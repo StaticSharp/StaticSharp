@@ -1,0 +1,219 @@
+.material .code {
+    max-height: 80vh;
+    overflow: auto;
+    margin-bottom: 1rem;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.CodeIdented {
+    margin-left: 4ch;
+    text-indent: -4ch;
+    display: block;
+}
+
+$backgroundColor: #f2f4f6;
+@mixin highlight($baseColor) {
+    color: $baseColor;
+    text-decoration-color: mix($baseColor, $backgroundColor, 25%);
+    &:hover {
+        text-decoration-color: $baseColor;
+    }
+}
+
+@mixin code {
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    background-color: $backgroundColor;
+    color: black;
+    .type,
+    .Type {
+        @include highlight(#008080);
+    }
+    .namespace,
+    .Namespace {
+        @include highlight(#888);
+    }
+    .method,
+    .Method {
+        @include highlight(#74531f);
+        /*&:last-child{
+            &:after{
+                content:"()";
+            }
+        }*/
+    }
+}
+
+code {
+    @include code;
+    display: inline-block;
+    font-size: 1rem;
+    padding: 2px 5px;
+    word-break: break-word;
+    /*& + code {
+        margin-left: -5px;
+        padding-left: 0;
+    }*/
+}
+
+.CodeBlock {
+    min-width: 100%;
+    overflow-x: auto;
+
+    height: fit-content;
+    word-wrap: normal;
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    word-break: normal;
+    .XmlDocComment,
+    .HtmlComment,
+    .Comment {
+        color: #008000;
+    }
+    .Keyword {
+        color: #0000ff
+    }
+    .PreprocessorKeyword {
+        color: darkgray;
+    }
+    .String,
+    .HtmlElementName,
+    .StringCSharpVerbatim {
+        color: #a31515;
+    }
+    .ClassName {
+        color: #48D1CC;
+    }
+    .Number {
+        color: rgb(139, 97, 34);
+    }
+    .Operator {}
+    .Delimiter {}
+    .SpecialChar {}
+    .HtmlServerSideScript {
+        color: #FFFF00;
+    }
+    .HtmlTagDelimiter {
+        color: #0000FF;
+    }
+    .HtmlElementName {
+        color: #A31515;
+    }
+    .HtmlAttributeName {
+        color: #FF0000;
+    }
+    .HtmlAttributeValue {
+        color: #0000FF;
+    }
+    .HtmlOperator {
+        color: #0000FF;
+    }
+    .XmlDocTag {
+        color: #808080;
+    }
+    .HtmlEntity {
+        color: #FF0000;
+    }
+    .XmlAttribute {
+        color: #FF0000;
+    }
+    .XmlAttributeQuotes {
+        color: #000000;
+    }
+    .XmlAttributeValue {
+        color: #0000FF;
+    }
+    .XmlCDataSection {
+        color: #808080;
+    }
+    .XmlComment {
+        color: #008000;
+    }
+    .XmlDelimiter {
+        color: #0000FF;
+    }
+    .XmlName {
+        color: #A31515;
+    }
+    .CssSelector {
+        color: #A31515;
+    }
+    .CssPropertyName {
+        color: #FF0000;
+    }
+    .CssPropertyValue {
+        color: #0000FF;
+    }
+    .SqlSystemFunction {
+        color: #FF00FF;
+    }
+    .PowershellAttribute {
+        color: #B0E0E6;
+    }
+    .PowershellOperator {
+        color: #808080;
+    }
+    .PowershellType {
+        color: #008080;
+    }
+    .PowershellVariable {
+        color: #FF4500;
+    }
+    .TypeVariable {
+        color: #008080;
+        font-style: italic;
+    }
+    .Constructor {
+        color: #800080;
+    }
+    .Predefined {
+        color: #000080;
+    }
+    .PseudoKeyword {
+        color: #000080;
+    }
+    .StringEscape {
+        color: #808080;
+    }
+    .ControlKeyword {
+        color: #0000FF;
+    }
+    .MarkdownHeader {
+        color: #0000FF;
+        font-weight: bold;
+    }
+    .MarkdownCode {
+        color: #008080;
+    }
+    .MarkdownListItem {
+        font-weight: bold;
+    }
+    .Italic {
+        font-style: italic;
+    }
+    .Bold {
+        font-weight: bold;
+    }
+    .BuiltinFunction {
+        color: #6B8E23;
+        font-weight: bold;
+    }
+    .BuiltinValue {
+        color: #556B2F;
+        font-weight: bold;
+    }
+    .Attribute {
+        color: #008B8B;
+        font-style: italic;
+    }
+}
+
+.CodeBlock>pre {
+    @include code;
+    padding: 8px;
+    overflow: auto;
+    font-size: 1rem;
+    border-radius: 2px;
+    font-weight: 200;
+}

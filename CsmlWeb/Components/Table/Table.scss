@@ -1,0 +1,30 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0.4rem;
+    //table-layout: fixed;
+    border-spacing: 0px;
+    border: 0;
+
+    > tbody {
+
+        th {
+            border: 1px solid white;
+            background-color: #eee;
+            padding: 4px 10px 4px 10px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        td {
+            border: 1px solid #ddd;
+            border-width: 1px;
+            padding: 4px 10px 4px 10px;
+        }
+
+        td:empty {
+            border: 1px solid transparent;
+        }
+        //width: 100%;
+    }
+}

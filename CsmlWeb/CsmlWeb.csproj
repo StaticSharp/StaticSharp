@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <Optimize>false</Optimize>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ColorCode.HTML" Version="2.0.11" />
+    <PackageReference Include="EnvDTE" Version="16.10.31320.204" />
+    <PackageReference Include="LibSassHost" Version="1.3.3" />
+    <PackageReference Include="LibSassHost.Native.win-x64" Version="1.3.3" />
+    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="8.3.3" />
+    <PackageReference Include="Magick.NET.Core" Version="8.3.3" />
+    <PackageReference Include="MediaTypeMap.Core" Version="2.3.3" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+    <PackageReference Include="MimeKit" Version="2.15.1" />
+    <PackageReference Include="NToastNotify" Version="7.0.0" />
+    <PackageReference Include="Octokit" Version="0.50.0" />
+    <PackageReference Include="YoutubeExplode" Version="6.0.5" />
+    <PackageReference Include="CsmlEngine" Version="1.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Components\Paragraph\Paragraph.css">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Paragraph.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+
+  
+  
+</Project>
