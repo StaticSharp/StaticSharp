@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsmlWeb", "CsmlWeb\CsmlWeb.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoWebsite", "DemoWebsite\DemoWebsite.csproj", "{CC557248-81BC-4BE2-AE22-E861EB7C927D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CsmlGenerator", "CsmlGenerator\CsmlGenerator.csproj", "{FA0EB49F-55EE-49B9-A8F9-9ED9E96B2F5A}"
+
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

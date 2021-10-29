@@ -41,6 +41,7 @@ namespace DemoWebsite.Content {
 			public override IEnumerable<ProtoNode> Children {
 				get {
 					yield return Articles;
+					yield return Katya;
 				}
 			}
 			public virtual αArticles Articles => new(Language);
@@ -76,11 +77,27 @@ namespace DemoWebsite.Content {
 					public IEnumerable<global::DemoWebsite.Content.Index.Articles.Terms.Common> Representatives {
 						get {
 							yield return new global::DemoWebsite.Content.Index.Articles.Terms.En(Language);
+							yield return new global::DemoWebsite.Content.Index.Articles.Terms.Fr(Language);
 							yield return new global::DemoWebsite.Content.Index.Articles.Terms.Ru(Language);
 						}
 					}
 					public override IEnumerable<ProtoNode> Children => Enumerable.Empty<ProtoNode>();
 				}
+			}
+			public virtual αKatya Katya => new(Language);
+			public class αKatya : ProtoNode, CsmlEngine.ITypedRepresentativeProvider<global::DemoWebsite.Content.Index.Katya.Common> {
+				public αKatya(global::DemoWebsite.Language language) : base(language) {
+				}
+				public override αKatya WithLanguage(global::DemoWebsite.Language language) {
+					return new αKatya(language);
+				}
+				public override ProtoNode Parent => new αIndex(Language);
+				public override CsmlRoot Root => new CsmlRoot(Language);
+				public override string[] Path => new string[]{"Index","Katya"};
+				public override string Name => "Katya";
+				public static implicit operator global::DemoWebsite.Content.Index.Katya.Common(αKatya α) => α.Representative;
+				public override global::DemoWebsite.Content.Index.Katya.Common Representative => new global::DemoWebsite.Content.Index.Katya.MyPage(Language);
+				public override IEnumerable<ProtoNode> Children => Enumerable.Empty<ProtoNode>();
 			}
 		}
 	}

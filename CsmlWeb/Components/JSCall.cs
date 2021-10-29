@@ -8,7 +8,7 @@ namespace CsmlWeb {
 
     public class RelativePath {
         string Value { get; init; }
-        public RelativePath(string subPath, [CallerFilePath] string callerFilePath = "") => 
+        public RelativePath(string subPath = "", [CallerFilePath] string callerFilePath = "") => 
             Value = Path.Combine(Path.GetDirectoryName(callerFilePath), subPath);
 
         public static implicit operator string(RelativePath relativePath) => relativePath.Value;

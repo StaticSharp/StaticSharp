@@ -95,7 +95,12 @@ function Material(element, contentWidth) {
     window.addEventListener("resize", updateAnchors);
     document.addEventListener("DOMContentLoaded", function() {
 
-        element.style.display = "block";
+        //element.style.display = "block";
+        element.style.display = "flex";
+        element.style.padding = 0;
+        element.style.minHeight = "100vh";
+        element.style.flexDirection = "column";
+
         rightBarWidth = document.getElementById("rightBar").scrollWidth;
         leftBarWidth = document.getElementById("leftBar").scrollWidth;
         header = document.getElementById("Header");

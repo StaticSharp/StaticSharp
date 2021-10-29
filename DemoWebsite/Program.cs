@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.IO;
 
 
 namespace CsmlWeb {
@@ -92,11 +93,19 @@ namespace DemoWebsite {
         static Server() {
             //CsmlWeb.Storage.StorageDirectory = @"D:\Csml2Cache\";
         }
-        public override Uri BaseUri => new("http://192.168.222.80/");
+        public override Uri BaseUri => new("http://localhost/");
 
         private IStorage _Storage;
 
-        public override IStorage Storage => _Storage ??= new Storage(@"D:\Csml2Cache\");
+        public override IStorage Storage {
+            get { 
+               if (_Storage is null){
+                    Directory.CreateDirectory(@"D:\Csml2Cache\");
+                    _Storage = new Storage(@"D:\Csml2Cache\");
+               }
+                return _Storage;
+            }   
+        }
 
         public override string BaseDirectory => throw new NotImplementedException();
 
@@ -169,7 +178,7 @@ namespace DemoWebsite {
         }
 
         static void Main(string[] args) {
-
+            
             //VisualStudio.Open(@"D:\git\csml2\DemoWebsite\Program.cs",60);
 
 

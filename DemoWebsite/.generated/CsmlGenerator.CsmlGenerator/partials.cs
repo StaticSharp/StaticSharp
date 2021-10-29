@@ -46,12 +46,35 @@ namespace DemoWebsite.Content {
 					public En(global::DemoWebsite.Language language) : base(language) {
 					}
 				}
+				public partial class Fr : CsmlEngine.IRepresentative {
+					protected override ProtoNode VirtualNode => Node;
+					CsmlRoot.αIndex.αArticles.αTerms Node => new(Language);
+					CsmlEngine.INode CsmlEngine.IRepresentative.Node => Node;
+					public Fr(global::DemoWebsite.Language language) : base(language) {
+					}
+				}
 				public partial class Ru : CsmlEngine.IRepresentative {
 					protected override ProtoNode VirtualNode => Node;
 					CsmlRoot.αIndex.αArticles.αTerms Node => new(Language);
 					CsmlEngine.INode CsmlEngine.IRepresentative.Node => Node;
 					public Ru(global::DemoWebsite.Language language) : base(language) {
 					}
+				}
+			}
+		}
+		namespace Katya {
+			public partial class Common : CsmlEngine.IRepresentative {
+				protected override ProtoNode VirtualNode => Node;
+				CsmlRoot.αIndex.αKatya Node => new(Language);
+				CsmlEngine.INode CsmlEngine.IRepresentative.Node => Node;
+				public Common(global::DemoWebsite.Language language) : base(language) {
+				}
+			}
+			public partial class MyPage : CsmlEngine.IRepresentative {
+				protected override ProtoNode VirtualNode => Node;
+				CsmlRoot.αIndex.αKatya Node => new(Language);
+				CsmlEngine.INode CsmlEngine.IRepresentative.Node => Node;
+				public MyPage(global::DemoWebsite.Language language) : base(language) {
 				}
 			}
 		}

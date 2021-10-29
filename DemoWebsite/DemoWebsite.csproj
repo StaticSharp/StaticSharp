@@ -30,14 +30,14 @@
   </ItemGroup>
 
   <ItemGroup Condition="!$(UseDebugGeneratorOutput)">
-    <ProjectReference Include="..\CsmlGenerator\CsmlGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\CsmlGenerator\CsmlGenerator.A" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <ItemGroup>
 
-    <PackageReference Include="CsmlWeb" Version="1.2.0" />
-    <!--<ProjectReference Include="..\CsmlEngine\CsmlEngine.csproj" />
-    <ProjectReference Include="..\CsmlWeb\CsmlWeb.csproj" />-->
+    <!-- <PackageReference Include="CsmlWeb" Version="1.2.0" /> -->
+    <ProjectReference Include="..\CsmlEngine\CsmlEngine.csproj" />
+    <ProjectReference Include="..\CsmlWeb\CsmlWeb.csproj" />
   </ItemGroup>
 
 

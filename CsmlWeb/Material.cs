@@ -35,8 +35,10 @@ namespace CsmlWeb {
         public virtual IImage TitleImage => null;
         public virtual RightSideBar RightSideBar => null;
         public virtual LeftSideBar LeftSideBar => null;
-        public virtual string RootPath => Path.GetDirectoryName(new System.Diagnostics.StackTrace(true).GetFrame(0).GetFileName());
-        public virtual Font Font => new(Path.Combine(RootPath, "Fonts", "roboto"), FontWeight.Regular);
+
+
+        public virtual string RootPath => Path.GetDirectoryName(new RelativePath());
+        public virtual Font Font => new(Path.Combine(new RelativePath(), "Fonts", "roboto"), FontWeight.Regular);
 
         public async Task<string> GenerateHtmlAsync(Context context) {
             context.Parents = context.Parents.Prepend(this);

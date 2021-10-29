@@ -9,7 +9,7 @@ namespace DemoWebsite.Content {
         //public override Font Font => new FontFamily(@"D:\svn\Antilatency.com\Dependencies\Csml\Src\Fonts\roboto").GetFont(FontWeight.Bold);
 
         public override Footer Footer => new() {
-            new Grid(200, 2) {
+            new Grid(1200, 2) {
                 new Paragraph{
                     "AAAAAA",
                     Node.Root.Index, 
@@ -32,7 +32,7 @@ namespace DemoWebsite.Content {
 
         public override LeftSideBar LeftSideBar => new() {
             new NavigationMenu(new Logo(Color.FromArgb(0xacc435), Color.White, Node.Root.Index)) {
-                Node.Root.Index,
+                Node.Root.Index, Node.Root.Index.Katya
             }
         };
     }
