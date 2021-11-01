@@ -21,7 +21,7 @@ jobs:
 
       - name: Build CsmlEngine and generate NuGet package
         run: |
-          cd Src/CsmlEngine
+          cd CsmlEngine
           dotnet pack -c Debug -p:PackageVersion=0.0.1-unstable${{github.run_number}} -o out
       - name: Push generated CsmlEngine package to GitHub registry
         run: dotnet nuget push ./CsmlEngine/out/*.nupkg --source https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_API_KEY}} --no-symbols true
