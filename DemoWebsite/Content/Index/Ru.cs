@@ -37,50 +37,52 @@ namespace DemoWebsite.Content.Index {
 
         public override Paragraph Description => new() { "Ссылка на эту статью: ", Node, "ТЕСТ ТЕСТ ТЕСТ" };
         private Image image = new Image(new RelativePath("111.jpg"), "Ricardooo");
+
         public override MaterialContent Content
         {
             get
             {
-                return new()
-                {
-                new Grid(ContentWidth / 4) {
-                new MaterialCard(Node.Representative),
-                new MaterialCard(Node.Representative),
-                new MaterialCard(Node.Representative),
-                //new MaterialCard(Node.Representative),
-            },
+                return new(){
+                    new Grid(ContentWidth / 4) {
+                    new MaterialCard(Node.Representative),
+                    new MaterialCard(Node.Representative),
+                    new MaterialCard(Node.Representative),
+                    //new MaterialCard(Node.Representative),
+                },
 
                     new Paragraph() {
-                "AAAAAAA"
-            },
+                    "AAAAAAA"
+                },
 
-            // new Grid(ContentWidth / 6) {
-            //     new MaterialCard(Node.Representative),
-            //     new MaterialCard(Node.Representative),
-            //     new MaterialCard(Node.Representative),
-            // },
-            
-            //new Video("S_fyy8X8C1g"),
-            //new Video("S_fyy8X8C1g", image),
-            
-            // new Paragraph() {
-            //     Node.Articles.Terms,
+                new Info(),
 
-            //     Node.WithLanguage(Language.En).Representative,
-            //     Node.WithLanguage(Language.Ru).Representative,
-            // },
-            // new Paragraph() {
-            //     Node.Articles.Terms,
+                // new Grid(ContentWidth / 6) {
+                //     new MaterialCard(Node.Representative),
+                //     new MaterialCard(Node.Representative),
+                //     new MaterialCard(Node.Representative),
+                // },
+                
+                //new Video("S_fyy8X8C1g"),
+                //new Video("S_fyy8X8C1g", image),
+                
+                // new Paragraph() {
+                //     Node.Articles.Terms,
 
-            //     Node.WithLanguage(Language.En).Representative,
-            //     Node.WithLanguage(Language.Ru).Representative,
-            // },
+                //     Node.WithLanguage(Language.En).Representative,
+                //     Node.WithLanguage(Language.Ru).Representative,
+                // },
+                // new Paragraph() {
+                //     Node.Articles.Terms,
 
-            //"Ссылка на эту статью: ", Node,
-            //Code,
+                //     Node.WithLanguage(Language.En).Representative,
+                //     Node.WithLanguage(Language.Ru).Representative,
+                // },
 
-            //,Node.Children.Select(x=>x.Representative).OfType<Material>()
-        };
+                //"Ссылка на эту статью: ", Node,
+                //Code,
+
+                //,Node.Children.Select(x=>x.Representative).OfType<Material>()
+                };
             }
         }
     }

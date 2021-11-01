@@ -1,0 +1,80 @@
+$panelRadius: 2px;
+$panelIconSize: 24px;
+$panelPagging: 10px;
+.List .Panel {
+    margin-bottom: 0;
+}
+
+.Panel {
+    position: relative;
+    //background-color: greenyellow;
+    border-radius: $panelRadius;
+    padding: $panelPagging;
+    font-size: inherit;
+    min-height: $panelIconSize+2*$panelRadius;
+    display: flex;
+    justify-content: flex-start;
+    &::before {
+        display: block;
+        margin-right: $panelPagging;
+        font-size: $panelIconSize;
+        line-height: $panelIconSize;
+        font-family: "Material Design Icons";
+        content: "\F0339";
+        color: #ccc;
+    }
+}
+
+.Info {
+    background-color: #deebff;
+}
+
+.Info::before {
+    color: #5883cc;
+    content: "\F02FC";
+}
+
+.Warning {
+    background-color: #fffae6;
+}
+
+.Warning::before {
+    color: #ff991f;
+    content: "\F0026";
+}
+
+.Error {
+    background-color: #ffebe6;
+}
+
+.Error::before {
+    color: #d4081d;
+    content: "\F0159";
+}
+
+.Note {
+    background-color: #eae6ff;
+}
+
+.Note::before {
+    color: #5243aa;
+    content: "\F082E";
+}
+
+.Success {
+    background-color: #e6edc2;
+}
+
+.Success::before {
+    color: #acc435;
+    content: "\F05E0";
+}
+
+.Bug {
+    background-color: #f4dfd9;
+}
+
+.Bug::before {
+    color: #d4081d;
+    content: "\F00E4";
+}
