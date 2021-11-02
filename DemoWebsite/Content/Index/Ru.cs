@@ -34,27 +34,48 @@ namespace DemoWebsite.Content.Index {
     partial class Ru : Common {
         public override string Title => null;
         public override IImage TitleImage => new Video("qj6S37xIqK0").ConfigureAsBackgroundVideo();
-
         public override Paragraph Description => new() { "Ссылка на эту статью: ", Node, "ТЕСТ ТЕСТ ТЕСТ" };
         private Image image = new Image(new RelativePath("111.jpg"), "Ricardooo");
+
+        //private Image refImage = new Image("https://bipbap.ru/wp-content/uploads/2017/04/0_7c779_5df17311_orig.jpg");
+
+        //private Language wiki => new Language();
+        //private Reference wiki_ru => new Reference("ТЕКСТ3: ", "https://ru.wikipedia.org/wiki/C_Sharp", "C#");    
 
         public override MaterialContent Content
         {
             get
             {
                 return new(){
-                    new Grid(ContentWidth / 4) {
-                    new MaterialCard(Node.Representative),
-                    new MaterialCard(Node.Representative),
-                    new MaterialCard(Node.Representative),
+
+                new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", "Ссылки с текстом: "),
+                new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", "Ссылки с текстом и подсказкой: ", "Шарп"),
+                new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", image),
+                //new Reference("ТЕКСТ3: ", "https://ru.wikipedia.org/wiki/C_Sharp", refImage),
+
+                new Grid(ContentWidth / 4) {
+                new MaterialCard(Node.Representative),
+                new MaterialCard(Node.Representative),
+                new MaterialCard(Node.Representative),
                     //new MaterialCard(Node.Representative),
                 },
 
-                    new Paragraph() {
-                    "AAAAAAA"
+                new Paragraph() {
+                "AAAAAAA"
                 },
 
-                new Info(),
+                new UnorderedList(new string[1] {"a"}),
+                //new Panel("Default Panel"),
+                new Info("Ситуации 7 и 9 - это не рабочий вариант. Работа сети в такой конфигурации будет крайне плоха из-за большого"),
+                new Error("Error Panel"),
+                new Bug("Bug Panel"),
+                new Note("Note Panel"),
+                new Success("Success Panel"),
+                new Warning("Warning Panel"),
+
+                // new Reference("ТЕКСТ1: ", "https://ru.wikipedia.org/wiki/C_Sharp"),
+                // new Reference("ТЕКСТ2: ", "https://ru.wikipedia.org/wiki/C_Sharp", "Шарп"),
+                // new Reference("ТЕКСТ3: ", "https://ru.wikipedia.org/wiki/C_Sharp", refImage),
 
                 // new Grid(ContentWidth / 6) {
                 //     new MaterialCard(Node.Representative),

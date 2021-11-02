@@ -1,4 +1,4 @@
-﻿function Panel(element) {
+function Reference(element) {
 
     let parent = element.parentElement;
 

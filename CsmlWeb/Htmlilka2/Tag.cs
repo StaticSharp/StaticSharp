@@ -84,6 +84,7 @@ namespace CsmlWeb.Html {
                     foreach(var node in this) {
                         node.WriteHtml(builder);
                     }
+                    
                     builder.Append("</").Append(Name).Append('>');
                 }
             } else {
@@ -92,7 +93,5 @@ namespace CsmlWeb.Html {
                 }
             }
         }
-
-
     }
 }
