@@ -64,7 +64,20 @@ namespace DemoWebsite.Content.Index {
                 "AAAAAAA"
                 },
 
-                new UnorderedList(new string[] {"a", "b", "c"}),
+                //new UnorderedList2(new string[] {"a", "b", "c"}),
+
+                //new UnorderedList2<string>(new string[] {"a", "b", "c"}),
+                //new UnorderedListWrap(),
+                
+                // new MyUnorderedList() {
+                //     "aaa",
+                //     new MyUnorderedList() {
+                //         "bbb"
+                //     },
+                // },
+                
+                //new ListWithChildren<string>("asd", "asdasd", new string[] {"a", "b", "c"}),
+
                 //new Panel("Default Panel"),
                 new Info("Ситуации 7 и 9 - это не рабочий вариант. Работа сети в такой конфигурации будет крайне плоха из-за большого"),
                 new Error("Error Panel"),
