@@ -8,8 +8,6 @@ namespace DemoWebsite.Content.Index {
 
     [Representative]
     partial class En : Common {
-
-        
         public override string Title => base.Title + "_EN";
 
         public override MaterialContent Content => new() {

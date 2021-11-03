@@ -2,13 +2,15 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
-    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-    <LangVersion>9.0</LangVersion>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <!-- <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles> -->
+
   </PropertyGroup>
 
   <PropertyGroup>
-    <UseDebugGeneratorOutput>true</UseDebugGeneratorOutput>
+    <UseDebugGeneratorOutput>false</UseDebugGeneratorOutput>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -25,22 +27,17 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="3.9.0">
       <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <IncludeAssets>runtime; native; contentfiles; analyzers; </IncludeAssets> <!-- build; buildtransitive-->
     </PackageReference>
   </ItemGroup>
 
   <ItemGroup Condition="!$(UseDebugGeneratorOutput)">
-    <ProjectReference Include="..\CsmlGenerator\CsmlGenerator.A" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\CsmlGenerator\CsmlGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <ItemGroup>
-
-    <!-- <PackageReference Include="CsmlWeb" Version="1.2.0" /> -->
+    <!--<PackageReference Include="CsmlWeb" Version="1.2.0" />-->
     <ProjectReference Include="..\CsmlEngine\CsmlEngine.csproj" />
     <ProjectReference Include="..\CsmlWeb\CsmlWeb.csproj" />
   </ItemGroup>
-
-
-  
-  
 </Project>

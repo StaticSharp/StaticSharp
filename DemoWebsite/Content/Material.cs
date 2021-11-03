@@ -7,7 +7,6 @@ using System.Drawing;
 namespace DemoWebsite.Content {
     partial class Material : CsmlWeb.Material {
         //public override Font Font => new FontFamily(@"D:\svn\Antilatency.com\Dependencies\Csml\Src\Fonts\roboto").GetFont(FontWeight.Bold);
-
         public override Footer Footer => new() {
             new Grid(1200, 2) {
                 new Paragraph{
@@ -32,7 +31,8 @@ namespace DemoWebsite.Content {
 
         public override LeftSideBar LeftSideBar => new() {
             new NavigationMenu(new Logo(Color.FromArgb(0xacc435), Color.White, Node.Root.Index)) {
-                Node.Root.Index, Node.Root.Index.Katya
+                Node.Root.Index,
+                Node.Root.Index.Katya
             }
         };
     }

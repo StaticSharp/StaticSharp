@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <LangVersion>9.0</LangVersion>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
   </PropertyGroup>
@@ -24,7 +25,8 @@
     <PackageReference Include="NToastNotify" Version="7.0.0" />
     <PackageReference Include="Octokit" Version="0.50.0" />
     <PackageReference Include="YoutubeExplode" Version="6.0.5" />
-    <PackageReference Include="CsmlEngine" Version="1.0.0" />
+    <!--<PackageReference Include="CsmlEngine" Version="1.0.0" />-->
+    <ProjectReference Include="..\CsmlEngine\CsmlEngine.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Components\Paragraph\Paragraph.css">
@@ -35,8 +37,4 @@
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
-
-
-  
-  
 </Project>

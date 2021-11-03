@@ -149,12 +149,6 @@ namespace CsmlWeb.Components {
             context.Includes.RequireStyle(new Style(new RelativePath("Video.scss")));
             var mips = VideoResource.Mips.Select(x =>
                 new KeyValuePair<int, string>(x.Key, new Uri(context.Urls.BaseUri, x.Value.Replace("\\", "/")).ToString()));
-
-            //-----//
-
-            
-
-            //-----//
             var tag = new Tag("div", new { Class = "VideoPlayer" }) {
                 new JSCall(new RelativePath("Video.js"),//element, code, aspect, showControls, autoPlay, loop, sound, mips, poster
                         VideoCode,
@@ -165,15 +159,10 @@ namespace CsmlWeb.Components {
                         Sound,
                         mips,
                         _isPosterDefinedByUser).Generate(context)
-                //new Tag("h2", new { Class = "Title" })
             };
-            
-            //var temp = new Tag("div", tag);
             if (_isPosterDefinedByUser) {
                 tag.Add(await _image.GenerateBlockHtmlAsync(context));
             }
-            
-            //var temp = new Tag("div", tag);
             return tag;
         }
     }
