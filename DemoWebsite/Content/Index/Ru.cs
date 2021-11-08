@@ -81,6 +81,22 @@ namespace DemoWebsite.Content.Index {
                         "ooo"
                     }
                 },
+
+                new Paragraph() {
+                    "Без заголовка"
+                },
+
+                new Table(2) {
+                    "a", "b", "c", "d"
+                },
+
+                new Paragraph() {
+                    "С заголовком"
+                },
+
+                new Table("A", "B", "C", "D") {
+                    "a", "b", "c", "d", "e", "f", "g", "h"
+                },
                 
                 //new ListWithChildren<string>("asd", "asdasd", new string[] {"a", "b", "c"}),
 

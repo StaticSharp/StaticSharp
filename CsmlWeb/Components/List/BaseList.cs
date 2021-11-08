@@ -46,10 +46,6 @@ namespace CsmlWeb {
             }
         }
 
-        public Tag GenerateText(Context context, string text) {
-            return new Tag("li") { text };
-        }
-
         public IEnumerator<object> GetEnumerator()
         {
             return _baseList.GetEnumerator();
