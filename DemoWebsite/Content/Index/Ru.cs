@@ -63,18 +63,24 @@ namespace DemoWebsite.Content.Index {
                 new Paragraph() {
                 "AAAAAAA"
                 },
-
-                //new UnorderedList2(new string[] {"a", "b", "c"}),
-
-                //new UnorderedList2<string>(new string[] {"a", "b", "c"}),
-                //new UnorderedListWrap(),
                 
-                // new MyUnorderedList() {
-                //     "aaa",
-                //     new MyUnorderedList() {
-                //         "bbb"
-                //     },
-                // },
+                new UnorderedList() {
+                    "aaa",
+                    new UnorderedList() {
+                        "bbb",
+                        "ccc"
+                    },
+                    "ddd"
+                },
+
+                new OrderedList() {
+                    "zzz",
+                    "sss",
+                    new OrderedList() {
+                        "bbb",
+                        "ooo"
+                    }
+                },
                 
                 //new ListWithChildren<string>("asd", "asdasd", new string[] {"a", "b", "c"}),
 
