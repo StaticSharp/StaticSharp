@@ -37,7 +37,7 @@ public class Table : IBlock, IEnumerable {
         context.Includes.RequireStyle(new Style(new RelativePath("Table.scss")));
         if (_headers != null) {
             for (int i = 0; i < _headers.Length; i++) {
-                tag.Add(new Tag("th", new { style = "text-align:center" }) {_headers[textListIndexCounter]});
+                tag.Add(new Tag("th") {_headers[textListIndexCounter]});
                 textListIndexCounter++;
             }
         }
@@ -45,7 +45,7 @@ public class Table : IBlock, IEnumerable {
         for (int i = 0; i < _text.Count / _colCount; i++) {
             var trTag = new Tag("tr");
             for (int j = 0; j < _colCount; j++) {
-                trTag.Add(new Tag("td", new { style = "text-align:center"}) {_text[textListIndexCounter]});
+                trTag.Add(new Tag("td") {_text[textListIndexCounter]});
                 textListIndexCounter++;
             }
             tag.Add(trTag);

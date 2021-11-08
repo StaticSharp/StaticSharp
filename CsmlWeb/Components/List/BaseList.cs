@@ -7,7 +7,7 @@ namespace CsmlWeb {
 
     public abstract class BaseList : IBlock, IEnumerable<object>
     {
-        public struct ListContent {
+        private struct ListContent {
             public string Text;
             public BaseList List;
         }
