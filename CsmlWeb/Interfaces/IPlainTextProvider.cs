@@ -8,7 +8,4 @@ namespace CsmlWeb {
     }
 
 
-    public interface INonVisual {
-        Task<Html.INode> GenerateHtmlAsync(Context context);
-    }
 }

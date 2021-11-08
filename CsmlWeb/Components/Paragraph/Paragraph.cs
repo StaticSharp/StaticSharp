@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace CsmlWeb {
@@ -11,6 +12,26 @@ namespace CsmlWeb {
 
         public static void Add<T>(this T collection, Paragraph item) where T : IVerifiedBlockReceiver, ITextAnchorsProvider {
             collection.AddBlock(item);
+        }
+
+        public static void Add<T>(this T collection, ParagraphIinterpolatedStringHandler item) where T : IVerifiedBlockReceiver, ITextAnchorsProvider {
+            collection.AddBlock(item.Paragraph);
+        }
+    }
+
+    //[InterpolatedStringHandler]
+    public class ParagraphIinterpolatedStringHandler {
+        public Paragraph Paragraph { get; } = new();
+        public void AppendLiteral(string s) {
+            Paragraph.Add(s);
+        }
+
+        public void AppendFormatted(IInline item) {
+            Paragraph.Add(item);
+        }
+
+        public void AppendFormatted(CsmlEngine.ITypedRepresentativeProvider<IInline> item) {
+            Paragraph.Add(item);
         }
     }
 
@@ -41,10 +62,10 @@ namespace CsmlWeb {
 
         public void Add(CsmlEngine.ITypedRepresentativeProvider<IInline> item) => Add(item.Representative);
 
-        public void Add(INonVisual item) => Items.Add(new() {
+        /*public void Add(INonVisual item) => Items.Add(new() {
             Html = async context => await item.GenerateHtmlAsync(context),
             PlaneText = context => Task.FromResult("")
-        });
+        });*/
 
         public async Task<INode> GenerateBlockHtmlAsync(Context context) {
             var result = new Tag("div", new { Class = nameof(Paragraph) });

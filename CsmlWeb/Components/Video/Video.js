@@ -22,13 +22,6 @@ function onYouTubeIframeAPIReady() {
     youTubeIFrameApiWaitList.forEach(element => element());
 }
 
-//----//
-// function test() {
-//     document.querySelector('.VideoPlayer::before').style.width = "82vw";
-// }
-
-//----//
-
 function Video(element, code, aspect, showControls, autoPlay, loop, sound, mips, poster) {
 
     this.element = element;
@@ -40,8 +33,6 @@ function Video(element, code, aspect, showControls, autoPlay, loop, sound, mips,
         let right = parent.anchors.textRight;
         element.style.marginLeft = left + "px";
         element.style.width = right - left + "px";
-        //document.querySelector('.VideoPlayer').width = "82vw";
-        //document.getElementsByClassName('.VideoPlayer').style.width = "1px";
         //element.style.backgroundColor = "red";
     }
     parent.onAnchorsChanged.push(this.element.updateWidth);

@@ -72,10 +72,6 @@ namespace CsmlWeb.Components {
 
         public void Add(CsmlEngine.ITypedRepresentativeProvider<IInline> item) => Add(item.Representative);
 
-        public void Add(INonVisual item) => Items.Add(new() {
-            Html = async context => await item.GenerateHtmlAsync(context),
-            PlaneText = context => Task.FromResult("")
-        });
 
         //public void Add(IBlock item) => Items.Add(new() {
         //    Html = async context => await item.GenerateBlockHtmlAsync(context),

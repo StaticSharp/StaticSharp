@@ -95,15 +95,7 @@ function Material(element, contentWidth) {
     window.addEventListener("resize", updateAnchors);
     document.addEventListener("DOMContentLoaded", function() {
 
-        //element.style.display = "block";
-        element.style.display = "flex";
-        //element.style.display = "grid";
-        element.style.padding = 0;
-        element.style.minHeight = "100vh";
-        element.style.flexDirection = "column";
-        //element.style.gridTemplateColumns = "[left_edge] 1fr [left_center] 1280px [right_center] 1fr [right_edge]";
-        //element.style.height = fit - content;
-
+        element.style.display = "block";
         rightBarWidth = document.getElementById("rightBar").scrollWidth;
         leftBarWidth = document.getElementById("leftBar").scrollWidth;
         header = document.getElementById("Header");

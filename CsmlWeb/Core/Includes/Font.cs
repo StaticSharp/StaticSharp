@@ -158,7 +158,15 @@ namespace CsmlWeb {
                 }
                 var files = System.IO.Directory.EnumerateFiles(Font.Directory);
                 files = files.OrderBy(x => ExtensionToPriority(Path.GetExtension(x).ToLower()));
-                return files.FirstOrDefault(x => MatchFileName(x) && Extensions.Contains(Path.GetExtension(x).ToLower()));
+                foreach (var file in files){
+                    if (MatchFileName(file)){
+                        if (Extensions.Contains(Path.GetExtension(file).ToLower())){
+                            return file;
+                        }
+                    }
+                }
+                return null;
+                //return files.FirstOrDefault(x => MatchFileName(x) && Extensions.Contains(Path.GetExtension(x).ToLower()));
             }
 
 
