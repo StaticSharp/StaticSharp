@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using CsmlWeb.Html;
 
 namespace CsmlWeb {
+    readonly public ref struct Test {
+    }
+
     public class Panel : IBlock {
 
         //public string _content;
@@ -19,7 +22,7 @@ namespace CsmlWeb {
         //     _content = content;
         // }
 
-        public Panel(string content)
+                public Panel(string content)
         {
             _content = content;
         }
@@ -35,11 +38,11 @@ namespace CsmlWeb {
             };
             //var componentName = nameof(Panel);
             context.Includes.RequireStyle(new Style(new RelativePath(componentName + ".scss")));
+            context.Includes.RequireFont(new Font(new RelativePath("..\\..\\Fonts\\materialdesignicons"), FontWeight.Regular));
             //context.Includes.RequireStyle(new Style(new RelativePath(componentClassName + ".scss")));
             tag.Add(new JSCall(new RelativePath(componentName + ".js")).Generate(context));
             tag.Add(new Tag("div", new { Class = "Text"}));
             tag.Add(_content);
-            
             return tag;
         }
 

@@ -15,12 +15,13 @@ $panelPagging: 10px;
     min-height: $panelIconSize+2*$panelRadius;
     display: flex;
     justify-content: flex-start;
+    align-items: center;
     &::before {
         display: block;
         margin-right: $panelPagging;
         font-size: $panelIconSize;
         line-height: $panelIconSize;
-        font-family: "Material Design Icons";
+        font-family: "materialdesignicons";
         content: "\F0339";
         color: #ccc;
     }

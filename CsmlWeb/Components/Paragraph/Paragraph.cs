@@ -19,7 +19,7 @@ namespace CsmlWeb {
         }
     }
 
-    [InterpolatedStringHandler]
+    //[InterpolatedStringHandler]
     public class ParagraphIinterpolatedStringHandler {
         public Paragraph Paragraph { get; } = new();
         public void AppendLiteral(string s) {

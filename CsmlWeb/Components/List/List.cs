@@ -105,13 +105,13 @@ namespace CsmlWeb {
         // }
 
     }
-    public sealed class UnorderedList : ListWithChildren<UnorderedList>, IBlock
+    public sealed class UnorderedList : BaseList, IBlock
     {
         //public IEnumerable<ListWithChildren<UnorderedList>> _listElements { get; set; }
         //private static string[] list = new string[] {"List", "Unordered"};
 
         //private IEnumerable<ListWithChildren<UnorderedList>> list { get; set; }
-        public UnorderedList() : base("ul", "li", new string[] {"List", "Unordered"}) {
+        public UnorderedList() : base("ul") {
 
         }
 

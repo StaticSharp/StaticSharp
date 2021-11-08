@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
-
+using System.IO;
 
 namespace CsmlWeb {
 
@@ -23,20 +23,12 @@ namespace CsmlWeb {
         public abstract string TempDirectory { get; }
 
         public void RegisterResource(string hash, IResource resource) {
-
         }
-
     }
-
 
     public record HtmlContext { }
 
-
     public abstract class StaticGenerator : AbstractResourceGenerator {
-
-
-
-
 
         public abstract IEnumerable<INode> GetRoots();
 
@@ -50,21 +42,18 @@ namespace CsmlWeb {
             /*IEnumerable<IPage> result = Enumerable.Empty<IPage>();
             foreach (var state in GetStates()) {
                 var root = new TRoot() as INode;
-
             }*/
             //return null;
         }
 
         private IEnumerable<IPage> GetPages(INode node) {
             IEnumerable<IPage> result = node.Representative is IPage page ? Enumerable.Repeat(page, 1) : Enumerable.Empty<IPage>();
-            foreach(var i in node.Children) {
+            foreach (var i in node.Children) {
                 result = result.Concat(GetPages(i));
             }
             return result;
         }
     }
-
-
 
     /*public class HtmlEnvironment : IHtmlEnvironment {
         public IDictionary<string, IResource> Storage => throw new NotImplementedException();
@@ -75,9 +64,6 @@ namespace CsmlWeb {
             throw new NotImplementedException();
         }
     }*/
-
-
-
 }
 
 namespace DemoWebsite {
@@ -87,23 +73,24 @@ namespace DemoWebsite {
         Ru
     }
 
-
     public class Server : CsmlWeb.Server {
+
         static Server() {
             //CsmlWeb.Storage.StorageDirectory = @"D:\Csml2Cache\";
         }
+
         public override Uri BaseUri => new("http://localhost/");
 
         private IStorage _Storage;
 
         public override IStorage Storage {
-            get { 
-               if (_Storage is null){
+            get {
+                if (_Storage is null) {
                     Directory.CreateDirectory(@"D:\Csml2Cache\");
                     _Storage = new Storage(@"D:\Csml2Cache\");
-               }
+                }
                 return _Storage;
-            }   
+            }
         }
 
         public override string BaseDirectory => throw new NotImplementedException();
@@ -120,7 +107,6 @@ namespace DemoWebsite {
                 path = new[] { "index_en.html" };
             }
 
-
             var htmlName = path.Last();
             htmlName = htmlName[..htmlName.LastIndexOf('.')].ToLower();
 
@@ -128,13 +114,11 @@ namespace DemoWebsite {
             Language language = default;
 
             if (lastIndexOf_ != -1) {
-
                 var languagePart = htmlName[(lastIndexOf_ + 1)..];
                 language = Enum.GetValues<Language>().FirstOrDefault(i => htmlName.EndsWith(i.ToString().ToLower()));
                 htmlName = htmlName[..lastIndexOf_];
             }
             path[^1] = htmlName;
-
 
             //Debug en
             INode result = new CsmlRoot(language);
@@ -147,28 +131,24 @@ namespace DemoWebsite {
             return result.Representative as IPage;
         }
 
-        public override Uri ObjectToUri(object obj) {
-            return obj is IRepresentative representative && representative.Node is ProtoNode protoNode
+        public override Uri ObjectToUri(object obj) => obj is IRepresentative representative && representative.Node is ProtoNode protoNode
                 ? new Uri(BaseUri, string.Join('/', representative.Node.Path) + "_" + protoNode.Language.ToString() + ".html")
                 : null;
-        }
-
     }
 
+    internal class Program {
 
-    class Program {
-
-        static void OpenUrl(string url) {
+        private static void OpenUrl(string url) {
             try {
                 Process.Start(url);
             } catch {
                 // hack because of this: https://github.com/dotnet/corefx/issues/10361
-                if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
                     url = url.Replace("&", "^&");
                     Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
-                } else if(RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
+                } else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
                     Process.Start("xdg-open", url);
-                } else if(RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
+                } else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
                     Process.Start("open", url);
                 } else {
                     throw;
@@ -176,15 +156,12 @@ namespace DemoWebsite {
             }
         }
 
-        static void Main(string[] args) {
-
+        private static void Main(string[] args) {
             //VisualStudio.Open(@"D:\git\csml2\DemoWebsite\Program.cs",60);
-
 
             //var localhost = "http://localhost:5000/";
             //OpenUrl($"{localhost}index_ru.html");
             new Server().Run();
-
         }
     }
 }
