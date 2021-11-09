@@ -1,6 +1,7 @@
 ﻿using CsmlEngine;
 using CsmlWeb;
 using CsmlWeb.Components;
+using System.Drawing;
 using CsmlWeb.Html;
 using CsmlWeb.Resources;
 using System;
@@ -97,8 +98,18 @@ namespace DemoWebsite.Content.Index {
                 new Table("A", "B", "C", "D") {
                     "a", "b", "c", "d", "e", "f", "g", "h"
                 },
+
+                new ColorSequenceCos(Color.FromArgb(255, 128, 64), Color.Blue, 1.792f),
                 
-                //new ListWithChildren<string>("asd", "asdasd", new string[] {"a", "b", "c"}),
+                new ColorSequence()
+                [Color.Red, 0.3f]
+                [Color.Black, 0.3f]
+                [Color.Green, 0.3f]
+                [Color.Black, 0.3f]
+                [Color.Red, 0.3f]
+                [Color.Black, 2.3f],
+
+                new ColorSequenceCos(Color.Black, Color.FromArgb(0x00, 0xff, 0x00), 1.792f),
 
                 //new Panel("Default Panel"),
                 new Info("Ситуации 7 и 9 - это не рабочий вариант. Работа сети в такой конфигурации будет крайне плоха из-за большого"),

@@ -10,11 +10,9 @@ using System.Linq;
 public class Table : IBlock, IEnumerable {
     private int _colCount { get; set; }
     private string[] _headers { get; set; }
-    //private int _rowCount { get; set; }
     private List<string> _text = new();
     public Table (int colCount) {
         _colCount = colCount;
-        //_rowCount = rowCount;
     }
 
     public Table(params string[] headers) {
