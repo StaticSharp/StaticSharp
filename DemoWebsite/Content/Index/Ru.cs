@@ -109,7 +109,13 @@ namespace DemoWebsite.Content.Index {
                 [Color.Red, 0.3f]
                 [Color.Black, 2.3f],
 
-                new ColorSequenceCos(Color.Black, Color.FromArgb(0x00, 0xff, 0x00), 1.792f),
+                //new ColorSequenceCos(Color.Black, Color.FromArgb(0x00, 0xff, 0x00), 1.792f),
+
+                new Table("Отображение", "Описание") {
+                    new ColorSequenceCos(Color.Black, Color.FromArgb(0xa8, 0x00, 0xff), 1.792f), "Loading - Первое состояние Alt при подаче питания или перезагрузке, происходит инициализация периферии и применение настроек.",
+                    new ColorSequenceCos(Color.Black, Color.FromArgb(0x7f, 0xba, 0xd9), 1.792f), "Idle - Ожидание задачи.", 
+                    new ColorSequenceCos(Color.Black, Color.FromArgb(0x00, 0xff, 0x00), 1.792f), "Task running - Alt выполняет задачу. Это может быть задача трекинга, обращение к свойствам или любая другая доступная задача."
+                },
 
                 //new Panel("Default Panel"),
                 new Info("Ситуации 7 и 9 - это не рабочий вариант. Работа сети в такой конфигурации будет крайне плоха из-за большого"),
