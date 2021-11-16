@@ -14,13 +14,16 @@ namespace CsmlWeb {
         private string _tooltip { get; set; }
         private Image _image { get; set; }
         private string _hrefText { get; set; }
-
         public Reference(string href, string hrefText, string text = null, string tooltip = null) 
             => (_href, _hrefText, _text, _tooltip) = (href, hrefText, text, tooltip);
 
         public Reference(string href, string hrefText, Image image, string text = null, string tooltip = null) : this(href, hrefText, text, tooltip) 
             => _image = image;
 
+        public Reference(string href) {
+            _href = href;
+            _hrefText = href;
+        }
         //private void SetHref(string href) => _href = href;
         public async Task<INode> GenerateBlockHtmlAsync(Context context)
         {

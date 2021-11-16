@@ -48,7 +48,8 @@ namespace DemoWebsite.Content.Index {
             get
             {
                 return new(){
-
+                
+                new Reference("https://ru.wikipedia.org/wiki/C_Sharp"),
                 new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", "Ссылки с текстом: "),
                 new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", "Ссылки с текстом и подсказкой: ", "Шарп"),
                 new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", image),
