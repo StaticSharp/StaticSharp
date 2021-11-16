@@ -38,7 +38,7 @@ namespace CsmlWeb {
             }
         }
         public ColorSequence this[Color color, float duration] {
-            get {                
+            get {
                 return this["#" + color.ToRgba().ToString("x8"), duration];
             }
             set {
@@ -64,7 +64,7 @@ namespace CsmlWeb {
         }
         private ColorSequence(string color, float duration) {
             if (duration <= 0) {
-                Log.Error.OnCaller("Invalod duration");
+                Log.Error.OnCaller("Invalid duration");
             }
             elements.Add(new ColorDuration() { color = color, duration = duration });
         }
@@ -82,7 +82,7 @@ namespace CsmlWeb {
                 if (currentPosition > 0) stringBuilder.Append(',');
                 stringBuilder.Append($"{e.color} {100 * currentPosition / totalDuration}%,");
                 currentPosition += e.duration;
-                stringBuilder.Append($"{e.color} {100 * currentPosition / totalDuration/* - 0.5f*/}%");                
+                stringBuilder.Append($"{e.color} {100 * currentPosition / totalDuration/* - 0.5f*/}%");
             }
             return stringBuilder.ToString();
         }
