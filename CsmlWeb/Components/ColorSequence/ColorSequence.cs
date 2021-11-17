@@ -11,9 +11,12 @@ namespace CsmlWeb {
         public abstract float TotalDuration { get; }
         public async Task<INode> GenerateBlockHtmlAsync(Context context)
         {
-            Tag tag = new Tag("div", new { Class = "ColorSequence"});
-            tag.Attributes.Add("style", $"background:linear-gradient(to right, {GetGradient()}); animation: animatedBackgroundPositionHorizontal {TotalDuration}s linear infinite;");
+            var tag = new Tag("div");
+            Tag innerTag = new Tag("div", new { Class = "ColorSequence"});
+            innerTag.Attributes.Add("style", $"background:linear-gradient(to right, {GetGradient()}); animation: animatedBackgroundPositionHorizontal {TotalDuration}s linear infinite;");
             context.Includes.RequireStyle(new Style(new RelativePath("ColorSequence.scss")));
+            tag.Attributes.Add("style", "padding-top: 0.2em");
+            tag.Add(innerTag);
             tag.Add(new JSCall(new RelativePath("ColorSequence.js")).Generate(context));
             return tag;
         }
@@ -23,54 +26,27 @@ namespace CsmlWeb {
         public struct ColorDuration {
             public string color;
             public float duration;
+            private ColorDuration(string color, float duration) {
+                this.color = color;
+                this.duration = duration;
+            }
+
+            public ColorDuration(Color color, float duration) {
+                this.color = "#" + color.ToRgba().ToString("x8");
+                this.duration = duration;
+            }
         }
         List<ColorDuration> elements = new List<ColorDuration>();
         public override float TotalDuration => elements.Sum(x => x.duration);
 
         public ColorSequence() { }
-        public ColorSequence this[string color, float duration] {
-            get {
-                if (duration <= 0) {
-                    Log.Error.OnCaller("Invalod duration");
-                }
-                elements.Add(new ColorDuration() { color = color, duration = duration });
-                return this;
-            }
-        }
-        public ColorSequence this[Color color, float duration] {
-            get {
-                return this["#" + color.ToRgba().ToString("x8"), duration];
-            }
-            set {
-                string color2 = color.ToRgba().ToString("x8");
-                elements.Add(new ColorDuration() { color = color2, duration = duration});
-            }
-        }
-
-        public ColorSequence this[Color color] {
-            get {
-                return this[color];
-            }
-            set {
-                string c2 = color.ToRgba().ToString("x8");
-            }
-        }
+        
         public void Add(ColorDuration item) {
             elements.Add(item);
         }
 
-        public void Add() {
-
-        }
-        private ColorSequence(string color, float duration) {
-            if (duration <= 0) {
-                Log.Error.OnCaller("Invalid duration");
-            }
-            elements.Add(new ColorDuration() { color = color, duration = duration });
-        }
-        public ColorSequence(Color color, float duration) {   
-                string color2 = color.ToRgba().ToString("x8");
-                elements.Add(new ColorDuration() { color = color2, duration = duration});
+        public void Add(Color color, float duration) {
+            elements.Add(new(color, duration));
         }
 
         public override string GetGradient()

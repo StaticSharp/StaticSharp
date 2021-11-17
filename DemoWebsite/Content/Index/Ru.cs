@@ -101,14 +101,28 @@ namespace DemoWebsite.Content.Index {
                 },
 
                 new ColorSequenceCos(Color.FromArgb(255, 128, 64), Color.Blue, 1.792f),
-                
-                new ColorSequence()
-                [Color.Red, 0.3f]
-                [Color.Black, 0.3f]
-                [Color.Green, 0.3f]
-                [Color.Black, 0.3f]
-                [Color.Red, 0.3f]
-                [Color.Black, 2.3f],
+                // new Dictionary<string, int>(){
+                //     {Color.Red, 0.3f)
+                // },
+                // new ColorSequence()
+                // [Color.Red, 0.3f]
+                // [Color.Black, 0.3f]
+                // [Color.Green, 0.3f]
+                // [Color.Black, 0.3f]
+                // [Color.Red, 0.3f]
+                // [Color.Black, 2.3f],
+                new ColorSequence() {
+                    new(Color.Red, 0.3f),
+                    new(Color.Black, 0.3f),
+                    new(Color.Green, 0.3f),
+                    new(Color.Black, 0.3f),
+                    new(Color.Red, 0.3f),
+                    new(Color.Black, 2.3f)
+                },
+
+                // new ColorSequence() {
+                //     {Color.Red, 0.3f},
+                // },
 
                 //new ColorSequenceCos(Color.Black, Color.FromArgb(0x00, 0xff, 0x00), 1.792f),
 
