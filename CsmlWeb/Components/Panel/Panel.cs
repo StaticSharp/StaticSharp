@@ -21,14 +21,14 @@ namespace CsmlWeb {
         {
             var componentClassName = this.GetType().Name;
             var componentName = nameof(Panel);
-            var tag = new Tag("div", new { Class = componentName + " " + componentClassName }) {
-                new JSCall(new RelativePath(componentName + ".js")).Generate(context)
+            var tag = new Tag("div") {
+                new Tag("div", new {Class = componentName + " " + componentClassName }){
+                    _content
+                }
             };
             context.Includes.RequireStyle(new Style(new RelativePath(componentName + ".scss")));
             context.Includes.RequireFont(new Font(new RelativePath("..\\..\\Fonts\\materialdesignicons"), FontWeight.Regular));
             tag.Add(new JSCall(new RelativePath(componentName + ".js")).Generate(context));
-            tag.Add(new Tag("div", new { Class = "Text"}));
-            tag.Add(_content);
             return tag;
         }
 
