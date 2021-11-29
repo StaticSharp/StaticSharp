@@ -43,30 +43,24 @@ namespace DemoWebsite.Content.Index {
         //private Language wiki => new Language();
         //private Reference wiki_ru => new Reference("ТЕКСТ3: ", "https://ru.wikipedia.org/wiki/C_Sharp", "C#");    
 
-        public override MaterialContent Content
-        {
-            get
-            {
-                return new(){
-                
-                new Reference("https://ru.wikipedia.org/wiki/C_Sharp"),
-                new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", "Ссылки с текстом: "),
-                new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", "Ссылки с текстом и подсказкой: ", "Шарп"),
-                new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", image),
-                //new Reference("ТЕКСТ3: ", "https://ru.wikipedia.org/wiki/C_Sharp", refImage),
+        public override MaterialContent Content => new() {
+            new Downloadable(new RelativePath("Download")),
+            new Reference("https://ru.wikipedia.org/wiki/C_Sharp"),
+            new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", "Ссылки с текстом: "),
+            new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", "Ссылки с текстом и подсказкой: ", "Шарп"),
+            new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", image),
 
-                new Grid(ContentWidth / 4) {
-                new MaterialCard(Node.Representative),
-                new MaterialCard(Node.Representative),
-                new MaterialCard(Node.Representative),
-                    //new MaterialCard(Node.Representative),
+            new Grid(ContentWidth / 4) {
+                    new MaterialCard(Node.Representative),
+                    new MaterialCard(Node.Representative),
+                    new MaterialCard(Node.Representative),
                 },
 
-                new Paragraph() {
+            new Paragraph() {
                 "AAAAAAA"
                 },
-                
-                new UnorderedList() {
+
+            new UnorderedList() {
                     "aaa",
                     new UnorderedList() {
                         "bbb",
@@ -75,7 +69,7 @@ namespace DemoWebsite.Content.Index {
                     "ddd"
                 },
 
-                new OrderedList() {
+            new OrderedList() {
                     "zzz",
                     "sss",
                     new OrderedList() {
@@ -84,34 +78,24 @@ namespace DemoWebsite.Content.Index {
                     }
                 },
 
-                new Paragraph() {
+            new Paragraph() {
                     "Без заголовка"
                 },
 
-                new Table(2) {
+            new Table(2) {
                     "a", "b", "c", "d"
                 },
 
-                new Paragraph() {
+            new Paragraph() {
                     "С заголовком"
                 },
 
-                new Table("A", "B", "C", "D") {
+            new Table("A", "B", "C", "D") {
                     "a", "b", "c", "d", "e", "f", "g", "h"
                 },
 
-                new ColorSequenceCos(Color.FromArgb(255, 128, 64), Color.Blue, 1.792f),
-                // new Dictionary<string, int>(){
-                //     {Color.Red, 0.3f)
-                // },
-                // new ColorSequence()
-                // [Color.Red, 0.3f]
-                // [Color.Black, 0.3f]
-                // [Color.Green, 0.3f]
-                // [Color.Black, 0.3f]
-                // [Color.Red, 0.3f]
-                // [Color.Black, 2.3f],
-                new ColorSequence() {
+            new ColorSequenceCos(Color.FromArgb(255, 128, 64), Color.Blue, 1.792f),
+            new ColorSequence() {
                     new(Color.Red, 0.3f),
                     new(Color.Black, 0.3f),
                     new(Color.Green, 0.3f),
@@ -119,59 +103,19 @@ namespace DemoWebsite.Content.Index {
                     new(Color.Red, 0.3f),
                     new(Color.Black, 2.3f)
                 },
-
-                // new ColorSequence() {
-                //     {Color.Red, 0.3f},
-                // },
-
-                //new ColorSequenceCos(Color.Black, Color.FromArgb(0x00, 0xff, 0x00), 1.792f),
-
-                new Table("Отображение", "Описание") {
+            new Table("Отображение", "Описание") {
                     new ColorSequenceCos(Color.Black, Color.FromArgb(0xa8, 0x00, 0xff), 1.792f), "Loading - Первое состояние Alt при подаче питания или перезагрузке, происходит инициализация периферии и применение настроек.",
-                    new ColorSequenceCos(Color.Black, Color.FromArgb(0x7f, 0xba, 0xd9), 1.792f), "Idle - Ожидание задачи.", 
+                    new ColorSequenceCos(Color.Black, Color.FromArgb(0x7f, 0xba, 0xd9), 1.792f), "Idle - Ожидание задачи.",
                     new ColorSequenceCos(Color.Black, Color.FromArgb(0x00, 0xff, 0x00), 1.792f), "Task running - Alt выполняет задачу. Это может быть задача трекинга, обращение к свойствам или любая другая доступная задача."
                 },
 
-                //new Panel("Default Panel"),
-                new Info("Ситуации 7 и 9 - это не рабочий вариант. Работа сети в такой конфигурации будет крайне плоха из-за большого"),
-                new Error("Error Panel"),
-                new Bug("Bug Panel"),
-                new Note("Note Panel"),
-                new Success("Success Panel"),
-                new Warning("Warning Panel"),
-
-                // new Reference("ТЕКСТ1: ", "https://ru.wikipedia.org/wiki/C_Sharp"),
-                // new Reference("ТЕКСТ2: ", "https://ru.wikipedia.org/wiki/C_Sharp", "Шарп"),
-                // new Reference("ТЕКСТ3: ", "https://ru.wikipedia.org/wiki/C_Sharp", refImage),
-
-                // new Grid(ContentWidth / 6) {
-                //     new MaterialCard(Node.Representative),
-                //     new MaterialCard(Node.Representative),
-                //     new MaterialCard(Node.Representative),
-                // },
-                
-                //new Video("S_fyy8X8C1g"),
-                //new Video("S_fyy8X8C1g", image),
-                
-                // new Paragraph() {
-                //     Node.Articles.Terms,
-
-                //     Node.WithLanguage(Language.En).Representative,
-                //     Node.WithLanguage(Language.Ru).Representative,
-                // },
-                // new Paragraph() {
-                //     Node.Articles.Terms,
-
-                //     Node.WithLanguage(Language.En).Representative,
-                //     Node.WithLanguage(Language.Ru).Representative,
-                // },
-
-                //"Ссылка на эту статью: ", Node,
-                //Code,
-
-                //,Node.Children.Select(x=>x.Representative).OfType<Material>()
-                };
-            }
-        }
+            //new Panel("Default Panel"),
+            new Info("Ситуации 7 и 9 - это не рабочий вариант. Работа сети в такой конфигурации будет крайне плоха из-за большого"),
+            new Error("Error Panel"),
+            new Bug("Bug Panel"),
+            new Note("Note Panel"),
+            new Success("Success Panel"),
+            new Warning("Warning Panel"),
+        };
     }
 }

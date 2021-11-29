@@ -5,9 +5,9 @@ using DemoWebsite.Content;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.IO;
 
 namespace CsmlWeb {
 
@@ -131,9 +131,11 @@ namespace DemoWebsite {
             return result.Representative as IPage;
         }
 
-        public override Uri ObjectToUri(object obj) => obj is IRepresentative representative && representative.Node is ProtoNode protoNode
+        public override Uri? ObjectToUri(object obj) {
+            return obj is IRepresentative representative && representative.Node is ProtoNode protoNode
                 ? new Uri(BaseUri, string.Join('/', representative.Node.Path) + "_" + protoNode.Language.ToString() + ".html")
                 : null;
+        }
     }
 
     internal class Program {

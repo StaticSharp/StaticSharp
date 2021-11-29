@@ -141,8 +141,8 @@ namespace CsmlWeb.Components {
 
         private async Task BuildTreeBySemVerAsync(Dictionary<string, object> result, IEnumerable<string> subDirectories, SearchSequencer searchSequence, int index, string name) {
             try {
-                var versions = subDirectories.ToDictionary(x => new Csml.SemVer(Path.GetFileName(x)))
-                .OrderByDescending(x => x.Key).ToList();
+                var versions = subDirectories.ToDictionary(x => new SemVer(Path.GetFileName(x)))
+                    .OrderByDescending(x => x.Key).ToList();
                 if (versions.Count == 0) return;
                 var stable = versions.FirstOrDefault(x => x.Key.labelsString == "");
                 var latest = versions.First();
