@@ -77,7 +77,7 @@ function Downloadable(element, primaryName, data) {
             var selectorsResult = BuildSelector(data, 0);
 
             var e = selectorsResult.split("|");
-            var href = "Downloadable/" + e[0];
+            var href = element.className + "/" + e[0];
             var size = e[1];
             var name = href.split("/").pop()
 
