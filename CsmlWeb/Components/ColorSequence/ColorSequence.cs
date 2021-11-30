@@ -3,6 +3,10 @@ using System.Text;
 using CsmlWeb.Html;
 using CsmlWeb.ColorUtils;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System;
+using System.Threading.Tasks;
 
 namespace CsmlWeb {
     public abstract class ColorSequence<T> : IBlock
@@ -12,7 +16,7 @@ namespace CsmlWeb {
         public async Task<INode> GenerateBlockHtmlAsync(Context context)
         {
             var tag = new Tag("div");
-            Tag innerTag = new Tag("div", new { Class = "ColorSequence"});
+            var innerTag = new Tag("div", new { Class = "ColorSequence"});
             innerTag.Attributes.Add("style", $"background:linear-gradient(to right, {GetGradient()}); animation: animatedBackgroundPositionHorizontal {TotalDuration}s linear infinite;");
             context.Includes.RequireStyle(new Style(new RelativePath("ColorSequence.scss")));
             tag.Attributes.Add("style", "padding-bottom: 0.2em");
