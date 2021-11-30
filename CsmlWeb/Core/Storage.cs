@@ -23,7 +23,7 @@ namespace CsmlWeb {
             var mylock = _locks.GetOrAdd(key, _ => new(1, 1));
             await mylock.WaitAsync();
             IResource result;
-            try {
+            try {   
                 result = _cache.Find(x => x.Key == key);
                 if (result == null) {
                     result = resource();

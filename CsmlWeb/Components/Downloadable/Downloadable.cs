@@ -96,20 +96,23 @@ namespace CsmlWeb.Components {
         public Downloadable(string sourcePath, string primaryName = null, SearchSequencer searchSequence = null) {
             SourcePath = sourcePath;
             PrimaryName = primaryName ?? Path.GetFileNameWithoutExtension(sourcePath);
+            SearchSequence = searchSequence;
         }
 
 
 
         public async Task<INode> GenerateBlockHtmlAsync(Context context) {
-            Resource = await context.Storage.AddOrGetAsync(
-                SourcePath + PrimaryName, 
+            //SourcePath + PrimaryName
+            Resource ??= await context.Storage.AddOrGetAsync(
+                SourcePath, 
                 () => new DownloadableResource(SourcePath, PrimaryName, context.Storage, SearchSequence)
             );
 
             context.Includes.RequireStyle(new Style(new RelativePath($"{nameof(Downloadable)}.scss")));
-            return new Tag("div") {
-                 new JSCall(new RelativePath($"{nameof(Downloadable)}.js"), PrimaryName, Resource.OptionsTree).Generate(context)
+            var tag = new Tag("div", new { Class = nameof(Downloadable) }) {
+                new JSCall(new RelativePath($"{nameof(Downloadable)}.js"), PrimaryName, Resource.OptionsTree).Generate(context)
             };
+            return tag;
         }
     }
 
@@ -125,6 +128,7 @@ namespace CsmlWeb.Components {
             => (_path, _name, _storage, _searchSequencer) = (path, name, storage, searchSequence);
         public string Key => _path;
 
+        //public string Source => _source;
         public string Source => _source;
 
         public object OptionsTree { get; private set; }
@@ -138,6 +142,8 @@ namespace CsmlWeb.Components {
         private readonly IStorage _storage;
         private long _fileSize;
         private string _source;
+
+        private const string DIRNAME = "Downloadable";
 
         private async Task BuildTreeBySemVerAsync(Dictionary<string, object> result, IEnumerable<string> subDirectories, SearchSequencer searchSequence, int index, string name) {
             try {
@@ -225,36 +231,55 @@ namespace CsmlWeb.Components {
 
         }
 
+        public string CalculateHash(IEnumerable<string> paths) {
+            var source = string.Join("?", paths.Select(x => Path.GetRelativePath(_storage.StorageDirectory, x)).OrderBy(x => x));
+            return Hash.CreateFromString(source).ToString();
+        }
+
         private async Task<string> FinalizeOptionsBranchAsync(string path, string name) {
             string[] files;
 
-            if (File.Exists(_path)) {
-                files = new[] { _path };
+            if (File.Exists(path)) {
+                files = new[] { path };
             } else {
-                if (!Directory.Exists(_path)) return null;
-                files = Directory.GetFiles(_path, "*.*", SearchOption.AllDirectories);
+                if (!Directory.Exists(path)) return null;
+                files = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
             }
 
             if (files.Length == 0) return null;
 
-            //var hash = CalculateHash(files);
+            var hash = CalculateHash(files);
 
-            string fileName = files.Length == 1
-                ? _name + Path.GetExtension(files[0])
-                : _name + ".zip";
+            // string fileName = files.Length == 1
+            //     ? _name + Path.GetExtension(files[0])
+            //     : _name + ".zip";
+            var outputPath = Path.Combine(_storage.StorageDirectory, DIRNAME, hash);
+            outputPath = Path.Combine(outputPath, Path.GetFileName(path));
+            if (files.Length != 1)
+                outputPath += ".zip";
+            //else outputPath += ".zip";
+            //else outputPath = Path.Combine(outputPath, Path.GetFileName(path));
 
-            var outputPath = Path.Combine(_storage.StorageDirectory, "Downloads", fileName);
+            //string filename = hash;
+            string filename = Path.Combine(hash, Path.GetFileName(path));
 
+            if (File.Exists(outputPath)) { File.Delete(outputPath); }
+            if(!Directory.Exists((Path.Combine(_storage.StorageDirectory, DIRNAME, hash))))
+                Directory.CreateDirectory(Path.Combine(_storage.StorageDirectory, DIRNAME, hash));
             if (files.Length == 1) {
                 await Utils.CopyFileAsync(files[0], outputPath);
+                //filename = Path.Combine(outputPath, Path.GetFileName(path));
+                //filename = Path.Combine(filename, Path.GetFileName(path));
             } else {
                 using var zip = ZipFile.Open(outputPath, ZipArchiveMode.Create);
                 foreach (var f in files) {
                     zip.CreateEntryFromFile(f, Path.GetRelativePath(_path, f), CompressionLevel.Optimal);
                 }
+                filename += ".zip";
+                //filename = Path.Combine(filename, Path.GetFileName(path)) + ".zip";
             }
             _fileSize = new FileInfo(outputPath).Length;
-            return fileName + '|' + Utils.HumanizeSize(_fileSize);
+            return filename + '|' + Utils.HumanizeSize(_fileSize);
         }
 
         public async Task GenerateAsync() {

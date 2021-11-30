@@ -45,6 +45,8 @@ namespace DemoWebsite.Content.Index {
 
         public override MaterialContent Content => new() {
             new Downloadable(new RelativePath("Download")),
+            new Downloadable(new RelativePath("MoreDownload")),
+            new Downloadable(@"D:/svn/antilatency.com/.Releases", "Api", new SearchSequencer().SvnLikeRepository.SpecifyThePath("Api\\Api.ml.cs")),
             new Reference("https://ru.wikipedia.org/wiki/C_Sharp"),
             new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", "Ссылки с текстом: "),
             new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", "Ссылки с текстом и подсказкой: ", "Шарп"),
