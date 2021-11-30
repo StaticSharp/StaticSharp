@@ -31,7 +31,7 @@ namespace CsmlWeb {
         public Tag Generate(Context context) {
             var functionName = System.IO.Path.GetFileNameWithoutExtension(Path);
 
-            context.Includes.RequireScript(new Script(Path));
+            context.Includes.Require(new Script(Path));
 
             var parameters = string.Concat(_parameters.Select(x => "," + JsonConvert.SerializeObject(x)));
 

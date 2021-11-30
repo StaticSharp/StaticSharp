@@ -45,7 +45,7 @@ namespace CsmlWeb.Components {
             }
             result.Add(await GetSlideContentAsync(material, context));
             var className = nameof(MaterialCard);
-            context.Includes.RequireStyle(new Style(new RelativePath(className + ".scss")));
+            context.Includes.Require(new Style(new RelativePath(className + ".scss")));
             result.Add(new JSCall(new RelativePath(className + ".js")).Generate(context));
             return result;
         }

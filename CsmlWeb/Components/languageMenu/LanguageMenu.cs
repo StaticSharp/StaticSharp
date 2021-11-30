@@ -17,7 +17,7 @@ namespace CsmlWeb {
 
         public async Task<Tag> GenerateSideBarAsync(Context context) {
             var relativePath = new RelativePath("LanguageMenu.js");
-            context.Includes.RequireScript(new Script(relativePath));
+            context.Includes.Require(new Script(relativePath));
             var result = new Tag("menu");
             foreach (var i in Enum.GetValues<TLanguage>()) {
                 var uri = context.Urls.ObjectToUri(Node.WithLanguage(i).Representative);

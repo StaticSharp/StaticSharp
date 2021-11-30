@@ -8,11 +8,11 @@ namespace CsmlWeb {
 
     public interface IIncludes {
 
-        void RequireScript(IScript script);
+        void Require(IScript script);
 
-        void RequireStyle(IStyle style);
+        void Require(IStyle style);
 
-        void RequireFont(IFont font);
+        void Require(IFont font);
 
         Task<Tag> GenerateScriptAsync(IStorage storage);
 
@@ -25,9 +25,9 @@ namespace CsmlWeb {
         private readonly Dictionary<string, IStyle> styles = new();
         private readonly Dictionary<string, IFont> fonts = new();
 
-        public void RequireScript(IScript script) {
+        public void Require(IScript script) {
             foreach(var i in script.Dependencies) {
-                RequireScript(i);
+                Require(i);
             }
 
             var id = script.Key;
@@ -46,7 +46,7 @@ namespace CsmlWeb {
             };
         }
 
-        public void RequireStyle(IStyle style) {
+        public void Require(IStyle style) {
             var id = style.Key;
             if(!styles.ContainsKey(id)) {
                 styles[id] = style;
@@ -63,7 +63,7 @@ namespace CsmlWeb {
             };
         }
 
-        public void RequireFont(IFont font) {
+        public void Require(IFont font) {
             var id = font.Key;
             if(!fonts.ContainsKey(id)) {
                 fonts[id] = font;

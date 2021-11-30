@@ -146,7 +146,7 @@ namespace CsmlWeb.Components {
         public async Task<INode> GenerateBlockHtmlAsync(Context context) {
             VideoResource ??= await context.Storage.AddOrGetAsync(VideoCode, () => new VideoResource(VideoCode, context.Storage));
             _image ??= new Image(VideoResource.IntermediateImageCache);
-            context.Includes.RequireStyle(new Style(new RelativePath("Video.scss")));
+            context.Includes.Require(new Style(new RelativePath("Video.scss")));
             var mips = VideoResource.Mips.Select(x =>
                 new KeyValuePair<int, string>(x.Key, new Uri(context.Urls.BaseUri, x.Value.Replace("\\", "/")).ToString()));
             var tag = new Tag("div", new { Class = "VideoPlayer" }) {

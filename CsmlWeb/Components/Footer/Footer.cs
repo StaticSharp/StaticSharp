@@ -13,7 +13,7 @@ namespace CsmlWeb {
         }
 
         public async Task<INode> GenerateBlockHtmlAsync(Context context) {
-            context.Includes.RequireStyle(new Style(new RelativePath(nameof(Footer) + ".scss")));
+            context.Includes.Require(new Style(new RelativePath(nameof(Footer) + ".scss")));
             var result = new Tag("div", new { Class = "footer" });            
             var items = _items.Select(item => item.GenerateBlockHtmlAsync(context));
             foreach(var item in await Task.WhenAll(items)) {

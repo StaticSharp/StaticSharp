@@ -39,9 +39,7 @@ namespace CsmlWeb.Components {
     }
 
     public interface ICodeResource : IResource {
-
     }
-
 
     public class CodeResource : ICodeResource {
         private readonly string _inputFilePath;
@@ -57,7 +55,6 @@ namespace CsmlWeb.Components {
         public string Extension => _extension;
 
         public async Task GenerateAsync() {
-
             if (File.Exists(_inputFilePath)) {
                 _extension = Path.GetExtension(_inputFilePath);
                 _code = await File.ReadAllTextAsync(_inputFilePath);
@@ -67,31 +64,27 @@ namespace CsmlWeb.Components {
         }
     }
 
-
-
-
-
-
     public class Code : IBlock, IInline {
         private readonly ProgrammingLanguage UserDefinedProgrammingLanguage;
         private readonly ProgrammingLanguage ProgrammingLanguageBasedOnExtension;
-        private ICodeResource CodeResource { get; }
-
+        private ICodeResource _codeResource;
 
         private readonly string _source;
-        public string Source => _source ?? CodeResource?.Source;
+        public string Source => _source ?? _codeResource?.Key;
 
-        protected Code() { }
+        protected Code() {}
+
         protected Code(string source) => _source = source;
-        protected Code(Code other) : this() => CodeResource = other.CodeResource;
+
+        protected Code(Code other) => _codeResource = other._codeResource;
+
         public Code(string source, ProgrammingLanguage programmingLanguage = ProgrammingLanguage.Undefined) {
             UserDefinedProgrammingLanguage = programmingLanguage;
             _source = source;
         }
 
-        public Code(string filePath, ProgrammingLanguage programmingLanguage = default, 
+        public Code(string filePath, ProgrammingLanguage programmingLanguage = default,
             [CallerFilePath] string callerFilePath = "") {
-
             UserDefinedProgrammingLanguage = programmingLanguage;
             if (!File.Exists(filePath)) {
                 var error = $"File {filePath} not found";
@@ -99,7 +92,6 @@ namespace CsmlWeb.Components {
                 throw new FileNotFoundException(error);
             }
         }
-
 
         protected virtual ProgrammingLanguage ProgrammingLanguage {
             get {
@@ -117,9 +109,7 @@ namespace CsmlWeb.Components {
                 _ => throw new ArgumentException("Please add extension here")
             };
 
-
-
-        protected virtual string FinalSourceCode => CodeResource.Source;
+        protected virtual string FinalSourceCode => _codeResource.Source;
 
         protected virtual Range? LineSpan => null;
 
@@ -134,7 +124,7 @@ namespace CsmlWeb.Components {
             => Enum.GetName(typeof(ProgrammingLanguage), lang);
 
         private StyleDictionary CreateStyleDictionary() {
-            static string CapitalizeFirstLetter(string name) 
+            static string CapitalizeFirstLetter(string name)
                 => string.IsNullOrEmpty(name) ? name : char.ToUpper(name[0]) + name[1..];
 
             var result = new StyleDictionary();
@@ -229,11 +219,10 @@ namespace CsmlWeb.Components {
             return code[a..b];
         }
 
-
-
-        public Task<INode> GenerateBlockHtmlAsync(Context context) {
-            throw new NotImplementedException();
-            //var result = new Tag(null);
+        public async Task<INode> GenerateBlockHtmlAsync(Context context) {
+            _codeResource ??= await context.Storage.AddOrGetAsync(_source, () => new CodeResource(_source));
+            //throw new NotImplementedException();
+            var result = new Tag(null);
 
             //if ((Source is GitHub.File) && !context.AForbidden) {
             //    var hrefTargetUrl = (Source as GitHub.File).HtmlUri;
@@ -242,41 +231,47 @@ namespace CsmlWeb.Components {
             //    if (lineSpan.HasValue)
             //        hrefTargetUrl += $"#L{lineSpan.Value.Start.Value + 1}-L{lineSpan.Value.End.Value + 1}";
 
-            //    result.Add(new Tag("a")
-            //        .AddClasses("GitHubLink")
-            //        .Attribute("target", "_blank")
-            //        .Attribute("href", hrefTargetUrl));
+            //    result.Add(new Tag("a", new { Class = "GitHubLink", target = "_blank", href = hrefTargetUrl }));
             //}
 
-            //var programmingLanguage = ProgrammingLanguage;
-            //var languageCssClass = GetLanguageName(programmingLanguage);
-            //var code = FinalSourceCode;
+            var programmingLanguage = ProgrammingLanguage;
+            var languageCssClass = GetLanguageName(programmingLanguage);
+            var code = FinalSourceCode;
 
-            ////https://github.com/WilliamABradley/ColorCode-Universal
+            //https://github.com/WilliamABradley/ColorCode-Universal
 
-            //if (programmingLanguage == ProgrammingLanguage.Undefined) {
-            //    return new Tag("div")
-            //        .AddClasses("Code", "CodeBlock", languageCssClass)
-            //        .Add(new Tag("pre").AddText(code));
-            //}
+            if (programmingLanguage == ProgrammingLanguage.Undefined) {
+                return new Tag("div", new { Class = $"Code CodeBlock {languageCssClass}" }) {
+                    new Tag("pre") {
+                        code
+                    }
+                };
+            }
 
-            //var styleDictionary = CreateStyleDictionary();
-            //var formatter = new ColorCode.HtmlClassFormatter(styleDictionary);
+            var styleDictionary = CreateStyleDictionary();
+            var formatter = new HtmlClassFormatter(styleDictionary);
 
-            //var html = formatter.GetHtmlString(code, LanguageToColorCode(programmingLanguage));
+            var html = formatter.GetHtmlString(code, LanguageToColorCode(programmingLanguage));
 
-            //string prefix = "<div class=\"";
-            //if (!html.StartsWith(prefix))
-            //    Log.Error.Here("Unexpected html");
+            string prefix = "<div class=\"";
+            if (!html.StartsWith(prefix))
+                Log.Error.Here("Unexpected html");
 
-            //html = $"{prefix}Code CodeBlock {languageCssClass} {html[prefix.Length..]}";
+            html = $"{prefix}Code CodeBlock {languageCssClass} {html[prefix.Length..]}";
 
-            //result.Add(new PureHtmlNode(html));
-            //return result;
+            result.Add(new PureHtmlNode(html));
+            context.Includes.Require(new Style(new RelativePath(nameof(Code) + ".scss")));
+            result.Add(new JSCall(new RelativePath("Code.js")).Generate(context));
+            return result;
         }
 
         public Task<INode> GenerateInlineHtmlAsync(Context context) {
             throw new NotImplementedException();
+        }
+    }
+    public static class CodeStatic {
+        public static void Add<T>(this T collection, Code item) where T : IVerifiedBlockReceiver {
+            collection.AddBlock(item);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace CsmlWeb.Components {
 
         public async Task<Tag> GenerateSideBarAsync(Context context) {
             var relativePath = new RelativePath("NavigationMenu.js");
-            context.Includes.RequireScript(new Script(relativePath));
+            context.Includes.Require(new Script(relativePath));
             var menuList = new Tag("ul", new { Class = "menu-list" });
             var result = new Tag("aside", new { Class = "menu" }) {
                 menuList
@@ -37,7 +37,7 @@ namespace CsmlWeb.Components {
                 });
             }
             result.Add(new JSCall(relativePath).Generate(context));
-            context.Includes.RequireStyle(new Style(new RelativePath($"{nameof(NavigationMenu)}.scss")));
+            context.Includes.Require(new Style(new RelativePath($"{nameof(NavigationMenu)}.scss")));
             return result;
         }
 

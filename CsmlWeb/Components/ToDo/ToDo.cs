@@ -21,7 +21,7 @@ namespace CsmlWeb {
             var result = new Tag("span") { Text };
             result.Attributes.Add("class", nameof(ToDo));
             result.Attributes.Add("title", Text);
-            context.Includes.RequireStyle(new Style(new RelativePath("ToDo.scss")));
+            context.Includes.Require(new Style(new RelativePath("ToDo.scss")));
             return result;
         }
     }

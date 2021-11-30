@@ -21,8 +21,8 @@ namespace DemoWebsite.Content {
         }
 
         public async Task<INode> GenerateInlineHtmlAsync(Context context) {
-            context.Includes.RequireFont(new Font(new RelativePath("..\\Fonts\\antilatency"), FontWeight.Regular, false));
-            context.Includes.RequireStyle(new Style(new RelativePath("Logo.scss")));
+            context.Includes.Require(new Font(new RelativePath("..\\Fonts\\antilatency"), FontWeight.Regular, false));
+            context.Includes.Require(new Style(new RelativePath("Logo.scss")));
             var uri = context.Urls.ObjectToUri(_node.Representative);
             return new Tag("a", new {
                 Class = "AntilatencyLogo",

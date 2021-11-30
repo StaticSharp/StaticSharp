@@ -26,8 +26,8 @@ namespace CsmlWeb {
                     _content
                 }
             };
-            context.Includes.RequireStyle(new Style(new RelativePath(componentName + ".scss")));
-            context.Includes.RequireFont(new Font(new RelativePath("..\\..\\Fonts\\materialdesignicons"), FontWeight.Regular));
+            context.Includes.Require(new Style(new RelativePath(componentName + ".scss")));
+            context.Includes.Require(new Font(new RelativePath("..\\..\\Fonts\\materialdesignicons"), FontWeight.Regular));
             tag.Add(new JSCall(new RelativePath(componentName + ".js")).Generate(context));
             return tag;
         }

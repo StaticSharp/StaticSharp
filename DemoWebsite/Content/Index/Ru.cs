@@ -44,6 +44,7 @@ namespace DemoWebsite.Content.Index {
         //private Reference wiki_ru => new Reference("ТЕКСТ3: ", "https://ru.wikipedia.org/wiki/C_Sharp", "C#");    
 
         public override MaterialContent Content => new() {
+            new CSharpCode(System.IO.File.ReadAllText(new RelativePath("Ru.cs"))),
             new Downloadable(new RelativePath("Download")),
             new Downloadable(new RelativePath("MoreDownload")),
             new Downloadable(@"D:/svn/antilatency.com/.Releases", "Api", new SearchSequencer().SvnLikeRepository.SpecifyThePath("Api\\Api.ml.cs")),

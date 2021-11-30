@@ -84,7 +84,7 @@ namespace CsmlWeb {
         //GetType().FullName+"/0"+ Family.Key+"/0"+ Weight + "/0";
 
         public string GenerateUsageCss(Context context) {
-            context.Includes.RequireFont(this);
+            context.Includes.Require(this);
             return $"font-family:{Family}; font-weight:{WeightToNames(Weight).Last()};" + (Italic ? @" font-style: Italic;" : "");
         }
 

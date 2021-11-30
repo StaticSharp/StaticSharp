@@ -43,7 +43,7 @@ namespace CsmlWeb.Components {
                 //$"grid-template-columns: repeat(3, 1fr); " + 
                 $"align-items: {CssAlign};grid-gap: {Gap}px;";
             //context.EstimatedWidth = MinElementWidthPx;
-            context.Includes.RequireStyle(new Style(new RelativePath(nameof(Grid) + ".scss")));
+            context.Includes.Require(new Style(new RelativePath(nameof(Grid) + ".scss")));
             var result = new Tag("div", new { style = css, Class = "grid" });
             foreach (var item in await Task.WhenAll(Items.Select(x => x.Html(context)))) {
                 result.Add(item);

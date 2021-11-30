@@ -108,7 +108,7 @@ namespace CsmlWeb.Components {
                 () => new DownloadableResource(SourcePath, PrimaryName, context.Storage, SearchSequence)
             );
 
-            context.Includes.RequireStyle(new Style(new RelativePath($"{nameof(Downloadable)}.scss")));
+            context.Includes.Require(new Style(new RelativePath($"{nameof(Downloadable)}.scss")));
             var tag = new Tag("div", new { Class = nameof(Downloadable) }) {
                 new JSCall(new RelativePath($"{nameof(Downloadable)}.js"), PrimaryName, Resource.OptionsTree).Generate(context)
             };

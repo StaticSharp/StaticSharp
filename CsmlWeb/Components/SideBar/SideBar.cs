@@ -9,7 +9,7 @@ namespace CsmlWeb {
         public virtual async Task<Tag> GenerateSideBarAsync(Context context) {
             var result = new Tag("div");
             var relativePath = new RelativePath("SideBar.js");
-            context.Includes.RequireScript(new Script(relativePath));
+            context.Includes.Require(new Script(relativePath));
             result.Add(new JSCall(relativePath).Generate(context));
             return result;
         }
@@ -21,7 +21,7 @@ namespace CsmlWeb {
                 id = "rightBar",
                 //style = ""
             });
-            context.Includes.RequireStyle(new Style(new RelativePath("SideBar.scss")));
+            context.Includes.Require(new Style(new RelativePath("SideBar.scss")));
             ForEach(async x => result.Add(await x.GenerateSideBarAsync(context)));
             return result;
         }
@@ -33,7 +33,7 @@ namespace CsmlWeb {
                 id = "leftBar",
                 //style = "visibility: visible;position: fixed;width: auto;display: flex;flex-direction: column;top: 0px;height: 100vh;background-color: rgb(227, 227, 227)"
             });
-            context.Includes.RequireStyle(new Style(new RelativePath("SideBar.scss")));
+            context.Includes.Require(new Style(new RelativePath("SideBar.scss")));
             ForEach(async x => result.Add(await x.GenerateSideBarAsync(context)));
             return result;
         }

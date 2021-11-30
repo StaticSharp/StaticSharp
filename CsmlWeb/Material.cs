@@ -40,7 +40,7 @@ namespace CsmlWeb {
 
         public async Task<string> GenerateHtmlAsync(Context context) {
             context.Parents = context.Parents.Prepend(this);
-            context.Includes.RequireScript(new Script(new RelativePath("Csml.js")));
+            context.Includes.Require(new Script(new RelativePath("Csml.js")));
 
             var head = new Tag("head"){
                     new Tag("meta", new{ charset = "utf-8" }),

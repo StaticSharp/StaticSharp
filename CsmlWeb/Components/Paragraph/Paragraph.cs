@@ -75,7 +75,7 @@ namespace CsmlWeb {
             }
 
             //var tasks = Items.OfType<IInline>().Select(x => x.GenerateInlineHtmlAsync(context));
-            context.Includes.RequireStyle(new Style(new RelativePath("Paragraph.scss")));
+            context.Includes.Require(new Style(new RelativePath("Paragraph.scss")));
             result.Add(new JSCall(new RelativePath("Paragraph.js")).Generate(context));
             foreach (var item in await Task.WhenAll(Items.Select(x => x.Html(context)))) {
                 result.Add(item);
