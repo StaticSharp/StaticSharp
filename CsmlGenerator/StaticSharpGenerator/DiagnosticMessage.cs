@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CsmlGenerator {
+namespace StaticSharpGenerator {
     class Log {
         public IGeneratorExecutionContext ExecutionContext { get; }
         //public DiagnosticSeverity Severity { get; }

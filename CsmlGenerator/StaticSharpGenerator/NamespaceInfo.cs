@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CsmlGenerator {
+namespace StaticSharpGenerator {
     public class Named {
         public string Name { get; private set; }
         public Named(string name) {

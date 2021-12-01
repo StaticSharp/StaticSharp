@@ -2,7 +2,7 @@ using Microsoft.CodeAnalysis;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CsmlGenerator {
+namespace StaticSharpGenerator {
     partial class Builder {
         readonly HashSet<string> knownStatelessTypes = new HashSet<string>();
         readonly HashSet<string> knownStatefulTypes = new HashSet<string>();

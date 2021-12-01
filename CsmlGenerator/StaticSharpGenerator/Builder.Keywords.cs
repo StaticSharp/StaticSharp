@@ -1,4 +1,4 @@
-﻿namespace CsmlGenerator {
+﻿namespace StaticSharpGenerator {
     partial class Builder {
         const string α = "α";
 

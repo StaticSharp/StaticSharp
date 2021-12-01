@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CsmlEngine\CsmlEngine.csproj" />
-    <ProjectReference Include="..\CsmlWeb\CsmlWeb.csproj" />
+    <ProjectReference Include="..\CsmlEngine\StaticSharpEngine.csproj" />
+    <ProjectReference Include="..\CsmlWeb\StaticSharpWeb.csproj" />
   </ItemGroup>
 </Project>

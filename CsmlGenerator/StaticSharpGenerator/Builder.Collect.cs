@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CsmlGenerator {
+namespace StaticSharpGenerator {
     partial class Builder {
         public NamespaceInfo Collect() {
             var result = new NamespaceInfo(null, null);

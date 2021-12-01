@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CsmlGenerator {
+namespace StaticSharpGenerator {
     class StateParameter {
         public string Name { get; private set; }
         public string ParameterName { get; private set; }

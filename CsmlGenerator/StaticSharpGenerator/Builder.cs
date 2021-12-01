@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using System.Linq;
 
-namespace CsmlGenerator {
+namespace StaticSharpGenerator {
 
     partial class Builder {
         public Log Log { get; }

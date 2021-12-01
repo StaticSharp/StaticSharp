@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CsmlGenerator {    
+namespace StaticSharpGenerator {    
     partial class Builder {
 
         public IEnumerable<TypeInfo> FindRoots() {

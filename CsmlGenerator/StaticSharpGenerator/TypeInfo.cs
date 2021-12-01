@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CsmlGenerator {
+namespace StaticSharpGenerator {
     public class TypeInfo : TypeContainer {
         
        

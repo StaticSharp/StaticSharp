@@ -89,7 +89,7 @@ public class NamespaceWriter : HeaderBracesWriter {
 
 
 
-namespace CsmlGenerator {
+namespace StaticSharpGenerator {
 
 
 
