@@ -222,7 +222,7 @@ namespace CsmlWeb.Components {
         public async Task<INode> GenerateBlockHtmlAsync(Context context) {
             _codeResource ??= await context.Storage.AddOrGetAsync(_source, () => new CodeResource(_source));
             //throw new NotImplementedException();
-            var result = new Tag(null);
+            //var result = new Tag(null);
 
             //if ((Source is GitHub.File) && !context.AForbidden) {
             //    var hrefTargetUrl = (Source as GitHub.File).HtmlUri;
@@ -241,11 +241,16 @@ namespace CsmlWeb.Components {
             //https://github.com/WilliamABradley/ColorCode-Universal
 
             if (programmingLanguage == ProgrammingLanguage.Undefined) {
-                return new Tag("div", new { Class = $"Code CodeBlock {languageCssClass}" }) {
-                    new Tag("pre") {
-                        code
-                    }
+                var tag = new Tag("div", new { Class = $"Code CodeBlock {languageCssClass}" }) {
+                    new Tag("pre") { code }
                 };
+                tag.Add(new JSCall(new RelativePath("Code.js")).Generate(context));
+                return tag;
+                // return new Tag("div", new { Class = $"Code CodeBlock {languageCssClass}" }) {
+                //     new Tag("pre") {
+                //         code
+                //     }
+                // };
             }
 
             var styleDictionary = CreateStyleDictionary();
@@ -258,6 +263,7 @@ namespace CsmlWeb.Components {
                 Log.Error.Here("Unexpected html");
 
             html = $"{prefix}Code CodeBlock {languageCssClass} {html[prefix.Length..]}";
+            var result = new Tag("div");
 
             result.Add(new PureHtmlNode(html));
             context.Includes.Require(new Style(new RelativePath(nameof(Code) + ".scss")));

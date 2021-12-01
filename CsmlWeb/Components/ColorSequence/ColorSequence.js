@@ -1,5 +1,4 @@
 function ColorSequence(element) {
-
     let parent = element.parentElement;
 
     element.updateWidth = function() {
