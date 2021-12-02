@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31105.61
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StaticSharpEngine", "CsmlEngine\StaticSharpEngine.csproj", "{662FDFED-4C19-4998-ADA0-65BF0A788DF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StaticSharpEngine", "StaticSharpEngine\StaticSharpEngine.csproj", "{662FDFED-4C19-4998-ADA0-65BF0A788DF1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StaticSharpWeb", "CsmlWeb\StaticSharpWeb.csproj", "{3E3B6ED6-A4C1-4349-8F1F-1C8E929E0DE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StaticSharpWeb", "StaticSharpWeb\StaticSharpWeb.csproj", "{3E3B6ED6-A4C1-4349-8F1F-1C8E929E0DE9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StaticSharpDemo", "DemoWebsite\StaticSharpDemo.csproj", "{CC557248-81BC-4BE2-AE22-E861EB7C927D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StaticSharpDemo", "StaticSharpDemo\StaticSharpDemo.csproj", "{CC557248-81BC-4BE2-AE22-E861EB7C927D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
