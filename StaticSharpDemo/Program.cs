@@ -151,12 +151,12 @@ namespace StaticSharpDemo {
         }
 
         private static void Main(string[] args) {
-            var generator = new StaticSharpDemo.Content.StaticGenerator();
-            var pages = generator.GetPages();
+            // var generator = new StaticSharpDemo.Content.StaticGenerator();
+            // var pages = generator.GetPages();
 
 
 
-            //new Server().Run();
+            new Server().Run();
         }
     }
 }
