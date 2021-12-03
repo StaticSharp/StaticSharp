@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace CsmlWeb.Resources {
+namespace StaticSharpWeb.Resources {
     public interface IResource {
         /// <summary>
         /// Должен быть уникален в течении сессии генерации.

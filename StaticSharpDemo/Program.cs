@@ -1,7 +1,6 @@
-﻿using StaticSharpEngine;
-using CsmlWeb;
-using CsmlWeb.Resources;
+﻿using StaticSharpWeb;
 using StaticSharpDemo.Content;
+using StaticSharpEngine;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,42 +9,29 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
 
-    public interface IResourceGeneratorSettings {
+    public interface IStaticGenerator {
         Uri BaseUri { get; }
         string BaseDirectory { get; }
         string TempDirectory { get; }
     }
 
-    public abstract class AbstractResourceGenerator : IResourceGeneratorSettings {
-        public abstract Uri BaseUri { get; }
-        public abstract string BaseDirectory { get; }
-        public abstract string TempDirectory { get; }
+    public abstract class StaticGenerator : IStaticGenerator {
+        public Uri BaseUri { get; set; }
 
-        public void RegisterResource(string hash, IResource resource) {
-        }
-    }
+        public string BaseDirectory { get; set; }
 
-    public record HtmlContext { }
-
-    public abstract class StaticGenerator : AbstractResourceGenerator {
+        public string TempDirectory { get; set; }
 
         public abstract IEnumerable<INode> GetRoots();
 
-        public abstract Uri GetNodeUri(INode node, Uri baseUri);
+        public abstract Uri GetNodeUri(INode node);
 
         //public string NodeToUrl()
 
-        public IEnumerable<IPage> GetPages() {
-            return GetRoots().SelectMany(x => GetPages(x));
-
-            /*IEnumerable<IPage> result = Enumerable.Empty<IPage>();
-            foreach (var state in GetStates()) {
-                var root = new TRoot() as INode;
-            }*/
-            //return null;
-        }
+        public IEnumerable<IPage> Pages 
+            => GetRoots().SelectMany(x => GetPages(x));
 
         private IEnumerable<IPage> GetPages(INode node) {
             IEnumerable<IPage> result = node.Representative is IPage page ? Enumerable.Repeat(page, 1) : Enumerable.Empty<IPage>();
@@ -64,7 +50,7 @@ namespace StaticSharpDemo {
         Ru
     }
 
-    public class Server : CsmlWeb.Server {
+    public class Server : StaticSharpWeb.Server {
 
         static Server() {
             //CsmlWeb.Storage.StorageDirectory = @"D:\Csml2Cache\";
@@ -132,14 +118,14 @@ namespace StaticSharpDemo {
         }
     }
 
-    class StaticGenerator : CsmlWeb.StaticGenerator {
-        public override Uri BaseUri => throw new NotImplementedException();
+    internal class StaticGenerator : StaticSharpWeb.StaticGenerator, IUrls {
 
-        public override string BaseDirectory => throw new NotImplementedException();
+        public StaticGenerator(Uri baseUri, Storage storage)
+            => (BaseUri, _context) = (baseUri, new(storage, this));
 
-        public override string TempDirectory => throw new NotImplementedException();
+        private Context _context;
 
-        public override Uri GetNodeUri(INode node, Uri baseUri) {
+        public override Uri GetNodeUri(INode node) {
             throw new NotImplementedException();
         }
 
@@ -147,11 +133,22 @@ namespace StaticSharpDemo {
             var language = Enum.GetValues(typeof(Language)).Cast<Language>();
             return language.Select(x => new CsmlRoot(x));
         }
-    }
 
-    public class Url : IUrls {
+        private static async Task WritePage(IPage page, Context context, string path) {
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            await File.WriteAllTextAsync(path, await page.GenerateHtmlAsync(context));
+        }
 
-        public Uri BaseUri => new(@"D:\TestSite\");
+        public async Task GenerateAsync() {
+            var tasks = new List<Task>();
+            foreach (var page in Pages) {
+                var url = ObjectToUri(page);
+                var relativeUrl = _context.Urls.BaseUri.MakeRelativeUri(url);
+                var path = Path.Combine(@"D:\TestSite", relativeUrl.ToString());
+                tasks.Add(WritePage(page, _context, path));
+            }
+            await Task.WhenAll(tasks);
+        }
 
         public Uri ObjectToUri(object obj) {
             return obj is IRepresentative representative && representative.Node is ProtoNode protoNode
@@ -181,26 +178,12 @@ namespace StaticSharpDemo {
             }
         }
 
-        static async Task WritePage(IPage page, Context context, string path) {
-            Directory.CreateDirectory(Path.GetDirectoryName(path));
-            await File.WriteAllTextAsync(path, await page.GenerateHtmlAsync(context));
-        }
+
 
         private static async Task Main(string[] args) {
-            var generator = new StaticGenerator();
-            var pages = generator.GetPages();
-            var context = new Context(new Storage(@"D:\TestSite", @"D:\TestSite\IntermediateCache"), new Url());
-            var tasks = new List<Task>();
-
-
-            foreach (var page in pages) {
-                var url = context.Urls.ObjectToUri(page);
-                var relativeUrl = context.Urls.BaseUri.MakeRelativeUri(url);
-                var path = Path.Combine(@"D:\TestSite", relativeUrl.ToString());
-                tasks.Add(WritePage(page, context, path));
-            }
-
-            await Task.WhenAll(tasks);
+            var generator =
+                new StaticGenerator(new Uri(@"D:/TestSite/"), new Storage(@"D:\TestSite", @"D:\TestSite\IntermediateCache"));
+            await generator.GenerateAsync();
 
             //await new Server().RunAsync();
         }

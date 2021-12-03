@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Security;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
 
     public static class Marshal2 {
         internal const string OLEAUT32 = "oleaut32.dll";

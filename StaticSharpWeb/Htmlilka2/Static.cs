@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace CsmlWeb.Html {
+namespace StaticSharpWeb.Html {
     public static class Static {
         private static readonly Dictionary<char, string> AttributeTagContentReplacement = new() { { '<', "&lt;" } };
         private static readonly char[] AttributeTagContentChars = AttributeTagContentReplacement.Keys.ToArray();

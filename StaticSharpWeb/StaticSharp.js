@@ -82,7 +82,7 @@ HTMLElement.prototype.css = function(object) {
     }
 }
 
-function CsmlCall(func) {
+function StaticSharpCall(func) {
     let parent = document.currentScript.parentElement;
     parent.removeChild(document.currentScript);
     func(parent)

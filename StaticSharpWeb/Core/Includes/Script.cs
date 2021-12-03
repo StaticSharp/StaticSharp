@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
 
     public interface IScript : IInclude {
         IEnumerable<IScript> Dependencies { get; }

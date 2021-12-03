@@ -1,4 +1,4 @@
-﻿using CsmlWeb.Resources;
+﻿using StaticSharpWeb.Resources;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
 
     public interface IFont : IInclude {
 
@@ -67,7 +67,7 @@ namespace CsmlWeb {
         public string Style => Italic ? "italic" : "normal";
 
 
-        public string Key => CsmlWeb.Key.Calculate(GetType(), Family, Weight, Italic);
+        public string Key => StaticSharpWeb.Key.Calculate(GetType(), Family, Weight, Italic);
 
         public Font(string directory, FontWeight weight, bool italic = false, [CallerFilePath] string CallerFilePath = "", [CallerLineNumber] int CallerLineNumber = 0)
             : this(char.ToUpper(directory.Split('\\').LastOrDefault()[0]) + directory.Split('\\').LastOrDefault()[1..], weight, italic)

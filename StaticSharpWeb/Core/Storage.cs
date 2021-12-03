@@ -1,11 +1,11 @@
-﻿using CsmlWeb.Resources;
+﻿using StaticSharpWeb.Resources;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
 
     public interface IStorage {
         public string StorageDirectory { get; }

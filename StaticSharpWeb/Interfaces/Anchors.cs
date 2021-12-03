@@ -1,4 +1,4 @@
-﻿namespace CsmlWeb {
+﻿namespace StaticSharpWeb {
     public interface ITextAnchorsProvider {
 
     }

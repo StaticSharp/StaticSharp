@@ -1,4 +1,4 @@
-﻿using CsmlWeb.Html;
+﻿using StaticSharpWeb.Html;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
 
     public class ErrorPage : IPage {
         public Exception Exception { get; }

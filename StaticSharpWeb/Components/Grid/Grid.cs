@@ -1,4 +1,4 @@
-﻿using CsmlWeb.Html;
+﻿using StaticSharpWeb.Html;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CsmlWeb.Components {
+namespace StaticSharpWeb.Components {
     public class Grid : IEnumerable, IBlock, IVerifiedBlockReceiver {
 
         int MinElementWidthPx { get; }

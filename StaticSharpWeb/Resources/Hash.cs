@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CsmlWeb.Resources {
+namespace StaticSharpWeb.Resources {
     class Hash {
         public byte[] Data { get; private set; }
 

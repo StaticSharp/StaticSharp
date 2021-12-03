@@ -1,7 +1,7 @@
-﻿using CsmlWeb.Html;
+﻿using StaticSharpWeb.Html;
 using System.Threading.Tasks;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
     /*public sealed class SimpleInline : IInline, IPlainTextProvider { 
         private string value;
 

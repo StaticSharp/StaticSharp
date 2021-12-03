@@ -11,7 +11,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
 
     public interface IUrls {
 

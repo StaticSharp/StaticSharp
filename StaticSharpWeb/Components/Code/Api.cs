@@ -1,5 +1,5 @@
-using CsmlWeb.Components;
-using CsmlWeb.Html;
+using StaticSharpWeb.Components;
+using StaticSharpWeb.Html;
 
 public static class ApiStatic {
     public static INode Keyword(string x) => new Tag("span", new { Class = "Keyword" }) { x };

@@ -2,7 +2,7 @@
     partial class Builder {
         const string α = "α";
 
-        const string CsmlRoot = "CsmlRoot";
+        const string StaticSharpRoot = "StaticSharpRoot";
         const string ProtoNode = "ProtoNode";
         const string VirtualNodePropertyName = "VirtualNode";
         const string NodePropertyName = "Node";

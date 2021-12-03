@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
     public struct Context { 
         public IStorage Storage { get; init; }
 

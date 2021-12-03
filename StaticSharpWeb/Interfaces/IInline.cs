@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
     public interface IInline {
         Task<Html.INode> GenerateInlineHtmlAsync(Context context);
     }

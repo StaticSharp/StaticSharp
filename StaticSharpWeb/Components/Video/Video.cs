@@ -1,5 +1,5 @@
-﻿using CsmlWeb.Html;
-using CsmlWeb.Resources;
+﻿using StaticSharpWeb.Html;
+using StaticSharpWeb.Resources;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using YoutubeExplode;
 using YoutubeExplode.Videos.Streams;
 
-namespace CsmlWeb.Components {
+namespace StaticSharpWeb.Components {
 
     public class VideoResource : IResource {
 

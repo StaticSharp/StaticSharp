@@ -1,11 +1,11 @@
-﻿using CsmlWeb.Html;
+﻿using StaticSharpWeb.Html;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
     public class Heading : IInline, IBlock {
         public string Caption { get; set; }
         public string UserDefinedIdentifier { get; set; }

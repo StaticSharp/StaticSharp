@@ -40,7 +40,7 @@ namespace StaticSharpGenerator {
 
         }
 
-#line 1 "CSML"
+#line 1 "StaticSharp"
         public void AbstractRepresentative(Location location) => ReportError("Abstract Representative",location);
 
 

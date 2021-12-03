@@ -1,10 +1,10 @@
-﻿using CsmlWeb.Html;
+﻿using StaticSharpWeb.Html;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
 
     public interface IIncludes {
 

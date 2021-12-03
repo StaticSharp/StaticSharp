@@ -1,4 +1,4 @@
-﻿using CsmlWeb.Html;
+﻿using StaticSharpWeb.Html;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
 
     public interface IMaterial {
         string Title { get; }
@@ -40,7 +40,7 @@ namespace CsmlWeb {
 
         public async Task<string> GenerateHtmlAsync(Context context) {
             context.Parents = context.Parents.Prepend(this);
-            context.Includes.Require(new Script(new RelativePath("Csml.js")));
+            context.Includes.Require(new Script(new RelativePath("StaticSharp.js")));
 
             var head = new Tag("head"){
                     new Tag("meta", new{ charset = "utf-8" }),

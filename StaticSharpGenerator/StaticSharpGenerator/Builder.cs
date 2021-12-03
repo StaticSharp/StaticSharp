@@ -68,7 +68,7 @@ namespace StaticSharpGenerator {
 
             //var classBody = classPlace.AddLine(new HeaderBracesWriter($"/*Generated*/ partial {root.Keyword} {CsmlRoot}{State.ToRecordParametersDeclaration()}: {Node}{State.ToBaseCall()}, {INode}")).Content;
 
-            WriteClassTree(CsmlRoot, namespaceInfo, classPlace, null, Enumerable.Empty<string>());
+            WriteClassTree(StaticSharpRoot, namespaceInfo, classPlace, null, Enumerable.Empty<string>());
 
             /*classBody.AddLine($"{INode} {INode}.Parent => null;");
 

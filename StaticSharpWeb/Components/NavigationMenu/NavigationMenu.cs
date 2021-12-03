@@ -1,11 +1,11 @@
-﻿using CsmlWeb;
-using CsmlWeb.Html;
+﻿using StaticSharpWeb;
+using StaticSharpWeb.Html;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CsmlWeb.Components {
+namespace StaticSharpWeb.Components {
     public class NavigationMenu : ISideBarComponent, IEnumerable {
 
         private List<StaticSharpEngine.INode> _nodes = new();
