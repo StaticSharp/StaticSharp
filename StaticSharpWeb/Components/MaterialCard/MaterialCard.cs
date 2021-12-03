@@ -1,10 +1,10 @@
-using CsmlWeb;
-using CsmlWeb.Html;
+using StaticSharpWeb;
+using StaticSharpWeb.Html;
 using System;
 using System.Drawing;
 using System.Threading.Tasks;
 
-namespace CsmlWeb.Components {
+namespace StaticSharpWeb.Components {
     public class MaterialCard : IBlock {
         Func<Context, IMaterial> MaterialGetter;
         public MaterialCard(IMaterial material) {

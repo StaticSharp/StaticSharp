@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CsmlWeb.Html;
+using StaticSharpWeb.Html;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
     public class Reference : IBlock
     {
         private string _href { get; set; }
@@ -44,20 +44,8 @@ namespace CsmlWeb {
                 _hrefText,
                 node
             });
-            //CsmlWeb.Components.Video video;
-
-            //await _image.GenerateBlockHtmlAsync(context);
-
-            
-
-            // tag.Add(new Tag("a", new {Class = "Reference"}));
-            // tag.Attributes.Add("href", _href);
-            // tag.Add(_text);
-            // tag.Attributes.Add("Title", _tooltip);
             
             tag.Add(new JSCall(new RelativePath(componentName + ".js")).Generate(context));
-            //tag.Add(_href);
-            //tag.Add(_tooltip);
             return tag;
         }
     }

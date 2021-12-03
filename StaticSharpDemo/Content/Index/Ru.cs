@@ -1,35 +1,14 @@
 ﻿using StaticSharpEngine;
-using CsmlWeb;
-using CsmlWeb.Components;
+using StaticSharpWeb;
+using StaticSharpWeb.Components;
 using System.Drawing;
-using CsmlWeb.Html;
-using CsmlWeb.Resources;
+using StaticSharpWeb.Html;
+using StaticSharpWeb.Resources;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace StaticSharpDemo.Content.Index {
-
-
-    /*public static class MenuStatic {
-        public static void Add<T>(this T collection, Menu item) where T : IVerifiedBlockReceiver, ITextAnchorsProvider {
-            collection.AddBlock(item);
-        }
-    }
-
-    public class Menu<TNode> : IBlock {
-        TNode Node;
-
-        public Menu(TNode node) {
-        }
-
-        public async Task<CsmlWeb.Html.INode> GenerateBlockHtmlAsync(Context context) {
-            return new Tag("menu") {
-
-            };
-        }
-
-    }*/
 
     [Representative]
     partial class Ru : Common {

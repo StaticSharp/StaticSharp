@@ -44,7 +44,7 @@ namespace StaticSharpGenerator {
 
             var accessibility = "public"; //typeSymbol.DeclaredAccessibility.ToCSharpName();
 
-            var nodeClassName = string.Join(".", path.Select(x => α + x).Prepend(CsmlRoot));
+            var nodeClassName = string.Join(".", path.Select(x => α + x).Prepend(StaticSharpRoot));
   
 
             var classBody = partials.AddLine(new HeaderBracesWriter($"{accessibility} partial class {typeInfo.Name} : {IRepresentative}"))

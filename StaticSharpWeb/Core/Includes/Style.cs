@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LibSassHost;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
 
 
     public interface IStyle : IInclude {

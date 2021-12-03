@@ -1,7 +1,7 @@
 using StaticSharpEngine;
-using CsmlWeb;
+using StaticSharpWeb;
 using System;
-using CsmlWeb.Components;
+using StaticSharpWeb.Components;
 
 namespace StaticSharpDemo.Content.Index.Katya {
 

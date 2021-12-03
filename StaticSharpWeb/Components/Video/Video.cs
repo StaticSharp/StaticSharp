@@ -1,5 +1,5 @@
-﻿using CsmlWeb.Html;
-using CsmlWeb.Resources;
+﻿using StaticSharpWeb.Html;
+using StaticSharpWeb.Resources;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,12 +10,13 @@ using System.Threading.Tasks;
 using YoutubeExplode;
 using YoutubeExplode.Videos.Streams;
 
-namespace CsmlWeb.Components {
+namespace StaticSharpWeb.Components {
 
     public class VideoResource : IResource {
 
         public VideoResource(string key, IStorage storage) {
             Key = key;
+            _storage = storage;
             _storageDirectory = storage.StorageDirectory;
         }
 
@@ -33,8 +34,8 @@ namespace CsmlWeb.Components {
 
         public Dictionary<int, string> Mips = new();
 
-        public string IntermediateVideoCache => Path.Combine(_storageDirectory, "IntermediateCache", Key);
-        public string IntermediateImageCache => Path.Combine(_storageDirectory, "IntermediateCache", Key, ImageName);
+        public string IntermediateVideoCache => Path.Combine(_storage.IntermediateCache, Key);
+        public string IntermediateImageCache => Path.Combine(_storage.IntermediateCache, Key, ImageName);
 
         private string ImageName => $"{Key}.jpg";
 
@@ -55,6 +56,7 @@ namespace CsmlWeb.Components {
         );
 
         private readonly SemaphoreSlim _imageSemaphoreSlim = new(1, 1);
+        private readonly IStorage _storage;
 
         private async Task DownloadImage() {
             await _imageSemaphoreSlim.WaitAsync();

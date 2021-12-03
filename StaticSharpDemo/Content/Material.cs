@@ -1,12 +1,12 @@
-﻿using CsmlWeb;
-using CsmlWeb.Components;
-using CsmlWeb.Html;
+﻿using StaticSharpWeb;
+using StaticSharpWeb.Components;
+using StaticSharpWeb.Html;
 using System.Collections.Generic;
 using System.Drawing;
 
 namespace StaticSharpDemo.Content {
-    partial class Material : CsmlWeb.Material {
-        //public override Font Font => new FontFamily(@"D:\svn\Antilatency.com\Dependencies\Csml\Src\Fonts\roboto").GetFont(FontWeight.Bold);
+    partial class Material : StaticSharpWeb.Material {
+        
         public override Footer Footer => new() {
             new Grid(1200, 2) {
                 new Paragraph{

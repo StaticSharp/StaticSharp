@@ -1,10 +1,10 @@
-﻿using CsmlWeb.Html;
+﻿using StaticSharpWeb.Html;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
     public class Footer : IEnumerable<IBlock>, IBlock, IVerifiedBlockReceiver {
         private readonly List<IBlock> _items = new();
 

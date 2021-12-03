@@ -1,14 +1,14 @@
 using System.Drawing;
 using System.Text;
-using CsmlWeb.Html;
-using CsmlWeb.ColorUtils;
+using StaticSharpWeb.Html;
+using StaticSharpWeb.ColorUtils;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Threading.Tasks;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
     public abstract class ColorSequence<T> : IBlock
     {
         public abstract string GetGradient();

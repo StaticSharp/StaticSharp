@@ -1,4 +1,4 @@
-﻿using CsmlWeb.Html;
+﻿using StaticSharpWeb.Html;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
 
     public static class ParagraphStatic {
 

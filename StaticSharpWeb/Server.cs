@@ -11,7 +11,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
 
     public interface IUrls {
 
@@ -30,11 +30,6 @@ namespace CsmlWeb {
         public abstract Uri BaseUri { get; }
         public abstract string BaseDirectory { get; }
         public abstract string TempDirectory { get; }
-
-        public async Task RunAsync() {
-            _host.Start();
-            await _host.WaitForShutdownAsync();
-        }
 
         public virtual IPage Get404(HttpRequest request) {
             return null;
@@ -122,7 +117,7 @@ namespace CsmlWeb {
             await response.WriteAsync("true");
         }
 
-        public void Run() {
+        public async Task RunAsync() {
             _host = WebHost.CreateDefaultBuilder().ConfigureServices(x =>
                 x.AddLogging(builder =>
                     builder.AddFilter("Microsoft", LogLevel.Warning)
@@ -145,8 +140,8 @@ namespace CsmlWeb {
              .UseUrls(BaseUri.ToString())
              .Build();
 
-            _host.Start();
-            _host.WaitForShutdown();
+            await _host.StartAsync();
+            await _host.WaitForShutdownAsync();
         }
 
 

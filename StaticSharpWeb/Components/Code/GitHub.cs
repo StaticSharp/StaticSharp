@@ -1,4 +1,4 @@
-using CsmlWeb.Resources;
+using StaticSharpWeb.Resources;
 using Octokit;
 using System;
 using System.IO;
@@ -6,7 +6,7 @@ using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
-namespace CsmlWeb.Components {
+namespace StaticSharpWeb.Components {
 
     namespace GitHub {
 
@@ -22,8 +22,6 @@ namespace CsmlWeb.Components {
             public RepositoryBranch GetRepositoryBranchPinned(string repositoryName, string reference, IStorage storage)
                 //if (RepositoryBranch.IgnorePinning)
                 => new(this, repositoryName, reference, storage);
-
-            //var client = new GitHubClient(new ProductHeaderValue("com.antilatency.csml"));
             //var sha = client.Repository.Commit.GetSha1(Name, repositoryName, reference).Result;
             //return new RepositoryBranch(this, repositoryName, sha);
 

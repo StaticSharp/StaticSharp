@@ -15,7 +15,7 @@ namespace StaticSharpGenerator {
             } else {
                 body.AddLine($"public override {ProtoNode} Parent => new {parentClassName}({State.ToCall()});");
             }
-            body.AddLine($"public override {CsmlRoot} Root => new {CsmlRoot}({State.ToCall()});");
+            body.AddLine($"public override {StaticSharpRoot} Root => new {StaticSharpRoot}({State.ToCall()});");
 
             body.AddLine($"public override string[] Path => new string[]{{{string.Join(",", path.Select(x => $"\"{x}\""))}}};");
 

@@ -1,7 +1,7 @@
 using ColorCode;
 using ColorCode.Styling;
-using CsmlWeb.Html;
-using CsmlWeb.Resources;
+using StaticSharpWeb.Html;
+using StaticSharpWeb.Resources;
 using System;
 using System.IO;
 using System.Linq;
@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CsmlWeb.Components {
+namespace StaticSharpWeb.Components {
 
     public enum ProgrammingLanguage {
         Undefined = 0,

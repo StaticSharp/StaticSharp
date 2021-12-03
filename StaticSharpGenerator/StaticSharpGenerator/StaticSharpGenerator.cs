@@ -95,7 +95,7 @@ namespace StaticSharpGenerator {
 
 
     [Generator]
-    public class CsmlGenerator : SourceGenerator {
+    public class StaticSharpGenerator : SourceGenerator {
         //Alpha
 
 

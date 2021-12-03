@@ -1,9 +1,9 @@
-﻿using CsmlWeb.Html;
+﻿using StaticSharpWeb.Html;
 using System;
 using System.Collections;
 using System.Threading.Tasks;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
 
     public interface ISideBarComponent {
         Task<Tag> GenerateSideBarAsync(Context context);

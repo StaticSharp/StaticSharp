@@ -1,5 +1,5 @@
-﻿using CsmlWeb.Html;
-using CsmlWeb.Resources;
+﻿using StaticSharpWeb.Html;
+using StaticSharpWeb.Resources;
 using StaticSharpWeb;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CsmlWeb.Components {
+namespace StaticSharpWeb.Components {
     public class SearchSequencer {
         [Flags]
         public enum SeqrchSequence : byte {

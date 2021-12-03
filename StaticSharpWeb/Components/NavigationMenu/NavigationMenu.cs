@@ -1,11 +1,11 @@
-﻿using CsmlWeb;
-using CsmlWeb.Html;
+﻿using StaticSharpWeb;
+using StaticSharpWeb.Html;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CsmlWeb.Components {
+namespace StaticSharpWeb.Components {
     public class NavigationMenu : ISideBarComponent, IEnumerable {
 
         private List<StaticSharpEngine.INode> _nodes = new();
@@ -21,11 +21,7 @@ namespace CsmlWeb.Components {
             var relativePath = new RelativePath("NavigationMenu.js");
             context.Includes.Require(new Script(relativePath));
             var menuList = new Tag("ul", new { Class = "menu-list" });
-            // var icon = new Tag("span", new { Class = "material-icons", Style = "font-family: 'Material Design Icons';"}) {
-               
-            // };
             var result = new Tag("aside", new { Class = "menu" }) {
-                //icon,
                 menuList
             };
             if(_logoNode != null) {

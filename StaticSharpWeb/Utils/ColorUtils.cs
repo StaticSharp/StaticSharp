@@ -3,7 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Threading;
 
-namespace CsmlWeb.ColorUtils {
+namespace StaticSharpWeb.ColorUtils {
     public static class Utils {
         public static Color Lerp(this Color s, Color t, float k) {
             var bk = (1 - k);

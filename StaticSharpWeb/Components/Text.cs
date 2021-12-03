@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CsmlWeb.Components {
+namespace StaticSharpWeb.Components {
 
     public enum TextAlign {
         Left,

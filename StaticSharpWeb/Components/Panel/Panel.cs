@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CsmlWeb.Html;
+using StaticSharpWeb.Html;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
     public class Panel : IBlock {
 
         private string _content { get; set; }

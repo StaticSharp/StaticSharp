@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 
-namespace CsmlWeb.Html {
+namespace StaticSharpWeb.Html {
 
     public class PureHtmlNode : INode {
         public string Content { get; set; }

@@ -1,10 +1,10 @@
-﻿using CsmlWeb.Html;
+﻿using StaticSharpWeb.Html;
 using Newtonsoft.Json;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
 
     public class RelativePath {
         string Value { get; init; }
@@ -35,7 +35,7 @@ namespace CsmlWeb {
 
             var parameters = string.Concat(_parameters.Select(x => "," + JsonConvert.SerializeObject(x)));
 
-            var code = $@"CsmlCall(function(parent){{{functionName}(parent {parameters})}})";
+            var code = $@"StaticSharpCall(function(parent){{{functionName}(parent {parameters})}})";
 
             return new("script") {
                 new PureHtmlNode(code)

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
 
     public interface IKey {
         string Key { get; }

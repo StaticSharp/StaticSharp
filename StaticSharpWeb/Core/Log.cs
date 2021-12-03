@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
 
     public enum ErrorCode {
         Unassigned = 0,

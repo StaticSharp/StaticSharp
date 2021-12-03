@@ -1,5 +1,5 @@
 ﻿using StaticSharpEngine;
-using CsmlWeb;
+using StaticSharpWeb;
 using System;
 
 namespace StaticSharpDemo.Content.Index {
@@ -22,8 +22,5 @@ namespace StaticSharpDemo.Content.Index {
         };
     }
 
-    /*partial record En(DemoWebsite.Content.CsmlRoot.αIndex Node): INodeProvider {
-        Node INodeProvider.Node => Node;
-    }*/
 
 }

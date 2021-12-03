@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
      
     public class InvalidUsageException : Exception {
         public ICallerInfo CallerInfo { get; }

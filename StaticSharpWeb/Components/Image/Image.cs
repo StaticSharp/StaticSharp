@@ -1,6 +1,6 @@
 ﻿using StaticSharpEngine;
-using CsmlWeb.Html;
-using CsmlWeb.Resources;
+using StaticSharpWeb.Html;
+using StaticSharpWeb.Resources;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
     public interface IImage : IBlock {
 
     }

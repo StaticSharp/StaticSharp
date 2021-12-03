@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CsmlWeb.Html {
+namespace StaticSharpWeb.Html {
 
     public class Attributes : Dictionary<string, string> {
 

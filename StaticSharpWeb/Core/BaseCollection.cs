@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CsmlWeb {
+namespace StaticSharpWeb {
     //public abstract class BaseCollection : IEnumerable {
     //    public struct Generators {
     //        public Func<Context, Task<Html.INode>> Html;
