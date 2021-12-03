@@ -55,15 +55,23 @@ namespace StaticSharpWeb {
 
         public async Task<Tag> GenerateStyleAsync(IStorage storage) {
             var styleCode = new StringBuilder();
-            var stylesList = new StringBuilder();
+            //var stylesList = new StringBuilder();
             foreach(var style in styles.Values) {
                 styleCode.Append(await style.GenerateAsync(storage));
                 //var a = style.Key;
-                var a = style.Path;
+                //stylesList.Append("@import " + style.Path);
             }
             return new Tag("style") {
                 new PureHtmlNode(styleCode.ToString())
             };
+        }
+
+        public StringBuilder GenerateSuperStyle() {
+            var stylesList = new StringBuilder();
+            foreach(var style in styles.Values) {
+                stylesList.Append("@import " + style.Path);
+            }
+            return stylesList;
         }
 
         public void Require(IFont font) {

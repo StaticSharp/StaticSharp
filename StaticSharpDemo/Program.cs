@@ -178,17 +178,17 @@ namespace StaticSharpDemo {
             }
         }
 
-        private static void Main(string[] args) {
+        private static async Task Main(string[] args) {
             // var generator = new StaticSharpDemo.Content.StaticGenerator();
             // var pages = generator.GetPages();
 
 
-        private static async Task Main(string[] args) {
-            var generator =
-                new StaticGenerator(new Uri(@"D:/TestSite/"), new Storage(@"D:\TestSite", @"D:\TestSite\IntermediateCache"));
-            await generator.GenerateAsync();
+        
+            // var generator =
+            //     new StaticGenerator(new Uri(@"D:/TestSite/"), new Storage(@"D:\TestSite", @"D:\TestSite\IntermediateCache"));
+            // await generator.GenerateAsync();
 
-            new Server().Run();
+            await new Server().RunAsync();
         }
     }
 }
