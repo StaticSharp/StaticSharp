@@ -101,9 +101,9 @@ namespace StaticSharpDemo {
             path[^1] = htmlName;
 
             //Debug en
-            INode result = new CsmlRoot(language);
+            INode result = new StaticSharpRoot(language);
             var pathList = new List<string[]>();
-            var root = new CsmlRoot(language).Children.FirstOrDefault().Name;
+            var root = new StaticSharpRoot(language).Children.FirstOrDefault().Name;
             foreach (var pathPart in path) {
                 result = result.Children.FirstOrDefault(x => x.Name.ToLower() == pathPart.ToLower());
                 if (result == null) return null;
@@ -177,16 +177,10 @@ namespace StaticSharpDemo {
                 }
             }
         }
-
         private static async Task Main(string[] args) {
-            // var generator = new StaticSharpDemo.Content.StaticGenerator();
-            // var pages = generator.GetPages();
-
-
-        
-            // var generator =
-            //     new StaticGenerator(new Uri(@"D:/TestSite/"), new Storage(@"D:\TestSite", @"D:\TestSite\IntermediateCache"));
-            // await generator.GenerateAsync();
+            //var generator =
+            //    new StaticGenerator(new Uri(@"D:/TestSite/"), new Storage(@"D:\TestSite", @"D:\TestSite\IntermediateCache"));
+            //await generator.GenerateAsync();
 
             await new Server().RunAsync();
         }
