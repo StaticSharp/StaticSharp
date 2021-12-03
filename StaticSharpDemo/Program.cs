@@ -120,18 +120,21 @@ namespace StaticSharpDemo {
 
     internal class StaticGenerator : StaticSharpWeb.StaticGenerator, IUrls {
 
-        public StaticGenerator(Uri baseUri, Storage storage)
-            => (BaseUri, _context) = (baseUri, new(storage, this));
+        public StaticGenerator(Uri baseUri, Storage storage, string outputPath)
+            => (BaseUri, _context, _outputPath) = (baseUri, new(storage, this), outputPath);
 
         private Context _context;
+        private string _outputPath;
 
         public override Uri GetNodeUri(INode node) {
-            throw new NotImplementedException();
+            return node is ProtoNode protoNode
+                ? new Uri(BaseUri, string.Join('/', node.Path) + "_" + protoNode.Language.ToString() + ".html")
+                : null;
         }
 
         public override IEnumerable<INode> GetRoots() {
             var language = Enum.GetValues(typeof(Language)).Cast<Language>();
-            return language.Select(x => new CsmlRoot(x));
+            return language.Select(x => new StaticSharpRoot(x));
         }
 
         private static async Task WritePage(IPage page, Context context, string path) {
@@ -144,7 +147,7 @@ namespace StaticSharpDemo {
             foreach (var page in Pages) {
                 var url = ObjectToUri(page);
                 var relativeUrl = _context.Urls.BaseUri.MakeRelativeUri(url);
-                var path = Path.Combine(@"D:\TestSite", relativeUrl.ToString());
+                var path = Path.Combine(_outputPath, relativeUrl.ToString());
                 tasks.Add(WritePage(page, _context, path));
             }
             await Task.WhenAll(tasks);
@@ -178,11 +181,11 @@ namespace StaticSharpDemo {
             }
         }
         private static async Task Main(string[] args) {
-            //var generator =
-            //    new StaticGenerator(new Uri(@"D:/TestSite/"), new Storage(@"D:\TestSite", @"D:\TestSite\IntermediateCache"));
-            //await generator.GenerateAsync();
+            var generator = new StaticGenerator(new(@"D:/TestSite/"), 
+                new(@"D:\TestSite", @"D:\TestSite\IntermediateCache"), @"D:\TestSite");
+            await generator.GenerateAsync();
 
-            await new Server().RunAsync();
+            //await new Server().RunAsync();
         }
     }
 }

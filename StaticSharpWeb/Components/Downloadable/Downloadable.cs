@@ -1,6 +1,5 @@
 ﻿using StaticSharpWeb.Html;
 using StaticSharpWeb.Resources;
-using StaticSharpWeb;
 using System;
 using System.Collections.Generic;
 using System.IO;
