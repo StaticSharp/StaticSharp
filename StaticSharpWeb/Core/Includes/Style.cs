@@ -9,7 +9,8 @@ namespace StaticSharpWeb {
 
 
     public interface IStyle : IInclude {
-
+        public string Path { get; }
+        
     }
 
     public class Style : IStyle {

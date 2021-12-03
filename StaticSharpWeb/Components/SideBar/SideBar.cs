@@ -21,6 +21,7 @@ namespace StaticSharpWeb {
                 id = "rightBar",
                 //style = ""
             });
+            //result.Add(new Tag("div", new { Class = "Glass"} ));
             context.Includes.Require(new Style(new RelativePath("SideBar.scss")));
             ForEach(async x => result.Add(await x.GenerateSideBarAsync(context)));
             return result;
@@ -33,6 +34,7 @@ namespace StaticSharpWeb {
                 id = "leftBar",
                 //style = "visibility: visible;position: fixed;width: auto;display: flex;flex-direction: column;top: 0px;height: 100vh;background-color: rgb(227, 227, 227)"
             });
+            result.Add(new Tag("div", new { Class = "Glass", id = "Glass"} ));
             context.Includes.Require(new Style(new RelativePath("SideBar.scss")));
             ForEach(async x => result.Add(await x.GenerateSideBarAsync(context)));
             return result;
