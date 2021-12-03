@@ -9,21 +9,29 @@ namespace CsmlWeb {
 
     public interface IStorage {
         public string StorageDirectory { get; }
+        public string IntermediateCache { get; }
 
         Task<TResource> AddOrGetAsync<TResource>(string key, Func<TResource> resource) where TResource : class, IResource;
     }
 
     public class Storage : IStorage {
+
+        public Storage(string storageDirectory, string intermediateCache) 
+            => (StorageDirectory, IntermediateCache) = (storageDirectory, intermediateCache);
+        
+
         public string StorageDirectory { get; }
+
+        public string IntermediateCache { get; }
+
         private readonly ConcurrentDictionary<object, SemaphoreSlim> _locks = new();
         private readonly List<IResource> _cache = new();
 
-        public Storage(string storageDirectory) => StorageDirectory = storageDirectory;
         public async Task<TResource> AddOrGetAsync<TResource>(string key, Func<TResource> resource) where TResource : class, IResource {
             var mylock = _locks.GetOrAdd(key, _ => new(1, 1));
             await mylock.WaitAsync();
             IResource result;
-            try {   
+            try {
                 result = _cache.Find(x => x.Key == key);
                 if (result == null) {
                     result = resource();

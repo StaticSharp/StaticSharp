@@ -22,8 +22,8 @@ namespace CsmlWeb {
 
     public class Includes : IIncludes {
         private readonly ConcurrentDictionary<string, IScript> scripts = new();
-        private readonly Dictionary<string, IStyle> styles = new();
-        private readonly Dictionary<string, IFont> fonts = new();
+        private readonly ConcurrentDictionary<string, IStyle> styles = new();
+        private readonly ConcurrentDictionary<string, IFont> fonts = new();
 
         public void Require(IScript script) {
             foreach(var i in script.Dependencies) {

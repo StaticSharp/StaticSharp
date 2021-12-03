@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace CsmlWeb {
 
@@ -77,7 +78,8 @@ namespace StaticSharpDemo {
             get {
                 if (_Storage is null) {
                     Directory.CreateDirectory(TempDirectory);
-                    _Storage = new Storage(TempDirectory);
+                    Directory.CreateDirectory(IntermidiateCache);
+                    _Storage = new Storage(TempDirectory, IntermidiateCache);
                 }
                 return _Storage;
             }
@@ -86,6 +88,8 @@ namespace StaticSharpDemo {
         public override string BaseDirectory => throw new NotImplementedException();
 
         public override string TempDirectory => @"D:\Csml2Cache\";
+
+        public string IntermidiateCache => Path.Combine(TempDirectory, "IntermediateCache");
 
         public override IPage FindPage(string requestPath) {
             if (requestPath == null) {
@@ -128,6 +132,33 @@ namespace StaticSharpDemo {
         }
     }
 
+    class StaticGenerator : CsmlWeb.StaticGenerator {
+        public override Uri BaseUri => throw new NotImplementedException();
+
+        public override string BaseDirectory => throw new NotImplementedException();
+
+        public override string TempDirectory => throw new NotImplementedException();
+
+        public override Uri GetNodeUri(INode node, Uri baseUri) {
+            throw new NotImplementedException();
+        }
+
+        public override IEnumerable<INode> GetRoots() {
+            var language = Enum.GetValues(typeof(Language)).Cast<Language>();
+            return language.Select(x => new CsmlRoot(x));
+        }
+    }
+
+    public class Url : IUrls {
+
+        public Uri BaseUri => new(@"D:\TestSite\");
+
+        public Uri ObjectToUri(object obj) {
+            return obj is IRepresentative representative && representative.Node is ProtoNode protoNode
+                ? new Uri(BaseUri, string.Join('/', representative.Node.Path) + "_" + protoNode.Language.ToString() + ".html")
+                : null;
+        }
+    }
 
     //public class ProtoNode : ProtoNode
     internal class Program {
@@ -150,13 +181,28 @@ namespace StaticSharpDemo {
             }
         }
 
-        private static void Main(string[] args) {
-            var generator = new StaticSharpDemo.Content.StaticGenerator();
+        static async Task WritePage(IPage page, Context context, string path) {
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            await File.WriteAllTextAsync(path, await page.GenerateHtmlAsync(context));
+        }
+
+        private static async Task Main(string[] args) {
+            var generator = new StaticGenerator();
             var pages = generator.GetPages();
+            var context = new Context(new Storage(@"D:\TestSite", @"D:\TestSite\IntermediateCache"), new Url());
+            var tasks = new List<Task>();
 
 
+            foreach (var page in pages) {
+                var url = context.Urls.ObjectToUri(page);
+                var relativeUrl = context.Urls.BaseUri.MakeRelativeUri(url);
+                var path = Path.Combine(@"D:\TestSite", relativeUrl.ToString());
+                tasks.Add(WritePage(page, context, path));
+            }
 
-            //new Server().Run();
+            await Task.WhenAll(tasks);
+
+            //await new Server().RunAsync();
         }
     }
 }
