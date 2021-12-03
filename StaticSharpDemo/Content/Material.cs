@@ -25,7 +25,6 @@ namespace StaticSharpDemo.Content {
         };
 
         public override RightSideBar RightSideBar => new() {
-            new LanguageMenu<Language>(VirtualNode),
             new LanguageMenu<Language>(VirtualNode)
         };
 

@@ -21,7 +21,11 @@ namespace CsmlWeb.Components {
             var relativePath = new RelativePath("NavigationMenu.js");
             context.Includes.Require(new Script(relativePath));
             var menuList = new Tag("ul", new { Class = "menu-list" });
+            // var icon = new Tag("span", new { Class = "material-icons", Style = "font-family: 'Material Design Icons';"}) {
+               
+            // };
             var result = new Tag("aside", new { Class = "menu" }) {
+                //icon,
                 menuList
             };
             if(_logoNode != null) {

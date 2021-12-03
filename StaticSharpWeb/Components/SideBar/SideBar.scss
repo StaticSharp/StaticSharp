@@ -8,7 +8,9 @@
     top: 0px;
     height: 100vh;
     background-color: #3b424d;
+    z-index: 5;
 }
+
 #leftBar {
     visibility: visible;
     position: fixed;
@@ -18,4 +20,17 @@
     top: 0px;
     height: 100vh;
     background-color: #3b424d;
+    z-index: 5;
 }
+
+// .Glass {
+//     position: fixed;
+//     //visibility: visible;
+//     width: 100vw;
+//     height: 100vh;
+//     top: 0;
+//     left: 0;
+//     opacity: 0;
+//     display: block;
+//     background-color: black;
+// }
