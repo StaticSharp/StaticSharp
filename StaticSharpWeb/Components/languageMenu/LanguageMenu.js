@@ -40,6 +40,7 @@
             borderRadius: '0px',
             backgroundColor: 'rgb(227, 227, 227)',
             top: '5px',
+            height: "auto",
             transform: 'unset',
         });
 
@@ -58,6 +59,48 @@
         }
     }
 
+    function disableScrolling() {
+        //if (element.parentElement.style.visibility == "hidden") {
+        TopScroll = window.pageYOffset || document.documentElement.scrollTop;
+        LeftScroll = window.pageXOffset || document.documentElement.scrollLeft,
+            window.onscroll = function() {
+                if (element.parentElement.style.visibility == "hidden") {
+                    window.scrollTo(LeftScroll, TopScroll);
+                }
+            };
+        //}
+    }
+
+    function enableScrolling() {
+        window.onscroll = function() {
+            console.log(element.parentElement.style.visibility);
+            if (element.parentElement.style.visibility == "hidden") {
+                if (window.scrollY == 0) {
+                    console.log("top right");
+                    element.css({
+                        //visibility: "hidden",
+                        transform: "translateX(0%)",
+                        visibility: "visible",
+                        width: "25px",
+                        height: "25px",
+                        borderRadius: "50%",
+                    })
+                } else {
+                    console.log("not the top right");
+                    element.css({
+                        borderRadius: "10px 0 0 10px",
+                        height: "auto",
+                        transform: "translateX(70%)",
+                        top: topOffset + "px",
+                        right: "0",
+                        visibility: "visible"
+                    })
+                }
+            }
+        };
+
+    }
+
     function hideChildren() {
         Array.from(element.children).forEach(x => {
             x.css({ visibility: "hidden" });
@@ -71,7 +114,7 @@
     }
 
     function minimizedRight() {
-        extend();
+        //extend();
         element.position = 'minimizedRight';
         element.css({
             borderRadius: "10px 0 0 10px",
@@ -82,12 +125,142 @@
             visibility: "visible"
         });
         hideChildren();
-        element.onclick = (e) => {
-            e.preventDefault();
-            extend();
+        if (element.parentElement.style.visibility == "hidden") {
+            element.onclick = (e) => {
+                //e.preventDefault();
+                console.log("haha");
+                disableScrolling();
+                //hideBackground();
+                extend();
+            }
         }
     }
 
+    document.addEventListener("click", (evt) => {
+        if (element.parentElement.style.visibility == "hidden") {
+            const flyoutElement = document.getElementById("rightBar");
+            let targetElement = evt.target;
+
+            while (targetElement) {
+                if (targetElement == flyoutElement) {
+                    console.log("inside right");
+                    return;
+                }
+                targetElement = targetElement.parentNode;
+            };
+            console.log("outside right");
+            enableScrolling();
+            minimizedRight();
+        }
+    });
+
+    window.onscroll = function() {
+        console.log(element.parentElement.style.visibility);
+        if (element.parentElement.style.visibility == "hidden") {
+            if (window.scrollY == 0) {
+                console.log("top right");
+                element.css({
+                    //visibility: "hidden",
+                    transform: "translateX(0%)",
+                    visibility: "visible",
+                    width: "25px",
+                    height: "25px",
+                    borderRadius: "50%",
+                })
+            } else {
+                console.log("not the top right");
+                element.css({
+                    borderRadius: "10px 0 0 10px",
+                    height: "auto",
+                    transform: "translateX(70%)",
+                    top: topOffset + "px",
+                    right: "0",
+                    visibility: "visible"
+                })
+            }
+        }
+    }
+
+    window.onloadRight = function() {
+        console.log("loaded");
+        if (element.parentElement.style.visibility == "hidden") {
+            if (window.scrollY == 0) {
+                console.log("top right");
+                element.css({
+                    //visibility: "hidden",
+                    transform: "translateX(0%)",
+                    visibility: "visible",
+                    width: "25px",
+                    height: "25px",
+                    borderRadius: "50%",
+                })
+            } else {
+                console.log("not the top right");
+                element.css({
+                    borderRadius: "10px 0 0 10px",
+                    height: "auto",
+                    transform: "translateX(70%)",
+                    top: topOffset + "px",
+                    right: "0",
+                    visibility: "visible"
+                })
+            }
+        }
+    }
+
+    window.onscrollRight = function() {
+        console.log(element.parentElement.style.visibility);
+        if (element.parentElement.style.visibility == "hidden") {
+            if (window.scrollY == 0) {
+                console.log("top right");
+                element.css({
+                    //visibility: "hidden",
+                    transform: "translateX(0%)",
+                    visibility: "visible",
+                    width: "25px",
+                    height: "25px",
+                    borderRadius: "50%",
+                })
+            } else {
+                console.log("not the top right");
+                element.css({
+                    borderRadius: "10px 0 0 10px",
+                    height: "auto",
+                    transform: "translateX(70%)",
+                    top: topOffset + "px",
+                    right: "0",
+                    visibility: "visible"
+                })
+            }
+        }
+    }
+
+    window.onload = function() {
+        console.log("loaded");
+        if (element.parentElement.style.visibility == "hidden") {
+            if (window.scrollY == 0) {
+                console.log("top right");
+                element.css({
+                    //visibility: "hidden",
+                    transform: "translateX(0%)",
+                    visibility: "visible",
+                    width: "25px",
+                    height: "25px",
+                    borderRadius: "50%",
+                })
+            } else {
+                console.log("not the top right");
+                element.css({
+                    borderRadius: "10px 0 0 10px",
+                    height: "auto",
+                    transform: "translateX(70%)",
+                    top: topOffset + "px",
+                    right: "0",
+                    visibility: "visible"
+                })
+            }
+        }
+    }
 
     const parent = element.parentElement.parentElement;
     element.updateWidth = () => {
@@ -101,4 +274,9 @@
     extend();
     parent.onAnchorsChanged.push(element.updateWidth);
 
+    // function hideBackground() {
+    //     if (!$(event.target).is('menu')) {
+    //         console.log("body");
+    //     }
+    // }
 }

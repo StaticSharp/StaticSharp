@@ -178,6 +178,9 @@ namespace StaticSharpDemo {
             }
         }
 
+        private static void Main(string[] args) {
+            // var generator = new StaticSharpDemo.Content.StaticGenerator();
+            // var pages = generator.GetPages();
 
 
         private static async Task Main(string[] args) {
@@ -185,7 +188,7 @@ namespace StaticSharpDemo {
                 new StaticGenerator(new Uri(@"D:/TestSite/"), new Storage(@"D:\TestSite", @"D:\TestSite\IntermediateCache"));
             await generator.GenerateAsync();
 
-            //await new Server().RunAsync();
+            new Server().Run();
         }
     }
 }
