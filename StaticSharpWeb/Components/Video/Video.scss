@@ -1,25 +1,27 @@
-.VideoPlayer {
-    position: relative;
-    max-height: 80vh;
-    overflow: hidden;
-    background-color: black;
-    z-index: 2;
-    >img {
-        width: 100%;
-        height: auto;
+@include exports("Video") {
+    .VideoPlayer {
         position: relative;
+        max-height: 80vh;
         overflow: hidden;
-        z-index: -1;
-    }
-    .VideoInner {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 100%;
-    }
-    >.Image {
-        position: absolute;
-        top: 0;
-        width: 100%;
+        background-color: black;
+        z-index: 2;
+        >img {
+            width: 100%;
+            height: auto;
+            position: relative;
+            overflow: hidden;
+            z-index: -1;
+        }
+        .VideoInner {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+        }
+        >.Image {
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
     }
 }

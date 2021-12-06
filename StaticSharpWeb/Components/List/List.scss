@@ -1,3 +1,5 @@
-.List {
-    margin-left: 20px;
+@include exports("List") {
+    .List {
+        margin-left: 20px;
+    }
 }

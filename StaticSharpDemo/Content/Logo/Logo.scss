@@ -1,6 +1,7 @@
-﻿
-.menu-list {
-    > .AntilatencyLogo {
-        font-size: 36px;
+﻿@include exports("Logo") {
+    .menu-list {
+        >.AntilatencyLogo {
+            font-size: 36px;
+        }
     }
 }
