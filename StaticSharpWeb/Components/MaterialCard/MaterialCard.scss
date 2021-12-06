@@ -38,7 +38,7 @@ $EnableShadows: false;
     }
 }
 
-@include exports("MaterialCard") {
+@include once("MaterialCard") {
     .MaterialCard {
         visibility: hidden;
         $backgroundColor: rgba(27, 30, 35, 0.7);

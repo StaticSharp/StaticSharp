@@ -37,21 +37,40 @@ namespace StaticSharpWeb {
             }
         }
 
-        public async Task<Tag> GenerateScriptAsync(IStorage storage) {
-            var scriptCode = new StringBuilder();
-            foreach(var i in scripts.Values) {
-                scriptCode.AppendLine(await i.GenerateAsync(storage));
-            }
-            return new Tag("script") {
-                new PureHtmlNode(scriptCode.ToString())
-            };
-        }
+        // public async Task<Tag> GenerateScriptAsync(IStorage storage) {
+        //     var scriptCode = new StringBuilder();
+        //     foreach(var i in scripts.Values) {
+        //         scriptCode.AppendLine(await i.GenerateAsync(storage));
+        //     }
+        //     return new Tag("script") {
+        //         new PureHtmlNode(scriptCode.ToString())
+        //     };
+        // }
 
         public void Require(IStyle style) {
             var id = style.Key;
             if(!styles.ContainsKey(id)) {
                 styles[id] = style;
             }
+        }
+
+        public async Task<Tag> GenerateScriptAsync(IStorage storage) {
+            return new Tag("script") {
+                new PureHtmlNode(GenerateSuperScript())
+            };
+        }
+
+        public string GenerateSuperScript() {
+            //StringBuilder scriptList = new StringBuilder();
+            string[] scriptList = new string[scripts.Values.Count];
+            int i = 0;
+            foreach(var script in scripts.Values) {
+                //scriptList.Append(script.Path);
+                scriptList[i] = script.Path.Replace("\\", "/");
+                i++;
+            }
+            Script superScript = new Script("");
+            return superScript.GenerateSuperScript(scriptList);
         }
 
         public async Task<Tag> GenerateStyleAsync(IStorage storage) {
@@ -61,14 +80,14 @@ namespace StaticSharpWeb {
         }
 
         public string GenerateSuperStyle() {
-            string styleList = "";
-            string functionPath = new RelativePath("_function.scss");
-            styleList += "@import " + "\"" + functionPath.Replace("\\", "/") + "\"" + ";" + "\r\n";
+            string functionPath = new RelativePath("once.scss");
+            StringBuilder styleList = new StringBuilder();
+            styleList.AppendLine("@import " + "\"" + functionPath.Replace("\\", "/") + "\"" + ";");
             foreach(var style in styles.Values) {
-                styleList += "@import " + "\"" + style.Path.Replace("\\", "/") + "\"" + ";" + "\r\n";
+                styleList.AppendLine("@import " + "\"" + style.Path.Replace("\\", "/") + "\"" + ";");
             }
             Style superStyle = new Style("");
-            return superStyle.GenerateSuperStyle(styleList);
+            return superStyle.GenerateSuperStyle(styleList.ToString());
         }
 
         public void Require(IFont font) {

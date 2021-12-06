@@ -1,4 +1,4 @@
-﻿@include exports("Paragraph") {
+﻿@include once("Paragraph") {
     .Paragraph {
         padding: 1em 0px;
         a {

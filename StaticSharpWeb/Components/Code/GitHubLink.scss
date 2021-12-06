@@ -21,7 +21,7 @@
     }
 }*/
 
-@include exports("GitHubLink") {
+@include once("GitHubLink") {
     @mixin GitHubLink {
         text-decoration: none;
         &:after {

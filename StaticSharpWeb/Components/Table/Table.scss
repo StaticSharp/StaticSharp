@@ -1,4 +1,4 @@
-@include exports("Table") {
+@include once("Table") {
     table {
         width: 100%;
         border-collapse: collapse;

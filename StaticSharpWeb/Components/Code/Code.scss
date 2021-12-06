@@ -30,7 +30,7 @@
         }
     }
     
-    @include exports("Code") {
+    @include once("Code") {
         .material .code {
             max-height: 80vh;
             overflow: auto;

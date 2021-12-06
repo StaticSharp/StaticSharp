@@ -1,4 +1,4 @@
-@include exports("Video") {
+@include once("Video") {
     .VideoPlayer {
         position: relative;
         max-height: 80vh;

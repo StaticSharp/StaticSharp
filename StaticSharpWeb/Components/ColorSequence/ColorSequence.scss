@@ -1,4 +1,4 @@
-@include exports("ColorSequence") {
+@include once("ColorSequence") {
     @keyframes animatedBackgroundPositionVertical {
         0% {
             background-position: 0 0;

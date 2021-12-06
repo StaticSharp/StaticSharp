@@ -1,58 +1,59 @@
-.Downloadable {
-    $lineHeight: 48px;
-    //position: relative;
-    //width: 100%;
-    left: 0;
-    right: 0;
-    //height: 48px;
-    background-color: #f7f7f7;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    padding: 4px 0 0 4px;
-    border-radius: 2px;
-    //overflow: scroll;
-    //@include MaterialShadow();
-    &>* {
+@include once("Downloadable") {
+    .Downloadable {
+        $lineHeight: 48px;
+        //position: relative;
+        //width: 100%;
+        left: 0;
+        right: 0;
+        //height: 48px;
+        background-color: #f7f7f7;
         display: flex;
-        height: $lineHeight;
-        justify-content: center;
-        text-align: center;
-        padding: 0px 16px 0px 16px;
-        font: inherit;
-        margin: 0 4px 4px 0;
-        flex: 10;
-    }
-    >.Title {
-        display: flex;
-        flex-direction: column;
-        white-space: nowrap;
-    }
-    >.Select {
-        display: flex;
-        font: inherit;
-        //height: $lineHeight;
-        //flex: 10;
-        border: 1px solid #ddd
-    }
-    >.Button {
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-        $color: #acc435;
-        text-decoration: none;
-        font-weight: 500;
-        color: black !important;
+        flex-wrap: wrap;
+        flex-direction: row;
+        padding: 4px 0 0 4px;
         border-radius: 2px;
-        background-color: $color;
-        overflow: unset;
-        height: $lineHeight;
+        //overflow: scroll;
         //@include MaterialShadow();
-        &:hover {
-            background-color: lighten($color, 10%);
+        &>* {
+            display: flex;
+            height: $lineHeight;
+            justify-content: center;
+            text-align: center;
+            padding: 0px 16px 0px 16px;
+            font: inherit;
+            margin: 0 4px 4px 0;
+            flex: 10;
         }
-    }
-    /*font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+        >.Title {
+            display: flex;
+            flex-direction: column;
+            white-space: nowrap;
+        }
+        >.Select {
+            display: flex;
+            font: inherit;
+            //height: $lineHeight;
+            //flex: 10;
+            border: 1px solid #ddd
+        }
+        >.Button {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            $color: #acc435;
+            text-decoration: none;
+            font-weight: 500;
+            color: black !important;
+            border-radius: 2px;
+            background-color: $color;
+            overflow: unset;
+            height: $lineHeight;
+            //@include MaterialShadow();
+            &:hover {
+                background-color: lighten($color, 10%);
+            }
+        }
+        /*font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
 	font-weight: normal;
 	-webkit-font-smoothing: antialiased;
 	box-sizing: inherit;
@@ -78,48 +79,43 @@
 	vertical-align: middle;
 	z-index: 1;
 	transition: .3s ease-out;*/
-}
-
-.DownloadableIcon {
-    color: #ffffff;
-    text-align: center;
-    cursor: pointer;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-    box-sizing: inherit;
-    float: left !important;
-    text-rendering: optimizeLegibility;
-    font-family: 'Material Design Icons';
-    font-weight: normal;
-    font-style: normal;
-    letter-spacing: normal;
-    text-transform: none;
-    display: inline-block;
-    white-space: nowrap;
-    word-wrap: normal;
-    direction: ltr;
-    -webkit-font-smoothing: antialiased;
-    margin-right: 15px;
-    font-size: 1.3rem;
-    line-height: inherit;
-}
-
-.DownloadableIconWindows::before {
-    content: "\F05B3";
-}
-
-.DownloadableIconAndroid::before {
-    content: "\F0032";
-}
-
-.DownloadableIconLinux::before {
-    content: "\F033D";
-}
-
-.DownloadableIconZip::before {
-    content: "\F06EB";
-}
-
-.DownloadableIconCloud::before {
-    content: "\F0162";
+    }
+    .DownloadableIcon {
+        color: #ffffff;
+        text-align: center;
+        cursor: pointer;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        box-sizing: inherit;
+        float: left !important;
+        text-rendering: optimizeLegibility;
+        font-family: 'Material Design Icons';
+        font-weight: normal;
+        font-style: normal;
+        letter-spacing: normal;
+        text-transform: none;
+        display: inline-block;
+        white-space: nowrap;
+        word-wrap: normal;
+        direction: ltr;
+        -webkit-font-smoothing: antialiased;
+        margin-right: 15px;
+        font-size: 1.3rem;
+        line-height: inherit;
+    }
+    .DownloadableIconWindows::before {
+        content: "\F05B3";
+    }
+    .DownloadableIconAndroid::before {
+        content: "\F0032";
+    }
+    .DownloadableIconLinux::before {
+        content: "\F033D";
+    }
+    .DownloadableIconZip::before {
+        content: "\F06EB";
+    }
+    .DownloadableIconCloud::before {
+        content: "\F0162";
+    }
 }

@@ -1,4 +1,4 @@
-﻿@include exports("Logo") {
+﻿@include once("Logo") {
     .menu-list {
         >.AntilatencyLogo {
             font-size: 36px;

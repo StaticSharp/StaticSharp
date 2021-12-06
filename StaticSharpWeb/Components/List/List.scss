@@ -1,4 +1,4 @@
-@include exports("List") {
+@include once("List") {
     .List {
         margin-left: 20px;
     }

@@ -1,4 +1,4 @@
-﻿@include exports("NavigationMenu") {
+﻿@include once("NavigationMenu") {
     $base-color: rgb(172, 196, 53);
     $background-color: #3b424d;
     $link-color: #f2f4f6;
