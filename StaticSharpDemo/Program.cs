@@ -131,7 +131,7 @@ namespace StaticSharpDemo {
 
         public override IEnumerable<INode> GetRoots() {
             var language = Enum.GetValues(typeof(Language)).Cast<Language>();
-            return language.Select(x => new CsmlRoot(x));
+            return language.Select(x => new StaticSharpRoot(x));
         }
 
         private static async Task WritePage(IPage page, Context context, string path) {

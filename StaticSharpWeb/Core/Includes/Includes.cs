@@ -24,6 +24,7 @@ namespace StaticSharpWeb {
         private readonly ConcurrentDictionary<string, IScript> scripts = new();
         private readonly ConcurrentDictionary<string, IStyle> styles = new();
         private readonly ConcurrentDictionary<string, IFont> fonts = new();
+        private Style superStyle { get; set; }
 
         public void Require(IScript script) {
             foreach(var i in script.Dependencies) {
@@ -55,24 +56,43 @@ namespace StaticSharpWeb {
 
         public async Task<Tag> GenerateStyleAsync(IStorage storage) {
             var styleCode = new StringBuilder();
-            //var stylesList = new StringBuilder();
             foreach(var style in styles.Values) {
                 styleCode.Append(await style.GenerateAsync(storage));
-                //var a = style.Key;
-                //stylesList.Append("@import " + style.Path);
             }
+            
+            GenerateSuperStyle();
+
+            //var superStyle = new StringBuilder();
+            //superStyle.Append(GenerateSuperStyle());
+
+            //styleCode.Append(GenerateSuperStyle());
             return new Tag("style") {
-                new PureHtmlNode(styleCode.ToString())
+                //new PureHtmlNode(styleCode.ToString())
+                new PureHtmlNode(superStyle.ToString()) //uncomment
             };
         }
 
-        public StringBuilder GenerateSuperStyle() {
-            var stylesList = new StringBuilder();
+        public void GenerateSuperStyle() {
+            //var stylesList = new StringBuilder();
+            string styleList = "";
+            styleList += "@import " + new RelativePath("_functions.scss") + ";";
+            //stylesList.Append("@import " + new RelativePath("_functions.scss") + ";");
             foreach(var style in styles.Values) {
-                stylesList.Append("@import " + style.Path);
+                //stylesList.Append("@import " + style.Path + ";");
+                styleList += "@import " + style.Path + ";";
             }
-            return stylesList;
+            superStyle = new Style("");
+            superStyle.GenerateSuperStyle(styleList);
         }
+
+        // public StringBuilder GenerateSuperStyle() {
+        //     var stylesList = new StringBuilder();
+        //     stylesList.Append("@import " + new RelativePath("_functions.scss") + ";");
+        //     foreach(var style in styles.Values) {
+        //         stylesList.Append("@import " + style.Path + ";");
+        //     }
+        //     return stylesList;
+        // }
 
         public void Require(IFont font) {
             var id = font.Key;

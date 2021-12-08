@@ -40,7 +40,10 @@ namespace StaticSharpWeb {
                 throw;
             }
         }
+
+        public string GenerateSuperStyle(string styleList) {            
+            var compilerResult = SassCompiler.Compile(styleList);
+            return compilerResult.CompiledContent;
+        }
     }
-
-
 }
