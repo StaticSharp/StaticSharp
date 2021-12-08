@@ -55,7 +55,9 @@
                         zIndex: "3"
                     })
                     targetElement.css({
-                        zIndex: "3"
+                        zIndex: "3",
+                        padding: "",
+                        paddintTop: "10px"
                     })
                     extend();
                     disableScrolling();
@@ -147,7 +149,7 @@
         console.log("exetended");
         element.position = 'extend';
         element.css({
-            padding: '10px',
+            paddingTop: '10px',
             margin: '0px',
             borderRadius: '0px',
             backgroundColor: '#3b424d',
@@ -167,7 +169,7 @@
             x.css({
                 visibility: "visible",
                 display: "block",
-                padding: "5px",
+                paddingTop: "5px",
                 textDecoration: "none",
                 fontSize: "20px",
                 color: "black",

@@ -1,6 +1,6 @@
 $modules: () !default;
 @mixin once() {
-    $id: $ss-file-hash;
+    $id: $ss-file-path-hash;
     @if (not index($modules, $id)) {
         $modules: append($modules, $id) !global;
         @content;

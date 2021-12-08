@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace StaticSharpWeb {
@@ -24,18 +25,32 @@ namespace StaticSharpWeb {
 
         public virtual async Task<string> GenerateAsync(IStorage storage) => await File.ReadAllTextAsync(Path);
 
-        public string GenerateSuperScript(string[] script) {
-            string result = "";
+        public string GenerateSuperScript(string[] scripts) {
+            StringBuilder stringBuilder = new();
             try {
-                foreach(var i in script) {
-                    result += File.ReadAllText(i) + "\r\n";
+                foreach(var i in scripts) {
+                    var script = ReadFile(i);
+                    stringBuilder.AppendLine(script);
                 }
-                return result;
+                return stringBuilder.ToString();
             } catch(Exception ex) {
                 Console.WriteLine(ex);
                 throw;
             }
         }
-    }
 
+        public string ReadFile(string script) {
+            var thisFilePath = new RelativePath(script);
+            string result = "// START FILE " + script + "\n" +
+                            File.ReadAllText(script).Replace("☺thisFilePath☹", thisFilePath)
+                            + "\n// END FILE " + script + "\n";
+            var uglifyResult = NUglify.Uglify.Js(result, script);
+            if (uglifyResult.HasErrors) {
+                throw new Exception("Javascript Uglify error's: "
+                        + "\n\t"
+                        + string.Join("\n\t", uglifyResult.Errors));
+            }
+            return result;
+        }
+    }
 }
