@@ -1,26 +1,27 @@
-﻿#rightBar {
-    visibility: visible;
-    position: fixed;
-    width: auto;
-    display: flex;
-    flex-direction: column;
-    right: 0px;
-    top: 0px;
-    height: 100vh;
-    background-color: #3b424d;
-    z-index: 5;
-}
-
-#leftBar {
-    visibility: visible;
-    position: fixed;
-    width: auto;
-    display: flex;
-    flex-direction: column;
-    top: 0px;
-    height: 100vh;
-    background-color: #3b424d;
-    z-index: 5;
+﻿@include once("SideBar") {
+    #rightBar {
+        visibility: visible;
+        position: fixed;
+        width: auto;
+        display: flex;
+        flex-direction: column;
+        right: 0px;
+        top: 0px;
+        height: 100vh;
+        background-color: #3b424d;
+        z-index: 5;
+    }
+    #leftBar {
+        visibility: visible;
+        position: fixed;
+        width: auto;
+        display: flex;
+        flex-direction: column;
+        top: 0px;
+        height: 100vh;
+        background-color: #3b424d;
+        z-index: 5;
+    }
 }
 
 // .Glass {

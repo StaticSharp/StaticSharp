@@ -1,7 +1,9 @@
-﻿footer {
-    padding-top: 50px;
-    padding-bottom: 50px;
-    background-color: #f7f7f7;
-    display: flex;
-    margin-top: auto;
+﻿@include once("Footer") {
+    footer {
+        padding-top: 50px;
+        padding-bottom: 50px;
+        background-color: #f7f7f7;
+        display: flex;
+        margin-top: auto;
+    }
 }

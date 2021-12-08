@@ -8,6 +8,7 @@ namespace StaticSharpWeb {
 
     public interface IScript : IInclude {
         IEnumerable<IScript> Dependencies { get; }
+        public string Path { get; }
     }
 
     public class Script : IScript {
@@ -22,6 +23,19 @@ namespace StaticSharpWeb {
         public Script(string path) => Path = path;
 
         public virtual async Task<string> GenerateAsync(IStorage storage) => await File.ReadAllTextAsync(Path);
+
+        public string GenerateSuperScript(string[] script) {
+            string result = "";
+            try {
+                foreach(var i in script) {
+                    result += File.ReadAllText(i) + "\r\n";
+                }
+                return result;
+            } catch(Exception ex) {
+                Console.WriteLine(ex);
+                throw;
+            }
+        }
     }
 
 }

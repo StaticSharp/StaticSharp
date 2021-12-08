@@ -41,9 +41,25 @@ namespace StaticSharpWeb {
             }
         }
 
-        public string GenerateSuperStyle(string styleList) {            
-            var compilerResult = SassCompiler.Compile(styleList);
-            return compilerResult.CompiledContent;
+        public string GenerateSuperStyle(string styleList) { 
+            try {           
+                var compilerResult = SassCompiler.Compile(styleList);
+
+                // var filePathHash = $"ss-file-path-hash: {}";
+                // var fileHash = "";
+                // var filePath = "";
+                // var fileName = "";
+                // var fileDirectory = "";
+                return compilerResult.CompiledContent;
+            } catch(SassCompilationException ex) {
+                Console.WriteLine(ex);
+                throw;
+            } catch(Exception ex) {
+                Console.WriteLine(ex);
+                throw;
+            }
         }
     }
+
+
 }
