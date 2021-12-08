@@ -8,7 +8,6 @@ using System.Text;
 using System.Security.Cryptography;
 
 namespace StaticSharpWeb {
-
     public interface IStyle : IInclude {
         public string Path { get; }
     }

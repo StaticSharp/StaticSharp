@@ -23,6 +23,7 @@ namespace StaticSharpWeb {
                     content = File.ReadAllText(path);
                     break;
                 } catch(IOException) {
+                    
                 }
             }
             return content;

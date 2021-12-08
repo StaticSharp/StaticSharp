@@ -35,7 +35,6 @@ namespace StaticSharpWeb {
             stringBuilder.AppendLine($"$ss-directory: \"{Path.GetDirectoryName(DirectoryPath.Replace("\\", "/"))}\";");
             return stringBuilder.ToString();
         }
-
         public string Update(string styleList) {
             CompilationResult result = new();
             try {
