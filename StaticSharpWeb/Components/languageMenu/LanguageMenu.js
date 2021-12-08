@@ -3,9 +3,9 @@
     let topOffset = 5;
     element.position = '';
 
-    element.onclick = function() {
-        alert("BBB");
-    }
+    // element.onclick = function() {
+    //     alert("BBB");
+    // }
 
     function disableScrolling() {
         console.log("disabled");
@@ -32,7 +32,7 @@
             } else {
                 element.css({
                     width: "auto",
-                    content: ""
+                    content: "",
                 })
                 minimizedRight();
             }
@@ -56,6 +56,7 @@
                     element.css({
                         width: "auto",
                         content: "",
+
                     })
                     minimizedRight();
                 }
@@ -65,19 +66,28 @@
 
     document.addEventListener("click", (evt) => {
         if (element.parentElement.style.visibility == "hidden") {
-            const flyoutElement = document.getElementById("rightBar");
+            const flyoutElement = document.getElementById("rightMenu");
+            const glassElement = document.getElementById("Glass");
+            //const flyoutElementLeft = document.getElementById("leftBar");
             let targetElement = evt.target;
-
             while (targetElement) {
                 if (targetElement == flyoutElement) {
-                    console.log("inside left");
+                    console.log("inside right");
+                    targetElement.css({
+                        zIndex: "2"
+                    })
+                    glassElement.css({
+                        visibility: "visible",
+                        opacity: "0.3",
+                        zIndex: "3"
+                    })
                     extend();
                     disableScrolling();
                     return;
                 }
                 targetElement = targetElement.parentNode;
             };
-            console.log("outside left");
+            console.log("outside right");
             enableScrolling();
             element.css({
                 width: "auto",
@@ -103,16 +113,29 @@
     function minimizedRight() {
         console.log("minimized");
         element.position = 'minimizedRight';
-        element.css({
-            borderRadius: "10px 10px 10px 10px",
-            height: "auto",
-            transform: "translateX(70%)",
-            backgroundColor: 'rgb(88, 131, 204)',
-            top: topOffset + "px",
-            right: "0",
-            visibility: "visible",
-            padding: '10px',
-        });
+        if (window.scrollY != 0) {
+            element.css({
+                borderRadius: "10px 10px 10px 10px",
+                height: "auto",
+                transform: "translateX(70%)",
+                backgroundColor: 'rgb(88, 131, 204)',
+                top: topOffset + "px",
+                right: "0",
+                visibility: "visible",
+                padding: '10px',
+            });
+        } else {
+            element.css({
+                transform: "translateX(0%)",
+                visibility: "visible",
+                width: "25px",
+                height: "25px",
+                borderRadius: "50%",
+                backgroundColor: 'rgb(88, 131, 204)',
+                padding: '10px',
+                content: "url(https://api.iconify.design/ic/baseline-translate.svg?color=white)"
+            })
+        }
         hideChildren();
     }
     window.myExtend = extend();

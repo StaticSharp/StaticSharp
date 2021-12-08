@@ -21,6 +21,7 @@ namespace StaticSharpWeb {
                 id = "rightBar",
                 //style = ""
             });
+            //result.Add(new Tag("div", new { Class = "Glass", id = "Glass"} ));
             //result.Add(new Tag("div", new { Class = "Glass"} ));
             context.Includes.Require(new Style(new RelativePath("SideBar.scss")));
             ForEach(async x => result.Add(await x.GenerateSideBarAsync(context)));

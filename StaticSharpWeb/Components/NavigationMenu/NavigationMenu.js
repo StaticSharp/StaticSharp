@@ -16,7 +16,7 @@
 
     function enableScrolling() {
         window.onscroll = function() {
-            //myEnableScrolling();
+            myEnableScrolling();
             if (element.parentElement.style.visibility == "hidden") {
                 if (window.scrollY == 0) {
                     console.log("top left");
@@ -39,65 +39,64 @@
         }
     }
 
-    element.onclick = function(evt) {
-        console.log(element.parentElement.style.visibility);
+    document.addEventListener("click", (evt) => {
         if (element.parentElement.style.visibility == "hidden") {
-            const flyoutElement = document.getElementById("leftBar");
-            //const flyoutElementRight = document.getElementById("rightBar");
-            //const glassElement = document.getElementById("Glass");
+            const flyoutElement = document.getElementById("leftMenu");
+            const flyoutElementRight = document.getElementById("rightMenu");
+            const glassElement = document.getElementById("Glass");
             let targetElement = evt.target;
             console.log(targetElement);
             while (targetElement) {
                 if (targetElement == flyoutElement) {
                     console.log("inside left");
+                    glassElement.css({
+                        visibility: "visible",
+                        opacity: "0.3",
+                        zIndex: "3"
+                    })
+                    targetElement.css({
+                        zIndex: "3"
+                    })
                     extend();
+                    disableScrolling();
+                    return;
+                } else if (targetElement == flyoutElementRight) {
+                    console.log("inside right");
+                    glassElement.css({
+                            visibility: "visible",
+                            opacity: "0.3",
+                            zIndex: "3"
+                        })
+                        // targetElement.css({
+                        //         zIndex: "1"
+                        //     })
+                        //myExtend();
                     disableScrolling();
                     return;
                 }
                 targetElement = targetElement.parentNode;
-                console.log(targetElement);
+                //console.log(targetElement); 
             };
             console.log("outside left");
             enableScrolling();
+            glassElement.css({
+                visibility: "hidden",
+                opacity: "0"
+            })
             element.css({
                 width: "auto",
-                content: ""
+                zIndex: "-2"
+                    //content: ""
             })
+            if (window.scrollY == 0) {
+                element.css({
+                    width: "auto"
+                        //content: url('https://api.iconify.design/ci/hamburger.svg'),
+                })
+            }
             minimizedLeft();
         }
-    }
-
-    // document.addEventListener("click", (evt) => {
-    //     if (element.parentElement.style.visibility == "hidden") {
-    //         const flyoutElement = document.getElementById("leftBar");
-    //         const flyoutElementRight = document.getElementById("rightBar");
-    //         const glassElement = document.getElementById("Glass");
-    //         let targetElement = evt.target;
-    //         console.log(targetElement);
-    //         while (targetElement) {
-    //             if (targetElement == flyoutElement) {
-    //                 console.log("inside left");
-    //                 extend();
-    //                 disableScrolling();
-    //                 return;
-    //             } else if (targetElement == flyoutElementRight) {
-    //                 console.log("inside right");
-    //                 myExtend();
-    //                 disableScrolling();
-    //                 return;
-    //             }
-    //             targetElement = targetElement.parentNode;
-    //             //console.log(targetElement); 
-    //         };
-    //         console.log("outside left");
-    //         enableScrolling();
-    //         element.css({
-    //             width: "auto",
-    //             content: ""
-    //         })
-    //         minimizedLeft();
-    //     }
-    // });
+    });
 
     function hideChildren() {
         Array.from(element.children).forEach(x => {
@@ -114,17 +113,33 @@
     function minimizedLeft() {
         console.log("minimized");
         element.position = 'minimizedRight';
-        element.css({
-            borderRadius: "10px 10px 10px 10px",
-            height: "auto",
-            transform: "translateX(-90%)",
-            backgroundColor: 'rgb(172, 196, 53)',
-            top: topOffset + "px",
-            right: "0",
-            visibility: "visible",
-            padding: '10px',
-            //content: url('https://api.iconify.design/ci/hamburger.svg')
-        });
+        if (window.scrollY != 0) {
+            element.css({
+                borderRadius: "10px 10px 10px 10px",
+                height: "auto",
+                transform: "translateX(-90%)",
+                backgroundColor: 'rgb(172, 196, 53)',
+                top: topOffset + "px",
+                right: "0",
+                visibility: "visible",
+                padding: '10px',
+                zIndex: "-2"
+                    //content: url('https://api.iconify.design/ci/hamburger.svg')
+            });
+        } else {
+            element.css({
+                transform: "translateX(0%)",
+                visibility: "visible",
+                width: "25px",
+                height: "25px",
+                backgroundColor: 'rgb(172, 196, 53)',
+                borderRadius: "50%",
+                padding: "10px",
+                content: "url(https://api.iconify.design/ci/hamburger.svg?color=white)",
+                zIndex: "-2"
+                    //content: url('https://api.iconify.design/ci/hamburger.svg')
+            })
+        }
         hideChildren();
     }
 
@@ -144,7 +159,7 @@
         if (element.parentElement.style.visibility == "hidden") {
             element.css({
                 width: "auto",
-                content: ""
+                //content: ""
             });
         }
 
@@ -161,7 +176,7 @@
     }
 
     window.onload = function() {
-        //myOnLoad();
+        myOnLoad();
         if (element.parentElement.style.visibility == "hidden") {
             if (window.scrollY == 0) {
                 console.log("top left");
@@ -176,6 +191,7 @@
             } else {
                 element.css({
                     width: "auto",
+                    content: ""
                 })
                 minimizedLeft();
             }
@@ -188,6 +204,7 @@
             enableScrolling();
             element.css({
                 width: "auto",
+                //content: url('https://api.iconify.design/ci/hamburger.svg')
             })
             minimizedLeft();
         } else {

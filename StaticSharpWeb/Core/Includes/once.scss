@@ -1,7 +1,8 @@
 $modules: () !default;
-@mixin once($name) {
-    @if (not index($modules, $name)) {
-        $modules: append($modules, $name) !global;
+@mixin once() {
+    $id: $ss-file-hash;
+    @if (not index($modules, $id)) {
+        $modules: append($modules, $id) !global;
         @content;
     }
 }

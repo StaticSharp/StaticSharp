@@ -1,4 +1,4 @@
-﻿@include once("SideBar") {
+﻿@include once() {
     #rightBar {
         visibility: visible;
         position: fixed;
@@ -24,14 +24,14 @@
     }
 }
 
-// .Glass {
-//     position: fixed;
-//     //visibility: visible;
-//     width: 100vw;
-//     height: 100vh;
-//     top: 0;
-//     left: 0;
-//     opacity: 0;
-//     display: block;
-//     background-color: black;
-// }
+.Glass {
+    position: fixed;
+    visibility: hidden;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    display: block;
+    background-color: black;
+}

@@ -1,4 +1,4 @@
-@include once("Reference") {
+@include once() {
     @mixin Reference($refColor) {
         text-decoration: underline;
         color: $refColor;
