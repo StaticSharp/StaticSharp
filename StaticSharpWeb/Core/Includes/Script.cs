@@ -40,9 +40,16 @@ namespace StaticSharpWeb {
         }
 
         public string ReadFile(string script) {
+            StringBuilder stringBuilder = new();
+            var file = File.ReadAllText(script);
             var thisFilePath = new RelativePath(script);
+            stringBuilder.AppendLine("// START FILE " + script);
             string result = "// START FILE " + script + "\n" +
-                            File.ReadAllText(script).Replace("☺thisFilePath☹", thisFilePath)
+                            file.Replace("☺thisFilePathHash☹", thisFilePath.ToString().ToHashString())
+                            .Replace("☺thisFileHash☹", file.ToHashString())
+                            .Replace("☺thisFilePath☹", thisFilePath.ToString())
+                            .Replace("☺thisFileName☹", System.IO.Path.GetFileName(thisFilePath))
+                            .Replace("☺thisDirectory☹", System.IO.Path.GetDirectoryName(thisFilePath))
                             + "\n// END FILE " + script + "\n";
             var uglifyResult = NUglify.Uglify.Js(result, script);
             if (uglifyResult.HasErrors) {
