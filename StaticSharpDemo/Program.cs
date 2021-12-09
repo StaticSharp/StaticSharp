@@ -152,8 +152,10 @@ namespace StaticSharpDemo {
         //        : null;
         //}
 
-        public override Uri ProtoNodeToUri<T>(T protoNode) {
-            throw new NotImplementedException();
+        public override Uri ProtoNodeToUri<T>(T node) {
+                return node is ProtoNode protoNode
+                    ? new Uri(BaseUri, string.Join('/', protoNode.Path) + "_" + protoNode.Language.ToString() + ".html")
+                    : null;
         }
     }
 
@@ -161,14 +163,14 @@ namespace StaticSharpDemo {
     internal class Program {
 
         private static async Task Main(string[] args) {
-            var generator = new Content.StaticGenerator(
-                    new Uri(@"D:/TestSite/"),
-                    new Storage(@"D:\TestSite", @"D:\TestSite\IntermediateCache"),
-                    @"D:\staticsharp.github.io"
-            );
-            await generator.GenerateAsync();
+            //var generator = new Content.StaticGenerator(
+            //        new Uri(@"D:/TestSite/"),
+            //        new Storage(@"D:\TestSite", @"D:\TestSite\IntermediateCache"),
+            //        @"D:\staticsharp.github.io"
+            //);
+            //await generator.GenerateAsync();
 
-            //await new Server().RunAsync();
+            await new Server().RunAsync();
         }
     }
 }
