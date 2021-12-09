@@ -8,6 +8,8 @@ namespace StaticSharpDemo.Content {
     partial class Material : StaticSharpWeb.Material {
         
         public override Footer Footer => new() {
+
+
             new Grid(1200, 2) {
                 new Paragraph{
                     "AAAAAA",

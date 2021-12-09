@@ -30,7 +30,7 @@ namespace StaticSharpWeb.Components {
 
         public async Task<INode> GenerateBlockHtmlAsync(Context context) {
             var material = MaterialGetter(context);
-            var result = new Tag("a", new { Class = "MaterialCard", href = context.Urls.ObjectToUri(material) });
+            var result = new Tag("a", new { Class = "MaterialCard", href = context.Urls.ProtoNodeToUri((material as StaticSharpEngine.IRepresentative)?.Node) });
             if (material.TitleImage != null) {
                 Image image;
                 if (material.TitleImage is Video video) {

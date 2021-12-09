@@ -105,7 +105,8 @@ namespace StaticSharpWeb {
         }
 
         public async Task<INode> GenerateInlineHtmlAsync(Context context) {
-            var uri = context.Urls.ObjectToUri(this);
+            var representative = this as  StaticSharpEngine.IRepresentative;
+            var uri = context.Urls.ProtoNodeToUri(representative?.Node);
             if (uri == null) {
                 throw new NullReferenceException();//todo: special exception
             }

@@ -20,7 +20,7 @@ namespace StaticSharpWeb {
             context.Includes.Require(new Script(relativePath));
             var result = new Tag("aside", new { Class = "rightMenu" });
             foreach (var i in Enum.GetValues<TLanguage>()) {
-                var uri = context.Urls.ObjectToUri(Node.WithLanguage(i).Representative);
+                var uri = context.Urls.ProtoNodeToUri(Node.WithLanguage(i));
                 result.Add(new Tag("a", new { href = uri }) {
                     i.ToString()
                 });
