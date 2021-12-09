@@ -1,8 +1,6 @@
 ﻿using StaticSharpWeb.Html;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -20,17 +18,22 @@ namespace StaticSharpWeb {
             public string File { get; init; }
             public string Line { get; init; }
 
+            public CallStack(string place, string file, string line) {
+                Place = place;
+                File = file;
+                Line = line;
+            }
+
+            public CallStack() {
+            }
         }
 
         private static Tag ReplaceLinks(string stackTrace) {
             var regex = new Regex(@"(in (?<file>.*):line (?<line>\d*))");
             var matches = regex.Matches(stackTrace);
             var listOfCallStack = new List<CallStack>();
-            var result = matches.Select(x => new CallStack() {
-                Place = x.Groups[0]?.ToString(),
-                File = x.Groups["file"]?.Value,
-                Line = x.Groups["line"]?.Value
-            });
+            var result = matches.Select(x => 
+                new CallStack(x.Groups[0]?.ToString(), x.Groups["file"]?.Value, x.Groups["line"]?.Value));
             var tag = new Tag("div") {
                 new Tag("script", new { type = "text/javascript"}){
                     "function findLine(file, line){fetch(`/api/v1/visual_studio/${file}/${line}`);" +
@@ -38,10 +41,10 @@ namespace StaticSharpWeb {
                 }
             };
             var stackTraceArray = stackTrace.Split(Environment.NewLine);
-            foreach(var stackPart in stackTraceArray) {
+            foreach (var stackPart in stackTraceArray) {
                 var added = false;
-                foreach(var callStack in result) {
-                    if(stackPart.Contains(callStack.Place)) {
+                foreach (var callStack in result) {
+                    if (stackPart.Contains(callStack.Place)) {
                         tag.Add(stackPart.Replace(callStack.Place, ""));
                         tag.Add(new Tag("a", new {
                             href = "localhost/aaaa/aaa/aa",
@@ -60,7 +63,7 @@ namespace StaticSharpWeb {
                         break;
                     }
                 }
-                if(!added) {
+                if (!added) {
                     tag.Add(stackPart);
                     tag.Add(new Tag("br"));
                 }
@@ -80,10 +83,10 @@ namespace StaticSharpWeb {
                 new Tag("h1"){ Title }
             };
             body.Add(Exception.Message);
-            if(!string.IsNullOrEmpty(Exception.InnerException?.Message)) {
+            if (!string.IsNullOrEmpty(Exception.InnerException?.Message)) {
                 body.Add(Exception.InnerException.Message);
             }
-            if(!string.IsNullOrEmpty(Exception.StackTrace)) {
+            if (!string.IsNullOrEmpty(Exception.StackTrace)) {
                 body.Add(ReplaceLinks(Exception.StackTrace));
             }
             var document = new Tag(null) {
