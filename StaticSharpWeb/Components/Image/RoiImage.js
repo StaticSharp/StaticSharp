@@ -1,22 +1,17 @@
 function RoiImage(element, aspect, roi) {
     this.element = element;
-    
-    console.log("ROI: ", aspect, roi);
+
     this.aspect = aspect;
     this.roi = roi;
     this.previousContainerWidth = -1;
     this.previousContainerHeight = -1;
     this.image = this.element.getElementsByTagName("img")[0];
-    
-/*    const parent = this.element.parentElement.className == "Section" || this.element.parentElement.className == "Header" || true?
-        null : this.element.parentElement;*/
 
 
 
-    
-    
+
+
     this.OnWindowResize = function() {
-        //console.log(window.getComputedStyle(parent, null).getPropertyValue("height").replace("px", ""));
         let width = this.element.offsetWidth;
         let height = this.element.offsetHeight;
         this.previousContainerWidth = width;
@@ -27,7 +22,7 @@ function RoiImage(element, aspect, roi) {
         let y0 = roi[2] / 100;
         let y1 = roi[3] / 100;
         let w = x1 - x0;
-        let h = y1 - y0;        
+        let h = y1 - y0;
 
         let widthAspect = width * aspect;
         let minHeight = widthAspect * h;
@@ -48,7 +43,7 @@ function RoiImage(element, aspect, roi) {
         }
 
         this.element.style.minHeight = minHeight + "px";
-        this.element.style.maxHeight = maxHeight + "px";        
+        this.element.style.maxHeight = maxHeight + "px";
     }
 
     this.OnResourcesLoaded = function() {

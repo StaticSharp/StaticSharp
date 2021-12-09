@@ -1,0 +1,79 @@
+@include once() {
+    $base-color: rgb(172, 196, 53);
+    $background-color: #3b424d;
+    $link-color: #f2f4f6;
+    .RightSlider {
+        visibility: visible;
+        position: fixed;
+        width: auto;
+        display: flex;
+        flex-direction: column;
+        top: 0px;
+        height: 100vh;
+        background-color: #3b424d;
+        z-index: 10;
+        font-size: 20px;
+    }
+    .RightMarker {
+        visibility: hidden;
+        width: 8px;
+        height: 160px;
+        background: rgb(88, 131, 204);
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+        top: 10px;
+        position: absolute;
+        left: -8px;
+        //transition: all 0.05s, opacity 0s;
+    }
+    .RightIcon {
+        margin-left: 20%;
+        margin-top: 20%;
+        width: 24px;
+        height: 24px;
+    }
+    .menu {
+        font-size: 24px;
+    }
+    .menu.is-small {
+        font-size: 0.75rem;
+    }
+    .menu.is-medium {
+        font-size: 1.25rem;
+    }
+    .menu.is-large {
+        font-size: 1.5rem;
+    }
+    .menu-list {
+        line-height: 24px;
+    }
+    .menu-list a {
+        border-radius: 2px;
+        color: $link-color;
+        display: block;
+        padding: 10px 14px;
+        //padding: 0.5em;
+        text-decoration: none
+    }
+    .menu-list a:hover {
+        background-color: darkGray;
+        color: $link-color;
+    }
+    .menu-list a.is-active {
+        background-color: #485fc7;
+        color: #fff;
+    }
+    .menu-list li ul {
+        border-left: 1px solid #dbdbdb;
+        margin: 0.75em;
+        padding-left: 0.75em;
+    }
+    .menu-list li {
+        list-style-type: none;
+    }
+    ul.menu-list {
+        padding-inline-start: 0px;
+        margin-block-start: 0px !important;
+        margin-block-end: 0px !important;
+    }
+}

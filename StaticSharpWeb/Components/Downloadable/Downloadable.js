@@ -68,31 +68,26 @@ function Downloadable(element, primaryName, data) {
         return BuildSelector(x[select.value], depth + 1)
     }
     var Build = function() {
-            element.textContent = '';
+        element.textContent = '';
 
-            var title = element.appendChild(document.createElement("div"));
-            title.innerText = primaryName;
-            title.className = "Title";
+        var title = element.appendChild(document.createElement("div"));
+        title.innerText = primaryName;
+        title.className = "Title";
 
-            var selectorsResult = BuildSelector(data, 0);
+        var selectorsResult = BuildSelector(data, 0);
 
-            var e = selectorsResult.split("|");
-            var href = element.className + "/" + e[0];
-            var size = e[1];
-            var name = href.split("/").pop()
+        var e = selectorsResult.split("|");
+        var href = element.className + "/" + e[0];
+        var size = e[1];
+        var name = href.split("/").pop()
 
-            var button = element.appendChild(document.createElement("a"));
-            button.className = "Button";
-            button.innerText = "Download";
-            button.href = href;
-            button.title = name + " " + size;
-            button.download = "";
-        }
-        /*var BuildSelectors = function () {
-            console.log("BuildSelectors");
-            selectors.textContent = '';
-            BuildSelector(data, 0);
-        }*/
+        var button = element.appendChild(document.createElement("a"));
+        button.className = "Button";
+        button.innerText = "Download";
+        button.href = href;
+        button.title = name + " " + size;
+        button.download = "";
+    }
 
     Build();
 

@@ -32,13 +32,13 @@ namespace StaticSharpWeb {
                 if (elem is string) {
                     parentTag.Add(new Tag("li") { 
                         elem.ToString(),
-                        new JSCall(new RelativePath("List.js")).Generate(context)
+                        //new JSCall(new RelativePath("List.js")).Generate(context)
                         });
                     
                 }
                 if (elem is BaseList curTag) {
                     var tag = new Tag(_type, new { Class = "List"}) {
-                        new JSCall(new RelativePath("List.js")).Generate(context)
+                        //new JSCall(new RelativePath("List.js")).Generate(context)
                     }; 
                     GenerateInnerTags(context, tag, curTag._baseList);
                     parentTag.Add(tag);

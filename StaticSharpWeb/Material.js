@@ -28,7 +28,6 @@ function Material(element, contentWidth) {
         var rightBar = element.querySelector("#rightBar");
         leftBarWidth = leftBar == null ? 0 : leftBar.offsetWidth;
         rightBarWidth = rightBar == null ? 0 : rightBar.offsetWidth;
-        console.log(leftBar.offsetWidth);
         const textMargin = 12;
         let width = element.offsetWidth;
         let wideAnchorsCollapsed = width < (leftBarWidth + rightBarWidth + contentWidth);

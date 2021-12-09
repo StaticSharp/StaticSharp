@@ -19,14 +19,14 @@ function MaterialCard(element) {
         })(navigator.userAgent || navigator.vendor || window.opera);
         return check;
     }
-    
+
     this.isMobile = false;
-    
+
     if (this.mobileCheck()) {
         this.isMobile = true;
-        element.classList.add("Mobile"); 
+        element.classList.add("Mobile");
     }
-    
+
     this.OnResourcesLoaded = function() {
         if (this.mobileCheck()) {
             this.isMobile = true;
@@ -36,7 +36,7 @@ function MaterialCard(element) {
 
 
     this.resize = e => {
-        if(!this.isMobile) this.truncateSlider();
+        if (!this.isMobile) this.truncateSlider();
     }
     if (parent.onAnchorsChanged == null) {
         parent.onAnchorsChanged = [];
@@ -48,7 +48,6 @@ function MaterialCard(element) {
     //taken from http://detectmobilebrowsers.com/
 
 
-    console.log(!this.mobileCheck(), sliderText.innerHTML, sliderText.innerHTML !== null, sliderText.innerHTML != "");
     if (!this.mobileCheck() && sliderText.innerHTML !== "") {
 
         element.addEventListener('mouseover', e => element.classList.add('MouseOver'));
@@ -61,7 +60,7 @@ function MaterialCard(element) {
         let sliderMaxHeight = element.offsetHeight - sliderTitle.clientHeight;
         if (slider.offsetHeight <= sliderMaxHeight)
             return;
-        
+
         this.truncateToHeight(slider, sliderText, sliderMaxHeight);
         slider.style.height = sliderMaxHeight + 'px';
     }

@@ -17,28 +17,24 @@ namespace StaticSharpWeb {
 
     public class RightSideBar : SideBar {
         public override async Task<Tag> GenerateSideBarAsync(Context context) {
-            var result = new Tag("div", new {
-                id = "rightBar",
-                //style = ""
-            });
-            //result.Add(new Tag("div", new { Class = "Glass", id = "Glass"} ));
-            //result.Add(new Tag("div", new { Class = "Glass"} ));
+            var rightSideBarElement = new Tag("div", new { Class = "rightBar", id = "rightBar" });
+            var glass = new Tag("div", new { Class = "Glass", id = "Glass" });
+            rightSideBarElement.Add(glass);
             context.Includes.Require(new Style(new RelativePath("SideBar.scss")));
-            ForEach(async x => result.Add(await x.GenerateSideBarAsync(context)));
-            return result;
+            ForEach(async x => rightSideBarElement.Add(await x.GenerateSideBarAsync(context)));
+            return rightSideBarElement;
         }
     }
 
     public class LeftSideBar : SideBar {
         public override async Task<Tag> GenerateSideBarAsync(Context context) {
-            var result = new Tag("div", new {
-                id = "leftBar",
-                //style = "visibility: visible;position: fixed;width: auto;display: flex;flex-direction: column;top: 0px;height: 100vh;background-color: rgb(227, 227, 227)"
-            });
-            result.Add(new Tag("div", new { Class = "Glass", id = "Glass"} ));
+            var leftSideBarElement = new Tag("div", new { Class = "leftBar", id = "leftBar" });
+            var glass = new Tag("div", new { Class = "Glass", id = "Glass" });
+            leftSideBarElement.Add(glass);
             context.Includes.Require(new Style(new RelativePath("SideBar.scss")));
-            ForEach(async x => result.Add(await x.GenerateSideBarAsync(context)));
-            return result;
+            ForEach(async x => leftSideBarElement.Add(await x.GenerateSideBarAsync(context)));
+            
+            return leftSideBarElement;
         }
     }
 

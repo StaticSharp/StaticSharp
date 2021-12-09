@@ -2,6 +2,36 @@
     $base-color: rgb(172, 196, 53);
     $background-color: #3b424d;
     $link-color: #f2f4f6;
+    .LeftSlider {
+        visibility: visible;
+        position: fixed;
+        width: 250px;
+        display: flex;
+        flex-direction: column;
+        top: 0px;
+        height: 100vh;
+        background-color: #3b424d;
+        z-index: 10;
+        font-size: 20px;
+    }
+    .LeftMarker {
+        visibility: hidden;
+        width: 8px;
+        height: 160px;
+        background: rgb(172, 196, 53);
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+        top: 10px;
+        position: absolute;
+        left: 250px;
+        //transition: all 0.05s, opacity 0s;
+    }
+    .LeftIcon {
+        margin-left: 20%;
+        margin-top: 20%;
+        width: 24px;
+        height: 24px;
+    }
     .menu {
         font-size: 24px;
     }

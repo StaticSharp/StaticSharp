@@ -1,27 +1,24 @@
 ﻿@include once() {
     #rightBar {
-        visibility: visible;
-        position: fixed;
-        width: auto;
-        display: flex;
-        flex-direction: column;
-        right: 0px;
-        top: 0px;
-        height: 100vh;
-        background-color: #3b424d;
-        z-index: 11;
+        //width: 50px;
+        //height: 0px;
+        //left: 0px;
+        margin-left: auto;
+        width: 50px;
+        height: 0px;
     }
     #leftBar {
-        visibility: visible;
-        position: fixed;
-        //width: auto;
         width: 250px;
-        display: flex;
-        flex-direction: column;
-        top: 0px;
-        height: 100vh;
-        background-color: #3b424d;
-        z-index: 11;
+        height: 0px;
+        // visibility: visible;
+        // position: fixed;
+        // width: auto;
+        // display: flex;
+        // flex-direction: column;
+        // top: 0px;
+        // height: 100vh;
+        // background-color: #3b424d;
+        // z-index: 10;
     }
     .Glass {
         position: fixed;

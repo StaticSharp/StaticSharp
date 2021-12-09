@@ -6,5 +6,7 @@ function ColorSequence(element) {
         let right = parent.anchors.textRight;
         element.style.marginLeft = left + "px";
     }
-    parent.onAnchorsChanged.push(element.updateWidth);
+    document.addEventListener('DOMContentLoaded', function() {
+        parent.onAnchorsChanged.push(element.updateWidth);
+    });
 }

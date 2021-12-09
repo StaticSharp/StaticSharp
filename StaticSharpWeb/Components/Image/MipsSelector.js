@@ -1,5 +1,4 @@
 function MipsSelector(element, mips) {
-    //console.log(mips);
     if (Object.keys(mips)[0] === undefined) { return; }
     this.element = element;
     let image = this.element.getElementsByTagName("img")[0];

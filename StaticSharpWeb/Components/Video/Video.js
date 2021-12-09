@@ -27,7 +27,6 @@ function Video(element, code, aspect, showControls, autoPlay, loop, sound, mips,
     this.element = element;
     this.element.onAnchorsChanged = [];
     let parent = element.parentElement;
-    console.log(this);
     element.updateWidth = function() {
         let left = parent.anchors.textLeft;
         let right = parent.anchors.textRight;

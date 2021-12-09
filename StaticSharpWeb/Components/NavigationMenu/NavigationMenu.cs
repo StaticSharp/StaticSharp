@@ -20,10 +20,16 @@ namespace StaticSharpWeb.Components {
         public async Task<Tag> GenerateSideBarAsync(Context context) {
             var relativePath = new RelativePath("NavigationMenu.js");
             context.Includes.Require(new Script(relativePath));
+            var slider = new Tag("div", new { Class = "LeftSlider", id = "LeftSlider"});
+            var marker = new Tag("div", new { Class = "LeftMarker", id = "LeftMarker"});
+            var icon = new Tag("span", new { Class = "LeftIcon", id = "LeftIcon"});
+            marker.Add(icon);
             var menuList = new Tag("ul", new { Class = "menu-list" });
             var result = new Tag("aside", new { Class = "leftMenu", id = "leftMenu" }) {
                 menuList
             };
+            slider.Add(result);
+            slider.Add(marker);
             if(_logoNode != null) {
                 menuList.Add(await _logoNode.GenerateInlineHtmlAsync(context));
             }
@@ -36,9 +42,9 @@ namespace StaticSharpWeb.Components {
                     }
                 });
             }
-            result.Add(new JSCall(relativePath).Generate(context));
+            slider.Add(new JSCall(relativePath).Generate(context));
             context.Includes.Require(new Style(new RelativePath($"{nameof(NavigationMenu)}.scss")));
-            return result;
+            return slider;
         }
 
         public void Add(StaticSharpEngine.INode node) => _nodes.Add(node);
