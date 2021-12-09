@@ -1,13 +1,14 @@
-@mixin Reference($refColor) {
-    text-decoration: underline;
-    color: $refColor;
-    text-decoration-color: mix($refColor, transparent, 50%);
-    &:hover {
-        text-decoration-color: $refColor;
+@include once() {
+    @mixin Reference($refColor) {
+        text-decoration: underline;
+        color: $refColor;
+        text-decoration-color: mix($refColor, transparent, 50%);
+        &:hover {
+            text-decoration-color: $refColor;
+        }
     }
-}
-
-$ReferenceColor: #0645ad !default;
-.Reference {
-    @include Reference($ReferenceColor);
+    $ReferenceColor: #0645ad !default;
+    .Reference {
+        @include Reference($ReferenceColor);
+    }
 }

@@ -21,7 +21,7 @@ namespace StaticSharpWeb.Components {
             var relativePath = new RelativePath("NavigationMenu.js");
             context.Includes.Require(new Script(relativePath));
             var menuList = new Tag("ul", new { Class = "menu-list" });
-            var result = new Tag("aside", new { Class = "menu" }) {
+            var result = new Tag("aside", new { Class = "leftMenu", id = "leftMenu" }) {
                 menuList
             };
             if(_logoNode != null) {

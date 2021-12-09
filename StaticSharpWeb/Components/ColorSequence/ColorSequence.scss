@@ -1,63 +1,62 @@
-@keyframes animatedBackgroundPositionVertical {
-    0% {
-        background-position: 0 0;
+@include once() {
+    @keyframes animatedBackgroundPositionVertical {
+        0% {
+            background-position: 0 0;
+        }
+        100% {
+            background-position: 0 100%;
+        }
     }
-    100% {
-        background-position: 0 100%;
+    @keyframes animatedBackgroundPositionHorizontal {
+        0% {
+            background-position: 0 0;
+        }
+        100% {
+            background-position: 100% 0;
+        }
     }
-}
-
-@keyframes animatedBackgroundPositionHorizontal {
-    0% {
-        background-position: 0 0;
+    @keyframes animatedRotateCentered {
+        0% {
+            transform: translate(-50%, -50%) rotate(0deg);
+        }
+        100% {
+            transform: translate(-50%, -50%) rotate(360deg);
+        }
     }
-    100% {
-        background-position: 100% 0;
-    }
-}
-
-@keyframes animatedRotateCentered {
-    0% {
-        transform: translate(-50%, -50%) rotate(0deg);
-    }
-    100% {
-        transform: translate(-50%, -50%) rotate(360deg);
-    }
-}
-
-.ColorSequence {
-    z-index: 10;
-    display: inline-block;
-    margin-left: 2.4em;
-    margin-right: 0.2em;
-    height: 2em;
-    width: 128px;
-    position: relative;
-    display: block;
-    border-radius: 0.25em;
-    box-shadow: 1px 3px 2px 0px rgba(0, 0, 0, 0.4);
-    &:before {
-        display: block;
-        box-shadow: inherit;
-        width: 2em;
+    .ColorSequence {
+        z-index: 10;
+        display: inline-block;
+        margin-left: 2.4em;
+        margin-right: 0.2em;
         height: 2em;
-        left: -2.2em;
+        width: 128px;
         position: relative;
-        background: inherit;
-        background-size: 100000% 100%;
-        border-radius: 50%;
-        content: "";
-    }
-    &::after {
         display: block;
-        width: inherit;
-        height: inherit;
-        position: relative;
-        top: -100%;
-        content: "";
-        transform: scaleX(-1);
-        background: linear-gradient(to left, transparent 0%, transparent 49.5%, gray 49.5%, gray 50%, gray 50.5%, transparent 50.5%, transparent 100%);
-        animation: inherit;
-        background-size: 200% 100%;
+        border-radius: 0.25em;
+        box-shadow: 1px 3px 2px 0px rgba(0, 0, 0, 0.4);
+        &:before {
+            display: block;
+            box-shadow: inherit;
+            width: 2em;
+            height: 2em;
+            left: -2.2em;
+            position: relative;
+            background: inherit;
+            background-size: 100000% 100%;
+            border-radius: 50%;
+            content: "";
+        }
+        &::after {
+            display: block;
+            width: inherit;
+            height: inherit;
+            position: relative;
+            top: -100%;
+            content: "";
+            transform: scaleX(-1);
+            background: linear-gradient(to left, transparent 0%, transparent 49.5%, gray 49.5%, gray 50%, gray 50.5%, transparent 50.5%, transparent 100%);
+            animation: inherit;
+            background-size: 200% 100%;
+        }
     }
 }

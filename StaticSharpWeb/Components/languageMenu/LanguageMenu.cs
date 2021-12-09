@@ -18,7 +18,7 @@ namespace StaticSharpWeb {
         public async Task<Tag> GenerateSideBarAsync(Context context) {
             var relativePath = new RelativePath("LanguageMenu.js");
             context.Includes.Require(new Script(relativePath));
-            var result = new Tag("aside", new { Class = "rightMenu" });
+            var result = new Tag("aside", new { Class = "rightMenu", id = "rightMenu" });
             foreach (var i in Enum.GetValues<TLanguage>()) {
                 var uri = context.Urls.ProtoNodeToUri(Node.WithLanguage(i));
                 result.Add(new Tag("a", new { href = uri }) {

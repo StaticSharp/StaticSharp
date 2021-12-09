@@ -1,3 +1,5 @@
-.List {
-    margin-left: 20px;
+@include once() {
+    .List {
+        margin-left: 20px;
+    }
 }

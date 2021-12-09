@@ -1,60 +1,49 @@
-﻿$base-color: rgb(172, 196, 53);
-$background-color: #3b424d;
-$link-color: #f2f4f6;
-
-
-.menu {
-    font-size: 24px;
-}
-
-.menu.is-small {
-    font-size: 0.75rem;
-}
-
-.menu.is-medium {
-    font-size: 1.25rem;
-}
-
-.menu.is-large {
-    font-size: 1.5rem;
-}
-
-.menu-list {
-    line-height: 24px;
-}
-
-.menu-list a {
-    border-radius: 2px;
-    color: $link-color;
-    display: block;
-    padding: 16px 28px;
-    //padding: 0.5em;
-    text-decoration: none
-}
-
-.menu-list a:hover {
-    background-color: darkGray;
-    color: $link-color;
-}
-
-.menu-list a.is-active {
-    background-color: #485fc7;
-    color: #fff;
-}
-
-.menu-list li ul {
-    border-left: 1px solid #dbdbdb;
-    margin: 0.75em;
-    padding-left: 0.75em;
-}
-
-.menu-list li {
-    list-style-type: none;
-    
-}
-
-ul.menu-list {
-    padding-inline-start: 0px;
-    margin-block-start: 0px !important;
-    margin-block-end: 0px !important;
+﻿@include once() {
+    $base-color: rgb(172, 196, 53);
+    $background-color: #3b424d;
+    $link-color: #f2f4f6;
+    .menu {
+        font-size: 24px;
+    }
+    .menu.is-small {
+        font-size: 0.75rem;
+    }
+    .menu.is-medium {
+        font-size: 1.25rem;
+    }
+    .menu.is-large {
+        font-size: 1.5rem;
+    }
+    .menu-list {
+        line-height: 24px;
+    }
+    .menu-list a {
+        border-radius: 2px;
+        color: $link-color;
+        display: block;
+        padding: 16px 28px;
+        //padding: 0.5em;
+        text-decoration: none
+    }
+    .menu-list a:hover {
+        background-color: darkGray;
+        color: $link-color;
+    }
+    .menu-list a.is-active {
+        background-color: #485fc7;
+        color: #fff;
+    }
+    .menu-list li ul {
+        border-left: 1px solid #dbdbdb;
+        margin: 0.75em;
+        padding-left: 0.75em;
+    }
+    .menu-list li {
+        list-style-type: none;
+    }
+    ul.menu-list {
+        padding-inline-start: 0px;
+        margin-block-start: 0px !important;
+        margin-block-end: 0px !important;
+    }
 }

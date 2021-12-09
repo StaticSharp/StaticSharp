@@ -21,46 +21,41 @@
     }
 }*/
 
-@mixin GitHubLink {
-    text-decoration: none;
-
-    &:after {
-        color: #666;
-        font-family: "Material Design Icons";
-        font-size: 1.7rem;
-        content: "\F02A4";
-    }
-}
-
-.Max, .Mid{
-    .GitHubLink {
-        @include GitHubLink;
-        float: left;
-    
+@include once() {
+    @mixin GitHubLink {
+        text-decoration: none;
         &:after {
-            position: absolute;
-            float: left;
-            margin-left: -1.2em;
+            color: #666;
+            font-family: "Material Design Icons";
+            font-size: 1.7rem;
+            content: "\F02A4";
         }
     }
-}
-
-
-
-.Min .GitHubLink {
-    @include GitHubLink;
-    float: right;
-
-    $size: 2.5rem;
-    &:after {
-        opacity: 0.5;
-        position: absolute;
-        float: right;
-        font-size: $size;
-        margin-left: -$size;
+    .Max,
+    .Mid {
+        .GitHubLink {
+            @include GitHubLink;
+            float: left;
+            &:after {
+                position: absolute;
+                float: left;
+                margin-left: -1.2em;
+            }
+        }
     }
-
-    &~.code>pre{
-        border-top-right-radius: $size/2;
+    .Min .GitHubLink {
+        @include GitHubLink;
+        float: right;
+        $size: 2.5rem;
+        &:after {
+            opacity: 0.5;
+            position: absolute;
+            float: right;
+            font-size: $size;
+            margin-left: -$size;
+        }
+        &~.code>pre {
+            border-top-right-radius: $size/2;
+        }
     }
 }

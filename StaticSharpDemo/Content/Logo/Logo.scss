@@ -1,6 +1,7 @@
-﻿
-.menu-list {
-    > .AntilatencyLogo {
-        font-size: 36px;
+﻿@include once() {
+    .menu-list {
+        >.AntilatencyLogo {
+            font-size: 36px;
+        }
     }
 }
