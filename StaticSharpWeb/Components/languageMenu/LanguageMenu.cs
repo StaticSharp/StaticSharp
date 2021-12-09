@@ -31,7 +31,7 @@ namespace StaticSharpWeb {
             slider.Add(result);
             slider.Add(marker);
             foreach (var i in Enum.GetValues<TLanguage>()) {
-                var uri = context.Urls.ObjectToUri(Node.WithLanguage(i).Representative);
+                var uri = context.Urls.ProtoNodeToUri(Node.WithLanguage(i).Representative);
                 menuList.Add(new Tag("li") { 
                     new Tag("a", new { href = uri }) {
                     i.ToString()

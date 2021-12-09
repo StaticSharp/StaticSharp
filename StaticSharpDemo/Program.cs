@@ -1,17 +1,18 @@
-﻿using StaticSharpWeb;
-using StaticSharpDemo.Content;
+﻿using StaticSharpDemo.Content;
 using StaticSharpEngine;
+using StaticSharpWeb;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace StaticSharpWeb {
 
-    public interface IStaticGenerator {
+    public interface IStaticGenerator : IUrls {
         Uri BaseUri { get; }
         string BaseDirectory { get; }
         string TempDirectory { get; }
@@ -24,14 +25,46 @@ namespace StaticSharpWeb {
 
         public string TempDirectory { get; set; }
 
-        public abstract IEnumerable<INode> GetRoots();
+        public IEnumerable<INode> GetRoots()
+            => GetStates().Select(x => new StaticSharpRoot(x));
 
-        public abstract Uri GetNodeUri(INode node);
+        public abstract IEnumerable<dynamic> GetStates();
 
-        //public string NodeToUrl()
+        public abstract Uri? ProtoNodeToUri<T>(T? node) where T : class, INode;
 
-        public IEnumerable<IPage> Pages 
+        public virtual string GetLanguage(INode page) => "en";
+
+        public IEnumerable<IPage> Pages
             => GetRoots().SelectMany(x => GetPages(x));
+
+
+        public IEnumerable<INode> GetAllNodes(INode root) {
+            var result = root.Children;
+            foreach (var node in result) {
+                result = result.Concat(GetAllNodes(node));
+            }
+            return result;
+        }
+
+        public StringBuilder CreateSiteMap() {
+            var map = new StringBuilder()
+                .AppendLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
+                .AppendLine("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" " +
+                    "xmlns:xhtml=\"http://www.w3.org/1999/xhtml\">");
+            var roots = GetRoots();
+            foreach (var node in roots.SelectMany(root => GetAllNodes(root))) {
+                map.AppendLine("\t<url>");
+                map.AppendLine($"\t<loc>{ProtoNodeToUri(node)}</loc>");
+                foreach (var l in (node as ProtoNode).GetAllParallelNodes()) {
+                    map.AppendLine($"\t\t<xhtml:link rel=\"alternate\" hreflang=\"{l.Key}\" href=\"{ProtoNodeToUri(l.Value)}\"/>");
+                }
+
+                map.AppendLine("\t</url>");
+            }
+
+            map.AppendLine("</urlset>");
+            return map;
+        }
 
         private IEnumerable<IPage> GetPages(INode node) {
             IEnumerable<IPage> result = node.Representative is IPage page ? Enumerable.Repeat(page, 1) : Enumerable.Empty<IPage>();
@@ -40,6 +73,8 @@ namespace StaticSharpWeb {
             }
             return result;
         }
+
+
     }
 }
 
@@ -111,78 +146,29 @@ namespace StaticSharpDemo {
             return result.Representative as IPage;
         }
 
-        public override Uri? ObjectToUri(object obj) {
-            return obj is IRepresentative representative && representative.Node is ProtoNode protoNode
-                ? new Uri(BaseUri, string.Join('/', representative.Node.Path) + "_" + protoNode.Language.ToString() + ".html")
-                : null;
-        }
-    }
+        //public override Uri? ProtoNodeToUri(object obj) {
+        //    return obj is IRepresentative representative && representative.Node is ProtoNode protoNode
+        //        ? new Uri(BaseUri, string.Join('/', representative.Node.Path) + "_" + protoNode.Language.ToString() + ".html")
+        //        : null;
+        //}
 
-    internal class StaticGenerator : StaticSharpWeb.StaticGenerator, IUrls {
-
-        public StaticGenerator(Uri baseUri, Storage storage)
-            => (BaseUri, _context) = (baseUri, new(storage, this));
-
-        private Context _context;
-
-        public override Uri GetNodeUri(INode node) {
+        public override Uri ProtoNodeToUri<T>(T protoNode) {
             throw new NotImplementedException();
-        }
-
-        public override IEnumerable<INode> GetRoots() {
-            var language = Enum.GetValues(typeof(Language)).Cast<Language>();
-            return language.Select(x => new StaticSharpRoot(x));
-        }
-
-        private static async Task WritePage(IPage page, Context context, string path) {
-            Directory.CreateDirectory(Path.GetDirectoryName(path));
-            await File.WriteAllTextAsync(path, await page.GenerateHtmlAsync(context));
-        }
-
-        public async Task GenerateAsync() {
-            var tasks = new List<Task>();
-            foreach (var page in Pages) {
-                var url = ObjectToUri(page);
-                var relativeUrl = _context.Urls.BaseUri.MakeRelativeUri(url);
-                var path = Path.Combine(@"D:\TestSite", relativeUrl.ToString());
-                tasks.Add(WritePage(page, _context, path));
-            }
-            await Task.WhenAll(tasks);
-        }
-
-        public Uri ObjectToUri(object obj) {
-            return obj is IRepresentative representative && representative.Node is ProtoNode protoNode
-                ? new Uri(BaseUri, string.Join('/', representative.Node.Path) + "_" + protoNode.Language.ToString() + ".html")
-                : null;
         }
     }
 
     //public class ProtoNode : ProtoNode
     internal class Program {
 
-        private static void OpenUrl(string url) {
-            try {
-                Process.Start(url);
-            } catch {
-                // hack because of this: https://github.com/dotnet/corefx/issues/10361
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
-                    url = url.Replace("&", "^&");
-                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
-                } else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
-                    Process.Start("xdg-open", url);
-                } else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
-                    Process.Start("open", url);
-                } else {
-                    throw;
-                }
-            }
-        }
         private static async Task Main(string[] args) {
-            //var generator =
-            //    new StaticGenerator(new Uri(@"D:/TestSite/"), new Storage(@"D:\TestSite", @"D:\TestSite\IntermediateCache"));
-            //await generator.GenerateAsync();
+            var generator = new Content.StaticGenerator(
+                    new Uri(@"D:/TestSite/"),
+                    new Storage(@"D:\TestSite", @"D:\TestSite\IntermediateCache"),
+                    @"D:\staticsharp.github.io"
+            );
+            await generator.GenerateAsync();
 
-            await new Server().RunAsync();
+            //await new Server().RunAsync();
         }
     }
 }

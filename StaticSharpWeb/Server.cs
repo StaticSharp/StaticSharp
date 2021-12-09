@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
+using StaticSharpEngine;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -14,9 +15,9 @@ using System.Threading.Tasks;
 namespace StaticSharpWeb {
 
     public interface IUrls {
-
-        public Uri ObjectToUri(object obj);
         public Uri BaseUri { get; }
+
+        public Uri? ProtoNodeToUri<T>(T? node) where T: class, INode;
     }
 
     public abstract class Server : IUrls {
@@ -26,7 +27,7 @@ namespace StaticSharpWeb {
 
         public abstract IPage FindPage(string requestPath);
 
-        public abstract Uri ObjectToUri(object obj);
+        public abstract  Uri ProtoNodeToUri<T>(T protoNode) where T : class, INode;
         public abstract Uri BaseUri { get; }
         public abstract string BaseDirectory { get; }
         public abstract string TempDirectory { get; }

@@ -35,7 +35,7 @@ namespace StaticSharpWeb.Components {
             }
             foreach (var node in _nodes) {
                 //result.Add(inline.GetHtml());
-                var uri = context.Urls.ObjectToUri(node.Representative);
+                var uri = context.Urls.ProtoNodeToUri(node);
                 menuList.Add(new Tag("li") { 
                     new Tag("a", new { href = uri }) {
                         node.Name,
