@@ -15,7 +15,7 @@
             margin: '0px',
             borderRadius: '0px',
             transform: 'unset',
-            translate: "250px"
+            translate: "0px"
         });
     }
 
@@ -95,23 +95,27 @@
     })
 
     function disableScrolling() {
-        TopScroll = window.pageYOffset || document.documentElement.scrollTop;
-        LeftScroll = window.pageXOffset || document.documentElement.scrollLeft,
-            window.addEventListener("scroll", (evt) => {
-                window.scrollTo(LeftScroll, TopScroll);
-            })
+        // TopScroll = window.pageYOffset || document.documentElement.scrollTop;
+        // LeftScroll = window.pageXOffset || document.documentElement.scrollLeft,
+        //     window.addEventListener("scroll", (evt) => {
+        //         window.scrollTo(LeftScroll, TopScroll);
+        //     })
+        document.documentElement.style.height = "100vh";
+        document.documentElement.style.overflow = "hidden";
         marker.css({
             transition: "",
         });
     };
 
     function enableScrolling() {
+        document.documentElement.style.height = "";
+        document.documentElement.style.overflow = "";
         window.addEventListener("scroll", (evt) => {
             if (window.scrollY == 0)
                 circleMarker();
             else standartMarker();
         });
-        window.addEventListener("onload", (evt) => {
+        window.addEventListener("load", (evt) => {
             if (window.scrollY == 0)
                 circleMarker();
             else standartMarker();
