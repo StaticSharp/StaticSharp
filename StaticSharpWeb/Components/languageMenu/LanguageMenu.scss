@@ -16,14 +16,14 @@
     }
     .RightMarker {
         visibility: hidden;
-        width: 8px;
+        width: 16px;
         height: 160px;
         background: rgb(88, 131, 204);
         border-top-left-radius: 8px;
         border-bottom-left-radius: 8px;
         top: 10px;
         position: absolute;
-        left: -8px;
+        left: -16px;
         //transition: all 0.05s, opacity 0s;
     }
     .RightIcon {

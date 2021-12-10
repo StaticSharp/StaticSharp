@@ -91,7 +91,7 @@ namespace StaticSharpDemo {
             //CsmlWeb.Storage.StorageDirectory = @"D:\Csml2Cache\";
         }
 
-        public override Uri BaseUri => new("http://localhost/");
+        public override Uri BaseUri => new("http://192.168.222.77/");
 
         private IStorage _Storage;
 

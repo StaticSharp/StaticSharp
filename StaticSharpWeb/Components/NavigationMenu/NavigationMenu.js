@@ -14,7 +14,8 @@
             margin: '0px',
             borderRadius: '0px',
             transform: 'unset',
-            translate: "0px"
+            translate: "0px",
+            zIndex: "11"
         });
     }
 
