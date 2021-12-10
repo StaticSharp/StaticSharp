@@ -30,11 +30,9 @@ namespace StaticSharpWeb {
             //var result = new Tag("aside", new { Class = "rightMenu", id = "rightMenu" });
             slider.Add(result);
             slider.Add(marker);
-            // var translateIcon = new Tag("a", new { Class = "translateIcon", id = "translateIcon",
-            // style = "content: \"url(https://api.iconify.design/ic/baseline-translate.svg?color=white&width=24&height=24)\""}) {
-            //     "IC"
-            // };
-            // menuList.Add(new Tag("li") { translateIcon });
+            var translateIcon = new Tag("a", new { Class = "translateIcon", id = "translateIcon",
+            style = "content: url(https://api.iconify.design/ic/baseline-translate.svg?color=%235883cc&width=24&height=24)"});
+            menuList.Add( translateIcon );
             foreach (var i in Enum.GetValues<TLanguage>()) {
                 var uri = context.Urls.ProtoNodeToUri(Node.WithLanguage(i));
                 menuList.Add(new Tag("li") { 
