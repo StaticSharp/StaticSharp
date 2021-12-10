@@ -15,7 +15,7 @@
             borderRadius: '0px',
             transform: 'unset',
             translate: "0px",
-            zIndex: "11"
+            zIndex: "20"
         });
     }
 
@@ -34,7 +34,7 @@
         glass.css({
             visibility: "visible",
             opacity: "0.7",
-            zIndex: "3",
+            zIndex: "11",
         })
     }
 
