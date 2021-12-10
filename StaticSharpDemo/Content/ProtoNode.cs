@@ -13,8 +13,16 @@ namespace StaticSharpDemo.Content {
                 .ToDictionary(l => l.ToString().ToLower(), l => WithLanguage(l));
 
 
-        protected T? SelectRepresentative<T>(IEnumerable<T> representatives) =>
-            representatives.FirstOrDefault(r => r?.GetType().Name == Enum.GetName(Language) || r?.GetType().Name == "En");
+        protected T? SelectRepresentative<T>(IEnumerable<T> representatives) {
+            var findedLanguage = representatives.FirstOrDefault(r => r?.GetType().Name == Enum.GetName(Language));
+            if (findedLanguage is null) {
+                findedLanguage = representatives.FirstOrDefault(r => r?.GetType().Name == "En");
+            }
+            if (findedLanguage is null) {
+                findedLanguage = representatives.FirstOrDefault();
+            }
+            return findedLanguage;
+        }
     }
 
     public abstract partial class ProtoNode : StaticSharpEngine.INode {

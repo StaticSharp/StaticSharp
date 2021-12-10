@@ -10,7 +10,6 @@ namespace StaticSharpDemo.Content.Index {
     partial class En : Common {
         public override string Title => base.Title + "_EN";
         private Image image = new Image(new RelativePath("111.jpg"), "Ricardooo");
-
         public override MaterialContent Content => new() {
             new Paragraph() {
                 "Read this article in russian ",
