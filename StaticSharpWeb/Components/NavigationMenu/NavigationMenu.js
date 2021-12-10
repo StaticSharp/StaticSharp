@@ -34,7 +34,7 @@
         glass.css({
             visibility: "visible",
             opacity: "0.7",
-            zIndex: "11",
+            zIndex: "10",
         })
     }
 
