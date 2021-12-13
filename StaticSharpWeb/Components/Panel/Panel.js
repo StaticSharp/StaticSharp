@@ -7,8 +7,6 @@
         let right = parent.anchors.textRight;
         element.style.marginLeft = left + "px";
         element.style.width = right - left + "px";
-
-        //element.style.backgroundColor = "red";
     }
     parent.onAnchorsChanged.push(element.updateWidth);
 

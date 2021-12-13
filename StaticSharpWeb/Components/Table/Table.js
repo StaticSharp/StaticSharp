@@ -16,5 +16,6 @@ function Table(element) {
             tds[i].onAnchorsChanged = [];
         }
         parent.onAnchorsChanged.push(element.updateWidth);
+        element.updateWidth();
     });
 }

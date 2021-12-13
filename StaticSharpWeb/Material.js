@@ -84,7 +84,7 @@ function Material(element, contentWidth) {
                 }
             }
         } else {
-            menusHitBoxes.forEach(x => x.element.css({ transform: 'translateX(70%)' }));
+            //menusHitBoxes.forEach(x => x.element.css({ transform: 'translateX(70%)' }));
         }
     }
 
