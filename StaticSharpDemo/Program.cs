@@ -87,9 +87,7 @@ namespace StaticSharpDemo {
 
     public class Server : StaticSharpWeb.Server {
 
-        static Server() {
-            //CsmlWeb.Storage.StorageDirectory = @"D:\Csml2Cache\";
-        }
+        static Server() { }
 
         public override Uri BaseUri => new("http://localhost/");
 
@@ -135,7 +133,6 @@ namespace StaticSharpDemo {
             }
             path[^1] = htmlName;
 
-            //Debug en
             INode result = new StaticSharpRoot(language);
             var pathList = new List<string[]>();
             var root = new StaticSharpRoot(language).Children.FirstOrDefault().Name;
@@ -146,20 +143,14 @@ namespace StaticSharpDemo {
             return result.Representative as IPage;
         }
 
-        //public override Uri? ProtoNodeToUri(object obj) {
-        //    return obj is IRepresentative representative && representative.Node is ProtoNode protoNode
-        //        ? new Uri(BaseUri, string.Join('/', representative.Node.Path) + "_" + protoNode.Language.ToString() + ".html")
-        //        : null;
-        //}
 
         public override Uri ProtoNodeToUri<T>(T node) {
-                return node is ProtoNode protoNode
-                    ? new Uri(BaseUri, string.Join('/', protoNode.Path) + "_" + protoNode.Language.ToString() + ".html")
-                    : null;
+            return node is ProtoNode protoNode
+                ? new Uri(BaseUri, string.Join('/', protoNode.Path) + "_" + protoNode.Language.ToString() + ".html")
+                : null;
         }
     }
 
-    //public class ProtoNode : ProtoNode
     internal class Program {
 
         private static async Task Main(string[] args) {
