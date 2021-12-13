@@ -38,7 +38,8 @@ namespace StaticSharpWeb {
         public async Task<Html.INode> GenerateBlockHtmlAsync(Context context) {
             Resource ??= await context.Storage.AddOrGetAsync(FilePath, () => new ImageResource(FilePath, context.Storage));
             var tag = new Tag("div", new { Class = nameof(Image) }) {
-                new Tag("img", new { src = Resource.Source, alt = Alt, style = "width: 100%; height: auto;"}),
+                new Tag("img", new { Class = "InnerImage", src = Resource.Source, alt = Alt, style = "width: 100%; height: auto;"}),
+                //new Tag("img", new { alt = Alt, style = "width: 100%; height: auto;"}),
                 new JSCall(new RelativePath("Image.js")).Generate(context),
                 new JSCall(new RelativePath("RoiImage.js"), Resource.Aspect, Resource.Roi).Generate(context),
                 new JSCall(new RelativePath("MipsSelector.js"), Resource.Mips).Generate(context)
@@ -47,7 +48,7 @@ namespace StaticSharpWeb {
         }
     }
     public static class ImageStatic {
-        public static void Add<T>(this T collection, IImage item) where T : IVerifiedBlockReceiver {
+        public static void Add<T>(this T collection, IImage item) where T : IVerifiedBlockReceiver, IFillAnchorsProvider {
             collection.AddBlock(item);
         }
     }

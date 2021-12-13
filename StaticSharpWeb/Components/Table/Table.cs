@@ -13,11 +13,17 @@ public class Table : IBlock, IEnumerable {
     private string[] _headers { get; set; }
     //private List<string> _text = new();
     private List<object> _text = new();
+    private Table() {
+
+    }
     public Table (int colCount) {
         _colCount = colCount;
     }
 
     public Table(params string[] headers) {
+        if (headers is null || headers.Length < 1) {
+            throw new ArgumentException("Headers can not be null or empty");
+        }
         _headers = headers;
         _colCount = headers.Length;
     }
@@ -51,8 +57,8 @@ public class Table : IBlock, IEnumerable {
                 var td = new Tag("td");
                 if (_text[textListIndexCounter] is string)
                     td.Add(_text[textListIndexCounter].ToString());
-                else {
-                    td.Add(await (_text[textListIndexCounter] as IBlock).GenerateBlockHtmlAsync(context));
+                else if (_text[textListIndexCounter] is IBlock block) {
+                    td.Add(await block.GenerateBlockHtmlAsync(context));
                     td.Attributes.Add("width", "1px");
                 }
                 if (_headers != null)

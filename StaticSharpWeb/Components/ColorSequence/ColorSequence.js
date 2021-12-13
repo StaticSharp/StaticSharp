@@ -8,6 +8,10 @@ function ColorSequence(element) {
             element.style.width = right - left + "px";
         }
         //document.addEventListener('DOMContentLoaded', function() {
-    parent.onAnchorsChanged.push(element.updateWidth);
+    try {
+        parent.onAnchorsChanged.push(element.updateWidth);
+    } catch {
+
+    }
     //});
 }

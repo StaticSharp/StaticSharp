@@ -13,9 +13,11 @@ namespace StaticSharpDemo.Content.Index {
     [Representative]
     partial class Ru : Common {
         public override string Title => null;
-        public override IImage TitleImage => new Video("qj6S37xIqK0").ConfigureAsBackgroundVideo();
+        //public override IImage TitleImage => new Video("qj6S37xIqK0").ConfigureAsBackgroundVideo();
         public override Paragraph Description => new() { "Ссылка на эту статью: ", Node, "ТЕСТ ТЕСТ ТЕСТ" };
-        private Image image = new Image(new RelativePath("111.jpg"), "Ricardooo");
+        //private Image image = new Image(new RelativePath("111.jpg"), "Ricardooo");
+        private Image image = new Image(new RelativePath("333.png"), "Ricardooo");
+
 
         //private Image refImage = new Image("https://bipbap.ru/wp-content/uploads/2017/04/0_7c779_5df17311_orig.jpg");
 
@@ -30,13 +32,17 @@ namespace StaticSharpDemo.Content.Index {
             new Reference("https://ru.wikipedia.org/wiki/C_Sharp"),
             new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", "Ссылки с текстом: "),
             new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", "Ссылки с текстом и подсказкой: ", "Шарп"),
-            new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", image),
+            image,
+            //new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", image),
+            // new Landing(image, new Paragraph() {
+            //     "HELLO"
+            // }, 10),
 
-            new Grid(ContentWidth / 4) {
-                    new MaterialCard(Node.Representative),
-                    new MaterialCard(Node.Representative),
-                    new MaterialCard(Node.Representative),
-                },
+            // new Grid(ContentWidth / 4) {
+            //         new MaterialCard(Node.Representative),
+            //         new MaterialCard(Node.Representative),
+            //         new MaterialCard(Node.Representative),
+            //     },
 
             new Paragraph() {
                 "AAAAAAA"

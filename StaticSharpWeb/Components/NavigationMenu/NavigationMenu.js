@@ -127,7 +127,6 @@
         document.documentElement.style.height = "";
         document.documentElement.style.overflow = "";
         window.addEventListener("scroll", (evt) => {
-            console.log("scrolling");
             if (window.scrollY == 0)
                 circleMarker();
             else standartMarker();
