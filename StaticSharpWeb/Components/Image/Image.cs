@@ -37,13 +37,18 @@ namespace StaticSharpWeb {
 
         public async Task<Html.INode> GenerateBlockHtmlAsync(Context context) {
             Resource ??= await context.Storage.AddOrGetAsync(FilePath, () => new ImageResource(FilePath, context.Storage));
-            var tag = new Tag("div", new { Class = nameof(Image) }) {
-                new Tag("img", new { Class = "InnerImage", src = Resource.Source, alt = Alt, style = "width: 100%; height: auto;"}),
+            
+            var tag = new Tag("div", new { Class = "ImageContainer" }) {
+                new Tag("img", new { Class = "InnerImage", id = "InnerImage", src = Resource.Source, alt = Alt}),
                 //new Tag("img", new { alt = Alt, style = "width: 100%; height: auto;"}),
-                new JSCall(new RelativePath("Image.js")).Generate(context),
-                new JSCall(new RelativePath("RoiImage.js"), Resource.Aspect, Resource.Roi).Generate(context),
-                new JSCall(new RelativePath("MipsSelector.js"), Resource.Mips).Generate(context)
+                new JSCall(new RelativePath("Image.js")).Generate(context),              
+                new JSCall(new RelativePath("RoiImage.js"), Resource.Aspect, Resource.Roi).Generate(context),  
+                new JSCall(new RelativePath("MipsSelector.js"), Resource.Mips).Generate(context),
             };
+            context.Includes.Require(new Style(new RelativePath("Image.scss")));
+            // if (Resource.Roi != null){
+            //     tag.Add(new JSCall(new RelativePath("RoiImage.js"), Resource.Aspect, Resource.Roi).Generate(context));
+            // }
             return tag;
         }
     }

@@ -13,10 +13,12 @@ namespace StaticSharpDemo.Content.Index {
     [Representative]
     partial class Ru : Common {
         public override string Title => null;
-        //public override IImage TitleImage => new Video("qj6S37xIqK0").ConfigureAsBackgroundVideo();
+        //public override IImage TitleImage => new Video("qj6S37xIqK0");
+        //public override IImage TitleImage => new Video("qj6S37xIqK0");
         public override Paragraph Description => new() { "Ссылка на эту статью: ", Node, "ТЕСТ ТЕСТ ТЕСТ" };
-        //private Image image = new Image(new RelativePath("111.jpg"), "Ricardooo");
-        private Image image = new Image(new RelativePath("333.png"), "Ricardooo");
+        private Image image = new Image(new RelativePath("111.jpg"), "Ricardooo1");
+        private Image image2 = new Image(new RelativePath("222.png"), "Ricardooo2");
+        private Image image3 = new Image(new RelativePath("333.png"), "Ricardooo3");
 
 
         //private Image refImage = new Image("https://bipbap.ru/wp-content/uploads/2017/04/0_7c779_5df17311_orig.jpg");
@@ -32,7 +34,28 @@ namespace StaticSharpDemo.Content.Index {
             new Reference("https://ru.wikipedia.org/wiki/C_Sharp"),
             new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", "Ссылки с текстом: "),
             new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", "Ссылки с текстом и подсказкой: ", "Шарп"),
-            image,
+            // new Paragraph() {
+            //     "SimpleImage"
+            // },
+            // image,
+            // new Paragraph() {
+            //     "SimpleImage"
+            // },
+
+            new Landing(image3, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.",  
+            "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.BottomRight),
+            new Landing(image2, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", 
+            "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.BottomLeft),
+            new Landing(image3, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.",
+            "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.TopRight),
+            new Landing(image2, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.",
+            "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.TopLeft),
+            new Landing(image3, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.",
+            "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.Top),
+            new Landing(image3, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.",
+            "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.Bottom),
+            
+            
             //new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", image),
             // new Landing(image, new Paragraph() {
             //     "HELLO"

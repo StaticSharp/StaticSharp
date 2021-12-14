@@ -19,7 +19,7 @@ function RoiImage(element, aspect, roi) {
         let height = this.element.offsetHeight;
         this.previousContainerWidth = width;
         this.previousContainerHeight = height;
-        console.log(width);
+        //console.log(width);
 
         let x0 = roi[0] / 100;
         let x1 = roi[1] / 100;
