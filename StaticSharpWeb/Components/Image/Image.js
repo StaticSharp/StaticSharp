@@ -1,6 +1,6 @@
 ﻿function Image(element) {
     let parent = element.parentElement;
-    console.log(parent);
+    //console.log(parent);
     //console.log(element.firstChild);
     element.updateWidth = function() {
         let left = parent.anchors.fillLeft;

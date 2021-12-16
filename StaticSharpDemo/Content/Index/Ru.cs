@@ -17,8 +17,16 @@ namespace StaticSharpDemo.Content.Index {
         //public override IImage TitleImage => new Video("qj6S37xIqK0");
         public override Paragraph Description => new() { "Ссылка на эту статью: ", Node, "ТЕСТ ТЕСТ ТЕСТ" };
         private Image image = new Image(new RelativePath("111.jpg"), "Ricardooo1");
+        private Image imagec = new Image(new RelativePath("111c.jpg"), "Ricardoooc");
         private Image image2 = new Image(new RelativePath("222.png"), "Ricardooo2");
         private Image image3 = new Image(new RelativePath("333.png"), "Ricardooo3");
+
+        private Image test1 = new Image(new RelativePath("test1.jpg"), "test1");
+        private Image test2 = new Image(new RelativePath("test2.jpg"), "test2");
+        private Image test3 = new Image(new RelativePath("test3.jpg"), "test3");
+        private Image test4 = new Image(new RelativePath("test4.jpg"), "test4");
+        private Image test6 = new Image(new RelativePath("test6.jpg"), "test6");
+        private Image test7 = new Image(new RelativePath("test7.jpg"), "test7");
 
 
         //private Image refImage = new Image("https://bipbap.ru/wp-content/uploads/2017/04/0_7c779_5df17311_orig.jpg");
@@ -37,29 +45,47 @@ namespace StaticSharpDemo.Content.Index {
             // new Paragraph() {
             //     "SimpleImage"
             // },
-            // image,
+            //image,
             // new Paragraph() {
             //     "SimpleImage"
             // },
+            // imagec,
 
-            new Landing(image3, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.",  
-            "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.BottomRight),
-            new Landing(image2, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", 
-            "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.BottomLeft),
-            new Landing(image3, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.",
-            "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.TopRight),
-            new Landing(image2, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.",
-            "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.TopLeft),
-            new Landing(image3, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.",
-            "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.Top),
-            new Landing(image3, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.",
-            "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.Bottom),
+            new Landing(test1, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.",  
+            "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.TopLeft, new int[4] {470, 150, 660, 350}),
+
+            // new Landing(test2, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.",  
+            // "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.TopLeft, new int[4] {760, 600, 1600, 1250}),
+
+            new Landing(test3, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.",  
+            "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.TopLeft, new int[4] {300, 500, 850, 1100}),
+
+            new Landing(test4, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.",  
+            "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.TopLeft, new int[4] {350, 200, 670, 470}),
             
+            new Landing(test7, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.",  
+            "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.TopLeft, new int[4] {500, 450, 1000, 1100}),
+
+
+            //------//
+
+            // new Landing(test6, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.",  
+            // "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.TopLeft, new int[4] {470, 150, 660, 350}),
+
+            // new Landing(image2, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", 
+            // "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.BottomLeft),
+            // new Landing(image3, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.",
+            // "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.TopRight),
+            // new Landing(image2, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.",
+            // "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.TopLeft),
+            // new Landing(image3, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.",
+            // "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.Top),
+            // new Landing(image3, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.",
+            // "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.Bottom),
             
+            // new Landing(image3, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.",
+            // "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.FullCenter),
             //new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", image),
-            // new Landing(image, new Paragraph() {
-            //     "HELLO"
-            // }, 10),
 
             // new Grid(ContentWidth / 4) {
             //         new MaterialCard(Node.Representative),
