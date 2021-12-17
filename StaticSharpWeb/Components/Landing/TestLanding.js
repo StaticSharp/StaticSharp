@@ -71,7 +71,7 @@ function TestLanding(element, crop) {
                 right: "50%"
             });
         }
-        console.log(windowRatio);
+        //console.log(windowRatio);
 
         function minimized() {
             imageContainer.css({
@@ -110,12 +110,22 @@ function TestLanding(element, crop) {
         // }
 
         if (imageAndTextBoxesWidthSum < imageAndTextContainerWidth) {
+            console.log("wide");
             wide();
         } else {
             if (maxSize < 0) {
+                console.log("minimized");
+                if (imageAndTextBoxesHeightSum < imageAndTextContainerHeight) {
+                    console.log("help");
+                }
                 minimized();
             }
+            // imageAndTextBoxesWidthSum = imageAndTextBoxesHeightSum;
+            // imageAndTextContainerWidth = imageAndTextContainerHeight;
         }
+        // if (imageAndTextBoxesWidthSum > imageAndTextContainerWidth && imageAndTextBoxesHeightSum < imageAndTextContainerHeight) {
+        //     console.log("what");
+        // }
 
         // if (imageAndTextBoxesWidthSum < imageAndTextContainerWidth) {
         //     wide();
