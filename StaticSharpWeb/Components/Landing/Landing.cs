@@ -42,13 +42,13 @@ namespace StaticSharpWeb {
             var imageTag = new Tag("div", new { Class = "ImageAndTextContainer", id = "ImageAndTextContainer"}) {
                 await _image.GenerateBlockHtmlAsync(context),
             };
-            //var textTag = new Tag("div", new { Class = "TextContainer", id = "TextContainer"});
+            var textTag = new Tag("div", new { Class = "TextContainer", id = "TextContainer"});
             var titleText = new Tag("h2") { _titleText };
             var text = new Tag("div") { _text };
-            // vartextTag.Add(titleText);
-            //textTag.Add(text);
+            textTag.Add(titleText);
+            textTag.Add(text);
             
-            //imageTag.Add(textTag);
+            imageTag.Add(textTag);
             tag.Add(imageTag);
             context.Includes.Require(new Style(new RelativePath("TestLanding.scss")));
             //tag.Add(new JSCall(new RelativePath(_position.ToString() + "Landing.js")).Generate(context));

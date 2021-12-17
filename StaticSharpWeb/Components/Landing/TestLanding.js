@@ -10,127 +10,191 @@ function TestLanding(element, crop) {
         return (firstposition * rendered / intrinsic);
     }
 
-    //console.log(innerImage);
     element.updateWidth = function() {
-        //console.log(imageContainer);
         var x1 = crop[0];
         var x2 = crop[2];
         var y1 = crop[1];
-        //console.log(y1);
-        //console.log(pixelConvert(innerImage.naturalWidth, innerImage.clientWidth, y1));
         var y2 = crop[3];
         var h = y2 - y1;
         var w = x2 - x1;
-        var textpadding = window.innerWidth - x1;
         var windowRatio = window.innerWidth / window.innerHeight;
-        //console.log(windowRatio);
-        var tr = y1 - y1 / (innerImage.naturalHeight / innerImage.offsetHeight);
-        var tr2 = -y1 / (innerImage.naturalHeight / innerImage.offsetHeight);
-        var tr3 = y2 - 1500; //vh to px
-        var tr4 = x1 - x1 / (innerImage.naturalWidth / innerImage.offsetWidth);
-        //var tr3 = x2 - window.innerWidth;
-        //console.log(tr3);
-        //var tr3 = y2 - 480;
-        //console.log(tr3);
-        //console.log(tr);
-        if (windowRatio > 1) {
-            imageAndTextContainer.css({
-                position: "relative",
-            })
+        var a = pixelConvert(innerImage.naturalWidth, innerImage.clientWidth, x2);
+        var b = window.innerWidth - a;
+        var t = 0;
+        if (b < 0)
+            t = b;
+        //if (windowRatio > 1) { // Когда тексту будет не хватать места
+        // console.log(textContainer.offsetWidth);
+        // console.log(pixelConvert(innerImage.naturalWidth, innerImage.clientWidth, w));
+        // console.log(imageAndTextContainer.offsetWidth);
+        // console.log(imageAndTextContainer.offsetHeight);
+        // console.log(textContainer.offsetHeight);
+
+        // console.log(textContainer.offsetWidth + pixelConvert(innerImage.naturalWidth, innerImage.clientWidth, w));
+        // console.log(imageAndTextContainer.offsetWidth);
+
+        // console.log(textContainer.offsetHeight + pixelConvert(innerImage.naturalHeight, innerImage.clientHeight, h));
+        // console.log(imageAndTextContainer.offsetHeight);
+
+        // (textContainer.offsetWidth + pixelConvert(innerImage.naturalWidth, innerImage.clientWidth, w) < imageAndTextContainer.offsetWidth ||
+        // textContainer.offsetHeight + pixelConvert(innerImage.naturalHeight, innerImage.clientHeight, h) < imageAndTextContainer.offsetHeight)
+        // if (textContainer.offsetWidth + pixelConvert(innerImage.naturalWidth, innerImage.clientWidth, w) < imageAndTextContainer.offsetWidth) {
+        //     console.log("w");
+        // }
+        // var check = 0;
+        // if (textContainer.offsetHeight + pixelConvert(innerImage.naturalHeight, innerImage.clientHeight, h) < imageAndTextContainer.offsetHeight && check == 0) {
+        //     imageContainer.css({
+        //         height: pixelConvert(innerImage.naturalHeight, innerImage.clientHeight, h) + "px",
+        //         overflow: "hidden"
+        //     });
+        //     innerImage.css({
+        //         width: screen.width + (x2 - x1) + "px",
+        //         transform: "translate(" + t + "px, " + -pixelConvert(innerImage.naturalWidth, innerImage.clientWidth, y1) + "px)",
+        //     });
+        //     textContainer.css({
+        //         top: (imageAndTextContainer.offsetHeight / 2) - (Math.round(textContainer.offsetHeight / 2)) + "px",
+        //         right: "50%"
+        //     });
+        //     console.log("h");
+        // }
+        function wide() {
             imageContainer.css({
-                height: "30vh",
-                //height: h + "px",
-                overflow: "hidden",
+                height: pixelConvert(innerImage.naturalHeight, innerImage.clientHeight, h) + "px",
+                overflow: "hidden"
             });
             innerImage.css({
-                objectFit: "cover",
-                transform: "translate(0px, " + -y1 / (innerImage.naturalHeight / innerImage.offsetHeight) + "px)",
+                width: screen.width + (x2 - x1) + "px",
+                transform: "translate(" + t + "px, " + -pixelConvert(innerImage.naturalWidth, innerImage.clientWidth, y1) + "px)",
             });
-        } else {
-            imageAndTextContainer.css({
-                position: "relative",
-            })
+            textContainer.css({
+                top: (imageAndTextContainer.offsetHeight / 2) - (Math.round(textContainer.offsetHeight / 2)) + "px",
+                right: "50%"
+            });
+        }
+        console.log(windowRatio);
+
+        function minimized() {
             imageContainer.css({
-                height: "50vh",
-                overflow: "hidden",
+                height: pixelConvert(innerImage.naturalHeight, innerImage.clientHeight, h) / windowRatio + "px",
+                //height: pixelConvert(innerImage.naturalHeight, innerImage.clientHeight, h) + "px",
+                overflow: "hidden"
             });
-            if (innerImage.naturalHeight < innerImage.naturalWidth) {
-                if (innerImage.naturalHeight < innerImage.offsetHeight) {
-                    innerImage.css({
-                        height: "100vh",
-                        objectFit: "cover",
-                        transform: "translate(0px, " + tr + "px)",
-                    });
-                } else {
-                    innerImage.css({
-                        height: "100vh",
-                        width: "100%",
-                        objectFit: "cover",
-                        transform: "translate(0px, " + tr3 + "px)",
-                    });
-                }
-            } else {
-                console.log(innerImage.naturalHeight / innerImage.naturalWidth);
-                if (innerImage.naturalHeight < innerImage.offsetHeight) {
-                    innerImage.css({
-                        height: "100vh",
-                        objectFit: "cover",
-                        transform: "translate(0px, " + tr + "px)",
-                    });
-                } else {
-                    innerImage.css({
-                        height: "100vh",
-                        width: "100%",
-                        objectFit: "cover",
-                        transform: "translate(0px, " + -50 + "px)",
-                    });
-                }
+            innerImage.css({
+                width: screen.width + (x2 - x1) + "px",
+                //transform: "translate(" + t + "px, " + (-pixelConvert(innerImage.naturalWidth, innerImage.clientWidth, y1)) + "px)",
+                transform: "translate(" + t + "px, " + (-pixelConvert(innerImage.naturalWidth, innerImage.clientWidth, y1) + (pixelConvert(innerImage.naturalHeight, innerImage.clientHeight, h) / windowRatio) - pixelConvert(innerImage.naturalHeight, innerImage.clientHeight, h)) + "px)",
+            });
+            textContainer.css({
+                top: "0px",
+                right: ""
+            });
+        }
+
+        var imageAndTextBoxesWidthSum = textContainer.offsetWidth + pixelConvert(innerImage.naturalWidth, innerImage.clientWidth, w);
+        var imageAndTextContainerWidth = imageAndTextContainer.offsetWidth;
+
+        var imageAndTextBoxesHeightSum = textContainer.offsetHeight + pixelConvert(innerImage.naturalHeight, innerImage.clientHeight, h);
+        var imageAndTextContainerHeight = imageAndTextContainer.offsetHeight;
+
+        var maxSize = (-pixelConvert(innerImage.naturalWidth, innerImage.clientWidth, y1) + (pixelConvert(innerImage.naturalHeight, innerImage.clientHeight, h) / windowRatio) - pixelConvert(innerImage.naturalHeight, innerImage.clientHeight, h));
+
+        // if (imageAndTextBoxesWidthSum < imageAndTextContainerWidth) {
+        //     wide();
+        //     console.log("width");
+        // }
+        // if (imageAndTextBoxesHeightSum < imageAndTextContainerHeight) {
+        //     console.log("height");
+        // }
+        // if (imageAndTextBoxesWidthSum > imageAndTextContainerWidth && imageAndTextBoxesHeightSum > imageAndTextContainerHeight) {
+        //     console.log("what");
+        // }
+
+        if (imageAndTextBoxesWidthSum < imageAndTextContainerWidth) {
+            wide();
+        } else {
+            if (maxSize < 0) {
+                minimized();
             }
         }
+
+        // if (imageAndTextBoxesWidthSum < imageAndTextContainerWidth) {
+        //     wide();
+        // }
+        // if (imageAndTextBoxesHeightSum < imageAndTextContainerHeight) {
+        //     if (maxSize < 0) {
+        //         minimized();
+        //     }
+        // }
+        // if (imageAndTextBoxesWidthSum > imageAndTextContainerWidth && imageAndTextBoxesHeightSum > imageAndTextContainerHeight) {
+        //     console.log("what");
+        // }
+        // if (windowRatio > 1) {
+        //     //console.log(tr);
+        //     imageAndTextContainer.css({
+        //         position: "relative",
+        //     })
+        //     imageContainer.css({
+        //         height: "40vh",
+        //         //height: h + "px",
+        //         overflow: "hidden",
+        //     });
+        //     innerImage.css({
+        //         //height: "100vh",
+        //         //width: "140vw",
+        //         objectFit: "cover",
+        //         width: innerImage.naturalWidth + x2 + (x2 - x1) + "px",
+        //         // transform: "translate(" + (innerImage.naturalWidth - x2) + "px, " + -y1 / (innerImage.naturalHeight / innerImage.offsetHeight) + "px)",
+        //         // transform: "translate(0px, " + -y1 / (innerImage.naturalHeight / innerImage.offsetHeight) + "px)",
+        //         transform: "translate(0px,  " + -pixelConvert(innerImage.naturalHeight, innerImage.clientHeight, y1) + "px)",
+        //     });
+        // } else {
+        //     imageAndTextContainer.css({
+        //         position: "relative",
+        //     })
+        //     imageContainer.css({
+        //         height: "50vh",
+        //         overflow: "hidden",
+        //     });
+        //     if (innerImage.naturalHeight < innerImage.naturalWidth) {
+        //         //console.log(tr);
+        //         if (innerImage.naturalHeight < innerImage.offsetHeight) {
+        //             innerImage.css({
+        //                 height: "100vh",
+        //                 objectFit: "cover",
+        //                 transform: "translate(" + 0 + "px, " + tr + "px)",
+        //             });
+        //         } else {
+        //             innerImage.css({
+        //                 height: "100vh",
+        //                 width: "100%",
+        //                 objectFit: "cover",
+        //                 transform: "translate(0px, " + tr3 + "px)",
+        //             });
+        //         }
+        //     } else {
+
+        //         if (innerImage.naturalHeight < innerImage.offsetHeight) {
+        //             innerImage.css({
+        //                 height: "100vh",
+        //                 objectFit: "cover",
+        //                 transform: "translate(0px, " + tr + "px)",
+        //             });
+        //         } else {
+        //             innerImage.css({
+        //                 height: "100vh",
+        //                 width: "100%",
+        //                 objectFit: "cover",
+        //                 transform: "translate(0px, " + -50 + "px)",
+        //             });
+        //         }
+        //     }
+        // }
+
+
         let left = parent.anchors.wideLeft;
         let right = parent.anchors.wideRight;
         element.style.marginLeft = left + "px";
         element.style.width = right - left + "px";
-        //console.log(innerImage.height);
-
-        // if (windowRatio < 1) {
-        //     //this.image.style.width = "100%"
-        //     //this.image.style.height = "auto"
-        //     var offset = (1 - (windowRatio / 1 - h) / (1 - h)) * y1 * 100.0;
-        //     //this.image.style.transform = "translate(0, -" + offset + "%)"
-        //     innerImage.css({
-        //         width: "100%",
-        //         height: "auto",
-        //         transform: "translate(0px, " + -offset + "px)",
-        //     });
-        // } else {
-        //     //this.image.style.width = "auto"
-        //     //this.image.style.height = "100%"
-        //     var offset = (1 - (1 / windowRatio - w) / (1 - w)) * x1 * 100.0;
-        //     //console.log(offset);
-        //     innerImage.css({
-        //         width: "100%",
-        //         height: "auto",
-        //         transform: "translate(0px, " + -offset + "px)",
-        //     });
-        //     //this.image.style.transform = "translate(-" + offset + "%, 0)"
-        // }
-
-
-        // var iheight = crop[3] - crop[1];
-        // var windowwidth = window.innerWidth / 40;
-        // var itranslateY = -crop[1] - windowwidth;
-        // let left = parent.anchors.wideLeft;
-        // let right = parent.anchors.wideRight;
-        // element.style.marginLeft = left + "px";
-        // element.style.width = right - left + "px";
-        // imageContainer.css({
-        //     height: iheight + "px",
-        //     overflow: "hidden"
-        // });
-        // innerImage.css({
-        //     transform: "translate(0px, " + -y1 + "px)",
-        // })
     }
     parent.onAnchorsChanged.push(element.updateWidth);
 }
