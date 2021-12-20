@@ -105,7 +105,7 @@
     function disableScrolling() {
         // TopScroll = window.pageYOffset || document.documentElement.scrollTop;
         // LeftScroll = window.pageXOffset || document.documentElement.scrollLeft;
-        console.log("disabledonce");
+        //console.log("disabledonce");
         // window.addEventListener("scroll", disable(TopScroll, LeftScroll));
         document.documentElement.style.height = "100vh";
         document.documentElement.style.overflow = "hidden";
