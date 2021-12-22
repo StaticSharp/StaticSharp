@@ -38,8 +38,8 @@ namespace StaticSharpWeb {
 
         public async Task<Html.INode> GenerateBlockHtmlAsync(Context context)
         {
-            var tag = new Tag("div", new { Class = "LandingContainer", id = "LandingContainer"});
-            var imageTag = new Tag("div", new { Class = "ImageAndTextContainer", id = "ImageAndTextContainer"}) {
+            //var tag = new Tag("div", new { Class = "LandingContainer", id = "LandingContainer"});
+            var tag = new Tag("div", new { Class = "ImageAndTextContainer", id = "ImageAndTextContainer"}) {
                 await _image.GenerateBlockHtmlAsync(context),
             };
             var textTag = new Tag("div", new { Class = "TextContainer", id = "TextContainer"});
@@ -48,12 +48,13 @@ namespace StaticSharpWeb {
             textTag.Add(titleText);
             textTag.Add(text);
             
-            imageTag.Add(textTag);
-            tag.Add(imageTag);
+            //imageTag.Add(textTag);
+            //tag.Add(imageTag);
             context.Includes.Require(new Style(new RelativePath("TestLanding.scss")));
             //tag.Add(new JSCall(new RelativePath(_position.ToString() + "Landing.js")).Generate(context));
-            tag.Add(new JSCall(new RelativePath("TestLanding.js"), _crop).Generate(context));
+            tag.Add(new JSCall(new RelativePath("TestRoiLanding.js"), _crop).Generate(context));
             return tag;
+            //return await _image.GenerateBlockHtmlAsync(context);
             // var tag = new Tag("div", new { Class = "LandingContainer", id = "LandingContainer" });
             // var imageTag = new Tag("div", new { Class = "InnerImageContainer", id = "InnerImageContainer" }) { 
             //     await _image.GenerateBlockHtmlAsync(context)

@@ -16,12 +16,12 @@ namespace StaticSharpDemo.Content.Index {
         //public override IImage TitleImage => new Video("qj6S37xIqK0");
         //public override IImage TitleImage => new Video("qj6S37xIqK0");
         public override Paragraph Description => new() { "Ссылка на эту статью: ", Node, "ТЕСТ ТЕСТ ТЕСТ" };
-        private Image image = new Image(new RelativePath("111.jpg"), "Ricardooo1");
+        private Image image = new Image(new RelativePath("333.png"), "Ricardooo1");
         private Image imagec = new Image(new RelativePath("111c.jpg"), "Ricardoooc");
         private Image image2 = new Image(new RelativePath("222.png"), "Ricardooo2");
         private Image image3 = new Image(new RelativePath("333.png"), "Ricardooo3");
 
-        private Image test1 = new Image(new RelativePath("test1.jpg"), "test1");
+        private Image test1 = new Image(new RelativePath("test1t.jpg"), "test1");
         private Image test2 = new Image(new RelativePath("test2.jpg"), "test2");
         private Image test3 = new Image(new RelativePath("test3.jpg"), "test3");
         private Image test4 = new Image(new RelativePath("test4.jpg"), "test4");
@@ -35,7 +35,7 @@ namespace StaticSharpDemo.Content.Index {
         //private Reference wiki_ru => new Reference("ТЕКСТ3: ", "https://ru.wikipedia.org/wiki/C_Sharp", "C#");    
 
         public override MaterialContent Content => new() {
-            new CSharpCode(System.IO.File.ReadAllText(new RelativePath("Ru.cs"))),
+            //new CSharpCode(System.IO.File.ReadAllText(new RelativePath("Ru.cs"))),
             new Downloadable(new RelativePath("Download")),
             new Downloadable(new RelativePath("MoreDownload")),
             new Downloadable(@"D:/svn/antilatency.com/.Releases", "Api", new SearchSequencer().SvnLikeRepository.SpecifyThePath("Api\\Api.ml.cs")),
@@ -45,14 +45,14 @@ namespace StaticSharpDemo.Content.Index {
             // new Paragraph() {
             //     "SimpleImage"
             // },
-            //image,
+            test1,
             // new Paragraph() {
             //     "SimpleImage"
             // },
             // imagec,
-
-            new Landing(test1, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.",  
-            "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.TopLeft, new int[4] {470, 150, 660, 350}),
+            //test2,
+            // new Landing(test1, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.",  
+            // "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.TopLeft, new int[4] {470, 150, 660, 350}),
 
             // new Landing(test2, "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.",  
             // "Сделайте вход только по приглашениям, чтобы чувствовать себя комфортно.", Position.TopLeft, new int[4] {1100, 600, 1600, 850}),
@@ -93,31 +93,31 @@ namespace StaticSharpDemo.Content.Index {
             //         new MaterialCard(Node.Representative),
             //     },
 
-            new Paragraph() {
-                "AAAAAAA"
-                },
+            // new Paragraph() {
+            //     "AAAAAAA"
+            //     },
 
-            new UnorderedList() {
-                    "aaa",
-                    new UnorderedList() {
-                        "bbb",
-                        "ccc"
-                    },
-                    "ddd"
-                },
+            // new UnorderedList() {
+            //         "aaa",
+            //         new UnorderedList() {
+            //             "bbb",
+            //             "ccc"
+            //         },
+            //         "ddd"
+            //     },
 
-            new OrderedList() {
-                    "zzz",
-                    "sss",
-                    new OrderedList() {
-                        "bbb",
-                        "ooo"
-                    }
-                },
+            // new OrderedList() {
+            //         "zzz",
+            //         "sss",
+            //         new OrderedList() {
+            //             "bbb",
+            //             "ooo"
+            //         }
+            //     },
 
-            new Paragraph() {
-                    "Без заголовка"
-                },
+            // new Paragraph() {
+            //         "Без заголовка"
+            //     },
 
             new Table(2) {
                     "a", "b", "c", "d"

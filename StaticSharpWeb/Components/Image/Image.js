@@ -1,10 +1,10 @@
 ﻿function Image(element) {
     let parent = element.parentElement;
-    //console.log(parent);
+    element.onAnchorsChanged = [];
     //console.log(element.firstChild);
     element.updateWidth = function() {
-        let left = parent.anchors.fillLeft;
-        let right = parent.anchors.fillRight;
+        let left = parent.anchors.wideLeft;
+        let right = parent.anchors.wideRight;
         element.style.marginLeft = left + "px";
         element.style.width = right - left + "px";
         //element.style.minWidth = "1280px";

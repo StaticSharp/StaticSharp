@@ -37,18 +37,27 @@ namespace StaticSharpWeb {
 
         public async Task<Html.INode> GenerateBlockHtmlAsync(Context context) {
             Resource ??= await context.Storage.AddOrGetAsync(FilePath, () => new ImageResource(FilePath, context.Storage));
-            
+            var textContainter = new Tag("div", new { Class = "TextContainer" , id = "TextContainer" });
+            var titleText = new Tag("h2") { "context.Storage.AddOrGetAsync(FilePath)" };
+            var text = new Tag("div") { "titleText = new Tag" };
+            textContainter.Add(titleText);
+            textContainter.Add(text);
             var tag = new Tag("div", new { Class = "ImageContainer", id = "ImageContainer" }) {
                 new Tag("img", new { Class = "InnerImage", id = "InnerImage", src = Resource.Source, alt = Alt}),
                 //new Tag("img", new { alt = Alt, style = "width: 100%; height: auto;"}),
-                new JSCall(new RelativePath("Image.js")).Generate(context),              
+                new JSCall(new RelativePath("Image.js")).Generate(context),        
+                //new JSCall(new RelativePath("TestImage.js")).Generate(context),       
                 //new JSCall(new RelativePath("RoiImage.js"), Resource.Aspect, Resource.Roi).Generate(context),  
                 new JSCall(new RelativePath("MipsSelector.js"), Resource.Mips).Generate(context),
             };
+            tag.Add(textContainter);
             context.Includes.Require(new Style(new RelativePath("Image.scss")));
             if (Resource.Roi.Length > 0){
                 tag.Add(new JSCall(new RelativePath("RoiImage.js"), Resource.Aspect, Resource.Roi).Generate(context));
             }
+            // if (Resource.Roi.Length > 0){
+            //     tag.Add(new JSCall(new RelativePath("TestRoiImage.js"), Resource.Aspect, Resource.Roi).Generate(context));
+            // }
             return tag;
         }
     }

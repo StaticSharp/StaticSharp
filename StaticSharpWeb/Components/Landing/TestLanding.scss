@@ -1,20 +1,27 @@
-@include once {
-    .LandingContainer {}
-    .ImageAndTextContainer {
-        position: relative;
-    }
-    .ImageContainer {
-        //height: 40vh;
-        //max-height: 80vh;
-        // topoverflow: hidden;
-    }
-    .TextContainer {
-        position: absolute;
-        //top: 8px;
-        left: 16px;
-        //right: 50%;
-    }
-    .InnerImage {
-        object-fit: cover,
-    }
-}
+// @include once {
+//     .LandingContainer {}
+//     .ImageAndTextContainer {
+//         position: relative;
+//     }
+//     .ImageContainer {
+//         //height: 40vh;
+//         //max-height: 80vh;
+//         // topoverflow: hidden;
+//     }
+//     .TextContainer {
+//         position: absolute;
+//         //top: 8px;
+//         left: 16px;
+//         //right: 50%;
+//         // .h2 {
+//         //     display: flex;
+//         // }
+//     }
+//     .InnerImage {
+//         object-fit: cover;
+//     }
+//     .TextContainer h2 {
+//         margin-top: 0px;
+//         //margin-bottom: 0px;
+//     }
+// }
