@@ -26,8 +26,8 @@ function RoiImage(element, aspect, roi) {
     // })
     //console.log(element.style);
     //200 400 460 680 720 940
-    let cropx1 = 460;
-    let cropx2 = 680;
+    let cropx1 = 720;
+    let cropx2 = 940;
     let imageWidth = 1000;
     //1 - min 0 - max
     let swap = 0;
@@ -242,7 +242,7 @@ function RoiImage(element, aspect, roi) {
         let newolddiag = _olddiag / _xgrad;
         console.log("NewoldDiag = " + newolddiag);
 
-        let newoldFullDiag = newolddiag + _oldFulldiag;
+        let newoldFullDiag = newolddiag + _oldFulldiag / ratio2;
         console.log("NewOldFullDiag = " + newoldFullDiag);
 
         let WIDTHNEW = 1000 * newoldFullDiag / _oldFulldiag;
