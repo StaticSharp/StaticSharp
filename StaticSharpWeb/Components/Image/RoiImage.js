@@ -13,6 +13,7 @@ function RoiImage(element, aspect, roi) {
     let cropx1 = 460;
     let cropx2 = 680;
     let imageWidth = 1000;
+    let imageHeight = 667;
     //1 - min 0 - max
     let swap = 0;
 
@@ -41,13 +42,13 @@ function RoiImage(element, aspect, roi) {
         console.log("x1Image = " + x1Image);
         console.log("x2Image = " + x2Image);
 
-        let initImageDiagonal = Math.sqrt(667 * 667 + 1000 * 1000);
+        let initImageDiagonal = Math.sqrt(imageHeight * imageHeight + imageWidth * imageWidth);
         console.log("initImageDiagonal = " + initImageDiagonal);
-        let sin = 667 / initImageDiagonal;
+        let sin = imageHeight / initImageDiagonal;
         console.log("Sin = " + sin);
-        let cos = 1000 / initImageDiagonal;
+        let cos = imageWidth / initImageDiagonal;
         console.log("Cos = " + cos);
-        let tg = 667 / 1000;
+        let tg = imageHeight / imageWidth;
         console.log("Tg = " + tg);
 
         console.log("-----------------maxWidth-----------------------");
@@ -70,7 +71,7 @@ function RoiImage(element, aspect, roi) {
         let renderImageDiagonal = diagonalIncreaseRelativeX2Image + initImageDiagonal / ratio;
         console.log("renderImageDiagonal = " + renderImageDiagonal);
 
-        let WidthIncreaseRealiveX2Window = 1000 * renderImageDiagonal / initImageDiagonal;
+        let WidthIncreaseRealiveX2Window = imageWidth * renderImageDiagonal / initImageDiagonal;
         console.log("WidthIncreaseRealiveX2Window = " + WidthIncreaseRealiveX2Window);
 
         console.log("-----------------maxWidth-----------------------");
@@ -100,7 +101,7 @@ function RoiImage(element, aspect, roi) {
         let renderImageDiagonalmin = diagonalIncreaseRelativeX1Image + initImageDiagonal / ratio;
         console.log("renderImageDiagonalmin = " + renderImageDiagonalmin);
 
-        let WidthIncreaseRealiveX1Window = 1000 * renderImageDiagonalmin / initImageDiagonal;
+        let WidthIncreaseRealiveX1Window = imageWidth * renderImageDiagonalmin / initImageDiagonal;
         console.log("WidthIncreaseRealiveX1Window = " + WidthIncreaseRealiveX1Window);
 
         if (WidthIncreaseRealiveX1Window < x2Window)
@@ -142,17 +143,8 @@ function RoiImage(element, aspect, roi) {
         var containerAspect = height / width;
         if (containerAspect < aspect) {
             if (swap) {
-                //if (myWidthMin < fullWide) //rightLimit
-                //    this.image.style.width = fullWide + "px";
-                //if (minWidth < _x1W)
                 this.image.style.width = minWidth + "px";
             } else {
-                //if ((cropx2 / ratio2) > fullWide)
-                //if (_x2 > fullWide)
-                //    this.image.style.width = fullWide + "px";
-                //if (myWidthMax > fullWide)
-                //    this.image.style.width = fullWide + "px";
-                //if (_x2 > rightLimit)
                 this.image.style.width = maxWidth + "px";
             }
             // this.image.style.minWidth = minWidth + "px";
