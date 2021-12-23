@@ -22,6 +22,7 @@ namespace StaticSharpDemo.Content.Index {
         private Image image3 = new Image(new RelativePath("333.png"), "Ricardooo3");
 
         private Image test1 = new Image(new RelativePath("test1t.jpg"), "test1");
+        // private Image test1 = new Image(new RelativePath("testd.jpg"), "test1");
         private Image test2 = new Image(new RelativePath("test2.jpg"), "test2");
         private Image test3 = new Image(new RelativePath("test3.jpg"), "test3");
         private Image test4 = new Image(new RelativePath("test4.jpg"), "test4");
