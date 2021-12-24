@@ -9,7 +9,7 @@
         element.style.width = right - left + "px";
         //element.style.minWidth = "1280px";
         //element.style.minHeight = "500px";
-        element.style.height = "50vh";
+        element.style.height = "500px";
         element.style.overflow = "hidden";
         element.style.backgroundColor = "rgb(60, 61, 63)";
         //let innerHeight = Math.max(element.style.height, element.style.minHeight);
