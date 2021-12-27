@@ -124,6 +124,11 @@ function RoiImage(element, aspect, roi) {
         maxWidth = WidthIncreaseRealiveX2Window;
         minWidth = WidthIncreaseRealiveX1Window;
 
+        //----------------------------------------------------------------//
+        let neededWidth = maxWidth + diagonalIncreaseRelativeX2Window;
+        console.log("neededWidth = " + neededWidth);
+        //----------------------------------------------------------------//
+
         console.log("MaxWidth = " + maxWidth);
         console.log("MinWidth = " + minWidth);
         console.log("Ratio = " + ratio);
@@ -221,7 +226,7 @@ function RoiImage(element, aspect, roi) {
 
 
 
-        console.log(parent.anchors.wideRight);
+        // console.log(parent.anchors.wideRight);
 
         let widthAspect = width * aspect;
         let minHeight = widthAspect * h;
@@ -231,36 +236,45 @@ function RoiImage(element, aspect, roi) {
         var containerAspect = height / width;
         // if (containerAspect < aspect) {
         if (ratio < swap) {
+            // if (parseInt(this.image.style.width) < minWidth) {
             //if (swap) {
-            this.image.style.minWidth = minWidth + "px";
+            // this.image.style.minWidth = minWidth + "px";
             //} else {
-            this.image.style.maxWidth = maxWidth + "px";
+            // this.image.style.maxWidth = maxWidth + "px";
             //}
             // this.image.style.width = "100%";
             // this.image.style.minWidth = minWidth + "px";
-            this.image.style.width = (maxWidth + minWidth) / (2 * ratio) + "px";
+            // this.image.style.width = (maxWidth + minWidth) / (2 * ratio) + "px";
             // this.image.style.width = maxWidth + "px";
+
+            // this.image.style.width = minWidth + "px";
+            this.image.style.width = neededWidth + "px";
+            // this.image.style.width = "2300px";
+
             // this.image.style.width = "auto";
             // imageContainer.style.minHeight = (containerMinHeight) + "px";
             // imageContainer.style.maxHeight = (containerMaxHeight) + "px";
-            imageContainer.style.minHeight = (containerMaxHeight) + "px";
-            // imageContainer.style.height = "340px";
+            // imageContainer.style.minHeight = (containerMinHeight) + "px";
+            imageContainer.style.height = "300px";
             // this.image.style.height = "auto"
             var offset = (1 - (containerAspect / aspect - h) / (1 - h)) * y0 * 100.0
                 // this.image.style.transform = "translate(0, -" + offset + "%)"
-            this.image.style.transform = "translate(0, -" + (myoffset) + "px)";
+                // this.image.style.transform = "translate(0, -" + (myoffset) + "px)";
+            this.image.style.transform = "translate(-" + (dxmin + dx) + "px, -" + currentY2 + "px)";
             // this.image.style.transform = "translate(0, -" + up + "px)"
             // textContainer.style.top = currentY2 + "px";
             // console.log(parent.anchors.textLeft);
             textContainer.style.marginLeft = parent.anchors.textLeft + "px";
+
         } else {
             console.log("SWAPPED");
             this.image.style.height = "auto"
             this.image.style.width = "100%"
-                // imageContainer.style.minHeight = minWidth + "px";
-                // imageContainer.style.maxHeight = maxWidth + "px";
+            imageContainer.style.minHeight = "207px";
+            // imageContainer.style.minHeight = minWidth + "px";
+            // imageContainer.style.maxHeight = maxWidth + "px";
             var offset = (1 - (aspect / containerAspect - w) / (1 - w)) * x0 * 100.0
-            this.image.style.transform = "translate(-" + offset + "%, 0)"
+            this.image.style.transform = "translate(-" + offset + "%, 0)";
         }
 
         // this.element.style.minHeight = minHeight + "px";
