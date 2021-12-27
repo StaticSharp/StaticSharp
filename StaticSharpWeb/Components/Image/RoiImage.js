@@ -6,20 +6,21 @@ function RoiImage(element, aspect, roi) {
     this.previousContainerHeight = -1;
     this.image = this.element.getElementsByTagName("img")[0];
     const imageContainer = document.querySelector("#ImageContainer");
+    const textContainer = document.querySelector("#TextContainer");
     this.parent = this.element.parentElement;
     element.onAnchorsChanged = [];
 
     //200 400 460 680 720 940
-    let cropx1 = 720;
-    let cropx2 = 940;
+    let cropx1 = 460;
+    let cropx2 = 680;
     let cropy1 = 150;
     let cropy2 = 285;
     let imageWidth = 1000;
     let imageHeight = 667;
     //1 - min 0 - max
-    let swap = 0;
+    let swap = 1.5;
 
-    let userHeight = 460;
+    let userHeight = 200;
 
     this.element.updateWidth = function() {
         let width = this.element.offsetWidth;
@@ -101,13 +102,13 @@ function RoiImage(element, aspect, roi) {
         let diagonalIncreaseRelativeX1Window = Math.sqrt(dxmin * dxmin + dymin * dymin);
         if (dxmin < 0)
             diagonalIncreaseRelativeX1Window = -diagonalIncreaseRelativeX1Window;
-        console.log("diagonalIncreaseRelativeX2Window = " + diagonalIncreaseRelativeX1Window);
+        console.log("diagonalIncreaseRelativeX1Window = " + diagonalIncreaseRelativeX1Window);
 
         let x1Gradient = x1Image / x2Window;
         console.log("xGradient = " + x1Gradient);
 
         let diagonalIncreaseRelativeX1Image = diagonalIncreaseRelativeX1Window / x1Gradient;
-        console.log("diagonalIncreaseRelativeX2Image = " + diagonalIncreaseRelativeX1Image);
+        console.log("diagonalIncreaseRelativeX1Image = " + diagonalIncreaseRelativeX1Image);
 
         let renderImageDiagonalmin = diagonalIncreaseRelativeX1Image + initImageDiagonal / ratio;
         console.log("renderImageDiagonalmin = " + renderImageDiagonalmin);
@@ -120,52 +121,24 @@ function RoiImage(element, aspect, roi) {
 
         console.log("-----------------minWidth-----------------------");
 
-        //UNCOMMNENT
         maxWidth = WidthIncreaseRealiveX2Window;
-        //UNCOMMNENT
-        //maxWidth = x2Window;
-
-        //UNCOMMNENT
         minWidth = WidthIncreaseRealiveX1Window;
+
         console.log("MaxWidth = " + maxWidth);
         console.log("MinWidth = " + minWidth);
         console.log("Ratio = " + ratio);
 
-        // let newMinHeight = minWidth * tg - dy / x2Gradient;
-        // console.log("newMinHeight = " + newMinHeight);
-
-        // let newMaxHeight = maxWidth * tg - dy / x1Gradient;
-        // console.log("newMaxHeight = " + newMaxHeight);
-
-        // let a = dy / x2Gradient;
-        // console.log("A = " + a);
         let newMinHeight = minWidth * tg;
         console.log("newMinHeight = " + newMinHeight);
 
         let newMaxHeight = maxWidth * tg;
         console.log("newMaxHeight = " + newMaxHeight);
 
-        if (userHeight < newMaxHeight && userHeight > newMinHeight) {
-            console.log("Fit");
-            let newActualWidth = userHeight / tg;
-            console.log("newActualWidth = " + newActualWidth);
-            // imageContainer.style.height = userHeight + "px";
-        }
-        if (userHeight < newMinHeight) {
-            console.log("Smaller");
-            imageContainer.style.height = newMinHeight + "px";
-        }
+        let currentY1 = cropy1 / ratio / x2Gradient;
+        console.log("CurrentY1 = " + currentY1);
 
-        if (userHeight > newMaxHeight) {
-            console.log("Bigger");
-            imageContainer.style.height = newMaxHeight + "px";
-        }
-
-        // let ratioH = 1000 / 667;
-        // console.log("Ratio H = " + ratioH);
-
-        let currentY = cropy2 / ratio;
-        console.log("CurrentY = " + currentY);
+        let currentY2 = cropy2 / ratio;
+        console.log("CurrentY2 = " + currentY2);
 
         let currentY2ForMax = (cropy2 / ratio / x2Gradient);
         console.log("CurrentY2ForMax = " + currentY2ForMax);
@@ -173,27 +146,82 @@ function RoiImage(element, aspect, roi) {
         let currentY2ForMin = (cropy2 / ratio);
         console.log("CurrentY2ForMin = " + currentY2ForMin);
 
-        let y2Gradient = currentY2ForMax / newMinHeight;
-        console.log("yGradient = " + y2Gradient);
+        let containerMinHeight = 0;
+        // let myoffset = 0;
+        // let up = 0;
+        if (dymin > 0) {
+            if (newMinHeight == newMaxHeight) {
+                containerMinHeight = currentY2ForMax;
 
-        // let containerMinHeight = newMinHeight - currentY2;
-        let containerMinHeight = 500;
+                // up = dy;
+            } else {
+                containerMinHeight = cropy2 / ratio + dymin;
+                // up = currentY1 - dymin / x2Gradient / ratio;
+            }
+        } else {
+            containerMinHeight = currentY2;
+            // up = currentY1;
+        }
+
+        let myoffset = y1Image + dymin / ratio;
+        console.log("myoffset = " + myoffset);
+
+        // console.log("TEST1 = " + (tg * minWidth / ratio));
+        // console.log("TEST2 = " + (tg * maxWidth / ratio));
+        // console.log("Razina = " + (-(tg * minWidth / ratio) + (tg * maxWidth / ratio)));
+        // console.log("myoffset1 = " + (myoffset));
+        // console.log("myoffset2 = " + (myoffset / x1Gradient));
+
+        containerMinHeight = containerMinHeight - myoffset;
+
+        let yRatio = 1 / ratio;
+        console.log("yRatio = " + yRatio);
+
+        // console.log("Up = " + up);
         console.log("containerMinHeight = " + containerMinHeight);
 
-        let containerMaxHeight = currentY2ForMax;
+        let containerMaxHeight = currentY2ForMax - myoffset;
         console.log("containerMaxHeight = " + containerMaxHeight);
 
-        imageContainer.style.height = containerMinHeight + "px";
+        console.log("UserHeight = " + userHeight / ratio);
 
-        // imageContainer.style.height = 500 + "px";
+        // if (userHeight / ratio > containerMaxHeight) {
+        //     console.log("User > Max");
+        //     imageContainer.style.height = containerMaxHeight + "px";
+        // }
+
+        // if (userHeight / ratio < containerMinHeight) {
+        //     console.log("User < Min");
+        //     imageContainer.style.height = containerMinHeight + "px";
+        // }
+
+        // if (userHeight / ratio > containerMinHeight && userHeight / ratio < containerMaxHeight) {
+        //     console.log("User fitted");
+        //     imageContainer.style.height = userHeight / ratio + "px";
+        // }
+
+        //Max = min
+        if (userHeight / ratio < containerMaxHeight) {
+            imageContainer.style.height = containerMaxHeight + "px";
+        } else imageContainer.style.height = (userHeight / ratio) + "px";
+
+        // imageContainer.style.height = "500px";
+
+        // imageContainer.style.height = containerMaxHeight + "px";
+
         console.log("ContainerHeight = " + imageContainer.style.height);
-        // imageContainer.style.height = 460 + "px";
-        //let a = imageContainer.style.height;
-        //let b = a - 100;
-        // console.log(parseInt(imageContainer.style.height) - y2Image / x2Gradient);
-        // imageContainer.style.minHeight = (parseInt(imageContainer.style.height) - y2Image / x2Gradient) + "px";
 
-        // console.log("ImageContainerMinHeight = " + (imageContainer.style.minHeight));
+
+
+        // let myoffset = currentY1 / ratio - dymin * x2Gradient / ratio;
+        // console.log("My offset = " + myoffset);
+
+        // if (parseInt(this.image.style.width) > maxWidth)
+        //     myoffset = currentY1 + dymin * x1Gradient / ratio;
+
+
+
+        console.log(parent.anchors.wideRight);
 
         let widthAspect = width * aspect;
         let minHeight = widthAspect * h;
@@ -201,7 +229,8 @@ function RoiImage(element, aspect, roi) {
         height = Math.max(height, minHeight);
         height = Math.min(height, maxHeight);
         var containerAspect = height / width;
-        if (containerAspect < aspect) {
+        // if (containerAspect < aspect) {
+        if (ratio < swap) {
             //if (swap) {
             this.image.style.minWidth = minWidth + "px";
             //} else {
@@ -209,20 +238,33 @@ function RoiImage(element, aspect, roi) {
             //}
             // this.image.style.width = "100%";
             // this.image.style.minWidth = minWidth + "px";
-            // this.image.style.maxWidth = maxWidth + "px";
-            this.image.style.width = minWidth + "px";
-            this.image.style.height = "auto"
+            this.image.style.width = (maxWidth + minWidth) / (2 * ratio) + "px";
+            // this.image.style.width = maxWidth + "px";
+            // this.image.style.width = "auto";
+            // imageContainer.style.minHeight = (containerMinHeight) + "px";
+            // imageContainer.style.maxHeight = (containerMaxHeight) + "px";
+            imageContainer.style.minHeight = (containerMaxHeight) + "px";
+            // imageContainer.style.height = "340px";
+            // this.image.style.height = "auto"
             var offset = (1 - (containerAspect / aspect - h) / (1 - h)) * y0 * 100.0
-            this.image.style.transform = "translate(0, -" + offset + "%)"
+                // this.image.style.transform = "translate(0, -" + offset + "%)"
+            this.image.style.transform = "translate(0, -" + (myoffset) + "px)";
+            // this.image.style.transform = "translate(0, -" + up + "px)"
+            // textContainer.style.top = currentY2 + "px";
+            // console.log(parent.anchors.textLeft);
+            textContainer.style.marginLeft = parent.anchors.textLeft + "px";
         } else {
-            this.image.style.width = "auto"
-            this.image.style.height = "100%"
+            console.log("SWAPPED");
+            this.image.style.height = "auto"
+            this.image.style.width = "100%"
+                // imageContainer.style.minHeight = minWidth + "px";
+                // imageContainer.style.maxHeight = maxWidth + "px";
             var offset = (1 - (aspect / containerAspect - w) / (1 - w)) * x0 * 100.0
             this.image.style.transform = "translate(-" + offset + "%, 0)"
         }
 
-        this.element.style.minHeight = minHeight + "px";
-        this.element.style.maxHeight = maxHeight + "px";
+        // this.element.style.minHeight = minHeight + "px";
+        // this.element.style.maxHeight = maxHeight + "px";
         //})
     }
 
