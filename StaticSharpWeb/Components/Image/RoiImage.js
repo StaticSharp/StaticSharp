@@ -255,12 +255,11 @@ function RoiImage(element, aspect, roi) {
         console.log("User height = " + userHeight);
         if (neededHeight < userHeight)
             neededHeight = userHeight;
+        console.log("Needed height = " + neededHeight);
 
         // console.log("ASDASD = " + (y2Image - y1Image));
         // let difference = neededHeight - (y2Image - y1Image);
         // console.log("Difference = " + difference);
-
-        let maxRatio = 0;
 
         // let testWidth = imageWidth * (renderImageDiagonalmin + 100) / initImageDiagonal;
         // let testHeight = (cropy2 - cropy1) / tg + difference * sin;
