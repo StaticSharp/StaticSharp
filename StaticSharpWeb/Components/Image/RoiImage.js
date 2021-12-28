@@ -278,24 +278,36 @@ function RoiImage(element, aspect, roi) {
 
         //----------------------------------------------------------------//
         console.log("================================");
-
+        //1515 - max window width when anchors collapse
         let middleOfFullImage2 = 1515 / 2;
 
-        let dxmin2 = middleOfFullImage2 - x1Image;
+        // let dxmin2 = middleOfFullImage2 - x1Image;
+        //689 - max(x1Image);
+        let dxmin2 = middleOfFullImage2 - 689;
+        console.log(dxmin2);
+        console.log(middleOfFullImage2 - 689);
 
         let dymin2 = dxmin2 * tg;
 
         let diagonalIncreaseRelativeX1Window2 = Math.sqrt(dxmin2 * dxmin2 + dymin2 * dymin2);
         if (dxmin2 < 0)
             diagonalIncreaseRelativeX1Window2 = -diagonalIncreaseRelativeX1Window2;
+        console.log("RRR = " + diagonalIncreaseRelativeX1Window2);
 
         let x1Gradient2 = x1Image / x2Window;
+        console.log(x1Gradient2);
+        // console.log(689 / 1515);
 
         let diagonalIncreaseRelativeX1Image2 = diagonalIncreaseRelativeX1Window2 / x1Gradient2;
+        console.log(diagonalIncreaseRelativeX1Image2);
 
-        let renderImageDiagonalmin2 = diagonalIncreaseRelativeX1Image2 + initImageDiagonal / ratio;
+        // let renderImageDiagonalmin2 = diagonalIncreaseRelativeX1Image2 + initImageDiagonal / ratio;
+        let renderImageDiagonalmin2 = diagonalIncreaseRelativeX1Image2 + initImageDiagonal / tg;
+        console.log(renderImageDiagonalmin2);
 
-        let WidthIncreaseRealiveX1Window2 = imageWidth * renderImageDiagonalmin2 / initImageDiagonal - dymin * x1Gradient;
+        // let WidthIncreaseRealiveX1Window2 = imageWidth * renderImageDiagonalmin2 / initImageDiagonal - dymin * x2Gradient;
+        // let WidthIncreaseRealiveX1Window2 = imageWidth * renderImageDiagonalmin2 / initImageDiagonal - dymin * x1Gradient;
+        let WidthIncreaseRealiveX1Window2 = imageWidth * renderImageDiagonalmin2 / initImageDiagonal - dymin2 * x1Gradient;
 
         // let WidthIncreaseRealiveX1Window2 = imageWidth * renderImageDiagonalmin2 / initImageDiagonal;
         // if (dymin > 0)
@@ -304,7 +316,7 @@ function RoiImage(element, aspect, roi) {
 
         console.log("AAAA = " + WidthIncreaseRealiveX1Window2);
 
-        let maxRatiooo = WidthIncreaseRealiveX1Window2 / 1000;
+        let maxRatiooo = WidthIncreaseRealiveX1Window2 / imageWidth;
         console.log("maxRatiooo = " + maxRatiooo);
 
         let newY1 = cropy1 * maxRatiooo;
@@ -313,7 +325,7 @@ function RoiImage(element, aspect, roi) {
         let newY2 = cropy2 * maxRatiooo;
         console.log("newY2 = " + newY2);
 
-        let raznica = newY2 - newY1 - dymin * x1Gradient;
+        let raznica = newY2 - newY1 - dymin2 * x1Gradient;
         console.log("raznica = " + raznica);
 
         //----------------------------------------------------------------//
@@ -329,7 +341,8 @@ function RoiImage(element, aspect, roi) {
 
 
         textContainer.innerText = "Высота рамки = " + parseInt(raznica).toString() +
-            "\nТекущая ширина картинки = " + parseInt(minWidth).toString();
+            "\nТекущая ширина картинки = " + parseInt(minWidth).toString() +
+            "\nЗаказанная высота = " + parseInt(userHeight).toString();
 
         let widthAspect = width * aspect;
         let minHeight = widthAspect * h;
@@ -361,7 +374,7 @@ function RoiImage(element, aspect, roi) {
             // imageContainer.style.minHeight = (containerMinHeight) + "px";
             // imageContainer.style.height = "202px";
             // imageContainer.style.height = (initImageDiagonal - imageWidth) + "px";
-            imageContainer.style.height = 200 + "px";
+            imageContainer.style.height = 202 + "px";
             // this.image.style.height = "auto"
             var offset = (1 - (containerAspect / aspect - h) / (1 - h)) * y0 * 100.0
                 // this.image.style.transform = "translate(0, -" + offset + "%)"
