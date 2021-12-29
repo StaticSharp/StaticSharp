@@ -335,6 +335,7 @@ function RoiImage(element, aspect, roi) {
         let middleOfFullImage4 = WidthIncreaseRealiveX1Window3 / 2;
         console.log("MiddleOfFullImage = " + middleOfFullImage4);
 
+        // !!!!!!!!!!!!!!! let ratio4 = tg;
         let ratio4 = imageWidth / 1515;
         console.log("ratio4 = " + ratio4);
 
@@ -365,10 +366,10 @@ function RoiImage(element, aspect, roi) {
         console.log("newY2Image = " + newY2Image);
 
         let newHeight = 0;
-        if (dymin > 0)
+        if (dymin4 > 0)
         // let t = Math.min(newHeight, newY2Image - newY1Image - dymin * x1Gradient);
             newHeight = newY2Image - newY1Image - dymin4 * x1Gradient;
-        else newHeight = newY2Image - newY1Image;
+        else newHeight = newY2Image - newY1Image; // либо перерас. либо dymin4 как при случае выше
         console.log("newHeight = " + newHeight);
 
         // console.log(screen.width - leftBar.clientWidth - rightBar.clientWidth);
@@ -438,6 +439,12 @@ function RoiImage(element, aspect, roi) {
         // // let a2 = a1 - leftBar.width;
         // console.log(leftBar.clientWidth);
 
+        let translateGradient = 1515 / imageWidth;
+        console.log("translateGradient = " + translateGradient);
+
+        const map = (value, x1, y1, x2, y2) => (value - x1) * (y2 - x2) / (y1 - x1) + x2;
+        console.log(map(1515 / imageWidth, 0, 1515 / imageWidth, 0, 1));
+
 
         textContainer.innerText = "Высота рамки = " + parseInt(newHeight).toString() +
             "\nТекущая ширина картинки = " + parseInt(minWidth).toString() +
@@ -473,7 +480,7 @@ function RoiImage(element, aspect, roi) {
             // imageContainer.style.minHeight = (containerMinHeight) + "px";
             // imageContainer.style.height = "202px";
             // imageContainer.style.height = (initImageDiagonal - imageWidth) + "px";
-            imageContainer.style.height = 202 + "px";
+            imageContainer.style.height = 203 + "px";
             // this.image.style.height = "auto"
             var offset = (1 - (containerAspect / aspect - h) / (1 - h)) * y0 * 100.0
                 // this.image.style.transform = "translate(0, -" + offset + "%)"
