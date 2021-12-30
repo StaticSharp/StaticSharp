@@ -332,6 +332,9 @@ function RoiImage(element, aspect, roi) {
 
         //----------------------------------------------------------------//
 
+        let currentHeight = WidthIncreaseRealiveX1Window3 * tg;
+        console.log("currentHeight = " + currentHeight);
+
         let middleOfFullImage4 = WidthIncreaseRealiveX1Window3 / 2;
         console.log("MiddleOfFullImage = " + middleOfFullImage4);
 
@@ -369,7 +372,8 @@ function RoiImage(element, aspect, roi) {
         if (dymin4 > 0)
         // let t = Math.min(newHeight, newY2Image - newY1Image - dymin * x1Gradient);
             newHeight = newY2Image - newY1Image - dymin4 * x1Gradient;
-        else newHeight = newY2Image - newY1Image; // либо перерас. либо dymin4 как при случае выше
+        // else newHeight = newY2Image - newY1Image + dy * x1Gradient; // либо перерас. либо dymin4 как при случае выше
+        else newHeight = (newY2Image - newY1Image) / x1Gradient3;
         console.log("newHeight = " + newHeight);
 
         // console.log(screen.width - leftBar.clientWidth - rightBar.clientWidth);
@@ -439,12 +443,44 @@ function RoiImage(element, aspect, roi) {
         // // let a2 = a1 - leftBar.width;
         // console.log(leftBar.clientWidth);
 
-        let translateGradient = 1515 / imageWidth;
-        console.log("translateGradient = " + translateGradient);
+        // let translateGradient = 1515 / imageWidth;
+        // console.log("translateGradient = " + translateGradient);
 
         const map = (value, x1, y1, x2, y2) => (value - x1) * (y2 - x2) / (y1 - x1) + x2;
-        console.log(map(1515 / imageWidth, 0, 1515 / imageWidth, 0, 1));
 
+        // let test = map(newY1Image, 0, newY1Image, 0, 1);
+        // console.log("test = " + test);
+        // console.log(map(1515 / imageWidth, 0, 1515 / imageWidth, 0, 1));
+
+        // console.log(newY2Image - newY1Image + dymin3 * sin - newY1Image);
+        // console.log(newY1Image - (newY2Image - newY1Image + dymin3 * sin - newY1Image));
+        // console.log((x2Image - x1Image - (cropy2 - cropy1) * sin));
+        // console.log(newY1Image);
+
+        // console.log("test = " + (y1Image + (dymin3 * sin / 2)));
+        // console.log("test2 = " + (newY1Image - (newY1Image - (y1Image + dymin * sin))));
+
+        // console.log("test3 = " + ((x2Image - x1Image - (cropy2 - cropy1) * sin) - dymin * x1Gradient / 2));
+        console.log("@@@@@@@@@@@@@ разница 2 - 1 t3 + (2-1)");
+        console.log(y2Image - y1Image + dymin * x1Gradient);
+        console.log(newY2Image - newY1Image);
+        console.log("@@@@@@@@@@@@@ разница 2 - 1 t3 + (2-1)");
+        let translatePlus = cropy2 / tg - cropy1 / tg + dymin4 * x1Gradient;
+        console.log("translatePlus = " + translatePlus);
+        let translatePlus2 = (newY2Image - newY1Image) - translatePlus;
+        console.log("translatePlus2 = " + translatePlus2);
+        console.log(newHeight - (y2Image - y1Image));
+        console.log((newY2Image - newY1Image) - (newHeight - (y2Image - y1Image)) / 2);
+
+        let t2 = (((newY2Image - newY1Image) - (y2Image - y1Image + dymin * sin)) + ((newY2Image - newY1Image) - (y2Image - y1Image + dymin * sin)) / 2);
+        console.log("raz = " + t2);
+        let t3 = (newY1Image - t2);
+        console.log("new translate = " + t3);
+
+        // let raz = (1515 - window.innerWidth);
+        // console.log("raz = " + raz * x1Gradient);
+
+        // console.log(newY1Image - raz * x1Gradient);
 
         textContainer.innerText = "Высота рамки = " + parseInt(newHeight).toString() +
             "\nТекущая ширина картинки = " + parseInt(minWidth).toString() +
@@ -480,15 +516,21 @@ function RoiImage(element, aspect, roi) {
             // imageContainer.style.minHeight = (containerMinHeight) + "px";
             // imageContainer.style.height = "202px";
             // imageContainer.style.height = (initImageDiagonal - imageWidth) + "px";
-            imageContainer.style.height = 203 + "px";
+            imageContainer.style.height = newHeight + "px";
             // this.image.style.height = "auto"
             var offset = (1 - (containerAspect / aspect - h) / (1 - h)) * y0 * 100.0
                 // this.image.style.transform = "translate(0, -" + offset + "%)"
                 // this.image.style.transform = "translate(0, -" + (myoffset) + "px)";
                 // this.image.style.transform = "translate(-" + (dxmin + dx) + "px, -" + currentY2 + "px)";
                 // this.image.style.transform = "translate(0, -" + up + "px)"
-                // this.image.style.transform = "translate(-" + (0) + "px, -" + (x2Image - x1Image - 75) + "px)";
-            this.image.style.transform = "translate(-" + (0) + "px, -" + (x2Image - x1Image - (cropy2 - cropy1) * sin) + "px)";
+
+            // this.image.style.transform = "translate(-" + (0) + "px, -" + (x2Image - x1Image - 75) + "px)";
+            // this.image.style.transform = "translate(-" + (0) + "px, -" + (x2Image - x1Image - (cropy2 - cropy1) * sin) + "px)";
+            this.image.style.transform = "translate(-" + (0) + "px, -" + (t3 + translatePlus2) + "px)";
+
+            // this.image.style.transform = "translate(-" + (0) + "px, -" + (newY1Image - (newY2Image - newY1Image + dymin3 * sin - newY1Image)) + "px)";
+            // this.image.style.transform = "translate(-" + (0) + "px, -" + (newY1Image) + "px)";
+            // this.image.style.transform = "translate(-" + (0) + "px, -" + newY1Image + "px)";
             // this.image.style.transform = "translate(-" + (0) + "px, -" + ((y2Image - y1Image) / tgImage - (cropy2 - cropy1) * sin) + "px)";
             // this.image.style.transform = "translate(-" + (0) + "px, -" + (x2Image - x1Image - dymin / x1Gradient) + "px)";
             // this.image.style.transform = "translate(-" + (0) + "px, -" + (y2Image - y1Image) + "px)";
