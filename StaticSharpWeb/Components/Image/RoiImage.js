@@ -376,11 +376,13 @@ function RoiImage(element, aspect, roi) {
         else newHeight = (newY2Image - newY1Image) / x1Gradient3;
         console.log("newHeight = " + newHeight);
 
+        let extratranslate = 0;
+
         if (newHeight < userHeight) {
             let difference = userHeight - newHeight;
             console.log("difference = " + difference);
             newHeight = userHeight;
-            let extratranslate = x1Gradient * difference / 2;
+            extratranslate = x1Gradient * difference;
             console.log("extratranslate = " + extratranslate);
         }
 
@@ -534,7 +536,7 @@ function RoiImage(element, aspect, roi) {
 
             // this.image.style.transform = "translate(-" + (0) + "px, -" + (x2Image - x1Image - 75) + "px)";
             // this.image.style.transform = "translate(-" + (0) + "px, -" + (x2Image - x1Image - (cropy2 - cropy1) * sin) + "px)";
-            this.image.style.transform = "translate(-" + (0) + "px, -" + (t3 + translatePlus2) + "px)";
+            this.image.style.transform = "translate(-" + (0) + "px, -" + (t3 + translatePlus2 - extratranslate) + "px)";
 
             // this.image.style.transform = "translate(-" + (0) + "px, -" + (newY1Image - (newY2Image - newY1Image + dymin3 * sin - newY1Image)) + "px)";
             // this.image.style.transform = "translate(-" + (0) + "px, -" + (newY1Image) + "px)";
