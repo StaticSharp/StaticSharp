@@ -22,7 +22,7 @@ function RoiImage(element, aspect, roi) {
     //1 - min 0 - max
     let swap = 1.5;
 
-    let userHeight = 150;
+    let userHeight = 300;
 
     // let tgImage = (cropy2 - cropy1) / (cropx2 - cropx1);
     // console.log("tgImage = " + tgImage);
@@ -375,6 +375,14 @@ function RoiImage(element, aspect, roi) {
         // else newHeight = newY2Image - newY1Image + dy * x1Gradient; // либо перерас. либо dymin4 как при случае выше
         else newHeight = (newY2Image - newY1Image) / x1Gradient3;
         console.log("newHeight = " + newHeight);
+
+        if (newHeight < userHeight) {
+            let difference = userHeight - newHeight;
+            console.log("difference = " + difference);
+            newHeight = userHeight;
+            let extratranslate = x1Gradient * difference / 2;
+            console.log("extratranslate = " + extratranslate);
+        }
 
         // console.log(screen.width - leftBar.clientWidth - rightBar.clientWidth);
         // console.log(parseInt(imageContainer.style.width) - leftBar.clientWidth - rightBar.clientWidth);
