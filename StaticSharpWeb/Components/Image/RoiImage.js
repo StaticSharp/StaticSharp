@@ -214,6 +214,9 @@ function RoiImage(element, aspect, roi) {
 
         console.log(x1Gradient, x1Gradient3, x2Gradient, y1Gradient, y2Gradient, ratio4);
 
+        let yIncrease = 1;
+        if (dymin4 >= 0)
+            yIncrease = (dymin4 / HeightIncreaseRealiveX1Window3) * 10.0
         let x0 = cropx1 / 1000;
         let x1 = cropx2 / 1000;
         let y0 = cropy1 / 667;
@@ -229,7 +232,7 @@ function RoiImage(element, aspect, roi) {
         var containerAspect = height / width;
         var containerAspect1 = newHeight2 / width;
         console.log("containerAspect1 = ", containerAspect1);
-        var offset1 = (dymin4 / HeightIncreaseRealiveX1Window3) * 10.0 + (1 - (containerAspect1 / aspect - h) / (1 - h)) * y0 * 100.0
+        var offset1 = yIncrease + (1 - (containerAspect1 / aspect - h) / (1 - h)) * y0 * 100.0
         console.log("offset1 = " + offset1);
         // var containerAspect = newHeight / width;
         if (containerAspect < aspect) {
