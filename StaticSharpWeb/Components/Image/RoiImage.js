@@ -130,7 +130,7 @@ function RoiImage(element, aspect, roi) {
         console.log("ddiag = " + ddiag);
 
         // let t = ratio4 * dymin4 / (2 * WidthIncreaseRealiveX1Window3 * tg) * 100.0;
-        let k = ratio4 * 100.0 * ((cropy1 / 667) - ((cropy1 + dymin4) / HeightIncreaseRealiveX1Window3));
+        let k = ratio4 * 100.0 * ((cropy1 / imageHeight) - ((cropy1 + dymin4) / HeightIncreaseRealiveX1Window3));
         console.log("k = " + k);
         let k1 = ratio4 * 100.0 * dymin4 / (2 * HeightIncreaseRealiveX1Window3);
         console.log("k1 = " + k1);
@@ -146,8 +146,8 @@ function RoiImage(element, aspect, roi) {
 
         let newHeight = 0;
 
-        let y1Gradient = cropy1 / 667;
-        let y2Gradient = cropy2 / 667;
+        let y1Gradient = cropy1 / imageHeight;
+        let y2Gradient = cropy2 / imageHeight;
         newHeight = newY2Image - newY1Image - dymin4 * y1Gradient;
         // let temp = newY2Image - newY1Image - dymin4 * y1Gradient;
         // console.log("temp = " + temp);
@@ -217,10 +217,10 @@ function RoiImage(element, aspect, roi) {
         let yIncrease = 1;
         if (dymin4 >= 0)
             yIncrease = (dymin4 / HeightIncreaseRealiveX1Window3) * 10.0
-        let x0 = cropx1 / 1000;
-        let x1 = cropx2 / 1000;
-        let y0 = cropy1 / 667;
-        let y1 = cropy2 / 667;
+        let x0 = cropx1 / imageWidth;
+        let x1 = cropx2 / imageWidth;
+        let y0 = cropy1 / imageHeight;
+        let y1 = cropy2 / imageHeight;
         let w = x1 - x0;
         let h = y1 - y0;
 
@@ -244,7 +244,7 @@ function RoiImage(element, aspect, roi) {
             console.log("aspect = " + aspect);
             console.log("h = " + h);
             console.log("y0 = " + y0);
-            var offset = 0 + (1 - (containerAspect / aspect - h) / (1 - h)) * y0 * 100.0
+            var offset = (1 - (containerAspect / aspect - h) / (1 - h)) * y0 * 100.0
             console.log("offset = " + offset);
             this.image.style.transform = "translate(-" + translatex + "px, -" + offset1 + "%)"
                 // this.image.style.transform = "translate(-" + 0 + "px, -" + offset + "px)"
