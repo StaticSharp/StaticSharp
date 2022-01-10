@@ -208,11 +208,31 @@ function RoiImage(element, aspect, roi) {
         this.previousContainerWidth = width;
         this.previousContainerHeight = height;
 
+        // let textMiddleHorizontal = minWidth / 2;
+
+        //----------------------------------------------------------------//
+        // let div = textContainer.getElementsByTagName("div")[0];
+        // let divPadding = div.clientWidth;
+        // console.log(divPadding);
+        // let h2Padding = textContainer.getElementsByTagName("h2")[0];
+        // console.log(h2Padding);
+        // console.log("test = " + minWidth / 2);
+        // console.log("test2 = " + parent.anchors.fillLeft);
+        // let textPadding = (((minWidth / 2 - parent.anchors.fillLeft) - 447) / 2 + parent.anchors.fillLeft);
+        // console.log("test3 = " + textPadding);
+        // div.style.paddingLeft = textPadding + "px";
+        // h2Padding.style.paddingLeft = textPadding + "px";
+        //----------------------------------------------------------------//
+
         textContainer.innerText = "Высота рамки = " + parseInt(newHeight).toString() +
             "\nТекущая ширинка картинки = " + parseInt(minWidth).toString() +
             "\nЗаказанная высота = " + parseInt(userHeight).toString();
+        textContainer.style.width = minWidth / 2 + "px";
+        textContainer.style.height = newHeight + "px";
 
-        console.log(x1Gradient, x1Gradient3, x2Gradient, y1Gradient, y2Gradient, ratio4);
+
+
+        // console.log(x1Gradient, x1Gradient3, x2Gradient, y1Gradient, y2Gradient, ratio4);
 
         let yIncrease = 1;
         if (dymin4 >= 0)
