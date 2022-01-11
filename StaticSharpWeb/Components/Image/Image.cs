@@ -38,8 +38,8 @@ namespace StaticSharpWeb {
         public async Task<Html.INode> GenerateBlockHtmlAsync(Context context) {
             Resource ??= await context.Storage.AddOrGetAsync(FilePath, () => new ImageResource(FilePath, context.Storage));
             var textContainter = new Tag("div", new { Class = "TextContainer" , id = "TextContainer" });
-            var titleText = new Tag("h2") { "context.Storage.AddOrGetAsync(FilePath)" };
-            var text = new Tag("div") { "titleText = new Tag" };
+            var titleText = new Tag("h2") { "HEADER" };
+            var text = new Tag("div") { "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean. A small river named Duden flows by their place and supplies it with the necessary regelialia." };
             textContainter.Add(titleText);
             textContainter.Add(text);
             var tag = new Tag("div", new { Class = "ImageContainer", id = "ImageContainer" }) {

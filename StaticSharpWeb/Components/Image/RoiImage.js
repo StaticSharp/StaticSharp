@@ -14,11 +14,11 @@ function RoiImage(element, aspect, roi) {
     this.parent = this.element.parentElement;
     element.onAnchorsChanged = [];
 
-    //200 400 460 680 720 940
-    let cropx1 = 500;
+    //200 400 460 680 720 940 / 285 400
+    let cropx1 = 460;
     let cropx2 = 680;
-    let cropy1 = 150;
-    let cropy2 = 285;
+    let cropy1 = 155;
+    let cropy2 = 400;
     let imageWidth = 1000;
     let imageHeight = 667;
     //1 - min 0 - max
@@ -61,35 +61,16 @@ function RoiImage(element, aspect, roi) {
         let renderImageDiagonalmin = diagonalIncreaseRelativeX1Image + initImageDiagonal / ratio;
         let WidthIncreaseRealiveX1Window = imageWidth * renderImageDiagonalmin / initImageDiagonal;
         console.log(renderImageDiagonalmin);
-        // let dxmin2 = middleOfFullImage - x2Image;
-        // let dymin2 = dxmin2 * tg;
-        // let diagonalIncreaseRelativeX2Window = Math.sqrt(dxmin2 * dxmin2 + dymin2 * dymin2);
-        // if (dxmin < 0)
-        //     diagonalIncreaseRelativeX2Window = -diagonalIncreaseRelativeX2Window;
-        // let diagonalIncreaseRelativeX2Image = diagonalIncreaseRelativeX2Window / x2Gradient;
-        // let renderImageDiagonalmin2 = diagonalIncreaseRelativeX2Image + initImageDiagonal / ratio;
-        // let WidthIncreaseRealiveX2Window = imageWidth * renderImageDiagonalmin2 / initImageDiagonal;
-        // console.log("asdasd = " + (WidthIncreaseRealiveX2Window - WidthIncreaseRealiveX1Window))
-        // console.log(Math.abs(middleOfFullImage - x2Image) + x2Image * ratio);
         if (WidthIncreaseRealiveX1Window < x2Window)
             WidthIncreaseRealiveX1Window = x2Window;
         minWidth = WidthIncreaseRealiveX1Window;
 
-        console.log("minWidth = " + minWidth);
-
-        console.log("window.screen = " + window.screen.width);
-
         //-----------------------------------------------//
         //1515 / 1285 - screen.width (maxwidth)
         let windowWidth2 = parent.anchors.wideRight - parent.anchors.wideLeft;
-        console.log("windowWidth2 = " + windowWidth2);
-
-        console.log(leftSlider.clientWidth)
-        console.log(rightSlider.clientWidth)
         let windowWidth3 = window.screen.width - leftSlider.clientWidth - rightSlider.clientWidth;
         if (leftSlider.style.visibility == "visible" && rightSlider.style.visibility == "visible")
             windowWidth3 = window.screen.width;
-        console.log("windowWidth3 = " + windowWidth3);
         if (leftSlider.style.visibility == "visible" && rightSlider.style.visibility == "visible")
             windowWidth3 = Math.min(windowWidth3, 1515);
 
@@ -114,51 +95,21 @@ function RoiImage(element, aspect, roi) {
         let dxmin4 = windowWidth3 / 2 - x1Image4; //!
         let dymin4 = dxmin4 * tg;
         let newRatio2 = WidthIncreaseRealiveX1Window3 / imageWidth;
-        console.log("newRatio2 = " + newRatio2);
         let newX1Image = cropx1 * newRatio2;
         let newX2Image = cropx2 * newRatio2;
         let newY1Image = cropy1 * newRatio2;
         let newY2Image = cropy2 * newRatio2;
         let HeightIncreaseRealiveX1Window3 = WidthIncreaseRealiveX1Window3 * tg
-        console.log("HeightIncreaseRealiveX1Window3 = " + HeightIncreaseRealiveX1Window3);
         let diagIncrease = Math.sqrt(WidthIncreaseRealiveX1Window3 * WidthIncreaseRealiveX1Window3 + HeightIncreaseRealiveX1Window3 * HeightIncreaseRealiveX1Window3);
-        console.log("diagIncrease = " + diagIncrease);
-        console.log("tg = " + tg);
         console.log("dx4 = " + dxmin4);
         console.log("dy4 = " + dymin4);
         let ddiag = Math.sqrt(dxmin4 * dxmin4 + dymin4 * dymin4);
-        console.log("ddiag = " + ddiag);
-
-        // let t = ratio4 * dymin4 / (2 * WidthIncreaseRealiveX1Window3 * tg) * 100.0;
-        let k = ratio4 * 100.0 * ((cropy1 / imageHeight) - ((cropy1 + dymin4) / HeightIncreaseRealiveX1Window3));
-        console.log("k = " + k);
-        let k1 = ratio4 * 100.0 * dymin4 / (2 * HeightIncreaseRealiveX1Window3);
-        console.log("k1 = " + k1);
-        let k2 = ratio4 * 100.0 * ddiag / (2 * HeightIncreaseRealiveX1Window3);
-        console.log("k2 = " + k2);
-        let t = k1;
-        if (t < 0) {
-            console.log("t < 0");
-            // t = 1 * ratio4 * -dymin4 / (2 * WidthIncreaseRealiveX1Window3 * tg) * 100.0;
-            t = 0;
-        }
-        console.log("t = " + t);
 
         let newHeight = 0;
 
         let y1Gradient = cropy1 / imageHeight;
         let y2Gradient = cropy2 / imageHeight;
         newHeight = newY2Image - newY1Image - dymin4 * y1Gradient;
-        // let temp = newY2Image - newY1Image - dymin4 * y1Gradient;
-        // console.log("temp = " + temp);
-
-
-        // if (dymin4 > 0)
-        //     // newHeight = newY2Image - newY1Image - dymin4 * x1Gradient;
-        //     newHeight = newY2Image - newY1Image - dymin4 * y1Gradient;
-        // // else newHeight = newY2Image - newY1Image + dy * x1Gradient; // ëèáî ïåðåðàñ. ëèáî dymin4 êàê ïðè ñëó÷àå âûøå
-        // else newHeight = (newY2Image - newY1Image) / x1Gradient3;
-        // newHeight = newY2Image - newY1Image - dymin4 * x1Gradient;
 
         //----------------------------------------------------------------//
 
@@ -182,57 +133,60 @@ function RoiImage(element, aspect, roi) {
         let _newY2Image = cropy2 * _newRatio2;
 
         let newHeight2 = _newY2Image - _newY1Image;
-        console.log("newHeight = " + newHeight);
-        console.log("newHeight2 = " + newHeight2);
 
         //--------------------------------//
         let translatex = 0;
         if (newHeight < userHeight) {
-            let temp3 = minWidth;
             let widthIncrease = minWidth * userHeight / newHeight;
-            console.log("widthIncrease = " + widthIncrease);
             minWidth = widthIncrease;
-            // translatex = widthIncrease / 4 - dxmin;
-            // console.log("transateX = " + translatex);
-            let t1 = temp3 / 2;
-            let translateRatio = minWidth / temp3;
-            translatex = t1 * (translateRatio - 1) - dymin4;
-            console.log("translatex = " + translatex);
+            let newRatio5 = userHeight / newHeight;
+            // let translateRatio = minWidth / temp3;
+            // translatex = t1 * (translateRatio - 1) - dymin4; dxmin4
+            // translatex = t1 * (translateRatio - 1);
+            translatex = x2Window / 2 * (newRatio5 - 1);
+            if (dymin4 < 0)
+                translatex = translatex * 2;
+            // translatex = 0;
             newHeight = userHeight;
         }
-        // console.log("newHeight2 = " + newHeight);
 
         let width = this.element.offsetWidth;
-        //let height = this.element.offsetHeight;
         let height = newHeight;
         this.previousContainerWidth = width;
         this.previousContainerHeight = height;
 
-        // let textMiddleHorizontal = minWidth / 2;
-
         //----------------------------------------------------------------//
-        // let div = textContainer.getElementsByTagName("div")[0];
-        // let divPadding = div.clientWidth;
-        // console.log(divPadding);
-        // let h2Padding = textContainer.getElementsByTagName("h2")[0];
-        // console.log(h2Padding);
-        // console.log("test = " + minWidth / 2);
-        // console.log("test2 = " + parent.anchors.fillLeft);
-        // let textPadding = (((minWidth / 2 - parent.anchors.fillLeft) - 447) / 2 + parent.anchors.fillLeft);
-        // console.log("test3 = " + textPadding);
-        // div.style.paddingLeft = textPadding + "px";
-        // h2Padding.style.paddingLeft = textPadding + "px";
+        let div = textContainer.getElementsByTagName("div")[0];
+        // let h2 = textContainer.getElementsByTagName("h2")[0];
+        // h2.style.display = "block";
+
+        // // textContainer.innerText = "Высота рамки = " + parseInt(newHeight).toString() +
+        // //     "\nТекущая ширинка картинки = " + parseInt(minWidth).toString() +
+        // //     "\nЗаказанная высота = " + parseInt(userHeight).toString();
+        // if (leftBar.style.visibility == "hidden") {
+        //     textContainer.style.paddingLeft = parent.anchors.textLeft + "px";
+        //     textContainer.style.width = (minWidth / 2 - parent.anchors.textLeft - dxmin4) + "px";
+        // } else {
+        //     textContainer.style.paddingLeft = parent.anchors.textLeft - leftSlider.clientWidth + "px";
+        //     textContainer.style.width = (minWidth / 2 - parent.anchors.textLeft + leftSlider.clientWidth - dxmin4) + "px";
+        // }
+        // textContainer.css({
+        //     fontSize: "1px",
+        // })
+        // let font = 1;
+        // while (textContainer.clientHeight + h2.offsetTop * 2 < newHeight) {
+        //     textContainer.css({
+        //         fontSize: font + "px",
+        //     })
+        //     font = font + 1;
+        // }
+        // while (textContainer.clientHeight + h2.offsetTop * 2 > newHeight) {
+        //     textContainer.css({
+        //         fontSize: font + "px",
+        //     })
+        //     font = font - 1;
+        // }
         //----------------------------------------------------------------//
-
-        textContainer.innerText = "Высота рамки = " + parseInt(newHeight).toString() +
-            "\nТекущая ширинка картинки = " + parseInt(minWidth).toString() +
-            "\nЗаказанная высота = " + parseInt(userHeight).toString();
-        textContainer.style.width = minWidth / 2 + "px";
-        textContainer.style.height = newHeight + "px";
-
-
-
-        // console.log(x1Gradient, x1Gradient3, x2Gradient, y1Gradient, y2Gradient, ratio4);
 
         let yIncrease = 1;
         if (dymin4 >= 0)
@@ -251,33 +205,102 @@ function RoiImage(element, aspect, roi) {
         height = Math.min(height, maxHeight);
         var containerAspect = height / width;
         var containerAspect1 = newHeight2 / width;
-        console.log("containerAspect1 = ", containerAspect1);
         var offset1 = yIncrease + (1 - (containerAspect1 / aspect - h) / (1 - h)) * y0 * 100.0
-        console.log("offset1 = " + offset1);
-        // var containerAspect = newHeight / width;
+        console.log(y1Image)
+        console.log(y2Image)
+        console.log("containerAspect = " + containerAspect);
+        console.log("aspect = " + aspect);
+        console.log("h = " + h);
+        console.log("y0 = " + y0);
+        console.log("Width1/2 = " + window.innerWidth);
+        console.log("---------")
         if (containerAspect < aspect) {
-            // this.image.style.width = "100%"
+            let h2 = textContainer.getElementsByTagName("h2")[0];
+            h2.style.display = "block";
+            // if (leftBar.style.visibility == "hidden") {
+            //     textContainer.style.paddingLeft = parent.anchors.textLeft + "px";
+            //     textContainer.style.width = (minWidth / 2 - parent.anchors.textLeft - dxmin4) + "px";
+            // } else {
+            //     textContainer.style.paddingLeft = parent.anchors.textLeft - leftSlider.clientWidth + "px";
+            //     textContainer.style.width = (minWidth / 2 - parent.anchors.textLeft + leftSlider.clientWidth - dxmin4) + "px";
+            // }
+            if (leftBar.style.visibility == "hidden") {
+                textContainer.style.paddingLeft = parent.anchors.textLeft + "px";
+                textContainer.style.width = (window.innerWidth / 2 - parent.anchors.textLeft - 20) + "px";
+            } else {
+                textContainer.style.paddingLeft = parent.anchors.textLeft - leftSlider.clientWidth + "px";
+                // textContainer.style.width = (minWidth / 2 - parent.anchors.textLeft + leftSlider.clientWidth - dxmin4) + "px";
+                textContainer.style.width = ((window.innerWidth - leftSlider.clientWidth - rightSlider.clientWidth) / 2 -
+                    (parent.anchors.textLeft - leftSlider.clientWidth) - 20) + "px";
+            }
+            textContainer.css({
+                fontSize: "1px",
+            })
+            let font = 1;
+            while ((textContainer.clientHeight + h2.offsetTop) < newHeight) {
+                textContainer.css({
+                    fontSize: font + "px",
+                })
+                font = font + 1;
+            }
+            while ((textContainer.clientHeight + h2.offsetTop) > newHeight) {
+                textContainer.css({
+                    fontSize: font + "px",
+                })
+                font = font - 1;
+            }
+            h2.css({
+                textAlign: "",
+            })
             imageContainer.style.height = newHeight + "px"
             this.image.style.width = minWidth + "px"
             this.image.style.height = "auto"
-            console.log("containerAspect = " + containerAspect);
-            console.log("aspect = " + aspect);
-            console.log("h = " + h);
-            console.log("y0 = " + y0);
-            var offset = (1 - (containerAspect / aspect - h) / (1 - h)) * y0 * 100.0
-            console.log("offset = " + offset);
+                // var offset = (1 - (containerAspect / aspect - h) / (1 - h)) * y0 * 100.0
+                // console.log("offset = " + offset);
             this.image.style.transform = "translate(-" + translatex + "px, -" + offset1 + "%)"
-                // this.image.style.transform = "translate(-" + 0 + "px, -" + offset + "px)"
         } else {
-            imageContainer.style.height = newHeight + "px"
+            imageContainer.style.height = (newHeight - y2Image * containerAspect) + "px"
             this.image.style.width = "auto"
-            this.image.style.height = "100%"
+                // this.image.style.height = "100%"
+            this.image.style.height = newHeight + "px"
             var offset = (1 - (aspect / containerAspect - w) / (1 - w)) * x0 * 100.0
             this.image.style.transform = "translate(-" + offset + "%, 0)"
+            let h2 = textContainer.getElementsByTagName("h2")[0];
+            let textContainerHeight = (cropy1 * ratio4) - h2.offsetTop;
+            console.log("textContainerHeight = " + textContainerHeight);
+            h2.style.display = "block";
+            if (leftBar.style.visibility == "hidden") {
+                textContainer.style.paddingLeft = parent.anchors.textLeft + "px";
+                textContainer.style.width = (window.innerWidth - parent.anchors.textLeft * 2) + "px";
+            } else {
+                // textContainer.style.paddingLeft = parent.anchors.textLeft - leftSlider.clientWidth + "px";
+                textContainer.style.width = ((window.innerWidth - leftSlider.clientWidth - rightSlider.clientWidth) / 2 -
+                    (parent.anchors.textLeft - leftSlider.clientWidth) - 20) + "px";
+            }
+            textContainer.css({
+                fontSize: "1px",
+            })
+            let font = 1;
+            while ((textContainer.clientHeight) < textContainerHeight) {
+                textContainer.css({
+                    fontSize: font + "px",
+                })
+                font = font + 1;
+            }
+            while ((textContainer.clientHeight) > textContainerHeight) {
+                textContainer.css({
+                    fontSize: font + "px",
+                })
+                font = font - 1;
+            }
+            h2.css({
+                textAlign: "center",
+            })
         }
 
         // this.element.style.minHeight = minHeight + "px";
         // this.element.style.maxHeight = maxHeight + "px";
     }
+
     this.parent.onAnchorsChanged.push(this.element.updateWidth);
 }
