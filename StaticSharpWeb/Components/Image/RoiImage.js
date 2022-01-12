@@ -14,24 +14,19 @@ function RoiImage(element, aspect, roi) {
     this.parent = this.element.parentElement;
     element.onAnchorsChanged = [];
 
-    //200 400 460 680 720 940 / 285 400
+    //200 400 460 680 720 940 / 285 400 630
     let cropx1 = 460;
     let cropx2 = 680;
     let cropy1 = 155;
     let cropy2 = 400;
     let imageWidth = 1000;
     let imageHeight = 667;
-    //1 - min 0 - max
-    let swap = 1.5;
 
     let userHeight = 100;
 
-    // let tgImage = (cropy2 - cropy1) / (cropx2 - cropx1);
-    // console.log("tgImage = " + tgImage);
-
     this.element.updateWidth = function() {
-        let ratio = imageWidth / parseInt(element.style.width);
-        console.log("ratio = " + ratio);
+        let widthRatio = imageWidth / parseInt(element.style.width);
+        console.log("ratio = " + widthRatio);
 
         var x1Window = (parent.anchors.wideRight - parent.anchors.wideLeft) / 2;
         var x2Window = (parent.anchors.wideRight - parent.anchors.wideLeft);
@@ -39,158 +34,134 @@ function RoiImage(element, aspect, roi) {
         // console.log("A = " + (parent.anchors.wideRight - parent.anchors.wideLeft));
         // console.log("B = " + (parent.anchors.fillRight + parent.anchors.fillLeft));
 
-        let x1Image = (cropx1 / ratio);
-        let x2Image = (cropx2 / ratio);
-        let y1Image = (cropy1 / ratio);
-        let y2Image = (cropy2 / ratio);
+        let x1Image = (cropx1 / widthRatio);
+        let x2Image = (cropx2 / widthRatio);
+        let y1Image = (cropy1 / widthRatio);
+        let y2Image = (cropy2 / widthRatio);
 
         let initImageDiagonal = Math.sqrt(imageHeight * imageHeight + imageWidth * imageWidth);
         let sin = imageHeight / initImageDiagonal;
         let cos = imageWidth / initImageDiagonal;
         let tg = imageHeight / imageWidth;
+        console.log("s = " + sin)
         console.log("x2Window = " + x2Window);
         let middleOfFullImage = x2Window / 2;
-        let dxmin = middleOfFullImage - x1Image;
-        let dymin = dxmin * tg;
-        let diagonalIncreaseRelativeX1Window = Math.sqrt(dxmin * dxmin + dymin * dymin);
-        if (dxmin < 0)
+        let dx = middleOfFullImage - x1Image;
+        let dy = dx * tg;
+        let diagonalIncreaseRelativeX1Window = Math.sqrt(dx * dx + dy * dy);
+        if (dx < 0)
             diagonalIncreaseRelativeX1Window = -diagonalIncreaseRelativeX1Window;
         let x1Gradient = x1Image / x2Window;
         let x2Gradient = x2Image / x2Window;
         let diagonalIncreaseRelativeX1Image = diagonalIncreaseRelativeX1Window / x1Gradient;
-        let renderImageDiagonalmin = diagonalIncreaseRelativeX1Image + initImageDiagonal / ratio;
+        let renderImageDiagonalmin = diagonalIncreaseRelativeX1Image + initImageDiagonal / widthRatio;
         let WidthIncreaseRealiveX1Window = imageWidth * renderImageDiagonalmin / initImageDiagonal;
         console.log(renderImageDiagonalmin);
         if (WidthIncreaseRealiveX1Window < x2Window)
             WidthIncreaseRealiveX1Window = x2Window;
-        minWidth = WidthIncreaseRealiveX1Window;
+        let currentWidth = WidthIncreaseRealiveX1Window;
+        console.log("minWidth = " + currentWidth);
+        console.log("x2Image = " + x2Image);
+        console.log("x2Window = " + x2Window);
 
         //-----------------------------------------------//
         //1515 / 1285 - screen.width (maxwidth)
-        let windowWidth2 = parent.anchors.wideRight - parent.anchors.wideLeft;
-        let windowWidth3 = window.screen.width - leftSlider.clientWidth - rightSlider.clientWidth;
+        let maxWidth = window.screen.width - leftSlider.clientWidth - rightSlider.clientWidth;
         if (leftSlider.style.visibility == "visible" && rightSlider.style.visibility == "visible")
-            windowWidth3 = window.screen.width;
-        if (leftSlider.style.visibility == "visible" && rightSlider.style.visibility == "visible")
-            windowWidth3 = Math.min(windowWidth3, 1515);
+            maxWidth = Math.min(maxWidth, 1515);
 
-        let middleOfFullImage3 = windowWidth3 / 2; //!
-        let dxmin3 = middleOfFullImage3 - x1Image;
-        let dymin3 = dxmin3 * tg;
-        let diagonalIncreaseRelativeX1Window3 = Math.sqrt(dxmin3 * dxmin3 + dymin3 * dymin3);
-        if (dxmin3 < 0)
-            diagonalIncreaseRelativeX1Window3 = -diagonalIncreaseRelativeX1Window3;
-        let x1Gradient3 = x1Image / x2Window;
-        let diagonalIncreaseRelativeX1Image3 = diagonalIncreaseRelativeX1Window3 / x1Gradient3;
-        let renderImageDiagonalmin3 = diagonalIncreaseRelativeX1Image3 + initImageDiagonal / ratio;
-        let WidthIncreaseRealiveX1Window3 = imageWidth * renderImageDiagonalmin3 / initImageDiagonal;
+        let middleOfFullImageWithMaxWidth = maxWidth / 2;
+        let dx2 = middleOfFullImageWithMaxWidth - x1Image;
+        let dy2 = dx2 * tg;
+        let diagonalIncreaseRelativeX1WindowWithMaxWidth = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+        if (dx2 < 0)
+            diagonalIncreaseRelativeX1WindowWithMaxWidth = -diagonalIncreaseRelativeX1WindowWithMaxWidth;
+        let x1GradientWithMaxWidth = x1Image / x2Window;
+        let diagonalIncreaseRelativeX1ImageWithMaxWidth = diagonalIncreaseRelativeX1WindowWithMaxWidth / x1GradientWithMaxWidth;
+        let renderImageDiagonalminWithMaxWidth = diagonalIncreaseRelativeX1ImageWithMaxWidth + initImageDiagonal / widthRatio;
+        let WidthIncreaseRealiveX1WindowWithMaxWidth = imageWidth * renderImageDiagonalminWithMaxWidth / initImageDiagonal;
 
         //----------------------------------------------------------------//
 
-        let currentHeight = WidthIncreaseRealiveX1Window3 * tg;
-        let middleOfFullImage4 = WidthIncreaseRealiveX1Window3 / 2;
-        // !!!!!!!!!!!!!!! let ratio4 = tg;
-        let ratio4 = imageWidth / windowWidth3; //!
-        let x1Image4 = cropx1 / ratio4;
-        let dxmin4 = windowWidth3 / 2 - x1Image4; //!
-        let dymin4 = dxmin4 * tg;
-        let newRatio2 = WidthIncreaseRealiveX1Window3 / imageWidth;
-        let newX1Image = cropx1 * newRatio2;
-        let newX2Image = cropx2 * newRatio2;
-        let newY1Image = cropy1 * newRatio2;
-        let newY2Image = cropy2 * newRatio2;
-        let HeightIncreaseRealiveX1Window3 = WidthIncreaseRealiveX1Window3 * tg
-        let diagIncrease = Math.sqrt(WidthIncreaseRealiveX1Window3 * WidthIncreaseRealiveX1Window3 + HeightIncreaseRealiveX1Window3 * HeightIncreaseRealiveX1Window3);
-        console.log("dx4 = " + dxmin4);
-        console.log("dy4 = " + dymin4);
-        let ddiag = Math.sqrt(dxmin4 * dxmin4 + dymin4 * dymin4);
+        let maxRatio = imageWidth / maxWidth;
+        let x1ImageWithMaxWidth = cropx1 / maxRatio;
+        let dx3 = maxWidth / 2 - x1ImageWithMaxWidth;
+        let dy3 = dx3 * tg;
+        let newRatioWithMaxWidth = WidthIncreaseRealiveX1WindowWithMaxWidth / imageWidth;
+        let y1ImageWithMaxWidth = cropy1 * newRatioWithMaxWidth;
+        let y2ImageWithMaxWidth = cropy2 * newRatioWithMaxWidth;
+        let HeightIncreaseRealiveX1WindowWithMaxWidth = WidthIncreaseRealiveX1WindowWithMaxWidth * tg
+        console.log("dx4 = " + dx3);
+        console.log("dy4 = " + dy3);
 
-        let newHeight = 0;
+        let neederHeight = 0;
 
         let y1Gradient = cropy1 / imageHeight;
-        let y2Gradient = cropy2 / imageHeight;
-        newHeight = newY2Image - newY1Image - dymin4 * y1Gradient;
+        neederHeight = y2ImageWithMaxWidth - y1ImageWithMaxWidth - dy3 * y1Gradient;
 
         //----------------------------------------------------------------//
 
-        let _x1Image = (500 / ratio);
-        let _x2Image = (cropx2 / ratio);
+        let x1ImageWithCurrentWidth = (imageWidth / 2 / widthRatio);
+        let dx4 = middleOfFullImageWithMaxWidth - x1ImageWithCurrentWidth;
+        let dy4 = dx4 * tg;
+        let diagonalIncreaseRelativeX1WindowWithCurrentWidth = Math.sqrt(dx4 * dx4 + dy4 * dy4);
+        if (dx4 < 0)
+            diagonalIncreaseRelativeX1WindowWithCurrentWidth = -diagonalIncreaseRelativeX1WindowWithCurrentWidth;
+        let x1Gradient2 = x1ImageWithCurrentWidth / x2Window;
+        let diagonalIncreaseRelativeX1ImageWithCurrentWidth = diagonalIncreaseRelativeX1WindowWithCurrentWidth / x1Gradient2;
+        let renderImageDiagonalminWithCurrentWidth = diagonalIncreaseRelativeX1ImageWithCurrentWidth + initImageDiagonal / widthRatio;
+        let widthIncreaseRealiveX1WindowWithCurrentWidth = imageWidth * renderImageDiagonalminWithCurrentWidth / initImageDiagonal;
 
-        let _middleOfFullImage3 = 1515 / 2;
-        let _dxmin3 = middleOfFullImage3 - _x1Image;
-        let _dymin3 = _dxmin3 * tg;
-        let _diagonalIncreaseRelativeX1Window3 = Math.sqrt(_dxmin3 * _dxmin3 + _dymin3 * _dymin3);
-        if (_dxmin3 < 0)
-            _diagonalIncreaseRelativeX1Window3 = -_diagonalIncreaseRelativeX1Window3;
-        let _x1Gradient3 = _x1Image / x2Window;
-        let _diagonalIncreaseRelativeX1Image3 = _diagonalIncreaseRelativeX1Window3 / _x1Gradient3;
-        let _renderImageDiagonalmin3 = _diagonalIncreaseRelativeX1Image3 + initImageDiagonal / ratio;
-        let _WidthIncreaseRealiveX1Window3 = imageWidth * _renderImageDiagonalmin3 / initImageDiagonal;
+        let newRatioWithCurrentWidth = widthIncreaseRealiveX1WindowWithCurrentWidth / imageWidth;
 
-        let _newRatio2 = _WidthIncreaseRealiveX1Window3 / imageWidth;
+        let y1ImageWithCurrentWidth = cropy1 * newRatioWithCurrentWidth;
+        let y2ImageWithCurrentWidth = cropy2 * newRatioWithCurrentWidth;
+        console.log(y1ImageWithCurrentWidth, y2ImageWithCurrentWidth);
 
-        let _newY1Image = cropy1 * _newRatio2;
-        let _newY2Image = cropy2 * _newRatio2;
+        let heightForContainerAspect = y2ImageWithCurrentWidth - y1ImageWithCurrentWidth;
 
-        let newHeight2 = _newY2Image - _newY1Image;
+        //----------------------------------------------------------------//
 
-        //--------------------------------//
-        let translatex = 0;
-        if (newHeight < userHeight) {
-            let widthIncrease = minWidth * userHeight / newHeight;
-            minWidth = widthIncrease;
-            let newRatio5 = userHeight / newHeight;
-            // let translateRatio = minWidth / temp3;
-            // translatex = t1 * (translateRatio - 1) - dymin4; dxmin4
-            // translatex = t1 * (translateRatio - 1);
-            translatex = x2Window / 2 * (newRatio5 - 1);
-            if (dymin4 < 0)
-                translatex = translatex * 2;
-            // translatex = 0;
-            newHeight = userHeight;
+        let currentXTranslate = 0;
+        let currentWidthForUserHeight = 0;
+        let currentHeightForUserHeight = 0;
+        console.log("newHeight = " + neederHeight);
+        console.log("newHeight2 = " + heightForContainerAspect);
+        if (neederHeight < userHeight) {
+            // let widthIncrease = minWidth * userHeight / newHeight;
+            let widthIncreaseForUserHeight = currentWidth * userHeight / neederHeight;
+            console.log("qqq = " + neederHeight);
+            console.log("widthIncrease = " + widthIncreaseForUserHeight);
+            // minWidth = widthIncrease;
+            currentWidthForUserHeight = widthIncreaseForUserHeight;
+            console.log("newMinWidth = " + currentWidthForUserHeight);
+            let ratioForUserHeight = userHeight / neederHeight;
+            console.log("ZZZZZZZZ = " + x2Image * ratioForUserHeight);
+            currentXTranslate = x2Window / 2 * (ratioForUserHeight - 1);
+            console.log("Какая задана2 = " + userHeight / ratioForUserHeight);
+            if (dy3 < 0)
+                currentXTranslate = currentXTranslate * 2;
+            // translatex = y1Image;
+            // newnewHeight = userHeight / newRatio5 + dymin4 / (cropy2 / imageHeight - cropy1 / imageHeight) / newRatio5;
+            currentHeightForUserHeight = userHeight;
         }
 
+        console.log("minWidth: " + currentWidth);
+
         let width = this.element.offsetWidth;
-        let height = newHeight;
+        let height = neederHeight;
         this.previousContainerWidth = width;
         this.previousContainerHeight = height;
 
         //----------------------------------------------------------------//
-        let div = textContainer.getElementsByTagName("div")[0];
-        // let h2 = textContainer.getElementsByTagName("h2")[0];
-        // h2.style.display = "block";
 
         // // textContainer.innerText = "Высота рамки = " + parseInt(newHeight).toString() +
         // //     "\nТекущая ширинка картинки = " + parseInt(minWidth).toString() +
         // //     "\nЗаказанная высота = " + parseInt(userHeight).toString();
-        // if (leftBar.style.visibility == "hidden") {
-        //     textContainer.style.paddingLeft = parent.anchors.textLeft + "px";
-        //     textContainer.style.width = (minWidth / 2 - parent.anchors.textLeft - dxmin4) + "px";
-        // } else {
-        //     textContainer.style.paddingLeft = parent.anchors.textLeft - leftSlider.clientWidth + "px";
-        //     textContainer.style.width = (minWidth / 2 - parent.anchors.textLeft + leftSlider.clientWidth - dxmin4) + "px";
-        // }
-        // textContainer.css({
-        //     fontSize: "1px",
-        // })
-        // let font = 1;
-        // while (textContainer.clientHeight + h2.offsetTop * 2 < newHeight) {
-        //     textContainer.css({
-        //         fontSize: font + "px",
-        //     })
-        //     font = font + 1;
-        // }
-        // while (textContainer.clientHeight + h2.offsetTop * 2 > newHeight) {
-        //     textContainer.css({
-        //         fontSize: font + "px",
-        //     })
-        //     font = font - 1;
-        // }
-        //----------------------------------------------------------------//
 
         let yIncrease = 1;
-        if (dymin4 >= 0)
-            yIncrease = (dymin4 / HeightIncreaseRealiveX1Window3) * 10.0
+        if (dy3 >= 0)
+            yIncrease = (dy3 / HeightIncreaseRealiveX1WindowWithMaxWidth) * 10.0
         let x0 = cropx1 / imageWidth;
         let x1 = cropx2 / imageWidth;
         let y0 = cropy1 / imageHeight;
@@ -204,10 +175,12 @@ function RoiImage(element, aspect, roi) {
         height = Math.max(height, minHeight);
         height = Math.min(height, maxHeight);
         var containerAspect = height / width;
-        var containerAspect1 = newHeight2 / width;
-        var offset1 = yIncrease + (1 - (containerAspect1 / aspect - h) / (1 - h)) * y0 * 100.0
+        var containerAspect2 = heightForContainerAspect / width;
+        var offset1 = yIncrease + (1 - (containerAspect2 / aspect - h) / (1 - h)) * y0 * 100.0
         console.log(y1Image)
         console.log(y2Image)
+        console.log("yIncrease = " + yIncrease);
+        console.log("containerAspect1 = " + containerAspect2);
         console.log("containerAspect = " + containerAspect);
         console.log("aspect = " + aspect);
         console.log("h = " + h);
@@ -237,13 +210,13 @@ function RoiImage(element, aspect, roi) {
                 fontSize: "1px",
             })
             let font = 1;
-            while ((textContainer.clientHeight + h2.offsetTop) < newHeight) {
+            while ((textContainer.clientHeight + h2.offsetTop) < neederHeight) {
                 textContainer.css({
                     fontSize: font + "px",
                 })
                 font = font + 1;
             }
-            while ((textContainer.clientHeight + h2.offsetTop) > newHeight) {
+            while ((textContainer.clientHeight + h2.offsetTop) > neederHeight) {
                 textContainer.css({
                     fontSize: font + "px",
                 })
@@ -252,21 +225,29 @@ function RoiImage(element, aspect, roi) {
             h2.css({
                 textAlign: "",
             })
-            imageContainer.style.height = newHeight + "px"
-            this.image.style.width = minWidth + "px"
+
+            if (neederHeight > userHeight) {
+                imageContainer.style.height = neederHeight + "px"
+                this.image.style.width = currentWidth + "px"
+            } else {
+                // translatex = 0;
+                imageContainer.style.height = currentHeightForUserHeight + "px"
+                this.image.style.width = currentWidthForUserHeight + "px"
+                    // this.image.style.width = minWidth + "px"
+            }
             this.image.style.height = "auto"
                 // var offset = (1 - (containerAspect / aspect - h) / (1 - h)) * y0 * 100.0
                 // console.log("offset = " + offset);
-            this.image.style.transform = "translate(-" + translatex + "px, -" + offset1 + "%)"
+            this.image.style.transform = "translate(-" + currentXTranslate + "px, -" + offset1 + "%)"
         } else {
-            imageContainer.style.height = (newHeight - y2Image * containerAspect) + "px"
+            imageContainer.style.height = (neederHeight - y2Image * containerAspect) + "px"
             this.image.style.width = "auto"
                 // this.image.style.height = "100%"
-            this.image.style.height = newHeight + "px"
+            this.image.style.height = neederHeight + "px"
             var offset = (1 - (aspect / containerAspect - w) / (1 - w)) * x0 * 100.0
             this.image.style.transform = "translate(-" + offset + "%, 0)"
             let h2 = textContainer.getElementsByTagName("h2")[0];
-            let textContainerHeight = (cropy1 * ratio4) - h2.offsetTop;
+            let textContainerHeight = (cropy1 * maxRatio) - h2.offsetTop;
             console.log("textContainerHeight = " + textContainerHeight);
             h2.style.display = "block";
             if (leftBar.style.visibility == "hidden") {
@@ -300,6 +281,9 @@ function RoiImage(element, aspect, roi) {
 
         // this.element.style.minHeight = minHeight + "px";
         // this.element.style.maxHeight = maxHeight + "px";
+
+        console.log("Какой хочется = " + neederHeight);
+        console.log("Какая задана = " + userHeight);
     }
 
     this.parent.onAnchorsChanged.push(this.element.updateWidth);
