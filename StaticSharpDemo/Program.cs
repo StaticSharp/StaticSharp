@@ -3,6 +3,9 @@ using StaticSharpEngine;
 using StaticSharpWeb;
 using System;
 using System.Collections.Generic;
+
+
+
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -106,11 +109,11 @@ namespace StaticSharpDemo {
 
         public override string BaseDirectory => throw new NotImplementedException();
 
-        public override string TempDirectory => @"D:\Csml2Cache\";
+        public override string TempDirectory => @"D:\StaticSharpCache\";
 
         public string IntermidiateCache => Path.Combine(TempDirectory, "IntermediateCache");
 
-        public override IPage FindPage(string requestPath) {
+        public override IPage? FindPage(string requestPath) {
             if (requestPath == null) {
                 return null;
             }
@@ -160,6 +163,8 @@ namespace StaticSharpDemo {
             //        @"D:\staticsharp.github.io"
             //);
             //await generator.GenerateAsync();
+
+
 
             await new Server().RunAsync();
         }

@@ -11,7 +11,7 @@ namespace StaticSharpDemo.Content.Index.Katya {
         //public override IImage TitleImage => new Video("qj6S37xIqK0").ConfigureAsBackgroundVideo();
 
         public override Paragraph Description => new() { "Ссылка на эту статью: ", Node, " ААА ААА ААА" };        
-        private Image image = new Image(new RelativePath("222.jpg"), "Mountain");
+        private Image image = new Image(new AbsolutePath("222.jpg"), "Mountain");
         public override MaterialContent Content => new () {
 
             new Paragraph() { 

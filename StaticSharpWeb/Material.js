@@ -11,6 +11,7 @@ function Material(element, contentWidth) {
     element.anchors = {}
     var leftBar = element.querySelector("#leftBar");
     var rightBar = document.getElementById("#rightBar");
+
     leftBarWidth = leftBar == null ? 0 : leftBar.width;
     rightBarWidth = rightBar == null ? 0 : rightBar.width;
 
@@ -47,14 +48,11 @@ function Material(element, contentWidth) {
             document.getElementById("rightBar").style.visibility = "hidden";
             document.getElementById("leftBar").style.visibility = "hidden";
         } else {
-            document.getElementById("rightBar").style.visibility = "visible";
-            document.getElementById("leftBar").style.visibility = "visible";
+            document.getElementById("rightBar").style.visibility = "";
+            document.getElementById("leftBar").style.visibility = "";
         }
 
     }
-
-
-
 
     DetectSwipe(element, swiper);
 
@@ -94,7 +92,7 @@ function Material(element, contentWidth) {
     window.addEventListener("resize", updateAnchors);
     document.addEventListener("DOMContentLoaded", function() {
 
-        element.style.display = "block";
+        element.style.display = "";
         rightBarWidth = document.getElementById("rightBar").scrollWidth;
         leftBarWidth = document.getElementById("leftBar").scrollWidth;
         header = document.getElementById("Header");

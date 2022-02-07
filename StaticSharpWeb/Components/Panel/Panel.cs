@@ -17,8 +17,7 @@ namespace StaticSharpWeb {
         }
 
 
-        public async Task<INode> GenerateBlockHtmlAsync(Context context)
-        {
+        public async Task<INode> GenerateBlockHtmlAsync(Context context) {
             var componentClassName = this.GetType().Name;
             var componentName = nameof(Panel);
             var tag = new Tag("div") {
@@ -26,9 +25,9 @@ namespace StaticSharpWeb {
                     _content
                 }
             };
-            context.Includes.Require(new Style(new RelativePath(componentName + ".scss")));
-            context.Includes.Require(new Font(new RelativePath("..\\..\\Fonts\\materialdesignicons"), FontWeight.Regular));
-            tag.Add(new JSCall(new RelativePath(componentName + ".js")).Generate(context));
+            context.Includes.Require(new Style(new AbsolutePath(componentName + ".scss")));
+            context.Includes.Require(new Font(new AbsolutePath("..\\..\\Fonts\\materialdesignicons"), FontWeight.Regular));
+            tag.Add(new JSCall(new AbsolutePath(componentName + ".js")).Generate(context));
             return tag;
         }
 

@@ -103,6 +103,10 @@ namespace StaticSharpGenerator {
                 //place.AddLine($"{IRepresentative} {INode}.{Representative} => {Representative} as {IRepresentative};");
 
                 var baseTypeFullName = first.BaseType.GetFullyQualifiedName();
+
+                ///TODO: check if baseTypeFullName==object
+                ///Error CS0553  'StaticSharpRoot.αIndex.αComponents.implicit operator object(StaticSharpRoot.αIndex.αComponents)': user - defined conversions to or from a base type are not allowed  StaticSharpDemo D:\StaticSharp\StaticSharpDemo\StaticSharpGenerator\StaticSharpGenerator.StaticSharpGenerator\classTree.cs  100 Active
+
                 place.AddLine($"public static implicit operator {baseTypeFullName}({α}{namespaceInfo.Name} {α}) => {α}.Representative;");
 
                 //place.AddLine($"{IRepresentative} {INode}.{Representative} => {Representative};");

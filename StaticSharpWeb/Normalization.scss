@@ -1,0 +1,20 @@
+@include once() {
+
+    * {
+        margin: 0;
+        visibility: inherit;
+    }
+
+    html {
+        min-height: 100vh;
+    }
+
+    body {
+        //position: relative;
+        //top: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+
+    }
+}

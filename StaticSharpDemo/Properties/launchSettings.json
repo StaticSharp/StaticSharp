@@ -8,13 +8,13 @@
     }
   },
   "profiles": {
-    "IIS Express": {
+    /*"IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "StaticSharpDemo"
       }
-    },
+    },*/
     "DemoWebsite": {
       "commandName": "Project",
       "launchBrowser": true,

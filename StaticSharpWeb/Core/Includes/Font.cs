@@ -32,6 +32,10 @@ namespace StaticSharpWeb {
         CourierNew,
     }
 
+
+
+
+
     public partial record Font : IFont, IKey, ICallerInfo {
 
         private readonly string _callerFilepath;

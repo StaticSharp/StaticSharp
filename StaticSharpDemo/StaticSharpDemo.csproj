@@ -26,8 +26,12 @@
   <!--</ItemGroup>-->
 
   <ItemGroup>
-  <ProjectReference Include="..\StaticSharpGenerator\StaticSharpGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\StaticSharpGenerator\StaticSharpGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\StaticSharpEngine\StaticSharpEngine.csproj" />
     <ProjectReference Include="..\StaticSharpWeb\StaticSharpWeb.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Content\Index\Components\HowToCreateNewComponent\" />
   </ItemGroup>
 </Project>

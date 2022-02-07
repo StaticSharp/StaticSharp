@@ -25,7 +25,7 @@ namespace StaticSharpWeb {
 
         private IWebHost _host = null;
 
-        public abstract IPage FindPage(string requestPath);
+        public abstract IPage? FindPage(string requestPath);
 
         public abstract  Uri ProtoNodeToUri<T>(T protoNode) where T : class, INode;
         public abstract Uri BaseUri { get; }
@@ -114,7 +114,7 @@ namespace StaticSharpWeb {
 
         protected virtual async Task FindVisualStudio(HttpRequest request, HttpResponse response, RouteData routeData) {
             var jsonBody = await ParseJsonRequest(request);
-            VisualStudio.Open(jsonBody["file"].ToString(), int.Parse(jsonBody["line"].ToString()));
+            StaticSharpGears.VisualStudio.Open(jsonBody["file"].ToString(), int.Parse(jsonBody["line"].ToString()));
             await response.WriteAsync("true");
         }
 

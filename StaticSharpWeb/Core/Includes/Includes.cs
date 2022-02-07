@@ -82,7 +82,7 @@ namespace StaticSharpWeb {
         }
 
         public string GenerateSuperStyle() {
-            string functionPath = new RelativePath("once.scss");
+            string functionPath = new AbsolutePath("once.scss");
             StringBuilder styleList = new StringBuilder();
             styleList.AppendLine("@import " + "\"" + functionPath.Replace("\\", "/") + "\"" + ";");
             foreach(var style in styles.Values) {

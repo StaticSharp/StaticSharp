@@ -11,6 +11,7 @@
 
   
   <ItemGroup>
+    <PackageReference Include="envdte" Version="17.0.32112.339" />
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -1,10 +1,8 @@
 ﻿using StaticSharpWeb;
 using StaticSharpWeb.Html;
-using System;
-using System.Collections.Generic;
+
 using System.Drawing;
-using System.Linq;
-using System.Text;
+
 using System.Threading.Tasks;
 
 namespace StaticSharpDemo.Content {
@@ -20,29 +18,21 @@ namespace StaticSharpDemo.Content {
             _node = node;
         }
 
-        public async Task<INode> GenerateInlineHtmlAsync(Context context) {
-            context.Includes.Require(new Font(new RelativePath("..\\Fonts\\antilatency"), FontWeight.Regular, false));
-            context.Includes.Require(new Style(new RelativePath("Logo.scss")));
+        public async Task<StaticSharpWeb.Html.INode> GenerateInlineHtmlAsync(Context context) {
+            context.Includes.Require(new Font(new AbsolutePath("..\\Fonts\\antilatency"), FontWeight.Regular, false));
+            context.Includes.Require(new Style(new AbsolutePath("Logo.scss")));
             var uri = context.Urls.ProtoNodeToUri(_node);
             return new Tag("a", new {
                 Class = "AntilatencyLogo",
                 style = $"font-family: 'antilatency' !important;",
                 href = uri
             }) {
-                new Tag("span", new { style = $"color: #{_primaryColor.ToRgbString()}"} ) { "a" },
-                new Tag("span", new { style = $"color: #{_secondaryColor.ToRgbString()}"} ) { "l" },
+                new Tag("span", new { style = $"color: #{_primaryColor.ToRgbHexString()}"} ) { "a" },
+                new Tag("span", new { style = $"color: #{_secondaryColor.ToRgbHexString()}"} ) { "l" },
             };
         }
 
-        public void WriteHtml(StringBuilder builder) {
-            throw new NotImplementedException();
-        }
     }
 
-    public static class LogoStatic {
-        public static string ToRgbString(this Color color) => color.ToRgb().ToString("X6");
-
-        public static uint ToRgb(this Color color) => (uint)color.ToArgb() & 0xFFFFFF;
-    }
 
 }

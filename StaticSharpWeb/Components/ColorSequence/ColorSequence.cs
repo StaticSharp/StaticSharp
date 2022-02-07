@@ -1,7 +1,7 @@
 using System.Drawing;
 using System.Text;
 using StaticSharpWeb.Html;
-using StaticSharpWeb.ColorUtils;
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,10 +18,10 @@ namespace StaticSharpWeb {
             var tag = new Tag("div");
             var innerTag = new Tag("div", new { Class = "ColorSequence"});
             innerTag.Attributes.Add("style", $"background:linear-gradient(to right, {GetGradient()}); animation: animatedBackgroundPositionHorizontal {TotalDuration}s linear infinite;");
-            context.Includes.Require(new Style(new RelativePath("ColorSequence.scss")));
+            context.Includes.Require(new Style(new AbsolutePath("ColorSequence.scss")));
             tag.Attributes.Add("style", "padding-bottom: 0.2em");
             tag.Add(innerTag);
-            tag.Add(new JSCall(new RelativePath("ColorSequence.js")).Generate(context));
+            tag.Add(new JSCall(new AbsolutePath("ColorSequence.js")).Generate(context));
             return tag;
         }
     }

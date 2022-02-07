@@ -3,8 +3,8 @@ using System.Drawing;
 using System.IO;
 using System.Threading;
 
-namespace StaticSharpWeb.ColorUtils {
-    public static class Utils {
+namespace StaticSharpWeb {
+    public static class ColorStatic {
         public static Color Lerp(this Color s, Color t, float k) {
             var bk = (1 - k);
             var a = s.A * bk + t.A * k;
@@ -21,7 +21,7 @@ namespace StaticSharpWeb.ColorUtils {
             return rgba;
         }
 
-        public static string ToRgbaString(this Color color) {
+        public static string ToRgbaHexString(this Color color) {
             return color.ToRgba().ToString("X8");
         }
 
@@ -30,12 +30,9 @@ namespace StaticSharpWeb.ColorUtils {
             uint rgba = argb & 0xFFFFFF;
             return rgba;
         }
-        public static string ToRgbString(this Color color) {
+        public static string ToRgbHexString(this Color color) {
             return color.ToRgb().ToString("X6");
         }
 
-        public static FormattableString ToFormattableString(this string x) {
-            return $"{x}";
-        }
     }
 }

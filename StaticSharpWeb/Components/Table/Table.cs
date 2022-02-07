@@ -41,9 +41,9 @@ public class Table : IBlock, IEnumerable {
         int textListIndexCounter = 0;
         //var componentName = nameof(Table);
         var tag = new Tag("table", new { Class = "Table", Align = "undefined"}) {
-                new JSCall(new RelativePath("Table.js")).Generate(context)
+                new JSCall(new AbsolutePath("Table.js")).Generate(context)
                 };
-        context.Includes.Require(new Style(new RelativePath("Table.scss")));
+        context.Includes.Require(new Style(new AbsolutePath("Table.scss")));
         if (_headers != null) {
             for (int i = 0; i < _headers.Length; i++) {
                 tag.Add(new Tag("th") {_headers[textListIndexCounter]});

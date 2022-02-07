@@ -15,7 +15,7 @@ namespace StaticSharpDemo.Content.Index {
         public override string Title => null;
         public override IImage TitleImage => new Video("qj6S37xIqK0").ConfigureAsBackgroundVideo();
         public override Paragraph Description => new() { "Ссылка на эту статью: ", Node, "ТЕСТ ТЕСТ ТЕСТ" };
-        private Image image = new Image(new RelativePath("111.jpg"), "Ricardooo");
+        //private Image image = new Image(new AbsolutePath("111.jpg"), "Ricardooo");
 
         //private Image refImage = new Image("https://bipbap.ru/wp-content/uploads/2017/04/0_7c779_5df17311_orig.jpg");
 
@@ -23,14 +23,18 @@ namespace StaticSharpDemo.Content.Index {
         //private Reference wiki_ru => new Reference("ТЕКСТ3: ", "https://ru.wikipedia.org/wiki/C_Sharp", "C#");    
 
         public override MaterialContent Content => new() {
-            new CSharpCode(System.IO.File.ReadAllText(new RelativePath("Ru.cs"))),
-            new Downloadable(new RelativePath("Download")),
-            new Downloadable(new RelativePath("MoreDownload")),
-            new Downloadable(@"D:/svn/antilatency.com/.Releases", "Api", new SearchSequencer().SvnLikeRepository.SpecifyThePath("Api\\Api.ml.cs")),
+            new Paragraph() {
+                
+            },
+
+            new CSharpCode(System.IO.File.ReadAllText(new AbsolutePath("Ru.cs"))),
+            new Downloadable(new AbsolutePath("Download")),
+            new Downloadable(new AbsolutePath("MoreDownload")),
+            //new Downloadable(@"D:/svn/antilatency.com/.Releases", "Api", new SearchSequencer().SvnLikeRepository.SpecifyThePath("Api\\Api.ml.cs")),
             new Reference("https://ru.wikipedia.org/wiki/C_Sharp"),
             new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", "Ссылки с текстом: "),
             new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", "Ссылки с текстом и подсказкой: ", "Шарп"),
-            new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", image),
+            //new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", image),
 
             new Grid(ContentWidth / 4) {
                     new MaterialCard(Node.Representative),

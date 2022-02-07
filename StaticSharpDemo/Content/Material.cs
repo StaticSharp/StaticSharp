@@ -13,7 +13,7 @@ namespace StaticSharpDemo.Content {
             new Grid(1200, 2) {
                 new Paragraph{
                     "AAAAAA",
-                    Node.Root.Index, 
+                    Node.Index, 
                 },
                 "BBBB",
                 Node.Root.Index.Name,
@@ -33,7 +33,7 @@ namespace StaticSharpDemo.Content {
         public override LeftSideBar LeftSideBar => new() {
             new NavigationMenu(new Logo(Color.FromArgb(0xacc435), Color.White, Node.Root.Index)) {
                 Node.Root.Index,
-                Node.Root.Index.Katya
+                Node.Root.Index.Children
             }
         };
     }

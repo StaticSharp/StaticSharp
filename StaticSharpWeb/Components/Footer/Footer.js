@@ -1,6 +1,9 @@
 ﻿function Footer(element) {
 
     let parent = element.parentElement.parentElement;
+
+    console.log(element.parentElement);
+
     element.onAnchorsChanged = [];
     element.updateWidth = function () {
         let left = parent.anchors.textLeft;

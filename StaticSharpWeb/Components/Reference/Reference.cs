@@ -45,7 +45,7 @@ namespace StaticSharpWeb {
                 node
             });
             
-            tag.Add(new JSCall(new RelativePath(componentName + ".js")).Generate(context));
+            tag.Add(new JSCall(new AbsolutePath(componentName + ".js")).Generate(context));
             return tag;
         }
     }

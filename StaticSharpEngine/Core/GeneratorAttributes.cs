@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace StaticSharpEngine {
-    public class Representative : Attribute {
+    public class RepresentativeAttribute : Attribute {
     }
 
 }

@@ -75,8 +75,8 @@ namespace StaticSharpWeb {
             }
 
             //var tasks = Items.OfType<IInline>().Select(x => x.GenerateInlineHtmlAsync(context));
-            context.Includes.Require(new Style(new RelativePath("Paragraph.scss")));
-            result.Add(new JSCall(new RelativePath("Paragraph.js")).Generate(context));
+            context.Includes.Require(new Style(new AbsolutePath("Paragraph.scss")));
+            result.Add(new JSCall(new AbsolutePath("Paragraph.js")).Generate(context));
             foreach (var item in await Task.WhenAll(Items.Select(x => x.Html(context)))) {
                 result.Add(item);
             }

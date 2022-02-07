@@ -39,9 +39,9 @@ namespace StaticSharpWeb {
             Resource ??= await context.Storage.AddOrGetAsync(FilePath, () => new ImageResource(FilePath, context.Storage));
             var tag = new Tag("div", new { Class = nameof(Image) }) {
                 new Tag("img", new { src = Resource.Source, alt = Alt, style = "width: 100%; height: auto;"}),
-                new JSCall(new RelativePath("Image.js")).Generate(context),
-                new JSCall(new RelativePath("RoiImage.js"), Resource.Aspect, Resource.Roi).Generate(context),
-                new JSCall(new RelativePath("MipsSelector.js"), Resource.Mips).Generate(context)
+                new JSCall(new AbsolutePath("Image.js")).Generate(context),
+                new JSCall(new AbsolutePath("RoiImage.js"), Resource.Aspect, Resource.Roi).Generate(context),
+                new JSCall(new AbsolutePath("MipsSelector.js"), Resource.Mips).Generate(context)
             };
             return tag;
         }

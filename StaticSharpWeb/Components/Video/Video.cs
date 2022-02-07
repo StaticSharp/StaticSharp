@@ -148,11 +148,11 @@ namespace StaticSharpWeb.Components {
         public async Task<INode> GenerateBlockHtmlAsync(Context context) {
             VideoResource ??= await context.Storage.AddOrGetAsync(VideoCode, () => new VideoResource(VideoCode, context.Storage));
             _image ??= new Image(VideoResource.IntermediateImageCache);
-            context.Includes.Require(new Style(new RelativePath("Video.scss")));
+            context.Includes.Require(new Style(new AbsolutePath("Video.scss")));
             var mips = VideoResource.Mips.Select(x =>
                 new KeyValuePair<int, string>(x.Key, new Uri(context.Urls.BaseUri, x.Value.Replace("\\", "/")).ToString()));
             var tag = new Tag("div", new { Class = "VideoPlayer" }) {
-                new JSCall(new RelativePath("Video.js"),//element, code, aspect, showControls, autoPlay, loop, sound, mips, poster
+                new JSCall(new AbsolutePath("Video.js"),//element, code, aspect, showControls, autoPlay, loop, sound, mips, poster
                         VideoCode,
                         Aspect,
                         ShowControls,
