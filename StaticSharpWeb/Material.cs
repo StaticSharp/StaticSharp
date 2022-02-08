@@ -42,6 +42,9 @@ namespace StaticSharpWeb {
             context.Parents = context.Parents.Prepend(this);
             context.Includes.Require(new Script(new AbsolutePath("StaticSharp.js")));
             context.Includes.Require(new Style(new AbsolutePath("Normalization.scss")));
+
+            context.Includes.Require(new Style(new AbsolutePath("Debug.scss")));
+
             var head = new Tag("head"){
                     new Tag("meta", new{ charset = "utf-8" }),
                     new Tag("meta", new{
@@ -125,13 +128,7 @@ namespace StaticSharpWeb {
         }
     }
 
-    //TODO: rename
-    public interface IVerifiedBlockReceiver {
-
-        void AddBlock(IBlock block);
-    }
-
-    public class MaterialContent : IEnumerable<IBlock>, IVerifiedBlockReceiver, ITextAnchorsProvider, IFillAnchorsProvider, IWideAnchorsProvider {
+    public class MaterialContent : IEnumerable<IBlock>, IBlockContainer, ITextAnchorsProvider, IFillAnchorsProvider, IWideAnchorsProvider {
         private readonly List<IBlock> _items = new();
 
         IEnumerator IEnumerable.GetEnumerator() {

@@ -1,0 +1,22 @@
+<#@ template language="C#" debug="True" #>
+<#@ output extension="cs" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+namespace StaticSharpWeb;
+<#
+int N = 10;
+Func<int,string> GenericArguments = n=>{
+    return string.Join(",", Enumerable.Range(0, n).Select(x => "T"+x.ToString()));
+};
+#>
+<# for (int i=1; i<=N; i++) { #>
+public interface IContainerConstraints<<#=GenericArguments(i)#>> : IBlock { }
+<# } #>
+
+public static class ContainerStatic {
+<# for (int i=1; i<=N; i++) { #>
+    public static void Add<Collection, <#=GenericArguments(i)#>>(this Collection collection, IContainerConstraints<<#=GenericArguments(i)#>> item)
+        where Collection : IBlockContainer, <#=GenericArguments(i)#>
+    => collection.AddBlock(item);
+<# } #>
+}

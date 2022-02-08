@@ -47,7 +47,7 @@ namespace StaticSharpWeb {
         }
     }
     public static class ImageStatic {
-        public static void Add<T>(this T collection, IImage item) where T : IVerifiedBlockReceiver {
+        public static void Add<T>(this T collection, IImage item) where T : IBlockContainer {
             collection.AddBlock(item);
         }
     }

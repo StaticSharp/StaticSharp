@@ -100,13 +100,13 @@ namespace StaticSharpWeb {
     }
 
     public static class ColorSequenceStatic {
-        public static void Add(this IVerifiedBlockReceiver collection, ColorSequence item) {
+        public static void Add(this IBlockContainer collection, ColorSequence item) {
             collection.AddBlock(item);
         }
     }
 
     public static class ColorSequenceCosStatic {
-        public static void Add(this IVerifiedBlockReceiver collection, ColorSequenceCos item) {
+        public static void Add(this IBlockContainer collection, ColorSequenceCos item) {
             collection.AddBlock(item);
         }
     }

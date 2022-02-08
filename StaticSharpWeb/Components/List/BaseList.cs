@@ -58,7 +58,7 @@ namespace StaticSharpWeb {
     }
     
     public static class BaseListStatic {
-        public static void Add(this IVerifiedBlockReceiver collection, BaseList item) {
+        public static void Add(this IBlockContainer collection, BaseList item) {
             collection.AddBlock(item);
         }
     }

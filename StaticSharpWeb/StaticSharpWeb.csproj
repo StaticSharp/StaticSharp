@@ -35,16 +35,26 @@
 		<ProjectReference Include="..\StaticSharpEngine\StaticSharpEngine.csproj" />
 		<ProjectReference Include="..\StaticSharpGears\StaticSharpGears.csproj" />
 	</ItemGroup>
+	
+		
 	<ItemGroup>
-		<None Update="Components\Paragraph\Paragraph.css">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>Paragraph.cs</LastGenOutput>
+
+		<None Update="ContainersAndBlocks\ContainerConstraints.tt">
+		  <Generator>TextTemplatingFileGenerator</Generator>
+		  <LastGenOutput>ContainerConstraints.cs</LastGenOutput>
 		</None>
+		<Compile Update="ContainersAndBlocks\ContainerConstraints.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>ContainerConstraints.tt</DependentUpon>
+		</Compile>
 	</ItemGroup>
+	
+	
+	
 	<ItemGroup>
 		<Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
 	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Utils\" />
-	</ItemGroup>
+
+
 </Project>

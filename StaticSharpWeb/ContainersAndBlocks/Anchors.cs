@@ -1,4 +1,7 @@
 ﻿namespace StaticSharpWeb {
+
+
+
     public interface ITextAnchorsProvider {
 
     }

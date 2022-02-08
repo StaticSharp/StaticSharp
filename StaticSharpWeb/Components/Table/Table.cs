@@ -78,7 +78,7 @@ public class Table : IBlock, IEnumerable {
 }
 
     public static class TableStatic {
-        public static void Add(this IVerifiedBlockReceiver collection, Table item) {
+        public static void Add(this IBlockContainer collection, Table item) {
             collection.AddBlock(item);
         }
     }

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace StaticSharpWeb.Components {
-    public class Grid : IEnumerable, IBlock, IVerifiedBlockReceiver {
+    public class Grid : IEnumerable, IBlock, IBlockContainer {
 
         int MinElementWidthPx { get; }
         int MinColumns { get; }
@@ -95,7 +95,7 @@ namespace StaticSharpWeb.Components {
     }
 
     public static class GridStatic {
-        public static void Add<T>(this T collection, Grid item) where T : IVerifiedBlockReceiver {
+        public static void Add<T>(this T collection, Grid item) where T : IBlockContainer {
             collection.AddBlock(item);
         }
     }

@@ -51,7 +51,7 @@ namespace StaticSharpWeb {
     }
 
     public static class ReferenceStatic {
-        public static void Add(this IVerifiedBlockReceiver collection, Reference item) {
+        public static void Add(this IBlockContainer collection, Reference item) {
             collection.AddBlock(item);
         }
     }  

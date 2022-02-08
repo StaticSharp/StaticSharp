@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace StaticSharpWeb {
-    public class Footer : IEnumerable<IBlock>, IBlock, IVerifiedBlockReceiver {
+    public class Footer : IEnumerable<IBlock>, IBlock, IBlockContainer {
         private readonly List<IBlock> _items = new();
 
         public void AddBlock(IBlock block) {

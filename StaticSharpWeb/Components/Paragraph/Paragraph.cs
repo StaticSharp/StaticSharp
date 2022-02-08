@@ -10,18 +10,25 @@ namespace StaticSharpWeb {
 
     public static class ParagraphStatic {
 
-        public static void Add<T>(this T collection, Paragraph item) where T : IVerifiedBlockReceiver, ITextAnchorsProvider {
+        public static void Add<T>(this T collection, Paragraph item) where T : IBlockContainer, ITextAnchorsProvider {
             collection.AddBlock(item);
         }
 
-        public static void Add<T>(this T collection, ParagraphIinterpolatedStringHandler item) where T : IVerifiedBlockReceiver, ITextAnchorsProvider {
+        public static void Add<T>(this T collection, ParagraphIinterpolatedStringHandler item) where T : IBlockContainer, ITextAnchorsProvider {
             collection.AddBlock(item.Paragraph);
         }
     }
 
-    //[InterpolatedStringHandler]
-    public class ParagraphIinterpolatedStringHandler {
+    [InterpolatedStringHandler]
+    public ref struct ParagraphIinterpolatedStringHandler {
         public Paragraph Paragraph { get; } = new();
+
+        public ParagraphIinterpolatedStringHandler(int literalLength, int formattedCount) {
+            //builder = new StringBuilder(literalLength);
+            //Console.WriteLine($"\tliteral length: {literalLength}, formattedCount: {formattedCount}");
+        }
+
+
         public void AppendLiteral(string s) {
             Paragraph.Add(s);
         }

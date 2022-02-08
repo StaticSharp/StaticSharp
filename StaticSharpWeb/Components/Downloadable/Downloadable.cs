@@ -116,7 +116,7 @@ namespace StaticSharpWeb.Components {
     }
 
     public static class DownlodableStatic{
-        public static void Add<T>(this T collection, Downloadable item) where T : IVerifiedBlockReceiver {
+        public static void Add<T>(this T collection, Downloadable item) where T : IBlockContainer {
             collection.AddBlock(item);
         }
     }

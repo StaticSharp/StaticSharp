@@ -38,6 +38,7 @@ public abstract record Constructor<T> : Constructor, IKeyProvider where T : ICac
         T value = Cache.Get<T>(Key);
         if (value == null) {
             value = Create();
+            value.AfterConstruction();
             Cache.Add(Key, value);
         }
         return value;

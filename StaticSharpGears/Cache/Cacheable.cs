@@ -12,14 +12,19 @@ public abstract class Cacheable<Constructor> : ICacheable, IKeyProvider
     protected Cacheable(Constructor arguments) {
         Arguments = arguments;
         Key = Arguments.Key;
+        //Job = CreateJob();
     }
 
-    protected virtual async Task CreateInternalAsync() {
+
+    /*protected virtual async Task CreateInternalAsync() {
         await CreateAsync();
-    }
+    }*/
 
     protected abstract Task CreateAsync();
 
+    public virtual void AfterConstruction() {
+        Job = CreateAsync();
+    }
 }
 
 public abstract class Cacheable<Constructor, Data> : Cacheable<Constructor>
@@ -38,14 +43,19 @@ public abstract class Cacheable<Constructor, Data> : Cacheable<Constructor>
 
     protected string CacheSubDirectory { get; }
 
+    protected virtual Data CachedData { get; private set; }
+
+    /*protected override Task CreateJob() {
+        return base.CreateJob();
+    }*/
 
     protected Cacheable(Constructor arguments) : base(arguments) {        
-        
         KeyHash = Hash.CreateFromString(Key).ToString();
         CacheSubDirectory = Path.Combine(Cache.Directory, KeyHash);
-
         CachedDataJsonFilePath = Path.Combine(CacheSubDirectory, CachedDataJsonFileName);
+    }
 
+    public override void AfterConstruction() {
         if (File.Exists(CachedDataJsonFilePath)) {
             var json = File.ReadAllText(CachedDataJsonFilePath);
             CachedData = JsonSerializer.Deserialize<Data>(json, JsonSerializerOptions);
@@ -56,10 +66,9 @@ public abstract class Cacheable<Constructor, Data> : Cacheable<Constructor>
             Job = CreateInternalAsync();
         }
     }
-    protected virtual Data CachedData { get; private set; }
 
 
-    protected override async Task CreateInternalAsync() {
+    protected async Task CreateInternalAsync() {
         Directory.CreateDirectory(CacheSubDirectory);
         await CreateAsync();
         StoreData();

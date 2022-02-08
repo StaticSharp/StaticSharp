@@ -54,7 +54,7 @@ namespace StaticSharpWeb {
     }
 
     public static class PanelStatic {
-        public static void Add(this IVerifiedBlockReceiver collection, Panel item) {
+        public static void Add(this IBlockContainer collection, Panel item) {
             collection.AddBlock(item);
         }
     }   

@@ -276,7 +276,7 @@ namespace StaticSharpWeb.Components {
         }
     }
     public static class CodeStatic {
-        public static void Add<T>(this T collection, Code item) where T : IVerifiedBlockReceiver {
+        public static void Add<T>(this T collection, Code item) where T : IBlockContainer {
             collection.AddBlock(item);
         }
     }

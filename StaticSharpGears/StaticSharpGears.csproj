@@ -7,7 +7,39 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="MaterialDesignIcons.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MaterialDesignIcons.tt</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="envdte" Version="17.0.32112.339" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="MaterialDesignIcons.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>MaterialDesignIcons.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="MaterialDesignIcons.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MaterialDesignIcons.tt</DependentUpon>
+    </Compile>
+    <Compile Update="MaterialDesignIcons.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MaterialDesignIcons.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>

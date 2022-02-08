@@ -52,7 +52,7 @@ namespace StaticSharpWeb.Components {
     }
 
     public static class MaterialCardStatic {
-        public static void Add<T>(this T collection, MaterialCard item) where T : IVerifiedBlockReceiver {
+        public static void Add<T>(this T collection, MaterialCard item) where T : IBlockContainer {
             collection.AddBlock(item);
         }
     }

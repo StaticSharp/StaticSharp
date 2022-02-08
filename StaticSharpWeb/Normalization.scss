@@ -1,6 +1,7 @@
 @include once() {
 
     * {
+        position: relative;
         margin: 0;
         visibility: inherit;
     }
@@ -15,6 +16,5 @@
         min-height: 100vh;
         display: flex;
         flex-direction: column;
-
     }
 }

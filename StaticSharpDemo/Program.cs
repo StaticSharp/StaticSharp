@@ -164,7 +164,7 @@ namespace StaticSharpDemo {
             //);
             //await generator.GenerateAsync();
 
-
+            StaticSharpGears.Cache.Directory = @"D:\StaticSharpCache\";
 
             await new Server().RunAsync();
         }
