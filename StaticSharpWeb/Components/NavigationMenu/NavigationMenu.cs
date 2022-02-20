@@ -18,7 +18,7 @@ namespace StaticSharpWeb.Components {
         }
 
         public async Task<Tag> GenerateSideBarAsync(Context context) {
-            var relativePath = new AbsolutePath("NavigationMenu.js");
+            var relativePath = AbsolutePath("NavigationMenu.js");
             context.Includes.Require(new Script(relativePath));
             var slider = new Tag("div", new { Class = "LeftSlider", id = "LeftSlider"});
             var marker = new Tag("div", new { Class = "LeftMarker", id = "LeftMarker"});
@@ -43,7 +43,7 @@ namespace StaticSharpWeb.Components {
                 });
             }
             slider.Add(new JSCall(relativePath).Generate(context));
-            context.Includes.Require(new Style(new AbsolutePath($"{nameof(NavigationMenu)}.scss")));
+            context.Includes.Require(new Style(AbsolutePath($"{nameof(NavigationMenu)}.scss")));
             return slider;
         }
 

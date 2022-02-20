@@ -1,5 +1,7 @@
 ﻿
 
+
+
 namespace StaticSharpDemo.Content.Index.Components.HowToCreateNewComponent {
 
     [Representative]
@@ -10,7 +12,11 @@ namespace StaticSharpDemo.Content.Index.Components.HowToCreateNewComponent {
         public override MaterialContent Content => new() {
             $"сначала напишу все в кучу, а потом правильно распределю..",
             new Heading("SCSS"),
-            $"Элемент отталкивается от предидущего. т.е. "
+            $"Элемент отталкивается от предидущего. т.е. имеют только верхни margin",
+
+            new BillboardSolidColor { Color = Color.Violet },
+            new BillboardSolidColor { Color = Color.BlueViolet }
+
         };
     }
 

@@ -1,5 +1,8 @@
 ﻿namespace StaticSharpGears.Public;
 public static class MaterialDesignIconsStatic {
+	public static Uri GetSvgUri(this MaterialDesignIcons icon) {
+		return new Uri($"https://raw.githubusercontent.com/Templarian/MaterialDesign/master/svg/{icon.GetName()}.svg");
+	}
 	public static string GetName(this MaterialDesignIcons icon) {
 		switch ((int)icon) {
 			case 0xF01C9 : return "ab-testing";

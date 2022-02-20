@@ -2,14 +2,12 @@
 using System.Runtime.CompilerServices;
 
 namespace StaticSharpWeb {
-    public class AbsolutePath {
-        string Value { get; init; }
-        public AbsolutePath(string subPath = "", [CallerFilePath] string callerFilePath = "") => 
-            Value = Path.Combine(Path.GetDirectoryName(callerFilePath), subPath);
+    public static partial class Static {
 
-        public static implicit operator string(AbsolutePath relativePath) => relativePath.Value;
+        public static string AbsolutePath(string subPath = "", [CallerFilePath] string callerFilePath = "") => 
+            Path.Combine(Path.GetDirectoryName(callerFilePath), subPath);
 
-        public override string ToString() => Value;
+
 
     }
 }

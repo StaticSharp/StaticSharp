@@ -35,15 +35,15 @@ namespace StaticSharpWeb {
         public virtual IImage TitleImage => null;
         public virtual RightSideBar RightSideBar => null;
         public virtual LeftSideBar LeftSideBar => null;
-        public virtual string RootPath => new AbsolutePath();
-        public virtual Font Font => new(Path.Combine(RootPath, "Fonts", "roboto"), FontWeight.Regular);
+
+        public virtual Font Font => new(Path.Combine(AbsolutePath(), "Fonts", "roboto"), FontWeight.Regular);
 
         public async Task<string> GenerateHtmlAsync(Context context) {
             context.Parents = context.Parents.Prepend(this);
-            context.Includes.Require(new Script(new AbsolutePath("StaticSharp.js")));
-            context.Includes.Require(new Style(new AbsolutePath("Normalization.scss")));
+            context.Includes.Require(new Script(AbsolutePath("StaticSharp.js")));
+            context.Includes.Require(new Style(AbsolutePath("Normalization.scss")));
 
-            context.Includes.Require(new Style(new AbsolutePath("Debug.scss")));
+            context.Includes.Require(new Style(AbsolutePath("Debug.scss")));
 
             var head = new Tag("head"){
                     new Tag("meta", new{ charset = "utf-8" }),
@@ -72,7 +72,7 @@ namespace StaticSharpWeb {
             var font = Font.GenerateUsageCss(context);
 
             var body = new Tag("body", new { style = $"display: none; {font}" }){
-                new JSCall(new AbsolutePath("Material.js"), ContentWidth).Generate(context),
+                new JSCall(AbsolutePath("Material.js"), ContentWidth).Generate(context),
             };
             var tasks = new List<Task<INode>>();
             if (RightSideBar != null) {

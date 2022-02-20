@@ -16,7 +16,7 @@ namespace StaticSharpWeb {
         public LanguageMenu(dynamic node) => Node = node;
 
         public async Task<Tag> GenerateSideBarAsync(Context context) {
-            var relativePath = new AbsolutePath("LanguageMenu.js");
+            var relativePath = AbsolutePath("LanguageMenu.js");
             context.Includes.Require(new Script(relativePath));
 
             var slider = new Tag("div", new { Class = "RightSlider", id = "RightSlider"});
@@ -43,7 +43,7 @@ namespace StaticSharpWeb {
             }
 
             slider.Add(new JSCall(relativePath).Generate(context));
-            context.Includes.Require(new Style(new AbsolutePath("LanguageMenu.scss")));
+            context.Includes.Require(new Style(AbsolutePath("LanguageMenu.scss")));
             return slider;
         }
     }

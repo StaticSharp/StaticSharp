@@ -21,7 +21,7 @@ namespace StaticSharpWeb {
         public async Task<INode> GenerateBlockHtmlAsync(Context context)
         {
             var result = new Tag(_type, new { Class = "List" }) {
-                new JSCall(new AbsolutePath("List.js")).Generate(context)
+                new JSCall(AbsolutePath("List.js")).Generate(context)
             };
             GenerateInnerTags(context, result, _baseList);
             return result;

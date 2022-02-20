@@ -21,7 +21,7 @@ namespace StaticSharpWeb {
             var result = new Tag("span") { Text };
             result.Attributes.Add("class", nameof(ToDo));
             result.Attributes.Add("title", Text);
-            context.Includes.Require(new Style(new AbsolutePath("ToDo.scss")));
+            context.Includes.Require(new Style(AbsolutePath("ToDo.scss")));
             return result;
         }
     }

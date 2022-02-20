@@ -2,6 +2,8 @@
 using System.Linq;
 
 namespace StaticSharpWeb {
+
+
     public struct Context { 
         public IStorage Storage { get; init; }
 
@@ -11,11 +13,12 @@ namespace StaticSharpWeb {
 
         public IEnumerable<object> Parents;
 
-   
+        public Theme Theme;
 
-        public Context(IStorage storage, IUrls urls) {
+        public Context(IStorage storage, IUrls urls, Theme theme) {
             Storage = storage;
             Urls = urls;
+            Theme = theme;
             Includes = new Includes();
             Parents = Enumerable.Empty<object>();
         }

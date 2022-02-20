@@ -2,7 +2,7 @@
 
 namespace StaticSharpGears;
 
-public static class CaseConvert {
+public static class CaseConverter {
 
     private static Regex PascalToKebabCaseRegex = new Regex("(?<!^)([A-Z][a-z]|(?<=[a-z])[A-Z])", RegexOptions.Compiled);
     public static string PascalToKebabCase(string value) {

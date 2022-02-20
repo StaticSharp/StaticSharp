@@ -47,6 +47,11 @@ static class Generator{
         result.AppendLine("namespace StaticSharpGears.Public;");
 
         result.AppendLine("public static class MaterialDesignIconsStatic {");
+
+        result.AppendLine("\tpublic static Uri GetSvgUri(this MaterialDesignIcons icon) {");
+        result.AppendLine("\t\treturn new Uri($\"https://raw.githubusercontent.com/Templarian/MaterialDesign/master/svg/{icon.GetName()}.svg\");");
+        result.AppendLine("\t}");
+
         result.AppendLine("\tpublic static string GetName(this MaterialDesignIcons icon) {");
         result.AppendLine("\t\tswitch ((int)icon) {");
         foreach (var i in meta)

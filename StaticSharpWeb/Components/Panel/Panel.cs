@@ -25,9 +25,9 @@ namespace StaticSharpWeb {
                     _content
                 }
             };
-            context.Includes.Require(new Style(new AbsolutePath(componentName + ".scss")));
-            context.Includes.Require(new Font(new AbsolutePath("..\\..\\Fonts\\materialdesignicons"), FontWeight.Regular));
-            tag.Add(new JSCall(new AbsolutePath(componentName + ".js")).Generate(context));
+            context.Includes.Require(new Style(AbsolutePath(componentName + ".scss")));
+            context.Includes.Require(new Font(AbsolutePath("..\\..\\Fonts\\materialdesignicons"), FontWeight.Regular));
+            tag.Add(new JSCall(AbsolutePath(componentName + ".js")).Generate(context));
             return tag;
         }
 

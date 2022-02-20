@@ -42,7 +42,7 @@ namespace StaticSharpWeb {
         public string ReadFile(string script) {
             StringBuilder stringBuilder = new();
             var file = File.ReadAllText(script);
-            var thisFilePath = new AbsolutePath(script);
+            var thisFilePath = AbsolutePath(script);
             stringBuilder.AppendLine("// START FILE " + script);
             string result = "// START FILE " + script + "\n" +
                             file.Replace("☺thisFilePathHash☹", thisFilePath.ToString().ToHashString())

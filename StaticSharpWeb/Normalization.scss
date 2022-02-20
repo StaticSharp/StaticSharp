@@ -4,6 +4,9 @@
         position: relative;
         margin: 0;
         visibility: inherit;
+        margin-block-start: 0;
+        margin-block-end: 0;
+        line-height: 100%;
     }
 
     html {

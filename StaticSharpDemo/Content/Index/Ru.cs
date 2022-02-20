@@ -27,9 +27,9 @@ namespace StaticSharpDemo.Content.Index {
                 
             },
 
-            new CSharpCode(System.IO.File.ReadAllText(new AbsolutePath("Ru.cs"))),
-            new Downloadable(new AbsolutePath("Download")),
-            new Downloadable(new AbsolutePath("MoreDownload")),
+            new CSharpCode(System.IO.File.ReadAllText(AbsolutePath("Ru.cs"))),
+            new Downloadable(AbsolutePath("Download")),
+            new Downloadable(AbsolutePath("MoreDownload")),
             //new Downloadable(@"D:/svn/antilatency.com/.Releases", "Api", new SearchSequencer().SvnLikeRepository.SpecifyThePath("Api\\Api.ml.cs")),
             new Reference("https://ru.wikipedia.org/wiki/C_Sharp"),
             new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", "Ссылки с текстом: "),

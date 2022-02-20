@@ -46,38 +46,35 @@ namespace StaticSharpWeb {
 
         public async Task<INode> GenerateBlockHtmlAsync(Context context) {
 
+            var anchorIconSource = new CacheableHttpRequest.Constructor(
+                MaterialDesignIcons.VectorLink.GetSvgUri()
+                )
+                .CreateOrGetCached();
+
+            var svgCode = await anchorIconSource.ReadAllTextAsync();
+
+            var svg = new Svg(await anchorIconSource.ReadAllTextAsync());
+            svg.FillColor = context.Theme.HeadingAnchorIconColor;
+            var svgDataUri = svg.DataUri;
 
 
-            CacheableMaterialDesignIcon cacheableMaterialDesignIcon = new CacheableMaterialDesignIcon.Constructor(MaterialDesignIcons.Link).CreateOrGetCached();
+            return new Tag("h2", new { id = Identifier, style = "display: flex;" }) {
+                new Tag("span", new{ style = "margin-right: auto;"}) { 
+                    new TextNode(Caption)
+                }
+                ,
+                new Tag("a", new{                    
+                    href = "#" + Identifier,
+                    title = "Heading anchor",
+                    style = "display: contents"
+                    }){ 
+                    new Tag("img", new{
+                        style = "display: inline;",
+                        src = svgDataUri
+                    })
+                },
 
-            //await cacheableMaterialDesignIcon.Job;
-            var svgCode = await cacheableMaterialDesignIcon.Code;
-
-            /*XmlDocument doc = new XmlDocument();
-            doc.LoadXml(svgCode);
-            doc.DocumentElement.ChildNodes.*/
-
-            XDocument svg = XDocument.Parse(svgCode);
-            var svgElement = svg.Elements().FirstOrDefault(x => x.Name.LocalName == "svg");
-            svgElement.SetAttributeValue("fill", "#ff8000");
-
-
-            var finalCode = svgElement.ToString();
-
-            foreach (var e in svg.Elements()) { 
-                Console.WriteLine(e.Name);
-            }
-
-
-            var dataSvg = Uri.EscapeDataString(await cacheableMaterialDesignIcon.Code);
-            //context.Includes.Require()
-
-            //var a = new Tag("a" new { href =  });
-
-            return new Tag("h2") {
-                new Tag("div", new{ Class = "HeadingLink"}),
-                new TextNode(Caption),
-                new JSCall(new AbsolutePath($"{GetType().Name}.js")).Generate(context)
+                new JSCall(AbsolutePath($"{GetType().Name}.js")).Generate(context)
             };
             /*=> string.IsNullOrWhiteSpace(Identifier)
             ? new Tag("h2", new { Class = "Heading" }) { Caption }

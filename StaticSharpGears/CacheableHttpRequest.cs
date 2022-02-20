@@ -4,8 +4,9 @@ using System.Text;
 namespace StaticSharpGears;
 
 
+
 //Instead of inheritance from CacheableHttpRequest, it is better to use aggregation
-public class CacheableHttpRequest : Cacheable<CacheableHttpRequest.Constructor, CacheableHttpRequest.Data>, IAsset {
+public class CacheableHttpRequest : Cacheable<CacheableHttpRequest.Constructor, CacheableHttpRequest.Data>, IAsset, IFile {
 
     public record Constructor(HttpRequestMessage HttpRequestMessage) : Constructor<CacheableHttpRequest> {
 
@@ -19,23 +20,36 @@ public class CacheableHttpRequest : Cacheable<CacheableHttpRequest.Constructor, 
     }
 
     public class Data {
-        public MediaTypeHeaderValue? ContentType;
+        public string? CharSet;
+        public string? MediaType;
     };
 
 
-    private TaskCompletionSource<MediaTypeHeaderValue?> ContentType_TaskCompletionSource = new();
+    public static readonly string DefaultMediaType = "application/octet-stream";
+
+    public SecondaryTask<string?> CharSet { get; init; } = new();
+    public SecondaryTask<string> MediaType { get; init; } = new();
+    public SecondaryTask<Func<Stream>> Content { get; init; } = new();
+
+    IAwaitable<Func<Stream>> IFile.Content => Content;
+    IAwaitable<string> IFile.MediaType => MediaType;
+    IAwaitable<string?> IFile.CharSet => CharSet;
+
+    /*private TaskCompletionSource<MediaTypeHeaderValue?> ContentType_TaskCompletionSource = new();
     public Task<MediaTypeHeaderValue?> ContentType => ContentType_TaskCompletionSource.Task;
 
     private TaskCompletionSource<Func<Stream>> Content_TaskCompletionSource = new();
-    public Task<Func<Stream>> Content => Content_TaskCompletionSource.Task;
+    public Task<Func<Stream>> Content => Content_TaskCompletionSource.Task;*/
 
     private string ContentFilePath => Path.Combine(CacheSubDirectory, "content");
+
+    
 
     protected CacheableHttpRequest(Constructor arguments): base(arguments) {
 
         var uri = Arguments.HttpRequestMessage.RequestUri;
         if (uri == null) { 
-            throw new ArgumentNullException("HttpRequestMessage.RequestUri");
+            throw new ArgumentException("HttpRequestMessage.RequestUri");
         }
         //var fileExtension = Path.GetExtension(uri.AbsolutePath);       
 
@@ -43,15 +57,54 @@ public class CacheableHttpRequest : Cacheable<CacheableHttpRequest.Constructor, 
 
     }
 
-    protected override void Load() {
-        //var fileStream = File.OpenRead(ContentFilePath);
-        Content_TaskCompletionSource.SetResult(()=> File.OpenRead(ContentFilePath));
-        ContentType_TaskCompletionSource.SetResult(CachedData.ContentType);
-    }
 
     protected override async Task CreateAsync() {
 
-        try {
+        void CompleteHeaderTasks() {
+            MediaType.SetResult(
+                string.IsNullOrEmpty(CachedData?.MediaType)
+                ? DefaultMediaType
+                : CachedData.MediaType);
+
+            CharSet.SetResult(CachedData?.CharSet);
+        }
+
+        void CompleteContentTasks() {
+            Content.SetResult(() => File.OpenRead(ContentFilePath));
+        }
+
+
+        if (!LoadData()) {
+            CachedData = new();
+
+            var httpResponseMessage = await HttpClientStatic.Instance.SendAsync(Arguments.HttpRequestMessage);
+            if (!httpResponseMessage.IsSuccessStatusCode) {
+                throw new Exception(); //TODO: details
+            }
+
+            CachedData.CharSet = (httpResponseMessage.Content.Headers.ContentType?.CharSet);
+            CachedData.MediaType = (httpResponseMessage.Content.Headers.ContentType?.MediaType);
+
+            CompleteHeaderTasks();
+
+            CreateCacheSubDirectory();
+
+            var fileStream = File.OpenWrite(ContentFilePath);
+            await httpResponseMessage.Content.CopyToAsync(fileStream);
+            fileStream.Close();
+
+            CompleteContentTasks();
+
+            StoreData();
+        } else {
+            CompleteHeaderTasks();
+            CompleteContentTasks();
+        }
+        
+        
+        
+        
+        /*try {
             var httpResponseMessage = await HttpClientStatic.Instance.SendAsync(Arguments.HttpRequestMessage);
             if (!httpResponseMessage.IsSuccessStatusCode) {
                 var exception = new Exception();
@@ -68,13 +121,13 @@ public class CacheableHttpRequest : Cacheable<CacheableHttpRequest.Constructor, 
         catch (Exception e) {
             ContentType_TaskCompletionSource.TrySetException(e);
             Content_TaskCompletionSource.TrySetException(e);
-        }        
+        } */
     }
 
 
 
     public async Task<string> ReadAllTextAsync() {        
-        var charSet = (await ContentType)?.CharSet;
+        var charSet = (await CharSet);
         Encoding encoding;
 
         if (charSet == null) {
@@ -98,26 +151,7 @@ public class CacheableHttpRequest : Cacheable<CacheableHttpRequest.Constructor, 
 
     }
 
-    /*public void Dispose() {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
-    }
 
-    public async ValueTask DisposeAsync() {
-        await DisposeAsyncCore();
-        Dispose(disposing: false);
-        GC.SuppressFinalize(this);
-    }
-
-    protected virtual void Dispose(bool disposing) {
-        if (disposing) {
-            job.Wait();
-        }
-    }
-
-    protected virtual async ValueTask DisposeAsyncCore() {
-        await job;//.ConfigureAwait(false);
-    }*/
 
 
 }

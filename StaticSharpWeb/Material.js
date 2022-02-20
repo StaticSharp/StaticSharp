@@ -25,12 +25,14 @@ function Material(element, contentWidth) {
 
 
     function updateAnchors() {
+        
+
         var leftBar = element.querySelector("#leftBar");
         var rightBar = element.querySelector("#rightBar");
         leftBarWidth = leftBar == null ? 0 : leftBar.offsetWidth;
         rightBarWidth = rightBar == null ? 0 : rightBar.offsetWidth;
         const textMargin = 12;
-        let width = element.offsetWidth;
+        let width = window.innerWidth;
         let wideAnchorsCollapsed = width < (leftBarWidth + rightBarWidth + contentWidth);
         element.anchors.wideLeft = wideAnchorsCollapsed ? 0 : leftBarWidth;
         element.anchors.wideRight = wideAnchorsCollapsed ? width : width - rightBarWidth;

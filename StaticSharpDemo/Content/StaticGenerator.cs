@@ -11,7 +11,7 @@ namespace StaticSharpDemo.Content {
     public class StaticGenerator : StaticSharpWeb.StaticGenerator {
 
         public StaticGenerator(Uri baseUri, Storage storage, string outputPath)
-            => (BaseUri, _context, _outputPath) = (baseUri, new(storage, this), outputPath);
+            => (BaseUri, _context, _outputPath) = (baseUri, new(storage, this, new Theme()), outputPath);
 
         private Context _context;
         private string _outputPath;

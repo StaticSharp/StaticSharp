@@ -39,7 +39,7 @@ namespace StaticSharpWeb {
         public abstract IStorage Storage { get; }
 
         private async Task<string> GenerateErrorPageAsync(Exception e) {
-            var context = new Context(Storage, this);
+            var context = new Context(Storage, this, new Theme());
             return await new ErrorPage(e).GenerateHtmlAsync(context);
         }
 
@@ -55,7 +55,7 @@ namespace StaticSharpWeb {
                     response.StatusCode = 404;
                     return;
                 }
-                var context = new Context(Storage, this);
+                var context = new Context(Storage, this, new Theme());
 
                 var html = await page.GenerateHtmlAsync(context);
                 response.Cookies.Append(_pageKey, html.ToHashString());
@@ -97,7 +97,7 @@ namespace StaticSharpWeb {
             var result = await ParseJsonRequest(request);
             var page = FindPage(result["location"]?.ToString());
             if (page == null) { return; }
-            var context = new Context(Storage, this);
+            var context = new Context(Storage, this, new Theme());
             var html = await page.GenerateHtmlAsync(context);
             await responce.WriteAsync((html.ToHashString() != result[_pageKey].ToString()).ToString().ToLower());
         }

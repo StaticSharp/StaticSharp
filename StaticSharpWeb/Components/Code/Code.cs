@@ -244,7 +244,7 @@ namespace StaticSharpWeb.Components {
                 var tag = new Tag("div", new { Class = $"Code CodeBlock {languageCssClass}" }) {
                     new Tag("pre") { code }
                 };
-                tag.Add(new JSCall(new AbsolutePath("Code.js")).Generate(context));
+                tag.Add(new JSCall(AbsolutePath("Code.js")).Generate(context));
                 return tag;
                 // return new Tag("div", new { Class = $"Code CodeBlock {languageCssClass}" }) {
                 //     new Tag("pre") {
@@ -266,8 +266,8 @@ namespace StaticSharpWeb.Components {
             var result = new Tag("div");
 
             result.Add(new PureHtmlNode(html));
-            context.Includes.Require(new Style(new AbsolutePath(nameof(Code) + ".scss")));
-            result.Add(new JSCall(new AbsolutePath("Code.js")).Generate(context));
+            context.Includes.Require(new Style(AbsolutePath(nameof(Code) + ".scss")));
+            result.Add(new JSCall(AbsolutePath("Code.js")).Generate(context));
             return result;
         }
 

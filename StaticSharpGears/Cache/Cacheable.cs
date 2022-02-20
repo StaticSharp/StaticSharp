@@ -1,13 +1,14 @@
 ﻿using System.Text.Json;
-
+using System.Reflection;
 namespace StaticSharpGears;
 
 public abstract class Cacheable<Constructor> : ICacheable, IKeyProvider
     where Constructor : IKeyProvider {
     protected Constructor Arguments { get; }
     public string Key { get; }
-    public Task Job { get; protected set; }
+    public Task Job { get; protected set; } = null!;
 
+    //public virtual IEnumerable<SecondaryTask>
 
     protected Cacheable(Constructor arguments) {
         Arguments = arguments;
@@ -16,15 +17,53 @@ public abstract class Cacheable<Constructor> : ICacheable, IKeyProvider
     }
 
 
-    /*protected virtual async Task CreateInternalAsync() {
-        await CreateAsync();
-    }*/
+
+
+    protected virtual async Task CreateInternalAsync() {
+        var exception = default(Exception);
+        var secondaryTasks = GetSecondaryTasks();
+
+        try {
+            await CreateAsync();
+        }
+        catch (Exception e) {
+            exception  = e;
+        }
+        
+        foreach (var secondaryTask in secondaryTasks) {
+            if (!secondaryTask.Value.IsCompleted) {
+                if (exception == null) exception = new Exception($"SecondaryTask {secondaryTask.Key.Name} of object {GetType().FullName} is not completed.");
+                secondaryTask.Value.SetException(exception);
+            }
+        }        
+    }
 
     protected abstract Task CreateAsync();
 
     public virtual void AfterConstruction() {
-        Job = CreateAsync();
+        Job = CreateInternalAsync();
     }
+
+    private Dictionary<PropertyInfo, ISynchronouslyFailable> GetSecondaryTasks() {
+        PropertyInfo[] properties = GetType().GetProperties(
+            BindingFlags.Public
+            | BindingFlags.NonPublic
+            | BindingFlags.FlattenHierarchy
+            | BindingFlags.Instance);
+
+        Dictionary<PropertyInfo, ISynchronouslyFailable> secondaryTasks = new ();
+
+        foreach (var p in properties) {
+            if (typeof(ISynchronouslyFailable).IsAssignableFrom(p.PropertyType)) {
+                var value = p.GetValue(this) as ISynchronouslyFailable;
+                if (value == null)
+                    throw new Exception($"SecondaryTask {p.Name} of object {GetType().FullName} is null");
+                secondaryTasks.Add(p,value);
+            }
+        }
+        return secondaryTasks;
+    } 
+
 }
 
 public abstract class Cacheable<Constructor, Data> : Cacheable<Constructor>
@@ -43,7 +82,7 @@ public abstract class Cacheable<Constructor, Data> : Cacheable<Constructor>
 
     protected string CacheSubDirectory { get; }
 
-    protected virtual Data CachedData { get; private set; }
+    protected virtual Data? CachedData { get; set; }
 
     /*protected override Task CreateJob() {
         return base.CreateJob();
@@ -55,7 +94,7 @@ public abstract class Cacheable<Constructor, Data> : Cacheable<Constructor>
         CachedDataJsonFilePath = Path.Combine(CacheSubDirectory, CachedDataJsonFileName);
     }
 
-    public override void AfterConstruction() {
+    /*public override void AfterConstruction() {
         if (File.Exists(CachedDataJsonFilePath)) {
             var json = File.ReadAllText(CachedDataJsonFilePath);
             CachedData = JsonSerializer.Deserialize<Data>(json, JsonSerializerOptions);
@@ -72,11 +111,23 @@ public abstract class Cacheable<Constructor, Data> : Cacheable<Constructor>
         Directory.CreateDirectory(CacheSubDirectory);
         await CreateAsync();
         StoreData();
+    }*/
+
+    //protected abstract void Load();
+
+    protected bool LoadData() {
+        if (!File.Exists(CachedDataJsonFilePath)) return false;
+        var json = File.ReadAllText(CachedDataJsonFilePath);
+        CachedData = JsonSerializer.Deserialize<Data>(json, JsonSerializerOptions);
+        return true;
     }
 
-    protected abstract void Load();    
+    protected void CreateCacheSubDirectory() {
+        Directory.CreateDirectory(CacheSubDirectory);
+    }
 
-    private void StoreData() {
+
+    protected void StoreData() {
         string json = JsonSerializer.Serialize(CachedData, JsonSerializerOptions);
         File.WriteAllText(CachedDataJsonFilePath, json);
     }

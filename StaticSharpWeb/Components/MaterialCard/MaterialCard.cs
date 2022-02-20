@@ -45,8 +45,8 @@ namespace StaticSharpWeb.Components {
             }
             result.Add(await GetSlideContentAsync(material, context));
             var className = nameof(MaterialCard);
-            context.Includes.Require(new Style(new AbsolutePath(className + ".scss")));
-            result.Add(new JSCall(new AbsolutePath(className + ".js")).Generate(context));
+            context.Includes.Require(new Style(AbsolutePath(className + ".scss")));
+            result.Add(new JSCall(AbsolutePath(className + ".js")).Generate(context));
             return result;
         }
     }

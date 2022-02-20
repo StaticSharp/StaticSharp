@@ -1,4 +1,6 @@
-﻿namespace StaticSharpGears;
+﻿using System.Drawing;
+
+namespace StaticSharpGears;
 
 public static partial class KeyCalculators {
     public static string GetKey(HttpRequestMessage httpRequestMessage) {
@@ -7,6 +9,12 @@ public static partial class KeyCalculators {
             httpRequestMessage.Method.ToString()
             );
     }
+
+
+    public static string GetKey(Color color) {
+        return KeyUtils.Combine<Color>(color.ToArgb().ToString()) ;
+    }
+
 }
 
 
