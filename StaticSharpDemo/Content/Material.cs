@@ -33,7 +33,9 @@ namespace StaticSharpDemo.Content {
         public override LeftSideBar LeftSideBar => new() {
             new NavigationMenu(new Logo(Color.FromArgb(0xacc435), Color.White, Node.Root.Index)) {
                 Node.Root.Index,
-                Node.Root.Index.Children
+                Node.Root.Index.Children,
+                Node.Root.Components,
+                Node.Root.Components.Children
             }
         };
     }

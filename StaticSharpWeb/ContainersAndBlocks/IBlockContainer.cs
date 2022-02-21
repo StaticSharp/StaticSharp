@@ -1,7 +1,4 @@
-﻿namespace StaticSharpWeb {
-    //TODO: rename
-    public interface IBlockContainer {
-
-        void AddBlock(IBlock block);
-    }
+﻿namespace StaticSharpWeb;
+public interface IBlockContainer {
+    void AddBlock(IBlock block);
 }

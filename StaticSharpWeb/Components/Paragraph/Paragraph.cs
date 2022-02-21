@@ -10,13 +10,18 @@ namespace StaticSharpWeb {
 
     public static class ParagraphStatic {
 
-        public static void Add<T>(this T collection, Paragraph item) where T : IBlockContainer, ITextAnchorsProvider {
+        /*public static void Add<T>(this T collection, Paragraph item) where T : IBlockContainer, ITextAnchorsProvider {
             collection.AddBlock(item);
-        }
+        }*/
 
         public static void Add<T>(this T collection, ParagraphIinterpolatedStringHandler item) where T : IBlockContainer, ITextAnchorsProvider {
             collection.AddBlock(item.Paragraph);
         }
+
+        public static void Add<T>(this T collection, string text) where T : IBlockContainer, ITextAnchorsProvider {
+            collection.AddBlock(new Paragraph() { text });
+        }
+
     }
 
     [InterpolatedStringHandler]
@@ -42,7 +47,7 @@ namespace StaticSharpWeb {
         }
     }
 
-    public sealed class Paragraph : IEnumerable, IInline, IBlock, IPlainTextProvider {
+    public sealed class Paragraph : IEnumerable, IInline, IBlock, IPlainTextProvider, IContainerConstraints<ITextAnchorsProvider> {
 
         public struct Generators {
             public Func<Context, Task<INode>> Html;
@@ -76,13 +81,15 @@ namespace StaticSharpWeb {
 
         public async Task<INode> GenerateBlockHtmlAsync(Context context) {
             var result = new Tag("div", new { Class = nameof(Paragraph) });
-            if (context.Parents.FirstOrDefault(x => x is IFontProvider) is IFontProvider fontProvider) {
+            /*if (context.Parents.FirstOrDefault(x => x is IFontProvider) is IFontProvider fontProvider) {
                 var font = fontProvider?.Font with { Weight = FontWeight.Regular };
                 result.Attributes.Add("style", font.GenerateUsageCss(context));
-            }
+            }*/
 
             //var tasks = Items.OfType<IInline>().Select(x => x.GenerateInlineHtmlAsync(context));
-            context.Includes.Require(new Style(AbsolutePath("Paragraph.scss")));
+            //context.Includes.Require(new Style(AbsolutePath("Paragraph.scss")));
+
+
             result.Add(new JSCall(AbsolutePath("Paragraph.js")).Generate(context));
             foreach (var item in await Task.WhenAll(Items.Select(x => x.Html(context)))) {
                 result.Add(item);

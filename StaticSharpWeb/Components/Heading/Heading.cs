@@ -29,20 +29,11 @@ namespace StaticSharpWeb {
         public Heading(string caption, string identifier = null) =>
             (Caption, Identifier) = (caption, identifier);
 
-
-
-
         public async Task<INode> GenerateInlineHtmlAsync(Context context) => string.IsNullOrWhiteSpace(Identifier)
             ? new Tag("h2", new { Class = "Heading" }) { Caption }
             : new Tag("h2", new { id = Identifier }){
                 new Tag("a", new { href = "#" + Identifier, title = "Heading anchor" })
             };
-        //x.Attribute("id", Id)
-        //        x.AddTag("a", a => {
-        //            a.AddClasses("Link");
-        //            a.Attribute("href", "#" + Id);
-        //            a.Attribute("title", "Heading anchor");
-        //        })
 
         public async Task<INode> GenerateBlockHtmlAsync(Context context) {
 
@@ -50,8 +41,6 @@ namespace StaticSharpWeb {
                 MaterialDesignIcons.VectorLink.GetSvgUri()
                 )
                 .CreateOrGetCached();
-
-            var svgCode = await anchorIconSource.ReadAllTextAsync();
 
             var svg = new Svg(await anchorIconSource.ReadAllTextAsync());
             svg.FillColor = context.Theme.HeadingAnchorIconColor;
@@ -76,12 +65,6 @@ namespace StaticSharpWeb {
 
                 new JSCall(AbsolutePath($"{GetType().Name}.js")).Generate(context)
             };
-            /*=> string.IsNullOrWhiteSpace(Identifier)
-            ? new Tag("h2", new { Class = "Heading" }) { Caption }
-            : new Tag("h2", new { id = Identifier }){
-                new Tag("a", new { href = "#" + Identifier, title = "Heading anchor" })
-            };*/
-
         }
     }
 }

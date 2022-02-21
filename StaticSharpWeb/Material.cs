@@ -128,19 +128,5 @@ namespace StaticSharpWeb {
         }
     }
 
-    public class MaterialContent : IEnumerable<IBlock>, IBlockContainer, ITextAnchorsProvider, IFillAnchorsProvider, IWideAnchorsProvider {
-        private readonly List<IBlock> _items = new();
-
-        IEnumerator IEnumerable.GetEnumerator() {
-            return _items.GetEnumerator();
-        }
-
-        public IEnumerator<IBlock> GetEnumerator() {
-            return _items.GetEnumerator();
-        }
-
-        public void AddBlock(IBlock block) {
-            _items.Add(block);
-        }
-    }
+    public class MaterialContent : BlockContainer, ITextAnchorsProvider, IFillAnchorsProvider, IWideAnchorsProvider {}
 }

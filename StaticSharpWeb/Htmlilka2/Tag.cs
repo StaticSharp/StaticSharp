@@ -6,7 +6,7 @@ using System.Text;
 namespace StaticSharpWeb.Html {
 
 
-    public class Collection<T> : ICollection<T> {
+    /*public class Collection<T> : IEnumerable, ICollection<T> {
         protected readonly List<T> _innerList = new();
         public int Count => _innerList.Count;
 
@@ -30,11 +30,11 @@ namespace StaticSharpWeb.Html {
         public bool Remove(T item) => _innerList.Remove(item);
 
         IEnumerator IEnumerable.GetEnumerator() => _innerList.GetEnumerator();
-    }
+    }*/
 
 
-    public class Tag : Collection<INode>, INode {
-
+    public class Tag : IEnumerable, INode {
+        protected readonly List<INode> children = new();
 
         private static readonly HashSet<string> VoidElements = new() {
             "area",
@@ -73,6 +73,17 @@ namespace StaticSharpWeb.Html {
             Add(new TextNode(item));
         }
 
+        public void Add(INode item) {
+            if (item == null)
+                return;
+            children.Add(item);
+        }
+
+        public void Add(IEnumerable<INode> items) {
+            foreach (INode item in items) {
+                children.Add(item);
+            }            
+        }
 
         public void WriteHtml(StringBuilder builder) {
             if(Name != null) {
@@ -81,18 +92,18 @@ namespace StaticSharpWeb.Html {
                 builder.Append('>');
 
                 if(!VoidElements.Contains(Name.ToLower())) {
-                    foreach(var node in this) {
+                    foreach(var node in children) {
                         node.WriteHtml(builder);
                     }
                     builder.Append("</").Append(Name).Append('>');
                 }
             } else {
-                foreach(var node in this) {
+                foreach(var node in children) {
                     node.WriteHtml(builder);
                 }
             }
         }
 
-
+        public IEnumerator GetEnumerator() => children.GetEnumerator();
     }
 }

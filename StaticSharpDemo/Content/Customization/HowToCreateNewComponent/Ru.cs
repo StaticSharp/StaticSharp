@@ -1,8 +1,4 @@
-﻿
-
-
-
-namespace StaticSharpDemo.Content.Index.Components.HowToCreateNewComponent {
+﻿namespace StaticSharpDemo.Content.Customization.HowToCreateNewComponent {
 
     [Representative]
     partial class Ru : Material {
@@ -20,5 +16,5 @@ namespace StaticSharpDemo.Content.Index.Components.HowToCreateNewComponent {
         };
     }
 
-    
+
 }
