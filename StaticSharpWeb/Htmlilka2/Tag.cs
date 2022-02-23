@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using StaticSharpGears;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -59,11 +60,17 @@ namespace StaticSharpWeb.Html {
         public string Name { get; }
 
 
-        public Attributes Attributes { get; private set; }
+        public IDictionary<string, object>? Attributes { get; private set; }
 
 
-        public Tag(string name, object attributes = null) {
-            Attributes = new Attributes(attributes);
+        public Tag(string name, IDictionary<string, object> attributes) {
+            Attributes = attributes;
+            Name = name;
+        }
+
+        public Tag(string name, object? attributes = null) {
+            if (attributes!=null)
+                Attributes = SoftObject.ObjectToDictionary(attributes);
             Name = name;
         }
 
@@ -86,9 +93,48 @@ namespace StaticSharpWeb.Html {
         }
 
         public void WriteHtml(StringBuilder builder) {
-            if(Name != null) {
+
+            void WriteCssStyle(StringBuilder builder, object styleObject) {
+                if (styleObject is string styleObjectString) {
+                    builder.Append(styleObjectString);
+                } else {
+                    var styleDictionary = SoftObject.ObjectToDictionary(styleObject);
+                    if (styleDictionary == null) return;
+
+                    foreach (var item in styleDictionary) {
+                        builder.Append($"{StaticSharpGears.CaseConverter.PascalToKebabCase(item.Key)}:{item.Value};");
+                    }
+                }
+            }
+
+
+            void WriteAttributes(StringBuilder builder) {
+                foreach (var i in Attributes) {
+                    if (i.Key.ToLower() == "style") {
+                        if (i.Value != null) {
+                            builder.Append(" style = \"");
+                            WriteCssStyle(builder, i.Value);
+                            builder.Append("\"");
+                        }
+                    } else {
+                        var valueString = i.Value?.ToString();
+                        if (valueString != null) {
+                            if (valueString.Length > 0) {
+                                builder.Append($" {i.Key}=\"{valueString.ReplaceInvalidAttributeValueSymbols()}\"");
+                            } else {
+                                builder.Append(' ').Append(i.Key);
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
+            if (Name != null) {
                 builder.Append('<').Append(Name);
-                if(Attributes != null) { builder.Append(Attributes); }
+                if (Attributes != null)
+                    WriteAttributes(builder);
                 builder.Append('>');
 
                 if(!VoidElements.Contains(Name.ToLower())) {
@@ -104,6 +150,15 @@ namespace StaticSharpWeb.Html {
             }
         }
 
+
+
+
         public IEnumerator GetEnumerator() => children.GetEnumerator();
+
+
+
+
+
+
     }
 }

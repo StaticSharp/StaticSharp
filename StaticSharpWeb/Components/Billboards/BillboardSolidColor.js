@@ -29,14 +29,11 @@ function BillboardSolidColor(element, MaxContentWidth) {
         let contentSpace = parent.anchors.textRight - parent.anchors.textLeft;
         let contentWidth = Math.min(MaxContentWidth, contentSpace);
         let horizontalMargin = 0.5 * (contentSpace - contentWidth);
-        console.log(contentWidth)
 
         element.anchors.textLeft = parent.anchors.textLeft - left + horizontalMargin;
         element.anchors.textRight = element.anchors.textLeft + contentWidth;
 
         element.onAnchorsChanged.map(x => x());
-
-
     }
     parent.onAnchorsChanged.push(element.updateWidth);
 

@@ -2,7 +2,7 @@
 
     [Representative]
     partial class Ru : Material {
-        public override Paragraph Description => new Paragraph() { "Компоненты для создания страниц." };
+        public override Paragraph Description => $"Компоненты для создания страниц.";
 
         public override MaterialContent Content => new() { 
             
@@ -17,7 +17,11 @@
             new BillboardSolidColor { 
                 Color = Color.LightBlue,
                 Content = {
-                    new Heading("BillboardSolidColor"),
+                    new Heading("BillboardSolidColor"){
+                        Style = new {
+                            FontSize = "60px"
+                        }
+                    },
                     "BillboardSolidColor.Content это коллекция текстового контента. Можно использовать заголовки и параграфы"
                 }
             }

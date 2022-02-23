@@ -6,11 +6,32 @@ namespace StaticSharpWeb.Html {
 
     public class Attributes : Dictionary<string, string> {
 
-        private static IDictionary<string, string> ObjectToDictionary(object attributes) => 
-            attributes != null && !Equals(attributes, new { })
-                ? attributes.GetType().GetProperties().ToDictionary(x => x.Name, x => x.GetValue(attributes).ToString())
-                : new Dictionary<string, string>();
+        private static IDictionary<string, string> ObjectToDictionary(object attributes) {
 
+            Dictionary<string, string> result = new ();
+
+            void Add(string key, object? value) {
+                var valueString = value?.ToString();
+                if (valueString != null) { 
+                    result.Add(key, valueString);
+                }
+            }
+
+            if (attributes == null || Equals(attributes, new { }))
+                return result;
+
+            if (attributes is IDictionary<string, object> dictionary) {
+                foreach (var i in dictionary) { 
+                    Add(i.Key, i.Value);
+                }
+                return result;
+            }
+
+            foreach (var i in attributes.GetType().GetProperties()) {
+                Add(i.Name, i.GetValue(attributes));
+            }
+            return result;
+        }
 
         public Attributes(object attributes) : base(ObjectToDictionary(attributes)) { }
 

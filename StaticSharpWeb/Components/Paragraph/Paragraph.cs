@@ -45,9 +45,18 @@ namespace StaticSharpWeb {
         public void AppendFormatted(StaticSharpEngine.ITypedRepresentativeProvider<IInline> item) {
             Paragraph.Add(item);
         }
+
+        public static implicit operator Paragraph(ParagraphIinterpolatedStringHandler paragraphIinterpolatedStringHandler) {
+            return paragraphIinterpolatedStringHandler.Paragraph;
+        }
+
+
     }
 
     public sealed class Paragraph : IEnumerable, IInline, IBlock, IPlainTextProvider, IContainerConstraints<ITextAnchorsProvider> {
+
+
+        public object? Style { get; set; } = null;
 
         public struct Generators {
             public Func<Context, Task<INode>> Html;
@@ -59,6 +68,16 @@ namespace StaticSharpWeb {
         private List<Generators> Items { get; init; } = new();
 
         public IEnumerator GetEnumerator() => Items.GetEnumerator();
+
+
+
+        public static implicit operator Paragraph(string text){
+            return new Paragraph() { text };
+        }
+        /*public static implicit operator Paragraph(ParagraphIinterpolatedStringHandler paragraphIinterpolatedStringHandler) {
+            return paragraphIinterpolatedStringHandler.Paragraph;
+        }*/
+
 
         public void Add(string item) => Items.Add(new() {
             Html = context => Task.FromResult(new TextNode(item) as INode),
@@ -90,7 +109,7 @@ namespace StaticSharpWeb {
             //context.Includes.Require(new Style(AbsolutePath("Paragraph.scss")));
 
 
-            result.Add(new JSCall(AbsolutePath("Paragraph.js")).Generate(context));
+            result.Add(new JSCall(Anchors.FillTextAnchorsJsPath).Generate(context));
             foreach (var item in await Task.WhenAll(Items.Select(x => x.Html(context)))) {
                 result.Add(item);
             }

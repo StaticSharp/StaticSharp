@@ -3,6 +3,7 @@ using StaticSharpGears.Public;
 using StaticSharpWeb.Html;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,26 +12,51 @@ using System.Xml.Linq;
 
 namespace StaticSharpWeb {
 
-    
 
-    public class Heading : IInline, IBlock, IContainerConstraints<ITextAnchorsProvider> {
-        public string Caption { get; set; }
+
+
+
+    public class Heading : IContainerConstraints<ITextAnchorsProvider> {
+
+        public object? Style { get; set; } = null;
+
+        public string Text { get; set; }
+
+        public Heading(string text) {
+            Text = text;
+        }
+
+        public async Task<INode> GenerateBlockHtmlAsync(Context context) {
+            return new Tag("h2", 
+                new {
+                    style = Style
+                })
+            {
+                new JSCall(Anchors.FillTextAnchorsJsPath).Generate(context),
+                new JSCall(Anchors.ReduceFontSizeOnOverflowJsPath).Generate(context),
+                new TextNode(Text)
+            };                
+        }
+    }
+
+    public class SectionHeading : IInline, IBlock, IContainerConstraints<ITextAnchorsProvider> {
+        public string Text { get; set; }
 
         private string _identifier;
         public string Identifier { 
             get {
                 if (string.IsNullOrEmpty(_identifier))
-                    return Caption.Replace(" ", "_");
+                    return Text.Replace(" ", "_");
                 return _identifier;
             }
             set { _identifier = value; }
         }
 
-        public Heading(string caption, string identifier = null) =>
-            (Caption, Identifier) = (caption, identifier);
+        public SectionHeading(string text, string identifier = null) =>
+            (Text, Identifier) = (text, identifier);
 
         public async Task<INode> GenerateInlineHtmlAsync(Context context) => string.IsNullOrWhiteSpace(Identifier)
-            ? new Tag("h2", new { Class = "Heading" }) { Caption }
+            ? new Tag("h2", new { Class = "Heading" }) { Text }
             : new Tag("h2", new { id = Identifier }){
                 new Tag("a", new { href = "#" + Identifier, title = "Heading anchor" })
             };
@@ -49,7 +75,7 @@ namespace StaticSharpWeb {
 
             return new Tag("h2", new { id = Identifier, style = "display: flex;" }) {
                 new Tag("span", new{ style = "margin-right: auto;"}) { 
-                    new TextNode(Caption)
+                    new TextNode(Text)
                 }
                 ,
                 new Tag("a", new{                    
