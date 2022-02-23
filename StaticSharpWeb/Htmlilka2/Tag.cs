@@ -1,6 +1,7 @@
 ﻿using StaticSharpGears;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 
@@ -102,7 +103,15 @@ namespace StaticSharpWeb.Html {
                     if (styleDictionary == null) return;
 
                     foreach (var item in styleDictionary) {
-                        builder.Append($"{StaticSharpGears.CaseConverter.PascalToKebabCase(item.Key)}:{item.Value};");
+                        string? stringValue;
+                        if (item.Value is Color color) {
+                            stringValue = ColorTranslator.ToHtml(color);
+                        } else {
+                            stringValue = item.Value.ToString();
+                        }
+                        if (stringValue == null) continue;
+
+                        builder.Append($"{StaticSharpGears.CaseConverter.PascalToKebabCase(item.Key)}:{stringValue};");
                     }
                 }
             }

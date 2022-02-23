@@ -2,7 +2,8 @@
     partial class Builder {
         const string α = "α";
 
-        const string StaticSharpRoot = "StaticSharpRoot";
+        const string AlphaRoot = "αRoot";
+
         const string ProtoNode = "ProtoNode";
         const string VirtualNodePropertyName = "VirtualNode";
         const string NodePropertyName = "Node";

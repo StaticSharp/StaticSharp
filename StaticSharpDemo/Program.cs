@@ -1,4 +1,4 @@
-﻿using StaticSharpDemo.Content;
+﻿using StaticSharpDemo.Root;
 using StaticSharpEngine;
 using StaticSharpWeb;
 using System;
@@ -29,7 +29,7 @@ namespace StaticSharpWeb {
         public string TempDirectory { get; set; }
 
         public IEnumerable<INode> GetRoots()
-            => GetStates().Select(x => new StaticSharpRoot(x));
+            => GetStates().Select(x => new αRoot(x));
 
         public abstract IEnumerable<dynamic> GetStates();
 
@@ -117,17 +117,19 @@ namespace StaticSharpDemo {
             if (requestPath == null) {
                 return null;
             }
+            
             string[] path = requestPath.Split('/', StringSplitOptions.RemoveEmptyEntries);
+            Language language = default;
+
 
             if (path.Length == 0) {
-                path = new[] { "index_en.html" };
+                return new αRoot(default).Representative;
             }
 
             var htmlName = path.Last();
             htmlName = htmlName[..htmlName.LastIndexOf('.')].ToLower();
 
-            var lastIndexOf_ = htmlName.LastIndexOf('_');
-            Language language = default;
+            var lastIndexOf_ = htmlName.LastIndexOf('_');            
 
             if (lastIndexOf_ != -1) {
                 var languagePart = htmlName[(lastIndexOf_ + 1)..];
@@ -135,10 +137,13 @@ namespace StaticSharpDemo {
                 htmlName = htmlName[..lastIndexOf_];
             }
             path[^1] = htmlName;
+            
+            if (path.Length == 1 && path[0] == "index")
+                return new αRoot(language).Representative;
 
-            INode result = new StaticSharpRoot(language);
+            INode result = new αRoot(language);
             var pathList = new List<string[]>();
-            var root = new StaticSharpRoot(language).Children.FirstOrDefault().Name;
+            //var root = new αRoot(language).Children.FirstOrDefault().Name;
             foreach (var pathPart in path) {
                 result = result.Children.FirstOrDefault(x => x.Name.ToLower() == pathPart.ToLower());
                 if (result == null) return null;
@@ -148,9 +153,18 @@ namespace StaticSharpDemo {
 
 
         public override Uri ProtoNodeToUri<T>(T node) {
-            return node is ProtoNode protoNode
-                ? new Uri(BaseUri, string.Join('/', protoNode.Path) + "_" + protoNode.Language.ToString() + ".html")
-                : null;
+            if (node is ProtoNode protoNode) {
+                string path;
+                if (protoNode.Path.Length == 0) {//root
+                    path = "Index";
+                } else {
+                    path = string.Join('/', protoNode.Path);
+                }
+                return new Uri(BaseUri, path + "_" + protoNode.Language.ToString() + ".html");
+
+            } else {
+                throw new Exception($"ProtoNodeToUri. {node.GetType()} is not ProtoNode");
+            }
         }
     }
 

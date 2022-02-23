@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace StaticSharpWeb {
-    public class ExternalReference : IInline {
+    public class ExternalReference : IElement {
         private string Href { get; set; }
         private string Text { get; set; }
         private Image Image { get; set; }
@@ -23,11 +23,11 @@ namespace StaticSharpWeb {
             => Image = image;
 
 
-        public async Task<INode> GenerateInlineHtmlAsync(Context context) {
+        public async Task<INode> GenerateHtmlAsync(Context context) {
             var result = new Tag("a", new { href = Href, Class = "\"Text\", \"Reference\", \"ExternalReference\"" });
             if (Image != null) {
                 result.Attributes.Add("style", "display: block");
-                result.Add(await Image.GenerateBlockHtmlAsync(context));
+                result.Add(await Image.GenerateHtmlAsync(context));
             } else if (string.IsNullOrEmpty(Text)) {
                 result.Add(Href);
             } else {

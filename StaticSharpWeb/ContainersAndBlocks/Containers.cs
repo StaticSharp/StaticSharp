@@ -1,3 +1,3 @@
 ﻿namespace StaticSharpWeb;
 
-public class TextContainer : BlockContainer, ITextAnchorsProvider {}
+public class TextContainer : ElementContainer, ITextAnchorsProvider {}

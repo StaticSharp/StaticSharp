@@ -40,7 +40,7 @@ namespace StaticSharpWeb {
 
         private async Task<string> GenerateErrorPageAsync(Exception e) {
             var context = new Context(Storage, this, new Theme());
-            return await new ErrorPage(e).GenerateHtmlAsync(context);
+            return await new ErrorPage(e).GeneratePageHtmlAsync(context);
         }
 
 
@@ -57,7 +57,7 @@ namespace StaticSharpWeb {
                 }
                 var context = new Context(Storage, this, new Theme());
 
-                var html = await page.GenerateHtmlAsync(context);
+                var html = await page.GeneratePageHtmlAsync(context);
                 response.Cookies.Append(_pageKey, html.ToHashString());
                 await response.WriteAsync(html);
             } catch (Exception e) {
@@ -98,7 +98,7 @@ namespace StaticSharpWeb {
             var page = FindPage(result["location"]?.ToString());
             if (page == null) { return; }
             var context = new Context(Storage, this, new Theme());
-            var html = await page.GenerateHtmlAsync(context);
+            var html = await page.GeneratePageHtmlAsync(context);
             await responce.WriteAsync((html.ToHashString() != result[_pageKey].ToString()).ToString().ToLower());
         }
 

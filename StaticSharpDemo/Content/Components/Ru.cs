@@ -1,4 +1,4 @@
-﻿namespace StaticSharpDemo.Content.Components {
+﻿namespace StaticSharpDemo.Root.Components;
 
     [Representative]
     partial class Ru : Material {
@@ -7,7 +7,7 @@
         public override MaterialContent Content => new() { 
             
             new Heading("Создание нового компонента."),
-            $"Если понадобится компонент, которого нет среди стандартных. Например {new ToDo("придумать пример")}",
+            $"Если понадобится компонент, которого нет среди стандартных.",
             $"Можно создать компонент прям в проекте вашего сайта.",
             //new ToDo("пример кода"),
             $"Тут подробнее : {Node.Root.Customization.HowToCreateNewComponent}",
@@ -22,11 +22,13 @@
                             FontSize = "60px"
                         }
                     },
-                    "BillboardSolidColor.Content это коллекция текстового контента. Можно использовать заголовки и параграфы"
+                    "BillboardSolidColor.Content это коллекция текстового контента. Можно использовать заголовки и параграфы",
+                    new OverlayLink(Node)
                 }
-            }
+            },
+
+            new Paragraph() { "Paragraph as link",new OverlayLink(Node.Root)}
             
         };
     }
 
-}

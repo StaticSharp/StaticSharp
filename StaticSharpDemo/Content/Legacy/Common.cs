@@ -2,7 +2,7 @@ using StaticSharpWeb;
 using System;
 using System.Linq;
 
-namespace StaticSharpDemo.Content.Index {
+namespace StaticSharpDemo.Root.Legacy {
 
     public partial class Common : Material {
         public override int ContentWidth => 1200;

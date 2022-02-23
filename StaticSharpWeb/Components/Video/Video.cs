@@ -145,7 +145,7 @@ namespace StaticSharpWeb.Components {
             return _image;
         }
 
-        public async Task<INode> GenerateBlockHtmlAsync(Context context) {
+        public async Task<INode> GenerateHtmlAsync(Context context) {
             VideoResource ??= await context.Storage.AddOrGetAsync(VideoCode, () => new VideoResource(VideoCode, context.Storage));
             _image ??= new Image(VideoResource.IntermediateImageCache);
             context.Includes.Require(new Style(AbsolutePath("Video.scss")));
@@ -163,7 +163,7 @@ namespace StaticSharpWeb.Components {
                         _isPosterDefinedByUser).Generate(context)
             };
             if (_isPosterDefinedByUser) {
-                tag.Add(await _image.GenerateBlockHtmlAsync(context));
+                tag.Add(await _image.GenerateHtmlAsync(context));
             }
             return tag;
         }

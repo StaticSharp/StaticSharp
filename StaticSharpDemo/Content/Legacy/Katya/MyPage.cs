@@ -3,7 +3,7 @@ using StaticSharpWeb;
 using System;
 using StaticSharpWeb.Components;
 
-namespace StaticSharpDemo.Content.Index.Katya {
+namespace StaticSharpDemo.Root.Legacy.Katya {
 
     [Representative]
     partial class MyPage : Common {

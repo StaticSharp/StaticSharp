@@ -9,11 +9,11 @@ using System;
 using System.Threading.Tasks;
 
 namespace StaticSharpWeb {
-    public abstract class ColorSequence<T> : IBlock
+    public abstract class ColorSequence<T> : IElement
     {
         public abstract string GetGradient();
         public abstract float TotalDuration { get; }
-        public async Task<INode> GenerateBlockHtmlAsync(Context context)
+        public async Task<INode> GenerateHtmlAsync(Context context)
         {
             var tag = new Tag("div");
             var innerTag = new Tag("div", new { Class = "ColorSequence"});
@@ -100,14 +100,14 @@ namespace StaticSharpWeb {
     }
 
     public static class ColorSequenceStatic {
-        public static void Add(this IBlockContainer collection, ColorSequence item) {
-            collection.AddBlock(item);
+        public static void Add(this IElementContainer collection, ColorSequence item) {
+            collection.AddElement(item);
         }
     }
 
     public static class ColorSequenceCosStatic {
-        public static void Add(this IBlockContainer collection, ColorSequenceCos item) {
-            collection.AddBlock(item);
+        public static void Add(this IElementContainer collection, ColorSequenceCos item) {
+            collection.AddElement(item);
         }
     }
 }

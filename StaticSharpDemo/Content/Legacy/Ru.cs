@@ -8,7 +8,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace StaticSharpDemo.Content.Index {
+namespace StaticSharpDemo.Root.Legacy {
 
     [Representative]
     partial class Ru : Common {
@@ -97,7 +97,8 @@ namespace StaticSharpDemo.Content.Index {
 
             //new Panel("Default Panel"),
             new Info("Ситуации 7 и 9 - это не рабочий вариант. Работа сети в такой конфигурации будет крайне плоха из-за большого"),
-            new Error("Error Panel"),
+            new 
+            ("Error Panel"),
             new Bug("Bug Panel"),
             new Note("Note Panel"),
             new Success("Success Panel"),

@@ -1,17 +1,24 @@
 ﻿namespace StaticSharpGears;
 
 public static class SoftObject {
-    public static IDictionary<string,object>? MergeObjects(object? a, object? b) {
-        
+    public static IDictionary<string,object>? MergeObjects(params object?[] objects) {
+        //IEnumerable<IDictionary<string, object>> 
+        var dictionaries = objects.Select(x=> ObjectToDictionary(x)).OfType<IDictionary<string, object>>();
 
-        var dA = ObjectToDictionary(a);
+        if (!dictionaries.Any()) return null;
+
+
+
+        /*var dA = ObjectToDictionary(a);
         var dB = ObjectToDictionary(b);
         if (dA == null) return dB;
-        if (dB == null) return dA;
+        if (dB == null) return dA;*/
 
-        var result = new Dictionary<string,object>(dA);
-        foreach (var i in dB) {
-            result.TryAdd(i.Key, i.Value);
+        var result = new Dictionary<string,object>(dictionaries.First());
+        foreach (var d in dictionaries.Skip(1)) {
+            foreach (var i in d) {
+                result.TryAdd(i.Key, i.Value);
+            }
         }
         return result;
     }

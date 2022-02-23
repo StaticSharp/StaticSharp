@@ -15,13 +15,13 @@ namespace StaticSharpGenerator {
             } else {
                 body.AddLine($"public override {ProtoNode} Parent => new {parentClassName}({State.ToCall()});");
             }
-            body.AddLine($"public override {StaticSharpRoot} Root => new {StaticSharpRoot}({State.ToCall()});");
+            body.AddLine($"public override {AlphaRoot} Root => new {AlphaRoot}({State.ToCall()});");
 
             body.AddLine($"public override string[] Path => new string[]{{{string.Join(",", path.Select(x => $"\"{x}\""))}}};");
 
             body.AddLine($"public override string Name => \"{namespaceInfo.Name}\";");                        
 
-            var commonRepresentativeType = WriteRepresentatives(namespaceInfo, body);
+            var commonRepresentativeType = WriteRepresentatives(namespaceInfo, className, body);
 
             nodeClass.Header += commonRepresentativeType == null ? "" : $", {ITypedRepresentativeProvider}<{commonRepresentativeType}>";
 
@@ -63,7 +63,7 @@ namespace StaticSharpGenerator {
             place.AddLine($"public virtual {α}{name} {name} => new({State.ToCall()});");
         }
 
-        string WriteRepresentatives(NamespaceInfo namespaceInfo, BlockWriter place) {
+        string WriteRepresentatives(NamespaceInfo namespaceInfo, string alphaClassName, BlockWriter place) {
 
             var representatives = namespaceInfo.Types
                 .Select(x => x.Value)
@@ -107,7 +107,7 @@ namespace StaticSharpGenerator {
                 ///TODO: check if baseTypeFullName==object
                 ///Error CS0553  'StaticSharpRoot.αIndex.αComponents.implicit operator object(StaticSharpRoot.αIndex.αComponents)': user - defined conversions to or from a base type are not allowed  StaticSharpDemo D:\StaticSharp\StaticSharpDemo\StaticSharpGenerator\StaticSharpGenerator.StaticSharpGenerator\classTree.cs  100 Active
 
-                place.AddLine($"public static implicit operator {baseTypeFullName}({α}{namespaceInfo.Name} {α}) => {α}.Representative;");
+                place.AddLine($"public static implicit operator {baseTypeFullName}({alphaClassName} {α}) => {α}.Representative;");
 
                 //place.AddLine($"{IRepresentative} {INode}.{Representative} => {Representative};");
 

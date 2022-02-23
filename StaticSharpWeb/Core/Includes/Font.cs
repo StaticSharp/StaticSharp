@@ -11,7 +11,7 @@ namespace StaticSharpWeb {
 
     public interface IFont : IInclude {
 
-        string GenerateUsageCss(Context context);
+        object GenerateUsageCss(Context context);
     }
 
     public enum FontWeight {
@@ -87,9 +87,21 @@ namespace StaticSharpWeb {
         //GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).Select(x => x.GetValue(this)).ToArray());
         //GetType().FullName+"/0"+ Family.Key+"/0"+ Weight + "/0";
 
-        public string GenerateUsageCss(Context context) {
+        public object GenerateUsageCss(Context context) {
             context.Includes.Require(this);
-            return $"font-family:{Family}; font-weight:{WeightToNames(Weight).Last()};" + (Italic ? @" font-style: Italic;" : "");
+            /*var result = new Dictionary<string, object> {
+                {"FontFamily" , Family},
+                {"FontWeight" , WeightToNames(Weight).Last() }
+            };
+            if ()*/
+
+
+            return new {
+                FontFamily = Family,
+                FontWeight = WeightToNames(Weight).Last(),
+                FontStyle = Italic ? "Italic" : null
+            };
+            //return $"font-family:{Family}; font-weight:{WeightToNames(Weight).Last()};" + (Italic ? @" font-style: Italic;" : "");
         }
 
         public async Task<string> GenerateAsync(IStorage storage) {

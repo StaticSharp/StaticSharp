@@ -72,7 +72,7 @@ namespace StaticSharpWeb {
             return tag;
         }
 
-        public async Task<string> GenerateHtmlAsync(Context context) {
+        public async Task<string> GeneratePageHtmlAsync(Context context) {
             var head = new Tag("head"){
                 new Tag("meta", new{ charset = "utf-8"}),
                 new Tag("title"){

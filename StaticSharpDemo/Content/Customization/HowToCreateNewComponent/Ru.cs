@@ -1,4 +1,4 @@
-﻿namespace StaticSharpDemo.Content.Customization.HowToCreateNewComponent {
+﻿namespace StaticSharpDemo.Root.Customization.HowToCreateNewComponent {
 
     [Representative]
     partial class Ru : Material {

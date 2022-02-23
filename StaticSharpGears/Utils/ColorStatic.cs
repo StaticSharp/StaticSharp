@@ -34,5 +34,11 @@ namespace StaticSharpWeb {
             return color.ToRgb().ToString("X6");
         }
 
+        public static Color ContrastTextColor(this Color color, float contrast = 1f) {
+            var grayscale = (0.2125f * color.R) + (0.7154f * color.G) + (0.0721f * color.B);
+            var contrastColor = (grayscale>127)?Color.Black:Color.White;
+            return color.Lerp(contrastColor, contrast);
+        }
+
     }
 }

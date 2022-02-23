@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace StaticSharpWeb {
-    public class ToDo : IInline {
+    public class ToDo : IElement {
         public static bool Enabled { get; set; } = false;
         public string Text { get; private set; }
         public bool ShowText { get; private set; }
@@ -16,7 +16,7 @@ namespace StaticSharpWeb {
             //if (!suppressWarning) { Log.ToDo.OnObject(this, text); }
         }
 
-        public async Task<INode> GenerateInlineHtmlAsync(Context context) {
+        public async Task<INode> GenerateHtmlAsync(Context context) {
             if (!Enabled) { return new Tag(null); }
             var result = new Tag("span") { Text };
             result.Attributes.Add("class", nameof(ToDo));

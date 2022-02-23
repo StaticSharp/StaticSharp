@@ -9,9 +9,9 @@ namespace StaticSharpWeb.Components {
     public class NavigationMenu : ISideBarComponent, IEnumerable {
 
         private List<StaticSharpEngine.INode> _nodes = new();
-        private readonly IInline _logoNode;
+        private readonly IElement _logoNode;
 
-        public NavigationMenu(IInline logoNode = null, params StaticSharpEngine.INode[] nodes) {
+        public NavigationMenu(IElement logoNode = null, params StaticSharpEngine.INode[] nodes) {
             if (nodes is null) { throw new System.ArgumentNullException(nameof(nodes)); }
             _nodes.AddRange(nodes);
             _logoNode = logoNode;
@@ -31,7 +31,7 @@ namespace StaticSharpWeb.Components {
             slider.Add(result);
             slider.Add(marker);
             if(_logoNode != null) {
-                menuList.Add(await _logoNode.GenerateInlineHtmlAsync(context));
+                menuList.Add(await _logoNode.GenerateHtmlAsync(context));
             }
             foreach (var node in _nodes) {
                 //result.Add(inline.GetHtml());

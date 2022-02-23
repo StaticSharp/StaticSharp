@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace StaticSharpWeb {
-    public interface IImage : IBlock {
+    public interface IImage : IElement {
 
     }
     public class Image : IImage {
@@ -35,7 +35,7 @@ namespace StaticSharpWeb {
         public Image(string filePath, string alt = "", [CallerFilePath] string callerFilePath = "")
             => (FilePath, CallerFilePath, Alt) = (filePath, alt, callerFilePath);
 
-        public async Task<Html.INode> GenerateBlockHtmlAsync(Context context) {
+        public async Task<Html.INode> GenerateHtmlAsync(Context context) {
             Resource ??= await context.Storage.AddOrGetAsync(FilePath, () => new ImageResource(FilePath, context.Storage));
             var tag = new Tag("div", new { Class = nameof(Image) }) {
                 new Tag("img", new { src = Resource.Source, alt = Alt, style = "width: 100%; height: auto;"}),
@@ -47,8 +47,8 @@ namespace StaticSharpWeb {
         }
     }
     public static class ImageStatic {
-        public static void Add<T>(this T collection, IImage item) where T : IBlockContainer {
-            collection.AddBlock(item);
+        public static void Add<T>(this T collection, IImage item) where T : IElementContainer {
+            collection.AddElement(item);
         }
     }
 }

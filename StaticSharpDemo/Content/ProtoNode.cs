@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace StaticSharpDemo.Content {
+namespace StaticSharpDemo.Root {
 
     public partial class ProtoNode {
         public Language Language { get; init; }

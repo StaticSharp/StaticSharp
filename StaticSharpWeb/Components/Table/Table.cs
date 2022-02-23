@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
-public class Table : IBlock, IEnumerable {
+public class Table : IElement, IEnumerable {
     private int _colCount { get; set; }
     private string[] _headers { get; set; }
     //private List<string> _text = new();
@@ -33,7 +33,7 @@ public class Table : IBlock, IEnumerable {
     public void Add(object item) {
         _text.Add(item);
     }
-    public async Task<INode> GenerateBlockHtmlAsync(Context context)
+    public async Task<INode> GenerateHtmlAsync(Context context)
     {
         if (_text.Count % _colCount != 0) {
             throw new Exception("Размер создаваемой таблицы не соответствует числу предполагаемых элементов таблицы.");
@@ -57,8 +57,8 @@ public class Table : IBlock, IEnumerable {
                 var td = new Tag("td");
                 if (_text[textListIndexCounter] is string)
                     td.Add(_text[textListIndexCounter].ToString());
-                else if (_text[textListIndexCounter] is IBlock block) {
-                    td.Add(await block.GenerateBlockHtmlAsync(context));
+                else if (_text[textListIndexCounter] is IElement block) {
+                    td.Add(await block.GenerateHtmlAsync(context));
                     td.Attributes.Add("width", "1px");
                 }
                 if (_headers != null)
@@ -78,7 +78,7 @@ public class Table : IBlock, IEnumerable {
 }
 
     public static class TableStatic {
-        public static void Add(this IBlockContainer collection, Table item) {
-            collection.AddBlock(item);
+        public static void Add(this IElementContainer collection, Table item) {
+            collection.AddElement(item);
         }
     }

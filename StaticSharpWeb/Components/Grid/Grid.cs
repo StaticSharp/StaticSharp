@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace StaticSharpWeb.Components {
-    public class Grid : IEnumerable, IBlock, IBlockContainer {
+    public class Grid : IEnumerable, IElement, IElementContainer {
 
         int MinElementWidthPx { get; }
         int MinColumns { get; }
@@ -37,7 +37,7 @@ namespace StaticSharpWeb.Components {
 
 
 
-        public async Task<INode> GenerateBlockHtmlAsync(Context context) {
+        public async Task<INode> GenerateHtmlAsync(Context context) {
             var css = //$"grid-template-columns: repeat(auto-fit, minmax({MinElementWidthPx}, 1fr)); " +
                 $"grid-template-columns: repeat(auto-fit, minmax( min({MinElementWidthPx}px, {100 / MinColumns}% - {Gap * (MinColumns - 1) / MinColumns}px), 1fr)); " +
                 //$"grid-template-columns: repeat(3, 1fr); " + 
@@ -52,8 +52,8 @@ namespace StaticSharpWeb.Components {
             return result;
         }
 
-        public void AddBlock(IBlock block) => Items.Add(new() {
-            Html = async context => await block.GenerateBlockHtmlAsync(context),
+        public void AddElement(IElement element) => Items.Add(new() {
+            Html = async context => await element.GenerateHtmlAsync(context),
         });
 
         
@@ -63,14 +63,14 @@ namespace StaticSharpWeb.Components {
             PlaneText = context => Task.FromResult(item)
         });
 
-        public void Add(IInline item) => Items.Add(new() {
+        /*public void Add(IInline item) => Items.Add(new() {
             Html = async context => await item.GenerateInlineHtmlAsync(context),
             PlaneText = async context => item is IPlainTextProvider plainTextProvider
                 ? await plainTextProvider.GetPlaneTextAsync(context)
                 : string.Empty
         });
 
-        public void Add(StaticSharpEngine.ITypedRepresentativeProvider<IInline> item) => Add(item.Representative);
+        public void Add(StaticSharpEngine.ITypedRepresentativeProvider<IInline> item) => Add(item.Representative);*/
 
 
         //public void Add(IBlock item) => Items.Add(new() {
@@ -95,8 +95,8 @@ namespace StaticSharpWeb.Components {
     }
 
     public static class GridStatic {
-        public static void Add<T>(this T collection, Grid item) where T : IBlockContainer {
-            collection.AddBlock(item);
+        public static void Add<T>(this T collection, Grid item) where T : IElementContainer {
+            collection.AddElement(item);
         }
     }
 }

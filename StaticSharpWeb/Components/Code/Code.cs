@@ -64,7 +64,7 @@ namespace StaticSharpWeb.Components {
         }
     }
 
-    public class Code : IBlock, IInline {
+    public class Code : IElement {
         private readonly ProgrammingLanguage UserDefinedProgrammingLanguage;
         private readonly ProgrammingLanguage ProgrammingLanguageBasedOnExtension;
         private ICodeResource _codeResource;
@@ -219,7 +219,7 @@ namespace StaticSharpWeb.Components {
             return code[a..b];
         }
 
-        public async Task<INode> GenerateBlockHtmlAsync(Context context) {
+        public async Task<INode> GenerateHtmlAsync(Context context) {
             _codeResource ??= await context.Storage.AddOrGetAsync(_source, () => new CodeResource(_source));
             //throw new NotImplementedException();
             //var result = new Tag(null);
@@ -271,13 +271,10 @@ namespace StaticSharpWeb.Components {
             return result;
         }
 
-        public Task<INode> GenerateInlineHtmlAsync(Context context) {
-            throw new NotImplementedException();
-        }
     }
     public static class CodeStatic {
-        public static void Add<T>(this T collection, Code item) where T : IBlockContainer {
-            collection.AddBlock(item);
+        public static void Add<T>(this T collection, Code item) where T : IElementContainer {
+            collection.AddElement(item);
         }
     }
 }

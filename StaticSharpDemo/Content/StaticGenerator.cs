@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace StaticSharpDemo.Content {
+namespace StaticSharpDemo.Root {
 
     public class StaticGenerator : StaticSharpWeb.StaticGenerator {
 
@@ -29,7 +29,7 @@ namespace StaticSharpDemo.Content {
 
         private static async Task WritePage(IPage page, Context context, string path) {
             Directory.CreateDirectory(Path.GetDirectoryName(path));
-            await File.WriteAllTextAsync(path, await page.GenerateHtmlAsync(context));
+            await File.WriteAllTextAsync(path, await page.GeneratePageHtmlAsync(context));
         }
 
         public async Task GenerateAsync() {

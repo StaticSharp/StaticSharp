@@ -84,7 +84,7 @@ namespace StaticSharpWeb.Components {
 
 
 
-    public sealed class Downloadable : IBlock {
+    public sealed class Downloadable : IElement {
         string PrimaryName { get; set; }
         string SourcePath { get; set; }
 
@@ -100,7 +100,7 @@ namespace StaticSharpWeb.Components {
 
 
 
-        public async Task<INode> GenerateBlockHtmlAsync(Context context) {
+        public async Task<INode> GenerateHtmlAsync(Context context) {
             //SourcePath + PrimaryName
             Resource ??= await context.Storage.AddOrGetAsync(
                 SourcePath, 
@@ -116,8 +116,8 @@ namespace StaticSharpWeb.Components {
     }
 
     public static class DownlodableStatic{
-        public static void Add<T>(this T collection, Downloadable item) where T : IBlockContainer {
-            collection.AddBlock(item);
+        public static void Add<T>(this T collection, Downloadable item) where T : IElementContainer {
+            collection.AddElement(item);
         }
     }
 

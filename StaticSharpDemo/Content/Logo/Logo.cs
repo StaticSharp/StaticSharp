@@ -5,9 +5,9 @@ using System.Drawing;
 
 using System.Threading.Tasks;
 
-namespace StaticSharpDemo.Content {
+namespace StaticSharpDemo.Root {
 
-    class Logo : IInline {
+    class Logo : IElement {
         public static Color AntilatencyColor => Color.FromArgb(0xacc435);
         private readonly Color _primaryColor;
         private readonly Color _secondaryColor;
@@ -18,7 +18,7 @@ namespace StaticSharpDemo.Content {
             _node = node;
         }
 
-        public async Task<StaticSharpWeb.Html.INode> GenerateInlineHtmlAsync(Context context) {
+        public async Task<StaticSharpWeb.Html.INode> GenerateHtmlAsync(Context context) {
             context.Includes.Require(new Font(AbsolutePath("..\\Fonts\\antilatency"), FontWeight.Regular, false));
             context.Includes.Require(new Style(AbsolutePath("Logo.scss")));
             var uri = context.Urls.ProtoNodeToUri(_node);

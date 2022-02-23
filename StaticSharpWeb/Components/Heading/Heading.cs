@@ -26,7 +26,7 @@ namespace StaticSharpWeb {
             Text = text;
         }
 
-        public async Task<INode> GenerateBlockHtmlAsync(Context context) {
+        public async Task<INode> GenerateHtmlAsync(Context context) {
             return new Tag("h2", 
                 new {
                     style = Style
@@ -39,7 +39,7 @@ namespace StaticSharpWeb {
         }
     }
 
-    public class SectionHeading : IInline, IBlock, IContainerConstraints<ITextAnchorsProvider> {
+    public class SectionHeading :  IElement, IContainerConstraints<ITextAnchorsProvider> {
         public string Text { get; set; }
 
         private string _identifier;
@@ -55,13 +55,13 @@ namespace StaticSharpWeb {
         public SectionHeading(string text, string identifier = null) =>
             (Text, Identifier) = (text, identifier);
 
-        public async Task<INode> GenerateInlineHtmlAsync(Context context) => string.IsNullOrWhiteSpace(Identifier)
+        /*public async Task<INode> GenerateInlineHtmlAsync(Context context) => string.IsNullOrWhiteSpace(Identifier)
             ? new Tag("h2", new { Class = "Heading" }) { Text }
             : new Tag("h2", new { id = Identifier }){
                 new Tag("a", new { href = "#" + Identifier, title = "Heading anchor" })
-            };
+            };*/
 
-        public async Task<INode> GenerateBlockHtmlAsync(Context context) {
+        public async Task<INode> GenerateHtmlAsync(Context context) {
 
             var anchorIconSource = new CacheableHttpRequest.Constructor(
                 MaterialDesignIcons.VectorLink.GetSvgUri()

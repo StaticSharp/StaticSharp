@@ -1,4 +1,5 @@
-﻿using StaticSharpWeb.Html;
+﻿using StaticSharpGears;
+using StaticSharpWeb.Html;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace StaticSharpWeb {
         public Font Font { get; }
     }
 
-    public abstract class Material : IMaterial, IPage, IInline, IPlainTextProvider, IFontProvider {
+    public abstract class Material : IMaterial, IInline, IPage, IPlainTextProvider, IFontProvider {
         //public class TChildren : List<object> { }
 
         public virtual string Title {
@@ -38,7 +39,7 @@ namespace StaticSharpWeb {
 
         public virtual Font Font => new(Path.Combine(AbsolutePath(), "Fonts", "roboto"), FontWeight.Regular);
 
-        public async Task<string> GenerateHtmlAsync(Context context) {
+        public async Task<string> GeneratePageHtmlAsync(Context context) {
             context.Parents = context.Parents.Prepend(this);
             context.Includes.Require(new Script(AbsolutePath("StaticSharp.js")));
             context.Includes.Require(new Style(AbsolutePath("Normalization.scss")));
@@ -71,7 +72,18 @@ namespace StaticSharpWeb {
         public virtual async Task<Tag> GetBodyAsync(Context context) {
             var font = Font.GenerateUsageCss(context);
 
-            var body = new Tag("body", new { style = $"display: none; {font}" }){
+            var body = new Tag("body", 
+                new {
+                    style = SoftObject.MergeObjects(
+                        new {
+                            Display = "none",
+                            BackgroundColor = context.Theme.Surface,
+                            Color = context.Theme.OnSurface,
+                        },
+                        font
+                    )
+                }                
+                ){
                 new JSCall(AbsolutePath("Material.js"), ContentWidth).Generate(context),
             };
             var tasks = new List<Task<INode>>();
@@ -86,19 +98,19 @@ namespace StaticSharpWeb {
                 body.Add(new Tag("h1", new { id = "Header" }) { Title });
             }
             if(TitleImage != null) {
-                tasks.Add(TitleImage.GenerateBlockHtmlAsync(context));
+                tasks.Add(TitleImage.GenerateHtmlAsync(context));
             }
             if (Description != null) {
-                tasks.Add(Description.GenerateBlockHtmlAsync(context));
+                tasks.Add(Description.GenerateHtmlAsync(context));
             } else {
                 //warning
             }
 
             if (Content != null) {
-                tasks.AddRange(Content.Select(x => x.GenerateBlockHtmlAsync(context)));
+                tasks.AddRange(Content.Select(x => x.GenerateHtmlAsync(context)));
             }
             if (Footer != null) {
-                tasks.Add(Footer.GenerateBlockHtmlAsync(context));
+                tasks.Add(Footer.GenerateHtmlAsync(context));
             }
             foreach (var item in await Task.WhenAll(tasks)) {
                 body.Add(item);
@@ -107,7 +119,7 @@ namespace StaticSharpWeb {
             return body;
         }
 
-        public async Task<INode> GenerateInlineHtmlAsync(Context context) {
+        public async Task<INode> GenerateHtmlAsync(Context context) {
             var representative = this as  StaticSharpEngine.IRepresentative;
             var uri = context.Urls.ProtoNodeToUri(representative?.Node);
             if (uri == null) {
@@ -128,5 +140,5 @@ namespace StaticSharpWeb {
         }
     }
 
-    public class MaterialContent : BlockContainer, ITextAnchorsProvider, IFillAnchorsProvider, IWideAnchorsProvider {}
+    public class MaterialContent : ElementContainer, ITextAnchorsProvider, IFillAnchorsProvider, IWideAnchorsProvider {}
 }

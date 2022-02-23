@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 
 namespace StaticSharpWeb.Components {
-    public class MaterialCard : IBlock {
+    public class MaterialCard : IElement {
         Func<Context, IMaterial> MaterialGetter;
         public MaterialCard(IMaterial material) {
             MaterialGetter = (context) => material;
@@ -28,7 +28,7 @@ namespace StaticSharpWeb.Components {
             };
         }
 
-        public async Task<INode> GenerateBlockHtmlAsync(Context context) {
+        public async Task<INode> GenerateHtmlAsync(Context context) {
             var material = MaterialGetter(context);
             var result = new Tag("a", new { Class = "MaterialCard", href = context.Urls.ProtoNodeToUri((material as StaticSharpEngine.IRepresentative)?.Node) });
             if (material.TitleImage != null) {
@@ -38,7 +38,7 @@ namespace StaticSharpWeb.Components {
                 } else {
                     image = material.TitleImage as Image;
                 }
-                result.Add(await image.GenerateBlockHtmlAsync(context));
+                result.Add(await image.GenerateHtmlAsync(context));
             } else {
                 Log.Warning.OnObject(this, "TitleImage of material required");
                 //result.Add(CsmlPredefined.MissingImage.Generate(context));
@@ -52,8 +52,8 @@ namespace StaticSharpWeb.Components {
     }
 
     public static class MaterialCardStatic {
-        public static void Add<T>(this T collection, MaterialCard item) where T : IBlockContainer {
-            collection.AddBlock(item);
+        public static void Add<T>(this T collection, MaterialCard item) where T : IElementContainer {
+            collection.AddElement(item);
         }
     }
 }

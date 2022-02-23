@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using StaticSharpWeb.Html;
 
 namespace StaticSharpWeb {
-    public class Reference : IBlock
+    public class Reference : IElement
     {
         private string _href { get; set; }
         private string _text { get; set; }
@@ -25,11 +25,11 @@ namespace StaticSharpWeb {
             _hrefText = href;
         }
         //private void SetHref(string href) => _href = href;
-        public async Task<INode> GenerateBlockHtmlAsync(Context context)
+        public async Task<INode> GenerateHtmlAsync(Context context)
         {
             INode node = null;
             if (_image != null) {
-                node = await _image.GenerateBlockHtmlAsync(context);
+                node = await _image.GenerateHtmlAsync(context);
                 _hrefText = null;
             }
 
@@ -51,8 +51,8 @@ namespace StaticSharpWeb {
     }
 
     public static class ReferenceStatic {
-        public static void Add(this IBlockContainer collection, Reference item) {
-            collection.AddBlock(item);
+        public static void Add(this IElementContainer collection, Reference item) {
+            collection.AddElement(item);
         }
     }  
 }

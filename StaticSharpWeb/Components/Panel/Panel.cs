@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using StaticSharpWeb.Html;
 
 namespace StaticSharpWeb {
-    public class Panel : IBlock {
+    public class Panel : IElement {
 
         private string _content { get; set; }
 
@@ -17,7 +17,7 @@ namespace StaticSharpWeb {
         }
 
 
-        public async Task<INode> GenerateBlockHtmlAsync(Context context) {
+        public async Task<INode> GenerateHtmlAsync(Context context) {
             var componentClassName = this.GetType().Name;
             var componentName = nameof(Panel);
             var tag = new Tag("div") {
@@ -54,8 +54,8 @@ namespace StaticSharpWeb {
     }
 
     public static class PanelStatic {
-        public static void Add(this IBlockContainer collection, Panel item) {
-            collection.AddBlock(item);
+        public static void Add(this IElementContainer collection, Panel item) {
+            collection.AddElement(item);
         }
     }   
 }

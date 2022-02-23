@@ -1,7 +1,7 @@
 using StaticSharpEngine;
 using System;
 
-namespace StaticSharpDemo.Content.Index.Articles.Terms {
+namespace StaticSharpDemo.Root.Legacy.Articles.Terms {
 
     partial class Common : Material { 
 

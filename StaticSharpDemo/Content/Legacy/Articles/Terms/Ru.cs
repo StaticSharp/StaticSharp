@@ -3,7 +3,7 @@ using StaticSharpEngine;
 using StaticSharpWeb;
 using System;
 
-namespace StaticSharpDemo.Content.Index.Articles.Terms {
+namespace StaticSharpDemo.Root.Legacy.Articles.Terms {
 
     [Representative]
     partial class Ru : Common {

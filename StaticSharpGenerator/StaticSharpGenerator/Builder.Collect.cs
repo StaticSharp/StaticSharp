@@ -15,6 +15,8 @@ namespace StaticSharpGenerator {
 
         public static void Collect(NamespaceInfo @namespace, IEnumerable<SyntaxNode> nodes) {
             foreach (var item in nodes) {
+
+
                 if (item is NamespaceDeclarationSyntax namespaceDeclaration) {
                     var nameItems = namespaceDeclaration.Name.Split();
                     var tip = @namespace.AddNamespaceBranch(nameItems.Select(n => n.Identifier.ValueText));

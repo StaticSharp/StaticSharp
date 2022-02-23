@@ -2,7 +2,7 @@
 using StaticSharpWeb;
 using System;
 
-namespace StaticSharpDemo.Content.Index {
+namespace StaticSharpDemo.Root.Legacy {
 
 
 

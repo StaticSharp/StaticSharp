@@ -1,6 +1,6 @@
 ﻿using StaticSharpEngine;
 
-namespace StaticSharpDemo.Content.Index.Articles {
+namespace StaticSharpDemo.Root.Legacy.Articles {
     [Representative]
     partial class _ : Material{ 
     

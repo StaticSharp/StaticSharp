@@ -4,13 +4,13 @@ using StaticSharpWeb.Html;
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace StaticSharpDemo.Content {
+namespace StaticSharpDemo.Root {
     partial class Material : StaticSharpWeb.Material {
         
         public override Footer Footer => new() {
 
 
-            new Grid(1200, 2) {
+            /*new Grid(1200, 2) {
                 new Paragraph{
                     "AAAAAA",
                     Node.Index, 
@@ -23,7 +23,7 @@ namespace StaticSharpDemo.Content {
                     "СССС",
                     Node.Root.Index,
                 },
-            }
+            }*/
         };
 
         public override RightSideBar RightSideBar => new() {
@@ -31,9 +31,7 @@ namespace StaticSharpDemo.Content {
         };
 
         public override LeftSideBar LeftSideBar => new() {
-            new NavigationMenu(new Logo(Color.FromArgb(0xacc435), Color.White, Node.Root.Index)) {
-                Node.Root.Index,
-                Node.Root.Index.Children,
+            new NavigationMenu(new Logo(Color.FromArgb(0xacc435), Color.White, Node.Root)) {
                 Node.Root.Components,
                 Node.Root.Components.Children
             }

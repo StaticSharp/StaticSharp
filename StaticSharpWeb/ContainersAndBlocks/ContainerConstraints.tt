@@ -10,13 +10,13 @@ Func<int,string> GenericArguments = n=>{
 };
 #>
 <# for (int i=1; i<=N; i++) { #>
-public interface IContainerConstraints<<#=GenericArguments(i)#>> : IBlock { }
+public interface IContainerConstraints<<#=GenericArguments(i)#>> : IElement { }
 <# } #>
 
-public static class ContainerStatic {
+public static partial class ContainerStatic {
 <# for (int i=1; i<=N; i++) { #>
     public static void Add<Collection, <#=GenericArguments(i)#>>(this Collection collection, IContainerConstraints<<#=GenericArguments(i)#>> item)
-        where Collection : IBlockContainer, <#=GenericArguments(i)#>
-    => collection.AddBlock(item);
+        where Collection : IElementContainer, <#=GenericArguments(i)#>
+    => collection.AddElement(item);
 <# } #>
 }

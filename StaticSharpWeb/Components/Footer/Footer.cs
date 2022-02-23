@@ -5,18 +5,18 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace StaticSharpWeb {
-    public class Footer : IEnumerable<IBlock>, IBlock, IBlockContainer {
-        private readonly List<IBlock> _items = new();
+    public class Footer : IEnumerable<IElement>, IElement, IElementContainer {
+        private readonly List<IElement> _items = new();
 
-        public void AddBlock(IBlock block) {
+        public void AddElement(IElement block) {
             _items.Add(block);
         }
 
-        public async Task<INode> GenerateBlockHtmlAsync(Context context) {
+        public async Task<INode> GenerateHtmlAsync(Context context) {
             context.Includes.Require(new Style(AbsolutePath(nameof(Footer) + ".scss")));
             
             var result = new Tag("div", new { Class = "footer" });            
-            var items = _items.Select(item => item.GenerateBlockHtmlAsync(context));
+            var items = _items.Select(item => item.GenerateHtmlAsync(context));
             foreach(var item in await Task.WhenAll(items)) {
                 result.Add(item);
             }
@@ -24,7 +24,7 @@ namespace StaticSharpWeb {
             return new Tag("footer") { result };
         }
 
-        public IEnumerator<IBlock> GetEnumerator() {
+        public IEnumerator<IElement> GetEnumerator() {
             return _items.GetEnumerator();
         }
 

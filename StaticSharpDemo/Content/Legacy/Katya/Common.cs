@@ -2,7 +2,7 @@ using StaticSharpEngine;
 using System;
 using System.Linq;
 
-namespace StaticSharpDemo.Content.Index.Katya {
+namespace StaticSharpDemo.Root.Legacy.Katya {
 
     partial class Common : Material {
         public override int ContentWidth => 1200;

@@ -3,18 +3,18 @@ using System.Collections.Generic;
 
 namespace StaticSharpWeb;
 
-public class BlockContainer : IEnumerable<IBlock>, IBlockContainer {
-    private readonly List<IBlock> _items = new();
+public class ElementContainer : IEnumerable<IElement>, IElementContainer {
+    private readonly List<IElement> _items = new();
 
     IEnumerator IEnumerable.GetEnumerator() {
         return _items.GetEnumerator();
     }
 
-    public IEnumerator<IBlock> GetEnumerator() {
+    public IEnumerator<IElement> GetEnumerator() {
         return _items.GetEnumerator();
     }
 
-    public void AddBlock(IBlock block) {
+    public void AddElement(IElement block) {
         _items.Add(block);
     }
 

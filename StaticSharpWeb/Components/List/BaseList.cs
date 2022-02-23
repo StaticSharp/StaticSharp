@@ -5,7 +5,7 @@ using StaticSharpWeb.Html;
 
 namespace StaticSharpWeb {
 
-    public abstract class BaseList : IBlock, IEnumerable<object>
+    public abstract class BaseList : IElement, IEnumerable<object>
     {
         private struct ListContent {
             public string Text;
@@ -18,7 +18,7 @@ namespace StaticSharpWeb {
             _type = type;
         }
 
-        public async Task<INode> GenerateBlockHtmlAsync(Context context)
+        public async Task<INode> GenerateHtmlAsync(Context context)
         {
             var result = new Tag(_type, new { Class = "List" }) {
                 new JSCall(AbsolutePath("List.js")).Generate(context)
@@ -58,8 +58,8 @@ namespace StaticSharpWeb {
     }
     
     public static class BaseListStatic {
-        public static void Add(this IBlockContainer collection, BaseList item) {
-            collection.AddBlock(item);
+        public static void Add(this IElementContainer collection, BaseList item) {
+            collection.AddElement(item);
         }
     }
 }

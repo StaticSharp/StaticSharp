@@ -1,4 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
+using Scopes;
+using Scopes.C;
 using System.Linq;
 
 namespace StaticSharpGenerator {
@@ -8,6 +10,10 @@ namespace StaticSharpGenerator {
         public Compilation Compilation { get; }
         public BlockWriter ClassTree { get; }
         public BlockWriter Partials { get; }
+
+        
+
+
         public NamespaceInfo NamespaceInfo { get; }
 
         //List<TypeInfo> Representatives { get; set; }
@@ -68,7 +74,7 @@ namespace StaticSharpGenerator {
 
             //var classBody = classPlace.AddLine(new HeaderBracesWriter($"/*Generated*/ partial {root.Keyword} {CsmlRoot}{State.ToRecordParametersDeclaration()}: {Node}{State.ToBaseCall()}, {INode}")).Content;
 
-            WriteClassTree(StaticSharpRoot, namespaceInfo, classPlace, null, Enumerable.Empty<string>());
+            WriteClassTree(AlphaRoot, namespaceInfo, classPlace, null, Enumerable.Empty<string>());
 
             /*classBody.AddLine($"{INode} {INode}.Parent => null;");
 
@@ -84,6 +90,12 @@ namespace StaticSharpGenerator {
             }*/
 
             WritePartials(namespaceInfo, Partials, Enumerable.Empty<string>());
+
+
+            new Group();
+
+
+
         }
     }
 }
