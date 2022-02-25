@@ -27,8 +27,14 @@
                 }
             },
 
-            new Paragraph() { "Paragraph as link",new OverlayLink(Node.Root)}
+            new Paragraph() { "Paragraph as link",new OverlayLink(Node.Root)},
             
+
+            new Heading("Buttons"),
+
+            new Button()
+            
+
         };
     }
 

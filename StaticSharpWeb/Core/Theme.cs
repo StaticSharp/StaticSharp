@@ -7,10 +7,13 @@ namespace StaticSharpWeb {
         public virtual Color OnSurface => Surface.ContrastTextColor(0.9f);
 
 
-        public virtual float BaseSpacing => 16;
 
-        public virtual float ParagraphSpacing => BaseSpacing;
-        public virtual float HeadingSpacing => 2 * BaseSpacing;
+
+        public virtual float BaseSize => 16;
+
+        public virtual float ParagraphFontSize => BaseSize;
+        public virtual float ParagraphSpacing => 0.6f * BaseSize;
+        public virtual float HeadingSpacing => 2 * BaseSize;
 
         public virtual Color HeadingAnchorIconColor => Color.LightGray;
 

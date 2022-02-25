@@ -26,7 +26,7 @@ public class BillboardSolidColor: /*IEnumerable,*/ IElement, IContainerConstrain
                     FontSize = FontSize,
                     BackgroundColor = ColorTranslator.ToHtml(Color),
                     MinHeight = MinHeight,
-                    Padding = $"{context.Theme.BaseSpacing*4} 0"
+                    Padding = $"{context.Theme.BaseSize*4} 0"
                 },
                 Style)
             })

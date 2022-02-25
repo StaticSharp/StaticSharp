@@ -7,6 +7,16 @@
         margin-block-start: 0;
         margin-block-end: 0;
         line-height: 100%;
+        text-decoration-color: inherit;
+        color: inherit;
+    }
+
+    a:hover {
+        opacity: 0.8;
+    }
+
+    a:visited {
+        text-decoration-color: inherit;
     }
 
     html {
@@ -20,4 +30,16 @@
         display: flex;
         flex-direction: column;
     }
+
+
+    .Button{
+        background-color: darkviolet;
+        padding: 16px;
+        border-radius: 16px;
+        text-align: center;
+
+    }
+
+
+
 }

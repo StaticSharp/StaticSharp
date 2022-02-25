@@ -29,7 +29,12 @@ namespace StaticSharpWeb {
         public async Task<INode> GenerateHtmlAsync(Context context) {
             return new Tag("h2", 
                 new {
-                    style = Style
+                    style = SoftObject.MergeObjects(
+                        new {
+                            MarginTop = $"{context.Theme.HeadingSpacing}px",
+                        },
+                        Style
+                        )
                 })
             {
                 new JSCall(Anchors.FillTextAnchorsJsPath).Generate(context),
