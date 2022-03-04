@@ -22,7 +22,7 @@ public class OverlayLink : IContainerConstraintsNone {
     }
 
     private static Uri UriFromNode(StaticSharpEngine.INode? node, Context context) {
-        var uri = context.Urls.ProtoNodeToUri(node);
+        var uri = context.NodeToUrl(node);
         if (uri == null) {
             throw new NullReferenceException();//todo: special exception
         }

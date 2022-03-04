@@ -9,26 +9,30 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using StaticSharpEngine;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace StaticSharpWeb {
 
-    public interface IUrls {
-        public Uri BaseUri { get; }
+    public interface INodeToUrl {
+        //public Uri BaseUrl { get; }
 
-        public Uri? ProtoNodeToUri<T>(T? node) where T: class, INode;
+        public Uri? NodeToUrl(Uri baseUrl, INode node);
     }
 
-    public abstract class Server : IUrls {
+    public abstract class Server: INodeToUrl {
         private const string _pageKey = "pageKey";
 
         private IWebHost _host = null;
 
         public abstract IPage? FindPage(string requestPath);
 
-        public abstract  Uri ProtoNodeToUri<T>(T protoNode) where T : class, INode;
-        public abstract Uri BaseUri { get; }
+        //public abstract Uri BaseUrl { get; }
+
+        public abstract  Uri? NodeToUrl(Uri baseUrl, INode node);
+        public abstract IEnumerable<Uri> Urls { get; }
         public abstract string BaseDirectory { get; }
         public abstract string TempDirectory { get; }
 
@@ -38,13 +42,19 @@ namespace StaticSharpWeb {
 
         public abstract IStorage Storage { get; }
 
-        private async Task<string> GenerateErrorPageAsync(Exception e) {
-            var context = new Context(Storage, this, new Theme());
+        private Context CreateContext(HttpRequest request) {
+            var baseUrl = new Uri($"{request.Scheme}://{request.Host}") ;
+            var context = new Context(Storage, baseUrl, new Theme(), this);
+            return context;
+        }
+
+        private async Task<string> GenerateErrorPageAsync(Context context, Exception e) {
             return await new ErrorPage(e).GeneratePageHtmlAsync(context);
         }
 
 
         protected virtual async Task HandleHtmlRequestAsync(HttpRequest request, HttpResponse response, RouteData routeData) {
+
             try {
                 var page = FindPage(request.Path.Value);
                 if (page == null) {
@@ -55,13 +65,15 @@ namespace StaticSharpWeb {
                     response.StatusCode = 404;
                     return;
                 }
-                var context = new Context(Storage, this, new Theme());
 
-                var html = await page.GeneratePageHtmlAsync(context);
+                
+
+                var html = await page.GeneratePageHtmlAsync(CreateContext(request));
                 response.Cookies.Append(_pageKey, html.ToHashString());
                 await response.WriteAsync(html);
+
             } catch (Exception e) {
-                await response.WriteAsync(await GenerateErrorPageAsync(e));
+                await response.WriteAsync(await GenerateErrorPageAsync(CreateContext(request), e));
             }
         }
 
@@ -97,20 +109,19 @@ namespace StaticSharpWeb {
             var result = await ParseJsonRequest(request);
             var page = FindPage(result["location"]?.ToString());
             if (page == null) { return; }
-            var context = new Context(Storage, this, new Theme());
-            var html = await page.GeneratePageHtmlAsync(context);
+            var html = await page.GeneratePageHtmlAsync(CreateContext(request));
             await responce.WriteAsync((html.ToHashString() != result[_pageKey].ToString()).ToString().ToLower());
         }
 
 
 
 
-        protected virtual async Task HandleErrorAsync(HttpRequest request, HttpResponse response, RouteData routeData) {
-            var context = request.HttpContext.Features.Get<IExceptionHandlerFeature>();
-            var exception = context.Error; // Your exception
+        /*protected virtual async Task HandleErrorAsync(HttpRequest request, HttpResponse response, RouteData routeData) {
+            var exceptionHandlerFeature = request.HttpContext.Features.Get<IExceptionHandlerFeature>();
+            var exception = exceptionHandlerFeature.Error; // Your exception
             //var code = 500; // Internal Server Error by default
-            await response.WriteAsync(await GenerateErrorPageAsync(exception));
-        }
+            await response.WriteAsync(await GenerateErrorPageAsync(CreateContext(request), exception));
+        }*/
 
         protected virtual async Task FindVisualStudio(HttpRequest request, HttpResponse response, RouteData routeData) {
             var jsonBody = await ParseJsonRequest(request);
@@ -130,15 +141,16 @@ namespace StaticSharpWeb {
                 .UseExceptionHandler(a => a.Run(async c => {
                     var exceptionHandlerPathFeature = c.Features.Get<IExceptionHandlerPathFeature>();
                     var exception = exceptionHandlerPathFeature.Error;
-                    await c.Response.WriteAsync(await GenerateErrorPageAsync(exception));
+                    await c.Response.WriteAsync(await GenerateErrorPageAsync(CreateContext(c.Request), exception));
                 }))
                 .UseRouter(r => r
                     .MapPost("/api/v1/visual_studio", FindVisualStudio)
                     .MapPost("/api/v1/refresh_required", HandleRefreshPageAsync)
                     .MapGet("/{**catchAll}", HandleAnyRequestAsync)
-                    .MapGet("/error", HandleErrorAsync))
+                    //.MapGet("/error", HandleErrorAsync)
+                    )
                 )
-             .UseUrls(BaseUri.ToString())
+             .UseUrls(Urls.Select(x=>x.ToString()).ToArray())
              .Build();
 
             await _host.StartAsync();

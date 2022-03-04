@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using StaticSharpEngine;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace StaticSharpWeb {
@@ -7,7 +9,11 @@ namespace StaticSharpWeb {
     public struct Context { 
         public IStorage Storage { get; init; }
 
-        public IUrls Urls { get; init; }
+        public INodeToUrl NodeToUrlConverter { get; init; }
+        public Uri? NodeToUrl(INode node) { 
+            return NodeToUrlConverter.NodeToUrl(BaseUrl, node);
+        }
+        public Uri BaseUrl { get; init; }
 
         public IIncludes Includes { get; init; }
 
@@ -15,12 +21,14 @@ namespace StaticSharpWeb {
 
         public Theme Theme;
 
-        public Context(IStorage storage, IUrls urls, Theme theme) {
+        public Context(IStorage storage, Uri baseUrl, Theme theme, INodeToUrl nodeToUrlConverter) {
             Storage = storage;
-            Urls = urls;
+            //Urls = urls;
+            BaseUrl = baseUrl;
             Theme = theme;
             Includes = new Includes();
             Parents = Enumerable.Empty<object>();
+            NodeToUrlConverter = nodeToUrlConverter;
         }
     }
 }

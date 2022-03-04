@@ -121,7 +121,8 @@ namespace StaticSharpWeb {
 
         public async Task<INode> GenerateHtmlAsync(Context context) {
             var representative = this as  StaticSharpEngine.IRepresentative;
-            var uri = context.Urls.ProtoNodeToUri(representative?.Node);
+            //todo: material outside of the tree exceprion
+            var uri = context.NodeToUrl(representative?.Node);
             if (uri == null) {
                 throw new NullReferenceException();//todo: special exception
             }

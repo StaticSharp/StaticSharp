@@ -30,7 +30,12 @@ namespace StaticSharpWeb.Components {
 
         public async Task<INode> GenerateHtmlAsync(Context context) {
             var material = MaterialGetter(context);
-            var result = new Tag("a", new { Class = "MaterialCard", href = context.Urls.ProtoNodeToUri((material as StaticSharpEngine.IRepresentative)?.Node) });
+            var node = (material as StaticSharpEngine.IRepresentative)?.Node;
+            if (node == null) {
+                throw new Exception("Material is outside of node tree");//todo: refactor exceptions
+            }
+            
+            var result = new Tag("a", new { Class = "MaterialCard", href = context.NodeToUrl(node) });
             if (material.TitleImage != null) {
                 Image image;
                 if (material.TitleImage is Video video) {

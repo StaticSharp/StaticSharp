@@ -5,13 +5,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-
+/*
 namespace StaticSharpDemo.Root {
 
     public class StaticGenerator : StaticSharpWeb.StaticGenerator {
 
         public StaticGenerator(Uri baseUri, Storage storage, string outputPath)
-            => (BaseUri, _context, _outputPath) = (baseUri, new(storage, this, new Theme()), outputPath);
+            => (BaseUrl, _context, _outputPath) = (baseUri, new(storage, this, new Theme()), outputPath);
 
         private Context _context;
         private string _outputPath;
@@ -38,7 +38,7 @@ namespace StaticSharpDemo.Root {
             foreach (var page in Pages) {
                 var representative = page as IRepresentative;
                 var url = ProtoNodeToUri(representative?.Node as ProtoNode);
-                var relativeUrl = _context.Urls.BaseUri.MakeRelativeUri(url);
+                var relativeUrl = _context.Urls.BaseUrl.MakeRelativeUri(url);
                 var path = Path.Combine(_outputPath, relativeUrl.ToString());
                 tasks.Add(WritePage(page, _context, path));
             }
@@ -47,7 +47,7 @@ namespace StaticSharpDemo.Root {
         }
 
         public override Uri? ProtoNodeToUri<T>(T? node) where T : class => node is ProtoNode protoNode
-            ? new(BaseUri, string.Join('/', protoNode.Path) + "_" + protoNode.Language.ToString() + ".html")
+            ? new(BaseUrl, string.Join('/', protoNode.Path) + "_" + protoNode.Language.ToString() + ".html")
             : null;
     }
-}
+}*/

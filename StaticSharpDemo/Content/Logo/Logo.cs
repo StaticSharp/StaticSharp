@@ -21,7 +21,7 @@ namespace StaticSharpDemo.Root {
         public async Task<StaticSharpWeb.Html.INode> GenerateHtmlAsync(Context context) {
             context.Includes.Require(new Font(AbsolutePath("..\\Fonts\\antilatency"), FontWeight.Regular, false));
             context.Includes.Require(new Style(AbsolutePath("Logo.scss")));
-            var uri = context.Urls.ProtoNodeToUri(_node);
+            var uri = context.NodeToUrl(_node);
             return new Tag("a", new {
                 Class = "AntilatencyLogo",
                 style = $"font-family: 'antilatency' !important;",

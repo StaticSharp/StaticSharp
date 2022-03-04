@@ -9,20 +9,23 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace StaticSharpWeb {
 
-    public interface IStaticGenerator : IUrls {
-        Uri BaseUri { get; }
+    public interface IStaticGenerator /*: IUrls*/ {
+        Uri BaseUrl { get; }
         string BaseDirectory { get; }
         string TempDirectory { get; }
     }
 
     public abstract class StaticGenerator : IStaticGenerator {
-        public Uri BaseUri { get; set; }
+        public Uri BaseUrl { get; set; }
 
         public string BaseDirectory { get; set; }
 
@@ -92,7 +95,42 @@ namespace StaticSharpDemo {
 
         static Server() { }
 
-        public override Uri BaseUri => new("http://localhost/");
+
+        public static IEnumerable<string> GetLocalIPAddresses() { //todo: move to urils
+            var interfaces = NetworkInterface.GetAllNetworkInterfaces()
+                .Where(x => x.OperationalStatus == OperationalStatus.Up)
+                .Where(x => x.NetworkInterfaceType == NetworkInterfaceType.Wireless80211
+                        || x.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
+                .Where(x => {
+                    var properties = x.GetIPProperties();
+                    if (properties == null) return false;
+                    return properties.GatewayAddresses.Any();
+                    });
+
+            foreach (var i in interfaces) {
+                var unicastAddresses = i.GetIPProperties().UnicastAddresses;
+                var address = unicastAddresses.Where(x => x.Address.AddressFamily == AddressFamily.InterNetwork).FirstOrDefault();
+                if (address != null) {
+                    yield return address.Address.ToString();
+                }
+            }
+        }
+
+        public override IEnumerable<Uri> Urls {
+            get
+            {
+                //new Uri[] {
+                yield return new("http://localhost/");
+                foreach (var i in GetLocalIPAddresses()) {
+                    yield return new($"http://{i}");
+                }
+                //yield return new(GetLocalIPAddress());
+            }
+        }
+
+        //delete me
+        //public override Uri BaseUrl => new("http://localhost/");
+        
 
         private IStorage _Storage;
 
@@ -109,9 +147,11 @@ namespace StaticSharpDemo {
 
         public override string BaseDirectory => throw new NotImplementedException();
 
-        public override string TempDirectory => @"D:\StaticSharpCache\";
+        public override string TempDirectory => AbsolutePath("../../StaticSharpCache");// @"D:\StaticSharpCache\";
 
         public string IntermidiateCache => Path.Combine(TempDirectory, "IntermediateCache");
+
+        
 
         public override IPage? FindPage(string requestPath) {
             if (requestPath == null) {
@@ -152,7 +192,7 @@ namespace StaticSharpDemo {
         }
 
 
-        public override Uri ProtoNodeToUri<T>(T node) {
+        public override Uri? NodeToUrl(Uri baseUrl, INode node) {
             if (node is ProtoNode protoNode) {
                 string path;
                 if (protoNode.Path.Length == 0) {//root
@@ -160,12 +200,13 @@ namespace StaticSharpDemo {
                 } else {
                     path = string.Join('/', protoNode.Path);
                 }
-                return new Uri(BaseUri, path + "_" + protoNode.Language.ToString() + ".html");
+                return new Uri(baseUrl, path + "_" + protoNode.Language.ToString() + ".html");
 
             } else {
                 throw new Exception($"ProtoNodeToUri. {node.GetType()} is not ProtoNode");
             }
         }
+
     }
 
     internal class Program {
@@ -178,7 +219,7 @@ namespace StaticSharpDemo {
             //);
             //await generator.GenerateAsync();
 
-            StaticSharpGears.Cache.Directory = @"D:\StaticSharpCache\";
+            StaticSharpGears.Cache.Directory = AbsolutePath("../../StaticSharpCache");// @$":\StaticSharpCache\";
 
             await new Server().RunAsync();
         }

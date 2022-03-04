@@ -34,7 +34,7 @@ namespace StaticSharpWeb {
             style = "content: url(https://api.iconify.design/ic/baseline-translate.svg?color=%235883cc&width=24&height=24)"});
             menuList.Add( translateIcon );
             foreach (var i in Enum.GetValues<TLanguage>()) {
-                var uri = context.Urls.ProtoNodeToUri(Node.WithLanguage(i));
+                var uri = context.NodeToUrl(Node.WithLanguage(i));
                 menuList.Add(new Tag("li") { 
                     new Tag("a", new { href = uri }) {
                     i.ToString()

@@ -9,6 +9,7 @@
         line-height: 100%;
         text-decoration-color: inherit;
         color: inherit;
+        box-sizing: border-box;
     }
 
     a:hover {
@@ -23,7 +24,10 @@
         min-height: 100vh;
     }
 
+
+
     body {
+        overscroll-behavior-x: none;
         //position: relative;
         //top: 0;
         min-height: 100vh;
@@ -32,14 +36,10 @@
     }
 
 
-    .Button{
+    .Button {
         background-color: darkviolet;
         padding: 16px;
-        border-radius: 16px;
+        border-radius: 0px;
         text-align: center;
-
     }
-
-
-
 }

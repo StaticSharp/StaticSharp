@@ -150,7 +150,7 @@ namespace StaticSharpWeb.Components {
             _image ??= new Image(VideoResource.IntermediateImageCache);
             context.Includes.Require(new Style(AbsolutePath("Video.scss")));
             var mips = VideoResource.Mips.Select(x =>
-                new KeyValuePair<int, string>(x.Key, new Uri(context.Urls.BaseUri, x.Value.Replace("\\", "/")).ToString()));
+                new KeyValuePair<int, string>(x.Key, new Uri(context.BaseUrl, x.Value.Replace("\\", "/")).ToString()));
             var tag = new Tag("div", new { Class = "VideoPlayer" }) {
                 new JSCall(AbsolutePath("Video.js"),//element, code, aspect, showControls, autoPlay, loop, sound, mips, poster
                         VideoCode,
