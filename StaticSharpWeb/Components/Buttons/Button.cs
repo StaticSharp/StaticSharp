@@ -7,8 +7,9 @@ namespace StaticSharpWeb;
 public class Button : /*IEnumerable,*/ IElement, IContainerConstraintsNone {
     public async Task<INode> GenerateHtmlAsync(Context context) {
         return new Tag("div", new { Class = "Button" }) {
-            new JSCall(AbsolutePath("Button.js")).Generate(context),
             new TextNode("Hello")
+            new JSCall(AbsolutePath("Button.js")).Generate(context),
+            
         };
     }
 }
