@@ -6,10 +6,10 @@
 
         public override Column Content => new() {
 
-            //new Button(),
+            new Button($"Hello"),
 
-            //new Heading("Создание нового компонента."),
-            /*$"Если понадобится компонент, которого нет среди стандартных.",
+            new Heading("Создание нового компонента."),
+            $"Если понадобится компонент, которого нет среди стандартных.",
             $"Можно создать компонент прям в проекте вашего сайта.",
             //new ToDo("пример кода"),
             $"Тут подробнее : {Node.Root.Customization.HowToCreateNewComponent}",
@@ -28,11 +28,14 @@
                     new OverlayLink(Node)
                 }
             },
+            new BillboardSolidColor {
+                Color = Color.BlueViolet,
+            },
 
             new Paragraph() { "Paragraph as link",new OverlayLink(Node.Root)},
             
 
-            new Heading("Buttons"),*/
+            new Heading("Buttons"),
 
             
             

@@ -51,8 +51,50 @@ class CustomButton extends HTMLElement {
 function Button() {
 
     let element = this
+    let parent = this.parentElement;
+    
+    const padding = 16
+    element.Reactive = {
+        Left: () => parent.PaddingLeft || 0,
+        Width: () => parent.InnerWidth || parent.Width,
+        PaddingLeft: padding,
+        InnerWidth: () => element.Width - 2 * padding,
+        /*PaddingTop: padding,
+        InnerHeight: () => element*/
+    }
+
+
+    
+    /*new Reaction(() => {
+        console.log("parent.PaddingLeft", parent.PaddingLeft)
+    })*/
+
+
+    /*new Reaction(() => {
+        console.log("this.Left", element.Left)
+    })*/
+
+    new Reaction(() => {
+        element.style.left = this.Left + "px"
+    })
+    new Reaction(() => {
+        element.style.width = this.Width + "px"
+    })
+
+    this.style.backgroundColor = "red"
+
+    //element.style.padding = padding+"px"
+    element.style.display = "flex"
+    element.style.textAlign = "center"
+
+    //element.style.flexDirection = "column"
+    //element.style.justifyContent = "center"
+
+
+
+
     //element.innerText = navigator.userAgent
-    element.innerText = 321//navigator.userAgent
+    //element.innerText = 321//navigator.userAgent
 
     /*let root = {}
 
@@ -188,14 +230,14 @@ function Button() {
     
 
 
-    let parent = element.parentElement;
+    /*let parent = element.parentElement;
 
     element.billboard = true;
 
     let previousIsBillboard = element.previousElementSibling?.billboard;
     if (!previousIsBillboard) {
         element.style.marginTop = "16px"
-    }
+    }*/
 
 
 
@@ -207,9 +249,7 @@ function Button() {
     //element.onAnchorsChanged = []
     //element.anchors = {}
 
-    element.style.display = "flex"
-    element.style.flexDirection = "column"
-    element.style.justifyContent = "center"
+    
 
 
     //element.updateWidth = function () {

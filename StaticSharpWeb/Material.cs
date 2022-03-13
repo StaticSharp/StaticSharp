@@ -33,7 +33,7 @@ namespace StaticSharpWeb {
 
         public virtual Column? Content => null;
         public virtual Footer Footer => null;
-        public virtual int ContentWidth => 800;
+        public virtual int ContentWidth => 400;
         
         public virtual RightSideBar RightSideBar => null;
         public virtual LeftSideBar LeftSideBar => null;

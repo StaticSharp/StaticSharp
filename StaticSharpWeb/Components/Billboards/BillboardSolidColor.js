@@ -4,21 +4,21 @@ function BillboardSolidColor(element, MaxContentWidth) {
 
     let parent = element.parentElement;
 
-    element.billboard = true;
+    /*element.billboard = true;
 
     let previousIsBillboard = element.previousElementSibling.billboard;
     if (!previousIsBillboard) {
         element.style.marginTop = "16px"
-    }
+    }*/
 
-    new Property(() => parent.Width)
+    /*new Property(() => parent.Width)
         .attach(element, "Width")
 
     new Property(() => parent.InnerWidth)
         .attach(element, "InnerWidth")
 
     new Property(() => parent.PaddingLeft)
-        .attach(element, "PaddingLeft")
+        .attach(element, "PaddingLeft")*/
 
 
 

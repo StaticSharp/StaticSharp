@@ -41,31 +41,49 @@ function Material(parameters) {
 
     this.Reactive.Content.OnChanged((previous, current) => {
         if (current) {
-            this.Content.InnerWidth =
-                () => Math.min(this.Content.Width, parameters.ContentWidth)
-            this.Content.PaddingLeft =
-                () => (this.Content.Width - parameters.ContentWidth) * 0.5
+
+            /*this.Content.Reactive = {
+                Width : () => window.InnerWidth,
+                InnerWidth: () => Math.min(window.InnerWidth, parameters.ContentWidth),
+                PaddingLeft : () => (this.Content.Width - parameters.ContentWidth) * 0.5
+            }*/
+            /*this.Content.Width = () => {
+                console.log("window.InnerWidth changed")
+                return window.InnerWidth
+            }
+            this.Content.InnerWidth = () => {
+                //console.log("Content.InnerWidth changed", window.InnerWidth, parameters.ContentWidth)
+                return Math.min(this.Content.Width, parameters.ContentWidth)
+            }
+            this.Content.PaddingLeft = () => {
+                return (this.Content.Width - this.Content.InnerWidth) * 0.5
+            }*/
         }
     })
 
+    /*new Reaction(() => {
 
+        if (this.Content)
+            console.log("Content.PaddingLeft changed", this.Content.PaddingLeft)
+    })*/
 
     new Reaction(() => {
-        this.innerText = window.InnerWidth
         const LeftBarSize = 200
         const RightBarSize = 50
 
         if (this.Content) {
-            console.log("content assigned")
-
+            //console.log("content assigned")
             
-                
+            
+            this.Content.Width = window.InnerWidth - LeftBarSize - RightBarSize
+            this.Content.InnerWidth = Math.min(this.Content.Width, parameters.ContentWidth)
+            this.Content.PaddingLeft = (this.Content.Width - this.Content.InnerWidth) * 0.5
 
 
             this.Content.style.left = LeftBarSize + "px"
 
-            this.Content.MaxInnerWidth = parameters.ContentWidth
-            this.Content.Width = window.InnerWidth - LeftBarSize - RightBarSize
+            //this.Content.MaxInnerWidth = parameters.ContentWidth
+            //this.Content.Width = window.InnerWidth - LeftBarSize - RightBarSize
         }
     })
 

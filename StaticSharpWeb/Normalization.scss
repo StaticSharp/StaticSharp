@@ -9,7 +9,11 @@
         line-height: 100%;
         text-decoration-color: inherit;
         color: inherit;
+        justify-content: inherit;
+        align-content: inherit;
+        text-align: inherit;
         box-sizing: border-box;
+        overflow: clip;
     }
 
     a:hover {
@@ -35,6 +39,4 @@
         flex-direction: column;
         background-color: chartreuse;
     }
-
-
 }

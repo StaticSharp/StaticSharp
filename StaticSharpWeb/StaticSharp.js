@@ -84,7 +84,7 @@ HTMLElement.prototype.css = function(object) {
 function StaticSharpCall(func, parameters) {
     
     let parent = document.currentScript.parentElement;
-    //parent.removeChild(document.currentScript);
+    parent.removeChild(document.currentScript);
 
     func.call(parent, parameters)
     //func.call(parent, parent)

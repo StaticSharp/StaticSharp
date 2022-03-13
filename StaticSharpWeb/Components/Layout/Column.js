@@ -9,9 +9,21 @@ function Column(parameters) {
     this.Reactive = {
         Width: undefined,
         InnerWidth: () => this.Width,
-        PaddingLeft: () => (element.Width - element.InnerWidth) * 0.5
+        PaddingLeft: 0
     }
-    
+
+    new Reaction(() => {
+        if (this.Width)
+            this.style.width = this.Width + "px"
+        else
+            this.style.width = undefined
+
+    })
+
+    /*new Reaction(() => {
+        console.log("Column.PaddingLeft", this.PaddingLeft)
+    })*/
+
     /*
 
     new Property(undefined)

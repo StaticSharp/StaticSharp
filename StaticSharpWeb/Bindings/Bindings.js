@@ -4,30 +4,32 @@
 
 
 function ReactionBase(func) {
-    this.dependencies = new Set()
-    this.func = func
+    let _this = this
 
-    this.addDependency = function (property) {
-        this.dependencies.add(property)
-        property.onChanged.add(this.onChangedHandler)
+    _this.dependencies = new Set()
+    _this.func = func
+    
+    _this.addDependency = function (property) {
+        _this.dependencies.add(property)
+        property.onChanged.add(_this.onChangedHandler)
     }
 
-    this.unsubscribe = function () {
-        if (this.dependencies.size == 0) return
+    _this.unsubscribe = function () {
+        if (_this.dependencies.size == 0) return
 
-        for (let dependency of this.dependencies) {
-            dependency.onChanged.delete(this.onChangedHandler)
+        for (let dependency of _this.dependencies) {
+            dependency.onChanged.delete(_this.onChangedHandler)
         }
-        this.dependencies.clear()
+        _this.dependencies.clear()
     }
 
-    this.execute = function () {
+    _this.execute = function () {
         let oldReaction = Reaction.current
-        Reaction.current = this
-        this.unsubscribe()
+        Reaction.current = _this
+        _this.unsubscribe()
 
 
-        let result = this.func()
+        let result = _this.func()
 
         Reaction.current = oldReaction
         return result
@@ -36,15 +38,16 @@ function ReactionBase(func) {
 
 
 function Reaction(func) {
-
-    ReactionBase.call(this, func)
-
     let _this = this
-    this.onChangedHandler = function () {
+
+    ReactionBase.call(_this, func)
+
+    
+    _this.onChangedHandler = function () {
         Reaction.deferred.add(_this)
     }
 
-    this.execute()
+    _this.execute()
 }
 Reaction.prototype = Object.create(ReactionBase.prototype)
 Reaction.prototype.constructor = Reaction
@@ -77,15 +80,18 @@ Reaction.beginDeferred = function () {
 
 function Binging(func, onChange) {
     //console.log("function Binging(func, onChange)", onChange)
-    ReactionBase.call(this, func)
-
-    this.dirty = true
-    this.onChange = onChange
-
-
     let _this = this
-    this.onChangedHandler = function () {
+
+    ReactionBase.call(_this, func)
+
+    _this.dirty = true
+    _this.onChange = onChange
+
+    
+    _this.onChangedHandler = function () {
         _this.dirty = true
+        //console.log("_this.dirty = true", _this, _this.onChange)
+        
         _this.onChange()
     }
 }
@@ -94,74 +100,94 @@ Binging.prototype.constructor = Binging;
 
 
 function Property(value) {
-    this.onChanged = new Set()
-    this.binding = undefined
 
-    _this = this
-    let onDependencyChanged = function () {
+    let _this = this
+
+    _this.onChanged = new Set()
+    _this.binding = undefined
+
+    
+    _this.onDependencyChanged = function () {
+        //console.log("onDependencyChanged", _this.binding.dirty, _this.binding)
         _this.onChanged.forEach(x => x())
     }
 
 
-    this.getValue = function() {
-        //console.log(`getValue`)
+    _this.getValue = function() {
+        //console.log("getValue")
         if (Reaction.current) {
-            Reaction.current.addDependency(this)
+            Reaction.current.addDependency(_this)
         }
-        if (this.binding) { //wechat if (this.binding?.dirty)
-            if (this.binding.dirty) {
-                this.value = this.binding.execute()
-                this.binding.dirty = false
+        if (_this.binding) { //wechat if (this.binding?.dirty)
+            if (_this.binding.dirty) {
+                _this.value = _this.binding.execute()
+                _this.binding.dirty = false
             }
         }
-        return this.value
+        return _this.value
     }
 
-    this.setValue = function(value) {
-        //console.log("setValue " + value + " " + this.onChanged.size)
+    _this.setValue = function(value) {
+        //console.log("setValue " + value + " " + _this.onChanged.size)
         if (typeof value === 'function') {
-            if (this.binding) {
-                if (this.binding.func === value) {
+            if (_this.binding) {
+                if (_this.binding.func === value) {
                     return
                 }
-                this.binding.unsubscribe()
+                _this.binding.unsubscribe()
+                //console.log("change binding from", _this.binding.func, "to", value)
             }
-            this.binding = new Binging(value, onDependencyChanged)
+            
+
+            _this.binding = new Binging(value, _this.onDependencyChanged)
+
 
         } else {
-            if (this.value === value)
-                return
-            if (this.binding) {
-                this.binding.unsubscribe()
-                this.binding = undefined
+            //console.log("value assigned", _this.value, "->", value, "will notify ", _this.onChanged.size)
+            if (_this.binding) {
+                _this.binding.unsubscribe()
+                _this.binding = undefined
             }
-            this.value = value
+
+            if (_this.value === value)
+                return
+
+            _this.value = value
         }
 
         var d = Reaction.beginDeferred()
-        this.onChanged.forEach(x => x())
+
+        for (let i of _this.onChanged) {
+            try {
+                //console.log(i)
+                i()
+            } catch (e) {
+                console.error(e)
+            }            
+        }
+        //this.onChanged.forEach(x => x())
         if (d)
             d.end()
 
     }
 
-    this.attach = function(object, name) {
-        let property = this
+    _this.attach = function(object, name) {
+        //let property = this
         let accessorDescriptor = {
             get: function () {
-                return property.getValue()
+                return _this.getValue()
             },
             set: function (value) {
-                property.setValue(value)
+                _this.setValue(value)
 
             }
         }
         Object.defineProperty(object, name, accessorDescriptor);
-        return this
+        return _this
     }
 
     
-    this.setValue(value)
+    _this.setValue(value)
 
 
 }
@@ -196,10 +222,11 @@ Object.defineProperty(Object.prototype, "Reactive", {
                     //console.log("set",target,name,value)
                     
                     if (target.hasOwnProperty("__" + name)) {
+                        //console.log("asigning existing property", name)
                         const propertyField = target["__" + name]
                         propertyField.setValue(value)
                     } else {
-                        //
+                        //console.log("creating new property", name)
                         target["__" + name] = new Property(value).attach(target,name)
                     }
                 }
@@ -227,11 +254,11 @@ Object.defineProperty(Object.prototype, "Reactive", {
 
 
 Property.prototype.OnChanged = function (func) {
-    console.log(this)
-    let previous = this.getValue()
+    let _this = this
+    let previous = _this.getValue()
 
     return new Reaction(() => {
-        let current = this.getValue()
+        let current = _this.getValue()
         if (current != previous) {
             func(previous, current)
             previous = current
@@ -281,26 +308,52 @@ function PropertyTest() {
     root.Reactive.A = 8
     console.assert(root.A == 8)
 
-    root.Reactive.B = ()=>root.A*2
+
+    root.Reactive.B = () => root.A * 2
     console.assert( root.B == 16)
 
     root.Reactive.A = 10
     console.assert( root.B == 20)
 
+    
 
     root.Reactive = {
         C: 7,
-        D: () => root.C
+        D: () => root.C,
+        //E: () => root.B*4,
     }
 
     console.assert( Property.exists(root, "C") == true)
     console.assert( Property.exists(root, "D") == true)
-    console.assert( root.D == 7)
+
+    console.assert(root.D == root.C)
+    //console.assert(root.E == root.B*4)
+
+    root.Reactive.B = () => root.A * 3
+    //console.assert(root.B == 30)
+    //console.assert(root.E == root.A * 3 * 4)
+
+    /*root.Reactive.B = 10
+    console.assert(root.E == 40)
+
+    root.Reactive.B = () => root.A * 3
+    console.assert(root.E == 10 * 3 * 4)*/
+
 
     new Reaction(() => {
         root.Field = root.C
     })
     console.assert(root.Field == root.C)
+
+    let bReactionResult
+    new Reaction(() => {
+        bReactionResult = root.B
+    })
+    console.assert(bReactionResult == root.B)
+    console.group("root.A = 20")
+    root.A = 20
+    console.groupEnd()
+    console.assert(bReactionResult == root.B)
 
 
     root.C = 9
