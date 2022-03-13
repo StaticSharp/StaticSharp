@@ -109,7 +109,7 @@ namespace StaticSharpWeb.Components {
 
             context.Includes.Require(new Style(AbsolutePath($"{nameof(Downloadable)}.scss")));
             var tag = new Tag("div", new { Class = nameof(Downloadable) }) {
-                new JSCall(AbsolutePath($"{nameof(Downloadable)}.js"), PrimaryName, Resource.OptionsTree).Generate(context)
+                //new JSCall(AbsolutePath($"{nameof(Downloadable)}.js"), PrimaryName, Resource.OptionsTree).Generate(context)
             };
             return tag;
         }

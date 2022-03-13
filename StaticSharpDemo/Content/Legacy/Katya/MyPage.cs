@@ -12,7 +12,7 @@ namespace StaticSharpDemo.Root.Legacy.Katya {
 
         public override Paragraph Description => new() { "Ссылка на эту статью: ", Node, " ААА ААА ААА" };        
         private Image image => new Image(AbsolutePath("222.jpg"), "Mountain");
-        public override MaterialContent Content => new () {
+        public override Column Content => new () {
 
             new Paragraph() { 
                 "Тестовый параграф"

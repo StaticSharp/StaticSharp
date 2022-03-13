@@ -4,5 +4,16 @@ namespace StaticSharpWeb;
 
 
 public interface IElement {
-    Task<Html.INode> GenerateHtmlAsync(Context context);
+    //можжет быть возвращать Tag?
+    Task<Html.INode?> GenerateHtmlAsync(Context context);
 }
+/*
+public static class IElementStatic {
+    public static Task<Html.INode?> GenerateHtmlAsync(this IElement? element, Context context) {
+        if (element == null) { 
+            return Task.FromResult<Html.INode?>(null);
+        } else {
+            return element.GenerateHtmlAsync(context);
+        }
+    }
+}*/

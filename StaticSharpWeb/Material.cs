@@ -22,18 +22,19 @@ namespace StaticSharpWeb {
     public abstract class Material : IMaterial, IInline, IPage, IPlainTextProvider, IFontProvider {
         //public class TChildren : List<object> { }
 
+        public virtual IImage TitleImage => null;
         public virtual string Title {
             get {
                 var n = GetType().Namespace;
                 return n[(n.LastIndexOf('.') + 1)..];
             }
         }
-
         public virtual Paragraph Description => null;
-        public virtual MaterialContent Content => null;
+
+        public virtual Column? Content => null;
         public virtual Footer Footer => null;
         public virtual int ContentWidth => 800;
-        public virtual IImage TitleImage => null;
+        
         public virtual RightSideBar RightSideBar => null;
         public virtual LeftSideBar LeftSideBar => null;
 
@@ -72,11 +73,13 @@ namespace StaticSharpWeb {
         public virtual async Task<Tag> GetBodyAsync(Context context) {
             var font = Font.GenerateUsageCss(context);
 
+            context.Includes.Require(new Script(Bindings.BindingsJsPath));
+
             var body = new Tag("body", 
                 new {
                     style = SoftObject.MergeObjects(
                         new {
-                            Display = "none",
+                            //Display = "none",
                             BackgroundColor = context.Theme.Surface,
                             Color = context.Theme.OnSurface,
                         },
@@ -84,9 +87,25 @@ namespace StaticSharpWeb {
                     )
                 }                
                 ){
-                new JSCall(AbsolutePath("Material.js"), ContentWidth).Generate(context),
+
+                new Tag("script") {
+                    new PureHtmlNode("document.body.style.backgroundColor = \"green\";")
+                },
+
+                new JSCall(AbsolutePath("Material.js"),
+                    new{
+                        ContentWidth = ContentWidth
+                    }
+                    ).Generate(context),
+
+                (await (Content?.GenerateHtmlAsync(context)).Unnull())
+                .ModifyIfNotNull(x=>{
+                    x.Name = "div";
+                    x.AttributesNotNull["id"] = "Content";
+                    })
+
             };
-            var tasks = new List<Task<INode>>();
+            /*var tasks = new List<Task<INode>>();
             if (RightSideBar != null) {
                 body.Add(await RightSideBar.GenerateSideBarAsync(context));
             }
@@ -107,14 +126,14 @@ namespace StaticSharpWeb {
             }
 
             if (Content != null) {
-                tasks.AddRange(Content.Select(x => x.GenerateHtmlAsync(context)));
+                tasks.AddRange(Content.Items.Select(x => x.GenerateHtmlAsync(context)));
             }
             if (Footer != null) {
                 tasks.Add(Footer.GenerateHtmlAsync(context));
             }
             foreach (var item in await Task.WhenAll(tasks)) {
                 body.Add(item);
-            }
+            }*/
 
             return body;
         }

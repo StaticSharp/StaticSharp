@@ -40,23 +40,24 @@ namespace StaticSharpWeb {
         }
 
         public string ReadFile(string script) {
-            StringBuilder stringBuilder = new();
+
             var file = File.ReadAllText(script);
             var thisFilePath = AbsolutePath(script);
-            stringBuilder.AppendLine("// START FILE " + script);
-            string result = "// START FILE " + script + "\n" +
+
+            string result = 
                             file.Replace("☺thisFilePathHash☹", thisFilePath.ToString().ToHashString())
                             .Replace("☺thisFileHash☹", file.ToHashString())
                             .Replace("☺thisFilePath☹", thisFilePath.ToString())
                             .Replace("☺thisFileName☹", System.IO.Path.GetFileName(thisFilePath))
-                            .Replace("☺thisDirectory☹", System.IO.Path.GetDirectoryName(thisFilePath))
-                            + "\n// END FILE " + script + "\n";
-            var uglifyResult = NUglify.Uglify.Js(result, script);
+                            .Replace("☺thisDirectory☹", System.IO.Path.GetDirectoryName(thisFilePath));
+
+
+            /*var uglifyResult = NUglify.Uglify.Js(result, script);
             if (uglifyResult.HasErrors) {
                 throw new Exception("Javascript Uglify error's: "
                         + "\n\t"
                         + string.Join("\n\t", uglifyResult.Errors));
-            }
+            }*/
             return result;
         }
     }

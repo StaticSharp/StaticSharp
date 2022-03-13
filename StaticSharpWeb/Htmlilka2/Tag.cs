@@ -58,18 +58,26 @@ namespace StaticSharpWeb.Html {
             "!doctype",
         };
 
-        public string Name { get; }
+        public string? Name { get; set; }//null tag is a collection
 
 
         public IDictionary<string, object>? Attributes { get; private set; }
 
+        public IDictionary<string, object> AttributesNotNull {
+            get {
+                if (Attributes == null) {
+                    Attributes = new Dictionary<string,object>();
+                }
+                return Attributes;
+            }
+        }
 
-        public Tag(string name, IDictionary<string, object> attributes) {
+        public Tag(string? name, IDictionary<string, object> attributes) {
             Attributes = attributes;
             Name = name;
         }
 
-        public Tag(string name, object? attributes = null) {
+        public Tag(string? name, object? attributes = null) {
             if (attributes!=null)
                 Attributes = SoftObject.ObjectToDictionary(attributes);
             Name = name;
@@ -81,15 +89,15 @@ namespace StaticSharpWeb.Html {
             Add(new TextNode(item));
         }
 
-        public void Add(INode item) {
+        public void Add(INode? item) {
             if (item == null)
                 return;
             children.Add(item);
         }
 
-        public void Add(IEnumerable<INode> items) {
-            foreach (INode item in items) {
-                children.Add(item);
+        public void Add(IEnumerable<INode?> items) {
+            foreach (INode? item in items) {
+                Add(item);
             }            
         }
 

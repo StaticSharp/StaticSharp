@@ -1,3 +1,5 @@
+
+
 function BillboardSolidColor(element, MaxContentWidth) {
 
     let parent = element.parentElement;
@@ -9,9 +11,18 @@ function BillboardSolidColor(element, MaxContentWidth) {
         element.style.marginTop = "16px"
     }
 
+    new Property(() => parent.Width)
+        .attach(element, "Width")
+
+    new Property(() => parent.InnerWidth)
+        .attach(element, "InnerWidth")
+
+    new Property(() => parent.PaddingLeft)
+        .attach(element, "PaddingLeft")
 
 
-    element.onAnchorsChanged = []
+
+    /*element.onAnchorsChanged = []
     element.anchors = {}
 
     element.style.display = "flex"
@@ -35,6 +46,6 @@ function BillboardSolidColor(element, MaxContentWidth) {
 
         element.onAnchorsChanged.map(x => x());
     }
-    parent.onAnchorsChanged.push(element.updateWidth);
+    parent.onAnchorsChanged.push(element.updateWidth);*/
 
 }

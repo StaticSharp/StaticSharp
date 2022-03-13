@@ -10,7 +10,7 @@ namespace StaticSharpDemo.Root.Legacy {
     partial class En : Common {
         public override string Title => base.Title + "_EN";
         private Image image = new Image(AbsolutePath("111.jpg"), "Ricardooo");
-        public override MaterialContent Content => new() {
+        public override Column Content => new() {
             new Paragraph() {
                 "Read this article in russian ",
                 Node.WithLanguage(Language.Ru),

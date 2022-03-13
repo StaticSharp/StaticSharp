@@ -1,6 +1,6 @@
 ﻿function ReduceFontSizeOnOverflow(element) {
 
-    let parent = element.parentElement;
+    /*let parent = element.parentElement;
 
     let scrollWidth = undefined;
     var initialTextAlign = element.style.textAlign
@@ -23,11 +23,8 @@
             element.style.removeProperty("transform-origin")
             element.style.textAlign = initialTextAlign
         }
-        /*
-        element.style.left = left + "px";
-        element.style.width = right - left + "px";*/
     }
 
-    parent.onAnchorsChanged.push(element.updateFontSize);
+    parent.onAnchorsChanged.push(element.updateFontSize);*/
 
 }

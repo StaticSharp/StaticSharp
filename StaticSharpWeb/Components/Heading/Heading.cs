@@ -16,7 +16,7 @@ namespace StaticSharpWeb {
 
 
 
-    public class Heading : IContainerConstraints<ITextAnchorsProvider> {
+    public class Heading : IContainerConstraints<IColumn> {
 
         public object? Style { get; set; } = null;
 
@@ -37,8 +37,8 @@ namespace StaticSharpWeb {
                         )
                 })
             {
-                new JSCall(Anchors.FillTextAnchorsJsPath).Generate(context),
-                new JSCall(Anchors.ReduceFontSizeOnOverflowJsPath).Generate(context),
+                new JSCall(Layout.TextJsPath).Generate(context),
+                new JSCall(Layout.ReduceFontSizeOnOverflowJsPath).Generate(context),
                 new TextNode(Text)
             };                
         }

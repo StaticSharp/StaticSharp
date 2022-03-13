@@ -6,7 +6,7 @@ namespace StaticSharpDemo.Root.Legacy.Articles.Terms {
     [Representative]
     partial class En : Common {
         public override string Title => "";
-        public override MaterialContent Content => new() { 
+        public override Column Content => new() { 
             
         };
     }

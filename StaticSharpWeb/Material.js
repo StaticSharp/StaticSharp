@@ -1,5 +1,109 @@
-function Material(element, contentWidth) {
-    element.css({
+function Material(parameters) {
+
+    //console.log(this.$.A)
+
+    document.body.style.backgroundColor = "violet"
+
+
+    PropertyTest()
+
+    window.Reactive = {
+        InnerWidth: window.innerWidth,
+        InnerHeight: window.innerHeight,
+    }
+
+    window.onresize = function (event) {
+        let d = Reaction.beginDeferred()
+        window.InnerWidth = window.innerWidth
+        window.InnerHeight = window.innerHeight
+        d.end()
+    }
+
+    this.Reactive = {
+        Content: undefined,
+    }
+
+
+    /*let previous = this.Content
+    let onChanged = function (previous, current) {
+        if (current) {
+            this.Content.InnerWidth =
+                () => Math.min(this.Content.Width, parameters.ContentWidth)
+        }
+    }
+    new Reaction(() => {
+        let current = this.Content
+        if (current != previous) {
+            onChanged(previous, current)
+            previous = current
+        }
+    })*/
+
+    this.Reactive.Content.OnChanged((previous, current) => {
+        if (current) {
+            this.Content.InnerWidth =
+                () => Math.min(this.Content.Width, parameters.ContentWidth)
+            this.Content.PaddingLeft =
+                () => (this.Content.Width - parameters.ContentWidth) * 0.5
+        }
+    })
+
+
+
+    new Reaction(() => {
+        this.innerText = window.InnerWidth
+        const LeftBarSize = 200
+        const RightBarSize = 50
+
+        if (this.Content) {
+            console.log("content assigned")
+
+            
+                
+
+
+            this.Content.style.left = LeftBarSize + "px"
+
+            this.Content.MaxInnerWidth = parameters.ContentWidth
+            this.Content.Width = window.InnerWidth - LeftBarSize - RightBarSize
+        }
+    })
+
+    document.title = "!!";
+    
+
+    console.log(parameters.ContentWidth)
+
+    element = this
+
+    /*new Property().attach(element, "Content")
+
+    new Property(window.innerWidth).attach(window, "InnerWidth")
+    new Property(window.innerHeight).attach(window, "InnerHeight")
+
+
+    const LeftBarSize = 200
+    const RightBarSize = 50
+
+    new Reaction(() => {
+        if (element.Content) {
+
+            element.Content.style.left = LeftBarSize+"px"
+
+            element.Content.MaxInnerWidth = parameters.ContentWidth
+            element.Content.Width = window.InnerWidth - LeftBarSize - RightBarSize
+        }
+    })
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        element.style.display = "";
+    })
+
+    */
+
+
+    /*element.css({
         margin: "0",
     })
     let leftBarWidth = 0;
@@ -113,6 +217,6 @@ function Material(element, contentWidth) {
             }
             menusHitBoxes.push(element);
         });
-    });
+    });*/
 
 }

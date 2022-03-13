@@ -22,7 +22,7 @@ namespace StaticSharpDemo.Root.Legacy {
         //private Language wiki => new Language();
         //private Reference wiki_ru => new Reference("ТЕКСТ3: ", "https://ru.wikipedia.org/wiki/C_Sharp", "C#");    
 
-        public override MaterialContent Content => new() {
+        public override Column Content => new() {
             new Paragraph() {
                 
             },

@@ -152,7 +152,7 @@ namespace StaticSharpWeb.Components {
             var mips = VideoResource.Mips.Select(x =>
                 new KeyValuePair<int, string>(x.Key, new Uri(context.BaseUrl, x.Value.Replace("\\", "/")).ToString()));
             var tag = new Tag("div", new { Class = "VideoPlayer" }) {
-                new JSCall(AbsolutePath("Video.js"),//element, code, aspect, showControls, autoPlay, loop, sound, mips, poster
+                /*new JSCall(AbsolutePath("Video.js"),//element, code, aspect, showControls, autoPlay, loop, sound, mips, poster
                         VideoCode,
                         Aspect,
                         ShowControls,
@@ -160,7 +160,7 @@ namespace StaticSharpWeb.Components {
                         Loop,
                         Sound,
                         mips,
-                        _isPosterDefinedByUser).Generate(context)
+                        _isPosterDefinedByUser).Generate(context)*/
             };
             if (_isPosterDefinedByUser) {
                 tag.Add(await _image.GenerateHtmlAsync(context));

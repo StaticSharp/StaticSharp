@@ -40,7 +40,7 @@ namespace StaticSharpWeb {
             var tag = new Tag("div", new { Class = nameof(Image) }) {
                 new Tag("img", new { src = Resource.Source, alt = Alt, style = "width: 100%; height: auto;"}),
                 new JSCall(AbsolutePath("Image.js")).Generate(context),
-                new JSCall(AbsolutePath("RoiImage.js"), Resource.Aspect, Resource.Roi).Generate(context),
+                //new JSCall(AbsolutePath("RoiImage.js"), Resource.Aspect, Resource.Roi).Generate(context),
                 new JSCall(AbsolutePath("MipsSelector.js"), Resource.Mips).Generate(context)
             };
             return tag;

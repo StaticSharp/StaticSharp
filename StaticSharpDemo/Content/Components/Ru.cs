@@ -4,10 +4,12 @@
     partial class Ru : Material {
         public override Paragraph Description => $"Компоненты для создания страниц.";
 
-        public override MaterialContent Content => new() { 
-            
-            new Heading("Создание нового компонента."),
-            $"Если понадобится компонент, которого нет среди стандартных.",
+        public override Column Content => new() {
+
+            //new Button(),
+
+            //new Heading("Создание нового компонента."),
+            /*$"Если понадобится компонент, которого нет среди стандартных.",
             $"Можно создать компонент прям в проекте вашего сайта.",
             //new ToDo("пример кода"),
             $"Тут подробнее : {Node.Root.Customization.HowToCreateNewComponent}",
@@ -30,9 +32,9 @@
             new Paragraph() { "Paragraph as link",new OverlayLink(Node.Root)},
             
 
-            new Heading("Buttons"),
+            new Heading("Buttons"),*/
 
-            new Button()
+            
             
 
         };

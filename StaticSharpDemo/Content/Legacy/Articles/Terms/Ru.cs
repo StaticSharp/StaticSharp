@@ -9,7 +9,7 @@ namespace StaticSharpDemo.Root.Legacy.Articles.Terms {
     partial class Ru : Common {
         public override string Title => "Термины";
         //public override string Title => base.Title+"_RU";
-        public override MaterialContent Content => new () {
+        public override Column Content => new () {
 
             new Paragraph() { 
                 "Тут приведен список всех внутренних терминов Antilatency"

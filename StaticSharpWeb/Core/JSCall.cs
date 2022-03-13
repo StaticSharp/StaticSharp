@@ -1,17 +1,23 @@
 ﻿using StaticSharpWeb.Html;
-using Newtonsoft.Json;
+
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 
 namespace StaticSharpWeb {
 
     internal class JSCall {
+
+        private static readonly JsonSerializerOptions JsonSerializerOptions = new() {
+            IncludeFields = true,
+        };
+
         public string Path { get; init; }
-        public readonly object[] _parameters;
+        public readonly object? Parameters;
 
 
-        public JSCall(string path, params object[] parameters) 
-            => (Path, _parameters) = (path, parameters);
+        public JSCall(string path, object? parameters = null) 
+            => (Path, Parameters) = (path, parameters);
 
 
         public Tag Generate(Context context) {
@@ -19,9 +25,19 @@ namespace StaticSharpWeb {
 
             context.Includes.Require(new Script(Path));
 
-            var parameters = string.Concat(_parameters.Select(x => "," + JsonConvert.SerializeObject(x)));
+            string parametersJson = "{}";
+            if (Parameters != null) {
+                parametersJson = JsonSerializer.Serialize(Parameters, JsonSerializerOptions);
+            }
 
-            var code = $@"StaticSharpCall(function(parent){{{functionName}(parent {parameters})}})";
+
+            //var parameters = string.Concat(Parameters.Select(x => "," + JsonConvert.SerializeObject(x)));
+
+            //var code = $@"StaticSharpCall(function(parent){{{functionName}(parent, {parametersJson})}})";
+
+            
+            var code = $"StaticSharpCall({functionName},{parametersJson});";//
+
 
             return new("script") {
                 new PureHtmlNode(code)

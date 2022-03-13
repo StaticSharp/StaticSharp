@@ -24,11 +24,11 @@ namespace StaticSharpWeb {
             collection.AddBlock(item);
         }*/
 
-        public static void Add<T>(this T collection, ParagraphIinterpolatedStringHandler item) where T : IElementContainer, ITextAnchorsProvider {
+        public static void Add<T>(this T collection, ParagraphIinterpolatedStringHandler item) where T : IElementContainer, IColumn {
             collection.AddElement(item.Paragraph);
         }
 
-        public static void Add<T>(this T collection, string text) where T : IElementContainer, ITextAnchorsProvider {
+        public static void Add<T>(this T collection, string text) where T : IElementContainer, IColumn {
             collection.AddElement(new Paragraph() { text });
         }
 
@@ -76,7 +76,7 @@ namespace StaticSharpWeb {
     
 
 
-    public sealed class Paragraph : IEnumerable, IElementContainer, IElement, IPlainTextProvider, IContainerConstraints<ITextAnchorsProvider> {
+    public sealed class Paragraph : IEnumerable, IElementContainer, IElement, IPlainTextProvider, IContainerConstraints<IColumn> {
 
 
         public object? Style { get; set; } = null;
@@ -145,7 +145,7 @@ namespace StaticSharpWeb {
             //context.Includes.Require(new Style(AbsolutePath("Paragraph.scss")));
 
 
-            result.Add(new JSCall(Anchors.FillTextAnchorsJsPath).Generate(context));
+            result.Add(new JSCall(Layout.TextJsPath).Generate(context));
             foreach (var item in await Task.WhenAll(Items.Select(x => x.Html(context)))) {
                 result.Add(item);
             }

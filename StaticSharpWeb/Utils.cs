@@ -33,12 +33,24 @@ namespace StaticSharpWeb {
         }
 
 
-        public static Task<T> NullAware<T>(this Task<T> _this) where T : class {
+        public static Task<T?> Unnull<T>(this Task<T?>? _this) where T : class {
             if(_this == null) {
-                return Task.FromResult<T>(null);
+                return Task.FromResult<T?>(null);
             }
             return _this;
         }
+
+        public static T? Modify<T>(this T? _this, Action<T?> modifier) where T : class {
+            modifier.Invoke(_this);
+            return _this;
+        }
+
+        public static T? ModifyIfNotNull<T>(this T? _this, Action<T> modifier) where T : class {
+            if (_this!=null)
+                modifier.Invoke(_this);
+            return _this;
+        }
+
 
         public static async Task CopyFileAsync(string sourcePath, string destinationPath) {
             Directory.CreateDirectory(Path.GetDirectoryName(destinationPath));
