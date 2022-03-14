@@ -3,17 +3,24 @@
     let parent = element.parentElement;
     element.style.marginTop = "20px"
     element.style.marginBottom = "20px"
-    element.style.position = "absolute"
-    this.Reactive = {
+    //element.style.position = "absolute"
+    element.Reactive = {
         Top: undefined,
         Left: undefined,
         Width: undefined,
-        Height: undefined
+        /*ContentHeight: () => {
+            console.log(element.offsetHeight, element.Width)
+            //element.Width
+            return element.offsetHeight
+        },
+        Height: () => element.ContentHeight*/
+
     }
 
-    element.Reactive.Width.OnChanged(() => {
-        element.Height = element.offsetHeight
-    })
+    /*element.Reactive.Width.OnChanged(() => {
+        console.log(element.clientHeight , element.Width)
+        //element.Height = element.offsetHeight
+    })*/
 
     new Reaction(() => {
         const textPadding = 16
@@ -48,7 +55,12 @@
     new Reaction(() => {
         this.style.width = this.Width + "px"
     })
-
+    new Reaction(() => {
+        this.style.top = this.Top + "px"
+    })
+    /*new Reaction(() => {
+        this.style.height = this.Height + "px"
+    })*/
 
     /*let parent = element.parentElement;
     element.updateWidth = function() {

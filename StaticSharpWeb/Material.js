@@ -41,7 +41,7 @@ function Material(parameters) {
 
     this.Reactive.Content.OnChanged((previous, current) => {
         if (current) {
-
+            this.Content.style.minHeight = "100%"
             /*this.Content.Reactive = {
                 Width : () => window.InnerWidth,
                 InnerWidth: () => Math.min(window.InnerWidth, parameters.ContentWidth),

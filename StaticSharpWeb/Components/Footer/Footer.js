@@ -1,10 +1,12 @@
-﻿function Footer(element) {
+﻿function Footer() {
+    element = this
+    let parent = element.parentElement;
 
-    let parent = element.parentElement.parentElement;
-
+    element.style.height = "100px"
+    element.style.backgroundColor = "yellow"
     //console.log(element.parentElement);
 
-    element.onAnchorsChanged = [];
+    /*element.onAnchorsChanged = [];
     element.updateWidth = function () {
         let left = parent.anchors.textLeft;
         let right = parent.anchors.textRight;
@@ -12,6 +14,6 @@
         element.style.width = right - left + "px";
         //element.style.backgroundColor = "red";
     }
-    parent.onAnchorsChanged.push(element.updateWidth);
+    parent.onAnchorsChanged.push(element.updateWidth);*/
 
 }

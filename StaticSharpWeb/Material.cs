@@ -98,13 +98,27 @@ namespace StaticSharpWeb {
                     }
                     ).Generate(context),
 
-                (await (Content?.GenerateHtmlAsync(context)).Unnull())
+                /*(await (Content?.GenerateHtmlAsync(context)).Unnull())
                 .ModifyIfNotNull(x=>{
                     x.Name = "div";
                     x.AttributesNotNull["id"] = "Content";
-                    })
+                    })*/
 
             };
+
+            var content = await (Content?.GenerateHtmlAsync(context)).Unnull();
+            if (content == null)
+                content = new Tag("div");
+
+            content.Name = "div";
+            content.AttributesNotNull["id"] = "Content";
+
+            if (Footer != null) {
+                content.Add(await Footer.GenerateHtmlAsync(context));
+            }
+
+            body.Add(content);
+
             /*var tasks = new List<Task<INode>>();
             if (RightSideBar != null) {
                 body.Add(await RightSideBar.GenerateSideBarAsync(context));

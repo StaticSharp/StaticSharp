@@ -2,6 +2,7 @@
 <#@ output extension="cs" #>
 <#@ assembly name="System.Core" #>
 <#@ import namespace="System.Linq" #>
+using System.Collections.Generic;
 namespace StaticSharpWeb;
 <#
 int N = 10;
@@ -18,5 +19,11 @@ public static partial class ContainerStatic {
     public static void Add<Collection, <#=GenericArguments(i)#>>(this Collection collection, IContainerConstraints<<#=GenericArguments(i)#>> item)
         where Collection : IElementContainer, <#=GenericArguments(i)#>
     => collection.AddElement(item);
+    public static void Add<Collection, <#=GenericArguments(i)#>>(this Collection collection, IEnumerable<IContainerConstraints<<#=GenericArguments(i)#>>> items)
+        where Collection : IElementContainer, <#=GenericArguments(i)#>{
+        foreach(var i in items){
+            collection.Add(i);
+        }
+    }
 <# } #>
 }

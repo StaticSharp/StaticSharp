@@ -1,4 +1,6 @@
-﻿namespace StaticSharpDemo.Root.Components;
+﻿using System.Linq;
+
+namespace StaticSharpDemo.Root.Components;
 
     [Representative]
     partial class Ru : Material {
@@ -14,7 +16,12 @@
             //new ToDo("пример кода"),
             $"Тут подробнее : {Node.Root.Customization.HowToCreateNewComponent}",
             
-            new Heading("Billboards"),
+
+
+            Enumerable.Range(0,1000).Select(i => new Paragraph() {$"This is paragraph #{i}"}),
+
+
+            /*new Heading("Billboards"),
             "Билборды - это блоки занимающие всю страницу. Между билбордами нет вертикальных отступов",
             new BillboardSolidColor { 
                 Color = Color.LightBlue,
@@ -30,7 +37,7 @@
             },
             new BillboardSolidColor {
                 Color = Color.BlueViolet,
-            },
+            },*/
 
             new Paragraph() { "Paragraph as link",new OverlayLink(Node.Root)},
             

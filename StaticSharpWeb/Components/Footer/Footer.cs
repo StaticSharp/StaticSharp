@@ -6,26 +6,33 @@ using System.Threading.Tasks;
 
 namespace StaticSharpWeb {
     public class Footer : IEnumerable<IElement>, IElement, IElementContainer {
-        private readonly List<IElement> _items = new();
+        private readonly List<IElement> Items = new();
 
         public void AddElement(IElement block) {
-            _items.Add(block);
+            Items.Add(block);
         }
 
-        public async Task<INode> GenerateHtmlAsync(Context context) {
-            context.Includes.Require(new Style(AbsolutePath(nameof(Footer) + ".scss")));
+        public async Task<INode?> GenerateHtmlAsync(Context context) {
+            //context.Includes.Require(new Style(AbsolutePath(nameof(Footer) + ".scss")));
             
-            var result = new Tag("div", new { Class = "footer" });            
-            var items = _items.Select(item => item.GenerateHtmlAsync(context));
+
+
+
+            /*var result = new Tag("div", new { Class = "footer" });            
+            var items = Items.Select(item => item.GenerateHtmlAsync(context));
             foreach(var item in await Task.WhenAll(items)) {
                 result.Add(item);
-            }
-            result.Add(new JSCall(AbsolutePath($"{nameof(Footer)}.js")).Generate(context));
-            return new Tag("footer") { result };
+            }*/
+
+            return new Tag("footer") {
+                new JSCall(AbsolutePath($"{nameof(Footer)}.js")).Generate(context),
+                new Tag("div", new { id = "Content" }),
+                await Task.WhenAll(Items.Select(item => item.GenerateHtmlAsync(context)))
+        };
         }
 
         public IEnumerator<IElement> GetEnumerator() {
-            return _items.GetEnumerator();
+            return Items.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator() {
