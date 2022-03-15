@@ -40,7 +40,7 @@ namespace StaticSharpWeb {
             return _this;
         }
 
-        public static T? Modify<T>(this T? _this, Action<T?> modifier) where T : class {
+        public static T Modify<T>(this T _this, Action<T> modifier) where T : class {
             modifier.Invoke(_this);
             return _this;
         }

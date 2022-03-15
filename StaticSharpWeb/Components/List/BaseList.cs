@@ -18,7 +18,7 @@ namespace StaticSharpWeb {
             _type = type;
         }
 
-        public async Task<INode> GenerateHtmlAsync(Context context)
+        public async Task<Tag> GenerateHtmlAsync(Context context)
         {
             var result = new Tag(_type, new { Class = "List" }) {
                 new JSCall(AbsolutePath("List.js")).Generate(context)

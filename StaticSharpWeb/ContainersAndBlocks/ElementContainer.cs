@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace StaticSharpWeb;
 
-public class ElementContainer : IEnumerable, IElementContainer {
+public abstract class ElementContainer : Item, IEnumerable, IElementContainer {
     public List<IElement> Items { get; } = new();
 
     IEnumerator IEnumerable.GetEnumerator() {

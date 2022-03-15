@@ -106,9 +106,12 @@ function Property(value) {
     _this.onChanged = new Set()
     _this.binding = undefined
 
+    _this.makeDirty = function () {
+        _this.binding.onChangedHandler()
+    }
     
-    _this.onDependencyChanged = function () {
-        //console.log("onDependencyChanged", _this.binding.dirty, _this.binding)
+    _this.dependencyChanged = function () {
+        //console.log("dependencyChanged", _this.binding.dirty, _this.binding)
         _this.onChanged.forEach(x => x())
     }
 
@@ -139,7 +142,7 @@ function Property(value) {
             }
             
 
-            _this.binding = new Binging(value, _this.onDependencyChanged)
+            _this.binding = new Binging(value, _this.dependencyChanged)
 
 
         } else {

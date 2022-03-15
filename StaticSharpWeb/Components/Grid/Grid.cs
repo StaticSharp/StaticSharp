@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StaticSharpWeb.Components {
+namespace StaticSharpWeb {
     public class Grid : IEnumerable, IElement, IElementContainer {
 
         int MinElementWidthPx { get; }
@@ -37,7 +37,7 @@ namespace StaticSharpWeb.Components {
 
 
 
-        public async Task<INode> GenerateHtmlAsync(Context context) {
+        public async Task<Tag> GenerateHtmlAsync(Context context) {
             var css = //$"grid-template-columns: repeat(auto-fit, minmax({MinElementWidthPx}, 1fr)); " +
                 $"grid-template-columns: repeat(auto-fit, minmax( min({MinElementWidthPx}px, {100 / MinColumns}% - {Gap * (MinColumns - 1) / MinColumns}px), 1fr)); " +
                 //$"grid-template-columns: repeat(3, 1fr); " + 
@@ -94,9 +94,9 @@ namespace StaticSharpWeb.Components {
         };
     }
 
-    public static class GridStatic {
+    /*public static class GridStatic {
         public static void Add<T>(this T collection, Grid item) where T : IElementContainer {
             collection.AddElement(item);
         }
-    }
+    }*/
 }

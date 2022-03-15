@@ -24,11 +24,11 @@ namespace StaticSharpWeb {
             collection.AddBlock(item);
         }*/
 
-        public static void Add<T>(this T collection, ParagraphIinterpolatedStringHandler item) where T : IElementContainer, IColumn {
+        public static void Add<T>(this T collection, ParagraphIinterpolatedStringHandler item) where T : IElementContainer {
             collection.AddElement(item.Paragraph);
         }
 
-        public static void Add<T>(this T collection, string text) where T : IElementContainer, IColumn {
+        public static void Add<T>(this T collection, string text) where T : IElementContainer {
             collection.AddElement(new Paragraph() { text });
         }
 
@@ -76,7 +76,7 @@ namespace StaticSharpWeb {
     
 
 
-    public sealed class Paragraph : IEnumerable, IElementContainer, IElement, IPlainTextProvider, IContainerConstraints<IColumn> {
+    public sealed class Paragraph : Item, IEnumerable, IElementContainer, IElement, IPlainTextProvider, IContainerConstraintsNone {
 
 
         public object? Style { get; set; } = null;
@@ -130,16 +130,13 @@ namespace StaticSharpWeb {
             PlaneText = context => Task.FromResult("")
         });*/
 
-        public async Task<INode> GenerateHtmlAsync(Context context) {
+        /*public async Task<Tag> GenerateHtmlAsync(Context context) {
             var result = new Tag("div", new {
                 style = new {
                     MarginTop = $"{context.Theme.ParagraphSpacing}px",
                 }
             });
-            /*if (context.Parents.FirstOrDefault(x => x is IFontProvider) is IFontProvider fontProvider) {
-                var font = fontProvider?.Font with { Weight = FontWeight.Regular };
-                result.Attributes.Add("style", font.GenerateUsageCss(context));
-            }*/
+
 
             //var tasks = Items.OfType<IInline>().Select(x => x.GenerateInlineHtmlAsync(context));
             //context.Includes.Require(new Style(AbsolutePath("Paragraph.scss")));
@@ -150,7 +147,30 @@ namespace StaticSharpWeb {
                 result.Add(item);
             }
             return result;
+        }*/
+
+
+        public override IEnumerable<Task<Tag>> Before(Context context) {
+            foreach (var i in base.Before(context)) yield return i;
+            yield return Task.FromResult(
+                new JSCall(Layout.TextJsPath, null, "Before").Generate(context)
+                );
         }
+
+
+        public override async Task<Tag> Content(Context context) {
+            return new Tag(null) {
+                await Task.WhenAll(Items.Select(x => x.Html(context)))
+            };
+        }
+
+        public override IEnumerable<Task<Tag>> After(Context context) {
+            foreach (var i in base.After(context)) yield return i;
+            yield return Task.FromResult(
+                new JSCall(Layout.TextJsPath, null, "After").Generate(context)
+                );
+        }
+
 
         public async Task<INode> GenerateInlineHtmlAsync(Context context) {
             var result = new Tag("span");

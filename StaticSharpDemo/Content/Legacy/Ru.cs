@@ -36,11 +36,11 @@ namespace StaticSharpDemo.Root.Legacy {
             new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", "Ссылки с текстом и подсказкой: ", "Шарп"),
             //new Reference("https://ru.wikipedia.org/wiki/C_Sharp", "C#", image),
 
-            new Grid(ContentWidth / 4) {
+            /*new Grid(ContentWidth / 4) {
                     new MaterialCard(Node.Representative),
                     new MaterialCard(Node.Representative),
                     new MaterialCard(Node.Representative),
-                },
+                },*/
 
             new Paragraph() {
                 "AAAAAAA"

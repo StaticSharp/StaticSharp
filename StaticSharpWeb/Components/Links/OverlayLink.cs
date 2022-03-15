@@ -31,7 +31,7 @@ public class OverlayLink : IContainerConstraintsNone {
 
 
 
-    public async Task<INode> GenerateHtmlAsync(Context context) {
+    public async Task<Tag> GenerateHtmlAsync(Context context) {
         return new Tag("a", new {
             style = new { 
                 position = "absolute",

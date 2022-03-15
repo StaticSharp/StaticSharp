@@ -48,10 +48,9 @@ class CustomButton extends HTMLElement {
 
 
 
-function Button() {
+function Button(element) {
 
-    let element = this
-    let parent = this.parentElement;
+    let parent = element.parentElement;
     
     const padding = 16
     element.Reactive = {
@@ -75,13 +74,13 @@ function Button() {
     })*/
 
     new Reaction(() => {
-        element.style.left = this.Left + "px"
+        element.style.left = element.Left + "px"
     })
     new Reaction(() => {
-        element.style.width = this.Width + "px"
+        element.style.width = element.Width + "px"
     })
 
-    this.style.backgroundColor = "red"
+    element.style.backgroundColor = "red"
 
     //element.style.padding = padding+"px"
     element.style.display = "flex"

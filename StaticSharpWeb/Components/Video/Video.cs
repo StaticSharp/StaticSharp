@@ -145,7 +145,7 @@ namespace StaticSharpWeb.Components {
             return _image;
         }
 
-        public async Task<INode> GenerateHtmlAsync(Context context) {
+        public async Task<Tag> GenerateHtmlAsync(Context context) {
             VideoResource ??= await context.Storage.AddOrGetAsync(VideoCode, () => new VideoResource(VideoCode, context.Storage));
             _image ??= new Image(VideoResource.IntermediateImageCache);
             context.Includes.Require(new Style(AbsolutePath("Video.scss")));

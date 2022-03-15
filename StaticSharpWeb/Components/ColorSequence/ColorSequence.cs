@@ -13,7 +13,7 @@ namespace StaticSharpWeb {
     {
         public abstract string GetGradient();
         public abstract float TotalDuration { get; }
-        public async Task<INode> GenerateHtmlAsync(Context context)
+        public async Task<Tag> GenerateHtmlAsync(Context context)
         {
             var tag = new Tag("div");
             var innerTag = new Tag("div", new { Class = "ColorSequence"});

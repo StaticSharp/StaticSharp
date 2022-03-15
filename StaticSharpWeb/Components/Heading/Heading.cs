@@ -16,7 +16,7 @@ namespace StaticSharpWeb {
 
 
 
-    public class Heading : IContainerConstraints<IColumn> {
+    public class Heading : IContainerConstraintsNone {
 
         public object? Style { get; set; } = null;
 
@@ -26,7 +26,7 @@ namespace StaticSharpWeb {
             Text = text;
         }
 
-        public async Task<INode> GenerateHtmlAsync(Context context) {
+        public async Task<Tag> GenerateHtmlAsync(Context context) {
             return new Tag("h2", 
                 new {
                     style = SoftObject.MergeObjects(
@@ -37,8 +37,8 @@ namespace StaticSharpWeb {
                         )
                 })
             {
-                new JSCall(Layout.TextJsPath).Generate(context),
-                new JSCall(Layout.ReduceFontSizeOnOverflowJsPath).Generate(context),
+                //new JSCall(Layout.TextJsPath,null,"Before").Generate(context),
+                //new JSCall(Layout.ReduceFontSizeOnOverflowJsPath).Generate(context),
                 new TextNode(Text)
             };                
         }
@@ -66,7 +66,7 @@ namespace StaticSharpWeb {
                 new Tag("a", new { href = "#" + Identifier, title = "Heading anchor" })
             };*/
 
-        public async Task<INode> GenerateHtmlAsync(Context context) {
+        public async Task<Tag> GenerateHtmlAsync(Context context) {
 
             var anchorIconSource = new CacheableHttpRequest.Constructor(
                 MaterialDesignIcons.VectorLink.GetSvgUri()

@@ -7,19 +7,22 @@ using System.Threading.Tasks;
 namespace StaticSharpWeb;
 
 
-public class BillboardSolidColor: /*IEnumerable,*/ IElement, IContainerConstraints<IColumn> {
+public class BillboardSolidColor: Column, IContainerConstraints<IColumn> {
 
-    public object? Style { get; set; } = null;
+    /*public object? Style { get; set; } = null;
     public Color Color { get; set; }
     public string MinHeight { get; set; } = "30vh";
     public string FontSize { get; set; } = "1.5rem";
 
     public float MaxContentWidth { get; set; } = 640;
-    public Column Content { get; init; } = new();
+    public Column Content { get; init; } = new();*/
 
-    public async Task<INode> GenerateHtmlAsync(Context context) {
+    public override async Task<Tag> GenerateHtmlAsync(Context context) {
 
-        return new Tag("div", new {
+        return await base.GenerateHtmlAsync(context);
+
+
+        /*return new Tag("div", new {
             style = SoftObject.MergeObjects(
                 new {
                     TextAlign = "center",
@@ -33,7 +36,7 @@ public class BillboardSolidColor: /*IEnumerable,*/ IElement, IContainerConstrain
         {
             new JSCall(AbsolutePath("BillboardSolidColor.js"),MaxContentWidth ).Generate(context),
             await Task.WhenAll(Content.Items.Select(x => x.GenerateHtmlAsync(context)))
-        };
+        };*/
     }
 
     //public 

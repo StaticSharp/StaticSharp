@@ -1,5 +1,4 @@
-﻿function Footer() {
-    element = this
+﻿function Footer(element) {
     let parent = element.parentElement;
 
     element.style.height = "100px"

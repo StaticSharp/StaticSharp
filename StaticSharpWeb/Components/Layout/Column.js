@@ -1,49 +1,165 @@
 
 
-function Column(parameters) {
-    
+function ColumnBefore(element) {
 
-    let element = this
     let parent = element.parentElement;
 
-    this.Reactive = {
-        Width: undefined,
-        InnerWidth: () => this.Width,
-        PaddingLeft: 0
+    element.verticalLayout = true
+
+    element.style.display = "flex"
+    element.style.flexDirection = "column";
+    element.Reactive = {
+        Padding: new Border(),
+        Width: () => parent.Width,
+        Height: undefined,
+        InnerWidth: () => parent.InnerWidth || element.Width,
+        PaddingLeft: () => parent.PaddingLeft || 0
     }
 
+    element.Padding.Left = (parent.Padding && parent.Padding.Left) || 0
+    element.Padding.Right = (parent.Padding && parent.Padding.Right) || 0
+
     new Reaction(() => {
-        if (this.Width)
-            this.style.width = this.Width + "px"
+        if (element.Width)
+            element.style.width = element.Width + "px"
         else
-            this.style.width = undefined
+            element.style.width = undefined
 
     })
-
-    /*new Reaction(() => {
-        console.log("Column.PaddingLeft", this.PaddingLeft)
-    })*/
-
-    /*
-
-    new Property(undefined)
-        .attach(element, "Width");
-
-    new Reaction(() => {
-        if (element.Width) element.style.width = element.Width + "px"
-    })
-
-    new Property()
-        .attach(element, "MaxInnerWidth");
-
-    new Property(() => Math.min(element.Width, element.MaxInnerWidth))
-        .attach(element, "InnerWidth")
-
-    new Property(() => (element.Width - element.InnerWidth)*0.5)
-        .attach(element, "PaddingLeft")*/
-
     
     parent[element.id] = element
+    //console.log("column", element)
+}
+
+
+function ColumnAfter(element) {
+    //optimize: 2 reactions for width and height
+    new Reaction(() => {
+        //console.log("ColumnAfter Reaction", element)
+
+        let children = element.children
+        let previousMarginTop = element.Padding.Top
+        //let containerPaddingLeft = element.Padding.Left
+        //let containerPaddingRight = element.Padding.Right
+        //let containerWidth = element.Width
+
+
+
+        for (let i = 0; i < children.length; i++) {
+            let current = children[i];
+            if (current.style.position == "absolute") {
+                continue
+            }
+
+            let marginTop = previousMarginTop
+            //let marginLeft = 0
+            //let width = containerWidth
+            
+            if (current.Margin) {
+
+                marginTop = Math.max(current.Margin.Top, previousMarginTop)
+                previousMarginTop = current.Margin.Bottom
+                //marginLeft = Math.max(current.Margin.Left, containerPaddingLeft)
+                //let marginRight = Math.max(current.Margin.Right, containerPaddingRight)
+
+                //width = containerWidth - marginLeft - marginRight
+            } else {
+                previousMarginTop = 0
+            }
+            
+            current.style.marginTop = marginTop + "px"
+            //current.style.marginLeft = marginLeft + "px"
+            //current.style.width = width + "px"
+        }
+
+        element.style.paddingBottom = previousMarginTop+"px"
+
+    })
+
+
+    /*let children = element.children
+
+    if (children.length > 0) {
+        new Reaction(() => {
+            console.log("element.Padding.Top", element.Padding.Top, children[0])
+            let firstChild = children[0]
+            let m = 0
+
+            if (firstChild.Margin != undefined) {
+                m = firstChild.Margin.Top
+            }
+            firstChild.style.marginTop = Math.max(m, element.Padding.Top) + "px"
+        })
+
+
+        new Reaction(() => {
+            let lastChild = children[children.length - 1]
+            let m = 0
+            if (lastChild.Margin != undefined) {
+                m = lastChild.Margin.Bottom
+            }
+            lastChild.style.marginBottom = Math.max(m, element.Padding.Bottom) + "px"
+        })
+
+        
+
+    }
+
+    function createMiddleMarginReaction(previous, current) {
+        return function () {
+            let pm = 0
+            let cm = 0
+            if (previous.Margin) {
+                pm = previous.Margin.Top
+            }
+            if (current.Margin) {
+                cm = current.Margin.Top
+            }
+            let margin = Math.max(cm, pm)
+            current.style.marginTop = margin+"px"
+        }
+    }
+
+    for (let i = 1; i < children.length; i++) {
+        let previous = children[i-1];
+        let current = children[i];
+        new Reaction(createMiddleMarginReaction(previous, current))
+
+
+        //current.Margin.Top = createMiddleMarginBinding(previous,current)
+
+        //new Reaction(createMiddleMarginReaction(previous, current))
+        console.log(element.id, i, element.children[i].tagName, children[i].class);
+    }*/
+
+    
+
+
+
+    /*new Reaction(() => {
+        let space = element.Padding.Top
+
+        for (let i = 0; i < element.children.length; i++) {
+            let child = children[i];
+            child.Margin.
+
+
+            console.log(element.id, i, element.children[i].tagName);
+        }
+
+    })*/
+
+    
+
+
+
+    function Use(value) {
+        return 0;
+    }
+
+    element.Reactive = {
+        Height: () => Use(element.Width) + element.clientHeight,
+    }
 
 
 }

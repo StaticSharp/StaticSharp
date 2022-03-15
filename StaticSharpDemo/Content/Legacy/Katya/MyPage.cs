@@ -18,7 +18,7 @@ namespace StaticSharpDemo.Root.Legacy.Katya {
                 "Тестовый параграф"
             },
 
-            new Grid(ContentWidth / 4) {
+            /*new Grid(ContentWidth / 4) {
                 new MaterialCard(Node.Representative),
                 new MaterialCard(Node.Representative),
                 new MaterialCard(Node.Representative),
@@ -28,7 +28,7 @@ namespace StaticSharpDemo.Root.Legacy.Katya {
                 new MaterialCard(Node.Representative),
                 new MaterialCard(Node.Representative),
                 new MaterialCard(Node.Representative),
-            },
+            },*/
 
             new Paragraph()
             {

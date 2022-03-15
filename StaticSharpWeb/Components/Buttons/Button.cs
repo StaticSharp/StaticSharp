@@ -14,7 +14,7 @@ public class Button : /*IEnumerable,*/ IElement, IContainerConstraintsNone {
 
     
 
-    public async Task<INode> GenerateHtmlAsync(Context context) {
+    public async Task<Tag> GenerateHtmlAsync(Context context) {
 
         context.Includes.Require(new Script(AbsolutePath("Button.js")));
 

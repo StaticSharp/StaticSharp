@@ -10,8 +10,8 @@
             new Heading("SCSS"),
             $"Элемент отталкивается от предидущего. т.е. имеют только верхни margin",
 
-            new BillboardSolidColor { Color = Color.Violet },
-            new BillboardSolidColor { Color = Color.BlueViolet }
+            //new BillboardSolidColor { Color = Color.Violet },
+            //new BillboardSolidColor { Color = Color.BlueViolet }
 
         };
     }

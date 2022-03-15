@@ -17,7 +17,7 @@ namespace StaticSharpWeb {
         }
 
 
-        public async Task<INode> GenerateHtmlAsync(Context context) {
+        public async Task<Tag> GenerateHtmlAsync(Context context) {
             var componentClassName = this.GetType().Name;
             var componentName = nameof(Panel);
             var tag = new Tag("div") {

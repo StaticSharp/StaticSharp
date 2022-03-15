@@ -16,11 +16,11 @@ namespace StaticSharpWeb {
             //if (!suppressWarning) { Log.ToDo.OnObject(this, text); }
         }
 
-        public async Task<INode> GenerateHtmlAsync(Context context) {
+        public async Task<Tag> GenerateHtmlAsync(Context context) {
             if (!Enabled) { return new Tag(null); }
             var result = new Tag("span") { Text };
-            result.Attributes.Add("class", nameof(ToDo));
-            result.Attributes.Add("title", Text);
+            result.AttributesNotNull.Add("class", nameof(ToDo));
+            result.AttributesNotNull.Add("title", Text);
             context.Includes.Require(new Style(AbsolutePath("ToDo.scss")));
             return result;
         }

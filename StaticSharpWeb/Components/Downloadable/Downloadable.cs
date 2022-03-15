@@ -100,7 +100,7 @@ namespace StaticSharpWeb.Components {
 
 
 
-        public async Task<INode> GenerateHtmlAsync(Context context) {
+        public async Task<Tag> GenerateHtmlAsync(Context context) {
             //SourcePath + PrimaryName
             Resource ??= await context.Storage.AddOrGetAsync(
                 SourcePath, 

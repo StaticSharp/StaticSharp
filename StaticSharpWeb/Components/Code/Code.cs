@@ -219,7 +219,7 @@ namespace StaticSharpWeb.Components {
             return code[a..b];
         }
 
-        public async Task<INode> GenerateHtmlAsync(Context context) {
+        public async Task<Tag> GenerateHtmlAsync(Context context) {
             _codeResource ??= await context.Storage.AddOrGetAsync(_source, () => new CodeResource(_source));
             //throw new NotImplementedException();
             //var result = new Tag(null);

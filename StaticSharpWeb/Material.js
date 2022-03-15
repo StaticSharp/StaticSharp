@@ -1,16 +1,16 @@
-function Material(parameters) {
-
-    //console.log(this.$.A)
-
+function Material(element,parameters) {
+    
     document.body.style.backgroundColor = "violet"
 
-
-    PropertyTest()
+    //PropertyTest()
 
     window.Reactive = {
         InnerWidth: window.innerWidth,
         InnerHeight: window.innerHeight,
     }
+
+    
+
 
     window.onresize = function (event) {
         let d = Reaction.beginDeferred()
@@ -19,8 +19,9 @@ function Material(parameters) {
         d.end()
     }
 
-    this.Reactive = {
+    element.Reactive = {
         Content: undefined,
+        Footer: undefined,
     }
 
 
@@ -39,9 +40,9 @@ function Material(parameters) {
         }
     })*/
 
-    this.Reactive.Content.OnChanged((previous, current) => {
+    element.Reactive.Content.OnChanged((previous, current) => {
         if (current) {
-            this.Content.style.minHeight = "100%"
+            //element.Content.style.minHeight = "100%"
             /*this.Content.Reactive = {
                 Width : () => window.InnerWidth,
                 InnerWidth: () => Math.min(window.InnerWidth, parameters.ContentWidth),
@@ -71,28 +72,60 @@ function Material(parameters) {
         const LeftBarSize = 200
         const RightBarSize = 50
 
-        if (this.Content) {
-            //console.log("content assigned")
+        let width = window.InnerWidth - LeftBarSize - RightBarSize
+        let innerWidth = Math.min(width, parameters.ContentWidth)
+        let paddingLeft = (width - innerWidth) * 0.5
+
+        if (element.Content) {           
             
             
-            this.Content.Width = window.InnerWidth - LeftBarSize - RightBarSize
-            this.Content.InnerWidth = Math.min(this.Content.Width, parameters.ContentWidth)
-            this.Content.PaddingLeft = (this.Content.Width - this.Content.InnerWidth) * 0.5
+            element.Content.Width = width
+            //element.Content.InnerWidth = innerWidth
+            element.Content.Padding.Left = paddingLeft
+            element.Content.Padding.Right = width - innerWidth - paddingLeft
 
-
-            this.Content.style.left = LeftBarSize + "px"
+            element.Content.style.left = LeftBarSize + "px"
 
             //this.Content.MaxInnerWidth = parameters.ContentWidth
             //this.Content.Width = window.InnerWidth - LeftBarSize - RightBarSize
         }
+
+        if (element.Footer) {
+            element.Footer.style.left = LeftBarSize + "px"
+            element.Footer.style.minHeight = "50px"
+            element.Footer.style.backgroundColor = "yellow"
+
+            element.Footer.Width = width
+            element.Footer.InnerWidth = innerWidth
+            element.Footer.PaddingLeft = paddingLeft
+
+            if (element.Footer.Height) {
+                element.Footer.style.position = "absolute"
+
+                let contentHeight = 0
+                if (element.Content) {
+                    contentHeight = element.Content.Height || 0
+                }
+
+                var top = Math.max(contentHeight, window.InnerHeight - element.Footer.Height)
+
+                element.Footer.style.top = top + "px"
+
+
+
+                //console.log("element.Footer.Height", element.Footer.Height)
+
+            }
+
+        }
+
     })
 
-    document.title = "!!";
+
     
 
-    console.log(parameters.ContentWidth)
+    //console.log(parameters.ContentWidth)
 
-    element = this
 
     /*new Property().attach(element, "Content")
 

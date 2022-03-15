@@ -28,7 +28,7 @@ namespace StaticSharpWeb.Components {
             };
         }
 
-        public async Task<INode> GenerateHtmlAsync(Context context) {
+        public async Task<Tag> GenerateHtmlAsync(Context context) {
             var material = MaterialGetter(context);
             var node = (material as StaticSharpEngine.IRepresentative)?.Node;
             if (node == null) {

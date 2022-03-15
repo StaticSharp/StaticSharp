@@ -33,7 +33,7 @@ public class Table : IElement, IEnumerable {
     public void Add(object item) {
         _text.Add(item);
     }
-    public async Task<INode> GenerateHtmlAsync(Context context)
+    public async Task<Tag> GenerateHtmlAsync(Context context)
     {
         if (_text.Count % _colCount != 0) {
             throw new Exception("Размер создаваемой таблицы не соответствует числу предполагаемых элементов таблицы.");

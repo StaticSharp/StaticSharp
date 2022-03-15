@@ -25,7 +25,7 @@ namespace StaticSharpWeb {
             _hrefText = href;
         }
         //private void SetHref(string href) => _href = href;
-        public async Task<INode> GenerateHtmlAsync(Context context)
+        public async Task<Tag> GenerateHtmlAsync(Context context)
         {
             INode node = null;
             if (_image != null) {

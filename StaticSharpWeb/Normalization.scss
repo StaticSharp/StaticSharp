@@ -13,7 +13,13 @@
         align-content: inherit;
         text-align: inherit;
         box-sizing: border-box;
+        word-wrap: break-word;
         //overflow: clip;
+        overflow: hidden;
+    }
+
+    * {
+        outline: 1px solid #f00 !important;
     }
 
     a:hover {
@@ -38,5 +44,6 @@
         display: flex;
         flex-direction: column;
         background-color: chartreuse;
+        overflow: auto;
     }
 }

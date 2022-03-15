@@ -23,7 +23,7 @@ namespace StaticSharpWeb {
             => Image = image;
 
 
-        public async Task<INode> GenerateHtmlAsync(Context context) {
+        public async Task<Tag> GenerateHtmlAsync(Context context) {
             var result = new Tag("a", new { href = Href, Class = "\"Text\", \"Reference\", \"ExternalReference\"" });
             if (Image != null) {
                 result.Attributes.Add("style", "display: block");

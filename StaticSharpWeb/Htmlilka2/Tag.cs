@@ -101,7 +101,7 @@ namespace StaticSharpWeb.Html {
             }            
         }
 
-        public void WriteHtml(StringBuilder builder) {
+        public virtual void WriteHtml(StringBuilder builder) {
 
             void WriteCssStyle(StringBuilder builder, object styleObject) {
                 if (styleObject is string styleObjectString) {

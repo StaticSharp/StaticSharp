@@ -1,12 +1,53 @@
 ﻿using StaticSharpWeb.Html;
-
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
 
+
+namespace StaticSharpWeb.Html {
+    
+
+}
+
+
+
 namespace StaticSharpWeb {
 
-    internal class JSCall {
+
+    public class JSCall {
+
+        private static readonly JsonSerializerOptions JsonSerializerOptions = new() {
+            IncludeFields = true,
+        };
+        public string Path { get; }
+        public string Suffix { get; }
+        public object? Parameters { get; }
+
+        public JSCall(string path, object? parameters = null, string suffix = "") {
+            Path = path;
+            Suffix = suffix;
+            Parameters = parameters;
+        }
+
+        public Tag Generate(Context context) {
+
+            var functionName = System.IO.Path.GetFileNameWithoutExtension(Path);
+
+            context.Includes.Require(new Script(Path));
+
+            string parametersJson = "{}";
+            if (Parameters != null) {
+                parametersJson = JsonSerializer.Serialize(Parameters, JsonSerializerOptions);
+            }
+
+            return new Tag("script"){
+                new PureHtmlNode($"StaticSharpCall({functionName+Suffix},{parametersJson});")
+            };
+        }
+    }
+
+    /*internal class JSCall {
 
         private static readonly JsonSerializerOptions JsonSerializerOptions = new() {
             IncludeFields = true,
@@ -43,5 +84,5 @@ namespace StaticSharpWeb {
                 new PureHtmlNode(code)
             };
         }
-    }
+    }*/
 }

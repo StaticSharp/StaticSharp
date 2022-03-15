@@ -113,11 +113,17 @@ namespace StaticSharpWeb {
             content.Name = "div";
             content.AttributesNotNull["id"] = "Content";
 
-            if (Footer != null) {
-                content.Add(await Footer.GenerateHtmlAsync(context));
-            }
+            
 
             body.Add(content);
+
+
+            if (Footer != null) {
+                body.Add((await Footer.GenerateHtmlAsync(context)).ModifyIfNotNull(x => {
+                    x.AttributesNotNull["id"] = "Footer";
+                }));
+            }
+
 
             /*var tasks = new List<Task<INode>>();
             if (RightSideBar != null) {
@@ -152,7 +158,7 @@ namespace StaticSharpWeb {
             return body;
         }
 
-        public async Task<INode> GenerateHtmlAsync(Context context) {
+        public async Task<Tag> GenerateHtmlAsync(Context context) {
             var representative = this as  StaticSharpEngine.IRepresentative;
             //todo: material outside of the tree exceprion
             var uri = context.NodeToUrl(representative?.Node);
@@ -174,5 +180,5 @@ namespace StaticSharpWeb {
         }
     }
 
-    public class MaterialContent : ElementContainer, ITextAnchorsProvider, IFillAnchorsProvider, IWideAnchorsProvider {}
+    //public class MaterialContent : ElementContainer, ITextAnchorsProvider, IFillAnchorsProvider, IWideAnchorsProvider {}
 }
