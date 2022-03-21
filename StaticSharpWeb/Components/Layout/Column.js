@@ -12,12 +12,12 @@ function ColumnBefore(element) {
         Padding: new Border(),
         Width: () => parent.Width,
         Height: undefined,
-        InnerWidth: () => parent.InnerWidth || element.Width,
-        PaddingLeft: () => parent.PaddingLeft || 0
+        //InnerWidth: () => parent.InnerWidth || element.Width,
+        //PaddingLeft: () => parent.PaddingLeft || 0
     }
 
-    element.Padding.Left = (parent.Padding && parent.Padding.Left) || 0
-    element.Padding.Right = (parent.Padding && parent.Padding.Right) || 0
+    element.Padding.Left = () => (parent.Padding && parent.Padding.Left) || 0
+    element.Padding.Right = () => (parent.Padding && parent.Padding.Right) || 0
 
     new Reaction(() => {
         if (element.Width)
@@ -56,7 +56,6 @@ function ColumnAfter(element) {
             //let width = containerWidth
             
             if (current.Margin) {
-
                 marginTop = Math.max(current.Margin.Top, previousMarginTop)
                 previousMarginTop = current.Margin.Bottom
                 //marginLeft = Math.max(current.Margin.Left, containerPaddingLeft)
@@ -153,9 +152,7 @@ function ColumnAfter(element) {
 
 
 
-    function Use(value) {
-        return 0;
-    }
+    
 
     element.Reactive = {
         Height: () => Use(element.Width) + element.clientHeight,

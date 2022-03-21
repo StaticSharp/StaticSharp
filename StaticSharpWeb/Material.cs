@@ -32,7 +32,7 @@ namespace StaticSharpWeb {
         public virtual Paragraph Description => null;
 
         public virtual Column? Content => null;
-        public virtual Footer Footer => null;
+        public virtual Column? Footer => null;
         public virtual int ContentWidth => 400;
         
         public virtual RightSideBar RightSideBar => null;
@@ -113,16 +113,18 @@ namespace StaticSharpWeb {
             content.Name = "div";
             content.AttributesNotNull["id"] = "Content";
 
-            
 
-            body.Add(content);
+            content.Add(await new Spacer().GenerateHtmlAsync(context));
+
 
 
             if (Footer != null) {
-                body.Add((await Footer.GenerateHtmlAsync(context)).ModifyIfNotNull(x => {
+                content.Add((await Footer.GenerateHtmlAsync(context)).ModifyIfNotNull(x => {
                     x.AttributesNotNull["id"] = "Footer";
                 }));
             }
+
+            body.Add(content);
 
 
             /*var tasks = new List<Task<INode>>();

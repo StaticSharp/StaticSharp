@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace StaticSharpWeb {
     public abstract class Item : Component , IContainerConstraintsNone {
 
+        protected virtual string TagName => "div";
         public virtual IEnumerable<Task<Tag>> Before(Context context) {
             yield return Task.FromResult(new JSCall(AbsolutePath("Item.js"), null, "Before").Generate(context));
         }
@@ -20,7 +21,7 @@ namespace StaticSharpWeb {
             var content = Content(context);
             var after = Task.WhenAll(After(context));
 
-            return new Tag("div") {
+            return new Tag(TagName) {
                 await before,
                 await content,
                 await after

@@ -90,7 +90,9 @@ function StaticSharpCall(func, parameters) {
     //func.call(parent, parent)
 }
 
-
+function Use(value) {
+    return 0;
+}
 
 
 

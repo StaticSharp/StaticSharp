@@ -9,22 +9,21 @@ partial class Ru : Material {
     public override Paragraph Description => $"Компоненты для создания страниц.";
 
 
-    
 
-    
-
-    IEnumerable<Paragraph> CreateParagraphs() {
-        Random random = new Random(0);
-
-        string RandomString(int length) {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789   ";
-            return new string(Enumerable.Repeat(chars, length)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
-        }
-
-
-        return Enumerable.Range(0, 1000).Select(i => new Paragraph() { $"This is paragraph #{i} {RandomString(random.Next(100))}" });
+    static string RandomString(int length, Random random) {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789   ";
+        return new string(Enumerable.Repeat(chars, length)
+            .Select(s => s[random.Next(s.Length)]).ToArray());
     }
+
+
+    IEnumerable<Paragraph> CreateParagraphs(int count) {
+        Random random = new Random(0);
+        return Enumerable.Range(0, count).Select(i => new Paragraph() { $"This is paragraph #{i} {RandomString(random.Next(100), random)}" });
+    }
+
+
+
 
     public override Column Content => new() {
 
@@ -34,10 +33,10 @@ partial class Ru : Material {
 
 
         new Heading("Создание нового компонента."),
-        $"Если понадобится компонент, которого нет среди стандартных.",
+        $"Если понадобится компонент,которого {"aligned text":<->} нет среди стандартных.",
         $"Можно создать компонент прям в проекте вашего сайта.",
         //new ToDo("пример кода"),
-        $"Тут подробнее : {Node.Root.Customization.HowToCreateNewComponent}",
+        $"Тут подробнее : {Node.Root.Customization.HowToCreateNewComponent} текст после ссылки",
 
 
         //CreateParagraphs(),
@@ -65,6 +64,52 @@ partial class Ru : Material {
 
         new Heading("Buttons"),
 
+        /*new Row().Modify(x => {
+            foreach (var i in CreateParagraphs(1000))
+                x.Add(i);
+        }),*/
+
+
+        new Row() {
+@"как выжил шерлок где ответы
+купить китайский грузовик
+как делать рыбные котлеты
+кино россия боевик
+актриса оттепель марьяна
+актер играет дартаньяна
+гвоздильный автомат станок
+как подключается звонок
+эстония анкета виза
+старославянский алфавит
+вид с космоса реальный вид
+цветной советский телевизор
+что входит в оливье салат
+подарочный сертификат",
+
+new Spacer(),
+
+@"что ответить на кто он такой
+ударение в слове доской
+корпорация центр
+гидрометеоцентр
+что мне делать с вселенской тоской",
+
+@"石室詩士施氏, 嗜獅, 誓食十獅。
+氏時時適市視獅。
+十時, 適十獅適市。
+是時, 適施氏適市。
+氏視是十獅, 恃矢勢, 使是十獅逝世。
+氏拾是十獅屍, 適石室。
+石室濕, 氏使侍拭石室。
+石室拭, 氏始試食是十獅。
+食時, 始識是十獅, 實十石獅屍。
+試釋是事。"
+
+        },
+
+        new Row() {
+            "A",new Spacer(1),"A",new Spacer(2),"A",new Spacer(1),"A",new Spacer(1),"A",new Spacer(1),"A",new Spacer(1),"B"
+        }
 
 
 

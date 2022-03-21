@@ -25,9 +25,7 @@ function ItemBefore(element) {
 }
 
 function ItemAfter(element) {
-    function Use(value) {
-        return 0;
-    }
+
 
     element.Reactive = {
         ContentHeight: () => Use(element.Width) + element.clientHeight,

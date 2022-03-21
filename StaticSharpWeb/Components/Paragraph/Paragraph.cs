@@ -34,6 +34,11 @@ namespace StaticSharpWeb {
 
     }
 
+    public static class Alignment {
+        public static readonly int PushLeft = 0;
+
+    }
+
     [InterpolatedStringHandler]
     public class ParagraphIinterpolatedStringHandler: IElementContainer {
         public Paragraph Paragraph { get; } = new();
@@ -59,6 +64,11 @@ namespace StaticSharpWeb {
             Paragraph.Add(item);
         }
 
+         
+        public void AppendFormatted(string text, int alignment = 0, string? format = null) {
+
+        }
+
         public void AppendFormatted(StaticSharpEngine.ITypedRepresentativeProvider<IInline> item) {
             Paragraph.Add(item.Representative);
         }
@@ -78,11 +88,11 @@ namespace StaticSharpWeb {
 
     public sealed class Paragraph : Item, IEnumerable, IElementContainer, IElement, IPlainTextProvider, IContainerConstraintsNone {
 
-
+        protected override string TagName => "p";
         public object? Style { get; set; } = null;
 
         public struct Generators {
-            public Func<Context, Task<INode>> Html;
+            public Func<Context, Task<Tag?>> Html;
             public Func<Context, Task<string>> PlaneText;
         }
 
@@ -101,9 +111,29 @@ namespace StaticSharpWeb {
             return paragraphIinterpolatedStringHandler.Paragraph;
         }*/
 
+        private void LineToTag(string value, Tag tag) {
+            //tag.Add(value);
+            var words = value.Split(new[] { " " }, StringSplitOptions.None);
+            foreach (var i in words)
+                tag.Add(new Tag("w") { i });
+        }
+
+        private Tag? StringToTag(string value) {
+            if (string.IsNullOrEmpty(value))
+                return null;
+            var lines = value.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+            var result = new Tag(null);
+            LineToTag(lines[0], result);
+
+            for (int i = 1; i < lines.Length; i++) {
+                result.Add(new Tag("n"));
+                LineToTag(lines[i], result);
+            }
+            return result;
+        }
 
         public void Add(string item) => Items.Add(new() {
-            Html = context => Task.FromResult(new TextNode(item) as INode),
+            Html = context => Task.FromResult(StringToTag(item)),
             PlaneText = context => Task.FromResult(item)
         });
 
