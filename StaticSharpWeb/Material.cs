@@ -15,11 +15,11 @@ namespace StaticSharpWeb {
         IImage TitleImage { get; }
     }
 
-    internal interface IFontProvider {
+    /*internal interface IFontProvider {
         public Font Font { get; }
-    }
+    }*/
 
-    public abstract class Material : IMaterial, IInline, IPage, IPlainTextProvider, IFontProvider {
+    public abstract class Material : IMaterial, IInline, IPage, IPlainTextProvider {
         //public class TChildren : List<object> { }
 
         public virtual IImage TitleImage => null;
@@ -38,7 +38,10 @@ namespace StaticSharpWeb {
         public virtual RightSideBar RightSideBar => null;
         public virtual LeftSideBar LeftSideBar => null;
 
-        public virtual Font Font => new(Path.Combine(AbsolutePath(), "Fonts", "roboto"), FontWeight.Regular);
+        public virtual Font Font => new Font(AbsolutePath("Fonts/roboto"));
+        public virtual float FontSize => 16;
+
+        //public virtual Font Font => new(Path.Combine(AbsolutePath(), "Fonts", "roboto"), FontWeight.Regular);
 
         public async Task<string> GeneratePageHtmlAsync(Context context) {
             context.Parents = context.Parents.Prepend(this);
@@ -46,6 +49,9 @@ namespace StaticSharpWeb {
             context.Includes.Require(new Style(AbsolutePath("Normalization.scss")));
 
             context.Includes.Require(new Style(AbsolutePath("Debug.scss")));
+
+
+            
 
             var head = new Tag("head"){
                     new Tag("meta", new{ charset = "utf-8" }),
@@ -71,7 +77,12 @@ namespace StaticSharpWeb {
         }
 
         public virtual async Task<Tag> GetBodyAsync(Context context) {
-            var font = Font.GenerateUsageCss(context);
+            var cacheableFont = Font.CreateOrGetCached();
+            context.Includes.Require(cacheableFont);
+
+            context.Font = Font;
+            context.FontSize = FontSize;
+            var font = cacheableFont.GenerateUsageCss(context);
 
             context.Includes.Require(new Script(Bindings.BindingsJsPath));
 
@@ -79,18 +90,16 @@ namespace StaticSharpWeb {
                 new {
                     style = SoftObject.MergeObjects(
                         new {
-                            //Display = "none",
+                            Display = "none",
                             BackgroundColor = context.Theme.Surface,
                             Color = context.Theme.OnSurface,
+                            FontSize = FontSize.ToString()+"px",
+
                         },
                         font
                     )
                 }                
                 ){
-
-                new Tag("script") {
-                    new PureHtmlNode("document.body.style.backgroundColor = \"green\";")
-                },
 
                 new JSCall(AbsolutePath("Material.js"),
                     new{
@@ -111,10 +120,15 @@ namespace StaticSharpWeb {
                 content = new Tag("div");
 
             content.Name = "div";
-            content.AttributesNotNull["id"] = "Content";
+            var attributes = content.AttributesNotNull;
+            attributes["id"] = "Content";
 
 
-            content.Add(await new Spacer().GenerateHtmlAsync(context));
+            /*attributes["xmlns"] = "http://www.w3.org/2000/svg";
+            attributes["xmlns:xlink"] = "http://www.w3.org/1999/xlink";*/
+
+
+            /*content.Add(await new Spacer().GenerateHtmlAsync(context));
 
 
 
@@ -122,7 +136,7 @@ namespace StaticSharpWeb {
                 content.Add((await Footer.GenerateHtmlAsync(context)).ModifyIfNotNull(x => {
                     x.AttributesNotNull["id"] = "Footer";
                 }));
-            }
+            }*/
 
             body.Add(content);
 

@@ -36,28 +36,27 @@ function ColumnAfter(element) {
     //optimize: 2 reactions for width and height
     new Reaction(() => {
         //console.log("ColumnAfter Reaction", element)
-
+        let width = element.Width
         let children = element.children
         let previousMarginTop = element.Padding.Top
-        //let containerPaddingLeft = element.Padding.Left
-        //let containerPaddingRight = element.Padding.Right
+
+        let containerPaddingLeft = element.Padding.Left
+        let containerPaddingRight = element.Padding.Right
         //let containerWidth = element.Width
 
-
+        let y = 0
 
         for (let i = 0; i < children.length; i++) {
-            let current = children[i];
-            if (current.style.position == "absolute") {
-                continue
-            }
+            let child = children[i];
+            
 
             let marginTop = previousMarginTop
             //let marginLeft = 0
             //let width = containerWidth
             
-            if (current.Margin) {
-                marginTop = Math.max(current.Margin.Top, previousMarginTop)
-                previousMarginTop = current.Margin.Bottom
+            if (child.Margin) {
+                marginTop = Math.max(child.Margin.Top, previousMarginTop)
+                previousMarginTop = child.Margin.Bottom
                 //marginLeft = Math.max(current.Margin.Left, containerPaddingLeft)
                 //let marginRight = Math.max(current.Margin.Right, containerPaddingRight)
 
@@ -65,8 +64,23 @@ function ColumnAfter(element) {
             } else {
                 previousMarginTop = 0
             }
-            
-            current.style.marginTop = marginTop + "px"
+
+            let left = Math.max(containerPaddingLeft, child.Margin.Left)
+            let right = Math.max(containerPaddingRight, child.Margin.Right)
+
+            y += marginTop
+            let d = Reaction.beginDeferred()
+            child.Y = y
+            child.X = left
+            child.Width = width - right - left
+            d.end()
+
+            y += child.Height
+
+
+
+
+            //current.style.marginTop = marginTop + "px"
             //current.style.marginLeft = marginLeft + "px"
             //current.style.width = width + "px"
         }

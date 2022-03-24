@@ -211,9 +211,51 @@ function HtmlTest(element) {
 
 function Material(element, parameters) {
 
-    Svg(element)
-    HtmlTest(element)
+    //Svg(element)
+    //HtmlTest(element)
     document.body.style.backgroundColor = "white"
+
+    let svgText = `
+        <svg xmlns = "http://www.w3.org/2000/svg" xml: lang = "en" width = "10cm" height = "2.5cm" >
+    <title>Positioning tspan</title>
+    <style type="text/css">
+        svg {
+            font-family: serif;
+            font-size: 12mm;
+            fill: navy;
+        }
+        .em {
+            fill: royalBlue;
+        }
+        .strong {
+            stroke: navy;
+            font-style: italic;
+        }
+    </style>
+    <rect fill="#CEE" width="100%" height="100%"/>
+    <text x="5mm" y="2.1cm">One, 
+        <tspan class="em" y="1.6cm">Two,</tspan>
+        <tspan class="strong em" y="1.1cm">Three!</tspan>
+    </text>
+</svg>
+    `
+    /*var doc = new DOMParser().parseFromString(svgText, 'application/xml');
+    element.appendChild(
+        element.ownerDocument.importNode(doc.documentElement, true));*/
+
+    let svg = document.createElement("div");
+
+    svg.innerHTML = svgText.trim()
+
+    
+
+
+    element.appendChild(svg);
+
+
+    /*document.body.innerHtml = */
+
+
 
     //PropertyTest()
 

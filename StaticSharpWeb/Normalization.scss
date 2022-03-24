@@ -20,18 +20,25 @@
     }
 
     p {
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: row;
+    }
+
+    t {
+        position: absolute;
+        display: inline;
+    }
+
+    span {
+        position: absolute;
     }
 
     w {
-        word-break: keep-all;
-        width: max-content;
+        position: absolute;
+        display: inline;
     }
 
     svg {
     }
+
 
 
     tspan::selection {
@@ -80,7 +87,7 @@
     }*/
 
     * {
-        //outline: 1px solid #f00 !important;
+        outline: 0.1px solid #f00 !important;
     }
 
     a:hover {

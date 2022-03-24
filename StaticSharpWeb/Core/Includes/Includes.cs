@@ -104,7 +104,7 @@ namespace StaticSharpWeb {
             var fontStyle = new StringBuilder();
 
             foreach(var i in fonts.Values) {
-                fontStyle.AppendLine(await i.GenerateAsync(storage));
+                fontStyle.AppendLine(await i.GenerateIncludeAsync(storage));
             }
             return new Tag("style") {
                 new PureHtmlNode(fontStyle.ToString())

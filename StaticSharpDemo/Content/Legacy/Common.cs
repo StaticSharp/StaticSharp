@@ -8,7 +8,8 @@ namespace StaticSharpDemo.Root.Legacy {
         public override int ContentWidth => 1200;
 
         public Image Image => new Image("a.png");
-        public string Titles {
+        public string 
+            s {
             get {
                 var options = Enum.GetValues<Language>().Select(x => VirtualNode.WithLanguage(x).Representative as Common);
 

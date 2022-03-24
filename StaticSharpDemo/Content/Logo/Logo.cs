@@ -19,7 +19,7 @@ namespace StaticSharpDemo.Root {
         }
 
         public async Task<StaticSharpWeb.Html.Tag> GenerateHtmlAsync(Context context) {
-            context.Includes.Require(new Font(AbsolutePath("..\\Fonts\\antilatency"), FontWeight.Regular, false));
+            //context.Includes.Require(new Font(AbsolutePath("..\\Fonts\\antilatency"), FontWeight.Regular, false));
             context.Includes.Require(new Style(AbsolutePath("Logo.scss")));
             var uri = context.NodeToUrl(_node);
             return new Tag("a", new {

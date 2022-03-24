@@ -74,7 +74,9 @@ Reaction.beginDeferred = function () {
             }
         };
     }
-    return undefined;
+    return {
+        end: function () { }
+    };
 }
 
 

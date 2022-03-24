@@ -21,6 +21,12 @@ namespace StaticSharpWeb {
 
         public Theme Theme;
 
+
+        public Font Font = new Font(DefaultFont.Arial);
+
+        public float FontSize = 16;
+
+
         public Context(IStorage storage, Uri baseUrl, Theme theme, INodeToUrl nodeToUrlConverter) {
             Storage = storage;
             //Urls = urls;

@@ -11,11 +11,16 @@ partial class Ru : Material {
 
 
     static string RandomString(int length, Random random) {
-        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789   ";
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789     ";
         return new string(Enumerable.Repeat(chars, length)
             .Select(s => s[random.Next(s.Length)]).ToArray());
     }
 
+    Paragraph CreateParagraph(int numChars) {
+        Random random = new Random(0);
+        //var result = new 
+        return new Paragraph() { RandomString(numChars, random) };
+    }
 
     IEnumerable<Paragraph> CreateParagraphs(int count) {
         Random random = new Random(0);
@@ -23,18 +28,26 @@ partial class Ru : Material {
     }
 
 
-
+    /*new Row().Modify(x => {
+    foreach (var i in CreateParagraphs(1000))
+        x.Add(i);
+}),*/
 
     public override Column Content => new() {
 
-        new Button($"Hello"),
+        //new Button($"Hello"),
 
         //new Item(),
 
 
-        new Heading("Создание нового компонента."),
-        $"Если понадобится компонент,которого {"aligned text":<->} нет среди стандартных.",
+        //new Heading("Создание нового компонента."),
+        $"A B C D",
+        $"Если   понадобится компонент,которого нет среди стандартных.",
         $"Можно создать компонент прям в проекте вашего сайта.",
+
+        CreateParagraph(10000),
+
+        /*
         //new ToDo("пример кода"),
         $"Тут подробнее : {Node.Root.Customization.HowToCreateNewComponent} текст после ссылки",
 
@@ -64,10 +77,7 @@ partial class Ru : Material {
 
         new Heading("Buttons"),
 
-        /*new Row().Modify(x => {
-            foreach (var i in CreateParagraphs(1000))
-                x.Add(i);
-        }),*/
+
 
 
         new Row() {
@@ -109,7 +119,7 @@ new Spacer(),
 
         new Row() {
             "A",new Spacer(1),"A",new Spacer(2),"A",new Spacer(1),"A",new Spacer(1),"A",new Spacer(1),"A",new Spacer(1),"B"
-        }
+        }*/
 
 
 

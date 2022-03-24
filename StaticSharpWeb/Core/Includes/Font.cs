@@ -1,4 +1,6 @@
-﻿using StaticSharpWeb.Resources;
+﻿using SkiaSharp;
+using StaticSharpGears;
+using StaticSharpWeb.Resources;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,7 +28,42 @@ namespace StaticSharpWeb {
         Black
     }
 
-    public enum SafeFonts {
+    
+
+
+    /*public abstract class AbstractFontFamily {
+        public string Name { get; init; }
+
+
+    }
+
+    public class FontFamily : AbstractFontFamily {
+
+        public string Directory { get; init; }
+        public FontFamily(string directory) {
+            Directory = directory;
+
+            var name = Path.GetFileName(directory);
+            Name = char.ToUpper(name[0]) + name[1..];
+
+        }
+    }
+    public class SafeFontFamily : AbstractFontFamily {
+
+        
+
+        public SafeFontFamily(FontFamily fontFamily) {
+            Name = fontFamily.ToString();
+        }
+    }
+
+    public struct FontSettings {
+        public FontWeight Weight;
+        public bool Italic;
+        public float Size;
+    }*/
+
+    public enum DefaultFont {
         Arial,
         TimesNewRoman,
         CourierNew,
@@ -34,17 +71,191 @@ namespace StaticSharpWeb {
 
 
 
+    public record Font(
+            string Directory,
+            string Family,
+            FontWeight Weight,
+            bool Italic
+
+            ) : Constructor<CacheableFont>{
+
+        private static string FamilyFromDirectory(string directory) {
+            var family = Path.GetFileName(directory);
+            return char.ToUpper(family[0]) + family[1..];
+        }
+
+        public Font(string directory, FontWeight weight = FontWeight.Regular, bool italic = false)
+            : this(directory, FamilyFromDirectory(directory), weight, italic) { }
+        public Font(DefaultFont defaultFont, FontWeight weight = FontWeight.Regular, bool italic = false)
+            : this("", defaultFont.ToString(), weight, italic) { }
+        protected override CacheableFont Create() {
+            return new CacheableFont(this);
+        }
+        
+    }
+
+    public interface ITextMeasurer {
+        float Measure(string text);
+    }
 
 
-    public partial record Font : IFont, IKey, ICallerInfo {
+    public class CacheableFont : Cacheable<Font>, IFont { 
+        
+        public SecondaryTask<string> Base64 { get; init; } = new();
+        public SecondaryTask<string> StyleInclude { get; init; } = new();
 
-        private readonly string _callerFilepath;
-        private readonly int _callerLineNumber;
+        //public SecondaryTask<SKTypeface> Typeface { get; init; } = new();
 
-        public string CallerFilePath => _callerFilepath;
-        public int CallerLineNumber => _callerLineNumber;
-        private string Directory { get; }
+        SecondaryTask<SixLabors.Fonts.FontFamily> FontFamily { get; init; } = new();
 
+
+        public CacheableFont(Font arguments) : base(arguments) {}
+        protected override async Task CreateAsync() {
+            //todo: case with SafeFont
+
+            var stringBuilder = new StringBuilder();
+            var path = FindFilePath();
+            var format = Formant[Path.GetExtension(path)];
+            var italicSuffix = Arguments.Italic ? " Italic" : "";
+            var fontStyle = Arguments.Italic ? "italic" : "normal";
+
+             
+
+            var base64 = Convert.ToBase64String(await File.ReadAllBytesAsync(path));
+            Base64.SetResult(base64);
+
+            /*using (FileStream fileStream = File.OpenRead(path)) {
+                var typeface = SKTypeface.FromStream(fileStream);
+
+
+                //var typeface = SKFontManager.Default.CreateTypeface(fileStream);
+                Typeface.SetResult(typeface);
+            }*/
+
+
+            SixLabors.Fonts.FontCollection fontCollection = new SixLabors.Fonts.FontCollection();
+            var family = fontCollection.Add(File.OpenRead(path));
+
+            FontFamily.SetResult(family);
+
+            //var font = family.CreateFont(16);
+
+            //SixLabors.Fonts.TextMeasurer.Measure("Text to measure", new(font));
+
+
+            stringBuilder.AppendLine("@font-face {");
+            stringBuilder.Append("font-family: '").Append(Arguments.Family).AppendLine("';");
+            stringBuilder.AppendLine($"src:local('{Arguments.Family} {Arguments.Weight}{italicSuffix}'),");
+            stringBuilder.AppendLine($"url(data:application/font-{format};charset=utf-8;base64,{base64}) format('{format}');");
+            stringBuilder.Append("font-weight: ").Append(Arguments.Weight).AppendLine(";");
+            stringBuilder.Append("font-style: ").Append(fontStyle).AppendLine(";\n}");
+
+            StyleInclude.SetResult(stringBuilder.ToString());
+        }
+
+        private class TextMeasurer2 : ITextMeasurer {
+
+            SixLabors.Fonts.Font font;
+            public TextMeasurer2(SixLabors.Fonts.FontFamily family, float fontSize) {
+                font = family.CreateFont(fontSize);
+            }
+
+            public float Measure(string text) {
+                var rect = SixLabors.Fonts.TextMeasurer.Measure(text, new(font));
+                return rect.Width;
+            }
+        }
+
+
+        private class TextMeasurer: ITextMeasurer {
+            SKPaint paint;
+            public TextMeasurer(SKTypeface typeface, float fontSize) {
+
+                
+
+                var font = new SKFont {
+                    Edging = SKFontEdging.SubpixelAntialias,
+                    Subpixel = false,
+                    Hinting = SKFontHinting.Normal,
+                    Typeface = typeface,
+                    Size = fontSize
+                };
+
+
+                paint = new SKPaint(font) {
+                    
+                    /*Typeface = typeface,
+                    TextSize = fontSize,*/
+
+                    /*IsAntialias = true,
+                    IsDither = false,
+                    Style = SKPaintStyle.Fill,
+                    Color = new SKColor(0, 0, 0, 255),
+                    StrokeMiter = 4,
+                    StrokeWidth = 0,
+                    StrokeCap = SKStrokeCap.Butt,
+                    BlendMode = SKBlendMode.SrcOver*/
+                };
+            }
+            public float Measure(string text) { 
+                return paint.MeasureText(text);
+            }
+
+        }
+
+        public async ValueTask<ITextMeasurer> CreateTextMeasurer(float fontSize) {
+            //return new TextMeasurer(await Typeface, fontSize);
+
+            return new TextMeasurer2(await FontFamily, fontSize);
+        }
+
+        public object GenerateUsageCss(Context context) {
+            context.Includes.Require(this);
+            return new {
+                FontFamily = Arguments.Family,
+                FontWeight = WeightToNames(Arguments.Weight).Last(),
+                FontStyle = Arguments.Italic ? "Italic" : null
+            };
+        }
+
+        public async Task<string> GenerateIncludeAsync(IStorage storage) {
+            return await StyleInclude;            
+        }
+
+
+
+        public const string ItalicName = "italic";
+        private string FindFilePath() {
+            var directoryName = Arguments.Family.ToLower();
+
+            bool MatchFileName(string filePath) {
+                var fileName = Path.GetFileNameWithoutExtension(filePath).ToLower();
+                if (!fileName.StartsWith(directoryName)) { return false; }
+                var parameters = fileName[directoryName.Length..].Trim(new[] { ' ', '-', '_' });
+                if (!Arguments.Italic) { return WeightToNames(Arguments.Weight).Any(x => x == parameters); }
+
+
+
+                if (!parameters.EndsWith(ItalicName)) { return false; }
+                parameters = parameters.Replace(ItalicName, "");
+                return WeightToNames(Arguments.Weight).Any(x => x == parameters);
+            }
+
+            if (!System.IO.Directory.Exists(Arguments.Directory)) {
+                throw new Exception();// InvalidUsageException(Arguments);
+            }
+            var files = System.IO.Directory.EnumerateFiles(Arguments.Directory);
+            files = files.OrderBy(x => ExtensionToPriority(Path.GetExtension(x).ToLower()));
+            foreach (var file in files) {
+                if (MatchFileName(file)) {
+                    if (Extensions.Contains(Path.GetExtension(file).ToLower())) {
+                        return file;
+                    }
+                }
+            }
+            return null;
+            //return files.FirstOrDefault(x => MatchFileName(x) && Extensions.Contains(Path.GetExtension(x).ToLower()));
+        }
 
         public static string[] WeightToNames(FontWeight weight) => weight switch {
             FontWeight.Thin => new[] { "thin", "100" },
@@ -59,11 +270,47 @@ namespace StaticSharpWeb {
             _ => throw new ArgumentOutOfRangeException(nameof(weight))
         };
 
+        public static readonly string[] Extensions = new[] { /*".woff2", ".woff",*/ ".ttf", ".eot" };
+        private static int ExtensionToPriority(string extension) => extension switch {
+            ".woff2" => 0,
+            ".woff" => 1,
+            ".ttf" => 2,
+            ".eot" => 3,
+            _ => int.MaxValue
+        };
+        private static IReadOnlyDictionary<string, string> Formant => new Dictionary<string, string>() {
+            [".woff2"] = "woff2",
+            [".woff"] = "woff",
+            [".ttf"] = "truetype",
+            [".eot"] = "embedded-opentype",
+            [".svg"] = "svg",
+        };
 
-        public const string ItalicName = "italic";
+    }
 
-        public static readonly string[] Extensions = new[] { ".woff2", ".woff", ".ttf", ".eot" };
 
+
+
+    /*public partial record Font : IFont, IKey, ICallerInfo {
+
+        private readonly string _callerFilepath;
+        private readonly int _callerLineNumber;
+
+        public string CallerFilePath => _callerFilepath;
+        public int CallerLineNumber => _callerLineNumber;
+        
+        
+        
+        
+        
+        //private string Directory { get; }
+
+
+        
+
+
+        
+        
         public string Family { get; init; }
         public FontWeight Weight { get; init; }
         public bool Italic { get; init; }
@@ -73,11 +320,22 @@ namespace StaticSharpWeb {
 
         public string Key => StaticSharpWeb.Key.Calculate(GetType(), Family, Weight, Italic);
 
-        public Font(string directory, FontWeight weight, bool italic = false, [CallerFilePath] string CallerFilePath = "", [CallerLineNumber] int CallerLineNumber = 0)
+        public Font(
+            string directory,
+            FontWeight weight,
+            bool italic = false,
+            [CallerFilePath] string CallerFilePath = "", [CallerLineNumber] int CallerLineNumber = 0) {
+
+            Directory = directory;
+
+            var family = Path.GetFileName(directory);
+            Family = char.ToUpper(family[0]) + family[1..];
+
+        }
             : this(char.ToUpper(directory.Split('\\').LastOrDefault()[0]) + directory.Split('\\').LastOrDefault()[1..], weight, italic)
             => (Directory, _callerFilepath, _callerLineNumber) = (directory, CallerFilePath, CallerLineNumber);
 
-        public Font(SafeFonts safeFonts, FontWeight weight, bool italic, [CallerFilePath] string CallerFilePath = "", [CallerLineNumber] int CallerLineNumber = 0)
+        public Font(SafeFontFamily.FontFamily safeFonts, FontWeight weight, bool italic, [CallerFilePath] string CallerFilePath = "", [CallerLineNumber] int CallerLineNumber = 0)
             : this(safeFonts.ToString(), weight, italic)
             => (_callerFilepath, _callerLineNumber) = (CallerFilePath, CallerLineNumber);
 
@@ -89,11 +347,6 @@ namespace StaticSharpWeb {
 
         public object GenerateUsageCss(Context context) {
             context.Includes.Require(this);
-            /*var result = new Dictionary<string, object> {
-                {"FontFamily" , Family},
-                {"FontWeight" , WeightToNames(Weight).Last() }
-            };
-            if ()*/
 
 
             return new {
@@ -148,44 +401,11 @@ namespace StaticSharpWeb {
                 _resultString = stringBuilder.ToString();
             }
 
-            private static int ExtensionToPriority(string extension) => extension switch {
-                ".woff2" => 0,
-                ".woff" => 1,
-                ".ttf" => 2,
-                ".eot" => 3,
-                _ => int.MaxValue
-            };
+            
 
-            private string FindFilePath() {
-                var directoryName = Font.Family.ToLower();
-
-                bool MatchFileName(string filePath) {
-                    var fileName = Path.GetFileNameWithoutExtension(filePath).ToLower();
-                    if (!fileName.StartsWith(directoryName)) { return false; }
-                    var parameters = fileName[directoryName.Length..].Trim(new[] { ' ', '-', '_' });
-                    if (!Font.Italic) { return WeightToNames(Font.Weight).Any(x => x == parameters); }
-                    if (!parameters.EndsWith(ItalicName)) { return false; }
-                    parameters = parameters.Replace(ItalicName, "");
-                    return WeightToNames(Font.Weight).Any(x => x == parameters);
-                }
-
-                if (!System.IO.Directory.Exists(Font.Directory)) {
-                    throw new InvalidUsageException(Font);
-                }
-                var files = System.IO.Directory.EnumerateFiles(Font.Directory);
-                files = files.OrderBy(x => ExtensionToPriority(Path.GetExtension(x).ToLower()));
-                foreach (var file in files){
-                    if (MatchFileName(file)){
-                        if (Extensions.Contains(Path.GetExtension(file).ToLower())){
-                            return file;
-                        }
-                    }
-                }
-                return null;
-                //return files.FirstOrDefault(x => MatchFileName(x) && Extensions.Contains(Path.GetExtension(x).ToLower()));
-            }
+            
 
 
         }
-    }
+    }*/
 }

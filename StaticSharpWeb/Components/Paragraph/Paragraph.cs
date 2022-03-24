@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -83,14 +84,19 @@ namespace StaticSharpWeb {
         }
     }
 
-    
 
+    /*public class SvgRowGenerator {
+        Tag Result = new Tag(null);
+        public 
+    
+    }*/
 
     public sealed class Paragraph : Item, IEnumerable, IElementContainer, IElement, IPlainTextProvider, IContainerConstraintsNone {
 
         protected override string TagName => "p";
         public object? Style { get; set; } = null;
 
+        
         public struct Generators {
             public Func<Context, Task<Tag?>> Html;
             public Func<Context, Task<string>> PlaneText;
@@ -98,7 +104,7 @@ namespace StaticSharpWeb {
 
         //protected List<object> Items { get; init; } = new();
 
-        private List<Generators> Items { get; init; } = new();
+        private List<object> Items { get; init; } = new();
 
         public IEnumerator GetEnumerator() => Items.GetEnumerator();
 
@@ -110,49 +116,103 @@ namespace StaticSharpWeb {
         /*public static implicit operator Paragraph(ParagraphIinterpolatedStringHandler paragraphIinterpolatedStringHandler) {
             return paragraphIinterpolatedStringHandler.Paragraph;
         }*/
+        private static void AddDefultSpace(int count, Tag tag) {
+            tag.Add(new String(' ', count));
+            //tag.Add(new Tag("w"));
+        }
+        private static void LineToTag(string value, Tag tag, ITextMeasurer textMeasurer) {
+            var span = new Span<char>();
+            int start = 0;
+            int length = 0;
+            void AddWord() {
+                if (length>0) {
+                    var word = value.Substring(start, length);
+                    tag.Add(
+                        new Tag("span", new {
+                            w = textMeasurer.Measure(word).ToString("0.00", CultureInfo.InvariantCulture),
+                        })
+                    { word }
+                    );
+                }
+            }
 
-        private void LineToTag(string value, Tag tag) {
-            //tag.Add(value);
-            var words = value.Split(new[] { " " }, StringSplitOptions.None);
-            foreach (var i in words)
-                tag.Add(new Tag("w") { i });
+            int spaces = 0;
+
+            for (int i = 0; i < value.Length; i++) {
+                var c = value[i];
+                if (c == ' ') {
+                    AddWord();
+                    start = i + 1;
+                    length = 0;
+                    spaces++;
+
+                } else {
+                    if (spaces > 0) {                        
+                        AddDefultSpace(spaces, tag);
+                        spaces = 0;
+                    }
+                    length++;
+                }
+
+                
+            }
+
+            AddWord();
         }
 
-        private Tag? StringToTag(string value) {
+        private static void StringToTag(string value, Tag tag, ITextMeasurer textMeasurer) {
             if (string.IsNullOrEmpty(value))
-                return null;
+                return;
+
             var lines = value.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
-            var result = new Tag(null);
-            LineToTag(lines[0], result);
+
+            LineToTag(lines[0], tag, textMeasurer);
 
             for (int i = 1; i < lines.Length; i++) {
-                result.Add(new Tag("n"));
-                LineToTag(lines[i], result);
+                tag.Add(new Tag("n"));
+                LineToTag(lines[i], tag, textMeasurer);
             }
-            return result;
         }
 
-        public void Add(string item) => Items.Add(new() {
-            Html = context => Task.FromResult(StringToTag(item)),
-            PlaneText = context => Task.FromResult(item)
-        });
+        public void Add(string item) {
+            Items.Add(item);
+            /*if (currentTextTag == null) {
+                currentTextTag = new Tag("text");
+            }
 
-        public void Add(IInline item) => Items.Add(new() {
+            Items.Add(new() {
+                Html = context => {
+                    Task.FromResult(StringToTag(item));
+                    
+                },
+                PlaneText = context => Task.FromResult(item)
+            });*/
+         }
+
+        public void Add(IInline item) {
+            Items.Add(item);
+        }
+
+        /*
+        => Items.Add(new() {
             Html = async context => await item.GenerateHtmlAsync(context),
             PlaneText = async context => item is IPlainTextProvider plainTextProvider
                 ? await plainTextProvider.GetPlaneTextAsync(context)
                 : string.Empty
-        });
+        });*/
 
         public void Add(StaticSharpEngine.ITypedRepresentativeProvider<IInline> item) => Add(item.Representative);
 
 
-        public void AddElement(IElement element) => Items.Add(new() {
+        public void AddElement(IElement element) {
+            Items.Add(element);
+        }
+        /*=> Items.Add(new() {
             Html = async context => await element.GenerateHtmlAsync(context),
             PlaneText = async context => element is IPlainTextProvider plainTextProvider
                 ? await plainTextProvider.GetPlaneTextAsync(context)
                 : string.Empty
-        });
+        });*/
 
 
         /*public void Add(INonVisual item) => Items.Add(new() {
@@ -183,40 +243,78 @@ namespace StaticSharpWeb {
         public override IEnumerable<Task<Tag>> Before(Context context) {
             foreach (var i in base.Before(context)) yield return i;
             yield return Task.FromResult(
-                new JSCall(Layout.TextJsPath, null, "Before").Generate(context)
+                new JSCall(Layout.AbsolutePath("Row.js"), null, "Before").Generate(context)
                 );
         }
 
 
         public override async Task<Tag> Content(Context context) {
-            return new Tag(null) {
-                await Task.WhenAll(Items.Select(x => x.Html(context)))
-            };
+            //Tag? currentTextTag = null;
+
+            var textMeasurer = await context.Font.CreateOrGetCached().CreateTextMeasurer(context.FontSize);
+            
+
+            var result = new Tag(null);
+            foreach (var i in Items) {
+                if (i is string iString) {
+                    /*if (currentTextTag == null) {
+                        currentTextTag = new Tag("text",new { 
+                            DataA = 9,//Ascent
+                            DataD = 2,//Descent
+                            DataSw = 5,//SpaceWidth
+                        });
+                    }*/
+                    StringToTag(iString, result, textMeasurer);
+                    continue;
+                }
+            
+            }
+            /*if (currentTextTag != null) {
+                result.Add(currentTextTag);
+            }*/
+            return result;
+
+                /*return new Tag(null) {
+                    await Task.WhenAll(Items.Select(x => x.Html(context)))
+                };*/
         }
 
         public override IEnumerable<Task<Tag>> After(Context context) {
             foreach (var i in base.After(context)) yield return i;
             yield return Task.FromResult(
-                new JSCall(Layout.TextJsPath, null, "After").Generate(context)
+                new JSCall(Layout.AbsolutePath("Row.js"), null, "After").Generate(context)
                 );
         }
 
+        public override async Task<Tag> GenerateHtmlAsync(Context context) {
 
-        public async Task<INode> GenerateInlineHtmlAsync(Context context) {
-            var result = new Tag("span");
-            //var tasks = Items.OfType<IInline>().Select(x => x.GenerateInlineHtmlAsync(context));
 
-            foreach (var item in Items) {
-                result.Add(await item.Html(context));
-            }
-
+            var result = await base.GenerateHtmlAsync(context);
+            //context.Font.GetFontMetrics() 
+            result.AttributesNotNull["f"] = $"10 2 5";
             return result;
         }
 
-        public async Task<string> GetPlaneTextAsync(Context context)
-             => string.Concat(await Task.WhenAll(Items.Select(x => x.PlaneText(context))));
 
-        
+
+            /*public async Task<INode> GenerateInlineHtmlAsync(Context context) {
+                var result = new Tag("span");
+                //var tasks = Items.OfType<IInline>().Select(x => x.GenerateInlineHtmlAsync(context));
+
+                foreach (var item in Items) {
+                    result.Add(await item.Html(context));
+                }
+
+                return result;
+            }*/
+
+            public async Task<string> GetPlaneTextAsync(Context context) {
+            return "";
+            //=> string.Concat(await Task.WhenAll(Items.Select(x => x.PlaneText(context))));
+        }
+
+
+
         //return string.Concat(await Task.WhenAll(Items.OfType<IPlainTextProvider>()
         //    .Select(x => x.GetPlaneTextAsync(context))));
 

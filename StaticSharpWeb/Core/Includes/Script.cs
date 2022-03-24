@@ -23,7 +23,7 @@ namespace StaticSharpWeb {
 
         public Script(string path) => Path = path;
 
-        public virtual async Task<string> GenerateAsync(IStorage storage) => await File.ReadAllTextAsync(Path);
+        public virtual async Task<string> GenerateIncludeAsync(IStorage storage) => await File.ReadAllTextAsync(Path);
 
         public string GenerateSuperScript(string[] scripts) {
             StringBuilder stringBuilder = new();

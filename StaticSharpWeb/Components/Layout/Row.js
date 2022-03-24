@@ -37,22 +37,216 @@ function RowBefore(element) {
 
     parent[element.id] = element
 
+    
+
+
 }
+
+function GetFontData(element) {
+    if (element.fontData == undefined) {
+        let attribute = element.getAttribute("f")
+        if (attribute == undefined) {
+            element.fontData = null
+        } else {
+            var parameters = attribute.split(" ").map(x => parseFloat(x));
+            element.fontData = {
+                ascent: parameters[0],
+                descent: parameters[1],
+                spaceWidth: parameters[2],
+            }            
+        }
+    }
+    return element.fontData
+}
+
+
+function getCanvasContext(font) {
+    // re-use canvas object for better performance
+    const canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
+    const context = canvas.getContext("2d");
+    context.font = font;
+    return context
+}
+
+
+function getTextWidth(text, context) {
+    const metrics = context.measureText(text);
+    return metrics.width;
+}
+
+function getCssStyle(element, prop) {
+    return window.getComputedStyle(element, null).getPropertyValue(prop);
+}
+
+function getCanvasFontSize(el = document.body) {
+    const fontWeight = getCssStyle(el, 'font-weight') || 'normal';
+    const fontSize = getCssStyle(el, 'font-size') || '16px';
+    const fontFamily = getCssStyle(el, 'font-family') || 'Times New Roman';
+
+    return `${fontWeight} ${fontSize} ${fontFamily}`;
+}
+
 
 
 function RowAfter(element) {
 
-    element.style.height = "200px"
+    //element.style.height = "200px"
+    let fontData = GetFontData(element)
+
     new Reaction(() => {
+
+        //console.log("rebuild ", element)
+
         let width = element.Width
         let internalWidth = element.Width - element.Padding.Left - element.Padding.Right
 
 
-        let children = element.children
+        let nodes = element.childNodes
 
-        for (let current of children) {
-            current.style.position = "absolute"
+        let y = 0
+
+        const fontStack = [
+            {
+                ascent:10,
+                descent:2,
+                spaceWidth:0,
+            }
+        ]
+        /*
+         {
+            ascent
+            descent
+            spaceWidth
+         }
+         */
+
+        const WordNodeTagName = "SPAN"
+
+        function initializeLine() {
+            return {
+                x: 0.0,
+                ascent: 0,
+                descent: 0,
+                nodes: [],
+                space: 0,
+            }
         }
+        let currentLine = initializeLine();
+
+        var spaceWidth = 0
+
+        var range = document.createRange();
+
+        var canvasFontSize = getCanvasFontSize(element)
+        var context = getCanvasContext(canvasFontSize)
+
+
+        function getWordWidth(node) {
+            //console.log(node.innerText)
+            //return getTextWidth(node.innerText, context)
+
+            if (node.wordWidth == undefined) {
+                let attribute = node.getAttribute("w")
+                if (attribute == undefined) {
+                    console.error("getWordWidth", node, "attribute w not found")
+                    return 0
+                } else {
+                    node.wordWidth = parseFloat(attribute);
+                }
+            }
+            return node.wordWidth
+        }
+
+        
+        //range.selectNodeContents(textNode);
+
+        function processLine() {
+            let x = 0.0
+            
+            //console.log(currentLine.items)
+            
+            for (let n of currentLine.nodes) {
+
+                if (n.tagName == WordNodeTagName) {
+                    //child.removeAttribute("x")
+                    //child.removeAttribute("y")
+                    /*range.selectNodeContents(n);
+                    var rect = range.getBoundingClientRect();
+                    console.log(n.innerText, rect)*/
+
+                    
+                    n.style.left = x.toFixed(2) + "px"
+                    n.style.top = y + "px"
+                    
+                    //child.setAttribute("x", x+"px" );
+                    //child.setAttribute("y", y + "px");
+
+                    x += getWordWidth(n) + spaceWidth
+                }
+            }
+
+            //fixme:
+            y += currentLine.ascent
+            y += currentLine.descent
+            //document.title = x;
+            currentLine = initializeLine()
+
+        }
+
+        function processNodes(nodes) {
+            for (let n of nodes) {
+                
+                if (n.nodeType == 1) {
+                    /*if (n.tagName == "text") {
+
+                        n.setAttribute("x", 0 + "px");
+                        n.setAttribute("y", 0 + "px");
+
+                        console.log("n.dataset.a", n.dataset.a)
+                        
+                        fontStack.push({
+                            ascent: n.dataset.a,
+                            descent: n.dataset.d,
+                            spaceWidth: n.dataset.sw,
+                        })
+
+                        processNodes(n.childNodes)
+
+                        fontStack.pop()
+                        continue
+                    }*/
+                    
+                    if (n.tagName == WordNodeTagName) {
+                        
+                        let w = getWordWidth(n)
+                        if ((currentLine.x + w) > width) {                            
+                            processLine()
+                        }
+                        let font = fontStack[fontStack.length - 1]
+                        currentLine.ascent = Math.max(currentLine.ascent, font.ascent)
+                        currentLine.descent = Math.max(currentLine.descent, font.descent)
+                        
+
+                        currentLine.x += w
+
+                        currentLine.nodes.push(n)
+                        continue
+                    }
+                } else if (n.nodeType == 3) {
+                    let text = n.textContent
+                    currentLine.x += spaceWidth * text.length
+
+                }
+            }
+        }
+        
+        processNodes(nodes)
+        processLine()
+        
+        element.Height = y
+
+
+        /*
 
 
         let height = 0
@@ -159,7 +353,7 @@ function RowAfter(element) {
             }
 
             top += rowHeight
-        }
+        }*/
 
         
 

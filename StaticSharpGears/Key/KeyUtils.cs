@@ -25,6 +25,10 @@ public static partial class KeyUtils {
         if (value is string valueAsString) { 
             return valueAsString;
         }
+        if (value is bool valueAsBool) {
+            return valueAsBool.ToString().ToLower();
+        }
+
 
         if (value is IKeyProvider keyProvider) {
             return keyProvider.Key;
@@ -37,6 +41,11 @@ public static partial class KeyUtils {
                 return key;
             }
         }
+
+        if (value.GetType().IsEnum) {
+            return value.ToString();
+        }
+
         throw new NotImplementedException($"GetKey() not found. Object : {value.GetType().FullName}");
     }
 

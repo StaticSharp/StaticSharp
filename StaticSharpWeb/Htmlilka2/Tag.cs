@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -102,6 +103,16 @@ namespace StaticSharpWeb.Html {
         }
 
         public virtual void WriteHtml(StringBuilder builder) {
+            //System.Globalization.CultureInfo.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+            /*string? objectToString(object? obj) {
+                return obj switch {
+                    //string => obj.,
+                    float => ((float)obj).ToString(CultureInfo.InvariantCulture),
+                    float => ((float)obj).ToString(CultureInfo.InvariantCulture),
+                    _ => "Watching TV",
+                };
+                //obj.GetType
+            }*/
 
             void WriteCssStyle(StringBuilder builder, object styleObject) {
                 if (styleObject is string styleObjectString) {
@@ -135,11 +146,14 @@ namespace StaticSharpWeb.Html {
                         }
                     } else {
                         var valueString = i.Value?.ToString();
+                        
+
                         if (valueString != null) {
-                            if (valueString.Length > 0) {
-                                builder.Append($" {i.Key}=\"{valueString.ReplaceInvalidAttributeValueSymbols()}\"");
+                            var kebebKey = StaticSharpGears.CaseConverter.PascalToKebabCase(i.Key);
+                            if (valueString.Length > 0) {                                
+                                builder.Append($" {kebebKey}=\"{valueString.ReplaceInvalidAttributeValueSymbols()}\"");
                             } else {
-                                builder.Append(' ').Append(i.Key);
+                                builder.Append(' ').Append(kebebKey);
                             }
                         }
                     }

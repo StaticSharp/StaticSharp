@@ -26,7 +26,7 @@ namespace StaticSharpWeb {
 
         public Style(string path) => Path = path;
 
-        public virtual async Task<string> GenerateAsync(IStorage storage) {
+        public virtual async Task<string> GenerateIncludeAsync(IStorage storage) {
             try {
                 var compilerResult = SassCompiler.Compile(await File.ReadAllTextAsync(Path));
                 _dependencies = compilerResult.IncludedFilePaths.Select(x => new Style(x));

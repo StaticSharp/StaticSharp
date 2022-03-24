@@ -14,14 +14,27 @@ function Border() {
 function ItemBefore(element) {
 
     element.Reactive = {
-        X: undefined,
-        Y: undefined,
+        X: 0,
+        Y: 0,
         Width: undefined,
         Height: undefined,
         Margin: new Border(),
         ContentHeight: undefined,
     }
 
+    new Reaction(() => {
+        element.style.top = element.Y+"px"        
+    })
+    new Reaction(() => {
+        element.style.left = element.X + "px"
+    })
+
+    new Reaction(() => {
+        element.style.height = (!!element.Height) ? element.Height + "px" : ""
+    })
+
+
+    //element.setAttribute("transform", `translate(${element.X},${element.Y})`)
 }
 
 function ItemAfter(element) {
