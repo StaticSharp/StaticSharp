@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-namespace StaticSharpGears;
+namespace StaticSharp.Gears;
 
 
 
@@ -57,7 +57,7 @@ public class SecondaryTask<T> : ISynchronouslyCompletable<T>, IAwaitable<T>, IAw
         Exception = exception;
         IsCompleted = true;
         Continuation?.Invoke();
-        return false;
+        return true;
     }
 }
 

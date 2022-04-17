@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Security;
 
-namespace StaticSharpGears;
+namespace StaticSharp.Gears;
 
 public static class Marshal2 {
     internal const string OLEAUT32 = "oleaut32.dll";

@@ -1,4 +1,4 @@
-﻿namespace StaticSharpGears;
+﻿namespace StaticSharp.Gears;
 
 public static partial class Cache { 
 

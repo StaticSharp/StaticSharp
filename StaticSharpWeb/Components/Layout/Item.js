@@ -12,14 +12,13 @@ function Border() {
 
 
 function ItemBefore(element) {
-
     element.Reactive = {
         X: 0,
         Y: 0,
         Width: undefined,
         Height: undefined,
         Margin: new Border(),
-        ContentHeight: undefined,
+        
     }
 
     new Reaction(() => {
@@ -27,6 +26,10 @@ function ItemBefore(element) {
     })
     new Reaction(() => {
         element.style.left = element.X + "px"
+    })
+
+    new Reaction(() => {
+        element.style.width = (!!element.Width) ? element.Width + "px" : ""
     })
 
     new Reaction(() => {

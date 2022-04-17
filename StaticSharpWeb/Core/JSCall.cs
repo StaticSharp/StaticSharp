@@ -1,4 +1,6 @@
-﻿using StaticSharpWeb.Html;
+﻿using StaticSharp.Gears;
+using StaticSharp.Html;
+using StaticSharpWeb.Html;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,21 +22,16 @@ namespace StaticSharpWeb {
         private static readonly JsonSerializerOptions JsonSerializerOptions = new() {
             IncludeFields = true,
         };
-        public string Path { get; }
-        public string Suffix { get; }
+        public string FunctionName { get; }
         public object? Parameters { get; }
 
-        public JSCall(string path, object? parameters = null, string suffix = "") {
-            Path = path;
-            Suffix = suffix;
+        public JSCall(string functionName, object? parameters = null) {
+            FunctionName = functionName;
             Parameters = parameters;
         }
 
         public Tag Generate(Context context) {
 
-            var functionName = System.IO.Path.GetFileNameWithoutExtension(Path);
-
-            context.Includes.Require(new Script(Path));
 
             string parametersJson = "{}";
             if (Parameters != null) {
@@ -42,7 +39,7 @@ namespace StaticSharpWeb {
             }
 
             return new Tag("script"){
-                new PureHtmlNode($"StaticSharpCall({functionName+Suffix},{parametersJson});")
+                new PureHtmlNode($"StaticSharpCall({FunctionName},{parametersJson});")
             };
         }
     }

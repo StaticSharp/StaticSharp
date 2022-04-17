@@ -16,6 +16,21 @@
 	</PropertyGroup>
 
 
+	<ItemGroup>
+	  <Compile Remove="Components\**" />
+	  <Compile Remove="ContainersAndBlocks\**" />
+	  <Compile Remove="Resources\**" />
+	  <EmbeddedResource Remove="Components\**" />
+	  <EmbeddedResource Remove="ContainersAndBlocks\**" />
+	  <EmbeddedResource Remove="Resources\**" />
+	  <None Include="Components\**" />
+	  <None Include="ContainersAndBlocks\**" />
+	  <None Include="Resources\**" />
+	</ItemGroup>
+
+
+
+
 
 	<ItemGroup>
 		<PackageReference Include="ColorCode.HTML" Version="2.0.11" />
@@ -36,20 +51,6 @@
 
 		<ProjectReference Include="..\StaticSharpEngine\StaticSharpEngine.csproj" />
 		<ProjectReference Include="..\StaticSharpGears\StaticSharpGears.csproj" />
-	</ItemGroup>
-	
-		
-	<ItemGroup>
-
-		<None Update="ContainersAndBlocks\ContainerConstraints.tt">
-		  <Generator>TextTemplatingFileGenerator</Generator>
-		  <LastGenOutput>ContainerConstraints.cs</LastGenOutput>
-		</None>
-		<Compile Update="ContainersAndBlocks\ContainerConstraints.cs">
-			<DesignTime>True</DesignTime>
-			<AutoGen>True</AutoGen>
-			<DependentUpon>ContainerConstraints.tt</DependentUpon>
-		</Compile>
 	</ItemGroup>
 	
 	

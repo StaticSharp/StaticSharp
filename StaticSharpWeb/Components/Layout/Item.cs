@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace StaticSharpWeb {
-    public abstract class Item : Component , IContainerConstraintsNone {
+    /*public abstract class Item : Component , IContainerConstraintsNone {
 
         protected virtual string TagName => "div";
         public virtual IEnumerable<Task<Tag>> Before(Context context) {
@@ -27,5 +27,5 @@ namespace StaticSharpWeb {
                 await after
             };
         }
-    }
+    }*/
 }

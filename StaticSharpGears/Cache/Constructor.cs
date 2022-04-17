@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Text;
 
-namespace StaticSharpGears;
+namespace StaticSharp.Gears;
 
 public abstract record Constructor {
 

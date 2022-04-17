@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
+using StaticSharp.Gears;
 using StaticSharpEngine;
 using System;
 using System.Collections.Generic;
@@ -14,13 +15,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace StaticSharpWeb {
-
-    public interface INodeToUrl {
-        //public Uri BaseUrl { get; }
-
-        public Uri? NodeToUrl(Uri baseUrl, INode node);
-    }
+namespace StaticSharp {
 
     public abstract class Server: INodeToUrl {
         private const string _pageKey = "pageKey";
@@ -40,11 +35,11 @@ namespace StaticSharpWeb {
             return null;
         }
 
-        public abstract IStorage Storage { get; }
+        //public abstract IStorage Storage { get; }
 
         private Context CreateContext(HttpRequest request) {
             var baseUrl = new Uri($"{request.Scheme}://{request.Host}") ;
-            var context = new Context(Storage, baseUrl, new Theme(), this);
+            var context = new Context(baseUrl, this);
             return context;
         }
 
@@ -79,7 +74,7 @@ namespace StaticSharpWeb {
 
         protected virtual async Task HandleFileRequestAsync(HttpRequest request, HttpResponse response, RouteData routeData) {
             try {
-                var storage = Storage.StorageDirectory;
+                var storage = Assets.Directory;
                 var curentDirectory = Environment.CurrentDirectory;
                 var path = storage.TrimEnd('\\') + request.Path.Value.Replace("/", @"\");//Path.Combine(storage, request.Path.Value.Replace("/", @"\"));
                 //var file = await File.ReadAllBytesAsync(path);
@@ -125,7 +120,7 @@ namespace StaticSharpWeb {
 
         protected virtual async Task FindVisualStudio(HttpRequest request, HttpResponse response, RouteData routeData) {
             var jsonBody = await ParseJsonRequest(request);
-            StaticSharpGears.VisualStudio.Open(jsonBody["file"].ToString(), int.Parse(jsonBody["line"].ToString()));
+            StaticSharp.Gears.VisualStudio.Open(jsonBody["file"].ToString(), int.Parse(jsonBody["line"].ToString()));
             await response.WriteAsync("true");
         }
 

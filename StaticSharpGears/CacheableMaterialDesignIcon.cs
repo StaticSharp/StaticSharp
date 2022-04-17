@@ -1,7 +1,7 @@
 ﻿using StaticSharpGears.Public;
 using System.Drawing;
 
-namespace StaticSharpGears;
+namespace StaticSharp.Gears;
 
 
 public static partial class KeyCalculators {

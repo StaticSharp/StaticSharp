@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace StaticSharpWeb {
+namespace StaticSharp.Gears {
     public interface IPage {
 
         public Task<string> GeneratePageHtmlAsync(Context context);

@@ -1,4 +1,4 @@
-﻿namespace StaticSharpGears;
+﻿namespace StaticSharp.Gears;
 
 public interface IFile {
     IAwaitable<Func<Stream>> Content { get; }

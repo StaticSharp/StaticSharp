@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
-namespace StaticSharpWeb.Html {
+namespace StaticSharp.Html {
 
 
     /*public class Collection<T> : IEnumerable, ICollection<T> {

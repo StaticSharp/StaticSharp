@@ -7,7 +7,7 @@ using LibSassHost;
 using System.Text;
 using System.Security.Cryptography;
 
-namespace StaticSharpWeb {
+namespace StaticSharp.Gears {
     public interface IStyle : IInclude {
         public string Path { get; }
     }
@@ -26,7 +26,7 @@ namespace StaticSharpWeb {
 
         public Style(string path) => Path = path;
 
-        public virtual async Task<string> GenerateIncludeAsync(IStorage storage) {
+        public virtual async Task<string> GenerateIncludeAsync() {
             try {
                 var compilerResult = SassCompiler.Compile(await File.ReadAllTextAsync(Path));
                 _dependencies = compilerResult.IncludedFilePaths.Select(x => new Style(x));

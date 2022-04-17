@@ -1,4 +1,6 @@
-﻿using StaticSharpGears;
+﻿using StaticSharp;
+using StaticSharp.Gears;
+using StaticSharp.Html;
 using StaticSharpWeb.Html;
 using System;
 using System.Collections;
@@ -11,40 +13,41 @@ namespace StaticSharpWeb {
 
     public interface IMaterial {
         string Title { get; }
-        Paragraph Description { get; }
-        IImage TitleImage { get; }
+        Row? Description { get; }//TODO: IPlainTextProvider
+        //IImage TitleImage { get; }
     }
 
     /*internal interface IFontProvider {
         public Font Font { get; }
     }*/
 
-    public abstract class Material : IMaterial, IInline, IPage, IPlainTextProvider {
+    public abstract class Material : IMaterial, IElement, IPage, IPlainTextProvider {
         //public class TChildren : List<object> { }
 
-        public virtual IImage TitleImage => null;
+        //public virtual IImage TitleImage => null;
         public virtual string Title {
             get {
                 var n = GetType().Namespace;
                 return n[(n.LastIndexOf('.') + 1)..];
             }
         }
-        public virtual Paragraph Description => null;
+        public virtual Row? Description => null;
 
         public virtual Column? Content => null;
         public virtual Column? Footer => null;
         public virtual int ContentWidth => 400;
-        
-        public virtual RightSideBar RightSideBar => null;
-        public virtual LeftSideBar LeftSideBar => null;
 
-        public virtual Font Font => new Font(AbsolutePath("Fonts/roboto"));
-        public virtual float FontSize => 16;
+        //public virtual RightSideBar RightSideBar => null;
+        //public virtual LeftSideBar LeftSideBar => null;
+        public virtual Modifier Style => new Modifier() {
+            FontSize = 16,
+            Font = new Font(AbsolutePath("Fonts/roboto")),
+        };
 
         //public virtual Font Font => new(Path.Combine(AbsolutePath(), "Fonts", "roboto"), FontWeight.Regular);
 
         public async Task<string> GeneratePageHtmlAsync(Context context) {
-            context.Parents = context.Parents.Prepend(this);
+
             context.Includes.Require(new Script(AbsolutePath("StaticSharp.js")));
             context.Includes.Require(new Style(AbsolutePath("Normalization.scss")));
 
@@ -70,23 +73,35 @@ namespace StaticSharpWeb {
                 head,
                 await GetBodyAsync(context)
             };
-            head.Add(await context.Includes.GenerateScriptAsync(context.Storage));
-            head.Add(await context.Includes.GenerateFontAsync(context.Storage));
-            head.Add(await context.Includes.GenerateStyleAsync(context.Storage));
+            head.Add(await context.Includes.GenerateScriptAsync());
+            head.Add(await context.Includes.GenerateFontAsync());
+            head.Add(await context.Includes.GenerateStyleAsync());
             return document.GetHtml();
         }
 
         public virtual async Task<Tag> GetBodyAsync(Context context) {
-            var cacheableFont = Font.CreateOrGetCached();
+
+
+            /*var cacheableFont = Font.CreateOrGetCached();
             context.Includes.Require(cacheableFont);
 
             context.Font = Font;
             context.FontSize = FontSize;
             var font = cacheableFont.GenerateUsageCss(context);
 
-            context.Includes.Require(new Script(Bindings.BindingsJsPath));
+            context.Includes.Require(new Script(Bindings.BindingsJsPath));*/
 
-            var body = new Tag("body", 
+            var body = Style;
+
+
+            var bodyTag = await body.GenerateHtmlAsync(context);
+            bodyTag.Name = "body";
+
+            context.Includes.Require(new Script(AbsolutePath("Material.js")));
+
+            bodyTag.Add(new JSCall("Material",new {ContentWidth = ContentWidth}).Generate(context));
+
+            /*var body = new Tag("body", 
                 new {
                     style = SoftObject.MergeObjects(
                         new {
@@ -101,27 +116,19 @@ namespace StaticSharpWeb {
                 }                
                 ){
 
-                new JSCall(AbsolutePath("Material.js"),
-                    new{
-                        ContentWidth = ContentWidth
-                    }
-                    ).Generate(context),
+            };*/
 
-                /*(await (Content?.GenerateHtmlAsync(context)).Unnull())
-                .ModifyIfNotNull(x=>{
-                    x.Name = "div";
-                    x.AttributesNotNull["id"] = "Content";
-                    })*/
+            var content = Content;
+            if (content != null) {
+                var contentTag = await content.GenerateHtmlAsync(context);
+                var attributes = contentTag.AttributesNotNull;
+                attributes["id"] = "Content";
+                bodyTag.Add(contentTag);
+            }
 
-            };
 
-            var content = await (Content?.GenerateHtmlAsync(context)).Unnull();
-            if (content == null)
-                content = new Tag("div");
-
-            content.Name = "div";
-            var attributes = content.AttributesNotNull;
-            attributes["id"] = "Content";
+            /*content.Name = "div";*/
+            
 
 
             /*attributes["xmlns"] = "http://www.w3.org/2000/svg";
@@ -138,7 +145,7 @@ namespace StaticSharpWeb {
                 }));
             }*/
 
-            body.Add(content);
+            
 
 
             /*var tasks = new List<Task<INode>>();
@@ -185,7 +192,7 @@ namespace StaticSharpWeb {
             var result = new Tag("a", new { href = uri }) { Title };
 
             if (Description != null) {
-                result.Attributes["title"] = await Description.GetPlaneTextAsync(context);
+                //result.Attributes["title"] = await Description.GetPlaneTextAsync(context);
             }
 
             return result;

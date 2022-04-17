@@ -1,11 +1,10 @@
-﻿using StaticSharpWeb.Resources;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-
-namespace StaticSharpWeb {
+/*
+namespace StaticSharp.Gears {
 
     public interface IStorage {
         public string StorageDirectory { get; }
@@ -44,4 +43,4 @@ namespace StaticSharpWeb {
             return result as TResource;
         }
     }
-}
+}*/

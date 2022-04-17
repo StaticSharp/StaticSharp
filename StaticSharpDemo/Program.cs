@@ -1,4 +1,5 @@
-﻿using StaticSharpDemo.Root;
+﻿using StaticSharp.Gears;
+using StaticSharpDemo.Root;
 using StaticSharpEngine;
 using StaticSharpWeb;
 using System;
@@ -91,7 +92,7 @@ namespace StaticSharpDemo {
         Ru
     }
 
-    public class Server : StaticSharpWeb.Server {
+    public class Server : StaticSharp.Server {
 
         static Server() { }
 
@@ -132,7 +133,7 @@ namespace StaticSharpDemo {
         //public override Uri BaseUrl => new("http://localhost/");
         
 
-        private IStorage _Storage;
+        /*private IStorage _Storage;
 
         public override IStorage Storage {
             get {
@@ -143,7 +144,7 @@ namespace StaticSharpDemo {
                 }
                 return _Storage;
             }
-        }
+        }*/
 
         public override string BaseDirectory => throw new NotImplementedException();
 
@@ -218,8 +219,8 @@ namespace StaticSharpDemo {
             //        @"D:\staticsharp.github.io"
             //);
             //await generator.GenerateAsync();
-
-            StaticSharpGears.Cache.Directory = AbsolutePath("../../StaticSharpCache");// @$":\StaticSharpCache\";
+            StaticSharp.Gears.Assets.Directory = AbsolutePath(".assets");
+            StaticSharp.Gears.Cache.Directory = AbsolutePath(".cache");
 
             await new Server().RunAsync();
         }

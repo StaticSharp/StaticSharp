@@ -17,8 +17,11 @@ namespace StaticSharpWeb {
     }*/
 
 
-    public class Row : ElementContainer {
-        public override IEnumerable<Task<Tag>> Before(Context context) {
+    public class Row :  ElementContainer, IElement {
+
+        string TagName { get; set; } = "div";
+
+        /*public override IEnumerable<Task<Tag>> Before(Context context) {
             foreach (var i in base.Before(context)) yield return i;
             yield return Task.FromResult(
                 new JSCall(AbsolutePath("Row.js"), null, "Before").Generate(context)
@@ -30,7 +33,22 @@ namespace StaticSharpWeb {
             yield return Task.FromResult(
                 new JSCall(AbsolutePath("Row.js"), null, "After").Generate(context)
                 );
+        }*/
+
+        public async Task<Tag> GenerateHtmlAsync(Context context) {
+            return new Tag(TagName) {
+                new JSCall(AbsolutePath("Item.js"), null, "Before").Generate(context),
+                new JSCall(AbsolutePath("Row.js"), null, "Before").Generate(context),
+
+                await Content(context),
+
+                new JSCall(AbsolutePath("Item.js"), null, "After").Generate(context),
+                new JSCall(AbsolutePath("Row.js"), null, "After").Generate(context),
+            };
         }
+
+
+
     }
 
 

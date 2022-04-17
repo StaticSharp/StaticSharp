@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using LibSassHost;
 using System.Text;
 using System.Security.Cryptography;
+using StaticSharp;
 
-namespace StaticSharpWeb {
+namespace StaticSharp.Gears {
     public class SassProcessor : IFileManager {
         public string DirectoryPath = "style.scss";
         public SassProcessor(string directoryPath) {

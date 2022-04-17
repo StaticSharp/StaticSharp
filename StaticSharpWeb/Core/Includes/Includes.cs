@@ -6,8 +6,9 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System;
+using StaticSharp.Html;
 
-namespace StaticSharpWeb {
+namespace StaticSharp.Gears {
 
     public interface IIncludes {
 
@@ -17,10 +18,10 @@ namespace StaticSharpWeb {
 
         void Require(IFont font);
 
-        Task<Tag> GenerateScriptAsync(IStorage storage);
+        Task<Tag> GenerateScriptAsync();
 
-        Task<Tag> GenerateFontAsync(IStorage storage);
-        Task<Tag> GenerateStyleAsync(IStorage storage);
+        Task<Tag> GenerateFontAsync();
+        Task<Tag> GenerateStyleAsync();
     }
 
     public class Includes : IIncludes {
@@ -56,7 +57,7 @@ namespace StaticSharpWeb {
             }
         }
 
-        public async Task<Tag> GenerateScriptAsync(IStorage storage) {
+        public async Task<Tag> GenerateScriptAsync() {
             return new Tag("script") {
                 new PureHtmlNode(GenerateSuperScript())
             };
@@ -75,7 +76,7 @@ namespace StaticSharpWeb {
             return superScript.GenerateSuperScript(scriptList);
         }
 
-        public async Task<Tag> GenerateStyleAsync(IStorage storage) {
+        public async Task<Tag> GenerateStyleAsync() {
             return new Tag("style") {
                 new PureHtmlNode(GenerateSuperStyle()) 
             };
@@ -100,11 +101,11 @@ namespace StaticSharpWeb {
             }
         }
 
-        public async Task<Tag> GenerateFontAsync(IStorage storage) {
+        public async Task<Tag> GenerateFontAsync() {
             var fontStyle = new StringBuilder();
 
             foreach(var i in fonts.Values) {
-                fontStyle.AppendLine(await i.GenerateIncludeAsync(storage));
+                fontStyle.AppendLine(await i.GenerateIncludeAsync());
             }
             return new Tag("style") {
                 new PureHtmlNode(fontStyle.ToString())

@@ -1,4 +1,4 @@
-﻿namespace StaticSharpGears;
+﻿namespace StaticSharp.Gears;
 
 public interface ICacheable {
     void AfterConstruction();

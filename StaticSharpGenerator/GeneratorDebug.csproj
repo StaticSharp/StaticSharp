@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 
 		<LangVersion>7.3</LangVersion>
 		
@@ -26,7 +26,7 @@
 		</PackageReference>
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.9.0" />
 		<PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="3.9.0" />
-		<PackageReference Include="Scopes" Version="0.0.12" />
+		<PackageReference Include="Scopes" Version="0.0.16" />
 
 	</ItemGroup>
 

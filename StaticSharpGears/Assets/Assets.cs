@@ -1,4 +1,4 @@
-﻿namespace StaticSharpGears;
+﻿namespace StaticSharp.Gears;
 
 public static class Assets {
     public static string Directory { get; set; }

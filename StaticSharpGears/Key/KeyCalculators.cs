@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace StaticSharpGears;
+namespace StaticSharp.Gears;
 
 public static partial class KeyCalculators {
     public static string GetKey(HttpRequestMessage httpRequestMessage) {

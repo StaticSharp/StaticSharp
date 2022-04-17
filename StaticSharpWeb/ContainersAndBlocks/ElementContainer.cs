@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace StaticSharpWeb;
 
-public abstract class ElementContainer : Item, IEnumerable, IElementContainer {
-    public List<IElement> Items { get; } = new();
+public abstract class ElementContainer : IEnumerable, IElementContainer {
+    public List<object> Items { get; } = new();
 
     IEnumerator IEnumerable.GetEnumerator() {
         return Items.GetEnumerator();
     }
 
-    public override async Task<Tag> Content(Context context) {
+    /*public async Task<Tag> Content(Context context) {
         return new Tag(null) {
-                await Task.WhenAll(Items.Select(x=>x.GenerateHtmlAsync(context)))
-            };
-    }
+            await Task.WhenAll(Items.Select(x=>x.GenerateHtmlAsync(context)))
+        };
+    }*/
 
     public void AddElement(IElement element) {
         Items.Add(element);

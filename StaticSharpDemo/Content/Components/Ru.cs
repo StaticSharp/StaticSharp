@@ -6,7 +6,7 @@ namespace StaticSharpDemo.Root.Components;
 
 [Representative]
 partial class Ru : Material {
-    public override Paragraph Description => $"Компоненты для создания страниц.";
+    public override Row Description => $"Компоненты для создания страниц.";
 
 
 
@@ -16,15 +16,15 @@ partial class Ru : Material {
             .Select(s => s[random.Next(s.Length)]).ToArray());
     }
 
-    Paragraph CreateParagraph(int numChars) {
+    Row CreateParagraph(int numChars) {
         Random random = new Random(0);
         //var result = new 
-        return new Paragraph() { RandomString(numChars, random) };
+        return new Row() { RandomString(numChars, random) };
     }
 
-    IEnumerable<Paragraph> CreateParagraphs(int count) {
+    IEnumerable<Row> CreateParagraphs(int count) {
         Random random = new Random(0);
-        return Enumerable.Range(0, count).Select(i => new Paragraph() { $"This is paragraph #{i} {RandomString(random.Next(100), random)}" });
+        return Enumerable.Range(0, count).Select(i => new Row() { $"This is paragraph #{i} {RandomString(random.Next(100), random)}" });
     }
 
 
@@ -42,6 +42,7 @@ partial class Ru : Material {
 
         //new Heading("Создание нового компонента."),
         $"A B C D",
+        new Space(),
         $"Если   понадобится компонент,которого нет среди стандартных.",
         $"Можно создать компонент прям в проекте вашего сайта.",
 

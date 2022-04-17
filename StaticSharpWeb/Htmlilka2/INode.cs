@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace StaticSharpWeb.Html {
+namespace StaticSharp.Html {
 
     public interface INode {
         public void WriteHtml(StringBuilder builder);

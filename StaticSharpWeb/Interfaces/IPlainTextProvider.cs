@@ -1,9 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using StaticSharp.Gears;
+using System.Threading.Tasks;
 
-namespace StaticSharpWeb {
+namespace StaticSharp {
 
     public interface IPlainTextProvider {
-
         Task<string> GetPlaneTextAsync(Context context);
     }
 

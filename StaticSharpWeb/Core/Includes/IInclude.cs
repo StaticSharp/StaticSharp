@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 
-namespace StaticSharpWeb {
+namespace StaticSharp.Gears {
 
-    public interface IInclude : IKey {
+    public interface IInclude : IKeyProvider {
 
-        Task<string> GenerateIncludeAsync(IStorage storage);
+        Task<string> GenerateIncludeAsync();
         //string GenerateSuperStyle(string file);
     }
 }

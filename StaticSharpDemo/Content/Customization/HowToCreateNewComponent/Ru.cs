@@ -3,11 +3,11 @@
     [Representative]
     partial class Ru : Material {
         public override string Title => "Как создать новый компонент";
-        public override Paragraph Description => new Paragraph() { "Компоненты для создания страниц." };
+        public override Row Description => $"Компоненты для создания страниц.";
 
         public override Column Content => new() {
             $"сначала напишу все в кучу, а потом правильно распределю..",
-            new Heading("SCSS"),
+            //new Heading("SCSS"),
             $"Элемент отталкивается от предидущего. т.е. имеют только верхни margin",
 
             //new BillboardSolidColor { Color = Color.Violet },

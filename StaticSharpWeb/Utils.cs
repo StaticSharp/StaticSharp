@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StaticSharpWeb {
+namespace StaticSharp {
     public static class Utils {
 
         /// <summary>

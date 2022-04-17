@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace StaticSharpGears;
+namespace StaticSharp.Gears;
 
 public interface IAwaitable {
     IAwaiter GetAwaiter();

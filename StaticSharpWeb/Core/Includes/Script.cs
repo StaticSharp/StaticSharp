@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StaticSharpWeb {
+namespace StaticSharp.Gears {
 
     public interface IScript : IInclude {
         IEnumerable<IScript> Dependencies { get; }
@@ -23,7 +23,7 @@ namespace StaticSharpWeb {
 
         public Script(string path) => Path = path;
 
-        public virtual async Task<string> GenerateIncludeAsync(IStorage storage) => await File.ReadAllTextAsync(Path);
+        public virtual async Task<string> GenerateIncludeAsync() => await File.ReadAllTextAsync(Path);
 
         public string GenerateSuperScript(string[] scripts) {
             StringBuilder stringBuilder = new();

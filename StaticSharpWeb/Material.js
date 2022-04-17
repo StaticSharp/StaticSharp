@@ -1,32 +1,6 @@
-const SVG_NS = "http://www.w3.org/2000/svg";
-// an object to define the initial properties and text content of the text element 
-let o = {
-    props: {
-        x: 50,
-        y: 15,
-        "dominant-baseline": "hanging",
-        //"text-anchor": "middle"
-    },
-    txtConent: "your name"
-};
 
-// a function to create a text element 
-function drawText(o, parent) {
-    var text = document.createElementNS(SVG_NS, "tspan");
-    for (var name in o.props) {
-        if (o.props.hasOwnProperty(name)) {
-            text.setAttributeNS(null, name, o.props[name]);
-        }
-    }
-    text.textContent = o.txtConent;
-    parent.appendChild(text);
-    return text;
-}
-
-
-
+/*
 var measuringCanvasContext = undefined
-
 function createMeasuringCanvasContext() {
 
     let canvas = document.createElement("canvas")
@@ -34,228 +8,19 @@ function createMeasuringCanvasContext() {
     document.body.appendChild(canvas)
     measuringCanvasContext = canvas.getContext("2d");
 }
-
-
 function measureText(text, font) {
-
     if (!measuringCanvasContext) {
         createMeasuringCanvasContext()
     }
-
     measuringCanvasContext.font = font;
     return measuringCanvasContext.measureText(text)
-}
+}*/
 
 
-
-function Svg(element) {
-
-
-    /*var c = document.getElementById("myCanvas");
-    var ctx = c.getContext("2d");
-    ctx.font = "30px Arial";
-    var txt = "Hello World"
-    ctx.fillText("width:" + ctx.measureText(txt).width, 10, 50)
-    ctx.fillText(txt, 10, 100);*/
-
-
-
-    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-
-    
-    //svg.setAttribute('viewBox', '0 0 512 512');
-    svg.style.height = "512px"
-    svg.style.width = "512px"
-    element.appendChild(svg);
-
-    var paragraph = document.createElementNS(SVG_NS, "text");
-    svg.appendChild(paragraph);
-    svg.style.position = "fixed"
-
-
-
-    /*var newText = document.createElementNS(null,"text");
-    var textNode = document.createTextNode("text");
-    newText.appendChild(textNode);
-    svg.appendChild(newText);*/
-    let x = 0
-    let y = 0
-    let rowHeight = 0
-    for (let i = 0; i < 1000; i++) {
-        //o.props.x = x
-        o.props.y = y
-
-        var fontSize = 2 * (i % 5)
-
-        o.props["font-size"] = fontSize
-        o.txtConent = "text #" + i
-
-        var t = drawText(o, paragraph)
-        t.style.left = x
-
-        /*if (i % 10 == 9) {
-            t.style.position = "fixed"
-        }*/
-
-        var metrics = measureText(o.txtConent, `${fontSize}px Roboto`)
-        //let box = t.getBBox()
-        let fontHeight = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent;
-        
-        let w = metrics.width
-        let h = fontHeight
-
-
-
-        //console.log(size, box)
-        t._width = w
-        t._height = h//box.height
-
-        rowHeight = Math.max(rowHeight, t._height)
-        x += t._width
-        if (x > 512) {
-            y += rowHeight
-            x = 0
-            rowHeight = 0
-        }
-        //console.log(t.x)
-        //sum += t.getBBox().width//t.getComputedTextLength()
-    }
-}
-
-
-function HtmlTest(element) {
-    var html = document.createElement("div");
-    html.style.height = "512px"
-    html.style.width = "512px"
-    html.style.color = "black"
-    element.appendChild(html);
-
-    let x = 0
-    let y = 0
-    let rowHeight = 0
-
-    for (let i = 0; i < 1000; i++) {
-
-        var t = document.createElement("w");
-        t.style.position = "absolute"
-        let fontSize = 2 * (i % 5)
-        t.style.fontSize = fontSize + "px"
-        let innerText = "text #" + i
-        t.innerText = innerText
-        //var t = drawText(o, svg)
-        t.style.left = x + "px"
-        t.style.top = y + "px"
-
-        //let box = t.getBoundingClientRect();
-
-        var metrics = measureText(innerText, `${fontSize}px Roboto`)
-        //console.log(metrics)
-        //let box = t.getBBox()
-        let fontHeight = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent;
-        
-        let w = metrics.width
-        let h = fontHeight
-
-
-        //console.log(box)
-        t._width = w//box.width
-        t._height = h//box.height
-
-        rowHeight = Math.max(rowHeight, t._height)
-        x += t._width
-        if (x > 512) {
-            y += rowHeight
-            x = 0
-            rowHeight = 0
-        }
-        html.appendChild(t);
-
-        //console.log(t.x)
-        //sum += t.getBBox().width//t.getComputedTextLength()
-    }
-
-    /*requestAnimationFrame(() => {
-        console.log("requestAnimationFrame")
-        var children = html.childNodes;
-
-        let x = 0
-        let y = 0
-        let rowHeight = 0
-
-        for (let child of children) {
-            let t = child
-            
-            let box = t.getBoundingClientRect();
-            t.style.left = x + "px"
-            t.style.top = y + "px"
-
-            //console.log(box)
-            t._width = t.offsetWidth
-            t._height = t.offsetHeight
-
-            rowHeight = Math.max(rowHeight, t._height)
-            x += t._width
-            if (x > 512) {
-                y += rowHeight
-                x = 0
-                rowHeight = 0
-            }
-
-        }
-    })*/
-
-
-    
-}
 
 
 function Material(element, parameters) {
-
-    //Svg(element)
-    //HtmlTest(element)
-    document.body.style.backgroundColor = "white"
-
-    let svgText = `
-        <svg xmlns = "http://www.w3.org/2000/svg" xml: lang = "en" width = "10cm" height = "2.5cm" >
-    <title>Positioning tspan</title>
-    <style type="text/css">
-        svg {
-            font-family: serif;
-            font-size: 12mm;
-            fill: navy;
-        }
-        .em {
-            fill: royalBlue;
-        }
-        .strong {
-            stroke: navy;
-            font-style: italic;
-        }
-    </style>
-    <rect fill="#CEE" width="100%" height="100%"/>
-    <text x="5mm" y="2.1cm">One, 
-        <tspan class="em" y="1.6cm">Two,</tspan>
-        <tspan class="strong em" y="1.1cm">Three!</tspan>
-    </text>
-</svg>
-    `
-    /*var doc = new DOMParser().parseFromString(svgText, 'application/xml');
-    element.appendChild(
-        element.ownerDocument.importNode(doc.documentElement, true));*/
-
-    let svg = document.createElement("div");
-
-    svg.innerHTML = svgText.trim()
-
-    
-
-
-    element.appendChild(svg);
-
-
-    /*document.body.innerHtml = */
-
-
+    console.log(element.attributes.id)
 
     //PropertyTest()
 
@@ -295,27 +60,6 @@ function Material(element, parameters) {
         }
     })*/
 
-    element.Reactive.Content.OnChanged((previous, current) => {
-        if (current) {
-            //element.Content.style.minHeight = "100%"
-            /*this.Content.Reactive = {
-                Width : () => window.InnerWidth,
-                InnerWidth: () => Math.min(window.InnerWidth, parameters.ContentWidth),
-                PaddingLeft : () => (this.Content.Width - parameters.ContentWidth) * 0.5
-            }*/
-            /*this.Content.Width = () => {
-                console.log("window.InnerWidth changed")
-                return window.InnerWidth
-            }
-            this.Content.InnerWidth = () => {
-                //console.log("Content.InnerWidth changed", window.InnerWidth, parameters.ContentWidth)
-                return Math.min(this.Content.Width, parameters.ContentWidth)
-            }
-            this.Content.PaddingLeft = () => {
-                return (this.Content.Width - this.Content.InnerWidth) * 0.5
-            }*/
-        }
-    })
 
     /*new Reaction(() => {
 
@@ -343,9 +87,15 @@ function Material(element, parameters) {
             element.Content.Padding.Left = paddingLeft
             element.Content.Padding.Right = width - innerWidth - paddingLeft
 
-            element.Content.style.left = LeftBarSize + "px"
+            element.Content.X = LeftBarSize
 
-            element.Content.style.minHeight = window.InnerHeight + "px"
+
+            //console.log("element.Content.ContentHeight", element.Content.ContentHeight)
+            element.Content.Height = Math.max(element.Content.ContentHeight, window.InnerHeight)// + "px"
+
+
+
+
 
             //this.Content.MaxInnerWidth = parameters.ContentWidth
             //this.Content.Width = window.InnerWidth - LeftBarSize - RightBarSize
@@ -379,7 +129,7 @@ function Material(element, parameters) {
     })
 
     document.addEventListener("DOMContentLoaded", function () {
-        element.style.display = "";
+        element.style.display = "contents";
     })
     
 

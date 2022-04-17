@@ -1,4 +1,4 @@
-﻿using StaticSharpWeb.Html;
+﻿using StaticSharp.Html;
 using System.IO;
 using System.Runtime.CompilerServices;
 

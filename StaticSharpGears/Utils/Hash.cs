@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace StaticSharpGears;
+namespace StaticSharp.Gears;
 
 class Hash {
 

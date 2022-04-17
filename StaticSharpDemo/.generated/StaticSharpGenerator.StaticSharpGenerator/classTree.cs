@@ -19,7 +19,6 @@ namespace StaticSharpDemo.Root {
 			get {
 				yield return Components;
 				yield return Customization;
-				yield return Legacy;
 			}
 		}
 		public virtual αComponents Components => new(Language);
@@ -67,88 +66,6 @@ namespace StaticSharpDemo.Root {
 				public override string Name => "HowToCreateNewComponent";
 				public static implicit operator global::StaticSharpDemo.Root.Material(αHowToCreateNewComponent α) => α.Representative;
 				public override global::StaticSharpDemo.Root.Material Representative => new global::StaticSharpDemo.Root.Customization.HowToCreateNewComponent.Ru(Language);
-				public override IEnumerable<ProtoNode> Children => Enumerable.Empty<ProtoNode>();
-			}
-		}
-		public virtual αLegacy Legacy => new(Language);
-		public class αLegacy : ProtoNode, StaticSharpEngine.ITypedRepresentativeProvider<global::StaticSharpDemo.Root.Legacy.Common> {
-			public αLegacy(global::StaticSharpDemo.Language language) : base(language) {
-			}
-			public override αLegacy WithLanguage(global::StaticSharpDemo.Language language) {
-				return new αLegacy(language);
-			}
-			public override ProtoNode Parent => new αRoot(Language);
-			public override αRoot Root => new αRoot(Language);
-			public override string[] Path => new string[]{"Legacy"};
-			public override string Name => "Legacy";
-			public static implicit operator global::StaticSharpDemo.Root.Legacy.Common(αLegacy α) => α.Representative;
-			public override global::StaticSharpDemo.Root.Legacy.Common Representative => SelectRepresentative(Representatives);
-			public IEnumerable<global::StaticSharpDemo.Root.Legacy.Common> Representatives {
-				get {
-					yield return new global::StaticSharpDemo.Root.Legacy.En(Language);
-					yield return new global::StaticSharpDemo.Root.Legacy.Ru(Language);
-				}
-			}
-			public override IEnumerable<ProtoNode> Children {
-				get {
-					yield return Articles;
-					yield return Katya;
-				}
-			}
-			public virtual αArticles Articles => new(Language);
-			public class αArticles : ProtoNode, StaticSharpEngine.ITypedRepresentativeProvider<global::StaticSharpDemo.Root.Material> {
-				public αArticles(global::StaticSharpDemo.Language language) : base(language) {
-				}
-				public override αArticles WithLanguage(global::StaticSharpDemo.Language language) {
-					return new αArticles(language);
-				}
-				public override ProtoNode Parent => new αLegacy(Language);
-				public override αRoot Root => new αRoot(Language);
-				public override string[] Path => new string[]{"Legacy","Articles"};
-				public override string Name => "Articles";
-				public static implicit operator global::StaticSharpDemo.Root.Material(αArticles α) => α.Representative;
-				public override global::StaticSharpDemo.Root.Material Representative => new global::StaticSharpDemo.Root.Legacy.Articles._(Language);
-				public override IEnumerable<ProtoNode> Children {
-					get {
-						yield return Terms;
-					}
-				}
-				public virtual αTerms Terms => new(Language);
-				public class αTerms : ProtoNode, StaticSharpEngine.ITypedRepresentativeProvider<global::StaticSharpDemo.Root.Legacy.Articles.Terms.Common> {
-					public αTerms(global::StaticSharpDemo.Language language) : base(language) {
-					}
-					public override αTerms WithLanguage(global::StaticSharpDemo.Language language) {
-						return new αTerms(language);
-					}
-					public override ProtoNode Parent => new αArticles(Language);
-					public override αRoot Root => new αRoot(Language);
-					public override string[] Path => new string[]{"Legacy","Articles","Terms"};
-					public override string Name => "Terms";
-					public static implicit operator global::StaticSharpDemo.Root.Legacy.Articles.Terms.Common(αTerms α) => α.Representative;
-					public override global::StaticSharpDemo.Root.Legacy.Articles.Terms.Common Representative => SelectRepresentative(Representatives);
-					public IEnumerable<global::StaticSharpDemo.Root.Legacy.Articles.Terms.Common> Representatives {
-						get {
-							yield return new global::StaticSharpDemo.Root.Legacy.Articles.Terms.En(Language);
-							yield return new global::StaticSharpDemo.Root.Legacy.Articles.Terms.Fr(Language);
-							yield return new global::StaticSharpDemo.Root.Legacy.Articles.Terms.Ru(Language);
-						}
-					}
-					public override IEnumerable<ProtoNode> Children => Enumerable.Empty<ProtoNode>();
-				}
-			}
-			public virtual αKatya Katya => new(Language);
-			public class αKatya : ProtoNode, StaticSharpEngine.ITypedRepresentativeProvider<global::StaticSharpDemo.Root.Legacy.Katya.Common> {
-				public αKatya(global::StaticSharpDemo.Language language) : base(language) {
-				}
-				public override αKatya WithLanguage(global::StaticSharpDemo.Language language) {
-					return new αKatya(language);
-				}
-				public override ProtoNode Parent => new αLegacy(Language);
-				public override αRoot Root => new αRoot(Language);
-				public override string[] Path => new string[]{"Legacy","Katya"};
-				public override string Name => "Katya";
-				public static implicit operator global::StaticSharpDemo.Root.Legacy.Katya.Common(αKatya α) => α.Representative;
-				public override global::StaticSharpDemo.Root.Legacy.Katya.Common Representative => new global::StaticSharpDemo.Root.Legacy.Katya.MyPage(Language);
 				public override IEnumerable<ProtoNode> Children => Enumerable.Empty<ProtoNode>();
 			}
 		}

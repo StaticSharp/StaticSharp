@@ -1,29 +1,12 @@
 ﻿using StaticSharpWeb;
-using StaticSharpWeb.Components;
-using StaticSharpWeb.Html;
+
 using System.Collections.Generic;
 using System.Drawing;
 
 namespace StaticSharpDemo.Root {
     partial class Material : StaticSharpWeb.Material {
         
-        public override Footer Footer => new() {
-
-
-            /*new Grid(1200, 2) {
-                new Paragraph{
-                    "AAAAAA",
-                    Node.Index, 
-                },
-                "BBBB",
-                Node.Root.Index.Name,
-                Node.Root.Index,
-                Node.Root.Index,
-                new Paragraph{
-                    "СССС",
-                    Node.Root.Index,
-                },
-            }*/
+        /*public override Footer Footer => new() {
         };
 
         public override RightSideBar RightSideBar => new() {
@@ -36,7 +19,7 @@ namespace StaticSharpDemo.Root {
                 Node.Root.Components.Children,
                 
             }
-        };
+        };*/
     }
 
 }

@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace StaticSharpWeb.Html {
+namespace StaticSharp.Html {
 
     public class TextNode : INode {
 

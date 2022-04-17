@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Xml.Linq;
 
-namespace StaticSharpGears;
+namespace StaticSharp.Gears;
 
 public class Svg {
 

@@ -3,11 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace StaticSharpWeb {
+namespace StaticSharp.Gears {
 
 
     public struct Context { 
-        public IStorage Storage { get; init; }
+        //public Assets Storage { get; init; }
 
         public INodeToUrl NodeToUrlConverter { get; init; }
         public Uri? NodeToUrl(INode node) { 
@@ -17,9 +17,7 @@ namespace StaticSharpWeb {
 
         public IIncludes Includes { get; init; }
 
-        public IEnumerable<object> Parents;
-
-        public Theme Theme;
+        //public IEnumerable<object> Parents;
 
 
         public Font Font = new Font(DefaultFont.Arial);
@@ -27,13 +25,11 @@ namespace StaticSharpWeb {
         public float FontSize = 16;
 
 
-        public Context(IStorage storage, Uri baseUrl, Theme theme, INodeToUrl nodeToUrlConverter) {
-            Storage = storage;
+        public Context(Uri baseUrl, INodeToUrl nodeToUrlConverter) {
             //Urls = urls;
             BaseUrl = baseUrl;
-            Theme = theme;
             Includes = new Includes();
-            Parents = Enumerable.Empty<object>();
+            //Parents = Enumerable.Empty<object>();
             NodeToUrlConverter = nodeToUrlConverter;
         }
     }

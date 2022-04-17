@@ -1,11 +1,11 @@
-﻿using StaticSharpWeb.Html;
+﻿using StaticSharp.Html;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace StaticSharpWeb {
+namespace StaticSharp.Gears {
 
     public class ErrorPage : IPage {
         public Exception Exception { get; }

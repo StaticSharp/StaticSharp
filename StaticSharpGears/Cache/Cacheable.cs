@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using System.Reflection;
-namespace StaticSharpGears;
+namespace StaticSharp.Gears;
 
 public abstract class Cacheable<Constructor> : ICacheable, IKeyProvider
     where Constructor : IKeyProvider {

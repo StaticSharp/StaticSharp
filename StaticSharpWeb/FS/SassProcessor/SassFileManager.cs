@@ -7,7 +7,7 @@ using LibSassHost;
 using System.Text;
 using System.Security.Cryptography;
 
-namespace StaticSharpWeb {
+namespace StaticSharp.Gears {
 
     public class SassFileManager : IFileManager {
         public bool SupportsConversionToAbsolutePath => throw new NotImplementedException();

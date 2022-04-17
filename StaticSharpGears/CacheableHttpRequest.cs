@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using System.Text;
 
-namespace StaticSharpGears;
+namespace StaticSharp.Gears;
 
 
 
