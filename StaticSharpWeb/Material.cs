@@ -39,9 +39,10 @@ namespace StaticSharpWeb {
 
         //public virtual RightSideBar RightSideBar => null;
         //public virtual LeftSideBar LeftSideBar => null;
-        public virtual Modifier Style => new Modifier() {
+        public virtual Body Body => new Body() {
             FontSize = 16,
-            Font = new Font(AbsolutePath("Fonts/roboto")),
+            FontFamily = new FontFamily(AbsolutePath("Fonts/roboto")),
+            //FontStyle = new FontStyle(),
         };
 
         //public virtual Font Font => new(Path.Combine(AbsolutePath(), "Fonts", "roboto"), FontWeight.Regular);
@@ -52,8 +53,6 @@ namespace StaticSharpWeb {
             context.Includes.Require(new Style(AbsolutePath("Normalization.scss")));
 
             context.Includes.Require(new Style(AbsolutePath("Debug.scss")));
-
-
             
 
             var head = new Tag("head"){
@@ -91,15 +90,18 @@ namespace StaticSharpWeb {
 
             context.Includes.Require(new Script(Bindings.BindingsJsPath));*/
 
-            var body = Style;
 
 
-            var bodyTag = await body.GenerateHtmlAsync(context);
-            bodyTag.Name = "body";
+
+            (var bodyTag, context) = await Body.GenerateHtmlAndContextAsync(context);
 
             context.Includes.Require(new Script(AbsolutePath("Material.js")));
+            bodyTag.Add(new JSCall("Material", new { ContentWidth = ContentWidth }).Generate(context));
 
-            bodyTag.Add(new JSCall("Material",new {ContentWidth = ContentWidth}).Generate(context));
+
+            
+
+            
 
             /*var body = new Tag("body", 
                 new {
@@ -178,7 +180,7 @@ namespace StaticSharpWeb {
                 body.Add(item);
             }*/
 
-            return body;
+            return bodyTag;
         }
 
         public async Task<Tag> GenerateHtmlAsync(Context context) {

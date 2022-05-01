@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using StaticSharp.Gears;
+
 using StaticSharpEngine;
 using System;
 using System.Collections.Generic;
@@ -17,12 +17,12 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    public abstract class Server: INodeToUrl {
+    public abstract class Server: Gears.INodeToUrl {
         private const string _pageKey = "pageKey";
 
         private IWebHost _host = null;
 
-        public abstract IPage? FindPage(string requestPath);
+        public abstract Gears.IPage? FindPage(string requestPath);
 
         //public abstract Uri BaseUrl { get; }
 
@@ -31,20 +31,20 @@ namespace StaticSharp {
         public abstract string BaseDirectory { get; }
         public abstract string TempDirectory { get; }
 
-        public virtual IPage Get404(HttpRequest request) {
+        public virtual Gears.IPage Get404(HttpRequest request) {
             return null;
         }
 
         //public abstract IStorage Storage { get; }
 
-        private Context CreateContext(HttpRequest request) {
+        private Gears.Context CreateContext(HttpRequest request) {
             var baseUrl = new Uri($"{request.Scheme}://{request.Host}") ;
-            var context = new Context(baseUrl, this);
+            var context = new Gears.Context(baseUrl, this);
             return context;
         }
 
-        private async Task<string> GenerateErrorPageAsync(Context context, Exception e) {
-            return await new ErrorPage(e).GeneratePageHtmlAsync(context);
+        private async Task<string> GenerateErrorPageAsync(Gears.Context context, Exception e) {
+            return await new Gears.ErrorPage(e).GeneratePageHtmlAsync(context);
         }
 
 
@@ -74,7 +74,7 @@ namespace StaticSharp {
 
         protected virtual async Task HandleFileRequestAsync(HttpRequest request, HttpResponse response, RouteData routeData) {
             try {
-                var storage = Assets.Directory;
+                var storage = Gears.Assets.Directory;
                 var curentDirectory = Environment.CurrentDirectory;
                 var path = storage.TrimEnd('\\') + request.Path.Value.Replace("/", @"\");//Path.Combine(storage, request.Path.Value.Replace("/", @"\"));
                 //var file = await File.ReadAllBytesAsync(path);

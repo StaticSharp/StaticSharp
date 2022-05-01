@@ -3,7 +3,7 @@ using System.Text;
 
 namespace StaticSharp.Gears;
 
-public abstract record Constructor {
+public abstract record Constructor: IKeyProvider {
 
     public string Key { get; }
 
@@ -33,17 +33,26 @@ public abstract record Constructor {
     }
 }
 
-public abstract record Constructor<T> : Constructor, IKeyProvider where T : ICacheable{
-    public T CreateOrGetCached() {
-        T value = Cache.Get<T>(Key);
+public abstract record Constructor<TFinalConstructor,Cacheable> : Constructor
+    where TFinalConstructor : Constructor<TFinalConstructor, Cacheable>
+    where Cacheable : ICacheable<TFinalConstructor>, new() {
+    public Task<Cacheable> CreateOrGetCached() {
+        //TODO add cache lock
+        Task<object>? value = Cache.Get(Key);
         if (value == null) {
-            value = Create();
-            value.AfterConstruction();
+            value = Create().ContinueWith(x=>(object)x.Result);
+            //value.AfterConstruction();
             Cache.Add(Key, value);
         }
-        return value;
+        return value.ContinueWith(x=>(Cacheable)x.Result);
     }
-    protected abstract T Create();    
+
+    protected async Task<Cacheable> Create() {
+        var result = new Cacheable();
+        result.SetArguments((TFinalConstructor)this);
+        await result.CreateAsync();
+        return result;
+    }    
 }
 
 

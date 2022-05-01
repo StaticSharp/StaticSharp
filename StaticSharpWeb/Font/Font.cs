@@ -16,18 +16,6 @@ namespace StaticSharp {
 
     }
 
-    public enum FontWeight {
-        Thin,
-        ExtraLight,
-        Light,
-        Regular,
-        Medium,
-        SemiBold,
-        Bold,
-        ExtraBold,
-        Black
-    }
-
     
 
 
@@ -69,28 +57,17 @@ namespace StaticSharp {
         CourierNew,
     }
 
-
-
     public record Font(
-            string Directory,
-            string Family,
-            FontWeight Weight,
-            bool Italic
+            CacheableFontFamily FontFamily,
+            FontStyle FontStyle
+            ) : Gears.Constructor<Font,CacheableFont> {
 
-            ) : Gears.Constructor<CacheableFont>{
+        
 
-        private static string FamilyFromDirectory(string directory) {
-            var family = Path.GetFileName(directory);
-            return char.ToUpper(family[0]) + family[1..];
-        }
-
-        public Font(string directory, FontWeight weight = FontWeight.Regular, bool italic = false)
+/*        public Font(string directory, FontWeight weight = FontWeight.Regular, bool italic = false)
             : this(directory, FamilyFromDirectory(directory), weight, italic) { }
         public Font(DefaultFont defaultFont, FontWeight weight = FontWeight.Regular, bool italic = false)
-            : this("", defaultFont.ToString(), weight, italic) { }
-        protected override CacheableFont Create() {
-            return new CacheableFont(this);
-        }
+            : this("", defaultFont.ToString(), weight, italic) { }*/
         
     }
 
@@ -99,30 +76,35 @@ namespace StaticSharp {
     }
 
 
-    public class CacheableFont : Gears.Cacheable<Font>, IFont { 
-        
-        public SecondaryTask<string> Base64 { get; init; } = new();
-        public SecondaryTask<string> StyleInclude { get; init; } = new();
+    public class CacheableFont : Gears.Cacheable<Font>, IFont {
+
+        public string Base64 { get; private set; } = null!;
+        public string StyleInclude { get; private set; } = null!;
 
         //public SecondaryTask<SKTypeface> Typeface { get; init; } = new();
 
-        SecondaryTask<SixLabors.Fonts.FontFamily> FontFamily { get; init; } = new();
+        SixLabors.Fonts.FontFamily MeasurerFontFamily;
 
 
-        public CacheableFont(Font arguments) : base(arguments) {}
         protected override async Task CreateAsync() {
+
+            var family = Arguments.FontFamily;
+            var member = family.FindMember(Arguments.FontStyle);
+
+
+
             //todo: case with SafeFont
 
-            var stringBuilder = new StringBuilder();
-            var path = FindFilePath();
-            var format = Formant[Path.GetExtension(path)];
-            var italicSuffix = Arguments.Italic ? " Italic" : "";
-            var fontStyle = Arguments.Italic ? "italic" : "normal";
+            
+            var path = member.FilePath;
+            var format = member.CssFormat;
+            //var italicSuffix = member.Italic ? " Italic" : "";
+            var fontStyle = member.Italic ? "italic" : "normal";
 
-             
 
-            var base64 = Convert.ToBase64String(await File.ReadAllBytesAsync(path));
-            Base64.SetResult(base64);
+
+            Base64 = Convert.ToBase64String(await File.ReadAllBytesAsync(path));
+
 
             /*using (FileStream fileStream = File.OpenRead(path)) {
                 var typeface = SKTypeface.FromStream(fileStream);
@@ -134,23 +116,22 @@ namespace StaticSharp {
 
 
             SixLabors.Fonts.FontCollection fontCollection = new SixLabors.Fonts.FontCollection();
-            var family = fontCollection.Add(File.OpenRead(path));
+            MeasurerFontFamily = fontCollection.Add(File.OpenRead(path));
 
-            FontFamily.SetResult(family);
 
             //var font = family.CreateFont(16);
 
             //SixLabors.Fonts.TextMeasurer.Measure("Text to measure", new(font));
 
-
+            var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("@font-face {");
-            stringBuilder.Append("font-family: '").Append(Arguments.Family).AppendLine("';");
-            stringBuilder.AppendLine($"src:local('{Arguments.Family} {Arguments.Weight}{italicSuffix}'),");
-            stringBuilder.AppendLine($"url(data:application/font-{format};charset=utf-8;base64,{base64}) format('{format}');");
-            stringBuilder.Append("font-weight: ").Append(Arguments.Weight).AppendLine(";");
+            stringBuilder.Append("font-family: '").Append(family.Name).AppendLine("';");
+            //stringBuilder.AppendLine($"src:local('{Arguments.Family} {Arguments.Weight}{italicSuffix}'),");
+            stringBuilder.AppendLine($"url(data:application/font-{format};charset=utf-8;base64,{Base64}) format('{format}');");
+            stringBuilder.Append("font-weight: ").Append((int)Arguments.FontStyle.FontWeight).AppendLine(";");
             stringBuilder.Append("font-style: ").Append(fontStyle).AppendLine(";\n}");
 
-            StyleInclude.SetResult(stringBuilder.ToString());
+            StyleInclude = stringBuilder.ToString();
         }
 
         private class TextMeasurer : ITextMeasurer {
@@ -166,97 +147,32 @@ namespace StaticSharp {
             }
         }
 
-        public async ValueTask<ITextMeasurer> CreateTextMeasurer(float fontSize) {
+        public ITextMeasurer CreateTextMeasurer(float fontSize) {
             //return new TextMeasurer(await Typeface, fontSize);
 
-            return new TextMeasurer(await FontFamily, fontSize);
+            return new TextMeasurer(MeasurerFontFamily, fontSize);
         }
 
         public object GenerateUsageCss(Context context) {
             context.Includes.Require(this);
             return new {
-                FontFamily = Arguments.Family,
+                /*FontFamily = Arguments.Family,
                 FontWeight = WeightToNames(Arguments.Weight).Last(),
-                FontStyle = Arguments.Italic ? "Italic" : null
+                FontStyle = Arguments.Italic ? "Italic" : null*/
             };
         }
 
-        public async Task<string> GenerateIncludeAsync() {
-            return await StyleInclude;            
+        public Task<string> GenerateIncludeAsync() {
+            return Task.FromResult(StyleInclude);            
         }
 
 
 
-        public const string ItalicName = "italic";
-        private string FindFilePath() {
-            var directoryName = Arguments.Family.ToLower();
 
-            bool MatchFileName(string filePath) {
-                var fileName = Path.GetFileNameWithoutExtension(filePath).ToLower();
-                if (!fileName.StartsWith(directoryName)) { return false; }
-                var parameters = fileName[directoryName.Length..].Trim(new[] { ' ', '-', '_' });
-                if (!Arguments.Italic) { return WeightToNames(Arguments.Weight).Any(x => x == parameters); }
+        
+    };
 
-
-
-                if (!parameters.EndsWith(ItalicName)) { return false; }
-                parameters = parameters.Replace(ItalicName, "");
-                return WeightToNames(Arguments.Weight).Any(x => x == parameters);
-            }
-
-            if (!System.IO.Directory.Exists(Arguments.Directory)) {
-                throw new Exception();// InvalidUsageException(Arguments);
-            }
-            var files = System.IO.Directory.EnumerateFiles(Arguments.Directory);
-            files = files.OrderBy(x => ExtensionToPriority(Path.GetExtension(x).ToLower()));
-            foreach (var file in files) {
-                if (MatchFileName(file)) {
-                    if (Extensions.Contains(Path.GetExtension(file).ToLower())) {
-                        return file;
-                    }
-                }
-            }
-            return null;
-            //return files.FirstOrDefault(x => MatchFileName(x) && Extensions.Contains(Path.GetExtension(x).ToLower()));
-        }
-
-        public static string[] WeightToNames(FontWeight weight) => weight switch {
-            FontWeight.Thin => new[] { "thin", "100" },
-            FontWeight.ExtraLight => new[] { "extralight", "200" },
-            FontWeight.Light => new[] { "light", "300" },
-            FontWeight.Regular => new[] { "", "regular", "400" },
-            FontWeight.Medium => new[] { "medium", "500" },
-            FontWeight.SemiBold => new[] { "semibold", "600" },
-            FontWeight.Bold => new[] { "bold", "700" },
-            FontWeight.ExtraBold => new[] { "extrabold", "800" },
-            FontWeight.Black => new[] { "black", "900" },
-            _ => throw new ArgumentOutOfRangeException(nameof(weight))
-        };
-
-        /*public struct FontFileDescription {
-            public string Extetension;
-            public string Format;
-            public int 
-        }*/
-
-
-        public static readonly string[] Extensions = new[] { ".woff2", ".woff", ".ttf", ".eot" };
-        private static int ExtensionToPriority(string extension) => extension switch {
-            ".woff2" => 0,
-            ".woff" => 1,
-            ".ttf" => 2,
-            ".eot" => 3,
-            _ => int.MaxValue
-        };
-        private static IReadOnlyDictionary<string, string> Formant => new Dictionary<string, string>() {
-            [".woff2"] = "woff2",
-            [".woff"] = "woff",
-            [".ttf"] = "truetype",
-            [".eot"] = "embedded-opentype",
-            [".svg"] = "svg",
-        };
-
-    }
+}
 
 
 
@@ -378,4 +294,3 @@ namespace StaticSharp {
 
         }
     }*/
-}

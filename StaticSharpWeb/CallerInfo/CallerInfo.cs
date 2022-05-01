@@ -1,4 +1,4 @@
-﻿namespace StaticSharp;
+﻿namespace StaticSharp.Gears;
 
 public abstract class CallerInfo{
     protected readonly string callerFilePath;

@@ -2,24 +2,27 @@
 using System.Reflection;
 namespace StaticSharp.Gears;
 
-public abstract class Cacheable<Constructor> : ICacheable, IKeyProvider
-    where Constructor : IKeyProvider {
-    protected Constructor Arguments { get; }
-    public string Key { get; }
-    public Task Job { get; protected set; } = null!;
+public abstract class Cacheable<Constructor> : ICacheable<Constructor>, IKeyProvider
+    where Constructor : class, IKeyProvider {
+    public Constructor Arguments { get; private set; } = null!;
+    public string Key { get; private set; } = null!;
+    //public Task Job { get; protected set; } = null!;
 
     //public virtual IEnumerable<SecondaryTask>
 
-    protected Cacheable(Constructor arguments) {
+    protected virtual void SetArguments(Constructor arguments) {
         Arguments = arguments;
         Key = Arguments.Key;
-        //Job = CreateJob();
     }
+    void ICacheable<Constructor>.SetArguments(Constructor arguments) => SetArguments(arguments);
 
 
+    protected abstract Task CreateAsync();
+    Task ICacheable<Constructor>.CreateAsync() => CreateAsync();
 
+    
 
-    protected virtual async Task CreateInternalAsync() {
+    /*protected virtual async Task CreateInternalAsync() {
         var exception = default(Exception);
         var secondaryTasks = GetSecondaryTasks();
 
@@ -36,15 +39,15 @@ public abstract class Cacheable<Constructor> : ICacheable, IKeyProvider
                 secondaryTask.Value.SetException(exception);
             }
         }        
-    }
+    }*/
 
-    protected abstract Task CreateAsync();
+    //protected abstract Task CreateAsync();
 
-    public virtual void AfterConstruction() {
+    /*public virtual void AfterConstruction() {
         Job = CreateInternalAsync();
-    }
+    }*/
 
-    private Dictionary<PropertyInfo, ISynchronouslyFailable> GetSecondaryTasks() {
+    /*private Dictionary<PropertyInfo, ISynchronouslyFailable> GetSecondaryTasks() {
         PropertyInfo[] properties = GetType().GetProperties(
             BindingFlags.Public
             | BindingFlags.NonPublic
@@ -62,12 +65,13 @@ public abstract class Cacheable<Constructor> : ICacheable, IKeyProvider
             }
         }
         return secondaryTasks;
-    } 
+    }*/
+
 
 }
 
 public abstract class Cacheable<Constructor, Data> : Cacheable<Constructor>
-        where Constructor : IKeyProvider
+        where Constructor : class, IKeyProvider
         where Data : class, new()
     {
 
@@ -76,11 +80,11 @@ public abstract class Cacheable<Constructor, Data> : Cacheable<Constructor>
     };
     private static readonly string CachedDataJsonFileName = "data.json";
 
-    protected string CachedDataJsonFilePath { get; }
+    protected string CachedDataJsonFilePath { get; private set; }
 
-    protected string KeyHash { get; }
+    protected string KeyHash { get; private set; }
 
-    protected string CacheSubDirectory { get; }
+    protected string CacheSubDirectory { get; private set; }
 
     protected virtual Data? CachedData { get; set; }
 
@@ -88,13 +92,15 @@ public abstract class Cacheable<Constructor, Data> : Cacheable<Constructor>
         return base.CreateJob();
     }*/
 
-    protected Cacheable(Constructor arguments) : base(arguments) {        
+    protected override void SetArguments(Constructor arguments) {
+        base.SetArguments(arguments);
         KeyHash = Hash.CreateFromString(Key).ToString();
         CacheSubDirectory = Path.Combine(Cache.Directory, KeyHash);
         CachedDataJsonFilePath = Path.Combine(CacheSubDirectory, CachedDataJsonFileName);
     }
 
-    /*public override void AfterConstruction() {
+
+    /*public override async Task CreateAsync() {
         if (File.Exists(CachedDataJsonFilePath)) {
             var json = File.ReadAllText(CachedDataJsonFilePath);
             CachedData = JsonSerializer.Deserialize<Data>(json, JsonSerializerOptions);
@@ -102,7 +108,7 @@ public abstract class Cacheable<Constructor, Data> : Cacheable<Constructor>
             Job = Task.CompletedTask;
         } else {
             CachedData = new();
-            Job = CreateInternalAsync();
+            return await CreateInternalAsync();
         }
     }
 
@@ -111,9 +117,9 @@ public abstract class Cacheable<Constructor, Data> : Cacheable<Constructor>
         Directory.CreateDirectory(CacheSubDirectory);
         await CreateAsync();
         StoreData();
-    }*/
+    }
 
-    //protected abstract void Load();
+    protected abstract void Load();*/
 
     protected bool LoadData() {
         if (!File.Exists(CachedDataJsonFilePath)) return false;

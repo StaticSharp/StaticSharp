@@ -13,9 +13,9 @@ namespace StaticSharp {
         }        
 
         public override async Task<Tag> GenerateHtmlAsync(Context context) {
-            Console.WriteLine("begin");
-            var measurer = await context.Font.CreateOrGetCached().CreateTextMeasurer(context.FontSize);
-            Console.WriteLine("end");
+            
+            var measurer = context.TextMeasurer;
+
 
             return new Tag("w", new { 
                 w = measurer.Measure(Text)

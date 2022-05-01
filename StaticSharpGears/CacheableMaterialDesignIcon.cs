@@ -4,11 +4,11 @@ using System.Drawing;
 namespace StaticSharp.Gears;
 
 
-public static partial class KeyCalculators {
+/*public static partial class KeyCalculators {
     public static string GetKey(MaterialDesignIcons x) {
         return KeyUtils.Combine<MaterialDesignIcons>(x.ToString());
     }
-}
+}*/
 /*
 public class CacheableMaterialDesignIcon : Cacheable<CacheableMaterialDesignIcon.Constructor> {
 

@@ -1,6 +1,6 @@
 ﻿namespace StaticSharp.Gears;
 
-
+/*
 
 
 public interface IMutableFile { 
@@ -29,5 +29,5 @@ public class CacheableFile : Cacheable<CacheableFile.Constructor> {
     }
 }
 
-
+*/
 

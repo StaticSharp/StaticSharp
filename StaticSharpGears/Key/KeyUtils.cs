@@ -29,10 +29,15 @@ public static partial class KeyUtils {
             return valueAsBool.ToString().ToLower();
         }
 
+        if (value.GetType().IsEnum) {
+            return value.ToString();
+        }
 
         if (value is IKeyProvider keyProvider) {
             return keyProvider.Key;
         }
+
+        
 
         var getKeyMethod = typeof(KeyCalculators).GetMethod("GetKey", BindingFlags.Static | BindingFlags.Public, new Type[] { value.GetType() });
         if (getKeyMethod != null) {
@@ -42,9 +47,7 @@ public static partial class KeyUtils {
             }
         }
 
-        if (value.GetType().IsEnum) {
-            return value.ToString();
-        }
+        
 
         throw new NotImplementedException($"GetKey() not found. Object : {value.GetType().FullName}");
     }
