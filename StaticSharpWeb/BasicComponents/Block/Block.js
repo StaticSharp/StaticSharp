@@ -9,7 +9,7 @@ function Border() {
 }
 
 
-function ItemInitialization(element) {
+function BlockInitialization(element) {
     element.Reactive = {
         Padding: new Border(),
         Margin: new Border(),
@@ -23,7 +23,7 @@ function ItemInitialization(element) {
     }
 }
 
-function ItemBefore(element) {
+function BlockBefore(element) {
 
     new Reaction(() => {
         element.style.top = (!!element.Y) ? element.Y + "px" : ""
@@ -42,6 +42,6 @@ function ItemBefore(element) {
 
 }
 
-function ItemAfter(element) {
+function BlockAfter(element) {
 
 }

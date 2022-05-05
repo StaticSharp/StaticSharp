@@ -5,14 +5,12 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
 
-    public interface IElement {
-        Task<StaticSharp.Html.Tag> GenerateHtmlAsync(Gears.Context context);
-    }
 
-    public abstract class Element : CallerInfo, IElement, IReactiveObjectCs {
-        public Element(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
 
-        public abstract Task<Tag> GenerateHtmlAsync(Context context);
+    public abstract class Reactive : CallerInfo,  IReactiveObjectCs {
+        public Reactive(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
+
+        //public abstract Task<Tag> GenerateHtmlAsync(Context context);
 
         public virtual void AddRequiredInclues(IIncludes includes) {
             includes.Require(new Script(AbsolutePath("Math.js")));

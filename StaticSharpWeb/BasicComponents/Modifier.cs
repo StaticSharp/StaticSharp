@@ -27,28 +27,22 @@ namespace StaticSharp {
 
 
             protected async Task<(Tag, Context)> GenerateHtmlAndContextAsync(Context context,  string tagName = "m") {
-                
-                if (FontFamily != null) {
-                    context.FontFamily = await FontFamily.CreateOrGetCached();
-                }
-                Debug.Assert(context.FontFamily != null);
-
-                var fontStyle = FontStyle;
-                fontStyle ??= context.Font?.Arguments.FontStyle;
-                fontStyle ??= new FontStyle();
-                //Debug.Assert(fontStyle != null);
-
-                context.Font = await new Font(context.FontFamily, fontStyle).CreateOrGetCached();
-                context.Includes.Require(context.Font);
-
-                context.FontSize = FontSize ?? context.FontSize;
-                context.TextMeasurer = context.Font.CreateTextMeasurer(context.FontSize);
-
-
 
                 var tag = new Tag(tagName);
 
+                if (FontFamily != null) {
+                    context.FontFamily = FontFamily;
+                    tag.Style["font-family"] = "abc";
+                }
+                if (FontStyle != null) {
+                    context.FontStyle = FontStyle;
+                }
+                if (FontSize != null) {
+                    context.FontSize = FontSize.Value;
+                }
 
+
+                context.Includes.Require(await context.GetCacheableFont());
 
 
                 return (tag,context);
@@ -70,11 +64,11 @@ namespace StaticSharp {
         }*/
     }
 
-    public sealed class Modifier : AbstractModifier, IElement, IElementCollector<IElement> {
+    public sealed class Modifier : AbstractModifier, IElement, IElementCollector {
 
         private List<IElement> children { get; } = new();
         public Modifier Children => this;
-        public void AddElement(IElement value) {
+        public void Add(IElement value) {
             children.Add(value);
         }
 

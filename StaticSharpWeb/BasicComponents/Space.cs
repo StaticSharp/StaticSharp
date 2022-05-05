@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace StaticSharp;
 
-public sealed class Space: Element {
+public sealed class Space: Reactive {
 
     public float? GrowBefore = null;
     public float? GrowBetween = null;

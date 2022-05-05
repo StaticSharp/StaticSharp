@@ -1,5 +1,5 @@
 function RowInitialization(element) {
-    ItemInitialization(element)
+    BlockInitialization(element)
 
     let parent = element.parentElement;
 
@@ -17,7 +17,7 @@ function RowInitialization(element) {
 }
 
 function RowBefore(element, parameters) {
-    ItemBefore(element)
+    BlockBefore(element)
 
 
     element.Reactive = parameters

@@ -5,12 +5,12 @@ using System.Runtime.CompilerServices;
 namespace StaticSharp {
 
     namespace Symbolic {
-        public class Item : Object {
-            public Item() { }
-            public Item(string value) : base(value) {
+        public class Block : Object {
+            public Block() { }
+            public Block(string value) : base(value) {
             }
 
-            public Item Parent => new($"{value}.Parent");
+            public Block Parent => new($"{value}.Parent");
             public Number X => new($"{value}.X");
             public Number Y => new($"{value}.Y");
             public Number Width => new($"{value}.Width");
@@ -20,10 +20,10 @@ namespace StaticSharp {
         }
     }
 
-    public interface IItem : IElement {
+    public interface IBlock : IElement {
     }
 
-    public abstract class Item<Js> : Element, IItem where Js : Symbolic.Item, new() {
+    public abstract class Block<Js> : Reactive, IBlock where Js : Symbolic.Block, new() {
 
         public delegate T Expression<out T>(Js element);
 
@@ -39,7 +39,7 @@ namespace StaticSharp {
         //public Border<Js> Padding { set; protected get; } = null!;
         public Border<Js> Margin { set; protected get; } = null!;
 
-        public Item(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
+        public Block(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
 
         public override void AddRequiredInclues(IIncludes includes) {
             base.AddRequiredInclues(includes);

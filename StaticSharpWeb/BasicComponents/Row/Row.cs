@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     namespace Symbolic {
-        public class Row : Item {
+        public class Row : Block {
             /*public RowJs(string value) : base(value) {
             }*/
         }
     }
 
-    public abstract class Row<Js> : Item<Js>, IElementCollector<IElement> where Js : Symbolic.Row, new() {
+    public abstract class Row<Js> : Block<Js>, IElementCollector where Js : Symbolic.Row, new() {
 
 
         //record Row(
@@ -26,7 +26,7 @@ namespace StaticSharp {
 
         protected List<IElement> children { get; } = new();
         public Row<Js> Children => this;
-        public void AddElement(IElement value) {
+        public void Add(IElement value) {
             children.Add(value);
         }
 
@@ -34,20 +34,22 @@ namespace StaticSharp {
 
         public Row(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
 
-        public void AppendLiteral(string text, [CallerFilePath] string callerFilePath = "",[CallerLineNumber] int callerLineNumber = 0){
+
+
+        /*public void AppendLiteral(string text, [CallerFilePath] string callerFilePath = "",[CallerLineNumber] int callerLineNumber = 0){
 
             TextProcessor.SplidText(text, children, callerFilePath, callerLineNumber);
             //Console.WriteLine($"\tAppended <{text}>");
         }
 
-        public void AppendFormatted(IElement element /*,[CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0*/) {
+        public void AppendFormatted(IElement element *//*,[CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0*//*) {
             //Console.WriteLine($"\tAppendFormatted called: {{{t}}} is of type {typeof(T)}");
             //Console.WriteLine($"\tAppended the formatted object");
         }
 
         public void Add(string text) {
             //AppendLiteral(text);
-        }
+        }*/
 
         public override void AddRequiredInclues(IIncludes includes) {
             base.AddRequiredInclues(includes);

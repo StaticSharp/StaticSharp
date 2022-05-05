@@ -8,22 +8,24 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     namespace Symbolic {
-        public class ColumnJs : Item {
+        public class ColumnJs : Block {
             /*public ColumnJs(string value) : base(value) {
             }*/
         }
     }
 
 
-    public abstract class Column<Js> : Item<Js>, IElementCollector<IElement> where Js : Symbolic.ColumnJs, new() {
+    public abstract class Column<Js> : Block<Js>, IElementCollector where Js : Symbolic.ColumnJs, new() {
         public Column(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
 
         public Space? Space { get; set; } = null;
 
         protected List<IElement> children { get; } = new();
         public Column<Js> Children => this;
-        public void AddElement(IElement value) {
-            children.Add(value);
+        public void Add(IElement? value) {
+            if (value != null) {
+                children.Add(value);
+            }
         }
 
 
@@ -31,10 +33,10 @@ namespace StaticSharp {
             MinBetween = 8
         };
 
-        public void Add(Row value) {
+        /*public void Add(Row value) {
             if (value != null)
                 children.Add(value);
-        }
+        }*/
 
         public override void AddRequiredInclues(IIncludes includes) {
             base.AddRequiredInclues(includes);
@@ -47,6 +49,13 @@ namespace StaticSharp {
     public sealed class Column : Column<Symbolic.ColumnJs> {
         public Column([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber) { }
+
+
+        //Пока невозможно использовать приведение из InterpolatedStringHandler из-за ошибок компилятора.
+        /*public static implicit operator Column(WeekCollection weekCollection) {
+            return new Column();
+        }*/
+
 
         public override async Task<Tag> GenerateHtmlAsync(Context context) {
             AddRequiredInclues(context.Includes);

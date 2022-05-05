@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -27,7 +27,7 @@ namespace StaticSharp.Gears {
                 void AddWord() {
                     if (length > 0) {
                         var word = value.Substring(start, length);
-                        elements.Add(new Word(word, callerFilePath, callerLineNumber));
+                        elements.Add(new Text(word, callerFilePath, callerLineNumber));
                     }
                 }
 
@@ -60,4 +60,4 @@ namespace StaticSharp.Gears {
         
 
     }
-}
+}*/
