@@ -8,47 +8,20 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
 
-    [InterpolatedStringHandler]
-    public class Group: Reactive, IElementCollector {
+    public class Group: CallerInfo,  IBlockCollector {
 
-        public List<IElement> Children { get; } = new();
-
-        public Group(
-            int literalLength,
-            int formattedCount,
-            /*, IElementCollector collector*/
-            [CallerFilePath] string callerFilePath = "",
-            [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
-
-        }
+        public List<IBlock> Children { get; } = new();
 
         public Group([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber) {
         
+        }        
+
+        public void Add(IBlock? value) {
+            if (value!=null)
+                Children.Add(value);
         }
 
-        public void AppendLiteral(string value,
-            [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
-            Add(new Text(value,true, callerFilePath, callerLineNumber));
-        }
 
-        public void AppendFormatted(string value,
-            [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
-            Add(new Text(value,false, callerFilePath, callerLineNumber));
-        }
-        public void AppendFormatted<T>(T t) {
-            Console.WriteLine($"\tAppendFormatted called: {{{t}}} is of type {typeof(T)}");
-        }
-
-        public void Add(IElement element) {
-            if (element!=null)
-                Children.Add(element);
-        }
-
-        
-
-        public override Task<Tag> GenerateHtmlAsync(Context context) {
-            throw new NotImplementedException();
-        }
     }
 }

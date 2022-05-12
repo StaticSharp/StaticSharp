@@ -45,7 +45,6 @@ function RowBefore(element, parameters) {
             element.style.width = element.Width + "px"
         else
             element.style.width = undefined
-
     })
 
     new Reaction(() => {

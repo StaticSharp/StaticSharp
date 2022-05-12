@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace StaticSharpGears;
+namespace StaticSharp.Gears;
 
 public static class CaseConverter {
 

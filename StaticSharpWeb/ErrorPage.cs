@@ -35,10 +35,13 @@ namespace StaticSharp.Gears {
             var result = matches.Select(x => 
                 new CallStack(x.Groups[0]?.ToString(), x.Groups["file"]?.Value, x.Groups["line"]?.Value));
             var tag = new Tag("div") {
-                new Tag("script", new { type = "text/javascript"}){
-                    "function findLine(file, line){fetch(`/api/v1/visual_studio/${file}/${line}`);" +
-                    "return false;}"
-                }
+                /*new Tag("script"){
+                    ["type"] = "text/javascript",
+                    Children = {
+                        "function findLine(file, line){fetch(`/api/v1/visual_studio/${file}/${line}`);" +
+                        "return false;}"
+                    }
+                }*/
             };
             var stackTraceArray = stackTrace.Split(Environment.NewLine);
             foreach (var stackPart in stackTraceArray) {
@@ -46,18 +49,21 @@ namespace StaticSharp.Gears {
                 foreach (var callStack in result) {
                     if (stackPart.Contains(callStack.Place)) {
                         tag.Add(stackPart.Replace(callStack.Place, ""));
-                        tag.Add(new Tag("a", new {
-                            href = "localhost/aaaa/aaa/aa",
-                            onclick = $"let xhr = new XMLHttpRequest();" +
+                        tag.Add(new Tag("a") {
+                            ["href"] = "localhost/aaaa/aaa/aa",
+                            ["onclick"] = $"let xhr = new XMLHttpRequest();" +
                             $"xhr.open('POST', '/api/v1/visual_studio'); " +
                             $"let requestBody = {{}};" +
                             $"requestBody['file'] = '{callStack.File.Replace("\\", "\\\\")}';" +
                             $"requestBody['line'] = '{callStack.Line}';" +
                             $"xhr.send(JSON.stringify(requestBody)); " +
-                            $"return false; "
-                        }) {
-                            $"{callStack.File}:line {callStack.Line}"
-                        });
+                            $"return false; ",
+
+                            Children = {
+                                $"{callStack.File}:line {callStack.Line}"
+                            }
+                        }
+                        );
                         tag.Add(new Tag("br"));
                         added = true;
                         break;
@@ -74,7 +80,9 @@ namespace StaticSharp.Gears {
 
         public async Task<string> GeneratePageHtmlAsync(Context context) {
             var head = new Tag("head"){
-                new Tag("meta", new{ charset = "utf-8"}),
+                new Tag("meta"){
+                    ["charset"] = "utf-8"
+                },
                 new Tag("title"){
                     Title
                 },
@@ -90,7 +98,9 @@ namespace StaticSharp.Gears {
                 body.Add(ReplaceLinks(Exception.StackTrace));
             }
             var document = new Tag(null) {
-                new Tag("!doctype",new{ html = ""}),
+                new Tag("!doctype"){
+                    ["html"] = ""
+                },
                 head,
                 body
             };

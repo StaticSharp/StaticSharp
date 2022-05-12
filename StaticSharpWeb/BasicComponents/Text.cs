@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    public class Text : Reactive {
+    public class Text : CallerInfo, IInline {
 
         public string Value { get; }
         public bool Formatting { get; }
@@ -19,7 +19,7 @@ namespace StaticSharp {
             Formatting = formatting;
         }        
 
-        public override Task<Tag> GenerateHtmlAsync(Context context) {
+        public Task<Tag> GenerateInlineHtmlAsync(Context context) {
 
             if (!Formatting) {
                 return Task.FromResult(new Tag() { Value });

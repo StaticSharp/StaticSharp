@@ -14,35 +14,46 @@ internal class Program {
 
         var body = new Tag("body"){
                         new Tag("pre"){ "a"," = ", "B"},
-
-
-
-                        new Tag("code", new {Class = "AAAA", src = "url"}),
-                        "<Hello>",
-                        new Tag("br"),
-                        new Tag("p"){
-                            "paragraph",
-                            new Tag("br"),
-                            "paragraph",
-                        }
+                        new Tag("code"){
+                            ["Class"] = "AAAA",
+                            ["src"] = "url",
+                        
+                            Children = { 
+                                "<Hello>",
+                                new Tag("br"),
+                                new Tag("p"){
+                                    "paragraph",
+                                    new Tag("br"),
+                                    "paragraph",
+                                }                            
+                            }
+                        }                        
                     };
 
         body.Attributes["style"] = "";
 
         var result =
             new Tag(null) {
-                new Tag("!DOCTYPE",new { html = "" }),
+                new Tag("!DOCTYPE"){ ["html"] = "" },
 
-                new Tag("html", new { lang = "en"}) {
-                    new Tag("head"){
-                        new Tag("title") {
-                            "HTMLilka 2"
+                new Tag("html"){
+                    ["lang"] = "en",
+                    Children = {
+                        new Tag("head"){
+                            new Tag("title") {
+                                "HTMLilka 2"
+                            },
+                            new Tag("link"){
+                                ["sizes"] = "16x16",
+                                ["rel"] = "icon",
+                                ["href"] = "https://developers.antilatency.com/Favicon/CAF6A1BD8D2F40903F79A3B595E9AD62/CAF6A1BD8D2F40903F79A3B595E9AD6216.png"
+                            }
                         },
-                        new Tag("link", new{ sizes = "16x16", rel = "icon", href = "https://developers.antilatency.com/Favicon/CAF6A1BD8D2F40903F79A3B595E9AD62/CAF6A1BD8D2F40903F79A3B595E9AD6216.png"})
-                            
-                    },
-                    string.Empty,
-                    body,
+                        string.Empty,
+                        body
+
+                    }
+
                 }
             };
 

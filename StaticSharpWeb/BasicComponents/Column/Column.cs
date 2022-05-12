@@ -8,21 +8,21 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     namespace Symbolic {
-        public class ColumnJs : Block {
+        public class ColumnJs : BlockJs {
             /*public ColumnJs(string value) : base(value) {
             }*/
         }
     }
 
 
-    public abstract class Column<Js> : Block<Js>, IElementCollector where Js : Symbolic.ColumnJs, new() {
+    public abstract class Column<Js> : Block<Js>, IBlockCollector where Js : Symbolic.ColumnJs, new() {
         public Column(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
 
         public Space? Space { get; set; } = null;
 
-        protected List<IElement> children { get; } = new();
+        protected List<IBlock> children { get; } = new();
         public Column<Js> Children => this;
-        public void Add(IElement? value) {
+        public void Add(IBlock? value) {
             if (value != null) {
                 children.Add(value);
             }
@@ -40,12 +40,13 @@ namespace StaticSharp {
 
         public override void AddRequiredInclues(IIncludes includes) {
             base.AddRequiredInclues(includes);
-            includes.Require(new Script(AbsolutePath("Column.js")));
+            includes.Require(new Script(ThisFilePathWithNewExtension("js")));
         }
-
 
     }
 
+    [ScriptBefore]
+    [ScriptAfter]
     public sealed class Column : Column<Symbolic.ColumnJs> {
         public Column([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber) { }

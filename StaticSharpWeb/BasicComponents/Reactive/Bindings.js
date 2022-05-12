@@ -286,12 +286,6 @@ Property.prototype.OnTruthify = function (func) {
     })
 }*/
 
-
-/*function OnChanged(property) {
-
-
-}*/
-
 function PropertyTest() {
 
     console.group("PropertyTest")

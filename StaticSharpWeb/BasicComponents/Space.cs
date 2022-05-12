@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace StaticSharp;
 
-public sealed class Space: Reactive {
+public sealed class Space: Reactive<ObjectJs>, IBlock {
 
     public float? GrowBefore = null;
     public float? GrowBetween = null;
@@ -16,7 +16,7 @@ public sealed class Space: Reactive {
     public Space([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
         : base(callerFilePath, callerLineNumber) { }
 
-    public override Task<Tag> GenerateHtmlAsync(Context context) {
+    public Task<Tag> GenerateHtmlAsync(Context context) {
         return Task.FromResult(new Tag("ws") { " "});
     }
 }

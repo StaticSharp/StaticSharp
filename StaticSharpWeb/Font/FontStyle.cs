@@ -1,5 +1,5 @@
 ﻿namespace StaticSharp {
-    public sealed record FontStyle(
+    public record FontStyle(
         FontWeight FontWeight = FontWeight.Regular,
         bool Italic = false
         ) : Gears.IKeyProvider {

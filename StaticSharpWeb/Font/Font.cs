@@ -58,7 +58,7 @@ namespace StaticSharp {
     }
 
     public record Font(
-            CacheableFontFamily FontFamily,
+            FontFamily FontFamily,
             FontStyle FontStyle
             ) : Gears.Constructor<Font,CacheableFont> {
 
@@ -88,7 +88,7 @@ namespace StaticSharp {
 
         protected override async Task CreateAsync() {
 
-            var family = Arguments.FontFamily;
+            var family = await Arguments.FontFamily.CreateOrGetCached();
             var member = family.FindMember(Arguments.FontStyle);
 
 
@@ -124,12 +124,12 @@ namespace StaticSharp {
             //SixLabors.Fonts.TextMeasurer.Measure("Text to measure", new(font));
 
             var stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine("@font-face {");
-            stringBuilder.Append("font-family: '").Append(family.Name).AppendLine("';");
+            stringBuilder.Append("@font-face {");
+            stringBuilder.Append("font-family: ").Append("abc"/*family.Name*/).Append(";");
             //stringBuilder.AppendLine($"src:local('{Arguments.Family} {Arguments.Weight}{italicSuffix}'),");
-            stringBuilder.AppendLine($"url(data:application/font-{format};charset=utf-8;base64,{Base64}) format('{format}');");
-            stringBuilder.Append("font-weight: ").Append((int)Arguments.FontStyle.FontWeight).AppendLine(";");
-            stringBuilder.Append("font-style: ").Append(fontStyle).AppendLine(";\n}");
+            stringBuilder.Append($"src: url(data:application/font-{format};charset=utf-8;base64,{Base64}) format('{format}');");
+            stringBuilder.Append("font-weight: ").Append((int)Arguments.FontStyle.FontWeight).Append(";");
+            stringBuilder.Append("font-style: ").Append(fontStyle).Append(";}");
 
             StyleInclude = stringBuilder.ToString();
         }

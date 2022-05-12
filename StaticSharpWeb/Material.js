@@ -20,7 +20,6 @@ function measureText(text, font) {
 
 
 function Material(element, parameters) {
-    console.log(element.attributes.id)
 
     //PropertyTest()
 
@@ -129,7 +128,8 @@ function Material(element, parameters) {
     })
 
     document.addEventListener("DOMContentLoaded", function () {
-        element.style.display = "contents";
+        element.style.visibility = "visible";
+        //element.style.display = "contents";
     })
     
 

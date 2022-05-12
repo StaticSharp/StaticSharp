@@ -10,35 +10,43 @@ function Border() {
 
 
 function BlockInitialization(element) {
+
+    HierarchicalInitialization(element)
+
     element.Reactive = {
         Padding: new Border(),
         Margin: new Border(),
-        X: undefined,
-        Y: undefined,
-        Width: undefined,
-        Height: undefined,
-        
-        //InnerWidth: () => parent.InnerWidth || element.Width,
-        //PaddingLeft: () => parent.PaddingLeft || 0
+
+        LayoutX: undefined,
+        LayoutY: undefined,
+        LayoutWidth: undefined,
+        LayoutHeight: undefined,
+
+        X: () => element.LayoutX,
+        Y: () => element.LayoutY,
+        Width: () => element.LayoutWidth,
+        Height: () => element.LayoutHeight,
     }
 }
 
+
+
+
+
 function BlockBefore(element) {
+    HierarchicalBefore(element)
 
-    new Reaction(() => {
-        element.style.top = (!!element.Y) ? element.Y + "px" : ""
-    })
-    new Reaction(() => {
-        element.style.left = (!!element.X) ? element.X + "px" : ""
-    })
+    let parent = element.parentElement
 
-    new Reaction(() => {
-        element.style.width = (!!element.Width) ? element.Width + "px" : ""
-    })
+    
+    if (parent.AddChild)
+        parent.AddChild(element);
 
-    new Reaction(() => {
-        element.style.height = (!!element.Height) ? element.Height + "px" : ""
-    })
+    XToStyle(element);
+    
+    YToStyle(element);
+
+    
 
 }
 

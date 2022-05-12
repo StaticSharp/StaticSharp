@@ -13,7 +13,7 @@ namespace StaticSharpWeb {
 
     public interface IMaterial {
         string Title { get; }
-        Row? Description { get; }//TODO: IPlainTextProvider
+        Paragraph? Description { get; }//TODO: IPlainTextProvider
         //IImage TitleImage { get; }
     }
 
@@ -21,7 +21,7 @@ namespace StaticSharpWeb {
         public Font Font { get; }
     }*/
 
-    public abstract class Material : IMaterial, IElement, IPage, IPlainTextProvider {
+    public abstract class Material : IMaterial, IInline, IPage, IPlainTextProvider {
         //public class TChildren : List<object> { }
 
         //public virtual IImage TitleImage => null;
@@ -31,18 +31,18 @@ namespace StaticSharpWeb {
                 return n[(n.LastIndexOf('.') + 1)..];
             }
         }
-        public virtual Row? Description => null;
+        public virtual Paragraph? Description => null;
 
-        public virtual Column? Content => null;
-        public virtual Column? Footer => null;
+        public virtual Group? Content => null;
+        public virtual IBlock? Footer => null;
         public virtual int ContentWidth => 400;
 
         //public virtual RightSideBar RightSideBar => null;
         //public virtual LeftSideBar LeftSideBar => null;
         public virtual Body Body => new Body() {
-            FontSize = 16,
+            FontSize = (_)=>16,
             FontFamily = new FontFamily(AbsolutePath("Fonts/roboto")),
-            //FontStyle = new FontStyle(),
+            FontStyle = new FontStyle(FontWeight.Regular),
         };
 
         //public virtual Font Font => new(Path.Combine(AbsolutePath(), "Fonts", "roboto"), FontWeight.Regular);
@@ -56,11 +56,11 @@ namespace StaticSharpWeb {
             
 
             var head = new Tag("head"){
-                    new Tag("meta", new{ charset = "utf-8" }),
-                    new Tag("meta", new{
-                        name="viewport",
-                        content = "width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"
-                    }),
+                    new Tag("meta"){["charset"] = "utf-8" },
+                    new Tag("meta"){
+                        ["name"]="viewport",
+                        ["content"] = "width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"
+                    },
                     new Tag("title"){
                         Title
                     },
@@ -68,7 +68,7 @@ namespace StaticSharpWeb {
                 };
 
             var document = new Tag(null) {
-                new Tag("!doctype",new{ html = ""}),
+                new Tag("!doctype"){ ["html"] = ""},
                 head,
                 await GetBodyAsync(context)
             };
@@ -91,17 +91,25 @@ namespace StaticSharpWeb {
             context.Includes.Require(new Script(Bindings.BindingsJsPath));*/
 
 
-
-
-            (var bodyTag, context) = await Body.GenerateHtmlAndContextAsync(context);
-
             context.Includes.Require(new Script(AbsolutePath("Material.js")));
-            bodyTag.Add(new JSCall("Material", new { ContentWidth = ContentWidth }).Generate(context));
+
+            var bodyTag = await Body.GenerateHtmlWithChildrenAsync(context,(innerContext) => new Task<Tag>[]{
+                    Task.FromResult(new JSCall("Material", new { ContentWidth = ContentWidth }).Generate(innerContext)),
+                    
+                    new Column() {
+                        Content
+                    }.GenerateHtmlAsync(innerContext).ContinueWith<Tag>(x=>{ 
+                        x.Result.Attributes["id"] = "Content";
+                        return x.Result;
+                    })
+                }         
+            );
 
 
-            
 
-            
+
+
+
 
             /*var body = new Tag("body", 
                 new {
@@ -120,13 +128,13 @@ namespace StaticSharpWeb {
 
             };*/
 
-            var content = Content;
-            if (content != null) {
-                var contentTag = await content.GenerateHtmlAsync(context);
-                var attributes = contentTag.AttributesNotNull;
-                attributes["id"] = "Content";
-                bodyTag.Add(contentTag);
-            }
+            /*var contentTag = await new Column() {
+                Content
+            }.GenerateHtmlAsync(context);
+            contentTag.Attributes["id"] = "Content";
+            bodyTag.Add(contentTag);*/
+
+            
 
 
             /*content.Name = "div";*/
@@ -183,7 +191,7 @@ namespace StaticSharpWeb {
             return bodyTag;
         }
 
-        public async Task<Tag> GenerateHtmlAsync(Context context) {
+        public async Task<Tag> GenerateInlineHtmlAsync(Context context) {
             var representative = this as  StaticSharpEngine.IRepresentative;
             //todo: material outside of the tree exceprion
             var uri = context.NodeToUrl(representative?.Node);
@@ -191,7 +199,10 @@ namespace StaticSharpWeb {
                 throw new NullReferenceException();//todo: special exception
             }
 
-            var result = new Tag("a", new { href = uri }) { Title };
+            var result = new Tag("a"){
+                ["href"] = uri,
+                Children = { Title }
+            };
 
             if (Description != null) {
                 //result.Attributes["title"] = await Description.GetPlaneTextAsync(context);

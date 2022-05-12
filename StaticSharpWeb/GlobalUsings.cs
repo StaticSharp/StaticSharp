@@ -1,1 +1,1 @@
-global using static StaticSharpWeb.Static;
+global using static StaticSharp.Static;

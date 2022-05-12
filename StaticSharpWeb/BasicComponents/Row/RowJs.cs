@@ -9,14 +9,15 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    namespace Symbolic {
-        public class Row : Block {
-            /*public RowJs(string value) : base(value) {
-            }*/
-        }
-    }
 
-    public abstract class Row<Js> : Block<Js>, IElementCollector where Js : Symbolic.Row, new() {
+    public class RowJs : BlockJs {
+        /*public RowJs(string value) : base(value) {
+        }*/
+    }
+    
+
+
+    public abstract class Row<Js> : Block<Js>, IBlockCollector where Js : RowJs, new() {
 
 
         //record Row(
@@ -24,9 +25,9 @@ namespace StaticSharp {
         float? GrowAbove { get; set; } = null;
         float? GrowBelow { get; set; } = null;
 
-        protected List<IElement> children { get; } = new();
+        protected List<IBlock> children { get; } = new();
         public Row<Js> Children => this;
-        public void Add(IElement value) {
+        public void Add(IBlock value) {
             children.Add(value);
         }
 
@@ -53,24 +54,25 @@ namespace StaticSharp {
 
         public override void AddRequiredInclues(IIncludes includes) {
             base.AddRequiredInclues(includes);
-            includes.Require(new Script(AbsolutePath("Row.js")));
+            includes.Require(new Script(ThisFilePathWithNewExtension("js")));
         }
 
     }
 
-    [InterpolatedStringHandler]
-    public sealed class Row : Row<Symbolic.Row> {
+    [ScriptBefore]
+    [ScriptAfter]
+    public sealed class Row : Row<RowJs> {
         public Row([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber)
             { }
 
-        public Row(
+        /*public Row(
             int literalLength,
             int formattedCount,
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber)
-            { }
+            { }*/
 
         public override async Task<Tag> GenerateHtmlAsync(Context context) {
             AddRequiredInclues(context.Includes);

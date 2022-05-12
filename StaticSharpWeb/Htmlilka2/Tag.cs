@@ -61,28 +61,77 @@ namespace StaticSharp.Html {
 
         public string? Name { get; set; }//null tag is a collection
 
-
-        public IDictionary<string, object>? Attributes { get; private set; }
-
-        public IDictionary<string, object> AttributesNotNull {
+        Dictionary<string, object>? style = null;
+        public IDictionary<string, object> Style {
             get {
-                if (Attributes == null) {
-                    Attributes = new Dictionary<string,object>();
+                if (style == null) {
+                    style = new();
                 }
-                return Attributes;
+                return style;
+            }
+            set {
+                if (value == null) {
+                    style = new();
+                } else {
+                    style = new Dictionary<string, object>(value);
+                }
             }
         }
 
-        public Tag(string? name, IDictionary<string, object> attributes) {
-            Attributes = attributes;
+        public string? Id {
+            get { 
+                return this["id"]?.ToString();
+            }
+            set {
+                if (string.IsNullOrEmpty(value)) value = null;
+                this["id"] = value;
+            }
+        }
+
+        Dictionary<string, object>? attributes = null;
+        public IDictionary<string, object> Attributes {
+            get {
+                if (attributes == null) {
+                    attributes = new();
+                }
+                return attributes;
+            }
+            set {
+                if (value == null) {
+                    attributes = new();
+                } else {
+                    attributes = new Dictionary<string, object>(value);
+                }                
+            }
+        }
+
+        public Tag Children => this;
+
+        public Tag(string? name = null) {
             Name = name;
         }
 
-        public Tag(string? name, object? attributes = null) {
+
+        public object? this[string attributeName] {            
+            get {
+                return Attributes.TryGetValue(attributeName, out var value) ? value?.ToString() : null;
+            }
+            set {
+                if (value == null) {
+                    Attributes.Remove(attributeName);
+                } else {
+                    Attributes[attributeName] = value;
+                }
+            }
+        }
+
+        
+
+        /*public Tag(string? name, object? attributes = null) {
             if (attributes!=null)
                 Attributes = SoftObject.ObjectToDictionary(attributes);
             Name = name;
-        }
+        }*/
 
         public void Add(string item) {
             if(string.IsNullOrEmpty(item)) { return;}
@@ -102,61 +151,83 @@ namespace StaticSharp.Html {
             }            
         }
 
-        public virtual void WriteHtml(StringBuilder builder) {
-            //System.Globalization.CultureInfo.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
-            /*string? objectToString(object? obj) {
-                return obj switch {
-                    //string => obj.,
-                    float => ((float)obj).ToString(CultureInfo.InvariantCulture),
-                    float => ((float)obj).ToString(CultureInfo.InvariantCulture),
-                    _ => "Watching TV",
-                };
-                //obj.GetType
-            }*/
 
-            void WriteCssStyle(StringBuilder builder, object styleObject) {
-                if (styleObject is string styleObjectString) {
-                    builder.Append(styleObjectString);
-                } else {
-                    var styleDictionary = SoftObject.ObjectToDictionary(styleObject);
-                    if (styleDictionary == null) return;
+        public static string? AttributeValueToString(object? value) {
+            if (value == null) return null;
 
-                    foreach (var item in styleDictionary) {
-                        string? stringValue;
-                        if (item.Value is Color color) {
-                            stringValue = ColorTranslator.ToHtml(color);
-                        } else {
-                            stringValue = item.Value.ToString();
-                        }
-                        if (stringValue == null) continue;
-
-                        builder.Append($"{StaticSharpGears.CaseConverter.PascalToKebabCase(item.Key)}:{stringValue};");
-                    }
-                }
+            if (value is float valueAsFloat) {
+                return valueAsFloat.ToString(CultureInfo.InvariantCulture);
             }
 
+            if (value is double valueAsDouble) {
+                return valueAsDouble.ToString(CultureInfo.InvariantCulture);
+            }
+
+            if (value is bool valueAsBool) {
+                return valueAsBool.ToString().ToLower();
+            }
+
+            return value.ToString();
+        }
+
+        public virtual void WriteHtml(StringBuilder builder) {
+
+            void WriteCssStyle(StringBuilder builder) {
+                /*if (styleObject is string styleObjectString) {
+                    builder.Append(styleObjectString);
+                } else {
+                    
+                }*/
+                /*var styleDictionary = SoftObject.ObjectToDictionary(styleObject);
+                if (styleDictionary == null) return;
+*/
+                if (style == null) return;
+                if (style.Count == 0) return;
+
+                builder.Append($" style=\"");
+
+                foreach (var item in style) {
+                    string? stringValue;
+                    if (item.Value is Color color) {
+                        stringValue = ColorTranslator.ToHtml(color);
+                    } else {
+                        stringValue = item.Value.ToString();
+                    }
+                    if (stringValue == null) continue;
+
+                    builder.Append($"{Gears.CaseConverter.PascalToKebabCase(item.Key)}:{stringValue};");
+                }
+                builder.Append($"\"");
+
+            }
 
             void WriteAttributes(StringBuilder builder) {
-                foreach (var i in Attributes) {
+                if (attributes == null) return;
+                foreach (var i in attributes) {
                     if (i.Key.ToLower() == "style") {
+                        throw new System.Exception("Do not set Style through attributes, use Style property instead.");
+                    }
+
+                    /*if (i.Key.ToLower() == "style") {
+
                         if (i.Value != null) {
                             builder.Append(" style = \"");
                             WriteCssStyle(builder, i.Value);
                             builder.Append("\"");
                         }
                     } else {
-                        var valueString = i.Value?.ToString();
-                        
 
-                        if (valueString != null) {
-                            var kebebKey = StaticSharpGears.CaseConverter.PascalToKebabCase(i.Key);
-                            if (valueString.Length > 0) {                                
-                                builder.Append($" {kebebKey}=\"{valueString.ReplaceInvalidAttributeValueSymbols()}\"");
-                            } else {
-                                builder.Append(' ').Append(kebebKey);
-                            }
+                    }*/
+                    var valueString = AttributeValueToString(i.Value);
+                    if (valueString != null) {
+                        var kebebKey = Gears.CaseConverter.PascalToKebabCase(i.Key);
+                        if (valueString.Length > 0) {
+                            builder.Append($" {kebebKey}=\"{valueString.ReplaceInvalidAttributeValueSymbols()}\"");
+                        } else {
+                            builder.Append(' ').Append(kebebKey);
                         }
                     }
+
                 }
             }
 
@@ -164,8 +235,8 @@ namespace StaticSharp.Html {
 
             if (Name != null) {
                 builder.Append('<').Append(Name);
-                if (Attributes != null)
-                    WriteAttributes(builder);
+                WriteAttributes(builder);
+                WriteCssStyle(builder);
                 builder.Append('>');
 
                 if(!VoidElements.Contains(Name.ToLower())) {

@@ -1,10 +1,10 @@
-﻿namespace StaticSharp.Symbolic;
+﻿namespace StaticSharp;
 
-public class Symbol{
-    public string value = "";
-    public bool isConstant = false;
-    public Symbol() {}
-    public Symbol(string value) {
+public class SymbolJs{
+    public string value = "";//TODO: make protected
+    public bool isConstant = false;//TODO: make protected
+    public SymbolJs() {}
+    public SymbolJs(string value) {
         this.value = value;
     }
 

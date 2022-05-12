@@ -1,7 +1,21 @@
 @include once() {
 
-    * {
+    body {
+        display: contents;
         position: absolute;
+        visibility: hidden;
+        overscroll-behavior-x: none;
+        //position: relative;
+        //top: 0;
+        min-height: 100vh;
+        //display: flex;
+        //flex-direction: column;
+        background-color: chartreuse;
+        white-space: pre-wrap;
+    }
+
+    * {
+        position: inherit;
         margin: 0;
         visibility: inherit;
         margin-block-start: 0;
@@ -20,39 +34,8 @@
         white-space: inherit;
     }
 
-    p {
-    }
-
-    t {
-        position: absolute;
-        display: inline;
-    }
-
-    span {
-        position: absolute;
-    }
-
-    w {
-        position: absolute;
-        display: inline;
-    }
-
-    svg {
-    }
-
-
-
-    tspan::selection {
-        filter: invert(1) !important;
-        //fill: red;
-        color: red;
-        background: yellow;
-    }
-
-
-    n {
-        flex-basis: 100%;
-        flex-shrink: 1;
+    m {
+        display: contents;
     }
     /*w::after {
         color: black;
@@ -102,18 +85,5 @@
     html {
         //min-height: 100vh;
         overflow: auto;
-    }
-
-
-
-    body {
-        display: none;
-        overscroll-behavior-x: none;
-        //position: relative;
-        //top: 0;
-        min-height: 100vh;
-        //display: flex;
-        //flex-direction: column;
-        background-color: chartreuse;
     }
 }
