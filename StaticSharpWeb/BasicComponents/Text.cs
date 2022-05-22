@@ -19,10 +19,26 @@ namespace StaticSharp {
             Formatting = formatting;
         }        
 
-        public Task<Tag> GenerateInlineHtmlAsync(Context context) {
+        public async Task<Tag> GenerateInlineHtmlAsync(Context context) {
+            
+            var chars = Value.ToPrintableChars();
+            HashSet<string> families = new();
+            foreach (var i in context.FontFamilies) {
+                var font = context.Includes.GetOrCreateFont(new Font(i, context.FontStyle));
+                var numChars = chars.Count;
+                chars = await font.AddCharsAsync(chars);
+                if (chars.Count < numChars) {
+                    families.Add(i.Name);
+                    numChars = chars.Count;
+                }
+                if (numChars == 0)
+                    break;
+            }
+
+            
 
             if (!Formatting) {
-                return Task.FromResult(new Tag() { Value });
+                return new Tag() { Value };
             }
 
             Dictionary<char, Action<Tag>> specialCharacters = new Dictionary<char, Action<Tag>>() {
@@ -47,7 +63,7 @@ namespace StaticSharp {
             if (length != 0)
                 result.Add(Value.Substring(start, length));
 
-            return Task.FromResult(result);
+            return result;
 
         }
     }

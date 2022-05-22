@@ -11,6 +11,7 @@ namespace StaticSharp {
     public class SliderJs : BlockJs {
         public NumberJs Min => new($"{value}.Min");
         public NumberJs Max => new($"{value}.Max");
+        public NumberJs Step => new($"{value}.Step");
         public NumberJs Value => new($"{value}.Value");
     }
     
@@ -33,6 +34,11 @@ namespace StaticSharp {
 
     [ScriptBefore][ScriptAfter]
     public sealed class Slider : Slider<SliderJs> {
+        public Binding<NumberJs> Min { set; protected get; } = null!;
+        public Binding<NumberJs> Max { set; protected get; } = null!;
+        public Binding<NumberJs> Step { set; protected get; } = null!;
+        public Binding<NumberJs> Value { set; protected get; } = null!;
+
         public Slider([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber) { }
 

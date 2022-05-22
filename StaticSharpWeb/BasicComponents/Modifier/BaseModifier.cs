@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
@@ -27,7 +28,7 @@ namespace StaticSharp {
             public Space? DefaultSpace = null;
 
 
-            public FontFamily? FontFamily = null;
+            public FontFamily[]? FontFamilies = null;
             public FontStyle? FontStyle = null;
             //public float? FontSize = null;
             public Binding<NumberJs> FontSize { set; protected get; } = null!;
@@ -41,29 +42,42 @@ namespace StaticSharp {
             }
 
 
-            protected async Task<Tag> GenerateHtmlWithChildrenAsync(Context context, Func<Context,IEnumerable<Task<Tag>>> children, string tagName = "m") {                
+            protected async Task<Tag> GenerateHtmlWithChildrenAsync(Context context, Func<Context,IEnumerable<Task<Tag>>> children, string tagName = "m") {
 
-                if (FontFamily != null) {
-                    context.FontFamily = FontFamily;
+                Dictionary<string, object> style = new();
+
+
+                if (FontFamilies != null) {
+                    context.FontFamilies = FontFamilies;
+                    style["font-family"] = string.Join(',', FontFamilies.Select(x => x.Name));
                     //tag.Style["font-family"] = "abc";
                 }
                 if (FontStyle != null) {
                     context.FontStyle = FontStyle;
+                    style["font-weight"] = (int)FontStyle.Weight;
+                    style["font-style"] = FontStyle.CssFontStyle;
+
                 }
                 /*if (FontSize != null) {
                     context.FontSize = FontSize.Value;
                 }*/
 
 
-                context.Includes.Require(await context.GetCacheableFont());
+                //context.Includes.Require(await context.GetCacheableFont());
 
                 AddRequiredInclues(context.Includes);
 
-                var tag = new Tag(tagName) { 
-                    CreateScriptBefore(),
-                    await Task.WhenAll(children(context)),
-                    CreateScriptAfter()
+                var tag = new Tag(tagName) {
+                    
+                    Children = {
+                        CreateScriptBefore(),
+                        await children(context).SequentialOrParallel(),
+                        CreateScriptAfter()
+                    }
                 };
+
+                tag.Style = style;
+
 
                 return tag;
             }

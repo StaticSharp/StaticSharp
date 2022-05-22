@@ -11,6 +11,7 @@ function ModifierBefore(element) {
         if (parent.AddChild)
             parent.AddChild(child)
     }
+
 }
 
 function ModifierAfter(element) {

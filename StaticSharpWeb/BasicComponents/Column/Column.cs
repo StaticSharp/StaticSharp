@@ -18,8 +18,6 @@ namespace StaticSharp {
     public abstract class Column<Js> : Block<Js>, IBlockCollector where Js : Symbolic.ColumnJs, new() {
         public Column(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
 
-        public Space? Space { get; set; } = null;
-
         protected List<IBlock> children { get; } = new();
         public Column<Js> Children => this;
         public void Add(IBlock? value) {
@@ -28,10 +26,6 @@ namespace StaticSharp {
             }
         }
 
-
-        public static Space DefaultSpace = new Space() {
-            MinBetween = 8
-        };
 
         /*public void Add(Row value) {
             if (value != null)
@@ -62,7 +56,7 @@ namespace StaticSharp {
             AddRequiredInclues(context.Includes);
             return new Tag("column") {
                 CreateScriptBefore(),
-                await Task.WhenAll(children.Select(x=>x.GenerateHtmlAsync(context))),
+                await children.Select(x=> x.GenerateHtmlAsync(context)).SequentialOrParallel(),
                 CreateScriptAfter()
             };
         }

@@ -6,7 +6,23 @@ namespace StaticSharp {
 
     //Instead of inheritance from CacheableHttpRequest, it is better to use aggregation
     namespace Gears {
-        public record HttpRequest(HttpRequestMessage HttpRequestMessage) : Constructor<HttpRequest, CacheableHttpRequest> {
+
+        public static partial class KeyCalculators {
+            public static string GetKey(HttpRequestMessage httpRequestMessage) {
+
+                var headers = string.Join('\0', httpRequestMessage.Headers.Select(x => $"{x.Key}\0{string.Join(',', x.Value)}"));
+                
+                return KeyUtils.Combine<HttpRequestMessage>(
+                    httpRequestMessage.RequestUri?.ToString(),
+                    httpRequestMessage.Method.ToString(),
+                    headers
+                    );
+            }
+        }
+
+
+
+       public record HttpRequest(HttpRequestMessage HttpRequestMessage) : Constructor<HttpRequest, CacheableHttpRequest> {
             public HttpRequest(string uri) : this(new Uri(uri)) { }
             public HttpRequest(Uri uri) : this(new HttpRequestMessage(HttpMethod.Get, uri) {
 
@@ -28,13 +44,13 @@ namespace StaticSharp {
 
             public static readonly string DefaultMediaType = "application/octet-stream";
 
-            public SecondaryTask<string?> CharSet { get; init; } = new();
-            public SecondaryTask<string> MediaType { get; init; } = new();
-            public SecondaryTask<Func<Stream>> Content { get; init; } = new();
+            public string? CharSet => CachedData.CharSet;
+            public string MediaType => CachedData.MediaType;
+            public byte[] Content { get; private set; } = null!;
 
-            IAwaitable<Func<Stream>> IFile.Content => Content;
+            /*IAwaitable<Func<Stream>> IFile.Content => Content;
             IAwaitable<string> IFile.MediaType => MediaType;
-            IAwaitable<string?> IFile.CharSet => CharSet;
+            IAwaitable<string?> IFile.CharSet => CharSet;*/
 
             /*private TaskCompletionSource<MediaTypeHeaderValue?> ContentType_TaskCompletionSource = new();
             public Task<MediaTypeHeaderValue?> ContentType => ContentType_TaskCompletionSource.Task;
@@ -57,18 +73,18 @@ namespace StaticSharp {
 
             protected override async Task CreateAsync() {
 
-                void CompleteHeaderTasks() {
+                /*void CompleteHeaderTasks() {
                     MediaType.SetResult(
                         string.IsNullOrEmpty(CachedData?.MediaType)
                         ? DefaultMediaType
                         : CachedData.MediaType);
 
                     CharSet.SetResult(CachedData?.CharSet);
-                }
+                }*/
 
-                void CompleteContentTasks() {
+                /*void CompleteContentTasks() {
                     Content.SetResult(() => File.OpenRead(ContentFilePath));
-                }
+                }*/
 
 
                 if (!LoadData()) {
@@ -82,20 +98,26 @@ namespace StaticSharp {
                     CachedData.CharSet = (httpResponseMessage.Content.Headers.ContentType?.CharSet);
                     CachedData.MediaType = (httpResponseMessage.Content.Headers.ContentType?.MediaType);
 
-                    CompleteHeaderTasks();
+                    //CompleteHeaderTasks();
 
                     CreateCacheSubDirectory();
 
-                    var fileStream = File.OpenWrite(ContentFilePath);
+                    Content = await httpResponseMessage.Content.ReadAsByteArrayAsync();
+
+                    await File.WriteAllBytesAsync(ContentFilePath, Content);
+
+/*                    var fileStream = File.OpenWrite(ContentFilePath);
                     await httpResponseMessage.Content.CopyToAsync(fileStream);
                     fileStream.Close();
 
-                    CompleteContentTasks();
+                    CompleteContentTasks();*/
 
                     StoreData();
                 } else {
-                    CompleteHeaderTasks();
-                    CompleteContentTasks();
+                    Content = await File.ReadAllBytesAsync(ContentFilePath);
+
+                    /*CompleteHeaderTasks();
+                    CompleteContentTasks();*/
                 }
 
 
@@ -123,20 +145,11 @@ namespace StaticSharp {
 
 
 
-            public async Task<string> ReadAllTextAsync() {
-                var charSet = (await CharSet);
-                Encoding encoding;
-
-                if (charSet == null) {
-                    encoding = Encoding.UTF8;
-                } else {
-                    encoding = Encoding.GetEncoding(charSet);
+            public string ContentText {
+                get {
+                    Encoding encoding = (CharSet == null)? Encoding.UTF8 : Encoding.GetEncoding(CharSet);
+                    return encoding.GetString(Content);
                 }
-
-                var stream = (await Content)();
-                var streamReader = new StreamReader(stream, encoding);
-
-                return streamReader.ReadToEnd();
             }
 
 

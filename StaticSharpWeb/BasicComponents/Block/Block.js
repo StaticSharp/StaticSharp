@@ -14,6 +14,8 @@ function BlockInitialization(element) {
     HierarchicalInitialization(element)
 
     element.Reactive = {
+        
+
         Padding: new Border(),
         Margin: new Border(),
 
@@ -37,8 +39,6 @@ function BlockBefore(element) {
     HierarchicalBefore(element)
 
     let parent = element.parentElement
-
-    
     if (parent.AddChild)
         parent.AddChild(element);
 
@@ -51,5 +51,5 @@ function BlockBefore(element) {
 }
 
 function BlockAfter(element) {
-
+    HierarchicalAfter(element)
 }

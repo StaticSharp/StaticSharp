@@ -1,6 +1,7 @@
 ﻿using StaticSharp.Gears;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -9,12 +10,7 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    namespace Gears {
-        public interface IFont : IInclude {
-            object GenerateUsageCss(Context context);
-        }
 
-    }
 
     
 
@@ -60,33 +56,88 @@ namespace StaticSharp {
     public record Font(
             FontFamily FontFamily,
             FontStyle FontStyle
-            ) : Gears.Constructor<Font,CacheableFont> {
+            ) : Gears.Constructor {
+
+
+
+        /*        public Font(string directory, FontWeight weight = FontWeight.Regular, bool italic = false)
+                    : this(directory, FamilyFromDirectory(directory), weight, italic) { }
+                public Font(DefaultFont defaultFont, FontWeight weight = FontWeight.Regular, bool italic = false)
+                    : this("", defaultFont.ToString(), weight, italic) { }*/
+
 
         
 
-/*        public Font(string directory, FontWeight weight = FontWeight.Regular, bool italic = false)
-            : this(directory, FamilyFromDirectory(directory), weight, italic) { }
-        public Font(DefaultFont defaultFont, FontWeight weight = FontWeight.Regular, bool italic = false)
-            : this("", defaultFont.ToString(), weight, italic) { }*/
-        
-    }
-
-    public interface ITextMeasurer {
-        float Measure(string text);
     }
 
 
-    public class CacheableFont : Gears.Cacheable<Font>, IFont {
+    namespace Gears {
+        public static partial class FontUtils {
+            
+            static UnicodeCategory[] NonRenderingCategories = new UnicodeCategory[] {
+            UnicodeCategory.Control,
+            UnicodeCategory.OtherNotAssigned,
+            UnicodeCategory.Surrogate };
+            static bool IsPrintable(char c) {
+                if (char.IsWhiteSpace(c))
+                    return false;
+                if (NonRenderingCategories.Contains(char.GetUnicodeCategory(c)))
+                    return false;
+                return true;
+            }
 
-        public string Base64 { get; private set; } = null!;
-        public string StyleInclude { get; private set; } = null!;
+            public static HashSet<char> ToPrintableChars(this string text) {
+                var result = new HashSet<char>();
+                foreach (var c in text) {
+                    if (IsPrintable(c))
+                        result.Add(c);
+                }
+                return result;
+            }
+        }
+    }
+
+    
+
+
+    public class CacheableFont  {
+
+        public Font Arguments { get; private set; } = null!;
+
+
+        public HashSet<char> usedChars = new();
+
+        public CacheableFont(Font arguments) {
+            Arguments = arguments;
+        }
+
+
+
+
+        public async Task<HashSet<char>> AddCharsAsync(HashSet<char> chars) {
+
+            var fontFamily = await Arguments.FontFamily.CreateOrGetCached();
+            var existingChars = fontFamily.GetExistingChars(Arguments.FontStyle, chars);
+
+            usedChars.UnionWith(existingChars);
+
+            chars = new HashSet<char>(chars);
+            chars.ExceptWith(existingChars);
+
+            return chars;
+        }
+
+
+
+        //public string Base64 { get; private set; } = null!;
+        //public string StyleInclude { get; private set; } = null!;
 
         //public SecondaryTask<SKTypeface> Typeface { get; init; } = new();
 
-        SixLabors.Fonts.FontFamily MeasurerFontFamily;
+        
 
 
-        protected override async Task CreateAsync() {
+        /*protected override async Task CreateAsync() {
 
             var family = await Arguments.FontFamily.CreateOrGetCached();
             var member = family.FindMember(Arguments.FontStyle);
@@ -106,13 +157,13 @@ namespace StaticSharp {
             Base64 = Convert.ToBase64String(await File.ReadAllBytesAsync(path));
 
 
-            /*using (FileStream fileStream = File.OpenRead(path)) {
+            *//*using (FileStream fileStream = File.OpenRead(path)) {
                 var typeface = SKTypeface.FromStream(fileStream);
 
 
                 //var typeface = SKFontManager.Default.CreateTypeface(fileStream);
                 Typeface.SetResult(typeface);
-            }*/
+            }*//*
 
 
             SixLabors.Fonts.FontCollection fontCollection = new SixLabors.Fonts.FontCollection();
@@ -125,53 +176,61 @@ namespace StaticSharp {
 
             var stringBuilder = new StringBuilder();
             stringBuilder.Append("@font-face {");
-            stringBuilder.Append("font-family: ").Append("abc"/*family.Name*/).Append(";");
+            stringBuilder.Append("font-family: ").Append("abc"*//*family.Name*//*).Append(";");
             //stringBuilder.AppendLine($"src:local('{Arguments.Family} {Arguments.Weight}{italicSuffix}'),");
             stringBuilder.Append($"src: url(data:application/font-{format};charset=utf-8;base64,{Base64}) format('{format}');");
             stringBuilder.Append("font-weight: ").Append((int)Arguments.FontStyle.FontWeight).Append(";");
             stringBuilder.Append("font-style: ").Append(fontStyle).Append(";}");
 
             StyleInclude = stringBuilder.ToString();
-        }
+        }*/
 
-        private class TextMeasurer : ITextMeasurer {
 
-            SixLabors.Fonts.Font font;
-            public TextMeasurer(SixLabors.Fonts.FontFamily family, float fontSize) {
-                font = family.CreateFont(fontSize);
-            }
-
-            public float Measure(string text) {
-                var rect = SixLabors.Fonts.TextMeasurer.Measure(text, new(font));
-                return rect.Width;
-            }
-        }
-
-        public ITextMeasurer CreateTextMeasurer(float fontSize) {
-            //return new TextMeasurer(await Typeface, fontSize);
-
-            return new TextMeasurer(MeasurerFontFamily, fontSize);
-        }
-
-        public object GenerateUsageCss(Context context) {
+        /*public object GenerateUsageCss(Context context) {
             context.Includes.Require(this);
             return new {
-                /*FontFamily = Arguments.Family,
+                *//*FontFamily = Arguments.Family,
                 FontWeight = WeightToNames(Arguments.Weight).Last(),
-                FontStyle = Arguments.Italic ? "Italic" : null*/
+                FontStyle = Arguments.Italic ? "Italic" : null*//*
             };
-        }
+        }*/
 
-        public Task<string> GenerateIncludeAsync() {
-            return Task.FromResult(StyleInclude);            
+        public async Task<string> GenerateIncludeAsync() {
+            var fontFamily = await Arguments.FontFamily.CreateOrGetCached();
+
+            var sortedUsedChars = usedChars.OrderBy(c => c);
+            var text = string.Concat(sortedUsedChars);
+
+            var subfontCssUrl = GoogleFonts.MakeCssUrl(fontFamily.Arguments.Name, Arguments.FontStyle, text);
+            var subFontCssRequest = await new HttpRequest(GoogleFonts.MakeWoff2Request(subfontCssUrl)).CreateOrGetCached();
+
+            var fontInfos = GoogleFonts.ParseCss(subFontCssRequest.ContentText);
+            //TODO validation
+            var fontInfo = fontInfos.First();
+            var subFontRequest = await new HttpRequest(fontInfo.Url).CreateOrGetCached();
+
+            var content = subFontRequest.Content;
+
+            var base64 = Convert.ToBase64String(content);
+            var format = "woff2";
+            var fontStyle = Arguments.FontStyle.CssFontStyle;
+
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append("@font-face {");
+            stringBuilder.Append("font-family: ").Append(Arguments.FontFamily.Name).Append(";");
+            //stringBuilder.AppendLine($"src:local('{Arguments.Family} {Arguments.Weight}{italicSuffix}'),");
+            stringBuilder.Append($"src: url(data:application/font-{format};charset=utf-8;base64,{base64}) format('{format}');");
+            stringBuilder.Append("font-weight: ").Append((int)Arguments.FontStyle.Weight).Append(";");
+            stringBuilder.Append("font-style: ").Append(fontStyle).Append(";}");
+
+            return stringBuilder.ToString();            
         }
 
 
 
 
         
-    };
-
+    }
 }
 
 

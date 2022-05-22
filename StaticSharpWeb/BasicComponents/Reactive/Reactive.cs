@@ -1,6 +1,7 @@
 ﻿using StaticSharp.Gears;
 using StaticSharp.Html;
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -20,11 +21,7 @@ namespace StaticSharp {
             
             public delegate T Binding<out T>(Js element);
 
-
-            
-
-            
-
+            //public Dictionary<string, Binding<SymbolJs>> Properties { get; private set; } = new();
             public Reactive(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
 
             //public abstract Task<Tag> GenerateHtmlAsync(Context context);
@@ -35,10 +32,6 @@ namespace StaticSharp {
                 includes.Require(new Script(AbsolutePath("Constants.js")));
                 includes.Require(new Script(AbsolutePath("Constructor.js")));
                 includes.Require(new Script(AbsolutePath("Bindings.js")));
-            }
-
-            public string GeneratePropertyDeclaration() {
-                return GetType().FullName;
             }
 
             string? FindScriptRoot<A>(Type? type) {

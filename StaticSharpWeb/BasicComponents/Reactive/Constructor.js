@@ -15,7 +15,7 @@ function _call(name, element) {
 function ConstructorBefore(name, script) {
     var element = _deleteScript()
 
-    _call(name + "Initialization",element)
+    _call(name + "Initialization", element)
 
     //let script = "";//"element.X = () => element.LayoutX+10"
     eval(script)

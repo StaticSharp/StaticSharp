@@ -41,7 +41,9 @@ namespace StaticSharpWeb {
         //public virtual LeftSideBar LeftSideBar => null;
         public virtual Body Body => new Body() {
             FontSize = (_)=>16,
-            FontFamily = new FontFamily(AbsolutePath("Fonts/roboto")),
+            FontFamilies = new[]{
+                new FontFamily("Roboto")
+            },
             FontStyle = new FontStyle(FontWeight.Regular),
         };
 

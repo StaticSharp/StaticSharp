@@ -16,6 +16,7 @@
 
     namespace Gears {
         [ScriptBefore]
+        [ScriptAfter]
         public abstract class Hierarchical<Js> : Reactive<Js> where Js : HierarchicalJs, new() {
             public Binding<StringJs> Id { set; protected get; } = null!;
             public Hierarchical(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }

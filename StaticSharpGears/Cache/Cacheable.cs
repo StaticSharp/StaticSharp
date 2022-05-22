@@ -86,7 +86,7 @@ public abstract class Cacheable<Constructor, Data> : Cacheable<Constructor>
 
     protected string CacheSubDirectory { get; private set; }
 
-    protected virtual Data? CachedData { get; set; }
+    protected virtual Data CachedData { get; set; } = null!;
 
     /*protected override Task CreateJob() {
         return base.CreateJob();

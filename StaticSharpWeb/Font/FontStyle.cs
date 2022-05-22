@@ -1,9 +1,10 @@
 ﻿namespace StaticSharp {
     public record FontStyle(
-        FontWeight FontWeight = FontWeight.Regular,
+        FontWeight Weight = FontWeight.Regular,
         bool Italic = false
         ) : Gears.IKeyProvider {
-        public string Key => Gears.KeyUtils.Combine<FontStyle>(FontWeight, Italic);
+        public string Key => Gears.KeyUtils.Combine<FontStyle>(Weight, Italic);
+        public string CssFontStyle => Italic ? "italic" : "normal";
     }
 
 }

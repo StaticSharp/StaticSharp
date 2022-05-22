@@ -21,6 +21,57 @@ function measureText(text, font) {
 
 function Material(element, parameters) {
 
+    /*while (!document.fonts.check('1em Roboto')) {
+        console.log("-")
+    }*/
+    let time = new Date().getTime()
+    console.log(document.fonts.check('1em Roboto'))
+
+    let compStyles = window.getComputedStyle(element);
+    let computedFontFamily = compStyles.getPropertyValue('font-family')
+
+    console.log(document.fonts)
+
+
+
+    console.log(document.fonts.ready)
+
+    document.fonts.ready
+        .then(() => {
+            console.log(new Date().getTime() - time)
+            console.log(document.fonts.check('1em Roboto'))
+
+            document.fonts.ready.then(() => {
+                console.log("Ready again")
+            })
+
+
+        })
+
+    document.fonts.onloading = () => {
+        console.log("onloading")
+    };
+
+    let done = false
+
+    document.fonts.onloadingdone  = () => {
+        console.log("onloadingdone")
+        done = true
+    };
+    /*while (!done) {
+        console.log(" ")
+    }*/
+
+    //if (document.fonts.size == 2)
+     //   location.reload()
+    console.log(document.fonts)
+
+
+    /*if (document.fonts.status == "loaded")
+        location.reload();*/
+    //console.log(document.fonts.status=="loaded")
+
+
     //PropertyTest()
 
     window.Reactive = {

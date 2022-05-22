@@ -16,7 +16,9 @@ namespace StaticSharp.Gears {
 
         void Require(IStyle style);
 
-        void Require(IFont font);
+        //void Require(IFont font);
+
+        CacheableFont GetOrCreateFont(Font font);
 
         Task<Tag> GenerateScriptAsync();
 
@@ -27,7 +29,7 @@ namespace StaticSharp.Gears {
     public class Includes : IIncludes {
         private readonly ConcurrentDictionary<string, IScript> scripts = new();
         private readonly ConcurrentDictionary<string, IStyle> styles = new();
-        private readonly ConcurrentDictionary<string, IFont> fonts = new();
+        private readonly ConcurrentDictionary<string, CacheableFont> fonts = new();
 
         public void Require(IScript script) {
             foreach(var i in script.Dependencies) {
@@ -56,6 +58,17 @@ namespace StaticSharp.Gears {
                 styles[id] = style;
             }
         }
+
+
+        public CacheableFont GetOrCreateFont(Font font) {
+            /* if (fonts.TryGetValue(font.Key, out var cacheableFont)) { 
+                 return cacheableFont;
+             }*/
+            return fonts.GetOrAdd(font.Key, x => new CacheableFont(font)
+            );
+        }
+
+
 
         public async Task<Tag> GenerateScriptAsync() {
             return new Tag("script") {
@@ -94,12 +107,14 @@ namespace StaticSharp.Gears {
             return superStyle.GenerateSuperStyle(styleList.ToString());
         }
 
-        public void Require(IFont font) {
+
+        
+        /*public void Require(IFont font) {
             var id = font.Key;
             if(!fonts.ContainsKey(id)) {
                 fonts[id] = font;
             }
-        }
+        }*/
 
         public async Task<Tag> GenerateFontAsync() {
             var fontStyle = new StringBuilder();

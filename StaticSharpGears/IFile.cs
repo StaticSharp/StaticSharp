@@ -1,9 +1,9 @@
 ﻿namespace StaticSharp.Gears;
 
 public interface IFile {
-    IAwaitable<Func<Stream>> Content { get; }
-    IAwaitable<string> MediaType { get; }
-    IAwaitable<string?> CharSet { get; }
+    byte[] Content { get; }
+    string MediaType { get; }
+    string? CharSet { get; }
 }
 
 

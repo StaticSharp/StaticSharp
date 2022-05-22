@@ -11,7 +11,13 @@ function GetModifierHierarchyProperty(element, propertyName) {
 }
 
 
-
+function GetModifier(element) {
+    if (!element) return undefined
+    if (element.isModifier) {
+        return element;
+    }
+    return GetModifier(element.parentElement)
+}
 
 function BaseModifierInitialization(element) {
     HierarchicalInitialization(element)
@@ -19,7 +25,8 @@ function BaseModifierInitialization(element) {
 
     element.Reactive = {
         FontSize: undefined,
-        HierarchyFontSize: () => GetModifierHierarchyProperty(element, "FontSize")
+        HierarchyFontSize: () => element.FontSize || element.Modifier.HierarchyFontSize
+        
     }
 }
 
@@ -27,8 +34,6 @@ function BaseModifierBefore(element) {
     HierarchicalBefore(element)
     let parent = element.parentElement;
 
-    //let m = GetModifierHierarchyProperty(element, "FontSize")//.find(e => e.FontSize)
-    console.log(element, element.HierarchyFontSize, element.FontSize)
     new Reaction(() => {
         element.style.fontSize = element.FontSize + "px"
     })
@@ -36,4 +41,5 @@ function BaseModifierBefore(element) {
 }
 
 function BaseModifierAfter(element) {
+    HierarchicalAfter(element)
 }

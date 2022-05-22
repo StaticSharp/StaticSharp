@@ -1,6 +1,10 @@
 ﻿using System.IO;
 using System.Runtime.CompilerServices;
 
+
+namespace StaticSharp {
+}
+
 namespace StaticSharp {
     public static partial class Static {
 

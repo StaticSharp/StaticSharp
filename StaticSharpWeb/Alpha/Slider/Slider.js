@@ -6,12 +6,9 @@ function SliderInitialization(element) {
         Min: 0,
         Max: 1,
         Step: 0,
-        Value: 0,
+        Value: ()=>element.Min,
         Height: 20
     }
-
-
-
 }
 
 function SliderBefore(element) {
@@ -29,10 +26,8 @@ function SliderAfter(element) {
 
     input.value = element.Value
 
-    console.log(input)
-
     input.oninput = function () {
-        element.Value = this.value
+        element.Value = this.valueAsNumber
     }
 
     new Reaction(() => {

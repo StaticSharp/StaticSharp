@@ -19,8 +19,8 @@ namespace StaticSharp.Gears {
         public IIncludes Includes { get; init; }
 
 
-        private FontFamily fontFamily = null!;
-        public FontFamily FontFamily {
+        public FontFamily[] FontFamilies { get; set; } = null!;
+        /*public FontFamily FontFamily {
             get { return fontFamily; }
             set {
                 if (fontFamily != value) {
@@ -29,9 +29,14 @@ namespace StaticSharp.Gears {
                     //cacheableFontFamily = null;
                 }
             }
-        }
+        }*/
 
-        private FontStyle fontStyle = new();
+        public FontStyle FontStyle { get; set; } = new();
+
+
+
+
+        /*private FontStyle fontStyle = new();
         public FontStyle FontStyle {
             get { return fontStyle; }
             set {
@@ -70,7 +75,7 @@ namespace StaticSharp.Gears {
                 cacheableFont = await font.CreateOrGetCached();
             }
             return cacheableFont;
-        }
+        }*/
 
         /*public ITextMeasurer? textMeasurer = null;
         public async ValueTask<ITextMeasurer> GetTextMeasurer() {

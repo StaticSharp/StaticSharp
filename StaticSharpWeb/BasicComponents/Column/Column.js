@@ -20,6 +20,7 @@ function ColumnBefore(element) {
     element.Children = []
 
     element.AddChild = function (child) {
+        //console.log("AddChild", element, child)
         element.Children.push(child)
 
         child.Reactive.LayoutX = () => {
@@ -33,7 +34,6 @@ function ColumnBefore(element) {
             return availableWidth
         }
     }
-
 
 
     let parent = element.parentElement;

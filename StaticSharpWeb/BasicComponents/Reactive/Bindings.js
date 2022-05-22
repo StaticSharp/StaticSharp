@@ -28,11 +28,13 @@ function ReactionBase(func) {
         Reaction.current = _this
         _this.unsubscribe()
 
-
-        let result = _this.func()
-
-        Reaction.current = oldReaction
-        return result
+        try {
+            let result = _this.func()
+            return result
+        }
+        finally {
+            Reaction.current = oldReaction
+        }
     }
 }
 
@@ -41,13 +43,17 @@ function Reaction(func) {
     let _this = this
 
     ReactionBase.call(_this, func)
-
     
     _this.onChangedHandler = function () {
         Reaction.deferred.add(_this)
     }
 
-    _this.execute()
+    //try {
+        _this.execute()
+    //} catch {
+    //}
+
+
 }
 Reaction.prototype = Object.create(ReactionBase.prototype)
 Reaction.prototype.constructor = Reaction
@@ -61,7 +67,11 @@ Reaction.beginDeferred = function () {
                     //console.log("Reaction.deferred.end", Reaction.deferred.size)
                     let d = Array.from(Reaction.deferred)
                     for (let reaction of d) {
-                        reaction.execute()
+                        try {
+                            reaction.execute()
+                        } catch (e) {
+                            console.warn(e)
+                        }
                         Reaction.deferred.delete(reaction)
                     }
 
@@ -125,8 +135,13 @@ function Property(value) {
         }
         if (_this.binding) { //wechat if (this.binding?.dirty)
             if (_this.binding.dirty) {
-                _this.value = _this.binding.execute()
-                _this.binding.dirty = false
+                try {
+                    _this.value = _this.binding.execute()
+                    _this.binding.dirty = false
+                } catch (e) {
+                    //console.warn(e)
+                }
+                
             }
         }
         return _this.value
@@ -369,88 +384,3 @@ function PropertyTest() {
 
     console.groupEnd()
 }
-
-
-
-
-
-
-/*
-
-
-
-
-class ReactionBase {
-    static current = undefined
-    dependencies = new Set()
-
-    static deferred = undefined
-
-    static beginDeferred() {
-        if (!Reaction.deferred) {
-            Reaction.deferred = new Set()
-            return {
-                end: function () {
-                    while (Reaction.deferred.size > 0) {
-                        //console.log("Reaction.deferred.end", Reaction.deferred.size)
-                        let d = Array.from(Reaction.deferred)
-                        for (let reaction of d) {
-                            reaction.execute()
-                            Reaction.deferred.delete(reaction)
-                        }
-
-                        //d.forEach(x => x.execute())
-                        //Reaction.deferred.clear()
-                    }
-                    //let l = Reaction.deferred;
-                    Reaction.deferred = undefined
-                    //l.forEach(x => x.execute())
-                }
-            };
-        }
-        return undefined;
-    }
-
-
-
-    constructor(func) {
-        this.func = func
-    }
-
-
-    addDependency(property) {
-        this.dependencies.add(property)
-        property.onChanged.add(this.onChangedHandler)
-    }
-
-    unsubscribe() {
-        if (this.dependencies.size == 0) return
-
-        for (let dependency of this.dependencies) {
-            dependency.onChanged.delete(this.onChangedHandler)
-        }
-        this.dependencies.clear()
-    }
-
-    execute() {
-        let oldReaction = Reaction.current
-        Reaction.current = this
-        this.unsubscribe()
-
-
-        let result = this.func()
-
-        Reaction.current = oldReaction
-        return result
-    }
-
-
-}
-
-
-
-
-
-
-
-*/
