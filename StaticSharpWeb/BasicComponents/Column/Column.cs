@@ -18,11 +18,11 @@ namespace StaticSharp {
     public abstract class Column<Js> : Block<Js>, IBlockCollector where Js : Symbolic.ColumnJs, new() {
         public Column(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
 
-        protected List<IBlock> children { get; } = new();
+        protected BlockList children { get; } = new();
         public Column<Js> Children => this;
-        public void Add(IBlock? value) {
+        public void Add(string? id, IBlock? value) {
             if (value != null) {
-                children.Add(value);
+                children.Add(value,id);
             }
         }
 
@@ -52,13 +52,13 @@ namespace StaticSharp {
         }*/
 
 
-        public override async Task<Tag> GenerateHtmlAsync(Context context) {
+        public override async Task<Tag> GenerateHtmlAsync(Context context, string? id) {
             AddRequiredInclues(context.Includes);
-            return new Tag("column") {
+            return new Tag("column", id) {
                 CreateScriptBefore(),
-                await children.Select(x=> x.GenerateHtmlAsync(context)).SequentialOrParallel(),
+                await children.Select(x=> x.Value.GenerateHtmlAsync(context,x.Key)).SequentialOrParallel(),
                 CreateScriptAfter()
-            };
+            } ;
         }
     }
 

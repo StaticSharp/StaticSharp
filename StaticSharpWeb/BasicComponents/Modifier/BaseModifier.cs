@@ -1,4 +1,5 @@
-﻿using StaticSharp.Html;
+﻿using StaticSharp.Gears;
+using StaticSharp.Html;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -7,13 +8,11 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-
+    [System.Diagnostics.DebuggerNonUserCode]
     public class BaseModifierJs : HierarchicalJs {
         public BaseModifierJs() { }
-        public BaseModifierJs(string value) : base(value) {
-        }
 
-        public NumberJs FontSize => new($"{value}.FontSize");
+        public float FontSize => throw new NotEvaluatableException();
     }
     
 
@@ -31,7 +30,7 @@ namespace StaticSharp {
             public FontFamily[]? FontFamilies = null;
             public FontStyle? FontStyle = null;
             //public float? FontSize = null;
-            public Binding<NumberJs> FontSize { set; protected get; } = null!;
+            public Binding<float> FontSize { set; protected get; }
             public BaseModifier(string callerFilePath, int callerLineNumber)
             : base(callerFilePath, callerLineNumber) { }
 
@@ -42,7 +41,7 @@ namespace StaticSharp {
             }
 
 
-            protected async Task<Tag> GenerateHtmlWithChildrenAsync(Context context, Func<Context,IEnumerable<Task<Tag>>> children, string tagName = "m") {
+            protected async Task<Tag> GenerateHtmlWithChildrenAsync(Context context, string? id, Func<Context,IEnumerable<Task<Tag>>> children, string tagName = "m") {
 
                 Dictionary<string, object> style = new();
 
@@ -67,7 +66,7 @@ namespace StaticSharp {
 
                 AddRequiredInclues(context.Includes);
 
-                var tag = new Tag(tagName) {
+                var tag = new Tag(tagName,id) {
                     
                     Children = {
                         CreateScriptBefore(),

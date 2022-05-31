@@ -6,8 +6,9 @@ function SpaceInitialization(element) {
         GrowBefore: 0,
         GrowBetween: 1,
         GrowAfter: 0,
-        MinBetween: 8,
+        MinBetween: 0,
     }
+    //console.log("Space", element.GrowBetween)
 }
 
 
@@ -16,4 +17,8 @@ function SpaceInitialization(element) {
 
 function SpaceBefore(element) {
     HierarchicalBefore(element)
+
+    let parent = element.parentElement
+    if (parent.AddChild)
+        parent.AddChild(element)
 }

@@ -12,6 +12,12 @@ public class SymbolJs{
         return value;
     }
 
+
+    public T As<T>() where T : SymbolJs, new() {
+        return new T { value = value };
+    }
+
+
     /*public Symbol(int value) {
         this.value = value;
     }

@@ -12,7 +12,7 @@ namespace StaticSharp {
             : base(callerFilePath, callerLineNumber) { }
 
         public async Task<Tag> GenerateHtmlWithChildrenAsync(Context context, Func<Context, IEnumerable<Task<Tag>>> children) {
-            return await GenerateHtmlWithChildrenAsync(context, children, "body");
+            return await GenerateHtmlWithChildrenAsync(context, null, children, "body");
         }
 /*        public async Task<Tag> GenerateHtmlAsync(Context context, IEnumerable<IElement> children) {
             //.Select(x=>x.GenerateHtmlAsync(context))

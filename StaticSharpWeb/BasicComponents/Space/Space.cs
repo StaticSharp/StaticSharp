@@ -5,25 +5,21 @@ using System.Threading.Tasks;
 
 namespace StaticSharp;
 
-
+[System.Diagnostics.DebuggerNonUserCode]
 public class SpaceJs : HierarchicalJs {
-    public SpaceJs() { }
-    public SpaceJs(string value) : base(value) {
-    }
-
-    public NumberJs GrowBefore => new($"{value}.GrowBefore");
-    public NumberJs GrowBetween => new($"{value}.GrowBetween");
-    public NumberJs GrowAfter => new($"{value}.GrowAfter");
-    public NumberJs MinBetween => new($"{value}.MinBetween");
+    public float GrowBefore =>  throw new NotEvaluatableException();
+    public float GrowBetween => throw new NotEvaluatableException();
+    public float GrowAfter =>   throw new NotEvaluatableException();
+    public float MinBetween =>  throw new NotEvaluatableException();
 }
 
 
 [ScriptBefore]
 public sealed class Space: Hierarchical<SpaceJs>, IBlock {
-    public Binding<NumberJs> GrowBefore { set; protected get; } = null!;
-    public Binding<NumberJs> GrowBetween { set; protected get; } = null!;
-    public Binding<NumberJs> GrowAfter { set; protected get; } = null!;
-    public Binding<NumberJs> MinBetween { set; protected get; } = null!;
+    public Binding<float> GrowBefore  { set; private get; }
+    public Binding<float> GrowBetween { set; private get; }
+    public Binding<float> GrowAfter   { set; private get; }
+    public Binding<float> MinBetween  { set; private get; }
     public Space([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
         : base(callerFilePath, callerLineNumber) { }
 
@@ -32,9 +28,9 @@ public sealed class Space: Hierarchical<SpaceJs>, IBlock {
         base.AddRequiredInclues(includes);
         includes.Require(new Script(ThisFilePathWithNewExtension("js")));
     }
-    public Task<Tag> GenerateHtmlAsync(Context context) {
+    public Task<Tag> GenerateHtmlAsync(Context context,string? id) {
         AddRequiredInclues(context.Includes);
-        return Task.FromResult(new Tag("ws") {
+        return Task.FromResult(new Tag("ws",id) {
             CreateScriptBefore()
         });
     }

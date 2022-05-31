@@ -1,18 +1,16 @@
 ﻿using StaticSharp.Gears;
 using StaticSharp.Html;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
 
- 
+    [System.Diagnostics.DebuggerNonUserCode]
     public class SliderJs : BlockJs {
-        public NumberJs Min => new($"{value}.Min");
-        public NumberJs Max => new($"{value}.Max");
-        public NumberJs Step => new($"{value}.Step");
-        public NumberJs Value => new($"{value}.Value");
+        public float Min =>     throw new NotEvaluatableException();
+        public float Max =>     throw new NotEvaluatableException();
+        public float Step =>    throw new NotEvaluatableException();
+        public float Value =>   throw new NotEvaluatableException();//new InvalidUsageException();//
     }
     
 
@@ -34,17 +32,17 @@ namespace StaticSharp {
 
     [ScriptBefore][ScriptAfter]
     public sealed class Slider : Slider<SliderJs> {
-        public Binding<NumberJs> Min { set; protected get; } = null!;
-        public Binding<NumberJs> Max { set; protected get; } = null!;
-        public Binding<NumberJs> Step { set; protected get; } = null!;
-        public Binding<NumberJs> Value { set; protected get; } = null!;
+        public Binding<float> Min   { set; private get; }
+        public Binding<float> Max   { set; private get; }
+        public Binding<float> Step  { set; private get; }
+        public Binding<float> Value { set; private get; }
 
         public Slider([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber) { }
 
-        public override async Task<Tag> GenerateHtmlAsync(Context context) {
+        public override async Task<Tag> GenerateHtmlAsync(Context context, string? id = null) {
             AddRequiredInclues(context.Includes);
-            return new Tag("div") {
+            return new Tag("div",id) {
                 CreateScriptBefore(),
                 new Tag("input"){ 
                     ["type"] = "range"

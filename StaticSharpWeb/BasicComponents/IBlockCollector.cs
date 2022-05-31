@@ -5,22 +5,28 @@ namespace StaticSharp {
 
     namespace Gears {
         public interface IBlockCollector : IVoidEnumerable {
-            void Add(IBlock? value);
+            void Add(string? id, IBlock? value);
         }
     }
     public static class BlockCollectorStatic {
 
+        public static void Add<T>(this T collector, IBlock? value) where T : IBlockCollector {
+            collector.Add(null, value);
+        }
+
         public static void Add<T>(this T collector, Group? group) where T : IBlockCollector {
             if (group != null) {
                 foreach (var i in group.Children) {
-                    collector.Add(i);
+                    collector.Add(i.Key,i.Value);
                 }
             }
         }
 
-        public static void Add<T>(this T collector, Paragraph paragraph) where T : IBlockCollector {
+        public static void Add<T>(this T collector, Paragraph paragraph) where T : IBlockCollector =>
+            collector.Add(null, paragraph);
+        public static void Add<T>(this T collector, string? id, Paragraph paragraph) where T : IBlockCollector {
             if (paragraph != null) {
-                collector.Add(paragraph);                
+                ((IBlockCollector)collector).Add(id, paragraph);                
             }
         }
 
@@ -33,6 +39,7 @@ namespace StaticSharp {
                 new Paragraph(callerFilePath, callerLineNumber) {
                     new Text(text, true, callerFilePath, callerLineNumber)
                 }
+                //,null
                 );
         }
 

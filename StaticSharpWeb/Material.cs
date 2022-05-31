@@ -40,7 +40,7 @@ namespace StaticSharpWeb {
         //public virtual RightSideBar RightSideBar => null;
         //public virtual LeftSideBar LeftSideBar => null;
         public virtual Body Body => new Body() {
-            FontSize = (_)=>16,
+            FontSize = 16,
             FontFamilies = new[]{
                 new FontFamily("Roboto")
             },
@@ -100,10 +100,7 @@ namespace StaticSharpWeb {
                     
                     new Column() {
                         Content
-                    }.GenerateHtmlAsync(innerContext).ContinueWith<Tag>(x=>{ 
-                        x.Result.Attributes["id"] = "Content";
-                        return x.Result;
-                    })
+                    }.GenerateHtmlAsync(innerContext,"Content")
                 }         
             );
 

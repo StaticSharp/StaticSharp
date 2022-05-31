@@ -1,4 +1,5 @@
 ﻿namespace StaticSharp;
+/*
 public class NumberJs : SymbolJs {
 
     public NumberJs(string value) : base(value) {
@@ -13,6 +14,6 @@ public class NumberJs : SymbolJs {
         return new($"({a}+{b.value})");
     }
 
-}
+}*/
 
 

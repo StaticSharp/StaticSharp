@@ -3,7 +3,6 @@ function ModifierInitialization(element) {
 }
 
 function ModifierBefore(element) {
-
     BaseModifierBefore(element)
 
     let parent = element.parentElement;

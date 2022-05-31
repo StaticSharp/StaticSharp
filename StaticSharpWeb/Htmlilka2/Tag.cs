@@ -107,8 +107,10 @@ namespace StaticSharp.Html {
 
         public Tag Children => this;
 
-        public Tag(string? name = null) {
+        public Tag(string? name = null, string? id = null) {
             Name = name;
+            if (!string.IsNullOrEmpty(id))
+                Id = id;
         }
 
 

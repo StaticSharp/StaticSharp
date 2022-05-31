@@ -25,7 +25,7 @@ namespace StaticSharp {
             }
             return result;*/
 
-            return await GenerateHtmlWithChildrenAsync(context, (innerContext) =>
+            return await GenerateHtmlWithChildrenAsync(context, null, (innerContext) =>
                 children.Select(x=>x.GenerateInlineHtmlAsync(innerContext))
             );
         }

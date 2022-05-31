@@ -14,7 +14,7 @@ namespace StaticSharp {
 
         protected List<IInline> children { get; } = new();
 
-        private new Binding<NumberJs> Height => null!;
+        private new Binding<float> Height => default;
 
 
         public Paragraph(
@@ -59,9 +59,9 @@ namespace StaticSharp {
             includes.Require(new Script(ThisFilePathWithNewExtension("js")));
         }
 
-        public override async Task<Tag> GenerateHtmlAsync(Context context) {
+        public override async Task<Tag> GenerateHtmlAsync(Context context, string? id) {
             AddRequiredInclues(context.Includes);
-            return new Tag("div") {
+            return new Tag("div", id) {
                 CreateScriptBefore(),
                 new Tag("div") {
                     await children.Select(x=>x.GenerateInlineHtmlAsync(context)).SequentialOrParallel()

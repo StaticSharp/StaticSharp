@@ -1,4 +1,4 @@
-function getDomPath(el) {
+/*function getDomPath(el) {
     var stack = [];
     while (el.parentNode != null) {
         var sibCount = 0;
@@ -23,7 +23,7 @@ function getDomPath(el) {
     }
     return (stack.slice(1)).join(' > '); // removes the html element
 }
-
+*/
 
 
 function HierarchicalInitialization(element) {
@@ -33,7 +33,6 @@ function HierarchicalInitialization(element) {
     let parent = element.parentElement
 
     element.Reactive = {
-        Id: undefined,
         Parent: parent,
         FirstChild: undefined,
         LastChild: undefined,
@@ -43,34 +42,23 @@ function HierarchicalInitialization(element) {
     }
     
 
-    element.ById = function (id) {
-        //console.log("ById called by", element,"with id = ", id)
+    element.Sibling = function (id) {
+        //console.log("Sibling called by", element,"with id = ", id)
         if (parent.isHierarchical) {
-
-            let i = parent.FirstChild            
-            while (i) {
-                //console.log("trying to compare", i)
-                if (i.Id == id) {
-                    //console.log("found by id", i)
-                    return i
-                }
-                i = i.NextSibling
-            }
-
-            //return parent.ById(id)
-
-        } else {
-            if (element.Id == id) {
-                return element
-            }
+            return parent.Child(id)
         }
-
-
     }
 
-    /*element.ChildById = function (id) {
+    element.Child = function (id) {
+        let i = element.FirstChild
+        while (i) {
+            if (i.id == id) {
+                return i
+            }
+            i = i.NextSibling
+        }
+    }
 
-    }*/
 
 }
 

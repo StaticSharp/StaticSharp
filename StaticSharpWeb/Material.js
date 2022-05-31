@@ -1,86 +1,14 @@
 
-/*
-var measuringCanvasContext = undefined
-function createMeasuringCanvasContext() {
-
-    let canvas = document.createElement("canvas")
-    canvas.style.position = "absolute"
-    document.body.appendChild(canvas)
-    measuringCanvasContext = canvas.getContext("2d");
-}
-function measureText(text, font) {
-    if (!measuringCanvasContext) {
-        createMeasuringCanvasContext()
-    }
-    measuringCanvasContext.font = font;
-    return measuringCanvasContext.measureText(text)
-}*/
-
-
-
-
 function Material(element, parameters) {
-
-    /*while (!document.fonts.check('1em Roboto')) {
-        console.log("-")
-    }*/
-    let time = new Date().getTime()
-    console.log(document.fonts.check('1em Roboto'))
-
-    let compStyles = window.getComputedStyle(element);
-    let computedFontFamily = compStyles.getPropertyValue('font-family')
-
-    console.log(document.fonts)
-
-
-
-    console.log(document.fonts.ready)
-
-    document.fonts.ready
-        .then(() => {
-            console.log(new Date().getTime() - time)
-            console.log(document.fonts.check('1em Roboto'))
-
-            document.fonts.ready.then(() => {
-                console.log("Ready again")
-            })
-
-
-        })
-
-    document.fonts.onloading = () => {
-        console.log("onloading")
-    };
-
-    let done = false
-
-    document.fonts.onloadingdone  = () => {
-        console.log("onloadingdone")
-        done = true
-    };
-    /*while (!done) {
-        console.log(" ")
-    }*/
-
-    //if (document.fonts.size == 2)
-     //   location.reload()
-    console.log(document.fonts)
-
-
-    /*if (document.fonts.status == "loaded")
-        location.reload();*/
-    //console.log(document.fonts.status=="loaded")
 
 
     //PropertyTest()
 
     window.Reactive = {
+        FontsReady: false,
         InnerWidth: window.innerWidth,
         InnerHeight: window.innerHeight,
     }
-
-    
-
 
     window.onresize = function (event) {
         let d = Reaction.beginDeferred()
@@ -90,10 +18,19 @@ function Material(element, parameters) {
     }
 
     element.Reactive = {
-        Content: undefined,
+        Content: () => {
+            //console.log("Reactive Content element.Child")
+            return element.Child("Content")
+        },
         Footer: undefined,
     }
 
+    document.fonts.ready
+        .then(() => {
+            let d = Reaction.beginDeferred()
+            window.FontsReady = true
+            d.end()
+        })
 
     /*let previous = this.Content
     let onChanged = function (previous, current) {
@@ -134,8 +71,8 @@ function Material(element, parameters) {
             
             element.Content.Width = width
             //element.Content.InnerWidth = innerWidth
-            element.Content.Padding.Left = paddingLeft
-            element.Content.Padding.Right = width - innerWidth - paddingLeft
+            element.Content.PaddingLeft = paddingLeft
+            element.Content.PaddingRight = width - innerWidth - paddingLeft
 
             element.Content.X = LeftBarSize
 
@@ -177,6 +114,10 @@ function Material(element, parameters) {
         }*/
 
     })
+
+
+    
+
 
     document.addEventListener("DOMContentLoaded", function () {
         element.style.visibility = "visible";

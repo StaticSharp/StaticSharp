@@ -6,34 +6,54 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
+    public static class W {
+        public static T MakeNotEvaluatable<T>(this T _this) {
+            return _this;
+        }
+    }
 
+    [System.Diagnostics.DebuggerNonUserCode]
     public class BlockJs : HierarchicalJs {
         public BlockJs() { }
-        public BlockJs(string value) : base(value) {
-        }
-
-        public NumberJs X => new($"{value}.X");
-        public NumberJs Y => new($"{value}.Y");
-        public NumberJs Width => new($"{value}.Width");
-        public NumberJs Height => new($"{value}.Height");
-        public BorderJs Margin => new($"{value}.Margin");
-
+        public float X =>             throw new NotEvaluatableException();
+        public float Y =>             throw new NotEvaluatableException();
+        public float Width =>         throw new NotEvaluatableException();
+        public float Height =>        throw new NotEvaluatableException();
+        public float MarginLeft =>    throw new NotEvaluatableException();
+        public float MarginRight =>   throw new NotEvaluatableException();
+        public float MarginTop =>     throw new NotEvaluatableException();
+        public float MarginBottom =>  throw new NotEvaluatableException();
+        public float PaddingLeft =>   throw new NotEvaluatableException();
+        public float PaddingRight =>  throw new NotEvaluatableException();
+        public float PaddingTop =>    throw new NotEvaluatableException();
+        public float PaddingBottom => throw new NotEvaluatableException();
     }
     
 
     namespace Gears {
 
+        public class BlockList : List<KeyValuePair<string?, IBlock>> {
+            public void Add(IBlock block, string? id) {
+                Add(new KeyValuePair<string?, IBlock>(id, block));
+            }
+        }
+
+
         [ScriptBefore][ScriptAfter]
         public abstract class Block<Js> : Hierarchical<Js>, IBlock where Js : BlockJs, new() {
             
-            public Binding<NumberJs> X { set; protected get; } = null!;
-            public Binding<NumberJs> Y { set; protected get; } = null!;
-
-            public Binding<NumberJs> Width { set; protected get; } = null!;
-            public Binding<NumberJs> Height { set; protected get; } = null!;
-
-            //public Border<Js> Padding { set; protected get; } = null!;
-            public Border<Js> Margin { set; protected get; } = null!;
+            public Binding<float> X                 { set; protected get; }
+            public Binding<float> Y                 { set; protected get; }
+            public Binding<float> Width             { set; protected get; }
+            public Binding<float> Height            { set; protected get; }
+            public Binding<float> MarginLeft        { set; protected get; }
+            public Binding<float> MarginRight       { set; protected get; }
+            public Binding<float> MarginTop         { set; protected get; }
+            public Binding<float> MarginBottom      { set; protected get; }
+            public Binding<float> PaddingLeft       { set; protected get; }
+            public Binding<float> PaddingRight      { set; protected get; }
+            public Binding<float> PaddingTop        { set; protected get; }
+            public Binding<float> PaddingBottom     { set; protected get; }
 
             public Block(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
 
@@ -41,11 +61,7 @@ namespace StaticSharp {
                 base.AddRequiredInclues(includes);
                 includes.Require(new Script(ThisFilePathWithNewExtension("js")));
             }
-
-            
-
-
-            public abstract Task<Tag> GenerateHtmlAsync(Context context);
+            public abstract Task<Tag> GenerateHtmlAsync(Context context, string? id);
 
         }
     }

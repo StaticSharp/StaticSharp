@@ -16,11 +16,11 @@ namespace StaticSharp {
     [ScriptAfter]
     public sealed class Modifier : BaseModifier, IBlock, IBlockCollector {
 
-        private List<IBlock> children { get; } = new();
+        private BlockList children { get; } = new();
         public Modifier Children => this;
-        public void Add(IBlock? value) {
+        public void Add(string? id, IBlock? value) {
             if (value != null)
-                children.Add(value);
+                children.Add(value, id);
         }
 
         public Modifier([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
@@ -34,7 +34,7 @@ namespace StaticSharp {
 
 
 
-        public async Task<Tag> GenerateHtmlAsync(Context context) {
+        public async Task<Tag> GenerateHtmlAsync(Context context, string? id) {
             
 /*            (Tag result, context) = await GenerateHtmlWithChildrenAsync(context);
             foreach (var i in children) {
@@ -44,7 +44,8 @@ namespace StaticSharp {
             }*/
             return await GenerateHtmlWithChildrenAsync(
                 context,
-                (innerContext)=>children.Select(x=>x.GenerateHtmlAsync(innerContext))
+                id,
+                (innerContext)=>children.Select(x=>x.Value.GenerateHtmlAsync(innerContext, x.Key))
             );
         }
 

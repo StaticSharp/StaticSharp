@@ -25,10 +25,11 @@ namespace StaticSharp {
         float? GrowAbove { get; set; } = null;
         float? GrowBelow { get; set; } = null;
 
-        protected List<IBlock> children { get; } = new();
+        protected BlockList children { get; } = new();
         public Row<Js> Children => this;
-        public void Add(IBlock value) {
-            children.Add(value);
+        public void Add(string? id, IBlock? value) {
+            if (value!=null)
+                children.Add(value,id);
         }
 
         public static Space DefaultSpace = new Space();
@@ -74,11 +75,11 @@ namespace StaticSharp {
             : base(callerFilePath, callerLineNumber)
             { }*/
 
-        public override async Task<Tag> GenerateHtmlAsync(Context context) {
+        public override async Task<Tag> GenerateHtmlAsync(Context context, string? id) {
             AddRequiredInclues(context.Includes);
             return new Tag("row") {
                 CreateScriptBefore(),
-                await Task.WhenAll(children.Select(x=>x.GenerateHtmlAsync(context))),
+                await Task.WhenAll(children.Select(x=>x.Value.GenerateHtmlAsync(context,x.Key))),
                 CreateScriptAfter()
             };
         }

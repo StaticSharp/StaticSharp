@@ -90,6 +90,23 @@ Reaction.beginDeferred = function () {
 }
 
 
+/*Reaction.beginNonReactive = function () {
+    if (!Reaction.current) {
+        let oldCurrent = Reaction.current
+        Reaction.current = undefined
+        return {
+            end: function () {
+                Reaction.current = oldCurrent
+            }
+        };
+    }
+    return {
+        end: function () { }
+    };
+}*/
+
+
+
 function Binging(func, onChange) {
     //console.log("function Binging(func, onChange)", onChange)
     let _this = this

@@ -19,11 +19,11 @@ function ParagraphInitialization(element) {
 
     }
 
-    element.Margin.Left = 10
-    element.Margin.Right = 10
+    element.MarginLeft = 10
+    element.MarginRight = 10
 
-    element.Margin.Top = 8
-    element.Margin.Bottom = 8
+    element.MarginTop = 8
+    element.MarginBottom = 8
 
 }
 
@@ -32,12 +32,15 @@ function ParagraphBefore(element) {
 }
 
 function ParagraphAfter(element) {
-
+    
     BlockAfter(element)
 
+    new Reaction(() => {
 
+        if (!window.FontsReady)
+            return;
 
-    let paragraphDeferred = function () {
+        
 
         const testFontSize = 100;
 
@@ -56,8 +59,11 @@ function ParagraphAfter(element) {
         element.MaxContentHeight = () => element.Modifier.HierarchyFontSize / testFontSize * minWidthRect.height
         element.MinContentHeight = () => element.Modifier.HierarchyFontSize / testFontSize * maxWidthRect.height
 
-        //element.title = maxWidthRect.width + " - " + minWidthRect.width
+        //console.log("element.Modifier.HierarchyFontSize",element.Modifier.HierarchyFontSize)
 
+
+        //element.title = maxWidthRect.width + " - " + minWidthRect.width
+        
 
         new Reaction(() => {
             element.style.width = element.Width + "px"
@@ -85,16 +91,14 @@ function ParagraphAfter(element) {
 
 
         })
-
+        
         HeightToStyle(element)
-    }
+        
+    })
 
 
 
-    document.fonts.ready
-        .then(() => {
-            paragraphDeferred()
-        })
+    
 
     /*element.onclick = function () {
     };*/

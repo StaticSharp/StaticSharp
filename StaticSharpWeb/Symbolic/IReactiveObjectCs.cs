@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Text;
 
 namespace StaticSharp;
-
+/*
 public interface IReactiveObjectCs {
     public string ToJsObject(SymbolJs context) {
         var script = new StringBuilder();
@@ -47,3 +47,4 @@ public interface IReactiveObjectCs {
     }
 
 }
+*/

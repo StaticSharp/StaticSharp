@@ -2,7 +2,7 @@
 
 
 
-    public class BorderJs : SymbolJs {
+    /*public class BorderJs : SymbolJs {
         public NumberJs Left => new($"{value}.Left");
         public NumberJs Right => new($"{value}.Right");
         public NumberJs Top => new($"{value}.Top");
@@ -21,5 +21,5 @@
         public Expression<NumberJs> Right { set; protected get; } = null!;
         public Expression<NumberJs> Top { set; protected get; } = null!;
         public Expression<NumberJs> Bottom { set; protected get; } = null!;
-    }
+    }*/
 }
