@@ -9,6 +9,9 @@ namespace StaticSharp {
 
     namespace Symbolic {
         public class ColumnJs : BlockJs {
+
+            
+
             /*public ColumnJs(string value) : base(value) {
             }*/
         }
@@ -16,6 +19,10 @@ namespace StaticSharp {
 
 
     public abstract class Column<Js> : Block<Js>, IBlockCollector where Js : Symbolic.ColumnJs, new() {
+
+
+        public Binding<float> ChildrenLayoutWidth { set; protected get; }
+
         public Column(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
 
         protected BlockList children { get; } = new();

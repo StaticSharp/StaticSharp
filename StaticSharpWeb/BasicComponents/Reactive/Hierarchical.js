@@ -40,7 +40,15 @@ function HierarchicalInitialization(element) {
 
         Modifier: GetModifier(element.parentElement),
     }
-    
+
+    element.Children = {}
+    element.Children[Symbol.iterator] = function* () {
+        var i = element.FirstChild
+        while (i != undefined) {
+            yield i
+            i = i.NextSibling
+        }
+    };
 
     element.Sibling = function (id) {
         //console.log("Sibling called by", element,"with id = ", id)

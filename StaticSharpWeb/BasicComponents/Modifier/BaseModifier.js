@@ -42,4 +42,6 @@ function BaseModifierBefore(element) {
 
 function BaseModifierAfter(element) {
     HierarchicalAfter(element)
+
+    
 }

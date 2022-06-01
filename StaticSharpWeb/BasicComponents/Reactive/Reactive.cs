@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
+
     public class ScriptBeforeAttribute : Attribute {}
     public class ScriptAfterAttribute : Attribute { }
 
@@ -59,6 +60,9 @@ namespace StaticSharp {
                     return Script;
                 }
             }
+
+            
+
             //public delegate T Binding<out T>(Js element);
 
             //public Dictionary<string, Binding<SymbolJs>> Properties { get; private set; } = new();

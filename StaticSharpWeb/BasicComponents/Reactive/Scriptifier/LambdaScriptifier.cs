@@ -1,46 +1,29 @@
-﻿using StaticSharp.Gears;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-
 namespace StaticSharp.Gears;
 public class LambdaScriptifier {
-
-
-
     public LambdaExpression LambdaExpression { get; }
-
-
     public ParameterExpression[] ParametersExpressions { get; }
-
     public LambdaScriptifier(LambdaExpression expression) {
         LambdaExpression = expression;
         ParametersExpressions = expression.Parameters.ToArray();
     }
-
     protected virtual object GetParameterValue(string name) {
         throw new NotEvaluatableException();
     }
-
     protected virtual string ReplaceParameterName(string name) => name;
-
     private IEnumerable<string> ParametersNames => ParametersExpressions.Select(x => ReplaceParameterName(x.Name));
-
     protected virtual object[] GetParametersValues() {
         return Enumerable.Range(0, ParametersExpressions.Length).Select(x => (object)null!).ToArray();
-        //return Enumerable.Range(0, ParametersExpressions.Length).Select(x => new ThrowObject<JsContext>()).ToArray();
-
     }
-
     public virtual string Eval() {
         var result = $"({string.Join(',', ParametersNames)}) => {Eval(LambdaExpression.Body)}";
         return result;
-    }
-
-    
+    }    
     protected string Eval(Expression expression) {
         var lambda = Expression.Lambda(expression, ParametersExpressions);
         var compiled = lambda.Compile();
@@ -55,7 +38,6 @@ public class LambdaScriptifier {
             }
 
             var value = compiled.DynamicInvoke(GetParametersValues());
-            //TODO: handle strings
             return ObjectToString(value);
         }
         catch (TargetInvocationException ex) {

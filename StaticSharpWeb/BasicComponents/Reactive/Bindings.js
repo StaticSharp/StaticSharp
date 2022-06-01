@@ -131,6 +131,8 @@ Binging.prototype.constructor = Binging;
 function Property(value) {
 
     let _this = this
+    _this.name = ""
+    _this.parent = null
 
     _this.onChanged = new Set()
     _this.binding = undefined
@@ -144,6 +146,37 @@ function Property(value) {
         _this.onChanged.forEach(x => x())
     }
 
+    _this.dependsOn = function (property) {
+        if (!_this.binding)
+            return false
+        _this.getValue()
+        for (let i of _this.binding.dependencies) {
+            if (i == property)
+                return true
+        }
+        for (let i of _this.binding.dependencies) {
+            if (i.dependsOn(property))
+                return true
+        }
+        return false
+    }
+
+    _this.getRecursiveDependencies = function () {
+        let result = new Set();
+        if (!_this.binding)
+            return result
+        _this.getValue()
+        
+        _this._collectRecursiveDependencies(result)
+        return result
+    }
+
+    _this._collectRecursiveDependencies = function (set) {
+        for (let i of _this.binding.dependencies) {
+            set.add(i)
+            i._collectRecursiveDependencies(set)
+        }
+    }
 
     _this.getValue = function() {
         //console.log("getValue")
@@ -157,8 +190,7 @@ function Property(value) {
                     _this.binding.dirty = false
                 } catch (e) {
                     //console.warn(e)
-                }
-                
+                }                
             }
         }
         return _this.value
@@ -210,6 +242,8 @@ function Property(value) {
 
     _this.attach = function(object, name) {
         //let property = this
+        _this.name = name
+        _this.parent = object
         let accessorDescriptor = {
             get: function () {
                 return _this.getValue()

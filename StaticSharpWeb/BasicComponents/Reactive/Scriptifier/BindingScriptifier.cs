@@ -2,7 +2,7 @@
 using System;
 using System.Linq.Expressions;
 
-namespace StaticSharp;
+namespace StaticSharp.Gears;
 
 public class BindingScriptifier : LambdaScriptifier {
 
@@ -31,6 +31,4 @@ public class BindingScriptifier : LambdaScriptifier {
         var result = $"() => {Eval(LambdaExpression.Body)}";
         return result;
     }
-
-
 }
