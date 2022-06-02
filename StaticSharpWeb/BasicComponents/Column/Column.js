@@ -1,12 +1,30 @@
 
+
+
+
 function ColumnInitialization(element) {
+
 
     BlockInitialization(element)
 
     element.Reactive = {
         ContentWidth: undefined,
+
+        Width: () => Sum(element.ContentWidth, element.PaddingLeft, element.PaddingRight),
+
+
+
         ContentHeight: undefined,
         Height: () => element.ContentHeight,
+
+        Test: () => element.Test2,
+        Test1: () => undefined,
+        Test2: () => Try(() => {
+            console.log("Test1", element.Test1)
+            if (element.Test1) return element.Test1
+            else return element.Test
+            },8)
+
     }
 
 
@@ -22,7 +40,11 @@ function ColumnInitialization(element) {
 function ColumnBefore(element) {
     BlockBefore(element)
 
-    
+    console.log(element.Test2)
+    console.log("before asign")
+    element.Test1 = 5
+    console.log("after asign")
+    console.log(element.Test2)
 
 
 
@@ -44,10 +66,21 @@ function ColumnBefore(element) {
 
         if (element.stretchChildren) {
             child.Reactive.LayoutWidth = () => {
-                var paddingLeft = Max(element.PaddingLeft, child.MarginLeft) || 0
-                var paddingRight = Max(element.PaddingRight, child.MarginRight) || 0
-                var availableWidth = element.Width - paddingLeft - paddingRight
-                return availableWidth
+                if (!Try(() => element.Width)) {
+                    console.log("element.Width not available", element)
+                    return undefined
+                } else {
+                    console.log("element.Width available", element)
+                }
+                    
+
+                return Try(() => {
+                    var spaceLeft = Max(element.PaddingLeft, child.MarginLeft) || 0
+                    var spaceRight = Max(element.PaddingRight, child.MarginRight) || 0
+                    var availableWidth = element.Width - spaceLeft - spaceRight
+                    return availableWidth
+                },undefined)
+                
             }
         }
     }
@@ -60,7 +93,14 @@ function ColumnBefore(element) {
 function ColumnAfter(element) {
     BlockAfter(element)
 
-    
+
+    element.onclick = function () {
+        console.log("Test",element.Test)
+        console.log("Test2",element.Test2)
+    };
+
+
+
     /*for (let i of element.LayoutChildren) {
         if (i.isBlock)
             console.log(i.Reactive.Width, i.Reactive.Width.getRecursiveDependencies())
@@ -70,22 +110,25 @@ function ColumnAfter(element) {
 
     element.ContentWidth = () => {
         let result = undefined
-        for (let i of element.LayoutChildren) {
-            if (i.isBlock) {
+        for (let child of element.LayoutChildren) {
+            if (child.isBlock) {
+                Try(() => {
+                    var spaceLeft = Max(element.PaddingLeft, child.MarginLeft) || 0
+                    var spaceRight = Max(element.PaddingRight, child.MarginRight) || 0
+                    console.log("child.Width", child.Width, child)
+                    result = Max(result, Sum(child.Width, + spaceLeft + spaceRight))
+                })
+
                 
-                if (!i.Reactive.Width.dependsOn(element.Reactive.ContentWidth)) {                    
-                    result = Max(result, i.Width)
-                }
-            }
-                //console.log(i.Reactive.Width, i.Reactive.Width.getRecursiveDependencies())
+            }                //console.log(i.Reactive.Width, i.Reactive.Width.getRecursiveDependencies())
 
         }
         return result
     }
 
-    new Reaction(() => {
+    /*new Reaction(() => {
         console.log(element.ContentWidth)
-    })
+    })*/
 
 
     let previousMarginTop

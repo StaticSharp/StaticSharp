@@ -34,8 +34,9 @@ function BaseModifierBefore(element) {
     HierarchicalBefore(element)
     let parent = element.parentElement;
 
+
     new Reaction(() => {
-        element.style.fontSize = element.FontSize + "px"
+        element.style.fontSize = ToCssSize(element.FontSize)
     })
 
 }

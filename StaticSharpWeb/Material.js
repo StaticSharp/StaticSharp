@@ -69,10 +69,10 @@ function Material(element, parameters) {
         if (element.Content) {           
             
             
-            element.Content.Width = width
-            //element.Content.InnerWidth = innerWidth
-            element.Content.PaddingLeft = paddingLeft
-            element.Content.PaddingRight = width - innerWidth - paddingLeft
+            //element.Content.Width = width
+
+            //element.Content.PaddingLeft = paddingLeft
+            //element.Content.PaddingRight = width - innerWidth - paddingLeft
 
             element.Content.X = LeftBarSize
 

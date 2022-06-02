@@ -41,7 +41,6 @@ namespace StaticSharp {
 
         [ScriptBefore][ScriptAfter]
         public abstract class Block<Js> : Hierarchical<Js>, IBlock where Js : BlockJs, new() {
-            
             public Binding<float> X                 { set; protected get; }
             public Binding<float> Y                 { set; protected get; }
             public Binding<float> Width             { set; protected get; }

@@ -6,27 +6,27 @@
 function ReactionBase(func) {
     let _this = this
 
-    _this.dependencies = new Set()
+    _this.triggeringProperties = new Set()
     _this.func = func
     
-    _this.addDependency = function (property) {
-        _this.dependencies.add(property)
+    _this.addTriggeringProperty = function (property) {
+        _this.triggeringProperties.add(property)
         property.onChanged.add(_this.onChangedHandler)
     }
 
-    _this.unsubscribe = function () {
-        if (_this.dependencies.size == 0) return
+    _this.unsubscribeFromtriggeringProperties = function () {
+        if (_this.triggeringProperties.size == 0) return
 
-        for (let dependency of _this.dependencies) {
-            dependency.onChanged.delete(_this.onChangedHandler)
+        for (let triggeringProperty of _this.triggeringProperties) {
+            triggeringProperty.onChanged.delete(_this.onChangedHandler)
         }
-        _this.dependencies.clear()
+        _this.triggeringProperties.clear()
     }
 
     _this.execute = function () {
         let oldReaction = Reaction.current
         Reaction.current = _this
-        _this.unsubscribe()
+        _this.unsubscribeFromtriggeringProperties()
 
         try {
             let result = _this.func()
@@ -128,6 +128,12 @@ Binging.prototype = Object.create(ReactionBase.prototype);
 Binging.prototype.constructor = Binging;
 
 
+function RecursionError(object, propertyName) {
+    this.object = object
+    this.propertyName = propertyName
+}
+//RecursionError.prototype = ???
+
 function Property(value) {
 
     let _this = this
@@ -146,7 +152,7 @@ function Property(value) {
         _this.onChanged.forEach(x => x())
     }
 
-    _this.dependsOn = function (property) {
+    /*_this.dependsOn = function (property) {
         if (!_this.binding)
             return false
         _this.getValue()
@@ -176,20 +182,43 @@ function Property(value) {
             set.add(i)
             i._collectRecursiveDependencies(set)
         }
-    }
-
+    }*/
+    _this.executionInProgress = false
     _this.getValue = function() {
         //console.log("getValue")
         if (Reaction.current) {
-            Reaction.current.addDependency(_this)
+            Reaction.current.addTriggeringProperty(_this)
         }
+        //console.log("getValue", _this.name, _this.binding?.dirty)
+
         if (_this.binding) { //wechat if (this.binding?.dirty)
             if (_this.binding.dirty) {
+
+
+
+                if (_this.executionInProgress) {
+                    console.log("getValue", _this.name, "executionInProgress")
+                    throw new RecursionError(_this.object,_this.name)
+                }
                 try {
-                    _this.value = _this.binding.execute()
-                    _this.binding.dirty = false
+
+                    try {
+                        _this.executionInProgress = true
+                        _this.value = _this.binding.execute()
+                    } finally {
+                        _this.executionInProgress = false
+                        _this.binding.dirty = false
+                    }
+
                 } catch (e) {
-                    //console.warn(e)
+
+                    if (e instanceof RecursionError) {
+                        console.warn("RecursionError",_this.object, _this.name, _this.binding.func)
+                        throw e
+                    }
+                    
+
+                    console.warn(e)
                 }                
             }
         }
@@ -203,18 +232,17 @@ function Property(value) {
                 if (_this.binding.func === value) {
                     return
                 }
-                _this.binding.unsubscribe()
+                _this.binding.unsubscribeFromtriggeringProperties()
                 //console.log("change binding from", _this.binding.func, "to", value)
             }
             
-
             _this.binding = new Binging(value, _this.dependencyChanged)
 
 
         } else {
             //console.log("value assigned", _this.value, "->", value, "will notify ", _this.onChanged.size)
             if (_this.binding) {
-                _this.binding.unsubscribe()
+                _this.binding.unsubscribeFromtriggeringProperties()
                 _this.binding = undefined
             }
 
@@ -243,7 +271,7 @@ function Property(value) {
     _this.attach = function(object, name) {
         //let property = this
         _this.name = name
-        _this.parent = object
+        _this.object = object
         let accessorDescriptor = {
             get: function () {
                 return _this.getValue()
@@ -255,12 +283,8 @@ function Property(value) {
         }
         Object.defineProperty(object, name, accessorDescriptor);
         return _this
-    }
-
-    
+    }    
     _this.setValue(value)
-
-
 }
 
 
@@ -323,7 +347,7 @@ Object.defineProperty(Object.prototype, "Reactive", {
     }
 });
 
-
+/*
 Property.prototype.OnChanged = function (func) {
     let _this = this
     let previous = _this.getValue()
@@ -335,7 +359,7 @@ Property.prototype.OnChanged = function (func) {
             previous = current
         }
     })
-}
+}*/
 
 
 
