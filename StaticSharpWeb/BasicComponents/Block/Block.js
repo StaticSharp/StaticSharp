@@ -32,7 +32,7 @@ function BlockInitialization(element) {
 
         X: () => element.LayoutX,
         Y: () => element.LayoutY,
-        Width: () => element.LayoutWidth,
+        Width: () => Try(()=>element.LayoutWidth),
         Height: () => element.LayoutHeight,
     }
 }

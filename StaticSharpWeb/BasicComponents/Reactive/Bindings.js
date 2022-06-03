@@ -11,14 +11,14 @@ function ReactionBase(func) {
     
     _this.addTriggeringProperty = function (property) {
         _this.triggeringProperties.add(property)
-        property.onChanged.add(_this.onChangedHandler)
+        property.dependentReactions.add(_this)
     }
 
-    _this.unsubscribeFromtriggeringProperties = function () {
+    _this.unsubscribeFromTriggeringProperties = function () {
         if (_this.triggeringProperties.size == 0) return
 
         for (let triggeringProperty of _this.triggeringProperties) {
-            triggeringProperty.onChanged.delete(_this.onChangedHandler)
+            triggeringProperty.dependentReactions.delete(_this)
         }
         _this.triggeringProperties.clear()
     }
@@ -26,7 +26,7 @@ function ReactionBase(func) {
     _this.execute = function () {
         let oldReaction = Reaction.current
         Reaction.current = _this
-        _this.unsubscribeFromtriggeringProperties()
+        _this.unsubscribeFromTriggeringProperties()
 
         try {
             let result = _this.func()
@@ -44,7 +44,7 @@ function Reaction(func) {
 
     ReactionBase.call(_this, func)
     
-    _this.onChangedHandler = function () {
+    _this.makeDirty = function () {
         Reaction.deferred.add(_this)
     }
 
@@ -107,21 +107,22 @@ Reaction.beginDeferred = function () {
 
 
 
-function Binging(func, onChange) {
+function Binging(func, onBecameDirty) {
     //console.log("function Binging(func, onChange)", onChange)
     let _this = this
 
     ReactionBase.call(_this, func)
 
     _this.dirty = true
-    _this.onChange = onChange
+    //_this.onBecameDirty = onBecameDirty
 
     
-    _this.onChangedHandler = function () {
-        _this.dirty = true
-        //console.log("_this.dirty = true", _this, _this.onChange)
-        
-        _this.onChange()
+    _this.makeDirty = function () {
+        if (_this.dirty)
+            return
+
+        _this.dirty = true        
+        onBecameDirty()
     }
 }
 Binging.prototype = Object.create(ReactionBase.prototype);
@@ -140,16 +141,19 @@ function Property(value) {
     _this.name = ""
     _this.parent = null
 
-    _this.onChanged = new Set()
+    _this.dependentReactions = new Set()
     _this.binding = undefined
 
     _this.makeDirty = function () {
-        _this.binding.onChangedHandler()
+        _this.binding.makeDirty()
     }
     
-    _this.dependencyChanged = function () {
-        //console.log("dependencyChanged", _this.binding.dirty, _this.binding)
-        _this.onChanged.forEach(x => x())
+    _this.onBindingBecameDirty = function () {
+        _this.makeDependentReactionsDirty()
+    }
+
+    _this.makeDependentReactionsDirty = function () {
+        _this.dependentReactions.forEach(x => x.makeDirty())
     }
 
     /*_this.dependsOn = function (property) {
@@ -232,17 +236,17 @@ function Property(value) {
                 if (_this.binding.func === value) {
                     return
                 }
-                _this.binding.unsubscribeFromtriggeringProperties()
+                _this.binding.unsubscribeFromTriggeringProperties()
                 //console.log("change binding from", _this.binding.func, "to", value)
             }
             
-            _this.binding = new Binging(value, _this.dependencyChanged)
+            _this.binding = new Binging(value, _this.onBindingBecameDirty)
 
 
         } else {
             //console.log("value assigned", _this.value, "->", value, "will notify ", _this.onChanged.size)
             if (_this.binding) {
-                _this.binding.unsubscribeFromtriggeringProperties()
+                _this.binding.unsubscribeFromTriggeringProperties()
                 _this.binding = undefined
             }
 
@@ -254,15 +258,8 @@ function Property(value) {
 
         var d = Reaction.beginDeferred()
 
-        for (let i of _this.onChanged) {
-            try {
-                //console.log(i)
-                i()
-            } catch (e) {
-                console.error(e)
-            }            
-        }
-        //this.onChanged.forEach(x => x())
+        _this.makeDependentReactionsDirty()
+
         if (d)
             d.end()
 

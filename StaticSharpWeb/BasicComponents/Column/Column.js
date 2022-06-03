@@ -29,7 +29,7 @@ function ColumnInitialization(element) {
 
 
     Object.assign(element, {
-        stretchChildren: false
+        stretchChildren: true
     })
 
     //element.stretchChildren = false
@@ -40,11 +40,11 @@ function ColumnInitialization(element) {
 function ColumnBefore(element) {
     BlockBefore(element)
 
-    console.log(element.Test2)
+    /*console.log(element.Test2)
     console.log("before asign")
     element.Test1 = 5
     console.log("after asign")
-    console.log(element.Test2)
+    console.log(element.Test2)*/
 
 
 
