@@ -190,10 +190,12 @@ function Property(value) {
     _this.executionInProgress = false
     _this.getValue = function() {
         //console.log("getValue")
+        
+        //console.log("getValue", _this.name, _this.binding?.dirty)
+
         if (Reaction.current) {
             Reaction.current.addTriggeringProperty(_this)
         }
-        //console.log("getValue", _this.name, _this.binding?.dirty)
 
         if (_this.binding) { //wechat if (this.binding?.dirty)
             if (_this.binding.dirty) {
@@ -201,8 +203,9 @@ function Property(value) {
 
 
                 if (_this.executionInProgress) {
-                    console.log("getValue", _this.name, "executionInProgress")
-                    throw new RecursionError(_this.object,_this.name)
+                    //console.log("getValue", _this.name, "executionInProgress")
+                    //throw new RecursionError(_this.object,_this.name)
+                    return null
                 }
                 try {
 
@@ -211,21 +214,25 @@ function Property(value) {
                         _this.value = _this.binding.execute()
                     } finally {
                         _this.executionInProgress = false
-                        _this.binding.dirty = false
+                        if (_this.value !== null)
+                            _this.binding.dirty = false
                     }
 
                 } catch (e) {
 
-                    if (e instanceof RecursionError) {
+                    /*if (e instanceof RecursionError) {
                         console.warn("RecursionError",_this.object, _this.name, _this.binding.func)
                         throw e
-                    }
+                    }*/
                     
 
-                    console.warn(e)
+                    //console.warn(e)
                 }                
             }
         }
+
+
+
         return _this.value
     }
 

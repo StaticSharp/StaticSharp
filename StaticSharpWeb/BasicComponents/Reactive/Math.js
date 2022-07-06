@@ -1,22 +1,42 @@
-function Max(a,b) {
-    if (a == undefined) return b
-    if (b == undefined) return a
-    return Math.max(a,b)
+function IsNaNOrNull(value) {
+    if (value === null) return true
+    return isNaN(value)
 }
 
-function Min(a, b) {
-    if (a == undefined) return b
-    if (b == undefined) return a
-    return Math.min(a, b)
+function Max() {
+    let result = undefined
+    for (let i of arguments) {
+        if (IsNaNOrNull(i)) continue;
+        if (result === undefined) {
+            result = i
+        } else {
+            result = Math.max(result, i)
+        }
+    }
+    return result
+}
+
+function Min() {
+    let result = undefined
+    for (let i of arguments) {
+        if (IsNaNOrNull(i)) continue;
+        if (result === undefined) {
+            result = i
+        } else {
+            result = Math.min(result, i)
+        }
+    }
+    return result
 }
 
 function Sum() {
     let resultValid = false
     let result = 0
     for (let i of arguments) {
-        if (isNaN(i)) continue;
+        if (IsNaNOrNull(i)) continue;
         resultValid = true
         result += i
     }
     return resultValid ? result : undefined
 }
+

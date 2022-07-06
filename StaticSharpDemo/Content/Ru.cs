@@ -8,6 +8,24 @@ namespace StaticSharpDemo.Root {
 
     [Representative]
     public partial class Ru : Material{
+
+
+        static string RandomString(int length, Random random) {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789     ";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        Paragraph CreateParagraph(int numChars, Random random) {
+            return new Paragraph() { RandomString(numChars, random) };
+        }
+
+        IEnumerable<Paragraph> CreateParagraphs(int count) {
+            Random random = new Random(0);
+            return Enumerable.Range(0, count).Select(i => CreateParagraph(100, random));
+        }
+
+
         public override Group? Content => new() {
 
             H1("H1"),
@@ -16,7 +34,7 @@ namespace StaticSharpDemo.Root {
                 Children = { $"Modifier test" }
             },
 
-
+            CreateParagraphs(100),
 
             {
                 "Slider",

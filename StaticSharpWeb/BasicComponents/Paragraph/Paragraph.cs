@@ -37,6 +37,11 @@ namespace StaticSharp {
             }
         }
 
+        public void Add(string value,
+            [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
+            Add(new Text(value, true, callerFilePath, callerLineNumber));
+        }
+
         public void AppendLiteral(string value,
             [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
             Add(new Text(value, true, callerFilePath, callerLineNumber));

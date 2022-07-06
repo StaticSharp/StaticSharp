@@ -17,13 +17,14 @@ function ColumnInitialization(element) {
         ContentHeight: undefined,
         Height: () => element.ContentHeight,
 
-        Test: () => element.Test2,
-        Test1: () => undefined,
-        Test2: () => Try(() => {
-            console.log("Test1", element.Test1)
-            if (element.Test1) return element.Test1
-            else return element.Test
-            },8)
+        A: () => {
+            console.log("element.B", element.B)
+            console.log("element.C", element.C)
+
+            return Min(element.B, element.C)
+        },
+        B: () => element.A,
+        C: () => 8
 
     }
 
@@ -37,8 +38,42 @@ function ColumnInitialization(element) {
     
 }
 
+/*function Unknown() {
+    this.a = 5
+}
+Unknown.prototype.valueOf = function () {
+    return undefined;
+};
+
+window.unknown = Symbol("unknown")*/
+
+
 function ColumnBefore(element) {
+
+
+
+    console.log(Math.min(null,2))
+
+    /*if (unknown) {
+        console.log("unknown is truthy")
+    }
+    console.log("!!(must be false)", unknown)
+
+    //console.log("isNaN(must be true)", isNaN(unknown))
+    console.log("!!(must be false)", !!unknown)
+    console.log("+(must be false)", +unknown)
+
+
+    console.log("B:", element.B)
+    console.log("A:", element.A)*/
+    
+
     BlockBefore(element)
+    
+
+    
+    
+
 
     /*console.log(element.Test2)
     console.log("before asign")
@@ -57,7 +92,7 @@ function ColumnBefore(element) {
 
 
     element.AddChild = function (child) {
-        //console.log("AddChild", element, child)
+
         element.LayoutChildren.push(child)
 
         child.Reactive.LayoutX = () => {
@@ -66,20 +101,24 @@ function ColumnBefore(element) {
 
         if (element.stretchChildren) {
             child.Reactive.LayoutWidth = () => {
-                if (!Try(() => element.Width)) {
-                    console.log("element.Width not available", element)
-                    return undefined
-                } else {
-                    console.log("element.Width available", element)
-                }
-                    
+                //console.log("child.LayoutWidth", child.Reactive.LayoutWidth.binding.dirty)
+                let width = element.Width
 
-                return Try(() => {
-                    var spaceLeft = Max(element.PaddingLeft, child.MarginLeft) || 0
-                    var spaceRight = Max(element.PaddingRight, child.MarginRight) || 0
-                    var availableWidth = element.Width - spaceLeft - spaceRight
-                    return availableWidth
-                },undefined)
+                if (width === null) return null
+                if (width === undefined) return undefined
+                /*if (!element.Width) {
+                    return undefined
+                }*/
+
+                
+                
+
+                var spaceLeft = Max(element.PaddingLeft, child.MarginLeft)
+                var spaceRight = Max(element.PaddingRight, child.MarginRight)
+                var availableWidth = Sum(element.Width, -spaceLeft, -spaceRight)
+                return availableWidth
+
+
                 
             }
         }
@@ -94,10 +133,10 @@ function ColumnAfter(element) {
     BlockAfter(element)
 
 
-    element.onclick = function () {
+    /*element.onclick = function () {
         console.log("Test",element.Test)
         console.log("Test2",element.Test2)
-    };
+    };*/
 
 
 
@@ -110,14 +149,16 @@ function ColumnAfter(element) {
 
     element.ContentWidth = () => {
         let result = undefined
+
         for (let child of element.LayoutChildren) {
             if (child.isBlock) {
-                Try(() => {
+                //Try(() => {
+                
+
                     var spaceLeft = Max(element.PaddingLeft, child.MarginLeft) || 0
                     var spaceRight = Max(element.PaddingRight, child.MarginRight) || 0
-                    console.log("child.Width", child.Width, child)
                     result = Max(result, Sum(child.Width, + spaceLeft + spaceRight))
-                })
+                //})
 
                 
             }                //console.log(i.Reactive.Width, i.Reactive.Width.getRecursiveDependencies())

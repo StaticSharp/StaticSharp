@@ -10,22 +10,7 @@ partial class Ru : Material {
 
 
 
-    static string RandomString(int length, Random random) {
-        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789     ";
-        return new string(Enumerable.Repeat(chars, length)
-            .Select(s => s[random.Next(s.Length)]).ToArray());
-    }
-
-    /*Row CreateParagraph(int numChars) {
-        Random random = new Random(0);
-        //var result = new 
-        return new Row() { RandomString(numChars, random) };
-    }
-
-    IEnumerable<Row> CreateParagraphs(int count) {
-        Random random = new Random(0);
-        return Enumerable.Range(0, count).Select(i => new Row() { $"This is paragraph #{i} {RandomString(random.Next(100), random)}" });
-    }*/
+    
 
 
     /*new Row().Modify(x => {

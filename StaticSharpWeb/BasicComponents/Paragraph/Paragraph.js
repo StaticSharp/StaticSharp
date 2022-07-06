@@ -5,8 +5,16 @@ function ParagraphInitialization(element) {
 
     let content = element.children[0]
 
+    element.onclick = function () {
+        console.log(element.Width)
+    };
+
+
     element.Reactive = {
-        Width: () => Min(element.LayoutWidth, element.MaxContentWidth),
+        Width: () => {
+            
+            return Min(element.LayoutWidth, element.MaxContentWidth)
+        },
 
         Height: undefined,
 
@@ -34,6 +42,9 @@ function ParagraphBefore(element) {
 function ParagraphAfter(element) {
     
     BlockAfter(element)
+
+    
+
 
     new Reaction(() => {
 
@@ -66,8 +77,15 @@ function ParagraphAfter(element) {
         
 
         new Reaction(() => {
+
+            content.style.transformOrigin = ""
+            content.style.transform = ""
+            content.style.width = ""
+
             element.style.width = element.Width + "px"
             if (element.MinContentWidth > element.Width) {
+                element.title = "element.MinContentWidth > element.Width"
+
                 content.style.width = "min-content"
                 content.style.transformOrigin = "top left"
 
@@ -77,14 +95,15 @@ function ParagraphAfter(element) {
                 return
             }
             if (element.Width == element.MaxContentWidth) {
+                element.title = "element.Width == element.MaxContentWidth"
+
                 element.Height = element.MinContentHeight
                 content.style.width = "max-content"
+
                 return
             }
-
-            content.style.transformOrigin = ""
-            content.style.transform = ""
-            content.style.width = ""
+            element.title = `MinContentWidth:${element.MinContentWidth} Width${element.Width}`
+            
             var rect = content.getBoundingClientRect()
 
             element.Height = rect.height

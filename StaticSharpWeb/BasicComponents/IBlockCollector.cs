@@ -1,4 +1,5 @@
 ﻿using StaticSharp.Gears;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace StaticSharp {
@@ -12,6 +13,12 @@ namespace StaticSharp {
 
         public static void Add<T>(this T collector, IBlock? value) where T : IBlockCollector {
             collector.Add(null, value);
+        }
+
+        public static void Add<T>(this T collector, IEnumerable<IBlock?> value) where T : IBlockCollector {
+            foreach (var i in value) {
+                collector.Add(null, i);
+            }
         }
 
         public static void Add<T>(this T collector, Group? group) where T : IBlockCollector {
