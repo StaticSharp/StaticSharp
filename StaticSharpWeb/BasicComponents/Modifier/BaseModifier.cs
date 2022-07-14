@@ -13,6 +13,7 @@ namespace StaticSharp {
         public BaseModifierJs() { }
 
         public float FontSize => throw new NotEvaluatableException();
+        public Color BackgroundColor => throw new NotEvaluatableException();
     }
     
 
@@ -24,6 +25,9 @@ namespace StaticSharp {
         public abstract class BaseModifier: Hierarchical<BaseModifierJs> {
 
             public Color? ForgroundColor = null;
+            
+
+
             public Space? DefaultSpace = null;
 
 
@@ -31,6 +35,9 @@ namespace StaticSharp {
             public FontStyle? FontStyle = null;
             //public float? FontSize = null;
             public Binding<float> FontSize { set; protected get; }
+            public Binding<Color> BackgroundColor { set; protected get; }
+
+
             public BaseModifier(string callerFilePath, int callerLineNumber)
             : base(callerFilePath, callerLineNumber) { }
 
@@ -41,7 +48,7 @@ namespace StaticSharp {
             }
 
 
-            protected async Task<Tag> GenerateHtmlWithChildrenAsync(Context context, string? id, Func<Context,IEnumerable<Task<Tag>>> children, string tagName = "m") {
+            protected async Task<Tag> GenerateHtmlWithChildrenAsync(Context context, string? id, Func<Context,IEnumerable<Task<Tag>?>> children, string tagName = "m") {
 
                 Dictionary<string, object> style = new();
 

@@ -12,7 +12,7 @@ function ParagraphInitialization(element) {
 
     element.Reactive = {
         Width: () => {
-            
+            //console.log("paragraph.Width.eval... element.LayoutWidth:", element.LayoutWidth, "element.MaxContentWidth", element.MaxContentWidth)
             return Min(element.LayoutWidth, element.MaxContentWidth)
         },
 
@@ -43,17 +43,10 @@ function ParagraphAfter(element) {
     
     BlockAfter(element)
 
-    
-
 
     new Reaction(() => {
 
-        if (!window.FontsReady)
-            return;
-
-        
-
-        const testFontSize = 100;
+        const testFontSize = 128;
 
         let content = element.children[0]
         content.style.fontSize = testFontSize + "px";
@@ -69,53 +62,54 @@ function ParagraphAfter(element) {
         element.MinContentWidth = () => element.Modifier.HierarchyFontSize / testFontSize * minWidthRect.width
         element.MaxContentHeight = () => element.Modifier.HierarchyFontSize / testFontSize * minWidthRect.height
         element.MinContentHeight = () => element.Modifier.HierarchyFontSize / testFontSize * maxWidthRect.height
-
-        //console.log("element.Modifier.HierarchyFontSize",element.Modifier.HierarchyFontSize)
-
-
-        //element.title = maxWidthRect.width + " - " + minWidthRect.width
-        
-
-        new Reaction(() => {
-
-            content.style.transformOrigin = ""
-            content.style.transform = ""
-            content.style.width = ""
-
-            element.style.width = element.Width + "px"
-            if (element.MinContentWidth > element.Width) {
-                element.title = "element.MinContentWidth > element.Width"
-
-                content.style.width = "min-content"
-                content.style.transformOrigin = "top left"
-
-                let scale = element.Width / element.MinContentWidth
-                content.style.transform = `scale(${scale}, ${scale})`
-                element.Height = element.MaxContentHeight * scale
-                return
-            }
-            if (element.Width == element.MaxContentWidth) {
-                element.title = "element.Width == element.MaxContentWidth"
-
-                element.Height = element.MinContentHeight
-                content.style.width = "max-content"
-
-                return
-            }
-            element.title = `MinContentWidth:${element.MinContentWidth} Width${element.Width}`
-            
-            var rect = content.getBoundingClientRect()
-
-            element.Height = rect.height
-
-
-        })
-        
-        HeightToStyle(element)
-        
+      
     })
 
 
+    new Reaction(() => {
+        let content = element.children[0]
+
+        content.style.transformOrigin = ""
+        content.style.transform = ""
+        content.style.width = ""
+        //console.log("element.Width", element.Parent, element)
+        element.style.width = element.Width + "px"
+
+        if (element.MinContentWidth > element.Width) {
+            //element.title = "element.MinContentWidth > element.Width"
+
+            content.style.width = "min-content"
+            content.style.transformOrigin = "top left"
+
+            let scale = element.Width / element.MinContentWidth
+            content.style.transform = `scale(${scale}, ${scale})`
+            element.Height = element.MaxContentHeight * scale
+            return
+        }
+        if (Math.abs(element.Width - element.MaxContentWidth) < 0.001) {
+            //element.title = "element.Width == element.MaxContentWidth"
+
+            element.Height = element.MinContentHeight
+            content.style.width = "max-content"
+
+            return
+        }
+
+        content.style.width = element.style.width
+
+        var rect = content.getBoundingClientRect()
+        element.Height = rect.height
+
+    })
+
+    HeightToStyle(element)
+
+
+
+
+    new Reaction(() => {
+        element.title = `MaxContentWidth:${element.MaxContentWidth} Width:${element.Width} LayoutWidth:${element.LayoutWidth}`
+    })
 
     
 

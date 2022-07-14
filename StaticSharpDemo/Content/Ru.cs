@@ -22,35 +22,35 @@ namespace StaticSharpDemo.Root {
 
         IEnumerable<Paragraph> CreateParagraphs(int count) {
             Random random = new Random(0);
-            return Enumerable.Range(0, count).Select(i => CreateParagraph(100, random));
+            return Enumerable.Range(0, count).Select(i => CreateParagraph(50, random));
         }
 
 
         public override Group? Content => new() {
+            "Abc",
 
-            H1("H1"),
-            new Modifier {
+            /*H1("H1"),*/
+            /*new Modifier {
                 FontSize = new((element) => element.Sibling<SliderJs>("Slider").Value + 2),
                 Children = { $"Modifier test" }
-            },
+            },*/
 
-            CreateParagraphs(100),
+            //CreateParagraphs(100),
 
             {
                 "Slider",
                 new Slider {
                     Min = 10,
-                    Max = 50,
-                    Id = "Slider"
+                    Max = 50
                 }
             },
 
-            $"A B C D {4}",
+            /*$"A B C D {4}",
             new Space(),
 
             $"Bold: {new InlineModifier { FontStyle = new FontStyle { Weight = FontWeight.Bold }, Children = { "Text" } }}",
             $"Если   понадобится компонент,которого нет среди стандартных.",
-            $"Можно создать компонент прям в проекте вашего сайта."
+            $"Можно создать компонент прям в проекте вашего сайта."*/
         };
     }
 }

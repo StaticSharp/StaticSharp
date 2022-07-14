@@ -25,6 +25,7 @@ function BaseModifierInitialization(element) {
 
     element.Reactive = {
         FontSize: undefined,
+        BackgroundColor: undefined,
         HierarchyFontSize: () => element.FontSize || element.Modifier.HierarchyFontSize
         
     }

@@ -38,7 +38,7 @@ namespace StaticSharpWeb {
         public virtual int ContentWidth => 400;
 
         //public virtual RightSideBar RightSideBar => null;
-        //public virtual LeftSideBar LeftSideBar => null;
+        public virtual IBlock? LeftSideBar => null;
         public virtual Body Body => new Body() {
             FontSize = 16,
             FontFamilies = new[]{
@@ -95,9 +95,12 @@ namespace StaticSharpWeb {
 
             context.Includes.Require(new Script(AbsolutePath("Material.js")));
 
-            var bodyTag = await Body.GenerateHtmlWithChildrenAsync(context,(innerContext) => new Task<Tag>[]{
+            var bodyTag = await Body.GenerateHtmlWithChildrenAsync(context,(innerContext) => new Task<Tag>?[]{
                     Task.FromResult(new JSCall("Material", new { ContentWidth = ContentWidth }).Generate(innerContext)),
-                    
+
+                    LeftSideBar?.GenerateHtmlAsync(innerContext,"LeftSideBar"),
+
+
                     new Column() {
                         Content
                     }.GenerateHtmlAsync(innerContext,"Content")

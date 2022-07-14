@@ -2,6 +2,53 @@
 function Material(element, parameters) {
 
 
+    /*element.Reactive =
+    {
+        A: () => {
+            console.log("Get A")
+            return Max(element.B, element.E)
+        },
+
+        //C: () => { Max(element.E, element.A) },
+
+        E: () => {
+            console.log("Get E")
+            return element.A
+        },
+
+        B: 6
+    }
+
+    //let d = Reaction.beginDeferred()
+
+    new Reaction(() => {
+        console.group("Reaction A:")
+        console.log("element.Reactive.E.binding.dirty:", element.Reactive.E.binding.dirty)
+        console.log("element.Reactive.A.binding.dirty:", element.Reactive.A.binding.dirty)
+
+        console.log("Reaction A:", element.A)
+
+        console.groupEnd()
+    })
+
+    //d.end()
+
+*/
+    
+
+
+    /*new Reaction(() => {
+        console.log("Reaction E:", element.E)
+    })
+
+    console.log("element.Reactive.E.binding.dirty:", element.Reactive.E.binding.dirty)
+    console.log("element.Reactive.A.binding.dirty:", element.Reactive.A.binding.dirty)*/
+
+    
+
+
+
+
     //PropertyTest()
 
     window.Reactive = {
@@ -18,18 +65,21 @@ function Material(element, parameters) {
     }
 
     element.Reactive = {
-        Content: () => {
-            //console.log("Reactive Content element.Child")
-            return element.Child("Content")
-        },
+        Content: () => element.Child("Content"),
+        LeftSideBar: () => element.Child("LeftSideBar"),
+        RightSideBar: () => element.Child("RightSideBar"),
         Footer: undefined,
     }
 
+
+
+    let loadingDeffered = Reaction.beginDeferred()
+
     document.fonts.ready
         .then(() => {
-            let d = Reaction.beginDeferred()
+
             window.FontsReady = true
-            d.end()
+            loadingDeffered.end()
         })
 
     /*let previous = this.Content
@@ -54,16 +104,26 @@ function Material(element, parameters) {
             console.log("Content.PaddingLeft changed", this.Content.PaddingLeft)
     })*/
 
+
+
     new Reaction(() => {
-        const LeftBarSize = 0
-        const RightBarSize = 0
+        let LeftBarSize = 0
+        let RightBarSize = Max(element.RightSideBar?.Width, 0)
+
+        if (element.LeftSideBar) {
+            element.LeftSideBar.style.position = "fixed"
+            element.LeftSideBar.Height = window.InnerHeight
+            LeftBarSize = Max(element.LeftSideBar.Width, 0)
+        }
+
+        
 
         let width = window.InnerWidth - LeftBarSize - RightBarSize
         let innerWidth = Math.min(width, parameters.ContentWidth)
         let paddingLeft = (width - innerWidth) * 0.5
 
 
-
+        
 
 
         if (element.Content) {           
@@ -72,6 +132,7 @@ function Material(element, parameters) {
             element.Content.Width = width
 
             element.Content.PaddingLeft = paddingLeft
+
             element.Content.PaddingRight = width - innerWidth - paddingLeft
 
             element.Content.X = LeftBarSize

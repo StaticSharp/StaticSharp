@@ -11,7 +11,7 @@ namespace StaticSharp {
         public Body([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber) { }
 
-        public async Task<Tag> GenerateHtmlWithChildrenAsync(Context context, Func<Context, IEnumerable<Task<Tag>>> children) {
+        public async Task<Tag> GenerateHtmlWithChildrenAsync(Context context, Func<Context, IEnumerable<Task<Tag>?>> children) {
             return await GenerateHtmlWithChildrenAsync(context, null, children, "body");
         }
 /*        public async Task<Tag> GenerateHtmlAsync(Context context, IEnumerable<IElement> children) {

@@ -36,6 +36,10 @@ function ReactionBase(func) {
             Reaction.current = oldReaction
         }
     }
+
+
+    //_this.makeDirty = abstract function
+    _this.dirtImmune = false
 }
 
 
@@ -45,16 +49,26 @@ function Reaction(func) {
     ReactionBase.call(_this, func)
     
     _this.makeDirty = function () {
+        if (_this.dirtImmune)
+            return;
         Reaction.deferred.add(_this)
     }
 
-    //try {
-        _this.execute()
-    //} catch {
-    //}
+    if (Reaction.deferred) {
+        Reaction.deferred.add(_this)
+    } else {
+        let d = Reaction.beginDeferred()
 
-
+        try {
+            _this.execute()
+        } catch (e) {
+            console.warn(e)
+        }
+        
+        d.end()
+    }
 }
+
 Reaction.prototype = Object.create(ReactionBase.prototype)
 Reaction.prototype.constructor = Reaction
 
@@ -63,24 +77,36 @@ Reaction.beginDeferred = function () {
         Reaction.deferred = new Set()
         return {
             end: function () {
-                while (Reaction.deferred.size > 0) {
+
+                let maxIterations = 64;
+                 
+                while (Reaction.deferred.size > 0 & maxIterations > 0) {
                     //console.log("Reaction.deferred.end", Reaction.deferred.size)
                     let d = Array.from(Reaction.deferred)
                     for (let reaction of d) {
+                        Reaction.deferred.delete(reaction)
                         try {
                             reaction.execute()
                         } catch (e) {
                             console.warn(e)
                         }
-                        Reaction.deferred.delete(reaction)
+                        
                     }
-
+                    maxIterations--
                     //d.forEach(x => x.execute())
                     //Reaction.deferred.clear()
                 }
+
+                if (maxIterations == 0) {
+                    console.error("Recursive property binding", Reaction.deferred)
+                }
+
                 //let l = Reaction.deferred;
                 Reaction.deferred = undefined
                 //l.forEach(x => x.execute())
+
+                
+
             }
         };
     }
@@ -129,11 +155,6 @@ Binging.prototype = Object.create(ReactionBase.prototype);
 Binging.prototype.constructor = Binging;
 
 
-function RecursionError(object, propertyName) {
-    this.object = object
-    this.propertyName = propertyName
-}
-//RecursionError.prototype = ???
 
 function Property(value) {
 
@@ -188,6 +209,7 @@ function Property(value) {
         }
     }*/
     _this.executionInProgress = false
+    
     _this.getValue = function() {
         //console.log("getValue")
         
@@ -197,36 +219,65 @@ function Property(value) {
             Reaction.current.addTriggeringProperty(_this)
         }
 
-        if (_this.binding) { //wechat if (this.binding?.dirty)
+        if (_this.binding) { //wechat (this.binding?.dirty) not supported
             if (_this.binding.dirty) {
 
 
 
                 if (_this.executionInProgress) {
+
+
+                    if (_this.reactionsWhoReceivedOldValue == undefined) {
+                        _this.reactionsWhoReceivedOldValue = new Set()
+                    }
+                    _this.reactionsWhoReceivedOldValue.add(Reaction.current)                    
+
                     //console.log("getValue", _this.name, "executionInProgress")
-                    //throw new RecursionError(_this.object,_this.name)
-                    return null
+
+                    return _this.value
                 }
                 try {
+
+                    var oldValue = _this.value
 
                     try {
                         _this.executionInProgress = true
                         _this.value = _this.binding.execute()
+                        
                     } finally {
                         _this.executionInProgress = false
-                        if (_this.value !== null)
-                            _this.binding.dirty = false
+
+                        _this.binding.dirty = false
+                        //console.log("execute finished ", _this.object, _this.name, oldValue, "->", _this.value)
+
+
+                        if (_this.reactionsWhoReceivedOldValue) {
+
+                            if (_this.value !== oldValue) {
+
+                                //var reactionsToPrint = Array.from(_this.reactionsWhoReceivedOldValue).map(x => x.func.name)
+                                //console.log("ReactionsWhoReceivedOldValue", reactionsToPrint)
+
+                                let d = Reaction.beginDeferred()
+                                _this.reactionsWhoReceivedOldValue.forEach(x => x.makeDirty())
+                                d.end()
+                            }
+
+                            if (_this.reactionsWhoReceivedOldValue) {
+                                _this.reactionsWhoReceivedOldValue = undefined
+                            }
+
+                        }
+                        
+                            
                     }
 
                 } catch (e) {
 
-                    /*if (e instanceof RecursionError) {
-                        console.warn("RecursionError",_this.object, _this.name, _this.binding.func)
-                        throw e
-                    }*/
+
                     
 
-                    //console.warn(e)
+                    console.error(e)
                 }                
             }
         }

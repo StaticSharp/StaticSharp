@@ -13,7 +13,7 @@ namespace StaticSharp {
     public class Paragraph : Block<BlockJs>, IVoidEnumerable, IInline {
 
         protected List<IInline> children { get; } = new();
-
+        public Paragraph Children => this;
         private new Binding<float> Height => default;
 
 

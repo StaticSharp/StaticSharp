@@ -20,7 +20,7 @@ namespace StaticSharp {
         [ScriptBefore]
         [ScriptAfter]
         public abstract class Hierarchical<Js> : Reactive<Js> where Js : HierarchicalJs, new() {
-            public string Id { set; protected get; } = null!;
+            
             public Hierarchical(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
 
             public override void AddRequiredInclues(IIncludes includes) {
