@@ -17,25 +17,29 @@ namespace StaticSharpDemo.Root {
         ;*/
 
         public override IBlock LeftSideBar => new Column() {
-            new Modifier(){
 
+            Modifiers = {
+                new Modifier() {
+                    BackgroundColor = Color.FromArgb(255,0xA0,0x70,0x30),
+                }
+            },
                 
-                Children = {
-                    "Menu Item 1",
-                    "Menu item 2",
-                    new Space(){
-                        GrowBetween = 1
-                    },
+            Children = {
+                "Menu Item 1",
+                "Menu item 2",
+                new Space(){
+                    GrowBetween = 1
+                },
                    
-                    new Paragraph(){
-                        Width = "() => element.LayoutWidth",
-                        Children = {
-                            "Social links"
-                        }
-                    
+                new Paragraph(){
+                    Width = "() => element.LayoutWidth",
+                    Children = {
+                        "Social links"
                     }
+                    
                 }
             }
+            
         };
 
 

@@ -14,15 +14,21 @@ namespace StaticSharp {
 
         protected List<IInline> children { get; } = new();
         public Paragraph Children => this;
-        private new Binding<float> Height => default;
+        private new Binding<float> Height => default; //hide
 
+        public Paragraph(Paragraph other,
+            [CallerFilePath] string callerFilePath = "",
+            [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
+
+            children = new(other.children);
+        }
 
         public Paragraph(
             int literalLength,
             int formattedCount,
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0)
-            : base(callerFilePath, callerLineNumber) {        
+            : base(callerFilePath, callerLineNumber) {
         }
 
         public Paragraph(
@@ -55,7 +61,7 @@ namespace StaticSharp {
         public void AppendFormatted(IInline value) {
             Add(value);
         }
-        public void AppendFormatted<T>(T t) where T: struct{
+        public void AppendFormatted<T>(T t) where T : struct {
             //Console.WriteLine($"\tAppendFormatted called: {{{t}}} is of type {typeof(T)}");
         }
 
@@ -64,17 +70,21 @@ namespace StaticSharp {
             includes.Require(new Script(ThisFilePathWithNewExtension("js")));
         }
 
-        public override async Task<Tag> GenerateHtmlAsync(Context context, string? id) {
+        public override async Task<Tag?> GenerateHtmlChildrenAsync(Context context) {
+            return new Tag("div") {
+                    await children.Select(x=>x.GenerateInlineHtmlAsync(context)).SequentialOrParallel()
+                    //await Task.WhenAll(children.Select(x=>x.GenerateInlineHtmlAsync(context)))
+                };
+        }
+
+        /*public override async Task<Tag> GenerateHtmlAsync(Context context, string? id) {
             AddRequiredInclues(context.Includes);
             return new Tag("div", id) {
                 CreateScriptBefore(),
-                new Tag("div") {
-                    await children.Select(x=>x.GenerateInlineHtmlAsync(context)).SequentialOrParallel()
-                    //await Task.WhenAll(children.Select(x=>x.GenerateInlineHtmlAsync(context)))
-                },
+                ,
                 CreateScriptAfter()
             };
-        }
+        }*/
 
         async Task<Tag> IInline.GenerateInlineHtmlAsync(Context context) {
             return new Tag() {

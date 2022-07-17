@@ -12,7 +12,7 @@ function ColumnInitialization(element) {
 
         Width: () => Sum(element.ContentWidth, element.PaddingLeft, element.PaddingRight),
 
-
+        //PaddingLeft: () => element.Height,
 
         ContentHeight: undefined,
         Height: () => element.ContentHeight,
@@ -22,23 +22,9 @@ function ColumnInitialization(element) {
     }
 
 
-    Object.assign(element, {
-        stretchChildren: true
-    })
-
-    //element.stretchChildren = false
-
     
 }
 
-/*function Unknown() {
-    this.a = 5
-}
-Unknown.prototype.valueOf = function () {
-    return undefined;
-};
-
-window.unknown = Symbol("unknown")*/
 
 
 function ColumnBefore(element) {
@@ -66,6 +52,9 @@ function ColumnBefore(element) {
 
 function ColumnAfter(element) {
     BlockAfter(element)
+
+    
+    
 
     new Reaction(() => {
 
@@ -102,9 +91,10 @@ function ColumnAfter(element) {
 
         }
     })
-
+    
 
     new Reaction(() => {
+
 
         let previousMargin
         let freeSpaceUnits
@@ -123,7 +113,11 @@ function ColumnAfter(element) {
             }
 
             if (child.isBlock) {
-                if (!child.Height) return false
+                if (!child.Height) {
+
+                    return false
+
+                }
 
                 let margin = Max(child.MarginTop, previousMargin)
                 previousMargin = child.MarginBottom || 0
@@ -134,27 +128,58 @@ function ColumnAfter(element) {
                 contentHeight += child.Height
                 return true
             }
+
+            console.warn("Column: Unknown element type", child)
+            return true
         }
+
 
 
         previousMargin = element.PaddingTop || 0
         freeSpaceUnits = 0
         contentHeight = 0
+
+
         for (let i of element.LayoutChildren) {
             if (!addElement(i, false)) {
                 return
             }
         }
-        //Here "previousMargin" contains last-child.MarginBottom
-        contentHeight += previousMargin
 
+        //console.log("ColumnAfter Reaction", element, element.LayoutChildren)
+
+        //Here "previousMargin" contains last-child.MarginBottom
+        contentHeight += Max(previousMargin, element.PaddingBottom)
+        //console.log("Vertical layout", element, contentHeight)
 
         previousMargin = element.PaddingTop || 0
         element.ContentHeight = contentHeight;
         if (!element.Height)
             return
 
-        freeSpacePixels = element.Height - contentHeight
+        freeSpacePixels = element.Height - contentHeight;// Math.max( element.Height - contentHeight, 0)
+
+        if (freeSpacePixels < 0) {
+            element.style.overflowY = "scroll"
+            freeSpacePixels = 0
+            console.log(element.innerSizeHolder);
+            if (!element.innerSizeHolder) {
+                element.innerSizeHolder = document.createElement('holder')
+                element.innerSizeHolder.style.position = "absolute"
+                element.appendChild(element.innerSizeHolder)
+                element.innerSizeHolder.style.width = "1px"
+            }
+            element.innerSizeHolder.style.height = contentHeight+"px"
+        } else {
+            element.style.overflowY = ""
+            if (element.innerSizeHolder) {
+                element.removeChild(element.innerSizeHolder)
+                element.innerSizeHolder = undefined
+            }
+        }
+
+        //console.log("freeSpacePixels", freeSpacePixels)
+
         contentHeight = 0
 
         for (let i of element.LayoutChildren) {

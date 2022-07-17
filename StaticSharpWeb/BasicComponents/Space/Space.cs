@@ -20,6 +20,8 @@ public sealed class Space: Hierarchical<SpaceJs>, IBlock {
     public Binding<float> GrowBetween { set; private get; }
     public Binding<float> GrowAfter   { set; private get; }
     public Binding<float> MinBetween  { set; private get; }
+
+    public override string TagName => "ws";
     public Space([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
         : base(callerFilePath, callerLineNumber) { }
 
@@ -28,12 +30,17 @@ public sealed class Space: Hierarchical<SpaceJs>, IBlock {
         base.AddRequiredInclues(includes);
         includes.Require(new Script(ThisFilePathWithNewExtension("js")));
     }
-    public Task<Tag> GenerateHtmlAsync(Context context,string? id) {
+
+    public override Task<Tag?> GenerateHtmlChildrenAsync(Context context) {
+        return Task.FromResult<Tag>(null);
+    }
+
+    /*public Task<Tag> GenerateHtmlAsync(Context context,string? id) {
         AddRequiredInclues(context.Includes);
         return Task.FromResult(new Tag("ws",id) {
             CreateScriptBefore()
         });
-    }
+    }*/
 
 
 }

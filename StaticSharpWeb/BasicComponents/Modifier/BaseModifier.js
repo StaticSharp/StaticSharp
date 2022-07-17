@@ -12,6 +12,7 @@ function GetModifierHierarchyProperty(element, propertyName) {
 
 
 function GetModifier(element) {
+    //console.log("GetModifier", element)
     if (!element) return undefined
     if (element.isModifier) {
         return element;
@@ -19,20 +20,32 @@ function GetModifier(element) {
     return GetModifier(element.parentElement)
 }
 
+
+
+
 function BaseModifierInitialization(element) {
-    HierarchicalInitialization(element)
+    //console.log("element.Modifier",element.Modifier)
+    if (element.isModifier)
+        return
+    //HierarchicalInitialization(element)
     element.isModifier = true
 
     element.Reactive = {
-        FontSize: undefined,
-        BackgroundColor: undefined,
-        HierarchyFontSize: () => element.FontSize || element.Modifier.HierarchyFontSize
+        Modifier: element,
+        //FontSize: undefined,
+        //BackgroundColor: undefined,
+        ForegroundColor: () => {            
+            if (element.BackgroundColor == undefined)
+                return undefined
+            return element.BackgroundColor.contrastColor()
+        },
+        HierarchyFontSize: () => element.FontSize || element.ParentModifier.HierarchyFontSize
         
     }
 }
 
 function BaseModifierBefore(element) {
-    HierarchicalBefore(element)
+    //HierarchicalBefore(element)
     let parent = element.parentElement;
 
 
@@ -40,10 +53,23 @@ function BaseModifierBefore(element) {
         element.style.fontSize = ToCssSize(element.FontSize)
     })
 
+    new Reaction(() => {
+        if (element.BackgroundColor) {
+            element.style.backgroundColor = element.BackgroundColor// element.BackgroundColor.toString(16)
+        }
+    })
+
+    new Reaction(() => {
+        if (element.ForegroundColor) {
+            element.style.color = element.ForegroundColor// element.BackgroundColor.toString(16)
+        }
+    })
+
+
 }
 
 function BaseModifierAfter(element) {
-    HierarchicalAfter(element)
+    //HierarchicalAfter(element)
 
     
 }

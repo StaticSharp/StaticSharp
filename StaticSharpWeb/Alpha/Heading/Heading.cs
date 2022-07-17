@@ -8,27 +8,33 @@ using System.Xml.Linq;
 
 namespace StaticSharp.Alpha {
 
+
+
     public static partial class Static {
         public static IBlock H1(
             Paragraph paragraph,
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0
             ) {
-            return new Modifier(callerFilePath,callerLineNumber) {
-                FontStyle = new FontStyle(FontWeight.Bold),
-                Children = { 
-                    paragraph
+
+            return new Paragraph(paragraph, callerFilePath, callerLineNumber) {
+                Modifiers = {
+                    new Modifier(callerFilePath,callerLineNumber) {
+                        FontSize = 30,         
+                        FontStyle = new FontStyle(FontWeight.Bold),
+                    }
                 }
             };
+
         }
-        public static IBlock H1(string text,
+        /*public static IBlock H1(string text,
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0
             ) {
             var paragraph = new Paragraph(callerFilePath, callerLineNumber);
             paragraph.AppendLiteral(text, callerFilePath, callerLineNumber);
             return H1(paragraph);
-        }
+        }*/
 
     }
 

@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 
 namespace StaticSharp.Gears;
+
 public class LambdaScriptifier {
     public LambdaExpression LambdaExpression { get; }
     public ParameterExpression[] ParametersExpressions { get; }
@@ -38,7 +39,7 @@ public class LambdaScriptifier {
             }
 
             var value = compiled.DynamicInvoke(GetParametersValues());
-            return ObjectToString(value);
+            return Static.ObjectToJsValue(value);
         }
         catch (TargetInvocationException ex) {
             if (ex.InnerException != null && (ex.InnerException is NotEvaluatableException)) {
@@ -48,17 +49,7 @@ public class LambdaScriptifier {
         }
     }
 
-    private static string ObjectToString(object? value) { 
-        if (value==null)
-            return "null";
-        if (value is bool valueAsBool) { 
-            return valueAsBool.ToString().ToLower();
-        }
-        if (value is string valueAsString) {
-            return "\"" + valueAsString + "\"";
-        }
-        return value.ToString()??"";
-    }
+    
 
     private string StringifyMethodCall(MethodCallExpression expression) {
         var arguments = expression.Arguments.ToArray();

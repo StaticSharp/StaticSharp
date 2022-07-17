@@ -47,6 +47,27 @@ namespace StaticSharp {
                 includes.Require(new Script(ThisFilePathWithNewExtension("js")));
             }
 
+            public Context ModifyContext(Context context) {
+                if (FontFamilies != null) {
+                    context.FontFamilies = FontFamilies;
+                }
+                if (FontStyle != null) {
+                    context.FontStyle = FontStyle;
+                }
+                return context;
+            }
+
+            public void ModifyTag(Tag tag) {
+
+                if (FontFamilies != null) {
+                    tag.Style["font-family"] = string.Join(',', FontFamilies.Select(x => x.Name));
+                }
+                if (FontStyle != null) {
+                    tag.Style["font-weight"] = (int)FontStyle.Weight;
+                    tag.Style["font-style"] = FontStyle.CssFontStyle;
+                }
+            }
+
 
             protected async Task<Tag> GenerateHtmlWithChildrenAsync(Context context, string? id, Func<Context,IEnumerable<Task<Tag>?>> children, string tagName = "m") {
 

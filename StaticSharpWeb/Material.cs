@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace StaticSharpWeb {
@@ -21,7 +22,8 @@ namespace StaticSharpWeb {
         public Font Font { get; }
     }*/
 
-    public abstract class Material : IMaterial, IInline, IPage, IPlainTextProvider {
+    [ScriptBefore]
+    public abstract class Material : Hierarchical<HierarchicalJs>, IMaterial, IInline, IPage, IPlainTextProvider {
         //public class TChildren : List<object> { }
 
         //public virtual IImage TitleImage => null;
@@ -39,13 +41,23 @@ namespace StaticSharpWeb {
 
         //public virtual RightSideBar RightSideBar => null;
         public virtual IBlock? LeftSideBar => null;
-        public virtual Body Body => new Body() {
-            FontSize = 16,
-            FontFamilies = new[]{
-                new FontFamily("Roboto")
+
+        public override List<Modifier> Modifiers => new(){
+            new(){
+                FontSize = 16,
+                FontFamilies = new[]{
+                    new FontFamily("Roboto")
+                },
+                FontStyle = new FontStyle(FontWeight.Regular)
             },
-            FontStyle = new FontStyle(FontWeight.Regular),
         };
+
+        public override string TagName => "body";
+
+        public Material([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
+            : base(callerFilePath, callerLineNumber) {}
+
+
 
         //public virtual Font Font => new(Path.Combine(AbsolutePath(), "Fonts", "roboto"), FontWeight.Regular);
 
@@ -72,7 +84,7 @@ namespace StaticSharpWeb {
             var document = new Tag(null) {
                 new Tag("!doctype"){ ["html"] = ""},
                 head,
-                await GetBodyAsync(context)
+                await GenerateHtmlAsync(context)
             };
             head.Add(await context.Includes.GenerateScriptAsync());
             head.Add(await context.Includes.GenerateFontAsync());
@@ -80,20 +92,51 @@ namespace StaticSharpWeb {
             return document.GetHtml();
         }
 
+
+        public override void AddRequiredInclues(IIncludes includes) {
+            base.AddRequiredInclues(includes);
+            includes.Require(new Script(AbsolutePath("Material.js")));
+        }
+
+        
+        public override async Task<Tag?> GenerateHtmlChildrenAsync(Context context) {
+            return new Tag(null) {
+                await LeftSideBar?.GenerateHtmlAsync(context,"LeftSideBar"),
+
+                await new Column() {
+                    Content
+                }.GenerateHtmlAsync(context,"Content"),
+            };
+        }
+
         public virtual async Task<Tag> GetBodyAsync(Context context) {
+            //FIXME: same code in Block.cs
+
+            AddRequiredInclues(context.Includes);
+            foreach (var m in Modifiers) {
+                m.AddRequiredInclues(context.Includes);
+                context = m.ModifyContext(context);
+            }
 
 
-            /*var cacheableFont = Font.CreateOrGetCached();
-            context.Includes.Require(cacheableFont);
+            return new Tag("body") {
+                CreateScriptInitialization(),
+                Modifiers.Select(x=>x.CreateScriptInitialization()),
 
-            context.Font = Font;
-            context.FontSize = FontSize;
-            var font = cacheableFont.GenerateUsageCss(context);
+                CreateScriptBefore(),
+                Modifiers.Select(x=>x.CreateScriptBefore()),
 
-            context.Includes.Require(new Script(Bindings.BindingsJsPath));*/
+                
+
+                Modifiers.Select(x=>x.CreateScriptAfter()).Reverse(),
+                CreateScriptAfter()
+            };
 
 
-            context.Includes.Require(new Script(AbsolutePath("Material.js")));
+            /*var body = new Hierarchical {
+                Modifiers = Modifiers
+            };
+
 
             var bodyTag = await Body.GenerateHtmlWithChildrenAsync(context,(innerContext) => new Task<Tag>?[]{
                     Task.FromResult(new JSCall("Material", new { ContentWidth = ContentWidth }).Generate(innerContext)),
@@ -105,7 +148,7 @@ namespace StaticSharpWeb {
                         Content
                     }.GenerateHtmlAsync(innerContext,"Content")
                 }         
-            );
+            );*/
 
 
 
@@ -190,7 +233,7 @@ namespace StaticSharpWeb {
                 body.Add(item);
             }*/
 
-            return bodyTag;
+            
         }
 
         public async Task<Tag> GenerateInlineHtmlAsync(Context context) {

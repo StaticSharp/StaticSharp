@@ -1,3 +1,82 @@
+function Color() {
+    let args = [...arguments]
+    let _this = this
+
+    _this.r = 0
+    _this.g = 0
+    _this.b = 0
+    _this.a = 1
+
+    if (args.length == 0) {
+        return
+    }
+
+    if (args.length == 1) {
+
+        if (typeof args[0] == 'number') {
+            _this.r = (args[0] & 0xFF) / 255
+            _this.g = ((args[0] & 0xFF00) >>> 8) / 255
+            _this.b = ((args[0] & 0xFF0000) >>> 16) / 255
+            _this.a = ((args[0] & 0xFF000000) >>> 24) / 255
+            return;
+        } else {
+            console.warn("Color: Invalid arguments", arguments[0])
+            return;
+        }
+    }
+
+    if (args.some(x => (typeof x) != 'number')) {
+        console.warn("Color: Invalid arguments types", args)
+        return;
+    }
+
+    if ((args.length >= 3) & (args.length <= 4)) {
+        _this.r = args[0]
+        _this.g = args[1]
+        _this.b = args[2]
+
+        if (args.length == 4) {
+            _this.a = args[3]
+        }
+        return
+    }
+
+    console.warn("Color: Invalid arguments", args)
+
+}
+
+Color.prototype.toString = function () {
+    return `rgba(${Math.round(255 * this.r)},${Math.round(255 * this.g)},${Math.round(255 * this.b)},${this.a})`
+}
+
+Color.prototype.lerp = function (targetColor, amount) {
+    var bk = (1 - amount);
+    var a = this.a * bk + targetColor.a * amount;
+    var r = this.r * bk + targetColor.r * amount;
+    var g = this.g * bk + targetColor.g * amount;
+    var b = this.b * bk + targetColor.b * amount;
+    return new Color(r, g, b, a);
+}
+
+Color.prototype.contrastColor = function (contrast = 1) {
+    var grayscale = (0.2125 * this.r) + (0.7154 * this.g) + (0.0721 * this.b);
+    var blackOrWhite = (grayscale > 0.5) ? new Color(0, 0, 0, 1) : new Color(1, 1, 1, 1);
+    return this.lerp(blackOrWhite, contrast);
+}
+
+
+
+
+function intToColor(num) {
+    num >>>= 0;
+    var b = num & 0xFF,
+        g = (num & 0xFF00) >>> 8,
+        r = (num & 0xFF0000) >>> 16,
+        a = ((num & 0xFF000000) >>> 24) / 255;
+    return "rgba(" + [r, g, b, a].join(",") + ")";
+}
+
+
 
 function GetCookie(name) {
     let matches = document.cookie.match(new RegExp(
@@ -70,7 +149,7 @@ function DetectSwipe(element, action) {
 
 
 
-HTMLElement.prototype.css = function(object) {
+HTMLElement.prototype.css = function (object) {
     for (const [key, value] of Object.entries(object)) {
         this.style[key] = value;
     }
@@ -82,11 +161,11 @@ HTMLElement.prototype.css = function(object) {
     func.call(parent,parent)
 }*/
 function StaticSharpCall(func, parameters) {
-    
+
     let parent = document.currentScript.parentElement;
     parent.removeChild(document.currentScript);
 
-    func.call(parent,parent, parameters)
+    func.call(parent, parent, parameters)
     //func.call(parent, parent)
 }
 
@@ -108,7 +187,7 @@ function Watch() {
     function CheckRefresh() {
         let request = new XMLHttpRequest();
         request.open("POST", "/api/v1/refresh_required");
-        request.onload = function() {
+        request.onload = function () {
             if (request.status != 200) {
                 console.error(`Page refresh query error: ${request.status}: ${request.statusText}`);
                 setTimeout(CheckRefresh, refreshIntervalMs);
@@ -121,7 +200,7 @@ function Watch() {
                 }
             }
         };
-        request.onerror = function() {
+        request.onerror = function () {
             console.error("Page refresh query failed");
             setTimeout(CheckRefresh, refreshIntervalMs);
         };
@@ -135,9 +214,6 @@ function Watch() {
 
     setTimeout(CheckRefresh, refreshIntervalMs);
 }
-
-
-
 
 
 Watch()

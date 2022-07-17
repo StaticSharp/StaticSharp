@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-
+    //public class ScriptInitializationAttribute : Attribute { }
     public class ScriptBeforeAttribute : Attribute {}
     public class ScriptAfterAttribute : Attribute { }
 
@@ -20,8 +20,6 @@ namespace StaticSharp {
     
 
     namespace Gears {
-
-        
 
 
         public abstract class Reactive<Js> : CallerInfo where Js : ObjectJs, new() {
@@ -40,7 +38,7 @@ namespace StaticSharp {
                     var currentCulture = Thread.CurrentThread.CurrentCulture;
                     Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                     try {
-                        Script = value?.ToString();
+                        Script = Static.ObjectToJsValue(value);
                     }
                     finally {
                         Thread.CurrentThread.CurrentCulture = currentCulture;
@@ -89,11 +87,17 @@ namespace StaticSharp {
                 return FindScriptRoot<A>(type.BaseType);
             }
 
+            public Tag CreateScriptInitialization() {
+                var className = FindScriptRoot<ScriptBeforeAttribute>(GetType());
+                return new Tag("script") {
+                new PureHtmlNode($"ConstructorInitialization(\"{className}\",\'{PropertiesInitializationScript()}\')")
+            };
+            }
 
             public Tag CreateScriptBefore() {
                 var className = FindScriptRoot<ScriptBeforeAttribute>(GetType());
                 return new Tag("script") {
-                new PureHtmlNode($"ConstructorBefore(\"{className}\",\'{PropertiesInitializationScript()}\')")
+                new PureHtmlNode($"ConstructorBefore(\"{className}\")")
             };
             }
 
@@ -107,15 +111,16 @@ namespace StaticSharp {
 
             public IEnumerable<KeyValuePair<string,string>> GetBindings() {
                 foreach (var i in GetType().GetProperties()) {
-                    MethodInfo? getter = i.GetGetMethod(nonPublic: true);
+                    //MethodInfo? getter = i.GetGetMethod(nonPublic: true);
                     if (i.CanRead) {
-                        if (i.PropertyType.IsGenericType)
+                        if (i.PropertyType.IsGenericType) {
                             if (i.PropertyType.GetGenericTypeDefinition() == typeof(Binding<>)) {
                                 var value = i.GetValue(this)?.ToString();
                                 if (value != null) {
-                                    yield return new(i.Name,value);
-                                }                            
+                                    yield return new(i.Name, value);
+                                }
                             }
+                        }
                     }
                 }
             } 

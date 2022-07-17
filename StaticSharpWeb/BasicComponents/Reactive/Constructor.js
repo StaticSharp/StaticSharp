@@ -12,13 +12,20 @@ function _call(name, element) {
     func(element)
 }
 
-function ConstructorBefore(name, script) {
+function ConstructorInitialization(name, script) {
     var element = _deleteScript()
 
     _call(name + "Initialization", element)
 
-    //let script = "";//"element.X = () => element.LayoutX+10"
-    eval(script)
+    try {
+        eval(script)
+    } catch (e) {
+        console.error(script, "\n", e)
+    }
+}
+
+function ConstructorBefore(name) {
+    var element = _deleteScript()
     _call(name + "Before", element)
 }
 

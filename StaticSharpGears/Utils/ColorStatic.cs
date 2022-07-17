@@ -3,7 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Threading;
 
-namespace StaticSharpWeb {
+namespace StaticSharp {
     public static class ColorStatic {
         public static Color Lerp(this Color s, Color t, float k) {
             var bk = (1 - k);

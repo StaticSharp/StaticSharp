@@ -1,7 +1,25 @@
 
-function Material(element, parameters) {
+function MaterialInitialization(element) {
+    HierarchicalInitialization(element)
+
+    window.Reactive = {
+        FontsReady: false,
+        InnerWidth: window.innerWidth,
+        InnerHeight: window.innerHeight,
+    }
+
+    element.Reactive = {
+        ContentWidth: 400,
+        Content: () => element.Child("Content"),
+        LeftSideBar: () => element.Child("LeftSideBar"),
+        RightSideBar: () => element.Child("RightSideBar"),
+        Footer: undefined,
+    }
+}
 
 
+function MaterialBefore(element) {
+    HierarchicalBefore(element)
     /*element.Reactive =
     {
         A: () => {
@@ -51,11 +69,7 @@ function Material(element, parameters) {
 
     //PropertyTest()
 
-    window.Reactive = {
-        FontsReady: false,
-        InnerWidth: window.innerWidth,
-        InnerHeight: window.innerHeight,
-    }
+    
 
     window.onresize = function (event) {
         let d = Reaction.beginDeferred()
@@ -64,12 +78,7 @@ function Material(element, parameters) {
         d.end()
     }
 
-    element.Reactive = {
-        Content: () => element.Child("Content"),
-        LeftSideBar: () => element.Child("LeftSideBar"),
-        RightSideBar: () => element.Child("RightSideBar"),
-        Footer: undefined,
-    }
+
 
 
 
@@ -110,6 +119,8 @@ function Material(element, parameters) {
         let LeftBarSize = 0
         let RightBarSize = Max(element.RightSideBar?.Width, 0)
 
+        
+
         if (element.LeftSideBar) {
             element.LeftSideBar.style.position = "fixed"
             element.LeftSideBar.Height = window.InnerHeight
@@ -119,7 +130,7 @@ function Material(element, parameters) {
         
 
         let width = window.InnerWidth - LeftBarSize - RightBarSize
-        let innerWidth = Math.min(width, parameters.ContentWidth)
+        let innerWidth = Math.min(width, element.ContentWidth)
         let paddingLeft = (width - innerWidth) * 0.5
 
 

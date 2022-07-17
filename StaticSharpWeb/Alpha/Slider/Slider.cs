@@ -40,7 +40,15 @@ namespace StaticSharp {
         public Slider([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber) { }
 
-        public override async Task<Tag> GenerateHtmlAsync(Context context, string? id = null) {
+        public override Task<Tag> GenerateHtmlChildrenAsync(Context context) {
+            return Task.FromResult(
+                new Tag("input") {
+                    ["type"] = "range"
+                }
+                );
+        }
+
+        /*public override async Task<Tag> GenerateHtmlAsync(Context context, string? id = null) {
             AddRequiredInclues(context.Includes);
             return new Tag("div",id) {
                 CreateScriptBefore(),
@@ -50,7 +58,7 @@ namespace StaticSharp {
                 CreateScriptAfter()                
                 
             };
-        }
+        }*/
     }
 
 }

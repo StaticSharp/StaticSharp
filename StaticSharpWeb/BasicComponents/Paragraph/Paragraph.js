@@ -1,4 +1,5 @@
 
+
 function ParagraphInitialization(element) {
 
     BlockInitialization(element)
@@ -58,6 +59,7 @@ function ParagraphAfter(element) {
         content.style.fontSize = ""
         content.style.width = ""
 
+
         element.MaxContentWidth = () => element.Modifier.HierarchyFontSize / testFontSize * maxWidthRect.width
         element.MinContentWidth = () => element.Modifier.HierarchyFontSize / testFontSize * minWidthRect.width
         element.MaxContentHeight = () => element.Modifier.HierarchyFontSize / testFontSize * minWidthRect.height
@@ -67,6 +69,9 @@ function ParagraphAfter(element) {
 
 
     new Reaction(() => {
+        //console.log("element.Modifier", element, element.Modifier)
+        //console.log("element.Modifier.HierarchyFontSize", element, element.Modifier.HierarchyFontSize)
+
         let content = element.children[0]
 
         content.style.transformOrigin = ""

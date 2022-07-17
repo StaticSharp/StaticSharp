@@ -59,14 +59,29 @@ namespace StaticSharp {
         }*/
 
 
-        public override async Task<Tag> GenerateHtmlAsync(Context context, string? id) {
+        public override async Task<Tag?> GenerateHtmlChildrenAsync(Context context) {
+            return new Tag() {
+                await children.Select(x=> x.Value.GenerateHtmlAsync(context,x.Key)).SequentialOrParallel(),
+            };
+        }
+
+        /*public override async Task<Tag> GenerateHtmlAsync(Context context, string? id) {
             AddRequiredInclues(context.Includes);
+            foreach (var m in Modifiers) {
+                m.AddRequiredInclues(context.Includes);
+                context = m.ModifyContext(context);
+            }
+
             return new Tag("column", id) {
                 CreateScriptBefore(),
-                await children.Select(x=> x.Value.GenerateHtmlAsync(context,x.Key)).SequentialOrParallel(),
+                Modifiers.Select(x=>x.CreateScriptBefore()),
+
+                
+
+                Modifiers.Select(x=>x.CreateScriptAfter()).Reverse(),
                 CreateScriptAfter()
             } ;
-        }
+        }*/
     }
 
 }

@@ -37,8 +37,8 @@ function HierarchicalInitialization(element) {
         FirstChild: undefined,
         LastChild: undefined,
         NextSibling: undefined,
-
-        Modifier: GetModifier(element.parentElement),
+        ParentModifier: GetModifier(element.parentElement),
+        Modifier: () => element.ParentModifier,
     }
 
     element.Children = {}
