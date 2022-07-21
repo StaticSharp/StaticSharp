@@ -34,6 +34,9 @@ namespace StaticSharp {
     namespace Gears {
 
         public class BlockList : List<KeyValuePair<string?, IBlock>> {
+            public BlockList(): base() { }
+            public BlockList(BlockList other): base(other) {}
+
             public void Add(IBlock block, string? id) {
                 Add(new KeyValuePair<string?, IBlock>(id, block));
             }
@@ -43,9 +46,6 @@ namespace StaticSharp {
         [ScriptBefore]
         [ScriptAfter]
         public abstract class Block<Js> : Hierarchical<Js>, IBlock where Js : BlockJs, new() {
-
-
-
             public Binding<float> X { set; protected get; }
             public Binding<float> Y { set; protected get; }
             public Binding<float> Width { set; protected get; }
@@ -59,11 +59,24 @@ namespace StaticSharp {
             public Binding<float> PaddingTop { set; protected get; }
             public Binding<float> PaddingBottom { set; protected get; }
 
-            /*protected Block(Block<Js> other,
+            protected Block(Block<Js> other,
                 string callerFilePath = "",
-                int callerLineNumber = 0) { 
+                int callerLineNumber = 0): base(other, callerFilePath, callerLineNumber) {
+
+                X = other.X;
+                Y = other.Y;
+                Width = other.Width;
+                Height = other.Height;
+                MarginLeft = other.MarginLeft;
+                MarginRight = other.MarginRight;
+                MarginTop = other.MarginTop;
+                MarginBottom = other.MarginBottom;
+                PaddingLeft = other.PaddingLeft;
+                PaddingRight = other.PaddingRight;
+                PaddingTop = other.PaddingTop;
+                PaddingBottom = other.PaddingBottom; 
                 
-            }*/
+            }
             public Block(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
 
             public override void AddRequiredInclues(IIncludes includes) {

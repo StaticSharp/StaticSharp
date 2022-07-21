@@ -23,14 +23,7 @@ function SliderBefore(element) {
 function SliderAfter(element) {
     BlockAfter(element)
 
-    new Reaction(() => {
-        //element.title = element.Reactive.LayoutWidth.binding.dirty
-        //element.title = `element.LayoutWidth ${element.Parent.Width}->${element.LayoutWidth}`
-    })
-
-
     let input = element.children[0]
-
     input.value = element.Value
 
     input.oninput = function () {

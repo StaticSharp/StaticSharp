@@ -32,7 +32,9 @@ class Hash {
         var bytes = Encoding.Unicode.GetBytes(text);
         return new Hash(HashAlgorithm.ComputeHash(bytes));
     }
-
+    public static Hash CreateFromBytes(byte[] bytes) {
+        return new Hash(HashAlgorithm.ComputeHash(bytes));
+    }
 
     static string ByteToHexBitFiddle(byte[] bytes) { //TODO: place somewhere else (maybe)
         char[] chars = new char[bytes.Length * 2];

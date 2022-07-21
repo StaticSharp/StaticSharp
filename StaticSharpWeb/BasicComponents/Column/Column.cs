@@ -20,68 +20,43 @@ namespace StaticSharp {
 
     public abstract class Column<Js> : Block<Js>, IBlockCollector where Js : Symbolic.ColumnJs, new() {
 
+        protected BlockList children { get; } = new();
 
-        public Binding<float> ChildrenLayoutWidth { set; protected get; }
-
+        public Column(Column<Js> other, string callerFilePath, int callerLineNumber)
+            : base(other, callerFilePath, callerLineNumber) {
+            children = new(other.children);        
+        }
         public Column(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
 
-        protected BlockList children { get; } = new();
         public Column<Js> Children => this;
         public void Add(string? id, IBlock? value) {
             if (value != null) {
                 children.Add(value,id);
             }
         }
-
-
-        /*public void Add(Row value) {
-            if (value != null)
-                children.Add(value);
-        }*/
-
         public override void AddRequiredInclues(IIncludes includes) {
             base.AddRequiredInclues(includes);
             includes.Require(new Script(ThisFilePathWithNewExtension("js")));
         }
-
     }
 
     [ScriptBefore]
     [ScriptAfter]
     public sealed class Column : Column<Symbolic.ColumnJs> {
+        public Column(Column other, string callerFilePath, int callerLineNumber)
+            : base(other, callerFilePath, callerLineNumber) { }
         public Column([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber) { }
-
 
         //Пока невозможно использовать приведение из InterpolatedStringHandler из-за ошибок компилятора.
         /*public static implicit operator Column(WeekCollection weekCollection) {
             return new Column();
         }*/
 
-
-        public override async Task<Tag?> GenerateHtmlChildrenAsync(Context context) {
+        public override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
             return new Tag() {
                 await children.Select(x=> x.Value.GenerateHtmlAsync(context,x.Key)).SequentialOrParallel(),
             };
         }
-
-        /*public override async Task<Tag> GenerateHtmlAsync(Context context, string? id) {
-            AddRequiredInclues(context.Includes);
-            foreach (var m in Modifiers) {
-                m.AddRequiredInclues(context.Includes);
-                context = m.ModifyContext(context);
-            }
-
-            return new Tag("column", id) {
-                CreateScriptBefore(),
-                Modifiers.Select(x=>x.CreateScriptBefore()),
-
-                
-
-                Modifiers.Select(x=>x.CreateScriptAfter()).Reverse(),
-                CreateScriptAfter()
-            } ;
-        }*/
     }
-
 }

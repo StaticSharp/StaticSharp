@@ -1,15 +1,16 @@
 ﻿namespace StaticSharp.Gears;
 
 /*
+public record FileHashHead(HttpRequestMessage HttpRequestMessage) : Constructor<HttpRequest, CacheableHttpRequest> {
+    public HttpRequest(string uri) : this(new Uri(uri)) { }
+    public HttpRequest(Uri uri) : this(new HttpRequestMessage(HttpMethod.Get, uri) {
 
-
-public interface IMutableFile { 
-
+    }) { }
 }
 
-
-
 public class CacheableFile : Cacheable<CacheableFile.Constructor> {
+
+
 
     public record Constructor(Uri Uri) : Constructor<CacheableFile> {
         protected override CacheableFile Create() {
@@ -27,7 +28,5 @@ public class CacheableFile : Cacheable<CacheableFile.Constructor> {
         }
         throw new NotImplementedException();
     }
-}
-
-*/
+}*/
 

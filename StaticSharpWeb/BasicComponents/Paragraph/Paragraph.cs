@@ -18,7 +18,7 @@ namespace StaticSharp {
 
         public Paragraph(Paragraph other,
             [CallerFilePath] string callerFilePath = "",
-            [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
+            [CallerLineNumber] int callerLineNumber = 0) : base(other, callerFilePath, callerLineNumber) {
 
             children = new(other.children);
         }
@@ -70,7 +70,7 @@ namespace StaticSharp {
             includes.Require(new Script(ThisFilePathWithNewExtension("js")));
         }
 
-        public override async Task<Tag?> GenerateHtmlChildrenAsync(Context context) {
+        public override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
             return new Tag("div") {
                     await children.Select(x=>x.GenerateInlineHtmlAsync(context)).SequentialOrParallel()
                     //await Task.WhenAll(children.Select(x=>x.GenerateInlineHtmlAsync(context)))

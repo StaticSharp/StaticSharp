@@ -38,15 +38,15 @@ namespace StaticSharp.Gears {
         }
         public string Update(string styleList) {
             CompilationResult result = new();
-            try {
+            //try {
                 var options = new CompilationOptions { SourceMap = true };
                 options.OutputStyle = OutputStyle.Compact;
                 options.SourceMapFileUrls = true;
                 SassCompiler.FileManager = this;
                 result = SassCompiler.Compile(styleList, options);
-            } catch {
-
-            }
+            /*} catch {
+                
+            }*/
             return result.CompiledContent;
         }
     }

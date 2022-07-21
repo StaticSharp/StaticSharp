@@ -96,33 +96,13 @@ namespace StaticSharpDemo {
 
         static Server() { }
 
-
-        public static IEnumerable<string> GetLocalIPAddresses() { //todo: move to urils
-            var interfaces = NetworkInterface.GetAllNetworkInterfaces()
-                .Where(x => x.OperationalStatus == OperationalStatus.Up)
-                .Where(x => x.NetworkInterfaceType == NetworkInterfaceType.Wireless80211
-                        || x.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
-                .Where(x => {
-                    var properties = x.GetIPProperties();
-                    if (properties == null) return false;
-                    return properties.GatewayAddresses.Any();
-                    });
-
-            foreach (var i in interfaces) {
-                var unicastAddresses = i.GetIPProperties().UnicastAddresses;
-                var address = unicastAddresses.Where(x => x.Address.AddressFamily == AddressFamily.InterNetwork).FirstOrDefault();
-                if (address != null) {
-                    yield return address.Address.ToString();
-                }
-            }
-        }
-
         public override IEnumerable<Uri> Urls {
             get
             {
                 //new Uri[] {
                 yield return new("http://localhost/");
                 foreach (var i in GetLocalIPAddresses()) {
+                    Console.WriteLine($"http://{i}");
                     yield return new($"http://{i}");
                 }
                 //yield return new(GetLocalIPAddress());
@@ -219,7 +199,7 @@ namespace StaticSharpDemo {
             //        @"D:\staticsharp.github.io"
             //);
             //await generator.GenerateAsync();
-            StaticSharp.Gears.Assets.Directory = AbsolutePath(".assets");
+
             StaticSharp.Gears.Cache.Directory = AbsolutePath(".cache");
 
             await new Server().RunAsync();

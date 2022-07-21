@@ -78,13 +78,6 @@ namespace StaticSharp {
                 return result;
             }
 
-
-
-
-
-
-            
-
             public FontFamilyMember FindMember(FontStyle fontStyle) {
 
                 var weights = members[fontStyle.Italic ? 1 : 0];

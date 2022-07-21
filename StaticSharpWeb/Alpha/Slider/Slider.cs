@@ -16,12 +16,11 @@ namespace StaticSharp {
 
 
     public abstract class Slider<Js> : Block<Js> where Js : SliderJs, new() {
-        public Slider(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
 
-        /*public void Add(Row value) {
-            if (value != null)
-                children.Add(value);
-        }*/
+        public Slider(Slider<Js> other, string callerFilePath, int callerLineNumber)
+            : base(other, callerFilePath, callerLineNumber) { }
+
+        public Slider(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
 
         public override void AddRequiredInclues(IIncludes includes) {
             base.AddRequiredInclues(includes);
@@ -37,28 +36,28 @@ namespace StaticSharp {
         public Binding<float> Step  { set; private get; }
         public Binding<float> Value { set; private get; }
 
+        public Slider(Slider other, string callerFilePath, int callerLineNumber)
+            : base(other, callerFilePath, callerLineNumber) {
+
+            Min = other.Min;
+            Max = other.Max;
+            Step = other.Step;
+            Value = other.Value;
+        }
         public Slider([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber) { }
 
-        public override Task<Tag> GenerateHtmlChildrenAsync(Context context) {
+        public override string TagName => "slider";
+
+        public override Task<Tag> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
+
+            context.Includes.Require(new Style(AbsolutePath("Slider.scss")));
+
             return Task.FromResult(
                 new Tag("input") {
                     ["type"] = "range"
                 }
                 );
         }
-
-        /*public override async Task<Tag> GenerateHtmlAsync(Context context, string? id = null) {
-            AddRequiredInclues(context.Includes);
-            return new Tag("div",id) {
-                CreateScriptBefore(),
-                new Tag("input"){ 
-                    ["type"] = "range"
-                },
-                CreateScriptAfter()                
-                
-            };
-        }*/
     }
-
 }

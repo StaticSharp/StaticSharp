@@ -59,11 +59,12 @@ namespace StaticSharp {
                 }
             }
 
-            
 
-            //public delegate T Binding<out T>(Js element);
+            /*protected Reactive(Reactive<Js> other,
+                string callerFilePath = "",
+                int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
+            }*/
 
-            //public Dictionary<string, Binding<SymbolJs>> Properties { get; private set; } = new();
             public Reactive(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
 
             //public abstract Task<Tag> GenerateHtmlAsync(Context context);

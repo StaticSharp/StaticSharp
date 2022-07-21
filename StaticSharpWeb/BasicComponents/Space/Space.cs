@@ -31,7 +31,7 @@ public sealed class Space: Hierarchical<SpaceJs>, IBlock {
         includes.Require(new Script(ThisFilePathWithNewExtension("js")));
     }
 
-    public override Task<Tag?> GenerateHtmlChildrenAsync(Context context) {
+    public override Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
         return Task.FromResult<Tag>(null);
     }
 

@@ -113,19 +113,26 @@ function ColumnAfter(element) {
             }
 
             if (child.isBlock) {
-                if (!child.Height) {
-
+                /*if (!child.Height) {
+                    console.log("Column !child.Height", child)
                     return false
 
-                }
+                }*/
+
+                //console.log("child.Height", Max(child.Height, 0), child)
+
 
                 let margin = Max(child.MarginTop, previousMargin)
                 previousMargin = child.MarginBottom || 0
+
+
                 contentHeight += margin
                 if (assignDimensions) {
                     child.LayoutY = contentHeight
                 }
-                contentHeight += child.Height
+                contentHeight += Max(child.Height, 0)
+
+
                 return true
             }
 

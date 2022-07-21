@@ -28,6 +28,13 @@ namespace StaticSharp {
             public virtual string TagName => "div";
             public virtual List<Modifier> Modifiers { get; } = new();
 
+            protected Hierarchical(Hierarchical<Js> other,
+                string callerFilePath = "",
+                int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
+
+                Modifiers = new(other.Modifiers);
+            }
+
             public Hierarchical(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
 
             public override void AddRequiredInclues(IIncludes includes) {
@@ -35,7 +42,7 @@ namespace StaticSharp {
                 includes.Require(new Script(AbsolutePath("Hierarchical.js")));
             }
 
-            public virtual Task<Tag?> GenerateHtmlChildrenAsync(Context context) {
+            public virtual Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
                 throw new System.NotImplementedException($"{GetType().FullName} overrides nither GenerateHtmlChildrenAsync nor GenerateHtmlAsync");
             }
 
@@ -46,18 +53,20 @@ namespace StaticSharp {
                     context = m.ModifyContext(context);
                 }
 
-                var tag = new Tag(TagName, id) {
-                    CreateScriptInitialization(),
-                    Modifiers.Select(x=>x.CreateScriptInitialization()),
+                var tag = new Tag(TagName, id);
 
-                    CreateScriptBefore(),
-                    Modifiers.Select(x=>x.CreateScriptBefore()),
 
-                    await GenerateHtmlChildrenAsync(context),
 
-                    Modifiers.Select(x=>x.CreateScriptAfter()).Reverse(),
-                    CreateScriptAfter()
-                };
+                tag.Add(CreateScriptInitialization());
+                tag.Add(Modifiers.Select(x=>x.CreateScriptInitialization()));
+                tag.Add(CreateScriptBefore());
+                tag.Add(Modifiers.Select(x=>x.CreateScriptBefore()));
+
+                tag.Add(await GenerateHtmlInternalAsync(context, tag));
+
+                tag.Add(Modifiers.Select(x=>x.CreateScriptAfter()).Reverse());
+                tag.Add(CreateScriptAfter());
+
 
                 foreach (var m in Modifiers) { 
                     m.ModifyTag(tag);

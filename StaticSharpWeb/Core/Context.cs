@@ -8,7 +8,6 @@ namespace StaticSharp.Gears {
 
 
     public struct Context { 
-        //public Assets Storage { get; init; }
 
         public INodeToUrl NodeToUrlConverter { get; init; }
         public Uri? NodeToUrl(INode node) { 
@@ -16,89 +15,23 @@ namespace StaticSharp.Gears {
         }
         public Uri BaseUrl { get; init; }
 
+        public Uri BaseAssetsUrl => new Uri(BaseUrl, "Assets/");
+
         public IIncludes Includes { get; init; }
+
+        public Assets Assets { get; init; }
 
 
         public FontFamily[] FontFamilies { get; set; } = null!;
-        /*public FontFamily FontFamily {
-            get { return fontFamily; }
-            set {
-                if (fontFamily != value) {
-                    fontFamily = value;
-                    Font = new Font(fontFamily, fontStyle);
-                    //cacheableFontFamily = null;
-                }
-            }
-        }*/
-
         public FontStyle FontStyle { get; set; } = new();
 
-
-
-
-        /*private FontStyle fontStyle = new();
-        public FontStyle FontStyle {
-            get { return fontStyle; }
-            set {
-                if (value == null) {
-                    value = new();
-                }
-                if (fontStyle != value) {
-                    fontStyle = value;
-                    if (fontFamily != null) {
-                        Font = new Font(fontFamily, fontStyle);
-                    } else {
-                        Font = null;
-                    }                    
-                }
-            }
+        public Uri AddAsset(IAsset asset) {
+            Assets.Add(asset);
+            return new Uri(BaseAssetsUrl, asset.FilePath);
         }
 
-        private Font? font = null;
-        public Font? Font {
-            get { return font; }
-            private set {
-                if (font != value) {
-                    font = value;
-                    cacheableFont = null;
-                    //textMeasurer = null;
-                }
-            }
-        }
-
-        private CacheableFont? cacheableFont = null;
-        public async ValueTask<CacheableFont> GetCacheableFont() {
-            if (cacheableFont == null) {
-                if (font == null) {
-                    throw new InvalidOperationException("FontFamily is not set.");
-                }
-                cacheableFont = await font.CreateOrGetCached();
-            }
-            return cacheableFont;
-        }*/
-
-        /*public ITextMeasurer? textMeasurer = null;
-        public async ValueTask<ITextMeasurer> GetTextMeasurer() {
-            if (textMeasurer == null) {
-                textMeasurer = (await GetCacheableFont()).CreateTextMeasurer(fontSize);
-            }
-            return textMeasurer;
-        }*/
-
-
-        //public CacheableFont Font = null!;
-        /*public float fontSize = 16;
-        public float FontSize {
-            get { return fontSize; }
-            set {
-                if (fontSize != value) {
-                    fontSize = value;
-                    textMeasurer = null;
-                }
-            }
-        }*/
-
-        public Context(Uri baseUrl, INodeToUrl nodeToUrlConverter) {
+        public Context(Assets assets, Uri baseUrl, INodeToUrl nodeToUrlConverter) {
+            Assets = assets;
             //Urls = urls;
             BaseUrl = baseUrl;
             Includes = new Includes();

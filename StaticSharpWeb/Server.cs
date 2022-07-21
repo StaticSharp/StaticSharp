@@ -7,12 +7,13 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-
 using StaticSharpEngine;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
@@ -31,6 +32,7 @@ namespace StaticSharp {
         public abstract string BaseDirectory { get; }
         public abstract string TempDirectory { get; }
 
+        public Gears.Assets Assets = new Gears.Assets();
         public virtual Gears.IPage Get404(HttpRequest request) {
             return null;
         }
@@ -39,9 +41,30 @@ namespace StaticSharp {
 
         private Gears.Context CreateContext(HttpRequest request) {
             var baseUrl = new Uri($"{request.Scheme}://{request.Host}") ;
-            var context = new Gears.Context(baseUrl, this);
+            var context = new Gears.Context(Assets, baseUrl, this);
             return context;
         }
+
+        public static IEnumerable<string> GetLocalIPAddresses() { //todo: move to urils
+            var interfaces = NetworkInterface.GetAllNetworkInterfaces()
+                .Where(x => x.OperationalStatus == OperationalStatus.Up)
+                .Where(x => x.NetworkInterfaceType == NetworkInterfaceType.Wireless80211
+                        || x.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
+                .Where(x => {
+                    var properties = x.GetIPProperties();
+                    if (properties == null) return false;
+                    return properties.GatewayAddresses.Any();
+                });
+
+            foreach (var i in interfaces) {
+                var unicastAddresses = i.GetIPProperties().UnicastAddresses;
+                var address = unicastAddresses.Where(x => x.Address.AddressFamily == AddressFamily.InterNetwork).FirstOrDefault();
+                if (address != null) {
+                    yield return address.Address.ToString();
+                }
+            }
+        }
+
 
         private async Task<string> GenerateErrorPageAsync(Gears.Context context, Exception e) {
             return await new Gears.ErrorPage(e).GeneratePageHtmlAsync(context);
@@ -72,13 +95,36 @@ namespace StaticSharp {
             }
         }
 
-        protected virtual async Task HandleFileRequestAsync(HttpRequest request, HttpResponse response, RouteData routeData) {
+        protected virtual async Task HandleAssetsRequestAsync(HttpRequest request, HttpResponse response, RouteData routeData) {
+            
             try {
-                var storage = Gears.Assets.Directory;
+
+                var filePath = routeData.Values.FirstOrDefault().Value?.ToString();
+                if (string.IsNullOrEmpty(filePath))
+                    return;
+
+                var asset = Assets.GetByFilePath(filePath);
+                if (asset == null)
+                    return;
+
+                response.Headers.ContentType = asset.MediaType;
+                //response.Headers.Add("content-disposition", $"attachment; filename=test");
+
+                //await response.StartAsync();
+
+                await asset.CreateReadStream().CopyToAsync(response.Body);
+
+                //await response.CompleteAsync();
+
+                    /*response.AddHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
+                context.Response.ContentType = "application/octet-stream";
+                context.Response.ClearContent();
+                file.CopyTo(context.Response.OutputStream);*/
+                /*var storage = Gears.Assets.Directory;
                 var curentDirectory = Environment.CurrentDirectory;
                 var path = storage.TrimEnd('\\') + request.Path.Value.Replace("/", @"\");//Path.Combine(storage, request.Path.Value.Replace("/", @"\"));
                 //var file = await File.ReadAllBytesAsync(path);
-                await response.SendFileAsync(path);
+                await response.SendFileAsync(path);*/
             } catch {
             }
         }
@@ -89,8 +135,7 @@ namespace StaticSharp {
             } else if (request.Path == "/") {
                 await HandleHtmlRequestAsync(request, response, routeData);
             } else {
-                //File
-                await HandleFileRequestAsync(request, response, routeData);
+                //await HandleFileRequestAsync(request, response, routeData);
             }
         }
 
@@ -101,6 +146,7 @@ namespace StaticSharp {
         }
 
         protected virtual async Task HandleRefreshPageAsync(HttpRequest request, HttpResponse responce, RouteData routeData) {
+            //TODO: try catch
             var result = await ParseJsonRequest(request);
             var page = FindPage(result["location"]?.ToString());
             if (page == null) { return; }
@@ -141,6 +187,7 @@ namespace StaticSharp {
                 .UseRouter(r => r
                     .MapPost("/api/v1/visual_studio", FindVisualStudio)
                     .MapPost("/api/v1/refresh_required", HandleRefreshPageAsync)
+                    .MapGet("/Assets/{**catchAll}", HandleAssetsRequestAsync)
                     .MapGet("/{**catchAll}", HandleAnyRequestAsync)
                     //.MapGet("/error", HandleErrorAsync)
                     )

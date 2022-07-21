@@ -99,7 +99,7 @@ namespace StaticSharpWeb {
         }
 
         
-        public override async Task<Tag?> GenerateHtmlChildrenAsync(Context context) {
+        public override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
             return new Tag(null) {
                 await LeftSideBar?.GenerateHtmlAsync(context,"LeftSideBar"),
 
