@@ -169,7 +169,6 @@ function ColumnAfter(element) {
         if (freeSpacePixels < 0) {
             element.style.overflowY = "scroll"
             freeSpacePixels = 0
-            console.log(element.innerSizeHolder);
             if (!element.innerSizeHolder) {
                 element.innerSizeHolder = document.createElement('holder')
                 element.innerSizeHolder.style.position = "absolute"

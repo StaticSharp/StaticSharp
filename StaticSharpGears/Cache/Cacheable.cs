@@ -80,11 +80,13 @@ public abstract class Cacheable<Constructor, Data> : Cacheable<Constructor>
     };
     private static readonly string CachedDataJsonFileName = "data.json";
 
-    protected string CachedDataJsonFilePath { get; private set; }
+    protected string CachedDataJsonFilePath { get; private set; } = null!;
 
-    protected string KeyHash { get; private set; }
+    protected string KeyHash { get; private set; } = null!;
 
-    protected string CacheSubDirectory { get; private set; }
+    protected string CacheSubDirectory { get; private set; } = null!;
+
+    protected string ContentFilePath => Path.Combine(CacheSubDirectory, "content");
 
     protected virtual Data CachedData { get; set; } = null!;
 

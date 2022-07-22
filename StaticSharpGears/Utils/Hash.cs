@@ -3,7 +3,7 @@ using System.Text;
 
 namespace StaticSharp.Gears;
 
-class Hash {
+public class Hash {
 
     private static HashAlgorithm HashAlgorithm = MD5.Create();
 
@@ -34,6 +34,13 @@ class Hash {
     }
     public static Hash CreateFromBytes(byte[] bytes) {
         return new Hash(HashAlgorithm.ComputeHash(bytes));
+    }
+    public static Hash CreateFromStream(Stream stream) {
+        //var position = stream.Position;
+        stream.Seek(0, SeekOrigin.Begin);
+        var result = new Hash(HashAlgorithm.ComputeHash(stream));
+        //stream.Position = position;
+        return result;
     }
 
     static string ByteToHexBitFiddle(byte[] bytes) { //TODO: place somewhere else (maybe)

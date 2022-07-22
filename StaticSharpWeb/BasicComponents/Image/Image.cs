@@ -60,8 +60,8 @@ namespace StaticSharp {
 
         public override string TagName => "div";
         public override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
-            var asset = await assetPromise.GetAsync();
-            var url = context.AddAsset(asset);
+            //var asset = await assetPromise.GetAsync();
+            
 
             /*Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
@@ -81,14 +81,19 @@ namespace StaticSharp {
             Console.WriteLine(stopWatch.ElapsedMilliseconds);
             Console.WriteLine(s);*/
 
-            var image = new MagickImage(asset.CreateReadStream());
+
+            var jpeg = await (new JpegPromise(assetPromise)).GetAsync();
+            var url = context.AddAsset(jpeg);
+
+            /*var image = new MagickImage(asset.CreateReadStream());
 
             var imageInfo = new MagickImageInfo(asset.CreateReadStream());
-            image.InterpolativeResize(512, 512, PixelInterpolateMethod.Average16);
-            image.InterpolativeResize(128, 128, PixelInterpolateMethod.Average16);
-            image.InterpolativeResize(32, 32, PixelInterpolateMethod.Average16);
+            //image.InterpolativeResize(512, 512, PixelInterpolateMethod.Average16);
+            //image.InterpolativeResize(128, 128, PixelInterpolateMethod.Average16);
+            //image.InterpolativeResize(32, 32, PixelInterpolateMethod.Average16);
             //image.InterpolativeResize(16, 16, PixelInterpolateMethod.Average16);
-
+            
+            image.Interlace = Interlace.Plane;
             image.Format = MagickFormat.Jpeg;
             image.Quality = 90;
             image.Strip();
@@ -97,16 +102,16 @@ namespace StaticSharp {
                 image.Write(memoryStream);
                 Console.WriteLine(memoryStream.Length);
                 base64Thumbnail = Convert.ToBase64String(memoryStream.ToArray());
-            }
+            }*/
 
 
-
+            var imageInfo = new MagickImageInfo(jpeg.CreateReadStream());
             elementTag["data-width"] = imageInfo.Width;
             elementTag["data-height"] = imageInfo.Height;
 
             return new Tag("img") {
 
-                ["src"] = $"data:image/jpg;base64,{base64Thumbnail}"
+                ["src"] = url,// $"data:image/jpg;base64,{base64Thumbnail}"
             };
         }
     }
