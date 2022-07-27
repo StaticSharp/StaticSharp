@@ -46,31 +46,47 @@ namespace StaticSharp {
                 throw new System.NotImplementedException($"{GetType().FullName} overrides nither GenerateHtmlChildrenAsync nor GenerateHtmlAsync");
             }
 
-            public virtual async Task<Tag> GenerateHtmlAsync(Context context, string? id = null) {
-                AddRequiredInclues(context.Includes);
+            public virtual void ModifyContext(ref Context context) {
                 foreach (var m in Modifiers) {
                     m.AddRequiredInclues(context.Includes);
                     context = m.ModifyContext(context);
                 }
+            }
 
-                var tag = new Tag(TagName, id);
-
-
-
-                tag.Add(CreateScriptInitialization());
-                tag.Add(Modifiers.Select(x=>x.CreateScriptInitialization()));
-                tag.Add(CreateScriptBefore());
-                tag.Add(Modifiers.Select(x=>x.CreateScriptBefore()));
-
-                tag.Add(await GenerateHtmlInternalAsync(context, tag));
-
-                tag.Add(Modifiers.Select(x=>x.CreateScriptAfter()).Reverse());
-                tag.Add(CreateScriptAfter());
-
-
-                foreach (var m in Modifiers) { 
+            public virtual void ModifyTag(Tag tag) {
+                foreach (var m in Modifiers) {
                     m.ModifyTag(tag);
                 }
+            }
+
+            public virtual IEnumerable<Tag> Before() {
+                yield return CreateScriptInitialization();
+                foreach (var m in Modifiers)
+                    yield return m.CreateScriptInitialization();
+                yield return CreateScriptBefore();
+                foreach (var m in Modifiers)
+                    yield return m.CreateScriptBefore();
+            }
+
+            public virtual IEnumerable<Tag> After() {
+                for (int i = Modifiers.Count-1; i >= 0; i--) {
+                    yield return Modifiers[i].CreateScriptAfter();
+                }
+                yield return CreateScriptAfter();
+            }
+
+
+            public virtual async Task<Tag> GenerateHtmlAsync(Context context, string? id = null) {
+                
+                AddRequiredInclues(context.Includes);
+                ModifyContext(ref context);
+
+                var tag = new Tag(TagName, id) {};
+
+                ModifyTag(tag);
+                tag.Add(Before());
+                tag.Add(await GenerateHtmlInternalAsync(context, tag));
+                tag.Add(After());
 
                 return tag;
             }

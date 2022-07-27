@@ -9,20 +9,12 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
 
-    //Instead of inheritance from CacheableHttpRequest, it is better to use aggregation
-
-
-
-    public record JpegPromise(IPromise<IAsset> Source) : Constructor<JpegPromise, JpegAsset>, IPromise<IAsset> {
-        public async Task<IAsset> GetAsync() {
-            return await CreateOrGetCached();
-        }
-    }
+    public record JpegGenome(IGenome<IAsset> Source) : AssetGenome<JpegGenome, JpegAsset> {}
 
 
     namespace Gears {
 
-        public class JpegAsset : Cacheable<JpegPromise, JpegAsset.Data>, IAsset {
+        public class JpegAsset : Cacheable<JpegGenome, JpegAsset.Data>, IAsset {
 
             public class Data {
                 public string ContentHash = null!;
@@ -30,9 +22,7 @@ namespace StaticSharp {
             };
 
             public string? CharSet => null;
-            public string MediaType => "image/jpeg";
-
-            
+            public string MediaType => "image/jpeg";           
 
             public string ContentHash => CachedData.ContentHash;
 
@@ -54,7 +44,7 @@ namespace StaticSharp {
                 if (!LoadData() || !VerifyCachedData()) {
                     CachedData = new();
 
-                    var source = await Arguments.Source.GetAsync();
+                    var source = await Genome.Source.CreateOrGetCached();
 
                     CachedData.SourceHash = source.ContentHash;
 
@@ -84,9 +74,6 @@ namespace StaticSharp {
                             fileStream.Close();
                         }
                     }
-
-                    
-
 
                     StoreData();
                 }

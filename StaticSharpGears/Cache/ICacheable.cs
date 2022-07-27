@@ -1,8 +1,8 @@
 ﻿namespace StaticSharp.Gears;
 
-public interface ICacheable<in TArguments> {
+public interface ICacheable<in TGenome> {
 
-    void SetArguments(TArguments arguments);
+    void SetGenome(TGenome genome);
     Task CreateAsync();
     //Task Job { get; }
 }

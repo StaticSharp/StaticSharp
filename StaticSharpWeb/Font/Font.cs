@@ -56,7 +56,7 @@ namespace StaticSharp {
     public record Font(
             FontFamily FontFamily,
             FontStyle FontStyle
-            ) : Gears.Constructor {
+            ) : Gears.Genome {
 
 
 
@@ -201,13 +201,13 @@ namespace StaticSharp {
             var sortedUsedChars = usedChars.OrderBy(c => c);
             var text = string.Concat(sortedUsedChars);
 
-            var subfontCssUrl = GoogleFonts.MakeCssUrl(fontFamily.Arguments.Name, Arguments.FontStyle, text);
-            var subFontCssRequest = await new HttpRequest(GoogleFonts.MakeWoff2Request(subfontCssUrl)).CreateOrGetCached();
+            var subfontCssUrl = GoogleFonts.MakeCssUrl(fontFamily.Genome.Name, Arguments.FontStyle, text);
+            var subFontCssRequest = await new HttpRequestGenome(GoogleFonts.MakeWoff2Request(subfontCssUrl)).CreateOrGetCached();
 
             var fontInfos = GoogleFonts.ParseCss(subFontCssRequest.ContentText);
             //TODO validation
             var fontInfo = fontInfos.First();
-            var subFontRequest = await new HttpRequest(fontInfo.Url).CreateOrGetCached();
+            var subFontRequest = await new HttpRequestGenome(fontInfo.Url).CreateOrGetCached();
 
             var content = subFontRequest.Content;
 

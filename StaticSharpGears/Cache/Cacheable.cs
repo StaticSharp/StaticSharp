@@ -2,23 +2,23 @@
 using System.Reflection;
 namespace StaticSharp.Gears;
 
-public abstract class Cacheable<Constructor> : ICacheable<Constructor>, IKeyProvider
-    where Constructor : class, IKeyProvider {
-    public Constructor Arguments { get; private set; } = null!;
+public abstract class Cacheable<TGenome> : ICacheable<TGenome>, IKeyProvider
+    where TGenome : class, IKeyProvider {
+    public TGenome Genome { get; private set; } = null!;
     public string Key { get; private set; } = null!;
     //public Task Job { get; protected set; } = null!;
 
     //public virtual IEnumerable<SecondaryTask>
 
-    protected virtual void SetArguments(Constructor arguments) {
-        Arguments = arguments;
-        Key = Arguments.Key;
+    protected virtual void SetGenome(TGenome genome) {
+        Genome = genome;
+        Key = Genome.Key;
     }
-    void ICacheable<Constructor>.SetArguments(Constructor arguments) => SetArguments(arguments);
+    void ICacheable<TGenome>.SetGenome(TGenome genome) => SetGenome(genome);
 
 
     protected abstract Task CreateAsync();
-    Task ICacheable<Constructor>.CreateAsync() => CreateAsync();
+    Task ICacheable<TGenome>.CreateAsync() => CreateAsync();
 
     
 
@@ -94,8 +94,8 @@ public abstract class Cacheable<Constructor, Data> : Cacheable<Constructor>
         return base.CreateJob();
     }*/
 
-    protected override void SetArguments(Constructor arguments) {
-        base.SetArguments(arguments);
+    protected override void SetGenome(Constructor arguments) {
+        base.SetGenome(arguments);
         KeyHash = Hash.CreateFromString(Key).ToString();
         CacheSubDirectory = Path.Combine(Cache.Directory, KeyHash);
         CachedDataJsonFilePath = Path.Combine(CacheSubDirectory, CachedDataJsonFileName);

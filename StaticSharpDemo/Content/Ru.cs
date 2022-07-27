@@ -29,7 +29,7 @@ namespace StaticSharpDemo.Root {
 
         public override Group? Content => new() {
 
-            new Image(new HttpRequest("https://upload.wikimedia.org/wikipedia/commons/4/49/Koala_climbing_tree.jpg")),
+            new Image(new HttpRequestGenome("https://upload.wikimedia.org/wikipedia/commons/4/49/Koala_climbing_tree.jpg")),
 
             H1($"H1"),
             "Abc",

@@ -9,7 +9,7 @@ namespace StaticSharp {
     public record FontFamily(
             string Name
 
-            ) : Gears.Constructor<FontFamily,Gears.CacheableFontFamily> {
+            ) : Gears.Genome<FontFamily,Gears.CacheableFontFamily> {
 
         private static string FamilyFromDirectory(string directory) {
             var family = Path.GetFileName(directory);
@@ -103,16 +103,16 @@ namespace StaticSharp {
                 var family = Path.GetFileName(uri.AbsolutePath);
                 return char.ToUpper(family[0]) + family[1..];
             }*/
-            protected override void SetArguments(FontFamily arguments) {
-                base.SetArguments(arguments);
+            protected override void SetGenome(FontFamily arguments) {
+                base.SetGenome(arguments);
                 //Name = FamilyFromDirectory(Arguments.Directory);
             }
 
 
             protected override async Task CreateAsync() {
 
-                var fullCssUrl = GoogleFonts.MakeCssUrl(Arguments.Name);
-                var fullCssRequest = await new HttpRequest(
+                var fullCssUrl = GoogleFonts.MakeCssUrl(Genome.Name);
+                var fullCssRequest = await new HttpRequestGenome(
                     GoogleFonts.MakeWoff2Request(fullCssUrl)
                     ) {
 

@@ -4,6 +4,7 @@ using StaticSharp.Html;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -20,15 +21,15 @@ namespace StaticSharp {
 
     public abstract class Image<Js> : Block<Js> where Js : Symbolic.ImageJs, new() {
 
-        protected IPromise<IAsset> assetPromise;
+        protected IGenome<IAsset> assetGenome;
 
 
         public Image(Image<Js> other, string callerFilePath, int callerLineNumber)
             : base(other, callerFilePath, callerLineNumber) {
-            assetPromise = other.assetPromise;
+            assetGenome = other.assetGenome;
         }
-        public Image(IPromise<IAsset> assetPromise, string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) {
-            this.assetPromise = assetPromise;
+        public Image(IGenome<IAsset> assetGenome, string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) {
+            this.assetGenome = assetGenome;
         }
 
         public override void AddRequiredInclues(IIncludes includes) {
@@ -51,8 +52,8 @@ namespace StaticSharp {
             
         }*/
 
-        public Image(IPromise<IAsset> assetPromise, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
-            : base(assetPromise, callerFilePath, callerLineNumber) {
+        public Image(IGenome<IAsset> assetGenome, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
+            : base(assetGenome, callerFilePath, callerLineNumber) {
 
         }
 
@@ -82,7 +83,7 @@ namespace StaticSharp {
             Console.WriteLine(s);*/
 
 
-            var jpeg = await (new JpegPromise(assetPromise)).GetAsync();
+            var jpeg = await (new JpegGenome(assetGenome)).CreateOrGetCached();
             var url = context.AddAsset(jpeg);
 
             /*var image = new MagickImage(asset.CreateReadStream());
@@ -104,10 +105,16 @@ namespace StaticSharp {
                 base64Thumbnail = Convert.ToBase64String(memoryStream.ToArray());
             }*/
 
+            var thumbnail =  await new ThumbnailGenome(assetGenome).CreateOrGetCached();
+
+
 
             var imageInfo = new MagickImageInfo(jpeg.CreateReadStream());
             elementTag["data-width"] = imageInfo.Width;
             elementTag["data-height"] = imageInfo.Height;
+
+            elementTag.Style["background-color"] = Color.Aqua;
+
 
             return new Tag("img") {
 
