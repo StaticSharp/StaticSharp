@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System;
 using StaticSharp.Html;
+using System.Collections;
 
 namespace StaticSharp.Gears {
 
@@ -18,18 +19,23 @@ namespace StaticSharp.Gears {
 
         //void Require(IFont font);
 
-        CacheableFont GetOrCreateFont(Font font);
+        //CacheableFont GetOrCreateFont(Font font);
 
         Task<Tag> GenerateScriptAsync();
 
-        Task<Tag> GenerateFontAsync();
+        //Task<Tag> GenerateFontAsync();
         Task<Tag> GenerateStyleAsync();
     }
+
 
     public class Includes : IIncludes {
         private readonly ConcurrentDictionary<string, IScript> scripts = new();
         private readonly ConcurrentDictionary<string, IStyle> styles = new();
-        private readonly ConcurrentDictionary<string, CacheableFont> fonts = new();
+        //private readonly ConcurrentDictionary<string, CacheableFont> fonts = new();
+
+
+        
+
 
         public void Require(IScript script) {
             foreach(var i in script.Dependencies) {
@@ -60,13 +66,10 @@ namespace StaticSharp.Gears {
         }
 
 
-        public CacheableFont GetOrCreateFont(Font font) {
-            /* if (fonts.TryGetValue(font.Key, out var cacheableFont)) { 
-                 return cacheableFont;
-             }*/
+        /*public CacheableFont GetOrCreateFont(Font font) {
             return fonts.GetOrAdd(font.Key, x => new CacheableFont(font)
             );
-        }
+        }*/
 
 
 
@@ -116,15 +119,6 @@ namespace StaticSharp.Gears {
             }
         }*/
 
-        public async Task<Tag> GenerateFontAsync() {
-            var fontStyle = new StringBuilder();
-
-            foreach(var i in fonts.Values) {
-                fontStyle.AppendLine(await i.GenerateIncludeAsync());
-            }
-            return new Tag("style") {
-                new PureHtmlNode(fontStyle.ToString())
-            };
-        }
+        
     }
 }

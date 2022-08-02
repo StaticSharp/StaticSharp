@@ -56,7 +56,7 @@ namespace StaticSharp {
     public record Font(
             FontFamily FontFamily,
             FontStyle FontStyle
-            ) : Gears.Genome {
+            ) : Gears.Genome<Font, CacheableFont> {
 
 
 
@@ -100,24 +100,20 @@ namespace StaticSharp {
     
 
 
-    public class CacheableFont  {
-
-        public Font Arguments { get; private set; } = null!;
-
+    public class CacheableFont : Cacheable<Font>, ICacheable<Font> {
 
         public HashSet<char> usedChars = new();
+        private CacheableFontFamily cacheableFontFamily = null!;
+        protected override async Task CreateAsync() {
+            cacheableFontFamily = await Genome.FontFamily.CreateOrGetCached();
 
-        public CacheableFont(Font arguments) {
-            Arguments = arguments;
         }
 
 
 
-
-        public async Task<HashSet<char>> AddCharsAsync(HashSet<char> chars) {
-
-            var fontFamily = await Arguments.FontFamily.CreateOrGetCached();
-            var existingChars = fontFamily.GetExistingChars(Arguments.FontStyle, chars);
+        public HashSet<char> AddChars(HashSet<char> chars) {
+            
+            var existingChars = cacheableFontFamily.GetExistingChars(Genome.FontStyle, chars);
 
             usedChars.UnionWith(existingChars);
 
@@ -196,12 +192,12 @@ namespace StaticSharp {
         }*/
 
         public async Task<string> GenerateIncludeAsync() {
-            var fontFamily = await Arguments.FontFamily.CreateOrGetCached();
+
 
             var sortedUsedChars = usedChars.OrderBy(c => c);
             var text = string.Concat(sortedUsedChars);
 
-            var subfontCssUrl = GoogleFonts.MakeCssUrl(fontFamily.Genome.Name, Arguments.FontStyle, text);
+            var subfontCssUrl = GoogleFonts.MakeCssUrl(Genome.FontFamily.Name, Genome.FontStyle, text);
             var subFontCssRequest = await new HttpRequestGenome(GoogleFonts.MakeWoff2Request(subfontCssUrl)).CreateOrGetCached();
 
             var fontInfos = GoogleFonts.ParseCss(subFontCssRequest.ContentText);
@@ -213,21 +209,18 @@ namespace StaticSharp {
 
             var base64 = Convert.ToBase64String(content);
             var format = "woff2";
-            var fontStyle = Arguments.FontStyle.CssFontStyle;
+            var fontStyle = Genome.FontStyle.CssFontStyle;
 
             var stringBuilder = new StringBuilder();
             stringBuilder.Append("@font-face {");
-            stringBuilder.Append("font-family: ").Append(Arguments.FontFamily.Name).Append(";");
+            stringBuilder.Append("font-family: ").Append(Genome.FontFamily.Name).Append(";");
             //stringBuilder.AppendLine($"src:local('{Arguments.Family} {Arguments.Weight}{italicSuffix}'),");
             stringBuilder.Append($"src: url(data:application/font-{format};charset=utf-8;base64,{base64}) format('{format}');");
-            stringBuilder.Append("font-weight: ").Append((int)Arguments.FontStyle.Weight).Append(";");
+            stringBuilder.Append("font-weight: ").Append((int)Genome.FontStyle.Weight).Append(";");
             stringBuilder.Append("font-style: ").Append(fontStyle).Append(";}");
 
             return stringBuilder.ToString();            
         }
-
-
-
 
         
     }

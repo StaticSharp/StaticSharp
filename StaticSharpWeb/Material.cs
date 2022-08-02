@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace StaticSharpWeb {
@@ -81,16 +82,47 @@ namespace StaticSharpWeb {
                     //<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
                 };
 
+            var body = await GenerateHtmlAsync(context);
+            
+
+
             var document = new Tag(null) {
                 new Tag("!doctype"){ ["html"] = ""},
                 head,
-                await GenerateHtmlAsync(context)
+                body
             };
+
+            body.Add(
+                new Tag("svg") {
+                    Style = {
+                        ["display"] = "none"
+                    },
+                    Children = {
+                        new Tag("defs"){
+                            await context.SvgDefs.GetAllAsync()
+                        }
+                    }
+                }
+                );
+
+
             head.Add(await context.Includes.GenerateScriptAsync());
-            head.Add(await context.Includes.GenerateFontAsync());
+            head.Add(await GenerateFontsAsync(context));
             head.Add(await context.Includes.GenerateStyleAsync());
             return document.GetHtml();
         }
+
+        public static async Task<Tag> GenerateFontsAsync(Context context) {
+            var fontStyle = new StringBuilder();
+
+            foreach (var i in context.Fonts.Values) {
+                fontStyle.AppendLine(await i.GenerateIncludeAsync());
+            }
+            return new Tag("style") {
+                new PureHtmlNode(fontStyle.ToString())
+            };
+        }
+
 
 
         public override void AddRequiredInclues(IIncludes includes) {
@@ -109,10 +141,10 @@ namespace StaticSharpWeb {
             };
         }
 
-        public virtual async Task<Tag> GetBodyAsync(Context context) {
+        //public virtual async Task<Tag> GetBodyAsync(Context context) {
             //FIXME: same code in Block.cs
 
-            AddRequiredInclues(context.Includes);
+            /*AddRequiredInclues(context.Includes);
             foreach (var m in Modifiers) {
                 m.AddRequiredInclues(context.Includes);
                 context = m.ModifyContext(context);
@@ -130,7 +162,7 @@ namespace StaticSharpWeb {
 
                 Modifiers.Select(x=>x.CreateScriptAfter()).Reverse(),
                 CreateScriptAfter()
-            };
+            };*/
 
 
             /*var body = new Hierarchical {
@@ -234,7 +266,7 @@ namespace StaticSharpWeb {
             }*/
 
             
-        }
+//        }
 
         public async Task<Tag> GenerateInlineHtmlAsync(Context context) {
             var representative = this as  StaticSharpEngine.IRepresentative;

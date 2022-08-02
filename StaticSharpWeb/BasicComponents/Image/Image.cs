@@ -61,52 +61,16 @@ namespace StaticSharp {
 
         public override string TagName => "div";
         public override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
-            //var asset = await assetPromise.GetAsync();
-            
-
-            /*Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
-
-            var s = 0;
-            for (int i = 0; i < 0xff; i++) {
-                var imageInfo = new MagickImageInfo(asset.CreateReadStream());
-                s += imageInfo.Width;
-            }
-            Console.WriteLine(stopWatch.ElapsedMilliseconds);
-
-            stopWatch.Start();
-            for (int i = 0; i < 0xff; i++) {
-                var image = new MagickImage(asset.CreateReadStream());
-                s += image.Width;
-            }
-            Console.WriteLine(stopWatch.ElapsedMilliseconds);
-            Console.WriteLine(s);*/
-
 
             var jpeg = await (new JpegGenome(assetGenome)).CreateOrGetCached();
             var url = context.AddAsset(jpeg);
 
-            /*var image = new MagickImage(asset.CreateReadStream());
-
-            var imageInfo = new MagickImageInfo(asset.CreateReadStream());
-            //image.InterpolativeResize(512, 512, PixelInterpolateMethod.Average16);
-            //image.InterpolativeResize(128, 128, PixelInterpolateMethod.Average16);
-            //image.InterpolativeResize(32, 32, PixelInterpolateMethod.Average16);
-            //image.InterpolativeResize(16, 16, PixelInterpolateMethod.Average16);
-            
-            image.Interlace = Interlace.Plane;
-            image.Format = MagickFormat.Jpeg;
-            image.Quality = 90;
-            image.Strip();
-            string base64Thumbnail;
-            using (var memoryStream = new MemoryStream()) { 
-                image.Write(memoryStream);
-                Console.WriteLine(memoryStream.Length);
-                base64Thumbnail = Convert.ToBase64String(memoryStream.ToArray());
-            }*/
-
             var thumbnail =  await new ThumbnailGenome(assetGenome).CreateOrGetCached();
 
+            var thumbnailId = context.SvgDefs.Add(new SvgInlineImageGenerator(new ThumbnailGenome(assetGenome)));
+
+            var hBlurId = context.SvgDefs.Add(new SvgBlurFilterGenerator(0.5f, 0));
+            var vBlurId = context.SvgDefs.Add(new SvgBlurFilterGenerator(0, 0.5f));
 
 
             var imageInfo = new MagickImageInfo(jpeg.CreateReadStream());
@@ -116,10 +80,43 @@ namespace StaticSharp {
             elementTag.Style["background-color"] = Color.Aqua;
 
 
-            return new Tag("img") {
-
-                ["src"] = url,// $"data:image/jpg;base64,{base64Thumbnail}"
+            return new Tag("content") {
+                new Tag("svg"){
+                    ["width"] = "100%",
+                    ["height"] = "100%",
+                    ["viewBox"] = $"0 0 {thumbnail.Width} {thumbnail.Height}",
+                    ["preserveAspectRatio"] = "none",
+                    Children = {
+                        new Tag("use"){
+                            ["href"]="#"+thumbnailId,
+                        },
+                        new Tag("use"){
+                            ["href"]="#"+thumbnailId,
+                            ["filter"] = $"url(#{vBlurId})"
+                        },
+                        new Tag("g"){
+                            ["filter"] = $"url(#{hBlurId})",
+                            Children = {
+                                new Tag("use"){
+                                    ["href"]="#"+thumbnailId,
+                                },
+                                new Tag("use"){
+                                    ["href"]="#"+thumbnailId,
+                                    ["filter"] = $"url(#{vBlurId})"
+                                }
+                            }
+                        }
+                    }
+                },
+                new Tag("img") {
+                    ["width"] = "100%",
+                    ["height"] = "100%",
+                    ["src"] = url
+                }
             };
+
+
+            /*;*/
         }
     }
 }

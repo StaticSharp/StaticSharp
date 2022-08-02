@@ -29,6 +29,14 @@ public static partial class KeyUtils {
             return valueAsBool.ToString().ToLower();
         }
 
+        if (
+            (value is float)
+            || (value is double)
+            || (value is int)
+            ) {
+            return value.ToString()??"";
+        }
+
         if (value.GetType().IsEnum) {
             return value.ToString();
         }

@@ -1,11 +1,9 @@
-﻿using StaticSharpEngine;
+﻿
+using StaticSharpEngine;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace StaticSharp.Gears {
-
 
     public struct Context { 
 
@@ -17,7 +15,11 @@ namespace StaticSharp.Gears {
 
         public Uri BaseAssetsUrl => new Uri(BaseUrl, "Assets/");
 
-        public IIncludes Includes { get; init; }
+        public Includes Includes { get; init; }
+
+        public IncludesCache<Font, CacheableFont> Fonts { get; } = new();
+
+        public UniqueTagCollection SvgDefs { get; } = new("s");
 
         public Assets Assets { get; init; }
 

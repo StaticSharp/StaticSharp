@@ -116,8 +116,6 @@ namespace StaticSharp {
                 }
             }
 
-            
-
             public Stream CreateReadStream() {
                 return new MemoryStream(Content);
             }

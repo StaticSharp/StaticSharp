@@ -222,11 +222,11 @@ namespace StaticSharp.Html {
                     }*/
                     var valueString = AttributeValueToString(i.Value);
                     if (valueString != null) {
-                        var kebebKey = Gears.CaseConverter.PascalToKebabCase(i.Key);
+                        //var kebebKey = Gears.CaseConverter.PascalToKebabCase(i.Key);
                         if (valueString.Length > 0) {
-                            builder.Append($" {kebebKey}=\"{valueString.ReplaceInvalidAttributeValueSymbols()}\"");
+                            builder.Append($" {i.Key}=\"{valueString.ReplaceInvalidAttributeValueSymbols()}\"");
                         } else {
-                            builder.Append(' ').Append(kebebKey);
+                            builder.Append(' ').Append(i.Key);
                         }
                     }
 

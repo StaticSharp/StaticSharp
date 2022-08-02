@@ -10,6 +10,13 @@ public interface IAsset : IKeyProvider {
 
     public string FilePath => ContentHash + FileExtension;
 
+    public byte[] ReadAllBites() {
+        using (var memoryStream = new MemoryStream()) {
+            CreateReadStream().CopyTo(memoryStream);
+            return memoryStream.ToArray();
+        }
+    }
+
 }
 
 

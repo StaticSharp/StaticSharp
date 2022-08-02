@@ -263,7 +263,7 @@ function Property(value) {
                                 d.end()
                             }
 
-                            if (_this.reactionsWhoReceivedOldValue) {
+                            if (_this.reactionsWhoReceivedOldValue) {//<- TODO: delete
                                 _this.reactionsWhoReceivedOldValue = undefined
                             }
 
@@ -308,7 +308,7 @@ function Property(value) {
                 _this.binding = undefined
             }
 
-            if (_this.value === value)
+            if (_this.value === value)//TODO: delete
                 return
 
             _this.value = value

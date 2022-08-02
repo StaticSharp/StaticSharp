@@ -48,14 +48,14 @@ function getPixel(img, x, y) {
 function ImageAfter(element) {
     BlockAfter(element)
 
-    let img = element.children[0]
+    let content = element.children[0]
 
 
 
 
 
-    img.style.width = "100%"
-    img.style.height = "100%"
+    content.style.width = "100%"
+    content.style.height = "100%"
 
 
 

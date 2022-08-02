@@ -1,5 +1,4 @@
-﻿using StaticSharp.Gears;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,6 +29,9 @@ namespace StaticSharpDemo.Root {
         public override Group? Content => new() {
 
             new Image(new HttpRequestGenome("https://upload.wikimedia.org/wikipedia/commons/4/49/Koala_climbing_tree.jpg")),
+
+            new Image(new FileGenome(AbsolutePath("TestPsdImage.psd"))),
+
 
             H1($"H1"),
             "Abc",

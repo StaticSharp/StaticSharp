@@ -3,8 +3,9 @@ using System.Text;
 
 namespace StaticSharp.Gears;
 
-public interface IGenome<T> {
-    public Task<T> CreateOrGetCached();
+public interface IGenome<TCacheable>: IKeyProvider {
+    Task<TCacheable> CreateOrGetCached();
+    Task<TCacheable> CreateAsync();
 }
 
 public abstract record Genome: IKeyProvider {
@@ -15,13 +16,30 @@ public abstract record Genome: IKeyProvider {
         Key = CalculateKey();
     }
     private string CalculateKey() {
-        var fields = GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+        var type = GetType();
+
+
+
+        
 
         var stringBuilder = new StringBuilder();
         stringBuilder.Append(GetType().FullName);
-        foreach (var field in fields) {
-            stringBuilder.Append('\0').Append(GetFieldKey(field));
+
+
+        while (type != typeof(Genome)) {
+            var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+            foreach (var field in fields) {
+                var fieldKey = GetFieldKey(field);
+                stringBuilder.Append('\0').Append(fieldKey);
+            }
+
+            type = type.BaseType;
         }
+
+
+        
+        
 
         var key = stringBuilder.ToString();
         return key;
@@ -41,18 +59,39 @@ public abstract record Genome<TFinalGenome,TCacheable> : Genome, IGenome<TCachea
     where TFinalGenome : Genome<TFinalGenome, TCacheable>
     where TCacheable : ICacheable<TFinalGenome>, new() {
 
-    public Task<TCacheable> CreateOrGetCached() {
-        //TODO add cache lock
-        Task<object>? value = Cache.Get(Key);
-        if (value == null) {
-            value = Create().ContinueWith(x=>(object)x.Result);
-            //value.AfterConstruction();
-            Cache.Add(Key, value);
+    public async Task<TCacheable> CreateOrGetCached() {
+
+
+        //Cache.Lock();
+
+        try {
+            Task<object>? task = Cache.Get(Key);
+            if (task == null) {
+                task = CreateAsync().ContinueWith(x => (object)x.Result);
+                Cache.Add(Key, task);
+                return (TCacheable)(await task);
+            }
+            
+            var value = (TCacheable)(await task);
+            if (value is IMutableAsset mutable) {
+                if (!await mutable.GetValidAsync()) {
+                    mutable.DeleteCacheSubDirectory();
+                    task = CreateAsync().ContinueWith(x => (object)x.Result);
+                    Cache.Add(Key, task);
+                }
+            } 
+            
+            return (TCacheable)(await task);
         }
-        return value.ContinueWith(x=>(TCacheable)x.Result);
+        finally {
+
+            //Cache.Unlock();
+        }
+
+        
     }
 
-    protected async Task<TCacheable> Create() {
+    public async Task<TCacheable> CreateAsync() {
         var result = new TCacheable();
         result.SetGenome((TFinalGenome)this);
         await result.CreateAsync();
@@ -64,9 +103,17 @@ public abstract record AssetGenome<TFinalGenome, TCacheable> : Genome<TFinalGeno
     where TFinalGenome : AssetGenome<TFinalGenome, TCacheable>
     where TCacheable : ICacheable<TFinalGenome>, IAsset, new() {
 
+    async Task<IAsset> IGenome<IAsset>.CreateAsync() {
+        return await base.CreateAsync();
+    }
     async Task<IAsset> IGenome<IAsset>.CreateOrGetCached() {
         return await base.CreateOrGetCached();
     }
 }
+
+
+
+
+
 
 

@@ -70,9 +70,9 @@ public abstract class Cacheable<TGenome> : ICacheable<TGenome>, IKeyProvider
 
 }
 
-public abstract class Cacheable<Constructor, Data> : Cacheable<Constructor>
-        where Constructor : class, IKeyProvider
-        where Data : class, new()
+public abstract class Cacheable<TGenome, TData> : Cacheable<TGenome>
+        where TGenome : class, IKeyProvider
+        where TData : class, new()
     {
 
     private static readonly JsonSerializerOptions JsonSerializerOptions = new() {
@@ -88,14 +88,14 @@ public abstract class Cacheable<Constructor, Data> : Cacheable<Constructor>
 
     protected string ContentFilePath => Path.Combine(CacheSubDirectory, "content");
 
-    protected virtual Data CachedData { get; set; } = null!;
+    protected virtual TData CachedData { get; set; } = null!;
 
     /*protected override Task CreateJob() {
         return base.CreateJob();
     }*/
 
-    protected override void SetGenome(Constructor arguments) {
-        base.SetGenome(arguments);
+    protected override void SetGenome(TGenome genome) {
+        base.SetGenome(genome);
         KeyHash = Hash.CreateFromString(Key).ToString();
         CacheSubDirectory = Path.Combine(Cache.Directory, KeyHash);
         CachedDataJsonFilePath = Path.Combine(CacheSubDirectory, CachedDataJsonFileName);
@@ -126,12 +126,32 @@ public abstract class Cacheable<Constructor, Data> : Cacheable<Constructor>
     protected bool LoadData() {
         if (!File.Exists(CachedDataJsonFilePath)) return false;
         var json = File.ReadAllText(CachedDataJsonFilePath);
-        CachedData = JsonSerializer.Deserialize<Data>(json, JsonSerializerOptions);
+        CachedData = JsonSerializer.Deserialize<TData>(json, JsonSerializerOptions);
         return true;
     }
 
     protected void CreateCacheSubDirectory() {
         Directory.CreateDirectory(CacheSubDirectory);
+    }
+
+    public void DeleteCacheSubDirectory() {
+        DeleteDirectory(CacheSubDirectory);
+    }
+
+    private void DeleteDirectory(string directoryPath) {
+        DirectoryInfo dir = new DirectoryInfo(directoryPath);
+
+        foreach (FileInfo file in dir.GetFiles()) {
+            file.Delete();
+        }
+
+        foreach (DirectoryInfo directory in dir.GetDirectories()) {
+            DeleteDirectory(directory.FullName);
+            directory.Delete();
+            while (directory.Exists) {
+                Thread.Sleep(100);
+            }
+        }
     }
 
 
