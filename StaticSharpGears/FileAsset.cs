@@ -26,7 +26,7 @@ namespace StaticSharp {
             }
 
             public Task<bool> GetValidAsync() => Task.FromResult(GetLastWriteTime() == CachedData.LastWriteTime);
-            public string? CharSet => null;
+            
             public string MediaType => MimeTypeMap.GetMimeType(FileExtension);
             public string ContentHash => CachedData.ContentHash;
             public string FileExtension => Path.GetExtension(Genome.Path);
@@ -36,7 +36,7 @@ namespace StaticSharp {
                     CachedData = new();
 
                     CachedData.LastWriteTime = GetLastWriteTime();
-                    CachedData.ContentHash = Hash.CreateFromStream(CreateReadStream()).ToString();
+                    CachedData.ContentHash = Hash.CreateFromBytes(ReadAllBites()).ToString();
 
                     CreateCacheSubDirectory();
                     StoreData();
@@ -44,17 +44,14 @@ namespace StaticSharp {
                 return Task.CompletedTask;
             }
 
-            public string ContentText {
-                get {
-                    return File.ReadAllText(Genome.Path);
+            public override byte[] ReadAllBites() {
+                if (Content == null) {
+                    Content = FileUtils.ReadAllBytes(Genome.Path);
                 }
+                return Content;
             }
 
-            public Stream CreateReadStream() {
-                return File.OpenRead(Genome.Path);
-            }
         }
-
     }
 }
 

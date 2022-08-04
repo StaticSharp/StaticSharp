@@ -43,9 +43,9 @@ namespace StaticSharp {
 
             public static readonly string DefaultMediaType = "application/octet-stream";
 
-            public string? CharSet => CachedData.CharSet;
+            public override string? CharSet => CachedData.CharSet;
             public string MediaType => CachedData.MediaType!=null ? CachedData.MediaType : DefaultMediaType;
-            public byte[] Content { get; private set; } = null!;
+            
             public string ContentHash => CachedData.ContentHash;
             public string FileExtension => CachedData.Extension;
 
@@ -109,16 +109,8 @@ namespace StaticSharp {
 
             }
 
-            public string ContentText {
-                get {
-                    Encoding encoding = (CharSet == null)? Encoding.UTF8 : Encoding.GetEncoding(CharSet);
-                    return encoding.GetString(Content);
-                }
-            }
-
-            public Stream CreateReadStream() {
-                return new MemoryStream(Content);
-            }
+            
+            
         }
 
     }

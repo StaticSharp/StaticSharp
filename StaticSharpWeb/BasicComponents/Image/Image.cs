@@ -73,7 +73,7 @@ namespace StaticSharp {
             var vBlurId = context.SvgDefs.Add(new SvgBlurFilterGenerator(0, 0.5f));
 
 
-            var imageInfo = new MagickImageInfo(jpeg.CreateReadStream());
+            var imageInfo = new MagickImageInfo(jpeg.ReadAllBites());
             elementTag["data-width"] = imageInfo.Width;
             elementTag["data-height"] = imageInfo.Height;
 

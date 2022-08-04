@@ -118,7 +118,7 @@ namespace StaticSharp {
 
                 }.CreateOrGetCached();
 
-                var fontInfos = GoogleFonts.ParseCss(fullCssRequest.ContentText);
+                var fontInfos = GoogleFonts.ParseCss(fullCssRequest.ReadAllText());
                 foreach (var i in fontInfos) {
                     var italicSubset = members[i.Italic ? 1 : 0];
                     var existing = italicSubset.Find(x => x.Weight == (FontWeight)i.Weight);

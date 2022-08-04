@@ -43,7 +43,8 @@ namespace StaticSharp {
             }
 
             public virtual Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
-                throw new System.NotImplementedException($"{GetType().FullName} overrides nither GenerateHtmlChildrenAsync nor GenerateHtmlAsync");
+                return Task.FromResult<Tag?>(null);
+                //throw new System.NotImplementedException($"{GetType().FullName} overrides nither GenerateHtmlChildrenAsync nor GenerateHtmlAsync");
             }
 
             public virtual void ModifyContext(ref Context context) {
@@ -59,13 +60,14 @@ namespace StaticSharp {
                 }
             }
 
-            public virtual IEnumerable<Tag> Before() {
+            public virtual IEnumerable<Task<Tag>> Before() {
                 yield return CreateScriptInitialization();
                 foreach (var m in Modifiers)
                     yield return m.CreateScriptInitialization();
-                yield return CreateScriptBefore();
+
+                yield return Task.FromResult(CreateScriptBefore());
                 foreach (var m in Modifiers)
-                    yield return m.CreateScriptBefore();
+                    yield return Task.FromResult(m.CreateScriptBefore());
             }
 
             public virtual IEnumerable<Tag> After() {
@@ -84,7 +86,7 @@ namespace StaticSharp {
                 var tag = new Tag(TagName, id) {};
 
                 ModifyTag(tag);
-                tag.Add(Before());
+                tag.Add(await Before().SequentialOrParallel());
                 tag.Add(await GenerateHtmlInternalAsync(context, tag));
                 tag.Add(After());
 

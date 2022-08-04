@@ -14,12 +14,41 @@ function MaterialInitialization(element) {
         LeftSideBar: () => element.Child("LeftSideBar"),
         RightSideBar: () => element.Child("RightSideBar"),
         Footer: undefined,
+
+        /*Html: () => `<svg style="z-index: 10;" width=${window.InnerWidth} viewBox="0 0 ${window.InnerWidth} ${window.InnerHeight}">
+${function () {
+                let result = []
+                for (let i = 0; i < window.InnerWidth; i++) {
+                    const gridSize = 16
+                    let x = (i % gridSize) / gridSize
+                    let y = Math.floor(i / gridSize) / gridSize
+                    result.push(`<circle cx=${window.InnerWidth * x} cy=${window.InnerWidth * y} cx="500"r=6></circle>`)
+                }
+                return result.join("")
+            }()}
+    <circle cx="${window.InnerWidth * 0.5}" cy="${window.InnerWidth * 0.25}" cx="500"r="20">
+    </circle>
+</svg>`*/
     }
 }
 
 
 function MaterialBefore(element) {
     HierarchicalBefore(element)
+
+    /*var template = document.createElement('div');
+    template.style.display = "contents"
+    element.appendChild(template);
+    new Reaction(() => {
+        template.innerHTML = element.Html;
+
+    })*/
+
+    //element.insertAdjacentHTML('beforeend', `<svg width="800" viewBox="0 0 800 600" x="2 ${200}"><circle cx="500" cy="500" cx="500"r="20"></circle></svg>`);
+    //console.log(`265 && element.ContentWidth`)
+
+
+
     /*element.Reactive =
     {
         A: () => {

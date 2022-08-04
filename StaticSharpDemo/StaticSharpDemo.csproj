@@ -33,7 +33,7 @@
 	<ItemGroup>
 		
 		<ProjectReference Include="..\StaticSharpEngine\StaticSharpEngine.csproj" />
-		<ProjectReference Include="..\StaticSharpWeb\StaticSharpWeb.csproj" />
+		<ProjectReference Include="..\StaticSharp\StaticSharp.csproj" />
 	</ItemGroup>
 
 	<ItemGroup Condition="$(UseDebugGeneratorOutput)">

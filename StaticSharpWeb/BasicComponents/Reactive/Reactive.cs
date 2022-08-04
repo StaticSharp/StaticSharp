@@ -88,29 +88,43 @@ namespace StaticSharp {
                 return FindScriptRoot<A>(type.BaseType);
             }
 
-            public Tag CreateScriptInitialization() {
+            public async Task<Tag> CreateScriptInitialization() {
+
                 var className = FindScriptRoot<ScriptBeforeAttribute>(GetType());
+
+                var propertiesInitializers = await GetGeneratedBundingsAsync().ToListAsync();
+                propertiesInitializers.AddRange(GetBindings());
+
+                var propertiesInitializersScript = string.Join(',', propertiesInitializers.Select(x => $"{x.Key}:{x.Value}"));
+
+                string script = $"{{let element = ConstructorInitialization(\"{className}\");";
+                if (!string.IsNullOrEmpty(propertiesInitializersScript)) {
+                    script += $"element.Reactive={{{propertiesInitializersScript}}}";
+                }
+                script += "}";
+
                 return new Tag("script") {
-                new PureHtmlNode($"ConstructorInitialization(\"{className}\",\'{PropertiesInitializationScript()}\')")
-            };
+                    new PureHtmlNode(script)
+                };
             }
 
             public Tag CreateScriptBefore() {
                 var className = FindScriptRoot<ScriptBeforeAttribute>(GetType());
-                return new Tag("script") {
-                new PureHtmlNode($"ConstructorBefore(\"{className}\")")
-            };
+                    return new Tag("script") {
+                    new PureHtmlNode($"ConstructorBefore(\"{className}\")")
+                };
             }
 
             public Tag CreateScriptAfter() {
                 var className = FindScriptRoot<ScriptAfterAttribute>(GetType());
                 return new Tag("script") {
-                new PureHtmlNode($"ConstructorAfter(\"{className}\")")
-            };
+                    new PureHtmlNode($"ConstructorAfter(\"{className}\")")
+                };
             }
 
 
             public IEnumerable<KeyValuePair<string,string>> GetBindings() {
+
                 foreach (var i in GetType().GetProperties()) {
                     //MethodInfo? getter = i.GetGetMethod(nonPublic: true);
                     if (i.CanRead) {
@@ -118,35 +132,32 @@ namespace StaticSharp {
                             if (i.PropertyType.GetGenericTypeDefinition() == typeof(Binding<>)) {
                                 var value = i.GetValue(this)?.ToString();
                                 if (value != null) {
-                                    yield return new(i.Name, value);
+                                    yield return new KeyValuePair<string, string>(i.Name, value);
                                 }
                             }
                         }
                     }
                 }
-            } 
+            }
 
+            public virtual IAsyncEnumerable<KeyValuePair<string, string>> GetGeneratedBundingsAsync() {
+                return AsyncEnumerable.Empty<KeyValuePair<string, string>>();
+            }
 
-            public string PropertiesInitializationScript() {
+            private async Task<string> CombineGeneratedBindingsAsync() {
+                var generatedBundings = await GetGeneratedBundingsAsync().ToArrayAsync();
+                return string.Join(',', generatedBundings.Select(x => $"{x.Key}:{x.Value}"));
+            }
 
+            /*public string PropertiesInitializers() {
                 var bindings = GetBindings().ToArray();
+
+
                 if (bindings.Length == 0)
                     return "";
 
-                return $"element.Reactive={{{string.Join(',', bindings.Select(x=>$"{x.Key}:{x.Value}"))}}}";
-
-
-                /*StringBuilder stringBuilder = new("element.Reactive = {");
-                foreach (var binding in bindings) {
-                
-                }
-                stringBuilder.Append("}");
-
-                var initializationScript = (this as IReactiveObjectCs).ToJsObject(new Js() { value = "element" });
-                if (string.IsNullOrEmpty(initializationScript))
-                    return "";
-                return "element.Reactive = " + initializationScript;*/
-            }
+                return string.Join(',', bindings.Select(x=>$"{x.Key}:{x.Value}"));
+            }*/
 
         }
     }

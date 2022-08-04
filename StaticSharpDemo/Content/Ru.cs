@@ -32,6 +32,7 @@ namespace StaticSharpDemo.Root {
 
             new Image(new FileGenome(AbsolutePath("TestPsdImage.psd"))),
 
+            new Template(new FileGenome(AbsolutePath("Reactive.template"))),
 
             H1($"H1"),
             "Abc",

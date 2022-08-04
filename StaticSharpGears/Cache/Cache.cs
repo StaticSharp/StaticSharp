@@ -10,13 +10,7 @@ public static partial class Cache {
 
     private static readonly Dictionary<string, Task<object>> items = new();
 
-    //private static SemaphoreSlim semaphore = new SemaphoreSlim(1, 1);
-    private static Mutex mutex;
 
-    /*    private static async Task<T> TaskCast<F,T>(Task<F> value){
-            object v = await value;
-            return (T)v;
-        }*/
 
     public static void Lock() {
         Monitor.Enter(items);
@@ -28,26 +22,10 @@ public static partial class Cache {
 
     public static Task<object>? Get(string key) {
         if (items.TryGetValue(key, out var resultTask)) {
-            
-            /*var result = await resultTask;
-
-            if (result is IMutableAsset mutableAsset) {
-                if (!mutableAsset.Valid) {
-                    items.Remove(key);
-                    return null;
-                }
-            }*/
-
             return resultTask;
         }
-        return null;
-
-
-        
+        return null;        
     }
-
-
-
 
     public static void Add(string key, Task<object> value) {
         items[key] = value;        

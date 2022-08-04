@@ -12,6 +12,7 @@
         //flex-direction: column;
         background-color: chartreuse;
         white-space: pre-wrap;
+        //overflow: visible;
     }
 
     * {
@@ -30,7 +31,7 @@
         word-break: keep-all;
         //word-wrap: break-word;
         //overflow: clip;
-        overflow: hidden;
+        //overflow: hidden;
         white-space: inherit;
     }
 

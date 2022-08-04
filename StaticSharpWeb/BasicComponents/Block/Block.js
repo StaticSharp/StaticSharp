@@ -34,6 +34,8 @@ function BlockInitialization(element) {
         Y: () => element.LayoutY,
         Width: () => element.LayoutWidth,
         Height: () => element.LayoutHeight,
+
+        Hover: false
     }
 }
 
@@ -48,14 +50,29 @@ function BlockBefore(element) {
     if (parent.AddChild)
         parent.AddChild(element);
 
-    XToStyle(element);
     
-    YToStyle(element);
-
-    
-
 }
 
 function BlockAfter(element) {
     HierarchicalAfter(element)
+
+    XToStyle(element);
+
+    YToStyle(element);
+
+    element.addEventListener('mouseenter', e => {
+        let d = Reaction.beginDeferred()
+        element.Hover = true
+        d.end()
+    });
+
+    element.addEventListener('mouseleave', e => {
+        let d = Reaction.beginDeferred()
+        element.Hover = false
+        d.end()
+    });
+    
+
+
+
 }

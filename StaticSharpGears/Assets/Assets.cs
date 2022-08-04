@@ -33,9 +33,8 @@ public class Assets {
     }
 
     private async Task StoreAssetAsync(IAsset asset) {
-        using var fileStream = File.Create(Path.Combine(Directory,asset.FilePath));
-        asset.CreateReadStream().CopyTo(fileStream);
-        fileStream.Close();
+        var fullFilePath = Path.Combine(Directory, asset.FilePath);
+        await File.WriteAllBytesAsync(fullFilePath, asset.ReadAllBites());
     }
     public async Task StoreAsync() {
         await Task.WhenAll(assets.Values.Select(x=>StoreAssetAsync(x)).ToArray());

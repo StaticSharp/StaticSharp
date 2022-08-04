@@ -59,7 +59,7 @@ namespace StaticSharp {
                     var source = await Genome.Source.CreateOrGetCached();
                     CachedData.SourceHash = source.ContentHash;
 
-                    var image = new MagickImage(source.CreateReadStream());
+                    var image = new MagickImage(source.ReadAllBites());
 
                     image = await Process(image);                    
 
@@ -67,25 +67,16 @@ namespace StaticSharp {
                     CachedData.Height = image.Height;                    
 
                     CreateCacheSubDirectory();
-                    using (var stream = new MemoryStream()) {
-                        await image.WriteAsync(stream);
-                        CachedData.ContentHash = Hash.CreateFromStream(stream).ToString();
-                        using (var fileStream = File.Create(ContentFilePath)) {
-                            stream.Seek(0, SeekOrigin.Begin);
-                            stream.CopyTo(fileStream);
 
-
-                            fileStream.Seek(0, SeekOrigin.Begin);
-                            var imageCheck = new MagickImage(fileStream);
-
-
-                            fileStream.Close();
-                        }
-                    }
+                    Content = image.ToByteArray();
+                    File.WriteAllBytes(ContentFilePath, Content); //TODO: mb async?
+                    CachedData.ContentHash = Hash.CreateFromBytes(Content).ToString();
 
                     StoreData();
                 }
             }
+
+
         }
     }
 }

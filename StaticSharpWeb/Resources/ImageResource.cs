@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-
+/*
 namespace StaticSharpWeb.Resources {
 
 
@@ -103,4 +103,4 @@ namespace StaticSharpWeb.Resources {
             Roi = await roiTask;
         }
     }
-}
+}*/

@@ -162,7 +162,7 @@ namespace StaticSharpWeb {
 
         public static bool operator !=(SemVer l, SemVer r) => l.CompareTo(r) != 0;
 
-        public override bool Equals(Object obj) =>
+        public override bool Equals(object? obj) =>
             //Check for null and compare run-time types.
             obj != null && GetType().Equals(obj.GetType()) && this == (SemVer)obj;
 

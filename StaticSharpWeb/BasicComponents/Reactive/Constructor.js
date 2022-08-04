@@ -12,16 +12,15 @@ function _call(name, element) {
     func(element)
 }
 
-function ConstructorInitialization(name, script) {
+function ConstructorInitialization(name) {
     var element = _deleteScript()
-
     _call(name + "Initialization", element)
-
-    try {
+    return element;
+    /*try {
         eval(script)
     } catch (e) {
         console.error(script, "\n", e)
-    }
+    }*/
 }
 
 function ConstructorBefore(name) {

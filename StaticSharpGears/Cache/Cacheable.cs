@@ -1,5 +1,7 @@
 ﻿using System.Text.Json;
 using System.Reflection;
+using System.Text;
+
 namespace StaticSharp.Gears;
 
 public abstract class Cacheable<TGenome> : ICacheable<TGenome>, IKeyProvider
@@ -86,9 +88,26 @@ public abstract class Cacheable<TGenome, TData> : Cacheable<TGenome>
 
     protected string CacheSubDirectory { get; private set; } = null!;
 
-    protected string ContentFilePath => Path.Combine(CacheSubDirectory, "content");
+    protected virtual string ContentFilePath => Path.Combine(CacheSubDirectory, "content");
 
     protected virtual TData CachedData { get; set; } = null!;
+
+    public virtual string? CharSet => null;
+
+    protected byte[]? Content = null;
+
+    public virtual byte[] ReadAllBites() {
+        if (Content == null) {
+            Content = File.ReadAllBytes(ContentFilePath);
+        }
+        return Content;
+    }
+
+    public string ReadAllText() {
+        Encoding encoding = (CharSet == null) ? Encoding.UTF8 : Encoding.GetEncoding(CharSet);
+        return encoding.GetString(ReadAllBites());
+    }
+
 
     /*protected override Task CreateJob() {
         return base.CreateJob();
@@ -123,10 +142,18 @@ public abstract class Cacheable<TGenome, TData> : Cacheable<TGenome>
 
     protected abstract void Load();*/
 
-    protected bool LoadData() {
+    protected bool LoadData(/*bool contentFileMustExist*/) {
         if (!File.Exists(CachedDataJsonFilePath)) return false;
+
+        /*if (contentFileMustExist) {
+            if (!File.Exists(ContentFilePath)) return false;
+        }*/
+
         var json = File.ReadAllText(CachedDataJsonFilePath);
         CachedData = JsonSerializer.Deserialize<TData>(json, JsonSerializerOptions);
+
+        
+
         return true;
     }
 

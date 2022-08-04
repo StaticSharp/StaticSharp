@@ -27,10 +27,8 @@ namespace StaticSharp {
             where TGenome : class, IKeyProvider
             where TData : class, new() {
 
-            public string? CharSet => null;
-            public Stream CreateReadStream() {
-                return File.OpenRead(ContentFilePath);
-            }
+            public override string? CharSet => null;
+
         }
     }
 }

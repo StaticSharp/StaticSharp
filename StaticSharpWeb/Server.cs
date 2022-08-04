@@ -111,8 +111,10 @@ namespace StaticSharp {
                 //response.Headers.Add("content-disposition", $"attachment; filename=test");
 
                 //await response.StartAsync();
+                var data = asset.ReadAllBites();
+                await response.Body.WriteAsync(data, 0, data.Length);
 
-                await asset.CreateReadStream().CopyToAsync(response.Body);
+                //await asset.CreateReadStream().CopyToAsync(response.Body);
 
                 //await response.CompleteAsync();
 
