@@ -5,7 +5,7 @@ VisualStudioVersion = 17.1.32113.165
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StaticSharpEngine", "StaticSharpEngine\StaticSharpEngine.csproj", "{662FDFED-4C19-4998-ADA0-65BF0A788DF1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StaticSharpWeb", "StaticSharpWeb\StaticSharpWeb.csproj", "{3E3B6ED6-A4C1-4349-8F1F-1C8E929E0DE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StaticSharp", "StaticSharpWeb\StaticSharp.csproj", "{3E3B6ED6-A4C1-4349-8F1F-1C8E929E0DE9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StaticSharpDemo", "StaticSharpDemo\StaticSharpDemo.csproj", "{CC557248-81BC-4BE2-AE22-E861EB7C927D}"
 EndProject
