@@ -40,3 +40,12 @@ function Sum() {
     return resultValid ? result : undefined
 }
 
+function First() {
+    for (let i of arguments) {
+        if (i === undefined) continue;
+        if (isNaN(i)) continue;
+        if (i === null) continue;
+        return i
+    }
+}
+

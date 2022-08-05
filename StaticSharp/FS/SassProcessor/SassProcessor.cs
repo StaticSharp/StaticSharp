@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using LibSassHost;
 using System.Text;
 using System.Security.Cryptography;
-using StaticSharp;
+using StaticSharp.Utils;
 
 namespace StaticSharp.Gears {
     public class SassProcessor : IFileManager {

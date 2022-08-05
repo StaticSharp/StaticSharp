@@ -1,29 +1,24 @@
-<svg style="overflow: visible" width=${element.Width} height=${Max(0.1*window.InnerHeight, 64)}>
+﻿<svg style="overflow: visible" width=${element.Width} height=32>
 
-    ${function () {
-        element.border = 0
-        return ""
-    }()}
 
-    <style>
-        .small {
-            font: italic ${0.5*element.Height}px sans-serif;
-            fill: red;
-        }
-    </style>
+
+
+    <defs>
+        <filter id="shadow" width="120%" height="200%">
+            <feDropShadow dx=${element.Hover?1:2} dy=${element.Hover?2:5} stdDeviation=${element.Hover?2:5} flood-opacity="0.5" />
+        </filter>
+    </defs>
+
+
 
     <rect
-        x=${element.border}
-        y=${element.border}
-        width=${element.Width - 2 * element.border}
-        height=${element.Height - 2 * element.border}
+        x=0
+        y=0
+        width=${element.Width}
+        height=${element.Height}
 
         rx=${element.Height * 0.5}
-        style="fill:rgb(50,50,50);stroke-width:${element.border};stroke:rgb(0,0,0)" />
+        style="fill:white;stroke-width:0;stroke:rgb(0,0,0); filter:url(#shadow);"  />
 
-    <circle cx=${element.Height * 0.5} cy=${element.Height * 0.5} r=${element.Height*0.4 }></circle>	
-
-    <text dominant-baseline="middle" text-anchor="start" x=${element.Height} y=100 class="small">${element.Text}</text>
-
-    
+    <circle style="fill:#eee" cx=${element.Height * 0.5} cy=${element.Height * 0.5} r=${element.Height*0.4 }></circle>	
 </svg>

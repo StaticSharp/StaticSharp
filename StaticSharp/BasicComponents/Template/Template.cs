@@ -38,7 +38,8 @@ namespace StaticSharp {
         }*/
 
         public override async IAsyncEnumerable<KeyValuePair<string, string>> GetGeneratedBundingsAsync() {
-            yield return new("Html", $"()=>`{(await assetGenome.CreateOrGetCached()).ReadAllText()}`");//
+            var template = (await assetGenome.CreateOrGetCached()).ReadAllText();
+            yield return new("Html", $"()=>`{template}`");//
         }
     }
     

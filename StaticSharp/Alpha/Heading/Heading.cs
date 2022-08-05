@@ -27,14 +27,14 @@ namespace StaticSharp.Alpha {
             };
 
         }
-        /*public static IBlock H1(string text,
+        public static IBlock H1(string text,
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0
             ) {
             var paragraph = new Paragraph(callerFilePath, callerLineNumber);
             paragraph.AppendLiteral(text, callerFilePath, callerLineNumber);
             return H1(paragraph);
-        }*/
+        }
 
     }
 

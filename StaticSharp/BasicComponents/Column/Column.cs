@@ -43,6 +43,7 @@ namespace StaticSharp {
     [ScriptBefore]
     [ScriptAfter]
     public sealed class Column : Column<Symbolic.ColumnJs> {
+        public override string TagName => "column";
         public Column(Column other, string callerFilePath, int callerLineNumber)
             : base(other, callerFilePath, callerLineNumber) { }
         public Column([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)

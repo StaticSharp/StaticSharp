@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StaticSharp {
+namespace StaticSharp.Utils {
     public static class Utils {
 
         /// <summary>
@@ -28,13 +28,13 @@ namespace StaticSharp {
             var inputBytes = Encoding.ASCII.GetBytes(input);
             var hashBytes = algorithm.ComputeHash(inputBytes);
             var sb = new StringBuilder();
-            foreach(var i in hashBytes) { sb.Append(i.ToString("X2")); }
+            foreach (var i in hashBytes) { sb.Append(i.ToString("X2")); }
             return sb.ToString();
         }
 
 
         public static Task<T?> Unnull<T>(this Task<T?>? _this) where T : class {
-            if(_this == null) {
+            if (_this == null) {
                 return Task.FromResult<T?>(null);
             }
             return _this;
@@ -46,7 +46,7 @@ namespace StaticSharp {
         }
 
         public static T? ModifyIfNotNull<T>(this T? _this, Action<T> modifier) where T : class {
-            if (_this!=null)
+            if (_this != null)
                 modifier.Invoke(_this);
             return _this;
         }

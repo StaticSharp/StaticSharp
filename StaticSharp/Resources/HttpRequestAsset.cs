@@ -1,6 +1,10 @@
 ﻿using MimeTypes;
 using StaticSharp.Gears;
-using System.Text;
+using System;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace StaticSharp {
 

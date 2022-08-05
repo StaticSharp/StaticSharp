@@ -1,4 +1,5 @@
-﻿using StaticSharp.Html;
+﻿using StaticSharp.Gears;
+using StaticSharp.Html;
 using System.Threading.Tasks;
 
 namespace StaticSharp {

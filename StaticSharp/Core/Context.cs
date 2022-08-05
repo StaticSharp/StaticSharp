@@ -1,4 +1,5 @@
 ﻿
+using StaticSharp.Resources;
 using StaticSharpEngine;
 using System;
 using System.Collections.Concurrent;

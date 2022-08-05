@@ -1,10 +1,4 @@
-
-
-
-
 function ColumnInitialization(element) {
-
-
     BlockInitialization(element)
 
     element.Reactive = {
@@ -16,13 +10,7 @@ function ColumnInitialization(element) {
 
         ContentHeight: undefined,
         Height: () => element.ContentHeight,
-
-
-
-    }
-
-
-    
+    }    
 }
 
 
@@ -38,15 +26,10 @@ function ColumnBefore(element) {
 
 
     element.LayoutChildren = []
-    
-
 
     element.AddChild = function (child) {
         element.LayoutChildren.push(child)
     }
-
-
-
 }
 
 
@@ -78,8 +61,8 @@ function ColumnAfter(element) {
 
         for (let child of element.LayoutChildren) {
 
-            let spaceLeft = Max(element.PaddingLeft, child.MarginLeft, 0)
-            let spaceRight = Max(element.PaddingRight, child.MarginRight, 0)
+            let spaceLeft = Max(element.PaddingLeft, child.MarginLeft)
+            let spaceRight = Max(element.PaddingRight, child.MarginRight)
 
 
             Reaction.current.dirtImmune = true
@@ -87,7 +70,7 @@ function ColumnAfter(element) {
             Reaction.current.dirtImmune = false
 
 
-            child.LayoutX = Max(element.PaddingLeft, child.MarginLeft, 0)
+            child.LayoutX = Max(element.PaddingLeft, child.MarginLeft)
 
         }
     })

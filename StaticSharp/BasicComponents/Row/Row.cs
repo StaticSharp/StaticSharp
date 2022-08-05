@@ -63,6 +63,9 @@ namespace StaticSharp {
     [ScriptBefore]
     [ScriptAfter]
     public sealed class Row : Row<RowJs> {
+
+        public override string TagName => "row";
+
         public Row([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber)
             { }
@@ -75,12 +78,9 @@ namespace StaticSharp {
             : base(callerFilePath, callerLineNumber)
             { }*/
 
-        public override async Task<Tag> GenerateHtmlAsync(Context context, string? id) {
-            AddRequiredInclues(context.Includes);
-            return new Tag("row") {
-                CreateScriptBefore(),
-                await Task.WhenAll(children.Select(x=>x.Value.GenerateHtmlAsync(context,x.Key))),
-                CreateScriptAfter()
+        public override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
+            return new Tag() {
+                await children.Select(x=> x.Value.GenerateHtmlAsync(context,x.Key)).SequentialOrParallel(),
             };
         }
 

@@ -136,7 +136,8 @@ namespace StaticSharpWeb {
                 await LeftSideBar?.GenerateHtmlAsync(context,"LeftSideBar"),
 
                 await new Column() {
-                    Content
+                    Content,
+                    Footer
                 }.GenerateHtmlAsync(context,"Content"),
             };
         }

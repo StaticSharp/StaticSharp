@@ -1,14 +1,10 @@
 ﻿using MimeTypes;
 using StaticSharp.Gears;
-using System.Text;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace StaticSharp {
-
-
-    public interface IMutableAsset {
-        Task<bool> GetValidAsync();
-        public void DeleteCacheSubDirectory();
-    }
 
     public record FileGenome(string Path) : AssetGenome<FileGenome, FileAsset> {
     }

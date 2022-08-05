@@ -19,17 +19,14 @@
 	<ItemGroup>
 	  <Compile Remove="Components\**" />
 	  <Compile Remove="ContainersAndBlocks\**" />
-	  <Compile Remove="Resources\**" />
+
 	  <EmbeddedResource Remove="Components\**" />
 	  <EmbeddedResource Remove="ContainersAndBlocks\**" />
-	  <EmbeddedResource Remove="Resources\**" />
+
 	  <None Include="Components\**" />
 	  <None Include="ContainersAndBlocks\**" />
-	  <None Include="Resources\**" />
+
 	</ItemGroup>
-
-
-
 
 
 	<ItemGroup>
@@ -47,8 +44,11 @@
 
 		<PackageReference Include="YoutubeExplode" Version="6.0.7" />
 
+
+		<PackageReference Include="envdte" Version="17.0.32112.339" />
+		<PackageReference Include="MimeTypeMapOfficial" Version="1.0.17" />
+		
 		<ProjectReference Include="..\StaticSharpEngine\StaticSharpEngine.csproj" />
-		<ProjectReference Include="..\StaticSharpGears\StaticSharpGears.csproj" />
 	</ItemGroup>
 	
 	

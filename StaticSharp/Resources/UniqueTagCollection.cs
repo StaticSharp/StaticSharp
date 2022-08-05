@@ -1,9 +1,11 @@
-﻿using StaticSharp.Html;
+﻿using StaticSharp;
+using StaticSharp.Gears;
+using StaticSharp.Html;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace StaticSharp.Gears {
+namespace StaticSharp.Resources {
     public class UniqueTagCollection {
 
         private string IdPrefix { get; }
@@ -12,7 +14,7 @@ namespace StaticSharp.Gears {
         }
 
         private int currentIdIndex = 0;
-        private Dictionary<string, KeyValuePair<int,TagGenerator>> items = new ();
+        private Dictionary<string, KeyValuePair<int, TagGenerator>> items = new();
 
         private string MakeId(int idIndex) {
             return IdPrefix + idIndex.ToString("X");

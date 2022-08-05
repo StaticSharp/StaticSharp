@@ -1,9 +1,22 @@
 function RowInitialization(element) {
     BlockInitialization(element)
 
-    let parent = element.parentElement;
+    element.Reactive = {
+        ContentWidth: undefined,
+        ContentHeight: undefined,
 
-    element.Reactive.X = () => {
+        Width: () => First(
+            element.LayoutWidth,
+            Sum(
+                element.ContentWidth,
+                element.PaddingLeft,
+                element.PaddingRight
+            )
+        ),
+        Height: () => Sum(element.ContentHeight, element.PaddingTop, element.PaddingButtom),
+    }
+
+    /*element.Reactive.X = () => {
         return Max(parent.Padding.Left, element.Margin.Left) || 0
     }
 
@@ -13,53 +26,21 @@ function RowInitialization(element) {
         var paddingRight = Max(parent.Padding.Right, element.Margin.Right) || 0
         var parentWidth = parent.Width - paddingLeft - paddingRight
         return Min(element.ContentWidth, parentWidth)
-    }
+    }*/
 }
 
 function RowBefore(element, parameters) {
     BlockBefore(element)
+    element.isRow = true
 
+    WidthToStyle(element)
+    HeightToStyle(element)
 
-    element.Reactive = parameters
-    //console.log("element.DefaultSpace",element.DefaultSpace)
+    element.LayoutChildren = []
 
-    let parent = element.parentElement;
-
-    element.horizontalLayout = true
-
-    /*element.style.display = "flex"
-    element.style.flexDirection = "row";
-
-    element.style.flexWrap = "wrap";
-    element.style.justifyContent = "space-between";*/
-
-
-    //element.Padding.Left = () => (parent.Padding && parent.Padding.Left) || 0
-    //element.Padding.Right = () => (parent.Padding && parent.Padding.Right) || 0
-
-    element.Margin.Left = 10
-    element.Margin.Right = 10
-
-    new Reaction(() => {
-        if (element.Width)
-            element.style.width = element.Width + "px"
-        else
-            element.style.width = undefined
-    })
-
-    new Reaction(() => {
-        if (element.Height)
-            element.style.height = element.Height + "px"
-        else
-            element.style.height = undefined
-
-    })
-
-
-    parent[element.id] = element
-
-    
-
+    element.AddChild = function (child) {
+        element.LayoutChildren.push(child)
+    }
 
 }
 
@@ -110,6 +91,76 @@ function getCanvasFontSize(el = document.body) {
 
 
 function RowAfter(element) {
+    BlockAfter(element)
+
+
+    new Reaction(() => {
+
+        let contentWidth = undefined
+
+        let line = []
+        let lineContentWidth = 0
+        let lineGrowUnits = 0
+        let previousMargin = First(element.PaddingLeft,0)
+
+
+
+        for (let child of element.LayoutChildren) {
+
+            if (child.isBlock) {
+                let margin = Max(child.MarginTop, previousMargin)
+                previousMargin = First(child.MarginRight, 0)
+
+                lineContentWidth += margin
+                //if (assignDimensions) {
+                child.LayoutX = lineContentWidth
+                //}
+                lineContentWidth += Max(child.Width, 0)
+            }
+
+
+            
+
+            line.push(child)
+
+            console.log(child)
+
+            /*Reaction.current.dirtImmune = true
+            child.LayoutWidth = undefined
+            Reaction.current.dirtImmune = false
+
+
+            let spaceLeft = Max(element.PaddingLeft, child.MarginLeft, 0)
+            let spaceRight = Max(element.PaddingRight, child.MarginRight, 0)
+            contentWidth = Max(contentWidth,
+                Sum(child.Width, spaceLeft + spaceRight, -element.PaddingLeft, -element.PaddingRight))*/
+
+            //contentWidth = Max(contentWidth, child.Width)
+
+        }
+
+        element.ContentWidth = contentWidth
+
+        /*for (let child of element.LayoutChildren) {
+
+            let spaceLeft = Max(element.PaddingLeft, child.MarginLeft)
+            let spaceRight = Max(element.PaddingRight, child.MarginRight)
+
+
+            Reaction.current.dirtImmune = true
+            child.LayoutWidth = element.Width - spaceLeft - spaceRight
+            Reaction.current.dirtImmune = false
+
+
+            child.LayoutX = Max(element.PaddingLeft, child.MarginLeft)
+
+        }*/
+    })
+
+
+
+    return
+
 
     //element.style.height = "200px"
     let fontData = GetFontData(element)

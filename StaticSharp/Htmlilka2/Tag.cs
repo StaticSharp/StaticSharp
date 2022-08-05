@@ -1,5 +1,4 @@
-﻿using StaticSharpGears;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
@@ -196,8 +195,8 @@ namespace StaticSharp.Html {
                         stringValue = item.Value.ToString();
                     }
                     if (stringValue == null) continue;
-
-                    builder.Append($"{Gears.CaseConverter.PascalToKebabCase(item.Key)}:{stringValue};");
+                    builder.Append($"{item.Key}:{stringValue};");
+                    //builder.Append($"{Gears.CaseConverter.PascalToKebabCase(item.Key)}:{stringValue};");
                 }
                 builder.Append($"\"");
 
