@@ -2,9 +2,22 @@ function ColumnInitialization(element) {
     BlockInitialization(element)
 
     element.Reactive = {
-        ContentWidth: undefined,
+        InternalWidth: () => {
 
-        Width: () => Sum(element.ContentWidth, element.PaddingLeft, element.PaddingRight),
+            let internalWidth = undefined
+            for (let child of element.LayoutChildren) {
+                let spaceLeft = Max(element.PaddingLeft, child.MarginLeft, 0)
+                let spaceRight = Max(element.PaddingRight, child.MarginRight, 0)
+                let internalWidthByCurrentChild = Sum(child.InternalWidth, spaceLeft + spaceRight)
+                internalWidth = Max(internalWidth, internalWidthByCurrentChild)
+            }
+            return internalWidth
+        },
+
+
+
+
+        //Width: () => element.ContentWidth,//Sum(element.ContentWidth, element.PaddingLeft, element.PaddingRight),
 
         //PaddingLeft: () => element.Height,
 
@@ -37,47 +50,21 @@ function ColumnAfter(element) {
     BlockAfter(element)
 
     
-    
+    for (let child of element.LayoutChildren) {
 
-    new Reaction(() => {
+        child.LayoutX = () => Max(element.PaddingLeft, child.MarginLeft)
 
-        let contentWidth = undefined
-        for (let child of element.LayoutChildren) {
-            Reaction.current.dirtImmune = true
-            child.LayoutWidth = undefined
-            Reaction.current.dirtImmune = false
-
-
-            let spaceLeft = Max(element.PaddingLeft, child.MarginLeft, 0)
-            let spaceRight = Max(element.PaddingRight, child.MarginRight, 0)
-            contentWidth = Max(contentWidth,
-                Sum(child.Width, spaceLeft + spaceRight, -element.PaddingLeft, -element.PaddingRight))
-
-            //contentWidth = Max(contentWidth, child.Width)
-            
-        }
-
-        element.ContentWidth = contentWidth
-
-        for (let child of element.LayoutChildren) {
-
-            let spaceLeft = Max(element.PaddingLeft, child.MarginLeft)
+        child.LayoutWidth = () => {
+            //let spaceLeft = Max(element.PaddingLeft, child.MarginLeft)
             let spaceRight = Max(element.PaddingRight, child.MarginRight)
+            return element.Width - child.LayoutX - spaceRight
+        }        
+    }
 
 
-            Reaction.current.dirtImmune = true
-            child.LayoutWidth = element.Width - spaceLeft - spaceRight
-            Reaction.current.dirtImmune = false
-
-
-            child.LayoutX = Max(element.PaddingLeft, child.MarginLeft)
-
-        }
-    })
     
 
     new Reaction(() => {
-
 
         let previousMargin
         let freeSpaceUnits

@@ -1,17 +1,11 @@
 ﻿using StaticSharp.Gears;
 using StaticSharp.Html;
-using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    public static class W {
-        public static T MakeNotEvaluatable<T>(this T _this) {
-            return _this;
-        }
-    }
 
     [System.Diagnostics.DebuggerNonUserCode]
     public class BlockJs : HierarchicalJs {
@@ -32,15 +26,6 @@ namespace StaticSharp {
     
 
     namespace Gears {
-
-        public class BlockList : List<KeyValuePair<string?, IBlock>> {
-            public BlockList(): base() { }
-            public BlockList(BlockList other): base(other) {}
-
-            public void Add(IBlock block, string? id) {
-                Add(new KeyValuePair<string?, IBlock>(id, block));
-            }
-        }
 
 
         [ScriptBefore]

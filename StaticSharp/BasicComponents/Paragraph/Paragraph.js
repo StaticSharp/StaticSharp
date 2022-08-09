@@ -12,12 +12,10 @@ function ParagraphInitialization(element) {
 
 
     element.Reactive = {
-        Width: () => {
-            //console.log("paragraph.Width.eval... element.LayoutWidth:", element.LayoutWidth, "element.MaxContentWidth", element.MaxContentWidth)
-            return Min(element.LayoutWidth, element.MaxContentWidth)
-        },
 
-        Height: undefined,
+        InternalWidth: () => element.MaxContentWidth,
+
+        InternalHeight: undefined,
 
         MaxContentWidth: undefined,
         MinContentWidth: undefined,
@@ -88,13 +86,13 @@ function ParagraphAfter(element) {
 
             let scale = element.Width / element.MinContentWidth
             content.style.transform = `scale(${scale}, ${scale})`
-            element.Height = element.MaxContentHeight * scale
+            element.InternalHeight = element.MaxContentHeight * scale
             return
         }
         if (Math.abs(element.Width - element.MaxContentWidth) < 0.001) {
             //element.title = "element.Width == element.MaxContentWidth"
 
-            element.Height = element.MinContentHeight
+            element.InternalHeight = element.MinContentHeight
             content.style.width = "max-content"
 
             return
@@ -103,7 +101,7 @@ function ParagraphAfter(element) {
         content.style.width = element.style.width
 
         var rect = content.getBoundingClientRect()
-        element.Height = rect.height
+        element.InternalHeight = rect.height
 
     })
 

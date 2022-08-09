@@ -9,9 +9,11 @@ function ImageInitialization(element) {
 
         Aspect: element.dataset.width / element.dataset.height,
 
-        Width: () => element.LayoutWidth || (element.Height * element.Aspect) || element.dataset.width,
+        InternalWidth: () => First(element.Height * element.Aspect, element.dataset.width),
+        InternalHeight: () => First(element.Width / element.Aspect, element.dataset.height),
+        //Width: () => element.LayoutWidth || (element.Height * element.Aspect) || element.dataset.width,
 
-        Height: () => element.LayoutHeight || (element.Width / element.Aspect) || element.dataset.height,
+        //Height: () => element.LayoutHeight || (element.Width / element.Aspect) || element.dataset.height,
 
 
 

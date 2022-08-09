@@ -25,11 +25,11 @@ namespace StaticSharp {
         float? GrowAbove { get; set; } = null;
         float? GrowBelow { get; set; } = null;
 
-        protected BlockList children { get; } = new();
+        protected Blocks children { get; } = new();
         public Row<Js> Children => this;
         public void Add(string? id, IBlock? value) {
             if (value!=null)
-                children.Add(value,id);
+                children.Add(id, value);
         }
 
         public static Space DefaultSpace = new Space();

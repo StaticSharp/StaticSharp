@@ -30,10 +30,19 @@ function BlockInitialization(element) {
         LayoutWidth: undefined,
         LayoutHeight: undefined,
 
+        
+
+        InternalWidth: undefined,
+        InternalHeight: undefined,
+
+
         X: () => element.LayoutX,
         Y: () => element.LayoutY,
-        Width: () => element.LayoutWidth,
-        Height: () => element.LayoutHeight,
+
+        Width: () => First(element.LayoutWidth, element.InternalWidth),
+        Height: () => First(element.LayoutHeight, element.InternalHeight),
+
+
 
         Hover: false
     }

@@ -1,8 +1,9 @@
 ﻿using StaticSharp.Symbolic;
 using StaticSharpWeb;
-
+using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace StaticSharpDemo.Root {
     partial class Material : StaticSharpWeb.Material {
@@ -43,16 +44,42 @@ namespace StaticSharpDemo.Root {
         };
 
         public override IBlock? Footer => new Row{
-            MarginLeft = 8,
-            PaddingLeft = -8,
-            Children = { 
+            X = 0,
+            Width = new((e)=>e.ParentBlock.Width),
+
+            PaddingTop = 20,
+            //MarginLeft = 8,
+            PaddingLeft = new((e) => e.ParentBlock.PaddingLeft),
+            PaddingRight = new((e) => e.ParentBlock.PaddingRight),
+
+
+            Children = {
+                new Func<IBlock>(()=>{ 
+                    var result = new Column{
+                        new Blocks(){
+                            H1("Links"),
+                            "тут будут ссылки"
+                        }.Select(x=>{
+                            return x;
+                        })
+                    };
+                    return result;
+                })(),
+
                 new Column{
-                    H1("Links"),
-                    "тут будут ссылки"
+                    new Blocks(){
+                        H1("Links"),
+                        "тут будут ссылки"
+                    }.Select(x=>{
+                        return x;
+                    })                    
                 },
                 new Column{
-                    H1("Column 2"),
-                    "тут будут еще ссылки"
+                    MarginTop = 20,
+                    Children = {
+                        H1("Column 2"),
+                        "тут будут еще ссылки"
+                    }
                 },
                 new Column{
                     H1("Column 3"),

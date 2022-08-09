@@ -13,6 +13,8 @@ namespace StaticSharp {
         public string Id => throw new NotEvaluatableException();
         public HierarchicalJs Parent => throw new NotEvaluatableException();
 
+        public BlockJs ParentBlock => throw new NotEvaluatableException();
+
         public T Sibling<T>(string id) where T : HierarchicalJs => throw new NotEvaluatableException();
         public T Child<T>(string id) where T : HierarchicalJs => throw new NotEvaluatableException();
 

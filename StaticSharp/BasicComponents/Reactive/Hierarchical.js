@@ -34,6 +34,17 @@ function HierarchicalInitialization(element) {
 
     element.Reactive = {
         Parent: parent,
+        ParentBlock: () => {
+            var p = element.Parent
+            while (p != undefined) {
+                if (p.isBlock) {
+                    return p
+                } else {
+                    p = p.Parent
+                }
+            }
+            return undefined
+        },
         FirstChild: undefined,
         LastChild: undefined,
         NextSibling: undefined,

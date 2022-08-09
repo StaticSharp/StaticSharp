@@ -20,7 +20,7 @@ namespace StaticSharp {
 
     public abstract class Column<Js> : Block<Js>, IBlockCollector where Js : Symbolic.ColumnJs, new() {
 
-        protected BlockList children { get; } = new();
+        protected Blocks children { get; } = new();
 
         public Column(Column<Js> other, string callerFilePath, int callerLineNumber)
             : base(other, callerFilePath, callerLineNumber) {
@@ -31,7 +31,7 @@ namespace StaticSharp {
         public Column<Js> Children => this;
         public void Add(string? id, IBlock? value) {
             if (value != null) {
-                children.Add(value,id);
+                children.Add(id, value);
             }
         }
         public override void AddRequiredInclues(IIncludes includes) {

@@ -1,19 +1,146 @@
+
+function RowMeasurer(startMargin) {
+    let _this = this
+    _this.margin = startMargin
+    _this.currentX = 0
+
+    _this.add = function (child) {
+        let spaceLeft = First(Max(_this.margin, child.MarginLeft), 0)
+        _this.currentX += spaceLeft + child.Width
+        _this.margin = child.MarginRight
+    }
+
+    _this.finish = function (endMargin) {
+        let spaceRight = First(Max(endMargin, _this.margin), 0)
+        _this.currentX += spaceRight
+    }
+}
+
+function RowBuilder(element) {
+    let _this = this
+
+    let startMargin = First(element.PaddingLeft, 0)
+    let endMargin = First(element.PaddingRight, 0)
+    let maxWidth = element.Width
+
+    _this.margin = startMargin;
+    _this.currentX = 0
+
+    _this.currentLineHardY = 0
+    _this.currentLineSoftY = element.PaddingTop
+    _this.currentY = 0
+
+    _this.lineHeight = 0
+
+    _this.newLineHardY = 0
+    _this.newLineSoftY = 0
+
+
+    let newLine = function () {
+        _this.lineIsEmpty = true
+        _this.margin = startMargin
+        _this.currentX = 0
+        _this.currentLineHardY = _this.newLineHardY;
+        _this.currentLineSoftY = _this.newLineSoftY;
+        _this.lineHeight = 0
+    }
+
+    _this.layout = function (child) {
+        let spaceLeft = First(Max(_this.margin, child.MarginLeft), 0)
+        let spaceRight = Max(endMargin, child.MarginRight)
+
+        //console.log("spaceLeft", spaceLeft)
+
+
+        if ((_this.currentX + spaceLeft + child.InternalWidth + spaceRight) > maxWidth) {
+            newLine()
+            spaceLeft = First(Max(_this.margin, child.MarginLeft), 0)
+
+            if ((spaceLeft + child.InternalWidth + spaceRight) > maxWidth) {
+                child.LayoutWidth = maxWidth - spaceLeft - spaceRight
+            } else {
+                child.LayoutWidth = undefined
+            }
+        } else {
+            child.LayoutWidth = undefined
+        }
+
+        var yA = Sum(_this.currentLineHardY, child.MarginTop)
+        var yB = _this.currentLineSoftY
+
+        var y = Max(yA, yB)
+
+
+        _this.lineHeight = Max(_this.lineHeight, child.Height)
+        _this.currentX += spaceLeft
+
+        child.LayoutX = _this.currentX
+
+
+        _this.currentX += child.Width
+
+        child.LayoutY = y
+
+        _this.margin = child.MarginRight
+
+        var hardBottom = y + child.Height
+
+        _this.newLineHardY = Max(_this.newLineHardY, hardBottom)
+        _this.newLineSoftY = Max(_this.newLineSoftY, Sum(hardBottom, child.MarginBottom))
+
+        //console.log("child.LayoutX", child.LayoutX)
+        //console.log("child.LayoutY", child.LayoutY)
+    }
+    
+
+    _this.try = function (child) {
+        //console.log("try._this.margin", _this.margin)
+        let spaceLeft = First(Max(_this.margin, child.MarginLeft),0)
+        return {
+            newPosition: _this.currentX + spaceLeft + child.Width,
+            newMargin: child.MarginRight
+        }
+    }
+
+    _this.add = function (resultOfTry) {
+        _this.currentX = resultOfTry.newPosition
+        _this.margin = resultOfTry.newMargin
+    }
+
+
+}
+
 function RowInitialization(element) {
     BlockInitialization(element)
 
     element.Reactive = {
+
+        InternalWidth: () => {
+            let measurer = new RowMeasurer(
+                First(element.PaddingLeft, 0)
+            );
+
+            for (let child of element.LayoutChildren) {
+                measurer.add(child)
+            }
+            measurer.finish();
+            return measurer.currentX
+        },
+
+        //Width: () => element.InternalWidth,
+
         ContentWidth: undefined,
         ContentHeight: undefined,
 
-        Width: () => First(
+        /*Width: () => First(
             element.LayoutWidth,
             Sum(
                 element.ContentWidth,
                 element.PaddingLeft,
                 element.PaddingRight
             )
-        ),
-        Height: () => Sum(element.ContentHeight, element.PaddingTop, element.PaddingButtom),
+        ),*/
+        //Height: 150//() => Sum(element.ContentHeight, element.PaddingTop, element.PaddingButtom),
     }
 
     /*element.Reactive.X = () => {
@@ -96,16 +223,34 @@ function RowAfter(element) {
 
     new Reaction(() => {
 
-        let contentWidth = undefined
+        /*let contentWidth = undefined
 
         let line = []
         let lineContentWidth = 0
         let lineGrowUnits = 0
-        let previousMargin = First(element.PaddingLeft,0)
+        let previousMargin = First(element.PaddingLeft,0)*/
 
-
+        let builder = new RowBuilder(element);
 
         for (let child of element.LayoutChildren) {
+            builder.layout(child)
+            /*var t = builder.try(child)
+            console.log(t.newPosition,element.Width)
+
+            if (t.newPosition > element.Width) {
+                builder.newLine()
+                builder.layout(child)
+            } else {
+                builder.layout(child)
+                builder.add(t)
+            }*/
+        }
+        var hA = Sum(builder.newLineHardY, element.PaddingBottom)
+        var hB = builder.newLineSoftY
+
+        element.Height = Max(hA, hB)
+
+        /*for (let child of element.LayoutChildren) {
 
             if (child.isBlock) {
                 let margin = Max(child.MarginTop, previousMargin)
@@ -125,21 +270,9 @@ function RowAfter(element) {
 
             console.log(child)
 
-            /*Reaction.current.dirtImmune = true
-            child.LayoutWidth = undefined
-            Reaction.current.dirtImmune = false
+        }*/
 
-
-            let spaceLeft = Max(element.PaddingLeft, child.MarginLeft, 0)
-            let spaceRight = Max(element.PaddingRight, child.MarginRight, 0)
-            contentWidth = Max(contentWidth,
-                Sum(child.Width, spaceLeft + spaceRight, -element.PaddingLeft, -element.PaddingRight))*/
-
-            //contentWidth = Max(contentWidth, child.Width)
-
-        }
-
-        element.ContentWidth = contentWidth
+        //element.ContentWidth = contentWidth
 
         /*for (let child of element.LayoutChildren) {
 
@@ -164,7 +297,7 @@ function RowAfter(element) {
 
     //element.style.height = "200px"
     let fontData = GetFontData(element)
-
+/*
     new Reaction(() => {
 
         //console.log("rebuild ", element)
@@ -184,13 +317,6 @@ function RowAfter(element) {
                 spaceWidth:0,
             }
         ]
-        /*
-         {
-            ascent
-            descent
-            spaceWidth
-         }
-         */
 
 
 
@@ -242,9 +368,7 @@ function RowAfter(element) {
                 if (n.tagName == WordTagName) {
                     //child.removeAttribute("x")
                     //child.removeAttribute("y")
-                    /*range.selectNodeContents(n);
-                    var rect = range.getBoundingClientRect();
-                    console.log(n.innerText, rect)*/
+
 
                     
                     n.style.left = x.toFixed(2) + "px"
@@ -269,24 +393,7 @@ function RowAfter(element) {
             for (let n of nodes) {
                 
                 if (n.nodeType == 1) {
-                    /*if (n.tagName == "text") {
 
-                        n.setAttribute("x", 0 + "px");
-                        n.setAttribute("y", 0 + "px");
-
-                        console.log("n.dataset.a", n.dataset.a)
-                        
-                        fontStack.push({
-                            ascent: n.dataset.a,
-                            descent: n.dataset.d,
-                            spaceWidth: n.dataset.sw,
-                        })
-
-                        processNodes(n.childNodes)
-
-                        fontStack.pop()
-                        continue
-                    }*/
                     
                     if (n.tagName == WordTagName) {
                         
@@ -318,115 +425,6 @@ function RowAfter(element) {
         element.Height = y
 
 
-        /*
-
-
-        let height = 0
-        
-        let containerSpaceLeft = element.Padding.Left
-        let containerSpaceRight = element.Padding.Right
-        let top = 0;
-        let i = 0
-        while (i < children.length) {
-
-            let previousSpaceLeft = containerSpaceLeft
-            let rowHeight = 0
-            let rowWidth = 0
-
-            
-            let j = 0
-
-            let row = []
-            let rowSpacers = 0
-            let accumulatedSpaces = 0
-            while (i < children.length) {
-                let current = children[i]
-                
-                let spacer = current.getAttribute("Spacer")
-                spacer = spacer && parseFloat(spacer)
-
-                if (spacer != undefined) {
-                    
-                    accumulatedSpaces += spacer
-                } else {                    
-
-                    let descriptor = {
-                        width: current.offsetWidth,
-                        left: 0,
-                        right: 0,
-                        element: current
-                    }
-
-
-                    let currentWidth = current.offsetWidth
-                    if (current.Margin) {
-                        descriptor.left = current.Margin.Left
-                        descriptor.right = current.Margin.Right
-                    }
-
-                    let totalFreeSpaceRequired =
-                        Math.max(previousSpaceLeft, descriptor.left)
-                        + currentWidth
-                        + Math.max(containerSpaceRight, descriptor.right)
-
-
-                    if (width < (rowWidth + totalFreeSpaceRequired)) {
-                        if (j > 0)
-                            break;
-                    }
-
-                    if (accumulatedSpaces > 0) {
-                        row.push(accumulatedSpaces)
-                        rowSpacers += accumulatedSpaces
-                        accumulatedSpaces = 0
-                    }
-
-                    row.push(descriptor)
-
-
-                    current.style.top = top + "px"
-
-
-                    rowWidth += Math.max(previousSpaceLeft, descriptor.left) + currentWidth
-
-                    rowHeight = Math.max(rowHeight, current.offsetHeight)
-
-                    previousSpaceLeft = descriptor.right
-
-                    j++
-                }                
-                i++                
-            }
-
-            let spacersWidth = width - (rowWidth + Math.max(previousSpaceLeft, containerSpaceRight))
-            let pixelsPerSpacer = (rowSpacers > 0) ? spacersWidth / rowSpacers : 0
-
-
-            //console.log("rowWidth", rowWidth, "spacersWidth", spacersWidth, "rowSpacers", rowSpacers, "pixelsPerSpacer", pixelsPerSpacer)
-
-            previousSpaceLeft = containerSpaceLeft
-            rowWidth = 0
-            let currentSpacerSize = 0
-
-
-            for (let current of row) {
-                
-                if (typeof current == "number") {
-                    currentSpacerSize += current * pixelsPerSpacer
-                } else {
-
-                    let spaceLeft = Math.max(previousSpaceLeft, current.left) + currentSpacerSize
-
-                    current.element.style.left = rowWidth + spaceLeft + "px"
-                    rowWidth += spaceLeft + current.width
-                    previousSpaceLeft = current.right
-                    currentSpacerSize = 0
-                }
-            }
-
-            top += rowHeight
-        }*/
-
         
 
         
@@ -434,7 +432,7 @@ function RowAfter(element) {
         element.style.height = top+"px"
 
     })
-
+*/
     //let flexChildren = document.querySelectorAll('.content');
     //let leftPosition = flexChildren[0].offsetLeft;
     

@@ -10,7 +10,7 @@ namespace StaticSharp {
 
     public class Group: CallerInfo,  IBlockCollector {
 
-        public BlockList Children { get; } = new();
+        public Blocks Children { get; } = new();
 
         public Group([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber) {
@@ -19,7 +19,7 @@ namespace StaticSharp {
 
         public void Add(string? id, IBlock? value) {
             if (value!=null)
-                Children.Add(value, id);
+                Children.Add(id,value);
         }
 
 
