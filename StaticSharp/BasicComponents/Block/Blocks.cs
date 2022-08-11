@@ -13,10 +13,5 @@ namespace StaticSharp {
             }            
         }
     }
-    
 
-    /*public sealed class Item : Item<Symbolic.Item> {
-        public Item([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
-            : base(callerFilePath, callerLineNumber) { }
-    }*/
 }

@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Linq;
 
 namespace StaticSharpDemo.Root {
-    partial class Material : StaticSharpWeb.Material {
+    public partial class Material : StaticSharpWeb.Material {
 
         /*public override Footer Footer => new() {
         };
@@ -21,7 +21,9 @@ namespace StaticSharpDemo.Root {
 
             Modifiers = {
                 new Modifier() {
-                    BackgroundColor = Color.FromArgb(255,0xA0,0x70,0x30),
+                    Bindings = {
+                        BackgroundColor = e=>Color.FromArgb(255,0xA0,0x70,0x30),
+                    }
                 }
             },
 
@@ -29,11 +31,13 @@ namespace StaticSharpDemo.Root {
                 "Menu Item 1",
                 "Menu item 2",
                 new Space(){
-                    GrowBetween = 1
+                    Bindings = {
+                        GrowBetween = e=>1
+                    }
                 },
 
                 new Paragraph(){
-                    Width = "() => element.LayoutWidth",
+                    ["Width"] = "() => element.LayoutWidth",
                     Children = {
                         "Social links"
                     }
@@ -43,15 +47,18 @@ namespace StaticSharpDemo.Root {
 
         };
 
+  
+
         public override IBlock? Footer => new Row{
-            X = 0,
-            Width = new((e)=>e.ParentBlock.Width),
+            Bindings = {
+                X = e=>0,
+                Width = e=>e.ParentBlock.Width,
 
-            PaddingTop = 20,
-            //MarginLeft = 8,
-            PaddingLeft = new((e) => e.ParentBlock.PaddingLeft),
-            PaddingRight = new((e) => e.ParentBlock.PaddingRight),
-
+                PaddingTop = e=>20,
+                //MarginLeft = 8,
+                PaddingLeft = e => e.ParentBlock.PaddingLeft,
+                PaddingRight = e => e.ParentBlock.PaddingRight,
+            },
 
             Children = {
                 new Func<IBlock>(()=>{ 
@@ -63,6 +70,9 @@ namespace StaticSharpDemo.Root {
                             return x;
                         })
                     };
+
+                    //result.Children.OfType<Block<>>
+
                     return result;
                 })(),
 
@@ -75,7 +85,9 @@ namespace StaticSharpDemo.Root {
                     })                    
                 },
                 new Column{
-                    MarginTop = 20,
+                    Bindings = {
+                        MarginTop = e=> 20,
+                    },
                     Children = {
                         H1("Column 2"),
                         "тут будут еще ссылки"

@@ -1,23 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
-  
-  <ItemGroup>
-    <Compile Remove="GeneratorDebugTools\**" />
-    <None Remove="GeneratorDebugTools\**" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		
+	</PropertyGroup>
 
-  
-  <ItemGroup>
-    <PackageReference Include="envdte" Version="17.0.32112.339" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.0.1" />
-    <PackageReference Include="Scopes" Version="0.0.16" />
-  </ItemGroup>
+
+
+
+	<ItemGroup>
+		<Compile Remove="GeneratorDebugTools\**" />
+		<None Remove="GeneratorDebugTools\**" />
+	</ItemGroup>
+	
+	
+	<ItemGroup>
+		<PackageReference Include="envdte" Version="17.0.32112.339" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.2.0" />
+		<PackageReference Include="Scopes" Version="0.0.16"/>
+	</ItemGroup>
+
+
 
 </Project>

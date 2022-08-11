@@ -50,8 +50,10 @@ namespace StaticSharpDemo.Root {
             {
                 "Slider",
                 new Slider {
-                    Min = 10,
-                    Max = 50
+                    Bindings = {
+                        Min = e=> 10,
+                        Max = e=> 50
+                    }
                 }
             },
 

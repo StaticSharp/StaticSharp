@@ -1,5 +1,8 @@
 ﻿using StaticSharp.Gears;
 using StaticSharp.Html;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
@@ -12,29 +15,54 @@ namespace StaticSharp {
         public float Step =>    throw new NotEvaluatableException();
         public float Value =>   throw new NotEvaluatableException();//new InvalidUsageException();//
     }
-    
 
 
-    public abstract class Slider<Js> : Block<Js> where Js : SliderJs, new() {
+    public class SliderBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
+        public SliderBindings(Dictionary<string, string> properties) : base(properties) {}
 
-        public Slider(Slider<Js> other, string callerFilePath, int callerLineNumber)
+        public Expression<Func<FinalJs, float>> Min { set { AssignProperty(value); } }
+        public Expression<Func<FinalJs, float>> Max { set { AssignProperty(value); } }
+        public Expression<Func<FinalJs, float>> Step { set { AssignProperty(value); } }
+        public Expression<Func<FinalJs, float>> Value { set { AssignProperty(value); } }
+    }
+
+
+
+
+    [ScriptBefore]
+    [ScriptAfter]
+    public class Slider : Block {
+
+        public new SliderBindings<SliderJs> Bindings => new(Properties);
+        public override string TagName => "slider";
+
+        
+
+
+        public Slider(Slider other, string callerFilePath, int callerLineNumber)
             : base(other, callerFilePath, callerLineNumber) { }
 
-        public Slider(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
+        public Slider([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
 
         public override void AddRequiredInclues(IIncludes includes) {
             base.AddRequiredInclues(includes);
             includes.Require(new Script(ThisFilePathWithNewExtension("js")));
         }
 
+        public override Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
+
+            context.Includes.Require(new Style(AbsolutePath("Slider.scss")));
+
+            return Task.FromResult<Tag?>(new Tag("input") {
+                    ["type"] = "range"
+                });
+        }
+
     }
 
-    [ScriptBefore][ScriptAfter]
-    public sealed class Slider : Slider<SliderJs> {
-        public Binding<float> Min   { set; private get; }
-        public Binding<float> Max   { set; private get; }
-        public Binding<float> Step  { set; private get; }
-        public Binding<float> Value { set; private get; }
+    
+    /*public sealed class Slider : Slider<SliderJs> {
+        
 
         public Slider(Slider other, string callerFilePath, int callerLineNumber)
             : base(other, callerFilePath, callerLineNumber) {
@@ -47,17 +75,8 @@ namespace StaticSharp {
         public Slider([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber) { }
 
-        public override string TagName => "slider";
+        
 
-        public override Task<Tag> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
-
-            context.Includes.Require(new Style(AbsolutePath("Slider.scss")));
-
-            return Task.FromResult(
-                new Tag("input") {
-                    ["type"] = "range"
-                }
-                );
-        }
-    }
+        
+    }*/
 }

@@ -20,8 +20,11 @@ namespace StaticSharp.Alpha {
             return new Paragraph(paragraph, callerFilePath, callerLineNumber) {
                 Modifiers = {
                     new Modifier(callerFilePath,callerLineNumber) {
-                        FontSize = 30,         
-                        FontStyle = new FontStyle(FontWeight.Bold),
+                        Bindings = {
+                            FontSize = e=>30,                            
+                        },
+                        FontStyle = new FontStyle(FontWeight.Bold)
+
                     }
                 }
             };

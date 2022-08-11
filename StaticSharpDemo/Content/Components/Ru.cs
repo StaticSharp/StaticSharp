@@ -2,23 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace StaticSharpDemo.Root.Components;
-
-[Representative]
-partial class Ru : Material {
-    public override Paragraph Description => $"Компоненты для создания {8} страниц.";
+namespace StaticSharpDemo.Root.Components {
 
 
 
-    
+    [Representative]
+    public partial class Ru : Material {
+        public override Paragraph Description => $"Компоненты для создания {8} страниц.";
 
 
-    /*new Row().Modify(x => {
-    foreach (var i in CreateParagraphs(1000))
-        x.Add(i);
-}),*/
 
-    public override Group Content => new() {
+
+
+
+        /*new Row().Modify(x => {
+        foreach (var i in CreateParagraphs(1000))
+            x.Add(i);
+    }),*/
+
+        public override Group Content => new() {
 
         "Text",
 
@@ -112,5 +114,6 @@ new Spacer(),
 
 
     };
+    }
 }
 

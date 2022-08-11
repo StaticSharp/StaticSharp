@@ -1,6 +1,9 @@
 ﻿using StaticSharp.Gears;
 using StaticSharp.Html;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
@@ -23,32 +26,43 @@ namespace StaticSharp {
         public float PaddingTop =>    throw new NotEvaluatableException();
         public float PaddingBottom => throw new NotEvaluatableException();
     }
-    
+
+
+    public class BlockBindings<FinalJs>: HierarchicalBindings<FinalJs> where FinalJs : new() {
+        public BlockBindings(Dictionary<string, string> properties) : base(properties) {
+        }
+        public Expression<Func<FinalJs, float>> X { set { AssignProperty(value); } }
+        public Expression<Func<FinalJs, float>> Y { set { AssignProperty(value); } }
+        public Expression<Func<FinalJs, float>> Width { set { AssignProperty(value); } }
+        public Expression<Func<FinalJs, float>> Height { set { AssignProperty(value); } }
+        public Expression<Func<FinalJs, float>> MarginLeft { set { AssignProperty(value); } }
+        public Expression<Func<FinalJs, float>> MarginRight { set { AssignProperty(value); } }
+        public Expression<Func<FinalJs, float>> MarginTop { set { AssignProperty(value); } }
+        public Expression<Func<FinalJs, float>> MarginBottom { set { AssignProperty(value); } }
+        public Expression<Func<FinalJs, float>> PaddingLeft { set { AssignProperty(value); } }
+        public Expression<Func<FinalJs, float>> PaddingRight { set { AssignProperty(value); } }
+        public Expression<Func<FinalJs, float>> PaddingTop { set { AssignProperty(value); } }
+        public Expression<Func<FinalJs, float>> PaddingBottom { set { AssignProperty(value); } }
+
+    }
+
 
     namespace Gears {
 
 
         [ScriptBefore]
         [ScriptAfter]
-        public abstract class Block<Js> : Hierarchical<Js>, IBlock where Js : BlockJs, new() {
-            public Binding<float> X { set; protected get; }
-            public Binding<float> Y { set; protected get; }
-            public Binding<float> Width { set; protected get; }
-            public Binding<float> Height { set; protected get; }
-            public Binding<float> MarginLeft { set; protected get; }
-            public Binding<float> MarginRight { set; protected get; }
-            public Binding<float> MarginTop { set; protected get; }
-            public Binding<float> MarginBottom { set; protected get; }
-            public Binding<float> PaddingLeft { set; protected get; }
-            public Binding<float> PaddingRight { set; protected get; }
-            public Binding<float> PaddingTop { set; protected get; }
-            public Binding<float> PaddingBottom { set; protected get; }
+        public partial class Block : Hierarchical, IBlock {
 
-            protected Block(Block<Js> other,
+            public new BlockBindings<BlockJs> Bindings => new(Properties);
+
+            
+
+            protected Block(Block other,
                 string callerFilePath = "",
                 int callerLineNumber = 0): base(other, callerFilePath, callerLineNumber) {
 
-                X = other.X;
+                /*X_Script = other.X_Script;
                 Y = other.Y;
                 Width = other.Width;
                 Height = other.Height;
@@ -59,10 +73,10 @@ namespace StaticSharp {
                 PaddingLeft = other.PaddingLeft;
                 PaddingRight = other.PaddingRight;
                 PaddingTop = other.PaddingTop;
-                PaddingBottom = other.PaddingBottom; 
+                PaddingBottom = other.PaddingBottom; */
                 
             }
-            public Block(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
+            public Block([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
 
             public override void AddRequiredInclues(IIncludes includes) {
                 base.AddRequiredInclues(includes);
@@ -73,6 +87,8 @@ namespace StaticSharp {
 
         }
     }
+
+
 
     /*public sealed class Item : Item<Symbolic.Item> {
         public Item([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)

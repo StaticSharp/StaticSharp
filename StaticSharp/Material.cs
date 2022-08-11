@@ -24,7 +24,7 @@ namespace StaticSharpWeb {
     }*/
 
     [ScriptBefore]
-    public abstract class Material : Hierarchical<HierarchicalJs>, IMaterial, IInline, IPage, IPlainTextProvider {
+    public abstract class Material : Hierarchical, IMaterial, IInline, IPage, IPlainTextProvider {
         //public class TChildren : List<object> { }
 
         //public virtual IImage TitleImage => null;
@@ -45,10 +45,13 @@ namespace StaticSharpWeb {
 
         public override List<Modifier> Modifiers => new(){
             new(){
-                FontSize = 16,
-                FontFamilies = new[]{
-                    new FontFamily("Roboto")
+                Bindings = {
+                    FontSize = e=>16,
+                    
                 },
+                FontFamilies = new[]{
+                        new FontFamily("Roboto")
+                    },
                 FontStyle = new FontStyle(FontWeight.Regular)
             },
         };

@@ -1,6 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
-using Scopes;
-using Scopes.C;
+//using Scopes;
+//using Scopes.C;
 using System.Linq;
 
 namespace StaticSharpGenerator {
@@ -91,8 +91,6 @@ namespace StaticSharpGenerator {
 
             WritePartials(namespaceInfo, Partials, Enumerable.Empty<string>());
 
-
-            new Group();
 
 
 

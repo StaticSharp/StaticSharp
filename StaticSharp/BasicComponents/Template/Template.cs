@@ -17,7 +17,7 @@ namespace StaticSharp {
 
     [ScriptBefore]
     [ScriptAfter]
-    public class Template : Block<BlockJs> {
+    public class Template : Block {
         protected IGenome<IAsset> assetGenome { get; }
 
         protected Template(Template other,

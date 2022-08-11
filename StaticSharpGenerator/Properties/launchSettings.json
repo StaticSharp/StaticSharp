@@ -2,6 +2,12 @@
   "profiles": {
     "Generator": {
       "commandName": "Project"
+    },
+    "Runnable": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "SOURCE_GENERATOR_DEBUG": "true"
+      }
     }
   }
 }

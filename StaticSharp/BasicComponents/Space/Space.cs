@@ -1,5 +1,8 @@
 ﻿using StaticSharp.Gears;
 using StaticSharp.Html;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
@@ -14,12 +17,20 @@ public class SpaceJs : HierarchicalJs {
 }
 
 
-[ScriptBefore]
-public sealed class Space: Hierarchical<SpaceJs>, IBlock {
-    public Binding<float> GrowBefore  { set; private get; }
-    public Binding<float> GrowBetween { set; private get; }
-    public Binding<float> GrowAfter   { set; private get; }
-    public Binding<float> MinBetween  { set; private get; }
+
+public class SpaceBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {
+    public SpaceBindings(Dictionary<string, string> properties) : base(properties) {
+    }
+    public Expression<Func<SpaceJs, float>> GrowBefore { set { AssignProperty(value); } }
+    public Expression<Func<SpaceJs, float>> GrowBetween { set { AssignProperty(value); } }
+    public Expression<Func<SpaceJs, float>> GrowAfter { set { AssignProperty(value); } }
+    public Expression<Func<SpaceJs, float>> MinBetween { set { AssignProperty(value); } }
+}
+
+    [ScriptBefore]
+public sealed class Space: Hierarchical, IBlock {
+
+    public new SpaceBindings<HierarchicalJs> Bindings => new(Properties);
 
     public override string TagName => "ws";
     public Space([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)

@@ -10,11 +10,13 @@ namespace StaticSharp {
     [ScriptBefore]
     [ScriptAfter]
     [InterpolatedStringHandler]
-    public class Paragraph : Block<BlockJs>, IVoidEnumerable, IInline {
+    public class Paragraph : Block, IVoidEnumerable, IInline {
 
         protected List<IInline> children { get; } = new();
         public Paragraph Children => this;
-        private new Binding<float> Height => default; //hide
+        private new int Height => default; //hide
+        //public Expression<Func<BlockJs, float>> Height { set { AssignProperty(value); } }
+
 
         public Paragraph(Paragraph other,
             [CallerFilePath] string callerFilePath = "",

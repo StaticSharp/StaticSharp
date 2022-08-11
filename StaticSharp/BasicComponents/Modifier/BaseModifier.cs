@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
@@ -15,14 +16,23 @@ namespace StaticSharp {
         public float FontSize => throw new NotEvaluatableException();
         public Color BackgroundColor => throw new NotEvaluatableException();
     }
-    
+
+    public class BaseModifierBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {
+        public BaseModifierBindings(Dictionary<string, string> properties) : base(properties) {
+        }
+        public Expression<Func<FinalJs, float>> FontSize { set { AssignProperty(value); } }
+        public Expression<Func<FinalJs, Color>> BackgroundColor { set { AssignProperty(value); } }
+    }
+
 
 
     namespace Gears {
 
         [ScriptBefore]
         [ScriptAfter]
-        public abstract class BaseModifier: Hierarchical<BaseModifierJs> {
+        public abstract class BaseModifier: Hierarchical {
+
+            public new BaseModifierBindings<BaseModifierJs> Bindings => new(Properties);
 
             public Color? ForgroundColor = null;
             
@@ -33,10 +43,8 @@ namespace StaticSharp {
 
             public FontFamily[]? FontFamilies = null;
             public FontStyle? FontStyle = null;
-            //public float? FontSize = null;
-            public Binding<float> FontSize { set; protected get; }
-            public Binding<Color> BackgroundColor { set; protected get; }
 
+            
 
             public BaseModifier(string callerFilePath, int callerLineNumber)
             : base(callerFilePath, callerLineNumber) { }

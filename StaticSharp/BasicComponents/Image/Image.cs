@@ -18,17 +18,20 @@ namespace StaticSharp {
         }
     }
 
+    [ScriptBefore]
+    [ScriptAfter]
+    public class Image : Block {
 
-    public abstract class Image<Js> : Block<Js> where Js : Symbolic.ImageJs, new() {
+        public override string TagName => "div";
 
         protected IGenome<IAsset> assetGenome;
 
 
-        public Image(Image<Js> other, string callerFilePath, int callerLineNumber)
+        public Image(Image other, string callerFilePath, int callerLineNumber)
             : base(other, callerFilePath, callerLineNumber) {
             assetGenome = other.assetGenome;
         }
-        public Image(IGenome<IAsset> assetGenome, string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) {
+        public Image(IGenome<IAsset> assetGenome, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
             this.assetGenome = assetGenome;
         }
 
@@ -36,36 +39,14 @@ namespace StaticSharp {
             base.AddRequiredInclues(includes);
             includes.Require(new Script(ThisFilePathWithNewExtension("js")));
         }
-    }
 
-    [ScriptBefore]
-    [ScriptAfter]
-    public sealed class Image : Image<Symbolic.ImageJs> {
-
-        public Image(Image other, string callerFilePath, int callerLineNumber)
-            : base(other, callerFilePath, callerLineNumber) {
-
-        }
-
-        /*public Image(string filePath, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
-            : base(filePath, callerFilePath, callerLineNumber) {
-            
-        }*/
-
-        public Image(IGenome<IAsset> assetGenome, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
-            : base(assetGenome, callerFilePath, callerLineNumber) {
-
-        }
-
-
-
-        public override string TagName => "div";
+        
         public override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
 
             var jpeg = await (new JpegGenome(assetGenome)).CreateOrGetCached();
             var url = context.AddAsset(jpeg);
 
-            var thumbnail =  await new ThumbnailGenome(assetGenome).CreateOrGetCached();
+            var thumbnail = await new ThumbnailGenome(assetGenome).CreateOrGetCached();
 
             var thumbnailId = context.SvgDefs.Add(new SvgInlineImageGenerator(new ThumbnailGenome(assetGenome)));
 
@@ -118,5 +99,21 @@ namespace StaticSharp {
 
             /*;*/
         }
+
     }
+
+    
+    /*public sealed class Image : Image<Symbolic.ImageJs> {
+
+        public Image(Image other, string callerFilePath, int callerLineNumber)
+            : base(other, callerFilePath, callerLineNumber) {
+
+        }
+
+        public Image(IGenome<IAsset> assetGenome, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
+            : base(assetGenome, callerFilePath, callerLineNumber) {
+
+        }
+        
+    }*/
 }

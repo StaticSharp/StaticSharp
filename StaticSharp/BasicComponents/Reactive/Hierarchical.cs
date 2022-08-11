@@ -20,19 +20,25 @@ namespace StaticSharp {
 
     }
 
+    public class HierarchicalBindings<FinalJs> : ReactiveBindings<FinalJs> where FinalJs : new() {
+        public HierarchicalBindings(Dictionary<string, string> properties) : base(properties) {
+        }
+    }
+
 
 
     namespace Gears {
         [ScriptBefore]
         [ScriptAfter]
-        public abstract class Hierarchical<Js> : Reactive<Js> where Js : HierarchicalJs, new() {
+        public abstract class Hierarchical : Reactive {
 
+            public new HierarchicalBindings<HierarchicalJs> Bindings => new(Properties);
             public virtual string TagName => "div";
             public virtual List<Modifier> Modifiers { get; } = new();
 
-            protected Hierarchical(Hierarchical<Js> other,
+            protected Hierarchical(Hierarchical other,
                 string callerFilePath = "",
-                int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
+                int callerLineNumber = 0) : base(other, callerFilePath, callerLineNumber) {
 
                 Modifiers = new(other.Modifiers);
             }
@@ -49,14 +55,14 @@ namespace StaticSharp {
                 //throw new System.NotImplementedException($"{GetType().FullName} overrides nither GenerateHtmlChildrenAsync nor GenerateHtmlAsync");
             }
 
-            public virtual void ModifyContext(ref Context context) {
+            public virtual void ApplyModifiers(ref Context context) {
                 foreach (var m in Modifiers) {
                     m.AddRequiredInclues(context.Includes);
                     context = m.ModifyContext(context);
                 }
             }
 
-            public virtual void ModifyTag(Tag tag) {
+            public virtual void ApplyModifiers(Tag tag) {
                 foreach (var m in Modifiers) {
                     m.ModifyTag(tag);
                 }
@@ -83,11 +89,11 @@ namespace StaticSharp {
             public virtual async Task<Tag> GenerateHtmlAsync(Context context, string? id = null) {
                 
                 AddRequiredInclues(context.Includes);
-                ModifyContext(ref context);
+                ApplyModifiers(ref context);
 
                 var tag = new Tag(TagName, id) {};
 
-                ModifyTag(tag);
+                ApplyModifiers(tag);
                 tag.Add(await Before().SequentialOrParallel());
                 tag.Add(await GenerateHtmlInternalAsync(context, tag));
                 tag.Add(After());

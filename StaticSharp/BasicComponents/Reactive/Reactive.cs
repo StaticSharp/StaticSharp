@@ -22,10 +22,42 @@ namespace StaticSharp {
     namespace Gears {
 
 
-        public abstract class Reactive<Js> : CallerInfo where Js : ObjectJs, new() {
+        [System.Diagnostics.DebuggerNonUserCode]
+        public class ReactiveJs {
+        }
+
+
+        public class ReactiveBindings<FinalJs> where FinalJs : new() {
+            private Dictionary<string, string> Properties;
+            protected void AssignProperty<J, T>(Expression<Func<J, T>> expression, [System.Runtime.CompilerServices.CallerMemberName] string memberName = "") where J : new() {
+                Properties[memberName] = new BindingScriptifier(expression, new J()).Eval();
+            }
+            public ReactiveBindings(Dictionary<string, string> properties) {
+                Properties = properties;
+            }
+        }
+
+
+        public abstract class Reactive : CallerInfo {
+            public Dictionary<string, string> Properties { get; } = new();
+
+            public ReactiveBindings<ReactiveJs> Bindings => new(Properties);
+
+            public string this[string propertyName] {
+                get {
+                    return Properties[propertyName];
+                }
+
+                set {
+                    Properties[propertyName] = value;
+                }
+            }
+            
+
+
 
             //public interface IBinding { }
-            public struct Binding<T> {
+            /*public struct Binding<T> {
                 public string? Script { get; } = null;
                 public Binding() { }
                 public Binding(string script) {
@@ -57,15 +89,19 @@ namespace StaticSharp {
                 public override string? ToString() {
                     return Script;
                 }
-            }
-
-
-            /*protected Reactive(Reactive<Js> other,
-                string callerFilePath = "",
-                int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
             }*/
 
-            public Reactive(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
+
+            protected Reactive(Reactive other,
+                string callerFilePath = "",
+                int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
+                
+                Properties = new(other.Properties);
+            }
+
+            public Reactive(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) {
+                
+            }
 
             //public abstract Task<Tag> GenerateHtmlAsync(Context context);
 
@@ -93,7 +129,7 @@ namespace StaticSharp {
                 var className = FindScriptRoot<ScriptBeforeAttribute>(GetType());
 
                 var propertiesInitializers = await GetGeneratedBundingsAsync().ToListAsync();
-                propertiesInitializers.AddRange(GetBindings());
+                propertiesInitializers.AddRange(Properties);
 
                 var propertiesInitializersScript = string.Join(',', propertiesInitializers.Select(x => $"{x.Key}:{x.Value}"));
 
@@ -123,7 +159,7 @@ namespace StaticSharp {
             }
 
 
-            public IEnumerable<KeyValuePair<string,string>> GetBindings() {
+            /*public IEnumerable<KeyValuePair<string,string>> GetBindings() {
 
                 foreach (var i in GetType().GetProperties()) {
                     //MethodInfo? getter = i.GetGetMethod(nonPublic: true);
@@ -138,7 +174,7 @@ namespace StaticSharp {
                         }
                     }
                 }
-            }
+            }*/
 
             public virtual IAsyncEnumerable<KeyValuePair<string, string>> GetGeneratedBundingsAsync() {
                 return AsyncEnumerable.Empty<KeyValuePair<string, string>>();

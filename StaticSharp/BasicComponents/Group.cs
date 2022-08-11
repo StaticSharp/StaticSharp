@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
 
-    public class Group: CallerInfo,  IBlockCollector {
+    public class Group: CallerInfo,  IBlockCollector {//TODO: delete? use Blocks?
 
         public Blocks Children { get; } = new();
 
