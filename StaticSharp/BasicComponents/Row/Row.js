@@ -30,31 +30,66 @@ function RowBuilder(element) {
     _this.currentLineSoftY = element.PaddingTop
     _this.currentY = 0
 
-    _this.lineHeight = 0
 
-    _this.newLineHardY = 0
-    _this.newLineSoftY = 0
+    //_this.newLineHardY = 0
+    //_this.newLineSoftY = 0
 
+    _this.lineIsEmpty = true
 
-    let newLine = function () {
+    _this.currentLine = []
+
+    _this.finalizeCurrentLine = function () {
+
+        let margin = startMargin 
+        let x = 0
+        let newLineHardY = 0
+        let newLineSoftY = 0
+
+        let availableSpace = maxWidth - _this.currentX - Max(_this.margin, element.PaddingRight)
+        console.log(availableSpace)
+        for (let child of _this.currentLine) {
+
+            let spaceLeft = First(Max(margin, child.MarginLeft), 0)
+
+            var yA = Sum(_this.currentLineHardY, child.MarginTop)
+            var yB = _this.currentLineSoftY
+            var y = Max(yA, yB)
+
+            x += spaceLeft
+            child.LayoutX = x
+            x += child.Width
+            child.LayoutY = y
+            margin = child.MarginRight
+
+            var hardBottom = y + child.Height
+
+            newLineHardY = Max(newLineHardY, hardBottom)
+            newLineSoftY = Max(newLineSoftY, Sum(hardBottom, child.MarginBottom))
+        }
+
+        _this.currentLine = []
         _this.lineIsEmpty = true
         _this.margin = startMargin
         _this.currentX = 0
-        _this.currentLineHardY = _this.newLineHardY;
-        _this.currentLineSoftY = _this.newLineSoftY;
-        _this.lineHeight = 0
+        _this.currentLineHardY = newLineHardY;
+        _this.currentLineSoftY = newLineSoftY;
+
+    }
+
+    _this.addSpace = function (space) {
+
     }
 
     _this.layout = function (child) {
         let spaceLeft = First(Max(_this.margin, child.MarginLeft), 0)
         let spaceRight = Max(endMargin, child.MarginRight)
 
-        //console.log("spaceLeft", spaceLeft)
-
 
         if ((_this.currentX + spaceLeft + child.InternalWidth + spaceRight) > maxWidth) {
-            newLine()
-            spaceLeft = First(Max(_this.margin, child.MarginLeft), 0)
+            if (_this.currentLine.length>0) {
+                _this.finalizeCurrentLine()
+                spaceLeft = First(Max(_this.margin, child.MarginLeft), 0)
+            }
 
             if ((spaceLeft + child.InternalWidth + spaceRight) > maxWidth) {
                 child.LayoutWidth = maxWidth - spaceLeft - spaceRight
@@ -65,28 +100,18 @@ function RowBuilder(element) {
             child.LayoutWidth = undefined
         }
 
-        var yA = Sum(_this.currentLineHardY, child.MarginTop)
-        var yB = _this.currentLineSoftY
-
-        var y = Max(yA, yB)
 
 
-        _this.lineHeight = Max(_this.lineHeight, child.Height)
-        _this.currentX += spaceLeft
+        _this.currentLine.push(child)
 
-        child.LayoutX = _this.currentX
-
-
-        _this.currentX += child.Width
-
-        child.LayoutY = y
-
+        _this.currentX += spaceLeft + child.Width
         _this.margin = child.MarginRight
 
-        var hardBottom = y + child.Height
+        _this.lineIsEmpty = false
 
-        _this.newLineHardY = Max(_this.newLineHardY, hardBottom)
-        _this.newLineSoftY = Max(_this.newLineSoftY, Sum(hardBottom, child.MarginBottom))
+        
+
+
 
         //console.log("child.LayoutX", child.LayoutX)
         //console.log("child.LayoutY", child.LayoutY)
@@ -233,20 +258,14 @@ function RowAfter(element) {
         let builder = new RowBuilder(element);
 
         for (let child of element.LayoutChildren) {
-            builder.layout(child)
-            /*var t = builder.try(child)
-            console.log(t.newPosition,element.Width)
-
-            if (t.newPosition > element.Width) {
-                builder.newLine()
+            if (child.isBlock) {
                 builder.layout(child)
-            } else {
-                builder.layout(child)
-                builder.add(t)
-            }*/
+            }
         }
-        var hA = Sum(builder.newLineHardY, element.PaddingBottom)
-        var hB = builder.newLineSoftY
+        builder.finalizeCurrentLine()
+
+        var hA = Sum(builder.currentLineHardY, element.PaddingBottom)
+        var hB = builder.currentLineSoftY
 
         element.Height = Max(hA, hB)
 

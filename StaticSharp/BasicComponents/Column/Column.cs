@@ -24,18 +24,18 @@ namespace StaticSharp {
 
 
         public override string TagName => "column";
-        protected Blocks children { get; } = new();
+        public Blocks Children { get; } = new();
 
         public Column(Column other, string callerFilePath, int callerLineNumber)
             : base(other, callerFilePath, callerLineNumber) {
-            children = new(other.children);        
+            Children = new(other.Children);        
         }
         public Column([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
 
-        public Column Children => this;
+        //public Column Children => this;
         public void Add(string? id, IBlock? value) {
             if (value != null) {
-                children.Add(id, value);
+                Children.Add(id, value);
             }
         }
         public override void AddRequiredInclues(IIncludes includes) {
@@ -45,7 +45,7 @@ namespace StaticSharp {
 
         public override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
             return new Tag() {
-                await children.Select(x=> x.Value.GenerateHtmlAsync(context,x.Key)).SequentialOrParallel(),
+                await Children.Select(x=> x.Value.GenerateHtmlAsync(context,x.Key)).SequentialOrParallel(),
             };
         }
 

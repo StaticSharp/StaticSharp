@@ -35,16 +35,22 @@ public sealed class Space: Hierarchical, IBlock {
     public override string TagName => "ws";
     public Space([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
         : base(callerFilePath, callerLineNumber) { }
-
-
     public override void AddRequiredInclues(IIncludes includes) {
         base.AddRequiredInclues(includes);
         includes.Require(new Script(ThisFilePathWithNewExtension("js")));
     }
-
     public override Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
         return Task.FromResult<Tag>(null);
     }
+
+    public static Space Grow(float value = 1, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
+        return new Space(callerFilePath, callerLineNumber) {
+            Bindings = {
+                GrowBetween = e=> value
+            }
+        };
+    }
+
 
     /*public Task<Tag> GenerateHtmlAsync(Context context,string? id) {
         AddRequiredInclues(context.Includes);

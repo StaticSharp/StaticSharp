@@ -103,12 +103,12 @@ namespace StaticSharp {
                     Content = await httpResponseMessage.Content.ReadAsByteArrayAsync();
                     CachedData.ContentHash = Gears.Hash.CreateFromBytes(Content).ToString();
 
-                    await File.WriteAllBytesAsync(ContentFilePath, Content);
+                    await FileUtils.WriteAllBytesAsync(ContentFilePath, Content);
 
                     StoreData();
 
                 } else {
-                    Content = await File.ReadAllBytesAsync(ContentFilePath);
+                    Content = await FileUtils.ReadAllBytesAsync(ContentFilePath);
                 }
 
             }

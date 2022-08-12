@@ -118,6 +118,7 @@ function MaterialBefore(element) {
 
             window.FontsReady = true
             loadingDeffered.end()
+            element.style.visibility = "visible";
         })
 
     /*let previous = this.Content
@@ -221,7 +222,7 @@ function MaterialBefore(element) {
 
 
     document.addEventListener("DOMContentLoaded", function () {
-        element.style.visibility = "visible";
+        //
         //element.style.display = "contents";
     })
     

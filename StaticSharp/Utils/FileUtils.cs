@@ -70,6 +70,29 @@ namespace StaticSharp.Gears {
             }
         }
 
+        public static void WriteAllBytes(string path, byte[] bytes) {
+            while (true) {
+                try {
+                    File.WriteAllBytes(path, bytes);
+                }
+                catch (IOException) {
+                    Thread.Yield();
+                }
+            }
+        }
+
+        public static async Task WriteAllBytesAsync(string path, byte[] bytes, CancellationToken cancellationToken = default) {
+            while (true) {
+                try {
+                    await File.WriteAllBytesAsync(path, bytes, cancellationToken);
+                }
+                catch (IOException) {
+                    await Task.Yield();
+                }
+            }
+        }
+
+
 
     }
 }

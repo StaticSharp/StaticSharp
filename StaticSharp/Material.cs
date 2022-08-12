@@ -140,6 +140,11 @@ namespace StaticSharpWeb {
 
                 await new Column() {
                     Content,
+                    new Space(){ 
+                        Bindings = { 
+                            GrowBetween = e=>1
+                        }
+                    },
                     Footer
                 }.GenerateHtmlAsync(context,"Content"),
             };

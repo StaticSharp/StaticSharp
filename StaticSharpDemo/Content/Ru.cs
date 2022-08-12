@@ -30,13 +30,13 @@ namespace StaticSharpDemo.Root {
 
             new Image(new HttpRequestGenome("https://upload.wikimedia.org/wikipedia/commons/4/49/Koala_climbing_tree.jpg")),
 
-            new Image(new FileGenome(AbsolutePath("TestPsdImage.psd"))),
+            /*new Image(new FileGenome(AbsolutePath("TestPsdImage.psd"))),
 
             new Template(new FileGenome(AbsolutePath("Reactive.template"))),
 
             H1($"H1"),
             "Abc",
-            "Abc",
+            "Abc",*/
             
 
             /*H1("H1"),*/
@@ -51,8 +51,9 @@ namespace StaticSharpDemo.Root {
                 "Slider",
                 new Slider {
                     Bindings = {
+                        MarginTop = e=>e.Value,
                         Min = e=> 10,
-                        Max = e=> 50
+                        Max = e=> 200
                     }
                 }
             },

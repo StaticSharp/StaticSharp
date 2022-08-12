@@ -8,90 +8,81 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
-
-
-    [System.Diagnostics.DebuggerNonUserCode]
-    public class BlockJs : HierarchicalJs {
-        public BlockJs() { }
-        public float X =>             throw new NotEvaluatableException();
-        public float Y =>             throw new NotEvaluatableException();
-        public float Width =>         throw new NotEvaluatableException();
-        public float Height =>        throw new NotEvaluatableException();
-        public float MarginLeft =>    throw new NotEvaluatableException();
-        public float MarginRight =>   throw new NotEvaluatableException();
-        public float MarginTop =>     throw new NotEvaluatableException();
-        public float MarginBottom =>  throw new NotEvaluatableException();
-        public float PaddingLeft =>   throw new NotEvaluatableException();
-        public float PaddingRight =>  throw new NotEvaluatableException();
-        public float PaddingTop =>    throw new NotEvaluatableException();
-        public float PaddingBottom => throw new NotEvaluatableException();
-    }
-
-
-    public class BlockBindings<FinalJs>: HierarchicalBindings<FinalJs> where FinalJs : new() {
-        public BlockBindings(Dictionary<string, string> properties) : base(properties) {
-        }
-        public Expression<Func<FinalJs, float>> X { set { AssignProperty(value); } }
-        public Expression<Func<FinalJs, float>> Y { set { AssignProperty(value); } }
-        public Expression<Func<FinalJs, float>> Width { set { AssignProperty(value); } }
-        public Expression<Func<FinalJs, float>> Height { set { AssignProperty(value); } }
-        public Expression<Func<FinalJs, float>> MarginLeft { set { AssignProperty(value); } }
-        public Expression<Func<FinalJs, float>> MarginRight { set { AssignProperty(value); } }
-        public Expression<Func<FinalJs, float>> MarginTop { set { AssignProperty(value); } }
-        public Expression<Func<FinalJs, float>> MarginBottom { set { AssignProperty(value); } }
-        public Expression<Func<FinalJs, float>> PaddingLeft { set { AssignProperty(value); } }
-        public Expression<Func<FinalJs, float>> PaddingRight { set { AssignProperty(value); } }
-        public Expression<Func<FinalJs, float>> PaddingTop { set { AssignProperty(value); } }
-        public Expression<Func<FinalJs, float>> PaddingBottom { set { AssignProperty(value); } }
-
-    }
-
-
     namespace Gears {
 
-
-        [ScriptBefore]
-        [ScriptAfter]
-        public partial class Block : Hierarchical, IBlock {
-
-            public new BlockBindings<BlockJs> Bindings => new(Properties);
-
-            
-
-            protected Block(Block other,
-                string callerFilePath = "",
-                int callerLineNumber = 0): base(other, callerFilePath, callerLineNumber) {
-
-                /*X_Script = other.X_Script;
-                Y = other.Y;
-                Width = other.Width;
-                Height = other.Height;
-                MarginLeft = other.MarginLeft;
-                MarginRight = other.MarginRight;
-                MarginTop = other.MarginTop;
-                MarginBottom = other.MarginBottom;
-                PaddingLeft = other.PaddingLeft;
-                PaddingRight = other.PaddingRight;
-                PaddingTop = other.PaddingTop;
-                PaddingBottom = other.PaddingBottom; */
-                
+        [System.Diagnostics.DebuggerNonUserCode]
+        public class BlockJs : HierarchicalJs {
+            public BlockJs() { }
+            public float X => throw new NotEvaluatableException();
+            public float Y => throw new NotEvaluatableException();
+            public float Width => throw new NotEvaluatableException();
+            public float Height => throw new NotEvaluatableException();
+            public float MarginLeft => throw new NotEvaluatableException();
+            public float MarginRight => throw new NotEvaluatableException();
+            public float MarginTop => throw new NotEvaluatableException();
+            public float MarginBottom => throw new NotEvaluatableException();
+            public float PaddingLeft => throw new NotEvaluatableException();
+            public float PaddingRight => throw new NotEvaluatableException();
+            public float PaddingTop => throw new NotEvaluatableException();
+            public float PaddingBottom => throw new NotEvaluatableException();
+        }
+        public class BlockBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {
+            public BlockBindings(Dictionary<string, string> properties) : base(properties) {
             }
-            public Block([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
-
-            public override void AddRequiredInclues(IIncludes includes) {
-                base.AddRequiredInclues(includes);
-                includes.Require(new Script(ThisFilePathWithNewExtension("js")));
-            }
-
-            
+            public Expression<Func<FinalJs, float>> X { set { AssignProperty(value); } }
+            public Expression<Func<FinalJs, float>> Y { set { AssignProperty(value); } }
+            public Expression<Func<FinalJs, float>> Width { set { AssignProperty(value); } }
+            public Expression<Func<FinalJs, float>> Height { set { AssignProperty(value); } }
+            public Expression<Func<FinalJs, float>> MarginLeft { set { AssignProperty(value); } }
+            public Expression<Func<FinalJs, float>> MarginRight { set { AssignProperty(value); } }
+            public Expression<Func<FinalJs, float>> MarginTop { set { AssignProperty(value); } }
+            public Expression<Func<FinalJs, float>> MarginBottom { set { AssignProperty(value); } }
+            public Expression<Func<FinalJs, float>> PaddingLeft { set { AssignProperty(value); } }
+            public Expression<Func<FinalJs, float>> PaddingRight { set { AssignProperty(value); } }
+            public Expression<Func<FinalJs, float>> PaddingTop { set { AssignProperty(value); } }
+            public Expression<Func<FinalJs, float>> PaddingBottom { set { AssignProperty(value); } }
 
         }
+
+
     }
 
 
+    [ScriptBefore]
+    [ScriptAfter]
+    public partial class Block : Hierarchical, IBlock {
 
-    /*public sealed class Item : Item<Symbolic.Item> {
-        public Item([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
-            : base(callerFilePath, callerLineNumber) { }
-    }*/
+        public new BlockBindings<BlockJs> Bindings => new(Properties);
+
+
+
+        protected Block(Block other,
+            string callerFilePath = "",
+            int callerLineNumber = 0) : base(other, callerFilePath, callerLineNumber) {
+
+            /*X_Script = other.X_Script;
+            Y = other.Y;
+            Width = other.Width;
+            Height = other.Height;
+            MarginLeft = other.MarginLeft;
+            MarginRight = other.MarginRight;
+            MarginTop = other.MarginTop;
+            MarginBottom = other.MarginBottom;
+            PaddingLeft = other.PaddingLeft;
+            PaddingRight = other.PaddingRight;
+            PaddingTop = other.PaddingTop;
+            PaddingBottom = other.PaddingBottom; */
+
+        }
+        public Block([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
+
+        public override void AddRequiredInclues(IIncludes includes) {
+            base.AddRequiredInclues(includes);
+            includes.Require(new Script(ThisFilePathWithNewExtension("js")));
+        }
+
+
+
+    }
+
 }
