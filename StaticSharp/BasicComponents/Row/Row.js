@@ -46,28 +46,79 @@ function RowBuilder(element) {
         let newLineSoftY = 0
 
         let availableSpace = maxWidth - _this.currentX - Max(_this.margin, element.PaddingRight)
-        console.log(availableSpace)
-        for (let child of _this.currentLine) {
+        
+        let spaceUnits = 0
+        for (let i = 0; i < _this.currentLine.length; i++) {
+            let child = _this.currentLine[i]
+            if (child.isSpace) {
+                switch (i) {
+                    case 0:
+                        spaceUnits += child.Before
+                        break;
+                    case _this.currentLine.length-1:
+                        spaceUnits += child.After
+                        break;
+                    default:
+                        spaceUnits += child.Between
+                }
 
-            let spaceLeft = First(Max(margin, child.MarginLeft), 0)
-
-            var yA = Sum(_this.currentLineHardY, child.MarginTop)
-            var yB = _this.currentLineSoftY
-            var y = Max(yA, yB)
-
-            x += spaceLeft
-            child.LayoutX = x
-            x += child.Width
-            child.LayoutY = y
-            margin = child.MarginRight
-
-            var hardBottom = y + child.Height
-
-            newLineHardY = Max(newLineHardY, hardBottom)
-            newLineSoftY = Max(newLineSoftY, Sum(hardBottom, child.MarginBottom))
+            }
         }
 
+        let pixelBySpaceUnits = spaceUnits>0 ?  availableSpace / spaceUnits : 0
+
+        for (let i = 0; i < _this.currentLine.length; i++){
+
+            let child = _this.currentLine[i]
+
+            if (child.isBlock) {
+                let spaceLeft = First(Max(margin, child.MarginLeft), 0)
+
+                var yA = Sum(_this.currentLineHardY, child.MarginTop)
+                var yB = _this.currentLineSoftY
+                var y = Max(yA, yB)
+
+                x += spaceLeft
+                child.LayoutX = x
+                x += child.Width
+                child.LayoutY = y
+                margin = child.MarginRight
+
+                var hardBottom = y + child.Height
+
+                newLineHardY = Max(newLineHardY, hardBottom)
+                newLineSoftY = Max(newLineSoftY, Sum(hardBottom, child.MarginBottom))
+
+                //continue
+            }
+
+            if (child.isSpace) {
+                switch (i) {
+                    case 0:
+                        x += child.Before * pixelBySpaceUnits
+                        break;
+                    case _this.currentLine.length - 1:
+                        x += child.After * pixelBySpaceUnits
+                        break;
+                    default:
+                        x += child.Between * pixelBySpaceUnits
+                }
+            }
+        }
+
+        let lastSpace = undefined
+        if (_this.currentLine.length > 0) {
+            let last = _this.currentLine[_this.currentLine.length - 1]
+            if (last.isSpace) {
+                lastSpace = last
+            }
+        }
         _this.currentLine = []
+        if (lastSpace) {
+            _this.currentLine.push(lastSpace)
+        }
+
+
         _this.lineIsEmpty = true
         _this.margin = startMargin
         _this.currentX = 0
@@ -76,45 +127,38 @@ function RowBuilder(element) {
 
     }
 
-    _this.addSpace = function (space) {
 
-    }
 
     _this.layout = function (child) {
         let spaceLeft = First(Max(_this.margin, child.MarginLeft), 0)
         let spaceRight = Max(endMargin, child.MarginRight)
 
+        if (child.isBlock) {
 
-        if ((_this.currentX + spaceLeft + child.InternalWidth + spaceRight) > maxWidth) {
-            if (_this.currentLine.length>0) {
-                _this.finalizeCurrentLine()
-                spaceLeft = First(Max(_this.margin, child.MarginLeft), 0)
-            }
+            if ((_this.currentX + spaceLeft + child.InternalWidth + spaceRight) > maxWidth) {
+                if (_this.currentLine.length > 0) {
+                    _this.finalizeCurrentLine()
+                    spaceLeft = First(Max(_this.margin, child.MarginLeft), 0)
+                }
 
-            if ((spaceLeft + child.InternalWidth + spaceRight) > maxWidth) {
-                child.LayoutWidth = maxWidth - spaceLeft - spaceRight
+                if ((spaceLeft + child.InternalWidth + spaceRight) > maxWidth) {
+                    child.LayoutWidth = maxWidth - spaceLeft - spaceRight
+                } else {
+                    child.LayoutWidth = undefined
+                }
             } else {
                 child.LayoutWidth = undefined
             }
+            _this.currentX += spaceLeft + child.Width
+            _this.margin = child.MarginRight
+
+            //_this.currentLine.push(child)
+
         } else {
-            child.LayoutWidth = undefined
+
+            //_this.currentLineSpaceUnits = 0
         }
-
-
-
         _this.currentLine.push(child)
-
-        _this.currentX += spaceLeft + child.Width
-        _this.margin = child.MarginRight
-
-        _this.lineIsEmpty = false
-
-        
-
-
-
-        //console.log("child.LayoutX", child.LayoutX)
-        //console.log("child.LayoutY", child.LayoutY)
     }
     
 
@@ -145,7 +189,7 @@ function RowInitialization(element) {
                 First(element.PaddingLeft, 0)
             );
 
-            for (let child of element.LayoutChildren) {
+            for (let child of element.children) {
                 measurer.add(child)
             }
             measurer.finish();
@@ -168,17 +212,7 @@ function RowInitialization(element) {
         //Height: 150//() => Sum(element.ContentHeight, element.PaddingTop, element.PaddingButtom),
     }
 
-    /*element.Reactive.X = () => {
-        return Max(parent.Padding.Left, element.Margin.Left) || 0
-    }
 
-
-    element.Reactive.Width = () => {
-        var paddingLeft = Max(parent.Padding.Left, element.Margin.Left) || 0
-        var paddingRight = Max(parent.Padding.Right, element.Margin.Right) || 0
-        var parentWidth = parent.Width - paddingLeft - paddingRight
-        return Min(element.ContentWidth, parentWidth)
-    }*/
 }
 
 function RowBefore(element, parameters) {
@@ -188,57 +222,15 @@ function RowBefore(element, parameters) {
     WidthToStyle(element)
     HeightToStyle(element)
 
-    element.LayoutChildren = []
+    /*element.LayoutChildren = []
 
     element.AddChild = function (child) {
         element.LayoutChildren.push(child)
-    }
+    }*/
 
 }
 
-function GetFontData(element) {
-    if (element.fontData == undefined) {
-        let attribute = element.getAttribute("f")
-        if (attribute == undefined) {
-            element.fontData = null
-        } else {
-            var parameters = attribute.split(" ").map(x => parseFloat(x));
-            element.fontData = {
-                ascent: parameters[0],
-                descent: parameters[1],
-                spaceWidth: parameters[2],
-            }            
-        }
-    }
-    return element.fontData
-}
 
-/*
-function getCanvasContext(font) {
-    // re-use canvas object for better performance
-    const canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
-    const context = canvas.getContext("2d");
-    context.font = font;
-    return context
-}
-
-
-function getTextWidth(text, context) {
-    const metrics = context.measureText(text);
-    return metrics.width;
-}
-
-function getCssStyle(element, prop) {
-    return window.getComputedStyle(element, null).getPropertyValue(prop);
-}
-
-function getCanvasFontSize(el = document.body) {
-    const fontWeight = getCssStyle(el, 'font-weight') || 'normal';
-    const fontSize = getCssStyle(el, 'font-size') || '16px';
-    const fontFamily = getCssStyle(el, 'font-family') || 'Times New Roman';
-
-    return `${fontWeight} ${fontSize} ${fontFamily}`;
-}*/
 
 
 
@@ -257,10 +249,9 @@ function RowAfter(element) {
 
         let builder = new RowBuilder(element);
 
-        for (let child of element.LayoutChildren) {
-            if (child.isBlock) {
-                builder.layout(child)
-            }
+        for (let child of element.children) {
+            builder.layout(child)
+            
         }
         builder.finalizeCurrentLine()
 
@@ -269,44 +260,7 @@ function RowAfter(element) {
 
         element.Height = Max(hA, hB)
 
-        /*for (let child of element.LayoutChildren) {
 
-            if (child.isBlock) {
-                let margin = Max(child.MarginTop, previousMargin)
-                previousMargin = First(child.MarginRight, 0)
-
-                lineContentWidth += margin
-                //if (assignDimensions) {
-                child.LayoutX = lineContentWidth
-                //}
-                lineContentWidth += Max(child.Width, 0)
-            }
-
-
-            
-
-            line.push(child)
-
-            console.log(child)
-
-        }*/
-
-        //element.ContentWidth = contentWidth
-
-        /*for (let child of element.LayoutChildren) {
-
-            let spaceLeft = Max(element.PaddingLeft, child.MarginLeft)
-            let spaceRight = Max(element.PaddingRight, child.MarginRight)
-
-
-            Reaction.current.dirtImmune = true
-            child.LayoutWidth = element.Width - spaceLeft - spaceRight
-            Reaction.current.dirtImmune = false
-
-
-            child.LayoutX = Max(element.PaddingLeft, child.MarginLeft)
-
-        }*/
     })
 
 

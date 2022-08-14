@@ -12,6 +12,7 @@
 function BlockInitialization(element) {
 
     HierarchicalInitialization(element)
+
     element.isBlock = true
     element.Reactive = {
         
@@ -46,24 +47,6 @@ function BlockInitialization(element) {
 
         Hover: false
     }
-}
-
-
-
-
-
-function BlockBefore(element) {
-    HierarchicalBefore(element)
-
-    let parent = element.parentElement
-    if (parent.AddChild)
-        parent.AddChild(element);
-
-    
-}
-
-function BlockAfter(element) {
-    HierarchicalAfter(element)
 
     XToStyle(element);
 
@@ -80,6 +63,27 @@ function BlockAfter(element) {
         element.Hover = false
         d.end()
     });
+
+}
+
+
+
+
+
+function BlockBefore(element) {
+    HierarchicalBefore(element)
+
+    /*let parent = element.parentElement
+    if (parent.AddChild)
+        parent.AddChild(element);*/
+
+    
+}
+
+function BlockAfter(element) {
+    HierarchicalAfter(element)
+
+    
     
 
 

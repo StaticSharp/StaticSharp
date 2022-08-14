@@ -1,4 +1,5 @@
-﻿using StaticSharp.Gears;
+﻿using Microsoft.Extensions.FileProviders;
+using StaticSharp.Gears;
 using StaticSharp.Html;
 using System;
 using System.Collections.Generic;
@@ -55,41 +56,6 @@ namespace StaticSharp {
             
 
 
-
-            //public interface IBinding { }
-            /*public struct Binding<T> {
-                public string? Script { get; } = null;
-                public Binding() { }
-                public Binding(string script) {
-                    Script = script;
-                }
-                public static implicit operator Binding<T>(string script) {
-                    return new Binding<T>(script);
-                }
-                public Binding(T value) {
-                    var currentCulture = Thread.CurrentThread.CurrentCulture;
-                    Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-                    try {
-                        Script = Static.ObjectToJsValue(value);
-                    }
-                    finally {
-                        Thread.CurrentThread.CurrentCulture = currentCulture;
-                    }
-                }
-
-                public static implicit operator Binding<T>(T value) {
-                    return new Binding<T>(value);
-                }
-                public Binding(Expression<Func<Js, T>> expression) {
-                    Script = new BindingScriptifier(expression, new Js()).Eval();
-                }
-                public static implicit operator Binding<T>(Func<Js, T> expression) {
-                    return new Binding<T>("");
-                }
-                public override string? ToString() {
-                    return Script;
-                }
-            }*/
 
 
             protected Reactive(Reactive other,

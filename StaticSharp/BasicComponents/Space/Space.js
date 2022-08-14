@@ -3,10 +3,10 @@ function SpaceInitialization(element) {
     HierarchicalInitialization(element)
 
     element.Reactive = {
-        GrowBefore: 0,
-        GrowBetween: 1,
-        GrowAfter: 0,
-        MinBetween: 0,
+        Before: 0,
+        Between: 1,
+        After: 0,
+        //MinBetween: 0,
     }
     //console.log("Space", element.GrowBetween)
 }
@@ -18,7 +18,5 @@ function SpaceInitialization(element) {
 function SpaceBefore(element) {
     HierarchicalBefore(element)
 
-    let parent = element.parentElement
-    if (parent.AddChild)
-        parent.AddChild(element)
+
 }

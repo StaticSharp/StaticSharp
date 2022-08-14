@@ -142,7 +142,7 @@ namespace StaticSharpWeb {
                     Content,
                     new Space(){ 
                         Bindings = { 
-                            GrowBetween = e=>1
+                            Between = e=>1
                         }
                     },
                     Footer

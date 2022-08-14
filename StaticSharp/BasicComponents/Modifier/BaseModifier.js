@@ -42,12 +42,6 @@ function BaseModifierInitialization(element) {
         HierarchyFontSize: () => element.FontSize || element.ParentModifier.HierarchyFontSize
         
     }
-}
-
-function BaseModifierBefore(element) {
-    //HierarchicalBefore(element)
-    let parent = element.parentElement;
-
 
     new Reaction(() => {
         element.style.fontSize = ToCssSize(element.FontSize)
@@ -64,6 +58,16 @@ function BaseModifierBefore(element) {
             element.style.color = element.ForegroundColor// element.BackgroundColor.toString(16)
         }
     })
+
+
+}
+
+function BaseModifierBefore(element) {
+    //HierarchicalBefore(element)
+    let parent = element.parentElement;
+
+
+    
 
 
 }

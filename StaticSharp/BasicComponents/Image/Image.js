@@ -1,7 +1,28 @@
 
+var Block = {}
+
+Block.After = function () {
+    console.log("block")
+}
+
+
+var Image = Block
+Image.Initialization = function (element) {
+    
+}
+
+
+
+
+
+
 function ImageInitialization(element) {
 
     BlockInitialization(element)
+
+    Image.After()
+
+    //console.log(E)
 
 
 

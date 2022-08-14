@@ -33,7 +33,7 @@ namespace StaticSharpDemo.Root {
                 "Menu item 2",
                 new Space(){
                     Bindings = {
-                        GrowBetween = e=>1
+                        Between = e=>1
                     }
                 },
 
@@ -57,6 +57,7 @@ namespace StaticSharpDemo.Root {
                 Modifiers = {
                     new Modifier(callerFilePath, callerLineNumber) {
                         Bindings = {
+                                
                                 FontSize = e=>18,
                             },
                         FontStyle = new FontStyle(FontWeight.Bold)
@@ -91,29 +92,42 @@ namespace StaticSharpDemo.Root {
             Children = {
 
                 new Blocks(){
+                    new Space(float.Epsilon,1,float.Epsilon),
                     new Column{
                         FooterTitle("Links"),
                         "тут будут ссылки"
                     },
-                    Space.Grow(),
+                    new Space(float.Epsilon,1,float.Epsilon),
                     new Column{
                         FooterTitle("Column 2"),
                         "тут будут еще ссылки"
 
                     },
-                    Space.Grow(),
+                    new Space(float.Epsilon,1,float.Epsilon),
                     new Column{
                         FooterTitle("Column 3"),
                         "и тут будут ссылки",
                         "line 2",
                         "line 3"
-                    }
+                    },
+                    new Space(float.Epsilon,1,float.Epsilon),
+
 
                 }.Modify(x=>{
                     foreach (var c in x.Values.OfType<Column>()){
 
                         c.Bindings.MarginLeft = e=> 10;
                         c.Bindings.MarginRight = e=> 10;
+                        c.Bindings.MarginTop = e=> 20;
+                        c.Bindings.MarginBottom = e=> 20;
+
+                        c.Children.Values.OfType<Block>().First().Modify(x=>{
+                            x.Bindings.MarginTop = e=> 0;
+                        });
+
+                        c.Children.Values.OfType<Block>().Last().Modify(x=>{
+                            x.Bindings.MarginBottom = e=> 0;
+                        });
 
                         foreach (var b in c.Children.Values.OfType<Block>()){
                             b.Bindings.MarginLeft = e=>0;

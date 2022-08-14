@@ -11,21 +11,7 @@ function TemplateInitialization(element) {
         Height: () => element.LayoutHeight || element.ContentHeight || 0,
 
     }
-}
 
-
-
-
-
-function TemplateBefore(element) {
-    BlockBefore(element)
-
-    function htmlToElement(html) {
-        var template = document.createElement('template');
-        html = html.trim(); // Never return a text node of whitespace as the result
-        template.innerHTML = html;
-        return template.content.firstChild;
-    }
 
 
     new Reaction(() => {
@@ -38,6 +24,18 @@ function TemplateBefore(element) {
 
     WidthToStyle(element)
     HeightToStyle(element)
+
+
+}
+
+
+
+
+
+function TemplateBefore(element) {
+    BlockBefore(element)
+
+    
 
 }
 

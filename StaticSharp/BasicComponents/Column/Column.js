@@ -5,7 +5,7 @@ function ColumnInitialization(element) {
         InternalWidth: () => {
 
             let internalWidth = undefined
-            for (let child of element.LayoutChildren) {
+            for (let child of element.children) {
                 let spaceLeft = Max(element.PaddingLeft, child.MarginLeft, 0)
                 let spaceRight = Max(element.PaddingRight, child.MarginRight, 0)
                 let internalWidthByCurrentChild = Sum(child.InternalWidth, spaceLeft + spaceRight)
@@ -23,49 +23,25 @@ function ColumnInitialization(element) {
 
         ContentHeight: undefined,
         Height: () => element.ContentHeight,
-    }    
-}
-
-
-
-function ColumnBefore(element) {
-   
-
-    BlockBefore(element)
-
-
-    WidthToStyle(element)
-    HeightToStyle(element)
-
-
-    element.LayoutChildren = []
-
-    element.AddChild = function (child) {
-        element.LayoutChildren.push(child)
-    }
-}
-
-
-function ColumnAfter(element) {
-    BlockAfter(element)
-
-    
-    for (let child of element.LayoutChildren) {
-
-        child.LayoutX = () => Max(element.PaddingLeft, child.MarginLeft)
-
-        child.LayoutWidth = () => {
-            //let spaceLeft = Max(element.PaddingLeft, child.MarginLeft)
-            let spaceRight = Max(element.PaddingRight, child.MarginRight)
-            return element.Width - child.LayoutX - spaceRight
-        }        
     }
 
-
-    
 
     new Reaction(() => {
+        console.log("column ch w")
+        for (let child of element.Children) {
+            if (child.isBlock) {
+                child.LayoutX = () => Max(element.PaddingLeft, child.MarginLeft)
 
+                child.LayoutWidth = () => {
+                    //let spaceLeft = Max(element.PaddingLeft, child.MarginLeft)
+                    let spaceRight = Max(element.PaddingRight, child.MarginRight)
+                    return element.Width - child.LayoutX - spaceRight
+                }
+            }
+        }
+    })
+
+    new Reaction(() => {
         let previousMargin
         let freeSpaceUnits
         let freeSpacePixels
@@ -73,11 +49,10 @@ function ColumnAfter(element) {
 
         function addElement(child, assignDimensions) {
             if (child.isSpace) {
-                contentHeight += child.MinBetween
                 if (assignDimensions) {
-                    contentHeight += freeSpacePixels / freeSpaceUnits * child.GrowBetween
+                    contentHeight += freeSpacePixels / freeSpaceUnits * child.Between
                 } else {
-                    freeSpaceUnits += child.GrowBetween
+                    freeSpaceUnits += child.Between
                 }
                 return true;
             }
@@ -117,7 +92,7 @@ function ColumnAfter(element) {
         contentHeight = 0
 
 
-        for (let i of element.LayoutChildren) {
+        for (let i of element.children) {
             if (!addElement(i, false)) {
                 return
             }
@@ -145,7 +120,7 @@ function ColumnAfter(element) {
                 element.appendChild(element.innerSizeHolder)
                 element.innerSizeHolder.style.width = "1px"
             }
-            element.innerSizeHolder.style.height = contentHeight+"px"
+            element.innerSizeHolder.style.height = contentHeight + "px"
         } else {
             element.style.overflowY = ""
             if (element.innerSizeHolder) {
@@ -158,12 +133,47 @@ function ColumnAfter(element) {
 
         contentHeight = 0
 
-        for (let i of element.LayoutChildren) {
+        for (let i of element.children) {
             if (!addElement(i, true)) {
                 return
             }
         }
     })
+
+    WidthToStyle(element)
+    HeightToStyle(element)
+
+}
+
+
+
+function ColumnBefore(element) {
+   
+
+    BlockBefore(element)
+
+
+    
+
+
+    /*element.LayoutChildren = []
+
+    element.AddChild = function (child) {
+        element.LayoutChildren.push(child)
+    }*/
+}
+
+
+function ColumnAfter(element) {
+    BlockAfter(element)
+
+    
+    
+
+
+    
+
+    
 
     //let w = element.LayoutChildren[0].Width
     

@@ -78,17 +78,6 @@ function HierarchicalInitialization(element) {
         }
     }
 
-
-}
-
-function HierarchicalBefore(element) {
-    
-}
-
-function HierarchicalAfter(element) {
-    let parent = element.parentElement
-
-    //console.log("Adding to search chain ", element, getDomPath(element))
     if (parent.isHierarchical) {
         if (!parent.FirstChild) {
             parent.FirstChild = element
@@ -98,4 +87,15 @@ function HierarchicalAfter(element) {
             parent.LastChild = element
         }
     }
+
+
+
+}
+
+function HierarchicalBefore(element) {
+    
+}
+
+function HierarchicalAfter(element) {
+    
 }

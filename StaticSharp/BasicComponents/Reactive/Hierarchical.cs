@@ -46,6 +46,9 @@ namespace StaticSharp {
             public Hierarchical(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
 
             public override void AddRequiredInclues(IIncludes includes) {
+
+
+
                 base.AddRequiredInclues(includes);
                 includes.Require(new Script(AbsolutePath("Hierarchical.js")));
             }

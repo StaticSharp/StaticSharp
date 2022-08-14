@@ -4,12 +4,6 @@ function ParagraphInitialization(element) {
 
     BlockInitialization(element)
 
-    let content = element.children[0]
-
-    element.onclick = function () {
-        console.log(element.Width)
-    };
-
 
     element.Reactive = {
 
@@ -32,16 +26,6 @@ function ParagraphInitialization(element) {
     element.MarginTop = 8
     element.MarginBottom = 8
 
-}
-
-function ParagraphBefore(element) {
-    BlockBefore(element)
-}
-
-function ParagraphAfter(element) {
-    
-    BlockAfter(element)
-
 
     new Reaction(() => {
 
@@ -62,9 +46,8 @@ function ParagraphAfter(element) {
         element.MinContentWidth = () => element.Modifier.HierarchyFontSize / testFontSize * minWidthRect.width
         element.MaxContentHeight = () => element.Modifier.HierarchyFontSize / testFontSize * minWidthRect.height
         element.MinContentHeight = () => element.Modifier.HierarchyFontSize / testFontSize * maxWidthRect.height
-      
-    })
 
+    })
 
     new Reaction(() => {
         //console.log("element.Modifier", element, element.Modifier)
@@ -106,18 +89,13 @@ function ParagraphAfter(element) {
     })
 
     HeightToStyle(element)
+}
 
+function ParagraphBefore(element) {
+    BlockBefore(element)
+}
 
-
-
-    new Reaction(() => {
-        element.title = `MaxContentWidth:${element.MaxContentWidth} Width:${element.Width} LayoutWidth:${element.LayoutWidth}`
-    })
-
+function ParagraphAfter(element) {
     
-
-    /*element.onclick = function () {
-    };*/
-
-
+    BlockAfter(element)
 }

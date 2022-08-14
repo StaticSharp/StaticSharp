@@ -22,9 +22,17 @@ namespace StaticSharp {
     [ScriptAfter]
     public class Image : Block {
 
+        public enum TEmbed { 
+            Image,
+            Thumbnail,
+            None
+        }
+
         public override string TagName => "div";
 
         protected IGenome<IAsset> assetGenome;
+
+        public TEmbed Embed { get; set; } = TEmbed.Thumbnail;
 
 
         public Image(Image other, string callerFilePath, int callerLineNumber)
@@ -42,23 +50,59 @@ namespace StaticSharp {
 
         
         public override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
+            string[] webExtensions = { ".jpg", ".jpeg", ".png", ".svg" };
 
-            var jpeg = await (new JpegGenome(assetGenome)).CreateOrGetCached();
-            var url = context.AddAsset(jpeg);
+            var source = await assetGenome.CreateOrGetCached();
+            if (!webExtensions.Contains(source.FileExtension)) {
+                source = await (new JpegGenome(assetGenome)).CreateOrGetCached();
+            }
+
+            var imageInfo = new MagickImageInfo(source.ReadAllBites());
+            elementTag["data-width"] = imageInfo.Width;
+            elementTag["data-height"] = imageInfo.Height;
+
+
+            if (Embed == TEmbed.Image) {
+                if (source.MediaType == "image/svg+xml") {
+                    return new Tag() {
+                        new PureHtmlNode(source.ReadAllText())
+                    };
+                } else {
+                    return new Tag("img") {
+                        ["src"] = source.GetDataUrl()
+                    };
+                }
+            }
+
+            var url = context.AddAsset(source);
+            if (Embed == TEmbed.None) {
+                return new Tag("img") {
+                    ["src"] = url
+                };
+            }
+
 
             var thumbnail = await new ThumbnailGenome(assetGenome).CreateOrGetCached();
-
             var thumbnailId = context.SvgDefs.Add(new SvgInlineImageGenerator(new ThumbnailGenome(assetGenome)));
-
             var hBlurId = context.SvgDefs.Add(new SvgBlurFilterGenerator(0.5f, 0));
             var vBlurId = context.SvgDefs.Add(new SvgBlurFilterGenerator(0, 0.5f));
 
 
-            var imageInfo = new MagickImageInfo(jpeg.ReadAllBites());
-            elementTag["data-width"] = imageInfo.Width;
-            elementTag["data-height"] = imageInfo.Height;
+            var quantizeSettings = new QuantizeSettings() {
+                Colors = 4,
+                ColorSpace = ColorSpace.RGB,
+                DitherMethod = DitherMethod.No,
+                MeasureErrors = false,
+                //TreeDepth = 0
+            };
 
-            elementTag.Style["background-color"] = Color.Aqua;
+
+            /*var imageColor = new MagickImage(thumbnail.ReadAllBites());
+            imageColor.Quantize(quantizeSettings);
+
+            var colors = imageColor.UniqueColors();
+
+            var pixel = imageColor.GetPixels().First().ToColor().ToHexString();*/
 
 
             return new Tag("content") {
