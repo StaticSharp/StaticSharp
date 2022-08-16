@@ -74,6 +74,7 @@ namespace StaticSharp.Gears {
             while (true) {
                 try {
                     File.WriteAllBytes(path, bytes);
+                    return;
                 }
                 catch (IOException) {
                     Thread.Yield();
@@ -85,8 +86,10 @@ namespace StaticSharp.Gears {
             while (true) {
                 try {
                     await File.WriteAllBytesAsync(path, bytes, cancellationToken);
+                    return;
                 }
-                catch (IOException) {
+                catch (IOException e) {
+
                     await Task.Yield();
                 }
             }

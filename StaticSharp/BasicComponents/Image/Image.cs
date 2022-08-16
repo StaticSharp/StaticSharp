@@ -47,8 +47,8 @@ namespace StaticSharp {
             includes.Require(new Script(ThisFilePathWithNewExtension("js")));
         }*/
 
-        
-        public override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
+
+        protected override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
             string[] webExtensions = { ".jpg", ".jpeg", ".png", ".svg" };
 
             var source = await assetGenome.CreateOrGetCached();

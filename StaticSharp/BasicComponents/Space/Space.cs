@@ -43,7 +43,7 @@ namespace StaticSharp {
             if (after != 0) Bindings.After = e => after;
         }
 
-        public override Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
+        protected override Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
             return Task.FromResult<Tag?>(null);
         }
     }

@@ -25,7 +25,7 @@ namespace StaticSharp {
 
         public Row([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
 
-        public override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
+        protected override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
             return new Tag() {
                 await children.Select(x=> x.Value.GenerateHtmlAsync(context,x.Key)).SequentialOrParallel(),
             };

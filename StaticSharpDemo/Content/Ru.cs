@@ -33,9 +33,17 @@ namespace StaticSharpDemo.Root {
 
             new Image(new HttpRequestGenome("https://upload.wikimedia.org/wikipedia/commons/4/49/Koala_climbing_tree.jpg")),
 
-            new Image(new FileGenome(AbsolutePath("Copilot/Delivery.svg"))){ 
-                Embed = Image.TEmbed.Image
+
+            new Flipper(){ 
+                First = new Image(new FileGenome(AbsolutePath("Copilot/Delivery.svg"))){ 
+                    Embed = Image.TEmbed.Image
+                },
+                Second = new Column(){
+                    $"text",
+                }
             },
+
+            
 
 
             /*new Image(new FileGenome(AbsolutePath("TestPsdImage.psd"))),

@@ -137,8 +137,8 @@ namespace StaticSharpWeb {
             includes.Require(new Script(AbsolutePath("Material.js")));
         }*/
 
-        
-        public override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
+
+        protected override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
             return new Tag(null) {
                 await LeftSideBar?.GenerateHtmlAsync(context,"LeftSideBar"),
 

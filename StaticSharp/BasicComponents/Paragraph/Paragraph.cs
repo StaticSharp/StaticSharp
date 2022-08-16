@@ -67,7 +67,7 @@ namespace StaticSharp {
             //Console.WriteLine($"\tAppendFormatted called: {{{t}}} is of type {typeof(T)}");
         }
 
-        public override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
+        protected override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
             return new Tag("div") {
                     await children.Select(x=>x.GenerateInlineHtmlAsync(context)).SequentialOrParallel()
             };

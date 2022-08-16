@@ -49,7 +49,7 @@ namespace StaticSharp {
             includes.Require(new Script(ThisFilePathWithNewExtension("js")));
         }*/
 
-        public override Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
+        protected override Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
 
             context.Includes.Require(new Style(AbsolutePath("Slider.scss")));
 

@@ -26,7 +26,7 @@ namespace StaticSharp {
             }
         }
 
-        public override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
+        protected override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
             return new Tag() {
                 await Children.Select(x=> x.Value.GenerateHtmlAsync(context,x.Key)).SequentialOrParallel(),
             };

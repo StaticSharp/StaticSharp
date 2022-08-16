@@ -52,7 +52,7 @@ namespace StaticSharp {
                 includes.Require(new Script(AbsolutePath("Hierarchical.js")));
             }*/
 
-            public virtual Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
+            protected virtual Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
                 return Task.FromResult<Tag?>(null);
                 //throw new System.NotImplementedException($"{GetType().FullName} overrides nither GenerateHtmlChildrenAsync nor GenerateHtmlAsync");
             }
