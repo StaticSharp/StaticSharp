@@ -28,8 +28,7 @@ namespace StaticSharp {
 
 
     namespace Gears {
-        [ScriptBefore]
-        [ScriptAfter]
+        [RelatedScript]
         public abstract class Hierarchical : Reactive {
 
             public new HierarchicalBindings<HierarchicalJs> Bindings => new(Properties);
@@ -45,61 +44,66 @@ namespace StaticSharp {
 
             public Hierarchical(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
 
-            public override void AddRequiredInclues(IIncludes includes) {
+            /*public override void AddRequiredInclues(Context context) {
 
 
 
-                base.AddRequiredInclues(includes);
+                base.AddRequiredInclues(context);
                 includes.Require(new Script(AbsolutePath("Hierarchical.js")));
-            }
+            }*/
 
             public virtual Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
                 return Task.FromResult<Tag?>(null);
                 //throw new System.NotImplementedException($"{GetType().FullName} overrides nither GenerateHtmlChildrenAsync nor GenerateHtmlAsync");
             }
 
-            public virtual void ApplyModifiers(ref Context context) {
-                foreach (var m in Modifiers) {
-                    m.AddRequiredInclues(context.Includes);
-                    context = m.ModifyContext(context);
-                }
-            }
 
-            public virtual void ApplyModifiers(Tag tag) {
+
+            /*public virtual void ApplyModifiers(Tag tag) {
                 foreach (var m in Modifiers) {
                     m.ModifyTag(tag);
                 }
-            }
+            }*/
 
-            public virtual IEnumerable<Task<Tag>> Before() {
-                yield return CreateScriptInitialization();
+            /*public virtual IEnumerable<Task<Tag>> CreateScripts(Context context) {
+                yield return CreateScript(context);
                 foreach (var m in Modifiers)
-                    yield return m.CreateScriptInitialization();
+                    yield return m.CreateScript(context);
 
-                yield return Task.FromResult(CreateScriptBefore());
-                foreach (var m in Modifiers)
-                    yield return Task.FromResult(m.CreateScriptBefore());
-            }
+            }*/
 
-            public virtual IEnumerable<Tag> After() {
+            /*public virtual IEnumerable<Tag> After() {
                 for (int i = Modifiers.Count-1; i >= 0; i--) {
                     yield return Modifiers[i].CreateScriptAfter();
                 }
                 yield return CreateScriptAfter();
-            }
+            }*/
 
 
             public virtual async Task<Tag> GenerateHtmlAsync(Context context, string? id = null) {
-                
-                AddRequiredInclues(context.Includes);
-                ApplyModifiers(ref context);
+
+                await AddRequiredInclues(context);
+
+                foreach (var m in Modifiers) {
+                    await m.AddRequiredInclues(context);
+                    context = m.ModifyContext(context);
+                }
 
                 var tag = new Tag(TagName, id) {};
 
-                ApplyModifiers(tag);
-                tag.Add(await Before().SequentialOrParallel());
+                foreach (var m in Modifiers) 
+                    m.ModifyTag(tag);
+                
+                //tag.Add(await CreateScripts(context).SequentialOrParallel());
+
+                tag.Add(await CreateScript(context));
+
+                foreach (var m in Modifiers)
+                    tag.Add(await m.CreateScript(context));
+
+
                 tag.Add(await GenerateHtmlInternalAsync(context, tag));
-                tag.Add(After());
+                //tag.Add(After());
 
                 return tag;
             }

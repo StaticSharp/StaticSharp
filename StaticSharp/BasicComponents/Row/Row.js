@@ -179,8 +179,10 @@ function RowBuilder(element) {
 
 }
 
-function RowInitialization(element) {
-    BlockInitialization(element)
+function Row(element) {
+    Block(element)
+
+    element.isRow = true
 
     element.Reactive = {
 
@@ -212,32 +214,6 @@ function RowInitialization(element) {
         //Height: 150//() => Sum(element.ContentHeight, element.PaddingTop, element.PaddingButtom),
     }
 
-
-}
-
-function RowBefore(element, parameters) {
-    BlockBefore(element)
-    element.isRow = true
-
-    WidthToStyle(element)
-    HeightToStyle(element)
-
-    /*element.LayoutChildren = []
-
-    element.AddChild = function (child) {
-        element.LayoutChildren.push(child)
-    }*/
-
-}
-
-
-
-
-
-function RowAfter(element) {
-    BlockAfter(element)
-
-
     new Reaction(() => {
 
         /*let contentWidth = undefined
@@ -251,7 +227,7 @@ function RowAfter(element) {
 
         for (let child of element.children) {
             builder.layout(child)
-            
+
         }
         builder.finalizeCurrentLine()
 
@@ -263,151 +239,6 @@ function RowAfter(element) {
 
     })
 
-
-
-    return
-
-
-    //element.style.height = "200px"
-    let fontData = GetFontData(element)
-/*
-    new Reaction(() => {
-
-        //console.log("rebuild ", element)
-
-        let width = element.Width
-        let internalWidth = element.Width - element.Padding.Left - element.Padding.Right
-
-
-        let nodes = element.childNodes
-
-        let y = 0
-
-        const fontStack = [
-            {
-                ascent:10,
-                descent:2,
-                spaceWidth:0,
-            }
-        ]
-
-
-
-        function initializeLine() {
-            return {
-                x: 0.0,
-                ascent: 0,
-                descent: 0,
-                nodes: [],
-                space: 0,
-            }
-        }
-        let currentLine = initializeLine();
-
-        var spaceWidth = 0
-
-        //var range = document.createRange();
-
-        //var canvasFontSize = getCanvasFontSize(element)
-        //var context = getCanvasContext(canvasFontSize)
-
-
-        function getWordWidth(node) {
-            //console.log(node.innerText)
-            //return getTextWidth(node.innerText, context)
-
-            if (node.wordWidth == undefined) {
-                let attribute = node.getAttribute("w")
-                if (attribute == undefined) {
-                    console.error("getWordWidth", node, "attribute w not found")
-                    return 0
-                } else {
-                    node.wordWidth = parseFloat(attribute);
-                }
-            }
-            return node.wordWidth
-        }
-
-        
-        //range.selectNodeContents(textNode);
-
-        function processLine() {
-            let x = 0.0
-            
-            //console.log(currentLine.items)
-            
-            for (let n of currentLine.nodes) {
-
-                if (n.tagName == WordTagName) {
-                    //child.removeAttribute("x")
-                    //child.removeAttribute("y")
-
-
-                    
-                    n.style.left = x.toFixed(2) + "px"
-                    n.style.top = y + "px"
-                    
-                    //child.setAttribute("x", x+"px" );
-                    //child.setAttribute("y", y + "px");
-
-                    x += getWordWidth(n) + spaceWidth
-                }
-            }
-
-            //fixme:
-            y += currentLine.ascent
-            y += currentLine.descent
-            //document.title = x;
-            currentLine = initializeLine()
-
-        }
-
-        function processNodes(nodes) {
-            for (let n of nodes) {
-                
-                if (n.nodeType == 1) {
-
-                    
-                    if (n.tagName == WordTagName) {
-                        
-                        let w = getWordWidth(n)
-                        if ((currentLine.x + w) > width) {                            
-                            processLine()
-                        }
-                        let font = fontStack[fontStack.length - 1]
-                        currentLine.ascent = Math.max(currentLine.ascent, font.ascent)
-                        currentLine.descent = Math.max(currentLine.descent, font.descent)
-                        
-
-                        currentLine.x += w
-
-                        currentLine.nodes.push(n)
-                        continue
-                    }
-                } else if (n.nodeType == 3) {
-                    let text = n.textContent
-                    currentLine.x += spaceWidth * text.length
-
-                }
-            }
-        }
-        
-        processNodes(nodes)
-        processLine()
-        
-        element.Height = y
-
-
-        
-
-        
-
-        element.style.height = top+"px"
-
-    })
-*/
-    //let flexChildren = document.querySelectorAll('.content');
-    //let leftPosition = flexChildren[0].offsetLeft;
-    
-
+    WidthToStyle(element)
+    HeightToStyle(element)
 }

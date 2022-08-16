@@ -1,7 +1,7 @@
 
-function TemplateInitialization(element) {
+function Template(element) {
 
-    BlockInitialization(element)
+    Block(element)
 
     element.isTemplate = true
     element.Reactive = {
@@ -24,21 +24,4 @@ function TemplateInitialization(element) {
 
     WidthToStyle(element)
     HeightToStyle(element)
-
-
-}
-
-
-
-
-
-function TemplateBefore(element) {
-    BlockBefore(element)
-
-    
-
-}
-
-function TemplateAfter(element) {
-    BlockAfter(element)
 }

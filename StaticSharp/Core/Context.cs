@@ -1,8 +1,15 @@
 ﻿
+
 using StaticSharp.Resources;
 using StaticSharpEngine;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace StaticSharp.Gears {
 
@@ -24,6 +31,7 @@ namespace StaticSharp.Gears {
 
         public Assets Assets { get; init; }
 
+        private ConcurrentDictionary<string, IAsset> Scripts { get; } = new();
 
         public FontFamily[] FontFamilies { get; set; } = null!;
         public FontStyle FontStyle { get; set; } = new();
@@ -32,6 +40,29 @@ namespace StaticSharp.Gears {
             Assets.Add(asset);
             return new Uri(BaseAssetsUrl, asset.FilePath);
         }
+
+        public void AddScript(IAsset asset) {
+            Scripts.TryAdd(asset.Key, asset);
+        }
+
+        public Html.Tag GenerateScript() {
+            var scriptCode = string.Join('\n', Scripts.Values.Select(x => x.ReadAllText()));
+            return new Html.Tag("script") {
+                new Html.PureHtmlNode(scriptCode)
+            };
+        }
+
+        public async Task AddScriptFromResource(string fileName, [CallerFilePath] string callerFilePath = "") {
+            var assembly = Assembly.GetCallingAssembly();
+            string directory = Path.GetDirectoryName(callerFilePath) ?? "";
+            string absoluteFilePath = Path.Combine(directory, fileName);
+            var relativeFilePath = AssemblyResourcesUtils.GetFilePathRelativeToProject(assembly, absoluteFilePath);
+            var relativeResourcePath = AssemblyResourcesUtils.GetResourcePath(relativeFilePath);
+
+            var script = await (new AssemblyResourceGenome(assembly, relativeResourcePath)).CreateOrGetCached();
+            AddScript(script);
+        }
+
 
         public Context(Assets assets, Uri baseUrl, INodeToUrl nodeToUrlConverter) {
             Assets = assets;

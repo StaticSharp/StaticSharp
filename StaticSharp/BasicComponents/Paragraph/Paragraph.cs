@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    [ScriptBefore]
-    [ScriptAfter]
+    [RelatedScript]
     [InterpolatedStringHandler]
     public class Paragraph : Block, IVoidEnumerable, IInline {
 
@@ -64,29 +63,15 @@ namespace StaticSharp {
             Add(value);
         }
         public void AppendFormatted<T>(T t) where T : struct {
+            //TODO: inplement
             //Console.WriteLine($"\tAppendFormatted called: {{{t}}} is of type {typeof(T)}");
-        }
-
-        public override void AddRequiredInclues(IIncludes includes) {
-            base.AddRequiredInclues(includes);
-            includes.Require(new Script(ThisFilePathWithNewExtension("js")));
         }
 
         public override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
             return new Tag("div") {
                     await children.Select(x=>x.GenerateInlineHtmlAsync(context)).SequentialOrParallel()
-                    //await Task.WhenAll(children.Select(x=>x.GenerateInlineHtmlAsync(context)))
-                };
-        }
-
-        /*public override async Task<Tag> GenerateHtmlAsync(Context context, string? id) {
-            AddRequiredInclues(context.Includes);
-            return new Tag("div", id) {
-                CreateScriptBefore(),
-                ,
-                CreateScriptAfter()
             };
-        }*/
+        }
 
         async Task<Tag> IInline.GenerateInlineHtmlAsync(Context context) {
             return new Tag() {

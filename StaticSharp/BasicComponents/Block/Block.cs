@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
     namespace Gears {
-
         [System.Diagnostics.DebuggerNonUserCode]
         public class BlockJs : HierarchicalJs {
             public BlockJs() { }
@@ -44,44 +43,18 @@ namespace StaticSharp {
 
         }
 
-
     }
 
 
-    [ScriptBefore]
-    [ScriptAfter]
+    [RelatedScript]
     public partial class Block : Hierarchical, IBlock {
-
         public new BlockBindings<BlockJs> Bindings => new(Properties);
-
-
 
         protected Block(Block other,
             string callerFilePath = "",
             int callerLineNumber = 0) : base(other, callerFilePath, callerLineNumber) {
-
-            /*X_Script = other.X_Script;
-            Y = other.Y;
-            Width = other.Width;
-            Height = other.Height;
-            MarginLeft = other.MarginLeft;
-            MarginRight = other.MarginRight;
-            MarginTop = other.MarginTop;
-            MarginBottom = other.MarginBottom;
-            PaddingLeft = other.PaddingLeft;
-            PaddingRight = other.PaddingRight;
-            PaddingTop = other.PaddingTop;
-            PaddingBottom = other.PaddingBottom; */
-
         }
         public Block([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
-
-        public override void AddRequiredInclues(IIncludes includes) {
-            base.AddRequiredInclues(includes);
-            includes.Require(new Script(ThisFilePathWithNewExtension("js")));
-        }
-
-
 
     }
 

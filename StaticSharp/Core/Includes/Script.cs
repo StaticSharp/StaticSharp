@@ -1,4 +1,5 @@
-﻿using StaticSharp.Utils;
+﻿using StaticSharp.Gears;
+using StaticSharp.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,7 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
+
+
+
+
+
+
+
 namespace StaticSharp.Gears {
+
+
+
+
+
 
     public interface IScript : IInclude {
         IEnumerable<IScript> Dependencies { get; }

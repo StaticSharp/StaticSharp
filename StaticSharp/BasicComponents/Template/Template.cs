@@ -15,8 +15,8 @@ namespace StaticSharp {
     }*/
 
 
-    [ScriptBefore]
-    [ScriptAfter]
+    [RelatedScript]
+
     public class Template : Block {
         protected IGenome<IAsset> assetGenome { get; }
 
@@ -28,10 +28,10 @@ namespace StaticSharp {
         public Template(IGenome<IAsset> assetGenome, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
             this.assetGenome = assetGenome;
         }
-        public override void AddRequiredInclues(IIncludes includes) {
+        /*public override void AddRequiredInclues(IIncludes includes) {
             base.AddRequiredInclues(includes);
             includes.Require(new Script(ThisFilePathWithNewExtension("js")));
-        }
+        }*/
 
         /*public override Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
             return Task.FromResult <Tag?>(null);

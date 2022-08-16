@@ -29,8 +29,8 @@ namespace StaticSharp {
 
 
 
-    [ScriptBefore]
-    [ScriptAfter]
+
+    [RelatedScript]
     public class Slider : Block {
 
         public new SliderBindings<SliderJs> Bindings => new(Properties);
@@ -44,10 +44,10 @@ namespace StaticSharp {
 
         public Slider([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
 
-        public override void AddRequiredInclues(IIncludes includes) {
+        /*public override void AddRequiredInclues(IIncludes includes) {
             base.AddRequiredInclues(includes);
             includes.Require(new Script(ThisFilePathWithNewExtension("js")));
-        }
+        }*/
 
         public override Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
 

@@ -1,5 +1,5 @@
-function ColumnInitialization(element) {
-    BlockInitialization(element)
+function Column(element) {
+    Block(element)
 
     element.Reactive = {
         InternalWidth: () => {
@@ -27,7 +27,6 @@ function ColumnInitialization(element) {
 
 
     new Reaction(() => {
-        console.log("column ch w")
         for (let child of element.Children) {
             if (child.isBlock) {
                 child.LayoutX = () => Max(element.PaddingLeft, child.MarginLeft)
@@ -80,8 +79,6 @@ function ColumnInitialization(element) {
 
                 return true
             }
-
-            console.warn("Column: Unknown element type", child)
             return true
         }
 
@@ -142,40 +139,5 @@ function ColumnInitialization(element) {
 
     WidthToStyle(element)
     HeightToStyle(element)
-
-}
-
-
-
-function ColumnBefore(element) {
-   
-
-    BlockBefore(element)
-
-
-    
-
-
-    /*element.LayoutChildren = []
-
-    element.AddChild = function (child) {
-        element.LayoutChildren.push(child)
-    }*/
-}
-
-
-function ColumnAfter(element) {
-    BlockAfter(element)
-
-    
-    
-
-
-    
-
-    
-
-    //let w = element.LayoutChildren[0].Width
-    
 
 }

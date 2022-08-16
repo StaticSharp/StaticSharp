@@ -7,22 +7,9 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    namespace Symbolic {
-        public class ColumnJs : BlockJs {
 
-            
-
-            /*public ColumnJs(string value) : base(value) {
-            }*/
-        }
-    }
-
-    [ScriptBefore]
-    [ScriptAfter]
+    [RelatedScript]
     public class Column : Block, IBlockCollector {
-
-
-
         public override string TagName => "column";
         public Blocks Children { get; } = new();
 
@@ -37,10 +24,6 @@ namespace StaticSharp {
             if (value != null) {
                 Children.Add(id, value);
             }
-        }
-        public override void AddRequiredInclues(IIncludes includes) {
-            base.AddRequiredInclues(includes);
-            includes.Require(new Script(ThisFilePathWithNewExtension("js")));
         }
 
         public override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {

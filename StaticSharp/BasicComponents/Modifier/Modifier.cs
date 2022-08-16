@@ -10,15 +10,14 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    [ScriptBefore]
-    [ScriptAfter]
+    [RelatedScript]
     public sealed class Modifier : BaseModifier {
         public Modifier([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber) { }
-        public override void AddRequiredInclues(IIncludes includes) {
+        /*public override void AddRequiredInclues(IIncludes includes) {
             base.AddRequiredInclues(includes);
             includes.Require(new Script(ThisFilePathWithNewExtension("js")));
-        }
+        }*/
     }
 
 

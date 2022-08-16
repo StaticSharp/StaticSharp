@@ -23,7 +23,11 @@ namespace StaticSharpWeb {
         public Font Font { get; }
     }*/
 
-    [ScriptBefore]
+    [RelatedScript]
+    [RelatedScript("Watch")]
+    [RelatedScript("Color")]
+    [RelatedScript("Cookies")]
+
     public abstract class Material : Hierarchical, IMaterial, IInline, IPage, IPlainTextProvider {
         //public class TChildren : List<object> { }
 
@@ -67,7 +71,7 @@ namespace StaticSharpWeb {
 
         public async Task<string> GeneratePageHtmlAsync(Context context) {
 
-            context.Includes.Require(new Script(AbsolutePath("StaticSharp.js")));
+            //context.Includes.Require(new Script(AbsolutePath("StaticSharp.js")));
             context.Includes.Require(new Style(AbsolutePath("Normalization.scss")));
 
             context.Includes.Require(new Style(AbsolutePath("Debug.scss")));
@@ -109,7 +113,7 @@ namespace StaticSharpWeb {
                 );
 
 
-            head.Add(await context.Includes.GenerateScriptAsync());
+            head.Add(context.GenerateScript());
             head.Add(await GenerateFontsAsync(context));
             head.Add(await context.Includes.GenerateStyleAsync());
             return document.GetHtml();
@@ -128,10 +132,10 @@ namespace StaticSharpWeb {
 
 
 
-        public override void AddRequiredInclues(IIncludes includes) {
+        /*public override void AddRequiredInclues(IIncludes includes) {
             base.AddRequiredInclues(includes);
             includes.Require(new Script(AbsolutePath("Material.js")));
-        }
+        }*/
 
         
         public override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
@@ -161,8 +165,8 @@ namespace StaticSharpWeb {
 
 
             return new Tag("body") {
-                CreateScriptInitialization(),
-                Modifiers.Select(x=>x.CreateScriptInitialization()),
+                CreateScript(),
+                Modifiers.Select(x=>x.CreateScript()),
 
                 CreateScriptBefore(),
                 Modifiers.Select(x=>x.CreateScriptBefore()),

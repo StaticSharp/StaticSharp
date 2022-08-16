@@ -28,8 +28,7 @@ namespace StaticSharp {
 
     namespace Gears {
 
-        [ScriptBefore]
-        [ScriptAfter]
+        [RelatedScript]
         public abstract class BaseModifier: Hierarchical {
 
             public new BaseModifierBindings<BaseModifierJs> Bindings => new(Properties);
@@ -50,10 +49,10 @@ namespace StaticSharp {
             : base(callerFilePath, callerLineNumber) { }
 
 
-            public override void AddRequiredInclues(IIncludes includes) {
+            /*public override void AddRequiredInclues(IIncludes includes) {
                 base.AddRequiredInclues(includes);
                 includes.Require(new Script(ThisFilePathWithNewExtension("js")));
-            }
+            }*/
 
             public Context ModifyContext(Context context) {
                 if (FontFamilies != null) {
@@ -100,14 +99,15 @@ namespace StaticSharp {
 
                 //context.Includes.Require(await context.GetCacheableFont());
 
-                AddRequiredInclues(context.Includes);
+                AddRequiredInclues(context);
 
                 var tag = new Tag(tagName,id) {
                     
                     Children = {
-                        CreateScriptBefore(),
+                        await CreateScript(context),
+                        //CreateScriptBefore(),
                         await children(context).SequentialOrParallel(),
-                        CreateScriptAfter()
+                        //CreateScriptAfter()
                     }
                 };
 

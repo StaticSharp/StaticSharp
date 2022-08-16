@@ -1,8 +1,6 @@
+function Paragraph(element) {
 
-
-function ParagraphInitialization(element) {
-
-    BlockInitialization(element)
+    Block(element)
 
 
     element.Reactive = {
@@ -89,13 +87,4 @@ function ParagraphInitialization(element) {
     })
 
     HeightToStyle(element)
-}
-
-function ParagraphBefore(element) {
-    BlockBefore(element)
-}
-
-function ParagraphAfter(element) {
-    
-    BlockAfter(element)
 }

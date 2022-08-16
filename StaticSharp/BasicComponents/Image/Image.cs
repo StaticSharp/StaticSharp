@@ -12,14 +12,13 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    namespace Symbolic {
+    namespace Gears {
         public class ImageJs : BlockJs {
 
         }
     }
 
-    [ScriptBefore]
-    [ScriptAfter]
+    [RelatedScript]
     public class Image : Block {
 
         public enum TEmbed { 
@@ -43,10 +42,10 @@ namespace StaticSharp {
             this.assetGenome = assetGenome;
         }
 
-        public override void AddRequiredInclues(IIncludes includes) {
+        /*public override void AddRequiredInclues(IIncludes includes) {
             base.AddRequiredInclues(includes);
             includes.Require(new Script(ThisFilePathWithNewExtension("js")));
-        }
+        }*/
 
         
         public override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {

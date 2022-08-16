@@ -4,20 +4,16 @@ using StaticSharp.Html;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
-
-    //public class ScriptInitializationAttribute : Attribute { }
-    public class ScriptBeforeAttribute : Attribute {}
-    public class ScriptAfterAttribute : Attribute { }
-
-
     
 
     namespace Gears {
@@ -38,7 +34,11 @@ namespace StaticSharp {
             }
         }
 
-
+        [RelatedScript("ReactiveUtils")]
+        [RelatedScript("Math")]
+        [RelatedScript("Constants")]
+        [RelatedScript("Constructor")]
+        [RelatedScript("Bindings")]
         public abstract class Reactive : CallerInfo {
             public Dictionary<string, string> Properties { get; } = new();
 
@@ -71,35 +71,89 @@ namespace StaticSharp {
 
             //public abstract Task<Tag> GenerateHtmlAsync(Context context);
 
-            public virtual void AddRequiredInclues(IIncludes includes) {
-                includes.Require(new Script(AbsolutePath("ReactiveUtils.js")));
-                includes.Require(new Script(AbsolutePath("Math.js")));
-                includes.Require(new Script(AbsolutePath("Constants.js")));
-                includes.Require(new Script(AbsolutePath("Constructor.js")));
-                includes.Require(new Script(AbsolutePath("Bindings.js")));
-            }
 
-            string? FindScriptRoot<A>(Type? type) {
-                if (type == null) return null;
-                if (type.GetCustomAttributes(typeof(A), false).Length > 0) {
-                    if (type.IsGenericType) {
-                        return $"{type.Name.Substring(0, type.Name.IndexOf("`"))}";
+            string FindScriptRoot() {
+                foreach (var i in GetBaseTypes()) {
+                    var attributes = i.GetCustomAttributes<RelatedScriptAttribute>(false);
+                    foreach (var attribute in attributes) {
+                        if (attribute.FileName == null) { // Script for class. Not editional
+                            return i.Name;
+                        }
                     }
-                    return type.Name;
                 }
-                return FindScriptRoot<A>(type.BaseType);
+                throw new Exception("There is no class in hierarchy, with related js component script");
             }
 
-            public async Task<Tag> CreateScriptInitialization() {
+            private IEnumerable<Type> GetBaseTypes() {
+                var type = GetType();
+                while (type != null) {
+                    yield return type;
+                    if (type == typeof(Reactive))
+                        yield break;
+                    type = type.BaseType;
+                }
+            }
 
-                var className = FindScriptRoot<ScriptBeforeAttribute>(GetType());
+            private async Task AddRequiredIncluesForType(Type type, Context context) {
+                if (type != typeof(Reactive)) {
+                    var baseType = type.BaseType;
+                    if (baseType != null) {
+                        await AddRequiredIncluesForType(baseType, context);
+                    }
+                }
+
+                var assembly = type.Assembly;
+                var scriptsAttributes = type.GetCustomAttributes<RelatedScriptAttribute>(false);
+                var typeName = type.Name;
+
+                foreach (var i in scriptsAttributes) {
+                    string directory = Path.GetDirectoryName(i.CallerFilePath) ?? "";
+                    var fileName = i.FileName ?? typeName;
+                    var extension = i.Extension;
+
+                    string absoluteFilePath = Path.GetFullPath(Path.Combine(directory, fileName+ extension));
+
+                    if (File.Exists(absoluteFilePath)) {
+                        var scriptFromFile = await (new FileGenome(absoluteFilePath)).CreateOrGetCached();
+                        context.AddScript(scriptFromFile);
+
+                    } else {
+                        var relativeFilePath = AssemblyResourcesUtils.GetFilePathRelativeToProject(assembly, absoluteFilePath);
+                        var relativeResourcePath = AssemblyResourcesUtils.GetResourcePath(relativeFilePath);
+
+                        var script = await (new AssemblyResourceGenome(assembly, relativeResourcePath)).CreateOrGetCached();
+                        context.AddScript(script);
+                    }
+
+                    
+                }
+            }
+
+            public virtual async Task AddRequiredInclues(Context context) {
+                var type = GetType();
+                await AddRequiredIncluesForType(type, context);
+
+                /*await context.AddScriptFromResource("ReactiveUtils.js");
+                await context.AddScriptFromResource("Math.js");
+                await context.AddScriptFromResource("Constants.js");
+                await context.AddScriptFromResource("Constructor.js");
+                await context.AddScriptFromResource("Bindings.js");*/
+            }
+
+
+
+            public async Task<Tag> CreateScript(Context context) {
+                var sripts = new List<string>();
+
+
+                var className = FindScriptRoot();
 
                 var propertiesInitializers = await GetGeneratedBundingsAsync().ToListAsync();
                 propertiesInitializers.AddRange(Properties);
 
                 var propertiesInitializersScript = string.Join(',', propertiesInitializers.Select(x => $"{x.Key}:{x.Value}"));
 
-                string script = $"{{let element = ConstructorInitialization(\"{className}\");";
+                string script = $"{{let element = Constructor(\"{className}\");";
                 if (!string.IsNullOrEmpty(propertiesInitializersScript)) {
                     script += $"element.Reactive={{{propertiesInitializersScript}}}";
                 }
@@ -110,7 +164,7 @@ namespace StaticSharp {
                 };
             }
 
-            public Tag CreateScriptBefore() {
+            /*public Tag CreateScriptBefore() {
                 var className = FindScriptRoot<ScriptBeforeAttribute>(GetType());
                     return new Tag("script") {
                     new PureHtmlNode($"ConstructorBefore(\"{className}\")")
@@ -122,7 +176,7 @@ namespace StaticSharp {
                 return new Tag("script") {
                     new PureHtmlNode($"ConstructorAfter(\"{className}\")")
                 };
-            }
+            }*/
 
 
             /*public IEnumerable<KeyValuePair<string,string>> GetBindings() {

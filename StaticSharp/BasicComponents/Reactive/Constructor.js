@@ -12,9 +12,9 @@ function _call(name, element) {
     func(element)
 }
 
-function ConstructorInitialization(name) {
+function Constructor(name) {
     var element = _deleteScript()
-    _call(name + "Initialization", element)
+    _call(name, element)
     return element;
     /*try {
         eval(script)
@@ -22,7 +22,7 @@ function ConstructorInitialization(name) {
         console.error(script, "\n", e)
     }*/
 }
-
+/*
 function ConstructorBefore(name) {
     var element = _deleteScript()
     _call(name + "Before", element)
@@ -32,4 +32,4 @@ function ConstructorBefore(name) {
 function ConstructorAfter(name) {
     var element = _deleteScript()
     _call(name + "After", element)
-}
+}*/

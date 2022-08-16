@@ -13,15 +13,20 @@ namespace StaticSharp.Gears {
 
     public interface IIncludes {
 
-        void Require(IScript script);
+
+
+        //void Require(IScript script);
 
         void Require(IStyle style);
+
+
+
 
         //void Require(IFont font);
 
         //CacheableFont GetOrCreateFont(Font font);
 
-        Task<Tag> GenerateScriptAsync();
+        //Task<Tag> GenerateScriptAsync();
 
         //Task<Tag> GenerateFontAsync();
         Task<Tag> GenerateStyleAsync();
@@ -29,7 +34,7 @@ namespace StaticSharp.Gears {
 
 
     public class Includes : IIncludes {
-        private readonly ConcurrentDictionary<string, IScript> scripts = new();
+        //private readonly ConcurrentDictionary<string, IScript> scripts = new();
         private readonly ConcurrentDictionary<string, IStyle> styles = new();
         //private readonly ConcurrentDictionary<string, CacheableFont> fonts = new();
 
@@ -37,7 +42,7 @@ namespace StaticSharp.Gears {
         
 
 
-        public void Require(IScript script) {
+        /*public void Require(IScript script) {
             foreach(var i in script.Dependencies) {
                 Require(i);
             }
@@ -46,7 +51,7 @@ namespace StaticSharp.Gears {
             if(!scripts.ContainsKey(id)) {
                 scripts.TryAdd(id, script);
             }
-        }
+        }*/
 
         // public async Task<Tag> GenerateScriptAsync(IStorage storage) {
         //     var scriptCode = new StringBuilder();
@@ -73,7 +78,7 @@ namespace StaticSharp.Gears {
 
 
 
-        public async Task<Tag> GenerateScriptAsync() {
+        /*public async Task<Tag> GenerateScriptAsync() {
             return new Tag("script") {
                 new PureHtmlNode(GenerateSuperScript())
             };
@@ -90,7 +95,7 @@ namespace StaticSharp.Gears {
             }
             Script superScript = new Script("");
             return superScript.GenerateSuperScript(scriptList);
-        }
+        }*/
 
         public async Task<Tag> GenerateStyleAsync() {
             return new Tag("style") {
@@ -110,8 +115,10 @@ namespace StaticSharp.Gears {
             return superStyle.GenerateSuperStyle(styleList.ToString());
         }
 
-
         
+
+
+
         /*public void Require(IFont font) {
             var id = font.Key;
             if(!fonts.ContainsKey(id)) {
@@ -119,6 +126,6 @@ namespace StaticSharp.Gears {
             }
         }*/
 
-        
+
     }
 }

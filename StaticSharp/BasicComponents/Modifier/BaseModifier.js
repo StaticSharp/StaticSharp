@@ -23,11 +23,11 @@ function GetModifier(element) {
 
 
 
-function BaseModifierInitialization(element) {
+function BaseModifier(element) {
     //console.log("element.Modifier",element.Modifier)
     if (element.isModifier)
         return
-    //HierarchicalInitialization(element)
+    //Hierarchical(element)
     element.isModifier = true
 
     element.Reactive = {
@@ -58,22 +58,4 @@ function BaseModifierInitialization(element) {
             element.style.color = element.ForegroundColor// element.BackgroundColor.toString(16)
         }
     })
-
-
-}
-
-function BaseModifierBefore(element) {
-    //HierarchicalBefore(element)
-    let parent = element.parentElement;
-
-
-    
-
-
-}
-
-function BaseModifierAfter(element) {
-    //HierarchicalAfter(element)
-
-    
 }

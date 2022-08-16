@@ -1,9 +1,9 @@
 
-function MaterialInitialization(element) {
-    HierarchicalInitialization(element)
+function Material(element) {
+
+    Hierarchical(element)
 
     window.Reactive = {
-        FontsReady: false,
         InnerWidth: window.innerWidth,
         InnerHeight: window.innerHeight,
     }
@@ -14,22 +14,75 @@ function MaterialInitialization(element) {
         LeftSideBar: () => element.Child("LeftSideBar"),
         RightSideBar: () => element.Child("RightSideBar"),
         Footer: undefined,
-
-        /*Html: () => `<svg style="z-index: 10;" width=${window.InnerWidth} viewBox="0 0 ${window.InnerWidth} ${window.InnerHeight}">
-${function () {
-                let result = []
-                for (let i = 0; i < window.InnerWidth; i++) {
-                    const gridSize = 16
-                    let x = (i % gridSize) / gridSize
-                    let y = Math.floor(i / gridSize) / gridSize
-                    result.push(`<circle cx=${window.InnerWidth * x} cy=${window.InnerWidth * y} cx="500"r=6></circle>`)
-                }
-                return result.join("")
-            }()}
-    <circle cx="${window.InnerWidth * 0.5}" cy="${window.InnerWidth * 0.25}" cx="500"r="20">
-    </circle>
-</svg>`*/
     }
+
+
+    window.onresize = function (event) {
+        let d = Reaction.beginDeferred()
+        window.InnerWidth = window.innerWidth
+        window.InnerHeight = window.innerHeight
+        d.end()
+    }
+
+    let loadingDeffered = Reaction.beginDeferred()
+    let loadEventsToWait = 2
+    function onLoadEvent() {
+        loadEventsToWait--
+        if (loadEventsToWait == 0) {
+            loadingDeffered.end()
+            element.style.visibility = "visible";
+        }
+    }
+
+    document.fonts.ready
+        .then(() => {
+            onLoadEvent()            
+        })
+
+    document.addEventListener("DOMContentLoaded", function (event) {
+        onLoadEvent()
+    })
+
+
+
+    new Reaction(() => {
+
+        let LeftBarSize = 0
+        let RightBarSize = Max(element.RightSideBar?.Width, 0)
+
+
+
+        if (element.LeftSideBar) {
+            element.LeftSideBar.style.position = "fixed"
+            element.LeftSideBar.Height = window.InnerHeight
+            LeftBarSize = Max(element.LeftSideBar.Width, 0)
+        }
+
+
+
+        let width = window.InnerWidth - LeftBarSize - RightBarSize
+        let innerWidth = Math.min(width, element.ContentWidth)
+        let paddingLeft = (width - innerWidth) * 0.5
+
+
+
+
+
+        if (element.Content) {
+
+
+            element.Content.Width = width
+
+            element.Content.PaddingLeft = paddingLeft
+
+            element.Content.PaddingRight = width - innerWidth - paddingLeft
+
+            element.Content.X = LeftBarSize
+            element.Content.Height = Math.max(element.Content.ContentHeight, window.InnerHeight)// + "px"
+        }
+
+    })
+
 }
 
 
@@ -100,26 +153,7 @@ function MaterialBefore(element) {
 
     
 
-    window.onresize = function (event) {
-        let d = Reaction.beginDeferred()
-        window.InnerWidth = window.innerWidth
-        window.InnerHeight = window.innerHeight
-        d.end()
-    }
-
-
-
-
-
-    let loadingDeffered = Reaction.beginDeferred()
-
-    document.fonts.ready
-        .then(() => {
-
-            window.FontsReady = true
-            loadingDeffered.end()
-            element.style.visibility = "visible";
-        })
+    
 
     /*let previous = this.Content
     let onChanged = function (previous, current) {
@@ -145,87 +179,7 @@ function MaterialBefore(element) {
 
 
 
-    new Reaction(() => {
-        let LeftBarSize = 0
-        let RightBarSize = Max(element.RightSideBar?.Width, 0)
-
-        
-
-        if (element.LeftSideBar) {
-            element.LeftSideBar.style.position = "fixed"
-            element.LeftSideBar.Height = window.InnerHeight
-            LeftBarSize = Max(element.LeftSideBar.Width, 0)
-        }
-
-        
-
-        let width = window.InnerWidth - LeftBarSize - RightBarSize
-        let innerWidth = Math.min(width, element.ContentWidth)
-        let paddingLeft = (width - innerWidth) * 0.5
-
-
-        
-
-
-        if (element.Content) {           
-            
-            
-            element.Content.Width = width
-
-            element.Content.PaddingLeft = paddingLeft
-
-            element.Content.PaddingRight = width - innerWidth - paddingLeft
-
-            element.Content.X = LeftBarSize
-
-
-            //console.log("element.Content.ContentHeight", element.Content.ContentHeight)
-            element.Content.Height = Math.max(element.Content.ContentHeight, window.InnerHeight)// + "px"
-
-
-
-
-
-            //this.Content.MaxInnerWidth = parameters.ContentWidth
-            //this.Content.Width = window.InnerWidth - LeftBarSize - RightBarSize
-        }
-
-        /*if (element.Footer) {
-            element.Footer.style.left = LeftBarSize + "px"
-            element.Footer.style.minHeight = "50px"
-            element.Footer.style.backgroundColor = "yellow"
-
-            element.Footer.Width = width
-            element.Footer.InnerWidth = innerWidth
-            element.Footer.PaddingLeft = paddingLeft
-
-            if (element.Footer.Height) {
-                element.Footer.style.position = "absolute"
-
-                let contentHeight = 0
-                if (element.Content) {
-                    contentHeight = element.Content.Height || 0
-                }
-
-                var top = Math.max(contentHeight, window.InnerHeight - element.Footer.Height)
-
-                element.Footer.style.top = top + "px"
-
-            }
-
-        }*/
-
-    })
-
-
-    
-
-
-    document.addEventListener("DOMContentLoaded", function () {
-        //
-        //element.style.display = "contents";
-    })
-    
+ 
 
     //console.log(parameters.ContentWidth)
 

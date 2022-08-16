@@ -1,22 +1,8 @@
-﻿using StaticSharp.Symbolic;
-using StaticSharpWeb;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
+﻿using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace StaticSharpDemo.Root {
     public partial class Material : StaticSharpWeb.Material {
-
-        /*public override Footer Footer => new() {
-        };
-
-        public override RightSideBar RightSideBar => new() {
-            new LanguageMenu<Language>(VirtualNode)
-        };
-
-        ;*/
 
         public override IBlock LeftSideBar => new Column() {
 

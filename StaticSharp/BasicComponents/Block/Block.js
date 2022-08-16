@@ -1,17 +1,6 @@
-/*function Border() {
-    let _this = this
-    _this.Reactive = {
-        Left: undefined,
-        Top: undefined,
-        Right: undefined,
-        Bottom: undefined
-    }
-}*/
+function Block(element) {
 
-
-function BlockInitialization(element) {
-
-    HierarchicalInitialization(element)
+    Hierarchical(element)
 
     element.isBlock = true
     element.Reactive = {
@@ -63,29 +52,5 @@ function BlockInitialization(element) {
         element.Hover = false
         d.end()
     });
-
-}
-
-
-
-
-
-function BlockBefore(element) {
-    HierarchicalBefore(element)
-
-    /*let parent = element.parentElement
-    if (parent.AddChild)
-        parent.AddChild(element);*/
-
-    
-}
-
-function BlockAfter(element) {
-    HierarchicalAfter(element)
-
-    
-    
-
-
 
 }
