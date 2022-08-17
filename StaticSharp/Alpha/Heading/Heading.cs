@@ -11,33 +11,77 @@ namespace StaticSharp.Alpha {
 
 
     public static partial class Static {
-        public static IBlock H1(
-            Paragraph paragraph,
-            [CallerFilePath] string callerFilePath = "",
-            [CallerLineNumber] int callerLineNumber = 0
-            ) {
 
-            return new Paragraph(paragraph, callerFilePath, callerLineNumber) {
+        public static Paragraph HX(string text,
+            float fontSize,
+            FontWeight fontWeight,
+            [CallerFilePath] string callerFilePath = "",
+            [CallerLineNumber] int callerLineNumber = 0) {
+
+            return new Paragraph(text, callerFilePath, callerLineNumber) {
                 Modifiers = {
                     new Modifier(callerFilePath,callerLineNumber) {
                         Bindings = {
-                            FontSize = e=>30,                            
+                            FontSize = e=>fontSize,
                         },
-                        FontStyle = new FontStyle(FontWeight.Bold)
+                        FontStyle = new FontStyle(fontWeight)
 
                     }
                 }
             };
-
         }
-        public static IBlock H1(string text,
+        public static IBlock H1(
+            string text,
+            [CallerFilePath] string callerFilePath = "",
+            [CallerLineNumber] int callerLineNumber = 0
+            ) {
+            return HX(text,96,FontWeight.ExtraLight, callerFilePath,callerLineNumber);
+        }
+        public static IBlock H2(
+            string text,
+            [CallerFilePath] string callerFilePath = "",
+            [CallerLineNumber] int callerLineNumber = 0
+            ) {
+            return HX(text, 60, FontWeight.Light, callerFilePath, callerLineNumber);
+        }
+        public static IBlock H3(
+            string text,
+            [CallerFilePath] string callerFilePath = "",
+            [CallerLineNumber] int callerLineNumber = 0
+            ) {
+            return HX(text, 48, FontWeight.Regular, callerFilePath, callerLineNumber);
+        }
+        public static IBlock H4(
+            string text,
+            [CallerFilePath] string callerFilePath = "",
+            [CallerLineNumber] int callerLineNumber = 0
+            ) {
+            return HX(text, 34, FontWeight.Medium, callerFilePath, callerLineNumber);
+        }
+        public static IBlock H5(
+            string text,
+            [CallerFilePath] string callerFilePath = "",
+            [CallerLineNumber] int callerLineNumber = 0
+            ) {
+            return HX(text, 24, FontWeight.SemiBold, callerFilePath, callerLineNumber);
+        }
+        public static IBlock H6(
+            string text,
+            [CallerFilePath] string callerFilePath = "",
+            [CallerLineNumber] int callerLineNumber = 0
+            ) {
+            return HX(text, 20, FontWeight.Bold, callerFilePath, callerLineNumber);
+        }
+
+
+        /*public static IBlock H1(string text,
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0
             ) {
             var paragraph = new Paragraph(callerFilePath, callerLineNumber);
             paragraph.AppendLiteral(text, callerFilePath, callerLineNumber);
             return H1(paragraph);
-        }
+        }*/
 
     }
 

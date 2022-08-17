@@ -3,13 +3,21 @@ function Material(element) {
 
     Hierarchical(element)
 
-    window.Reactive = {
+    /*window.Reactive = {
         InnerWidth: window.innerWidth,
         InnerHeight: window.innerHeight,
-    }
+    }*/
 
     element.Reactive = {
-        ContentWidth: 400,
+        WindowWidth: window.innerWidth,
+        WindowHeight: window.innerHeight,
+        ContentWidth: 960,
+        BarsCollapsed: () =>
+            element.WindowWidth < Sum(
+                element.ContentWidth,
+                element.LeftSideBar ? element.LeftSideBar.Width : 0,
+                element.RightSideBar ? element.RightSideBar.Width : 0),
+
         Content: () => element.Child("Content"),
         LeftSideBar: () => element.Child("LeftSideBar"),
         RightSideBar: () => element.Child("RightSideBar"),
@@ -19,8 +27,8 @@ function Material(element) {
 
     window.onresize = function (event) {
         let d = Reaction.beginDeferred()
-        window.InnerWidth = window.innerWidth
-        window.InnerHeight = window.innerHeight
+        element.WindowWidth = window.innerWidth
+        element.WindowHeight = window.innerHeight
         d.end()
     }
 
@@ -53,32 +61,35 @@ function Material(element) {
 
 
         if (element.LeftSideBar) {
+            if (element.BarsCollapsed) {
+                element.LeftSideBar.style.visibility = "hidden"
+            } else {
+                element.LeftSideBar.style.visibility = "visible"
+                LeftBarSize = Max(element.LeftSideBar.Width, 0)
+            }            
+
             element.LeftSideBar.style.position = "fixed"
-            element.LeftSideBar.Height = window.InnerHeight
-            LeftBarSize = Max(element.LeftSideBar.Width, 0)
+            element.LeftSideBar.Height = element.WindowHeight
+
         }
 
 
 
-        let width = window.InnerWidth - LeftBarSize - RightBarSize
+        let width = element.WindowWidth - LeftBarSize - RightBarSize
         let innerWidth = Math.min(width, element.ContentWidth)
-        let paddingLeft = (width - innerWidth) * 0.5
-
-
-
-
+        let contentSpace = (width - innerWidth) * 0.5
 
         if (element.Content) {
 
 
-            element.Content.Width = width
+            element.Content.Width = width - 2 * contentSpace
 
-            element.Content.PaddingLeft = paddingLeft
+            element.Content.MarginLeft = contentSpace
 
-            element.Content.PaddingRight = width - innerWidth - paddingLeft
+            element.Content.MarginRight = contentSpace
 
-            element.Content.X = LeftBarSize
-            element.Content.Height = Math.max(element.Content.ContentHeight, window.InnerHeight)// + "px"
+            element.Content.LayoutX = LeftBarSize + contentSpace
+            element.Content.LayoutHeight = Math.max(element.Content.InternalHeight, element.WindowHeight)
         }
 
     })

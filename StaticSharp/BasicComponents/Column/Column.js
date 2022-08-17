@@ -6,35 +6,46 @@ function Column(element) {
 
             let internalWidth = undefined
             for (let child of element.children) {
-                let spaceLeft = Max(element.PaddingLeft, child.MarginLeft, 0)
-                let spaceRight = Max(element.PaddingRight, child.MarginRight, 0)
-                let internalWidthByCurrentChild = Sum(child.InternalWidth, spaceLeft + spaceRight)
+                let left = CalcOffset(element, child, "Left")
+                let right = CalcOffset(element, child, "Right")
+
+                //let spaceLeft = Max(element.PaddingLeft, child.MarginLeft, 0)
+                //let spaceRight = Max(element.PaddingRight, child.MarginRight, 0)
+
+                let internalWidthByCurrentChild = Sum(child.InternalWidth, left + right)
+
                 internalWidth = Max(internalWidth, internalWidthByCurrentChild)
             }
             return internalWidth
         },
 
-
-
-
-        //Width: () => element.ContentWidth,//Sum(element.ContentWidth, element.PaddingLeft, element.PaddingRight),
-
-        //PaddingLeft: () => element.Height,
-
-        ContentHeight: undefined,
-        Height: () => element.ContentHeight,
+        //InternalHeight: undefined,
+        //Height: () => element.InternalHeight,
     }
 
 
     new Reaction(() => {
         for (let child of element.Children) {
             if (child.isBlock) {
-                child.LayoutX = () => Max(element.PaddingLeft, child.MarginLeft)
+
+                /*if (element.PaddingLeft == undefined) {
+                    let maxMargin = Max(Sum(-element.MarginLeft, child.MarginLeft), 0)
+                    child.LayoutX = maxMargin
+                } else {
+                    
+                }*/
+                child.LayoutX = () => CalcOffset(element, child, "Left")
+                
 
                 child.LayoutWidth = () => {
+
+                    let left = CalcOffset(element, child, "Left")
+                    let right = CalcOffset(element, child, "Right")
+
+                    child.title = right
                     //let spaceLeft = Max(element.PaddingLeft, child.MarginLeft)
-                    let spaceRight = Max(element.PaddingRight, child.MarginRight)
-                    return element.Width - child.LayoutX - spaceRight
+                    //let spaceRight = Max(element.PaddingRight, child.MarginRight)
+                    return element.Width - left - right
                 }
             }
         }
@@ -102,7 +113,7 @@ function Column(element) {
         //console.log("Vertical layout", element, contentHeight)
 
         previousMargin = element.PaddingTop || 0
-        element.ContentHeight = contentHeight;
+        element.InternalHeight = contentHeight;
         if (!element.Height)
             return
 

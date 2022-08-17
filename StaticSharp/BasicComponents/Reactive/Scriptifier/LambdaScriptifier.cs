@@ -83,19 +83,24 @@ public class LambdaScriptifier {
                 }
 
             case UnaryExpression unaryExpression: {
-                    if (expression.NodeType == ExpressionType.Convert) {
-                        if (unaryExpression.Operand is ParameterExpression parameterExpression) {
-                            var resultType = expression.Type;
-                            if (parameterExpression.Type == typeof(NotEvaluatable<>).MakeGenericType(resultType)) {
-                                return parameterExpression.Name;
-                            }
-                        } else {
-                            return Eval(unaryExpression.Operand);
-
+                if (expression.NodeType == ExpressionType.Convert) {
+                    if (unaryExpression.Operand is ParameterExpression parameterExpression) {
+                        var resultType = expression.Type;
+                        if (parameterExpression.Type == typeof(NotEvaluatable<>).MakeGenericType(resultType)) {
+                            return parameterExpression.Name;
                         }
+                    } else {
+                        return Eval(unaryExpression.Operand);
+
                     }
-                    throw NotImplemented(expression);
                 }
+
+                var Op = unaryExpression.NodeType switch {
+                    ExpressionType.UnaryPlus => "+",
+                    ExpressionType.Negate => "-",
+                };
+                return $"({Op}{Eval(unaryExpression.Operand)})";
+            }
 
             case ConditionalExpression conditionalExpression: {
                     return $"({Eval(conditionalExpression.Test)}?{Eval(conditionalExpression.IfTrue)}:{Eval(conditionalExpression.IfFalse)})";

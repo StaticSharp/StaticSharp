@@ -7,11 +7,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StaticSharpWeb {
+namespace StaticSharp {
 
     public interface IMaterial {
         string Title { get; }
@@ -19,9 +20,27 @@ namespace StaticSharpWeb {
         //IImage TitleImage { get; }
     }
 
-    /*internal interface IFontProvider {
-        public Font Font { get; }
-    }*/
+
+
+    namespace Gears {
+        [System.Diagnostics.DebuggerNonUserCode]
+        public class MaterialJs : HierarchicalJs {
+            public float WindowWidth => throw new NotEvaluatableException();
+            public float WindowHeight => throw new NotEvaluatableException();
+            public float ContentWidth => throw new NotEvaluatableException();
+
+        }
+
+        public class MaterialBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {            
+            public MaterialBindings(Dictionary<string, string> properties) : base(properties) {}
+            public Expression<Func<FinalJs, float>> ContentWidth { set { AssignProperty(value); } }
+
+
+        }
+
+    }
+
+
 
     [RelatedScript]
     [RelatedScript("Watch")]
@@ -29,6 +48,8 @@ namespace StaticSharpWeb {
     [RelatedScript("Cookies")]
 
     public abstract class Material : Hierarchical, IMaterial, IInline, IPage, IPlainTextProvider {
+        protected virtual void SetupBundings(MaterialBindings<MaterialJs> bindings) {}
+
         //public class TChildren : List<object> { }
 
         //public virtual IImage TitleImage => null;
@@ -70,6 +91,8 @@ namespace StaticSharpWeb {
         //public virtual Font Font => new(Path.Combine(AbsolutePath(), "Fonts", "roboto"), FontWeight.Regular);
 
         public async Task<string> GeneratePageHtmlAsync(Context context) {
+
+            SetupBundings(new(Properties));
 
             //context.Includes.Require(new Script(AbsolutePath("StaticSharp.js")));
             context.Includes.Require(new Style(AbsolutePath("Normalization.scss")));

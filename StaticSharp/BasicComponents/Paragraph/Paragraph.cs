@@ -13,9 +13,22 @@ namespace StaticSharp {
 
         protected List<IInline> children { get; } = new();
         public Paragraph Children => this;
-        private new int Height => default; //hide
-        //public Expression<Func<BlockJs, float>> Height { set { AssignProperty(value); } }
 
+
+        /*public static implicit operator Paragraph(string text) {
+            string callerFilePath = "";
+            int callerLineNumber = 0;
+
+            var paragraph = new Paragraph(callerFilePath, callerLineNumber);
+            paragraph.AppendLiteral(text, callerFilePath, callerLineNumber);
+            return paragraph;
+        }*/
+
+        public Paragraph(string text,
+            [CallerFilePath] string callerFilePath = "",
+            [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
+            AppendLiteral(text, callerFilePath, callerLineNumber);
+        }
 
         public Paragraph(Paragraph other,
             [CallerFilePath] string callerFilePath = "",

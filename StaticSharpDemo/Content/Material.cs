@@ -1,9 +1,13 @@
-﻿using System.Linq;
+﻿using StaticSharp.Gears;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace StaticSharpDemo.Root {
-    public partial class Material : StaticSharpWeb.Material {
+    public partial class Material : StaticSharp.Material {
 
+        protected override void SetupBundings(MaterialBindings<MaterialJs> bindings) {
+            bindings.ContentWidth = e => 960;// (e.WindowWidth > 960) ? 960 : 640;
+        }
         public override IBlock LeftSideBar => new Column() {
 
             Modifiers = {
@@ -65,14 +69,14 @@ namespace StaticSharpDemo.Root {
                 }
             },
             Bindings = {
-                X = e=>0,
-                Width = e=>e.ParentBlock.Width,
+                X = e=> -e.ParentBlock.MarginLeft,
+                Width = e=>e.ParentBlock.Width + e.ParentBlock.MarginLeft + e.ParentBlock.MarginRight,
 
                 PaddingTop = e=>20,
                 PaddingBottom = e=>20,
 
-                PaddingLeft = e => e.ParentBlock.PaddingLeft,
-                PaddingRight = e => e.ParentBlock.PaddingRight,
+                PaddingLeft = e => e.ParentBlock.MarginLeft,
+                PaddingRight = e => e.ParentBlock.MarginRight,
             },
 
             Children = {
@@ -115,10 +119,10 @@ namespace StaticSharpDemo.Root {
                             x.Bindings.MarginBottom = e=> 0;
                         });
 
-                        foreach (var b in c.Children.Values.OfType<Block>()){
+                        /*foreach (var b in c.Children.Values.OfType<Block>()){
                             b.Bindings.MarginLeft = e=>0;
                             b.Bindings.MarginRight = e=>0;
-                        }
+                        }*/
                     }
                 })
 

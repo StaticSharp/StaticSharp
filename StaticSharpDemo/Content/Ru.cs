@@ -9,7 +9,8 @@ namespace StaticSharpDemo.Root {
     [Representative]
     public partial class Ru : Material{
 
-
+        
+        
         static string RandomString(int length, Random random) {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789     ";
             return new string(Enumerable.Repeat(chars, length)
@@ -34,16 +35,35 @@ namespace StaticSharpDemo.Root {
             new Image(new HttpRequestGenome("https://upload.wikimedia.org/wikipedia/commons/4/49/Koala_climbing_tree.jpg")),
 
 
-            new Flipper(){ 
+            new Flipper(){
+                Bindings = { 
+                    MarginLeft = e=>e.ParentBlock.MarginLeft,
+                    MarginRight = e=>e.ParentBlock.MarginRight,                    
+                },
                 First = new Image(new FileGenome(AbsolutePath("Copilot/Delivery.svg"))){ 
-                    Embed = Image.TEmbed.Image
+                    Embed = Image.TEmbed.Image,
+                    Bindings = { 
+                        MarginLeft = e=>24,
+                        MarginRight = e=>24,
+                        MarginTop = e=>24,
+                        MarginBottom = e=>24,
+                    }
                 },
                 Second = new Column(){
-                    $"text",
+                    Bindings = { 
+                        MarginLeft = e=>10,
+                        MarginRight = e=>10,
+                    },
+                    Children ={
+                        new Space(),
+                        H5("Increased delivery efficiency"),
+                        "Autonomous landing at delivery points, automatic delivery scenarios in large warehouses and enterprises.",
+                        new Space(),
+                    }
                 }
             },
 
-            
+            "This product is still under development, but you can get early access to Copilot, join discussions, and share your ideas in our community on Discord",
 
 
             /*new Image(new FileGenome(AbsolutePath("TestPsdImage.psd"))),

@@ -1,3 +1,30 @@
+
+function CalcLeft(container, child) {
+    if (container.PaddingLeft != undefined) {
+        return Math.max(container.PaddingLeft, First(child.MarginLeft,0))
+    }
+    if (container.MarginLeft == undefined) {
+        return First(child.MarginLeft,0)
+    }
+    return Math.max(child.MarginLeft - container.MarginLeft, 0)
+}
+
+function CalcOffset(container, child, sideName) {
+    let paddingName = "Padding" + sideName
+    let marginName = "Margin" + sideName
+    if (container[paddingName] != undefined) {
+        return Math.max(container[paddingName], First(child[marginName], 0))
+    }
+    if (container[marginName] == undefined) {
+        return First(child[marginName], 0)
+    }
+    if (child[marginName] == undefined) {
+        return 0
+    }
+    return Math.max(child[marginName] - container[marginName], 0)
+}
+
+
 function Block(element) {
 
     Hierarchical(element)
