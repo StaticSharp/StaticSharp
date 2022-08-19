@@ -60,20 +60,21 @@ namespace StaticSharp {
             elementTag["data-width"] = imageInfo.Width;
             elementTag["data-height"] = imageInfo.Height;
 
+            string url = "";
+
 
             if (Embed == TEmbed.Image) {
                 if (source.MediaType == "image/svg+xml") {
-                    return new Tag() {
-                        new PureHtmlNode(source.ReadAllText())
-                    };
+                    url = source.GetDataUrlXml();
                 } else {
-                    return new Tag("img") {
-                        ["src"] = source.GetDataUrl()
-                    };
+                    url = source.GetDataUrlBase64();
                 }
+                return new Tag("img") {
+                    ["src"] = url
+                };
             }
 
-            var url = context.AddAsset(source);
+            url = context.AddAsset(source).ToString();
             if (Embed == TEmbed.None) {
                 return new Tag("img") {
                     ["src"] = url

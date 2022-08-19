@@ -12,18 +12,18 @@ namespace StaticSharp {
         [System.Diagnostics.DebuggerNonUserCode]
         public class BlockJs : HierarchicalJs {
             public BlockJs() { }
-            public float X => throw new NotEvaluatableException();
-            public float Y => throw new NotEvaluatableException();
-            public float Width => throw new NotEvaluatableException();
-            public float Height => throw new NotEvaluatableException();
-            public float MarginLeft => throw new NotEvaluatableException();
-            public float MarginRight => throw new NotEvaluatableException();
-            public float MarginTop => throw new NotEvaluatableException();
-            public float MarginBottom => throw new NotEvaluatableException();
-            public float PaddingLeft => throw new NotEvaluatableException();
-            public float PaddingRight => throw new NotEvaluatableException();
-            public float PaddingTop => throw new NotEvaluatableException();
-            public float PaddingBottom => throw new NotEvaluatableException();
+            public float X => NotEvaluatableValue<float>();
+            public float Y => NotEvaluatableValue<float>();
+            public float Width => NotEvaluatableValue<float>();
+            public float Height => NotEvaluatableValue<float>();
+            public float MarginLeft => NotEvaluatableValue<float>();
+            public float MarginRight => NotEvaluatableValue<float>();
+            public float MarginTop => NotEvaluatableValue<float>();
+            public float MarginBottom => NotEvaluatableValue<float>();
+            public float PaddingLeft => NotEvaluatableValue<float>();
+            public float PaddingRight => NotEvaluatableValue<float>();
+            public float PaddingTop => NotEvaluatableValue<float>();
+            public float PaddingBottom => NotEvaluatableValue<float>();
         }
         public class BlockBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {
             public BlockBindings(Dictionary<string, string> properties) : base(properties) {
@@ -57,5 +57,17 @@ namespace StaticSharp {
         public Block([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
 
     }
+
+    public static partial class Static {
+        public static T ConsumeParentHorizontalMargins<T>(this T _this) where T : Block {
+            _this.Bindings.X = e => -e.ParentBlock.MarginLeft;
+            _this.Bindings.Width = e => e.ParentBlock.Width + e.ParentBlock.MarginLeft + e.ParentBlock.MarginRight;
+            _this.Bindings.PaddingLeft = e => e.ParentBlock.MarginLeft;
+            _this.Bindings.PaddingRight = e => e.ParentBlock.MarginRight;
+            return _this;
+        }
+    
+    }
+
 
 }

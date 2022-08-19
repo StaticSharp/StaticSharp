@@ -5,6 +5,7 @@ using StaticSharpWeb.Html;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -25,9 +26,9 @@ namespace StaticSharp {
     namespace Gears {
         [System.Diagnostics.DebuggerNonUserCode]
         public class MaterialJs : HierarchicalJs {
-            public float WindowWidth => throw new NotEvaluatableException();
-            public float WindowHeight => throw new NotEvaluatableException();
-            public float ContentWidth => throw new NotEvaluatableException();
+            public float WindowWidth =>  NotEvaluatableValue<float>();
+            public float WindowHeight => NotEvaluatableValue<float>();
+            public float ContentWidth => NotEvaluatableValue<float>();
 
         }
 
@@ -112,6 +113,7 @@ namespace StaticSharp {
                     //<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
                 };
 
+            
             var body = await GenerateHtmlAsync(context);
             
 
@@ -135,10 +137,15 @@ namespace StaticSharp {
                 }
                 );
 
-
+            
+            
             head.Add(context.GenerateScript());
             head.Add(await GenerateFontsAsync(context));
             head.Add(await context.Includes.GenerateStyleAsync());
+
+
+            
+
             return document.GetHtml();
         }
 

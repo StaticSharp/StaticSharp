@@ -16,6 +16,19 @@ namespace StaticSharp.Html {
         public static string ReplaceInvalidAttributeValueSymbols(this string x) =>
             x.ReplaceSymbols(AttributeValueChars, AttributeValueReplacement);
 
+        public static string ReplaceSymbols(this string x, Dictionary<char, string> fromTo) {
+            return ReplaceSymbols(x, fromTo.Keys.ToArray(), fromTo);
+        }
+
+        public static string PercentageEncode(this string x,char[] chars) {
+            Dictionary<char, string> fromTo = new();
+            foreach (var i in chars) {
+                fromTo[i] = $"%{(int)i:X2}";
+            }
+            return ReplaceSymbols(x, chars, fromTo);
+        }
+
+
         private static string ReplaceSymbols(this string x, char[] keys, Dictionary<char, string> keyValuePairs) {
             int start = 0;
             int i = x.IndexOfAny(keys);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -13,9 +14,9 @@ public class LambdaScriptifier {
         LambdaExpression = expression;
         ParametersExpressions = expression.Parameters.ToArray();
     }
-    protected virtual object GetParameterValue(string name) {
-        throw new NotEvaluatableException();
-    }
+    /*protected virtual object GetParameterValue(string name) {
+       return ObjectJs.NotEvaluatable<object>();
+    }*/
     protected virtual string ReplaceParameterName(string name) => name;
     private IEnumerable<string> ParametersNames => ParametersExpressions.Select(x => ReplaceParameterName(x.Name));
     protected virtual object[] GetParametersValues() {
@@ -27,26 +28,50 @@ public class LambdaScriptifier {
     }    
     protected string Eval(Expression expression) {
         var lambda = Expression.Lambda(expression, ParametersExpressions);
+        
+        
+        
+        
+
+        /*try {*/
+
+        if (expression is LambdaExpression lambdaExpression) {
+            return new LambdaScriptifier(lambdaExpression).Eval();
+        }
+
+        if (expression is ParameterExpression parameterExpression) {
+            return ReplaceParameterName(parameterExpression.Name);
+        }
+
+        Stopwatch stopwatch = Stopwatch.StartNew();
+
         var compiled = lambda.Compile();
-        try {
 
-            if (expression is LambdaExpression lambdaExpression) {
-                return new LambdaScriptifier(lambdaExpression).Eval();
-            }
-
-            if (expression is ParameterExpression parameterExpression) {
-                return ReplaceParameterName(parameterExpression.Name);
-            }
-
-            var value = compiled.DynamicInvoke(GetParametersValues());
+        ObjectJs.NotEvaluatableFound = false;
+        var value = compiled.DynamicInvoke(GetParametersValues());
+        if (ObjectJs.NotEvaluatableFound) {
+            var result = Stringify(expression);
+            return result;
+        } else {
             return Static.ObjectToJsValue(value);
         }
+
+        Console.WriteLine("compiled + DynamicInvoke " + stopwatch.ElapsedMilliseconds + " ms");
+
+
+        
+        /*}
         catch (TargetInvocationException ex) {
             if (ex.InnerException != null && (ex.InnerException is NotEvaluatableException)) {
-                return Stringify(expression);
+
+                Stopwatch stopwatch = Stopwatch.StartNew();
+                var result = Stringify(expression);
+                Console.WriteLine($"Stringify {expression.ToString()} " + stopwatch.ElapsedMilliseconds + " ms");
+                return result;
             } else
                 throw;
-        }
+        }*/
+        
     }
 
     
@@ -84,7 +109,8 @@ public class LambdaScriptifier {
 
             case UnaryExpression unaryExpression: {
                 if (expression.NodeType == ExpressionType.Convert) {
-                    if (unaryExpression.Operand is ParameterExpression parameterExpression) {
+                    Console.WriteLine("ExpressionType.Convert");
+                    /*if (unaryExpression.Operand is ParameterExpression parameterExpression) {
                         var resultType = expression.Type;
                         if (parameterExpression.Type == typeof(NotEvaluatable<>).MakeGenericType(resultType)) {
                             return parameterExpression.Name;
@@ -92,7 +118,7 @@ public class LambdaScriptifier {
                     } else {
                         return Eval(unaryExpression.Operand);
 
-                    }
+                    }*/
                 }
 
                 var Op = unaryExpression.NodeType switch {

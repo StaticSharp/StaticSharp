@@ -3,6 +3,7 @@ using StaticSharp.Gears;
 using StaticSharp.Html;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -27,7 +28,11 @@ namespace StaticSharp {
         public class ReactiveBindings<FinalJs> where FinalJs : new() {
             private Dictionary<string, string> Properties;
             protected void AssignProperty<J, T>(Expression<Func<J, T>> expression, [System.Runtime.CompilerServices.CallerMemberName] string memberName = "") where J : new() {
+                
                 Properties[memberName] = new BindingScriptifier(expression, new J()).Eval();
+
+                
+                
             }
             public ReactiveBindings(Dictionary<string, string> properties) {
                 Properties = properties;

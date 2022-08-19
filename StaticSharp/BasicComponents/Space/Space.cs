@@ -11,9 +11,9 @@ namespace StaticSharp {
     namespace Gears {
         [System.Diagnostics.DebuggerNonUserCode]
         public class SpaceJs : HierarchicalJs {
-            public float Before => throw new NotEvaluatableException();
-            public float Between => throw new NotEvaluatableException();
-            public float After => throw new NotEvaluatableException();
+            public float Before =>      NotEvaluatableValue<float>();
+            public float Between =>     NotEvaluatableValue<float>();
+            public float After =>       NotEvaluatableValue<float>();
         }
 
 

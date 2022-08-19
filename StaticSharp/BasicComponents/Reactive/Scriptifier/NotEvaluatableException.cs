@@ -1,5 +1,5 @@
 ﻿using System;
 
 namespace StaticSharp.Gears;
-public class NotEvaluatableException : Exception {}
+//public class NotEvaluatableException : Exception {}
 

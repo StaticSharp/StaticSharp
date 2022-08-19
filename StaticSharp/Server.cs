@@ -11,6 +11,7 @@ using StaticSharp.Utils;
 using StaticSharpEngine;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
@@ -150,11 +151,17 @@ namespace StaticSharp {
 
         protected virtual async Task HandleRefreshPageAsync(HttpRequest request, HttpResponse responce, RouteData routeData) {
             //TODO: try catch
+
+           
+
             var result = await ParseJsonRequest(request);
             var page = FindPage(result["location"]?.ToString());
-            if (page == null) { return; }
-            var html = await page.GeneratePageHtmlAsync(CreateContext(request));
+            if (page == null) { return; }            
+            var html = await page.GeneratePageHtmlAsync(CreateContext(request));           
+
             await responce.WriteAsync((html.ToHashString() != result[_pageKey].ToString()).ToString().ToLower());
+
+            
         }
 
 

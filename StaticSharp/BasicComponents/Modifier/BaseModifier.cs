@@ -13,8 +13,8 @@ namespace StaticSharp {
     public class BaseModifierJs : HierarchicalJs {
         public BaseModifierJs() { }
 
-        public float FontSize => throw new NotEvaluatableException();
-        public Color BackgroundColor => throw new NotEvaluatableException();
+        public float FontSize =>        NotEvaluatableValue<float>();
+        public Color BackgroundColor => NotEvaluatableValue<Color>();
     }
 
     public class BaseModifierBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {

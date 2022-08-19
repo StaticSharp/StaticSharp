@@ -161,7 +161,7 @@ public abstract class Cacheable<TGenome, TData> : Cacheable<TGenome>
             if (!File.Exists(ContentFilePath)) return false;
         }*/
 
-        var json = File.ReadAllText(CachedDataJsonFilePath);
+        var json = FileUtils.ReadAllText(CachedDataJsonFilePath);
         CachedData = JsonSerializer.Deserialize<TData>(json, JsonSerializerOptions);
 
         

@@ -21,25 +21,6 @@ namespace StaticSharp {
 
     namespace Gears {
 
-
-        public record FontFamilyMember(
-            FontWeight Weight,
-            bool Italic,
-            List<Segment> Segments
-            //string FilePath, //Stream?
-            //FontExtension Extension
-
-        ) {
-            /*public string CssFormat => Extension switch {
-                FontExtension.woff2 => "woff2",
-                FontExtension.woff => "woff",
-                FontExtension.ttf => "truetype",
-                //FontExtension.eot => "embedded-opentype",
-                //FontExtension.svg => "svg",
-                _ => throw new Exception($"Invalid font extension {Extension}")
-            };*/
-        }
-
         public enum FontExtension {
             woff2,
             woff,
@@ -56,38 +37,18 @@ namespace StaticSharp {
 
 
 
-            public HashSet<char> GetExistingChars(FontStyle fontStyle, HashSet<char> chars) {
-                var member = FindMember(fontStyle);
-                var segments = member.Segments;
 
-                var result = new HashSet<char>();
-                
-
-                int currentSegment = 0;
-                foreach (var c in chars) {
-                    for (int i = 0; i < segments.Count; i++) {
-                        var segment = segments[currentSegment];
-                        if (segment.Contains(i)) {
-                            result.Add(c);
-                            break;
-                        }
-                        currentSegment = (currentSegment + 1) % segments.Count;
-                    }
-                }
-
-                return result;
-            }
 
             public FontFamilyMember FindMember(FontStyle fontStyle) {
 
                 var weights = members[fontStyle.Italic ? 1 : 0];
-                var difWithPrevious = Math.Abs((int)fontStyle.Weight - (int)weights[0].Weight);
+                var difWithPrevious = Math.Abs((int)fontStyle.Weight - (int)weights[0].FontStyle.Weight);
 
                 var selectedIndex = weights.Count - 1;
 
                 for (int i = 1; i < weights.Count; i++) {
-                    var difWithCurent = Math.Abs((int)fontStyle.Weight - (int)weights[i].Weight);
-                    if ((int)weights[i].Weight >= (int)fontStyle.Weight) {
+                    var difWithCurent = Math.Abs((int)fontStyle.Weight - (int)weights[i].FontStyle.Weight);
+                    if ((int)weights[i].FontStyle.Weight >= (int)fontStyle.Weight) {
                         selectedIndex = (difWithPrevious < difWithCurent) ? i - 1 : i;
                         break;
                     }
@@ -97,12 +58,6 @@ namespace StaticSharp {
                 return weights[selectedIndex];
             }
 
-
-            /*private static string FamilyFromUri(Uri uri) {
-
-                var family = Path.GetFileName(uri.AbsolutePath);
-                return char.ToUpper(family[0]) + family[1..];
-            }*/
             protected override void SetGenome(FontFamily arguments) {
                 base.SetGenome(arguments);
                 //Name = FamilyFromDirectory(Arguments.Directory);
@@ -121,11 +76,11 @@ namespace StaticSharp {
                 var fontInfos = GoogleFonts.ParseCss(fullCssRequest.ReadAllText());
                 foreach (var i in fontInfos) {
                     var italicSubset = members[i.Italic ? 1 : 0];
-                    var existing = italicSubset.Find(x => x.Weight == (FontWeight)i.Weight);
+                    var existing = italicSubset.Find(x => x.FontStyle.Weight == (FontWeight)i.Weight);
                     if (existing != null) {
                         existing.Segments.AddRange(i.Segments);
                     } else {
-                        italicSubset.Add(new FontFamilyMember((FontWeight)i.Weight, i.Italic, i.Segments));
+                        italicSubset.Add(new FontFamilyMember(new FontStyle((FontWeight)i.Weight, i.Italic), i.Segments));
                     }                    
                 }
 

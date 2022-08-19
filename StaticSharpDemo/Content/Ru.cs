@@ -27,13 +27,51 @@ namespace StaticSharpDemo.Root {
         }
 
 
+
+
         public override Group? Content => new() {
 
 
             
 
-            new Image(new HttpRequestGenome("https://upload.wikimedia.org/wikipedia/commons/4/49/Koala_climbing_tree.jpg")),
+            //new Image(new HttpRequestGenome("https://upload.wikimedia.org/wikipedia/commons/4/49/Koala_climbing_tree.jpg")),
 
+            new Column(){ 
+                Modifiers = { 
+                    new Modifier(){ 
+                        Bindings ={ 
+                            BackgroundColor = e=>Color.FromArgb(255,32,32,32),
+                        }
+                    }
+                },
+                Children = {
+                    "Refer to GitHub repository for more information, and join our Discord server to learn more about getting early access to Copilot.",
+                    new Flipper(){
+                        Bindings = {
+                            MarginLeft = e=>e.ParentBlock.PaddingLeft,
+                            MarginRight = e=>e.ParentBlock.PaddingRight,
+                        },
+                        First = new Column(){
+                            Bindings = {
+                                MarginLeft = e=>10,
+                                MarginRight = e=>10,
+                            },
+                            Children = {
+                                H4("Antilatency Copilot.\nPositional solution for drones"),
+                                "Copilot is an Antilatency project. We use our accurate optical-inertial tracking system with Raspberry Pi to provide you with precise indoor navigation and outdoor landing for drones in different use cases."
+                            }
+                        },
+                        Second = new Image(new FileGenome(AbsolutePath("Copilot/SchemeDark.svg"))){
+                            Embed = Image.TEmbed.Image,
+                            /*Bindings = {
+                                MarginLeft = e=>10,
+                                MarginRight = e=>10,
+                            }*/
+                        }
+                    }
+                }
+                
+            }.ConsumeParentHorizontalMargins(),
 
             new Flipper(){
                 Bindings = { 

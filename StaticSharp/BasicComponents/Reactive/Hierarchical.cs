@@ -1,5 +1,6 @@
 ﻿using StaticSharp.Gears;
 using StaticSharp.Html;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,13 +10,13 @@ namespace StaticSharp {
         [System.Diagnostics.DebuggerNonUserCode]
         public class HierarchicalJs : ObjectJs {
 
-            public string Id => throw new NotEvaluatableException();
-            public HierarchicalJs Parent => throw new NotEvaluatableException();
+            public string Id => NotEvaluatableValue<String>();
+            public HierarchicalJs Parent => NotEvaluatableObject<HierarchicalJs>();
 
-            public BlockJs ParentBlock => throw new NotEvaluatableException();
+            public BlockJs ParentBlock => NotEvaluatableObject<BlockJs>();
 
-            public T Sibling<T>(string id) where T : HierarchicalJs => throw new NotEvaluatableException();
-            public T Child<T>(string id) where T : HierarchicalJs => throw new NotEvaluatableException();
+            public T Sibling<T>(string id) where T : HierarchicalJs, new() => NotEvaluatableObject<T>();
+            public T Child<T>(string id) where T : HierarchicalJs, new() => NotEvaluatableObject<T>();
 
         }
 

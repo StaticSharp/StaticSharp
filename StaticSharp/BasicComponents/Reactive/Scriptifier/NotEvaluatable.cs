@@ -1,5 +1,5 @@
 ﻿namespace StaticSharp.Gears;
-public class NotEvaluatable<T> {
+/*public class NotEvaluatable<T> {
     T value;
     public NotEvaluatable(T value) {
         this.value = value;
@@ -10,4 +10,4 @@ public class NotEvaluatable<T> {
             throw new NotEvaluatableException();
         return d.value;
     }
-}
+}*/

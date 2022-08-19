@@ -55,6 +55,7 @@ namespace StaticSharp {
                     if (length!=0)
                         result.Add(Value.Substring(start, length));
                     start = i+1;
+                    length = 0;
                     action(result);
                 } else {
                     length++;

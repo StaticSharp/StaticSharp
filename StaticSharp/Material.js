@@ -3,14 +3,29 @@ function Material(element) {
 
     Hierarchical(element)
 
-    /*window.Reactive = {
-        InnerWidth: window.innerWidth,
-        InnerHeight: window.innerHeight,
-    }*/
+
+    function getWindowWidth() {
+        return document.documentElement.clientWidth//window.innerWidth
+    }
+    function getWindowHeight() {
+        return document.documentElement.clientHeight//window.innerHeight
+    }
+
+    //detect slim scroll or thick
+    document.documentElement.style.overflowX = "hidden"
+    document.documentElement.style.overflowY = "scroll"
+    if (window.innerWidth == document.documentElement.clientWidth) {
+        document.documentElement.style.overflowY = "auto"
+        //console.log("document.documentElement.style.overflowY = auto")
+    } else {
+        //console.log("document.documentElement.style.overflowY = scroll")
+    }
+
+
 
     element.Reactive = {
-        WindowWidth: window.innerWidth,
-        WindowHeight: window.innerHeight,
+        WindowWidth: getWindowWidth(),
+        WindowHeight: getWindowHeight(),
         ContentWidth: 960,
         BarsCollapsed: () =>
             element.WindowWidth < Sum(
@@ -25,11 +40,13 @@ function Material(element) {
     }
 
 
-    window.onresize = function (event) {
+
+    window.onresize = function (event) {        
         let d = Reaction.beginDeferred()
-        element.WindowWidth = window.innerWidth
-        element.WindowHeight = window.innerHeight
+        element.WindowWidth = getWindowWidth()
+        element.WindowHeight = getWindowHeight()
         d.end()
+
     }
 
     let loadingDeffered = Reaction.beginDeferred()
@@ -37,8 +54,13 @@ function Material(element) {
     function onLoadEvent() {
         loadEventsToWait--
         if (loadEventsToWait == 0) {
+            
             loadingDeffered.end()
             element.style.visibility = "visible";
+            /*let d = Reaction.beginDeferred()
+            element.WindowWidth = getWindowWidth()
+            element.WindowHeight = getWindowHeight()
+            d.end()*/
         }
     }
 
@@ -70,7 +92,6 @@ function Material(element) {
 
             element.LeftSideBar.style.position = "fixed"
             element.LeftSideBar.Height = element.WindowHeight
-
         }
 
 

@@ -1,17 +1,22 @@
-﻿namespace StaticSharp;
-
-
-
+﻿using System;
+namespace StaticSharp;
 
 
 public class ObjectJs : SymbolJs {
 
-    public ObjectJs() { }
-    /*public ObjectJs(string value) : base(value) {}
-    public SymbolJs this[string i] {
-        get { return new SymbolJs($"{value}[\"{i}\"]"); }
-    }*/
+    [ThreadStatic] public static bool NotEvaluatableFound = false;
 
-    
+
+    public ObjectJs() {}
+
+    public static T NotEvaluatableObject<T>() where T: new() {
+        NotEvaluatableFound = true;        
+        return new();
+    }
+
+    public static T NotEvaluatableValue<T>(){
+        NotEvaluatableFound = true;
+        return default;
+    }
 
 }
