@@ -11,19 +11,70 @@ namespace StaticSharp {
 
     [System.Diagnostics.DebuggerNonUserCode]
     public class BaseModifierJs : HierarchicalJs {
-        public BaseModifierJs() { }
-
-        public float FontSize =>        NotEvaluatableValue<float>();
+        
         public Color BackgroundColor => NotEvaluatableValue<Color>();
+
+        public Color ForegroundColor => NotEvaluatableValue<Color>();
+
+
     }
 
     public class BaseModifierBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {
-        public BaseModifierBindings(Dictionary<string, string> properties) : base(properties) {
-        }
-        public Expression<Func<FinalJs, float>> FontSize { set { AssignProperty(value); } }
+        public BaseModifierBindings(Dictionary<string, string> properties) : base(properties) {}
+        
         public Expression<Func<FinalJs, Color>> BackgroundColor { set { AssignProperty(value); } }
+
+        public Expression<Func<FinalJs, Color>> ForegroundColor { set { AssignProperty(value); } }
+
     }
 
+
+    public static partial class BaseModifierStatic { // For bindings
+
+        public static T BackgroundColor<T>(this T _this, Expression<Func<BaseModifierJs, Color>> expression) where T : BaseModifier {
+            _this.Bindings.BackgroundColor = expression;
+            return _this;
+        }
+        public static T BackgroundColor<T>(this T _this, Color value) where T : BaseModifier {
+            _this.Bindings.BackgroundColor = e => value;
+            return _this;
+        }
+
+        public static T ForegroundColor<T>(this T _this, Expression<Func<BaseModifierJs, Color>> expression) where T : BaseModifier {
+            _this.Bindings.ForegroundColor = expression;
+            return _this;
+        }
+        public static T ForegroundColor<T>(this T _this, Color value) where T : BaseModifier {
+            _this.Bindings.ForegroundColor = e => value;
+            return _this;
+        }
+
+    }
+
+    public static partial class BaseModifierStatic {
+        
+        public static T Url<T>(this T _this, string url) where T: BaseModifier {
+            _this.Url = url;
+            return _this;
+        }
+        public static T Title<T>(this T _this, string title) where T : BaseModifier {
+            _this.Title = title;
+            return _this;
+        }
+        public static T FontFamilies<T>(this T _this, FontFamily[] fontFamilies) where T : BaseModifier {
+            _this.FontFamilies = fontFamilies;
+            return _this;
+        }
+        public static T FontStyle<T>(this T _this, FontStyle fontStyle) where T : BaseModifier {
+            _this.FontStyle = fontStyle;
+            return _this;
+        }
+
+        public static T FontStyle<T>(this T _this, FontWeight weight = FontWeight.Regular,bool italic = false) where T : BaseModifier {
+            _this.FontStyle = new FontStyle(weight, italic);
+            return _this;
+        }
+    }
 
 
     namespace Gears {
@@ -33,17 +84,10 @@ namespace StaticSharp {
 
             public new BaseModifierBindings<BaseModifierJs> Bindings => new(Properties);
 
-            public Color? ForgroundColor = null;
-            
-
-
-            public Space? DefaultSpace = null;
-
-
             public FontFamily[]? FontFamilies = null;
             public FontStyle? FontStyle = null;
-
-            
+            public string? Url = null;
+            public string? Title = null;
 
             public BaseModifier(string callerFilePath, int callerLineNumber)
             : base(callerFilePath, callerLineNumber) { }
@@ -65,6 +109,14 @@ namespace StaticSharp {
             }
 
             public void ModifyTag(Tag tag) {
+                if (Url != null) {
+                    tag.Name = "a";
+                    tag["href"] = Url;
+                }
+
+                if (Title != null) {
+                    tag["title"] = Title;
+                }
 
                 if (FontFamilies != null) {
                     tag.Style["font-family"] = string.Join(',', FontFamilies.Select(x => x.Name));
@@ -75,8 +127,13 @@ namespace StaticSharp {
                 }
             }
 
+            /*
+             
+             */
 
-            protected async Task<Tag> GenerateHtmlWithChildrenAsync(Context context, string? id, Func<Context,IEnumerable<Task<Tag>?>> children, string tagName = "m") {
+
+
+            /*protected async Task<Tag> GenerateHtmlWithChildrenAsync(Context context, string? id, Func<Context,IEnumerable<Task<Tag>?>> children, string tagName = "m") {
 
                 Dictionary<string, object> style = new();
 
@@ -92,14 +149,6 @@ namespace StaticSharp {
                     style["font-style"] = FontStyle.CssFontStyle;
 
                 }
-                /*if (FontSize != null) {
-                    context.FontSize = FontSize.Value;
-                }*/
-
-
-                //context.Includes.Require(await context.GetCacheableFont());
-
-                AddRequiredInclues(context);
 
                 var tag = new Tag(tagName,id) {
                     
@@ -115,7 +164,7 @@ namespace StaticSharp {
 
 
                 return tag;
-            }
+            }*/
         }
     }
 }

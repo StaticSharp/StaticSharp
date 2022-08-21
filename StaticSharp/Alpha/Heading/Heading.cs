@@ -19,13 +19,12 @@ namespace StaticSharp.Alpha {
             [CallerLineNumber] int callerLineNumber = 0) {
 
             return new Paragraph(text, callerFilePath, callerLineNumber) {
+                Bindings = {
+                    FontSize = e=>fontSize,
+                },
                 Modifiers = {
                     new Modifier(callerFilePath,callerLineNumber) {
-                        Bindings = {
-                            FontSize = e=>fontSize,
-                        },
                         FontStyle = new FontStyle(fontWeight)
-
                     }
                 }
             };

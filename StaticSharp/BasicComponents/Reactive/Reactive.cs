@@ -147,7 +147,7 @@ namespace StaticSharp {
 
 
 
-            public async Task<Tag> CreateScript(Context context) {
+            public async Task<Tag> CreateConstructorScriptAsync(Context context) {
                 var sripts = new List<string>();
 
 

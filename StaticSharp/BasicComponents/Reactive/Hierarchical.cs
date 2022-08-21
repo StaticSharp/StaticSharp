@@ -33,49 +33,19 @@ namespace StaticSharp {
 
         public new HierarchicalBindings<HierarchicalJs> Bindings => new(Properties);
         public virtual string TagName => "div";
-        public virtual List<Modifier> Modifiers { get; } = new();
-
+        
+        
         protected Hierarchical(Hierarchical other,
             string callerFilePath = "",
             int callerLineNumber = 0) : base(other, callerFilePath, callerLineNumber) {
 
-            Modifiers = new(other.Modifiers);
+            
         }
 
         public Hierarchical(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
 
   
-        protected virtual Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
-            return Task.FromResult<Tag?>(null);
-        }
-
-        public virtual async Task<Tag> GenerateHtmlAsync(Context context, string? id = null) {
-
-            await AddRequiredInclues(context);
-
-            foreach (var m in Modifiers) {
-                await m.AddRequiredInclues(context);
-                context = m.ModifyContext(context);
-            }
-
-            var tag = new Tag(TagName, id) { };
-
-            foreach (var m in Modifiers)
-                m.ModifyTag(tag);
-
-            //tag.Add(await CreateScripts(context).SequentialOrParallel());
-
-            tag.Add(await CreateScript(context));
-
-            foreach (var m in Modifiers)
-                tag.Add(await m.CreateScript(context));
-
-
-            tag.Add(await GenerateHtmlInternalAsync(context, tag));
-            //tag.Add(After());
-
-            return tag;
-        }
+        
 
     }
 

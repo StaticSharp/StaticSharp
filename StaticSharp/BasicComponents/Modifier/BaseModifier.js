@@ -24,6 +24,10 @@ function GetModifier(element) {
 
 
 function BaseModifier(element) {
+
+    if (!element.isHierarchical) {
+        Hierarchical(element)
+    }
     //console.log("element.Modifier",element.Modifier)
     if (element.isModifier)
         return
@@ -32,20 +36,18 @@ function BaseModifier(element) {
 
     element.Reactive = {
         Modifier: element,
-        //FontSize: undefined,
+
         //BackgroundColor: undefined,
         ForegroundColor: () => {            
             if (element.BackgroundColor == undefined)
                 return undefined
             return element.BackgroundColor.contrastColor()
-        },
-        HierarchyFontSize: () => element.FontSize || element.ParentModifier.HierarchyFontSize
+        }
+        
         
     }
 
-    new Reaction(() => {
-        element.style.fontSize = ToCssSize(element.FontSize)
-    })
+    
 
     new Reaction(() => {
         if (element.BackgroundColor) {

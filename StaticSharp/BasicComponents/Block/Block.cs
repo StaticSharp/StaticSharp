@@ -24,6 +24,7 @@ namespace StaticSharp {
             public float PaddingRight => NotEvaluatableValue<float>();
             public float PaddingTop => NotEvaluatableValue<float>();
             public float PaddingBottom => NotEvaluatableValue<float>();
+            public float FontSize => NotEvaluatableValue<float>();
         }
         public class BlockBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {
             public BlockBindings(Dictionary<string, string> properties) : base(properties) {
@@ -41,6 +42,8 @@ namespace StaticSharp {
             public Expression<Func<FinalJs, float>> PaddingTop { set { AssignProperty(value); } }
             public Expression<Func<FinalJs, float>> PaddingBottom { set { AssignProperty(value); } }
 
+            public Expression<Func<FinalJs, float>> FontSize { set { AssignProperty(value); } }
+
         }
 
     }
@@ -50,11 +53,46 @@ namespace StaticSharp {
     public partial class Block : Hierarchical, IBlock {
         public new BlockBindings<BlockJs> Bindings => new(Properties);
 
+        public virtual List<Modifier> Modifiers { get; } = new();
+
         protected Block(Block other,
             string callerFilePath = "",
             int callerLineNumber = 0) : base(other, callerFilePath, callerLineNumber) {
+
+            Modifiers = new(other.Modifiers);
         }
         public Block([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
+        
+        protected virtual Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
+            return Task.FromResult<Tag?>(null);
+        }
+        public virtual async Task<Tag> GenerateHtmlAsync(Context context, string? id = null) {
+
+            await AddRequiredInclues(context);
+
+            foreach (var m in Modifiers) {
+                await m.AddRequiredInclues(context);
+                context = m.ModifyContext(context);
+            }
+
+            var tag = new Tag(TagName, id) { };
+
+            foreach (var m in Modifiers)
+                m.ModifyTag(tag);
+
+            //tag.Add(await CreateScripts(context).SequentialOrParallel());
+
+            tag.Add(await CreateConstructorScriptAsync(context));
+
+            foreach (var m in Modifiers)
+                tag.Add(await m.CreateConstructorScriptAsync(context));
+
+
+            tag.Add(await GenerateHtmlInternalAsync(context, tag));
+            //tag.Add(After());
+
+            return tag;
+        }
 
     }
 

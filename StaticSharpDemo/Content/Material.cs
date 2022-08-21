@@ -6,6 +6,7 @@ namespace StaticSharpDemo.Root {
     public partial class Material : StaticSharp.Material {
 
         protected override void SetupBundings(MaterialBindings<MaterialJs> bindings) {
+            base.SetupBundings(bindings);
             bindings.ContentWidth = e => 960;// (e.WindowWidth > 960) ? 960 : 640;
         }
         public override IBlock LeftSideBar => new Column() {
@@ -43,19 +44,16 @@ namespace StaticSharpDemo.Root {
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0
             ) {
-            var paragraph = new Paragraph(callerFilePath, callerLineNumber) {
+            var paragraph = new Paragraph(text, callerFilePath, callerLineNumber) {
+                Bindings = {
+                    FontSize = e=>18,
+                },
                 Modifiers = {
                     new Modifier(callerFilePath, callerLineNumber) {
-                        Bindings = {
-                                
-                                FontSize = e=>18,
-                            },
                         FontStyle = new FontStyle(FontWeight.Bold)
-
                     }
                 }
             };
-            paragraph.AppendLiteral(text, callerFilePath, callerLineNumber);
             return paragraph;
         }
 
@@ -63,13 +61,13 @@ namespace StaticSharpDemo.Root {
             Modifiers = {
                 new Modifier(){ 
                     Bindings = { 
-                        FontSize = e=>16,
                         BackgroundColor = e=>Color.Black,
                     }
                 }
             },
             Bindings = {
                 X = e=> -e.ParentBlock.MarginLeft,
+
                 Width = e=>e.ParentBlock.Width + e.ParentBlock.MarginLeft + e.ParentBlock.MarginRight,
 
                 PaddingTop = e=>20,

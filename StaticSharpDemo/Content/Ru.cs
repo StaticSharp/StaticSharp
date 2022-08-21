@@ -27,7 +27,11 @@ namespace StaticSharpDemo.Root {
         }
 
 
-
+        public IInline GithubUrl(string text = "GitHub repository") {
+            return new InlineModifier() { text }
+            .Url("https://github.com/antilatency/Antilatency.Copilot")
+            .ForegroundColor(Color.FromArgb(172, 196, 53));
+        }
 
         public override Group? Content => new() {
 
@@ -45,7 +49,7 @@ namespace StaticSharpDemo.Root {
                     }
                 },
                 Children = {
-                    "Refer to GitHub repository for more information, and join our Discord server to learn more about getting early access to Copilot.",
+                    $"Refer to {GithubUrl()} for more information, and join our Discord server to learn more about getting early access to Copilot.",
                     new Flipper(){
                         Bindings = {
                             MarginLeft = e=>e.ParentBlock.PaddingLeft,

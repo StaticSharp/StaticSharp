@@ -26,6 +26,10 @@ function Material(element) {
     element.Reactive = {
         WindowWidth: getWindowWidth(),
         WindowHeight: getWindowHeight(),
+
+        FontSize: 16,
+        HierarchyFontSize: () => element.FontSize || element.Parent.HierarchyFontSize,
+
         ContentWidth: 960,
         BarsCollapsed: () =>
             element.WindowWidth < Sum(

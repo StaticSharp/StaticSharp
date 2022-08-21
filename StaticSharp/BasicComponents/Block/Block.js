@@ -59,7 +59,10 @@ function Block(element) {
         Width: () => First(element.LayoutWidth, element.InternalWidth),
         Height: () => First(element.LayoutHeight, element.InternalHeight),
 
+        //FontSize: undefined,
+        HierarchyFontSize: () => element.FontSize || element.Parent.HierarchyFontSize,
 
+        //public Expression<Func< FinalJs, float >> FontSize { set { AssignProperty(value); } }
 
         Hover: false
     }
@@ -67,6 +70,11 @@ function Block(element) {
     XToStyle(element);
 
     YToStyle(element);
+
+    new Reaction(() => {
+        element.style.fontSize = ToCssSize(element.FontSize)
+    })
+
 
     element.addEventListener('mouseenter', e => {
         let d = Reaction.beginDeferred()

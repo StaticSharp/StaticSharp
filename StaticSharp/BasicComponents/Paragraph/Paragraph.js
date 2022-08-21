@@ -40,14 +40,15 @@ function Paragraph(element) {
         content.style.width = ""
 
 
-        element.MaxContentWidth = () => element.Modifier.HierarchyFontSize / testFontSize * maxWidthRect.width
-        element.MinContentWidth = () => element.Modifier.HierarchyFontSize / testFontSize * minWidthRect.width
-        element.MaxContentHeight = () => element.Modifier.HierarchyFontSize / testFontSize * minWidthRect.height
-        element.MinContentHeight = () => element.Modifier.HierarchyFontSize / testFontSize * maxWidthRect.height
+        element.MaxContentWidth = () =>  element.HierarchyFontSize / testFontSize * maxWidthRect.width
+        element.MinContentWidth = () =>  element.HierarchyFontSize / testFontSize * minWidthRect.width
+        element.MaxContentHeight = () => element.HierarchyFontSize / testFontSize * minWidthRect.height
+        element.MinContentHeight = () => element.HierarchyFontSize / testFontSize * maxWidthRect.height
 
     })
 
     new Reaction(() => {
+        //console.log("element.HierarchyFontSize", element.HierarchyFontSize, element)
         //console.log("element.Modifier", element, element.Modifier)
         //console.log("element.Modifier.HierarchyFontSize", element, element.Modifier.HierarchyFontSize)
 

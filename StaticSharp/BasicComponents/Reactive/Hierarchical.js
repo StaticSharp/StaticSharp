@@ -1,21 +1,22 @@
+function GetParentElementByPredicate(firstParentToCompare, predicate) {
+    var p = firstParentToCompare
+    while (p != undefined) {
+        if (predicate(p)) {
+            return p
+        } else {
+            p = p.parentElement
+        }
+    }
+    return undefined
+}
+
 function Hierarchical(element) {
     element.isHierarchical = true
 
-    let parent = element.parentElement
 
     element.Reactive = {
-        Parent: parent,
-        ParentBlock: () => {
-            var p = element.Parent
-            while (p != undefined) {
-                if (p.isBlock) {
-                    return p
-                } else {
-                    p = p.Parent
-                }
-            }
-            return undefined
-        },
+        Parent: () => GetParentElementByPredicate(element.parentElement, x => x.isHierarchical),
+        ParentBlock: () => GetParentElementByPredicate(element.Parent, x => x.isBlock),
         FirstChild: undefined,
         LastChild: undefined,
         NextSibling: undefined,
@@ -33,10 +34,7 @@ function Hierarchical(element) {
     };
 
     element.Sibling = function (id) {
-        //console.log("Sibling called by", element,"with id = ", id)
-        if (parent.isHierarchical) {
-            return parent.Child(id)
-        }
+        return Parent.Child(id)        
     }
 
     element.Child = function (id) {
@@ -49,14 +47,15 @@ function Hierarchical(element) {
         }
     }
 
-    if (parent.isHierarchical) {
-        if (!parent.FirstChild) {
-            parent.FirstChild = element
-            parent.LastChild = element
+    if (element.Parent) {
+        if (!element.Parent.FirstChild) {
+            element.Parent.FirstChild = element
+            element.Parent.LastChild = element
         } else {
-            parent.LastChild.NextSibling = element
-            parent.LastChild = element
+            element.Parent.LastChild.NextSibling = element
+            element.Parent.LastChild = element
         }
     }
+    
 
 }

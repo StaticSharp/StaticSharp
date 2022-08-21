@@ -30,11 +30,14 @@ namespace StaticSharp {
             public float WindowHeight => NotEvaluatableValue<float>();
             public float ContentWidth => NotEvaluatableValue<float>();
 
+            public float FontSize => NotEvaluatableValue<float>();
+
         }
 
         public class MaterialBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {            
             public MaterialBindings(Dictionary<string, string> properties) : base(properties) {}
             public Expression<Func<FinalJs, float>> ContentWidth { set { AssignProperty(value); } }
+            public Expression<Func<FinalJs, float>> FontSize { set { AssignProperty(value); } }
 
 
         }
@@ -49,7 +52,9 @@ namespace StaticSharp {
     [RelatedScript("Cookies")]
 
     public abstract class Material : Hierarchical, IMaterial, IInline, IPage, IPlainTextProvider {
-        protected virtual void SetupBundings(MaterialBindings<MaterialJs> bindings) {}
+        protected virtual void SetupBundings(MaterialBindings<MaterialJs> bindings) {
+            bindings.FontSize = e => 16;
+        }
 
         //public class TChildren : List<object> { }
 
@@ -69,12 +74,9 @@ namespace StaticSharp {
         //public virtual RightSideBar RightSideBar => null;
         public virtual IBlock? LeftSideBar => null;
 
-        public override List<Modifier> Modifiers => new(){
+        
+        public List<Modifier> Modifiers => new(){
             new(){
-                Bindings = {
-                    FontSize = e=>16,
-                    
-                },
                 FontFamilies = new[]{
                         new FontFamily("Roboto")
                     },
@@ -168,7 +170,35 @@ namespace StaticSharp {
         }*/
 
 
-        protected override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
+        public virtual async Task<Tag> GenerateHtmlAsync(Context context, string? id = null) {
+
+            await AddRequiredInclues(context);
+
+            foreach (var m in Modifiers) {
+                await m.AddRequiredInclues(context);
+                context = m.ModifyContext(context);
+            }
+
+            var tag = new Tag(TagName, id) { };
+
+            foreach (var m in Modifiers)
+                m.ModifyTag(tag);
+
+            //tag.Add(await CreateScripts(context).SequentialOrParallel());
+
+            tag.Add(await CreateConstructorScriptAsync(context));
+
+            foreach (var m in Modifiers)
+                tag.Add(await m.CreateConstructorScriptAsync(context));
+
+
+            tag.Add(await GenerateChildrenHtmlAsync(context, tag));
+            //tag.Add(After());
+
+            return tag;
+        }
+
+        protected async Task<Tag?> GenerateChildrenHtmlAsync(Context context, Tag elementTag) {
             return new Tag(null) {
                 await LeftSideBar?.GenerateHtmlAsync(context,"LeftSideBar"),
 

@@ -19,15 +19,18 @@ namespace StaticSharp {
             : base(callerFilePath, callerLineNumber) { }
 
         public async Task<Tag> GenerateInlineHtmlAsync(Context context) {
-            /*(Tag result, context) = await GenerateHtmlAndContextAsync(context);
-            foreach (var i in children) {
-                result.Add(await i.GenerateInlineHtmlAsync(context));
-            }
-            return result;*/
+            await AddRequiredInclues(context);
+            context = ModifyContext(context);
 
-            return await GenerateHtmlWithChildrenAsync(context, null, (innerContext) =>
-                children.Select(x=>x.GenerateInlineHtmlAsync(innerContext))
-            );
+            var result = new Tag("span") {
+                await CreateConstructorScriptAsync(context)
+            };
+            ModifyTag(result);
+
+            foreach (var child in children) {
+                result.Add(await child.GenerateInlineHtmlAsync(context));
+            }
+            return result;
         }
     }
 }

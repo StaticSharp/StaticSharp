@@ -10,7 +10,7 @@ namespace StaticSharp {
     [RelatedScript]
     [InterpolatedStringHandler]
     public class Paragraph : Block, IVoidEnumerable, IInline {
-
+        public override string TagName => "paragraph";
         protected List<IInline> children { get; } = new();
         public Paragraph Children => this;
 
@@ -81,7 +81,7 @@ namespace StaticSharp {
         }
 
         protected override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
-            return new Tag("div") {
+            return new Tag("p") {
                     await children.Select(x=>x.GenerateInlineHtmlAsync(context)).SequentialOrParallel()
             };
         }
