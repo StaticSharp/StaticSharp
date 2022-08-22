@@ -110,10 +110,14 @@ namespace StaticSharp {
                     return;
 
                 response.Headers.ContentType = asset.MediaType;
-                //response.Headers.Add("content-disposition", $"attachment; filename=test");
+                /*response.Headers.AcceptRanges.Add("byte");
+                if (asset.FileExtension == ".mp4") {
+                    response.StatusCode = 206;
+                }*/
 
-                //await response.StartAsync();
+
                 var data = asset.ReadAllBites();
+                
                 await response.Body.WriteAsync(data, 0, data.Length);
 
                 //await asset.CreateReadStream().CopyToAsync(response.Body);

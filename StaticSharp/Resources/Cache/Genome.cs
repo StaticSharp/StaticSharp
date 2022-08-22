@@ -11,6 +11,7 @@ public interface IGenome<TCacheable>: IKeyProvider {
 
 public abstract record Genome: IKeyProvider {
 
+
     public string Key { get; }
 
     protected Genome() {

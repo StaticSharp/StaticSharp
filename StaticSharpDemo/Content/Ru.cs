@@ -33,10 +33,16 @@ namespace StaticSharpDemo.Root {
             .ForegroundColor(Color.FromArgb(172, 196, 53));
         }
 
+        public IInline DiscordUrl(string text = "Discord server") {
+            return new InlineModifier() { text }
+            .Url("https://discord.gg/ZTqmfPsGEr")
+            .ForegroundColor(Color.FromArgb(139, 148, 245));
+        }
+
         public override Group? Content => new() {
 
 
-            
+            new Video("T4TEdzSLyi0"),
 
             //new Image(new HttpRequestGenome("https://upload.wikimedia.org/wikipedia/commons/4/49/Koala_climbing_tree.jpg")),
 
@@ -49,7 +55,16 @@ namespace StaticSharpDemo.Root {
                     }
                 },
                 Children = {
-                    $"Refer to {GithubUrl()} for more information, and join our Discord server to learn more about getting early access to Copilot.",
+
+                    new Paragraph($"Refer to {GithubUrl()} for more information, and join our {DiscordUrl()} to learn more about getting early access to Copilot."){ 
+                        Modifiers = {
+                            new (){ 
+                                LineHeight = 1.8f,
+                                LetterSpacing = 0.2f
+                            }
+                        }
+                    },
+                    
                     new Flipper(){
                         Bindings = {
                             MarginLeft = e=>e.ParentBlock.PaddingLeft,

@@ -28,23 +28,11 @@ function Column(element) {
         for (let child of element.Children) {
             if (child.isBlock) {
 
-                /*if (element.PaddingLeft == undefined) {
-                    let maxMargin = Max(Sum(-element.MarginLeft, child.MarginLeft), 0)
-                    child.LayoutX = maxMargin
-                } else {
-                    
-                }*/
-                child.LayoutX = () => CalcOffset(element, child, "Left")
-                
+                child.LayoutX = () => CalcOffset(element, child, "Left")               
 
                 child.LayoutWidth = () => {
-
                     let left = CalcOffset(element, child, "Left")
                     let right = CalcOffset(element, child, "Right")
-
-                    child.title = right
-                    //let spaceLeft = Max(element.PaddingLeft, child.MarginLeft)
-                    //let spaceRight = Max(element.PaddingRight, child.MarginRight)
                     return element.Width - left - right
                 }
             }

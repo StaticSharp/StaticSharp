@@ -74,6 +74,17 @@ namespace StaticSharp {
             _this.FontStyle = new FontStyle(weight, italic);
             return _this;
         }
+
+        public static T LineHeight<T>(this T _this, float lineHeight) where T : BaseModifier {
+            _this.LineHeight = lineHeight;
+            return _this;
+        }
+
+        public static T LetterSpacing<T>(this T _this, float letterSpacing) where T : BaseModifier {
+            _this.LetterSpacing = letterSpacing;
+            return _this;
+        }
+
     }
 
 
@@ -88,6 +99,9 @@ namespace StaticSharp {
             public FontStyle? FontStyle = null;
             public string? Url = null;
             public string? Title = null;
+
+            public float? LineHeight = null;//line-height
+            public float? LetterSpacing = null;//letter-spacing
 
             public BaseModifier(string callerFilePath, int callerLineNumber)
             : base(callerFilePath, callerLineNumber) { }
@@ -116,6 +130,14 @@ namespace StaticSharp {
 
                 if (Title != null) {
                     tag["title"] = Title;
+                }
+
+                if (LineHeight != null) {
+                    tag.Style["line-height"] = LineHeight;
+                }
+
+                if (LetterSpacing != null){
+                    tag.Style["letter-spacing"] = LetterSpacing+"em";
                 }
 
                 if (FontFamilies != null) {
