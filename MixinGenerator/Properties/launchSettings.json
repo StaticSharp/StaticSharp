@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "MixinGenerator": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ProjectPath": "$(MSBuildProjectDirectory)/../StaticSharp/StaticSharp.csproj"
+      }
+    }
+  }
+}

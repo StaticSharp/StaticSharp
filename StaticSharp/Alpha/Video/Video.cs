@@ -16,7 +16,11 @@ namespace StaticSharp {
     namespace Gears {
         [System.Diagnostics.DebuggerNonUserCode]
         public class VideoJs : BlockJs {
-            //public float Before => throw new NotEvaluatableException();
+            public bool PreferPlatformPlayer => NotEvaluatableValue<bool>();
+            public bool Controls => NotEvaluatableValue<bool>();
+            public bool Play => NotEvaluatableValue<bool>();
+            public bool Sound => NotEvaluatableValue<bool>();
+            public bool Loop => NotEvaluatableValue<bool>();
         }
 
 
@@ -24,17 +28,29 @@ namespace StaticSharp {
         public class VideoBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
             public VideoBindings(Dictionary<string, string> properties) : base(properties) {
             }
-            //public Expression<Func<SpaceJs, float>> Before { set { AssignProperty(value); } }
+            public Expression<Func<FinalJs, bool>> PreferPlatformPlayer { set { AssignProperty(value); } }
+            public Expression<Func<FinalJs, bool>> Controls { set { AssignProperty(value); } }
+            public Expression<Func<FinalJs, bool>> Play { set { AssignProperty(value); } }
+            public Expression<Func<FinalJs, bool>> Sound { set { AssignProperty(value); } }
+            public Expression<Func<FinalJs, bool>> Loop { set { AssignProperty(value); } }
+
         }
     }
 
+    public interface IVideoJs {
+        bool PreferPlatformPlayer { set { 
+            
+            }
+        }
+    }
+
+
+
     [RelatedScript]
-    public sealed class Video : Block, IBlock {
+    public sealed class Video : Block, IBlock , IVideoJs {
 
-        public new FlipperBindings<FlipperJs> Bindings => new(Properties);
-        public override string TagName => "player";
-
-
+        public new VideoBindings<VideoJs> Bindings => new(Properties);
+        protected override string TagName => "player";
 
         public string Identifier { get; init; }
 
@@ -57,7 +73,7 @@ namespace StaticSharp {
                 var video = await new YoutubeVideoGenome(item).CreateOrGetCached();
                 var url = context.AddAsset(video);
 
-                elementTag["data-youtubeId"] = youtubeVideoId;
+                elementTag["data-youtube-id"] = youtubeVideoId;
                 elementTag["data-width"] = item.Width;
                 elementTag["data-height"] = item.Height;
 

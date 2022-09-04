@@ -16,6 +16,7 @@ namespace StaticSharp {
             public BlockJs ParentBlock => NotEvaluatableObject<BlockJs>();
 
             public T Sibling<T>(string id) where T : HierarchicalJs, new() => NotEvaluatableObject<T>();
+            public HierarchicalJs Sibling(string id) => NotEvaluatableObject<HierarchicalJs>();
             public T Child<T>(string id) where T : HierarchicalJs, new() => NotEvaluatableObject<T>();
 
         }
@@ -32,7 +33,7 @@ namespace StaticSharp {
     public abstract class Hierarchical : Reactive {
 
         public new HierarchicalBindings<HierarchicalJs> Bindings => new(Properties);
-        public virtual string TagName => "div";
+        protected virtual string TagName => "div";
         
         
         protected Hierarchical(Hierarchical other,

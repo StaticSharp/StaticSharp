@@ -10,7 +10,7 @@ namespace StaticSharp {
 
     [RelatedScript]
     public class Column : Block, IBlockCollector {
-        public override string TagName => "column";
+        protected override string TagName => "column";
         public Blocks Children { get; } = new();
 
         public Column(Column other, string callerFilePath, int callerLineNumber)

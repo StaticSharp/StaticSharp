@@ -1,9 +1,9 @@
 ﻿namespace StaticSharp;
 
 public class SymbolJs{
-    public string value = "";//TODO: make protected
-    public bool isConstant = false;//TODO: make protected
-    public SymbolJs() {}
+    //public string value = "";//TODO: make protected
+    //public bool isConstant = false;//TODO: make protected
+    /*public SymbolJs() {}
     public SymbolJs(string value) {
         this.value = value;
     }
@@ -15,7 +15,7 @@ public class SymbolJs{
 
     public T As<T>() where T : SymbolJs, new() {
         return new T { value = value };
-    }
+    }*/
 
 
     /*public Symbol(int value) {

@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace StaticSharpDemo.Root {
 
+
+
     [Representative]
     public partial class Ru : Material{
 
@@ -42,7 +44,16 @@ namespace StaticSharpDemo.Root {
         public override Group? Content => new() {
 
 
-            new Video("T4TEdzSLyi0"),
+
+            new Video("T4TEdzSLyi0"){
+
+                Bindings = {
+                    PreferPlatformPlayer = e=>e.Sibling("videoProperties").Child<CheckboxJs>("play").Value
+                }
+            },
+
+            {"videoProperties", $"{new Checkbox():#play Play}" },
+
 
             //new Image(new HttpRequestGenome("https://upload.wikimedia.org/wikipedia/commons/4/49/Koala_climbing_tree.jpg")),
 
@@ -112,7 +123,8 @@ namespace StaticSharpDemo.Root {
                         MarginRight = e=>10,
                     },
                     Children ={
-                        new Space(),
+                        new Space(),                        
+                        //$"{new Checkbox():#id}",
                         H5("Increased delivery efficiency"),
                         "Autonomous landing at delivery points, automatic delivery scenarios in large warehouses and enterprises.",
                         new Space(),

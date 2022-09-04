@@ -84,7 +84,7 @@ namespace StaticSharp {
             },
         };
 
-        public override string TagName => "body";
+        protected override string TagName => "body";
 
         public Material([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber) {}
@@ -341,7 +341,7 @@ namespace StaticSharp {
             
 //        }
 
-        public async Task<Tag> GenerateInlineHtmlAsync(Context context) {
+        public async Task<Tag> GenerateInlineHtmlAsync(Context context, string? id) {
             var representative = this as  StaticSharpEngine.IRepresentative;
             //todo: material outside of the tree exceprion
             var uri = context.NodeToUrl(representative?.Node);

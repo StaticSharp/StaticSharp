@@ -1,45 +1,279 @@
+
+var YouTube = {
+    initialize: function () {
+        youtubeIFrameApiScript = document.createElement("script")
+        youtubeIFrameApiScript.src = "https://www.youtube.com/iframe_api"
+
+        let timeout = setTimeout(() => {
+            document.head.removeChild(youtubeIFrameApiScript)
+            youtubeIFrameApiScript.onload = undefined
+            youtubeIFrameApiScript.onerror = undefined
+            let d = Reaction.beginDeferred()
+            YouTube.Status = "error"
+            d.end()
+        }, 500)
+
+        youtubeIFrameApiScript.onload = function () {
+            clearTimeout(timeout)
+            YT.ready(function () {
+                let d = Reaction.beginDeferred()
+                YouTube.Status = "ready"
+                d.end()
+            })            
+        }
+        youtubeIFrameApiScript.onerror = function () {
+            clearTimeout(timeout)
+            let d = Reaction.beginDeferred()
+            YouTube.Status = "error"
+            d.end()
+        }
+
+        document.head.appendChild(youtubeIFrameApiScript)
+        YouTube.Status = "loading"
+    }
+}
+
+YouTube.Reactive = {
+    Status: undefined
+}
+
+
+var uniqueID = 0;
+function getUniqueID() {
+    uniqueID++;
+    return "uniqueId" + uniqueID;
+}
+
+
 function Video(element) {
     Block(element)
     element.isVideo = true
 
 
+    
+
+    let youtubeId = element.dataset.youtubeId
+
+       
 
     var sourcesJson = element.dataset.sources.replaceAll("'", '"');
     var sources = JSON.parse(sourcesJson)
 
-    //var a = "[{\"size\":{\"x\":176,\"y\":144},\"url\":\"https://rr1---sn-jtu5jt2g0n-aj5y.googlevideo.com/videoplayback?expire=1661194950\u0026ei=Zn4DY9jWIoKjxN8P-oCSoAY\u0026ip=83.168.43.121\u0026id=o-AOC0pZ5C5zrjOivymfB8pI786u6-T5n3hkPb94dO_dmc\u0026itag=17\u0026source=youtube\u0026requiressl=yes\u0026mh=Kb\u0026mm=31%2C29\u0026mn=sn-jtu5jt2g0n-aj5y%2Csn-hgn7yn76\u0026ms=au%2Crdu\u0026mv=m\u0026mvi=1\u0026pl=26\u0026initcwndbps=905000\u0026vprv=1\u0026mime=video%2F3gpp\u0026gir=yes\u0026clen=1625123\u0026dur=200.109\u0026lmt=1658784098951739\u0026mt=1661173050\u0026fvip=5\u0026fexp=24001373%2C24007246\u0026c=ANDROID\u0026rbqsm=fr\u0026txp=5318224\u0026sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cvprv%2Cmime%2Cgir%2Cclen%2Cdur%2Clmt\u0026sig=AOq0QJ8wRAIga6kRK4p7X7NKGy5fndjnH5jrWS3Q_KsOWbTqnVaA-LsCIAgMDa0p1J3FucP0Sm_i-OOAO4n6I81VK2UNkzq-aljQ\u0026lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps\u0026lsig=AG3C_xAwRQIhAOWd7iZSVmC4z12h-j2aCmSYNzwiPAvEybgL155njL3iAiAjVc5fnChrCB1oQe2IvQPT6-ZJceqQGN6GwOjkH1UnXA%3D%3D'},{'size':{'x':640,'y':360},'url':'https://rr1---sn-jtu5jt2g0n-aj5y.googlevideo.com/videoplayback?expire=1661194950\u0026ei=Zn4DY9jWIoKjxN8P-oCSoAY\u0026ip=83.168.43.121\u0026id=o-AOC0pZ5C5zrjOivymfB8pI786u6-T5n3hkPb94dO_dmc\u0026itag=18\u0026source=youtube\u0026requiressl=yes\u0026mh=Kb\u0026mm=31%2C29\u0026mn=sn-jtu5jt2g0n-aj5y%2Csn-hgn7yn76\u0026ms=au%2Crdu\u0026mv=m\u0026mvi=1\u0026pl=26\u0026initcwndbps=905000\u0026vprv=1\u0026mime=video%2Fmp4\u0026gir=yes\u0026clen=8237128\u0026ratebypass=yes\u0026dur=200.063\u0026lmt=1658784087562218\u0026mt=1661173050\u0026fvip=5\u0026fexp=24001373%2C24007246\u0026c=ANDROID\u0026rbqsm=fr\u0026txp=5319224\u0026sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cvprv%2Cmime%2Cgir%2Cclen%2Cratebypass%2Cdur%2Clmt\u0026sig=AOq0QJ8wRAIgeyKk1nGQPZKUR5fflyNNac4tcrd99QjFLtpN4B-kDRgCIBRS9ia41ep0buQOE6BM6lf8QZ1VizQYYdur29FgOGyz\u0026lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps\u0026lsig=AG3C_xAwRQIhAOWd7iZSVmC4z12h-j2aCmSYNzwiPAvEybgL155njL3iAiAjVc5fnChrCB1oQe2IvQPT6-ZJceqQGN6GwOjkH1UnXA%3D%3D'},{'size':{'x':1280,'y':720},'url':'https://rr1---sn-jtu5jt2g0n-aj5y.googlevideo.com/videoplayback?expire=1661194950\u0026ei=Zn4DY9jWIoKjxN8P-oCSoAY\u0026ip=83.168.43.121\u0026id=o-AOC0pZ5C5zrjOivymfB8pI786u6-T5n3hkPb94dO_dmc\u0026itag=22\u0026source=youtube\u0026requiressl=yes\u0026mh=Kb\u0026mm=31%2C29\u0026mn=sn-jtu5jt2g0n-aj5y%2Csn-hgn7yn76\u0026ms=au%2Crdu\u0026mv=m\u0026mvi=1\u0026pl=26\u0026initcwndbps=905000\u0026vprv=1\u0026mime=video%2Fmp4\u0026cnr=14\u0026ratebypass=yes\u0026dur=200.063\u0026lmt=1658784718472174\u0026mt=1661173050\u0026fvip=5\u0026fexp=24001373%2C24007246\u0026c=ANDROID\u0026rbqsm=fr\u0026txp=5318224\u0026sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cvprv%2Cmime%2Ccnr%2Cratebypass%2Cdur%2Clmt\u0026sig=AOq0QJ8wRAIgEhZrQTXFGDY6j9WiuN314GrgfDga-EI_VBUHCf6jNZwCIGfnKLNFxSj_y4dtBzeMcZpTJS_7PYLmC1RNkBokhSXn\u0026lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps\u0026lsig=AG3C_xAwRQIhAOWd7iZSVmC4z12h-j2aCmSYNzwiPAvEybgL155njL3iAiAjVc5fnChrCB1oQe2IvQPT6-ZJceqQGN6GwOjkH1UnXA%3D%3D'}]"
-
-
-    /*console.log(a)
-    console.log(JSON.parse(a))*/
 
     element.Reactive = {
         Aspect: element.dataset.width / element.dataset.height,
         InternalWidth: () => First(element.Height * element.Aspect, element.dataset.width),
         InternalHeight: () => First(element.Width / element.Aspect, element.dataset.height),
 
-        Controls: true,
+        PreferPlatformPlayer: false,
+
+
+        Controls: () => !element.Hover,
+
+        Play: true,
+        Position: 0,
+        Sound: true,
+        Loop: true,
+
+        VideoPlayerType: undefined,//youtube, html5
+
+        Player: undefined,
+        YoutubePlayerReady: false
     }
 
-    var videoElement = undefined
-    function onLoadedMetadata(event) {
-        console.log("onLoadedMetadata")
-        videoElement.play()
+    var playerDestructor = undefined
+    var getCurrentPosition = undefined
+
+
+
+
+
+
+    /*
+     if (!showControls) {
+                iframe.style.pointerEvents = "none";
+            }
+
+
+     */
+
+
+
+    function InitializeYoutubeIFrame() {
+
+        var currentPosition = 0
+        if (getCurrentPosition)
+            currentPosition = getCurrentPosition()
+
+        if (playerDestructor) {
+            playerDestructor()
+            
+        }
+
+        element.VideoPlayerType = "youtube"
+
+        var iframe = document.createElement("div");
+        iframe.id = getUniqueID();
+        element.appendChild(iframe);
+
+        let player = new YT.Player(iframe.id, {
+            height: '100%',
+            width: '100%',
+            videoId: youtubeId,
+            host: "http://www.youtube-nocookie.com",
+            playerVars: {
+                "rel": 0,
+                //"autoplay": autoPlay ? 1 : 0,
+                "controls": element.Controls ? 1 : 0,
+                //"mute": autoPlay ? 1 : (sound ? 0 : 1),
+            },
+            events: {
+                'onReady': function (event) {                    
+                    if (currentPosition !== 0) {
+                        player.seekTo(currentPosition, true)
+                    }
+                    element.YoutubePlayerReady = true
+                },
+                'onStateChange': function (event) {
+                    console.log(event)
+                    //onYoutubePlayerStateChange(event)
+                }
+            }
+        })
+
+        getCurrentPosition = function () {
+            return player.getCurrentTime()
+        }
+        
+        playerDestructor = function () {
+            playerDestructor = undefined
+            player.destroy()
+            let d = Reaction.beginDeferred()
+            element.Player = undefined
+            element.YoutubePlayerReady = false
+            d.end()
+        }
+        
+        element.Player = player
+
+        /*callWhenYouTubeIFrameApiReady(function () {
+            
+            element.appendChild(iframe);
+            var controls = showControls ? 1 : 0;
+            player = new YT.Player(iframe.id, {
+
+                height: '100%',
+                width: '100%',
+                videoId: code,
+                host: "http://www.youtube-nocookie.com",
+                playerVars: {
+                    "rel": 0,
+                    "autoplay": autoPlay ? 1 : 0,
+                    "controls": showControls ? 1 : 0,
+                    "mute": autoPlay ? 1 : (sound ? 0 : 1),
+                },
+                events: {
+                    'onReady': function (event) {
+                        onYoutubePlayerReady(event)
+                    },
+                    'onStateChange': function (event) { onYoutubePlayerStateChange(event) }
+                }
+            });
+        })*/
     }
 
-    function onTimeUpdate() {
-        console.log("onTimeUpdate", videoElement.currentTime)
+    function InitializeHtml5Video() {
+        element.VideoPlayerType = "video"
     }
+
+
+
+
 
     new Reaction(() => {
-        //videoElement.currentTime = "5"
-        console.log(element.Width)
 
+        console.log(element.Parent.Sibling("videoProperties"))
+
+        if (element.PreferPlatformPlayer) {
+            if (element.dataset.youtubeId !== undefined) {
+                if (YouTube.Status === undefined) {
+                    YouTube.initialize()
+                }
+                if (YouTube.Status == "ready") {
+                    InitializeYoutubeIFrame()
+                }
+                if (YouTube.Status == "error") {
+                    InitializeHtml5Video()
+                }
+            }
+
+        } else {
+            InitializeHtml5Video()
+
+        }
+    })
+
+    //Play
+    new Reaction(() => {
+        if (element.VideoPlayerType == "youtube" && element.YoutubePlayerReady) {
+            if (element.Play) {
+                console.log("Play")
+                element.Player.playVideo()
+            } else {
+                element.Player.pauseVideo()
+            }
+        }
+    })
+
+    //Sound
+    new Reaction(() => {
+        if (element.VideoPlayerType == "youtube" && element.YoutubePlayerReady) {
+            if (element.Sound) {
+                element.Player.unMute()
+            } else {
+                element.Player.mute()
+            }
+        }
     })
 
 
+
+
+
+    element.onclick = () => {
+        element.Sound = !element.Sound
+
+    }
+
+
+    var videoElement = undefined
+    function onLoadedMetadata(event) {
+        //console.log("onLoadedMetadata")
+        //videoElement.play()
+    }
+
+    function onTimeUpdate() {
+        //console.log("onTimeUpdate", videoElement.currentTime)
+    }
+
+    
+
+
+
+
+
     new Reaction(() => {
-        if (videoElement == undefined) {
+
+        /*if (YouTube.Status == "ready") {
+
+
+        }
+        if (YouTube.Status == "error") {
+
+
+        }*/
+
+        /*if (videoElement == undefined) {
             videoElement = document.createElement("video")
             element.appendChild(videoElement)
 
@@ -51,7 +285,14 @@ function Video(element) {
         
         videoElement.width = element.Width
         videoElement.height = element.Height
-        videoElement.controls = element.Controls
+        videoElement.autoplay = element.AutoPlay
+        videoElement.muted = element.AutoPlay || (!element.Sound)
+        videoElement.loop = element.Loop;
+        videoElement.controls = element.Controls*/
+
+        //element.AutoPlay
+
+        //videoElement.play()
     })
 
 

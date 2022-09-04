@@ -110,32 +110,22 @@ namespace StaticSharp {
                     return;
 
                 response.Headers.ContentType = asset.MediaType;
-                /*response.Headers.AcceptRanges.Add("byte");
-                if (asset.FileExtension == ".mp4") {
-                    response.StatusCode = 206;
+                
+                /*if (asset.FileExtension == ".mp4") {
+                    HandleVideoAssetsRequestAsync(request, response, routeData);
                 }*/
 
-
-                var data = asset.ReadAllBites();
-                
+                var data = asset.ReadAllBites();                
                 await response.Body.WriteAsync(data, 0, data.Length);
-
-                //await asset.CreateReadStream().CopyToAsync(response.Body);
-
-                //await response.CompleteAsync();
-
-                    /*response.AddHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
-                context.Response.ContentType = "application/octet-stream";
-                context.Response.ClearContent();
-                file.CopyTo(context.Response.OutputStream);*/
-                /*var storage = Gears.Assets.Directory;
-                var curentDirectory = Environment.CurrentDirectory;
-                var path = storage.TrimEnd('\\') + request.Path.Value.Replace("/", @"\");//Path.Combine(storage, request.Path.Value.Replace("/", @"\"));
-                //var file = await File.ReadAllBytesAsync(path);
-                await response.SendFileAsync(path);*/
             } catch {
             }
         }
+
+        /*protected virtual async Task HandleVideoAssetsRequestAsync(HttpRequest request, HttpResponse response, RouteData routeData) {
+            response.Headers.AcceptRanges.Add("byte");
+        }*/
+
+
 
         protected virtual async Task HandleAnyRequestAsync(HttpRequest request, HttpResponse response, RouteData routeData) {
             if (request.Path.Value.ToLower().EndsWith(".html")) {

@@ -9,21 +9,16 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     [System.Diagnostics.DebuggerNonUserCode]
-    public class SliderJs : BlockJs {
-        public float Min =>     NotEvaluatableValue<float>();
-        public float Max =>     NotEvaluatableValue<float>();
-        public float Step =>    NotEvaluatableValue<float>();
-        public float Value =>   NotEvaluatableValue<float>();
+    public class CheckboxJs : BlockJs {
+        public bool Enabled =>     NotEvaluatableValue<bool>();
+        public bool Value =>   NotEvaluatableValue<bool>();
     }
 
 
-    public class SliderBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
-        public SliderBindings(Dictionary<string, string> properties) : base(properties) {}
-
-        public Expression<Func<FinalJs, float>> Min { set { AssignProperty(value); } }
-        public Expression<Func<FinalJs, float>> Max { set { AssignProperty(value); } }
-        public Expression<Func<FinalJs, float>> Step { set { AssignProperty(value); } }
-        public Expression<Func<FinalJs, float>> Value { set { AssignProperty(value); } }
+    public class CheckboxBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
+        public CheckboxBindings(Dictionary<string, string> properties) : base(properties) {}
+        public Expression<Func<FinalJs, bool>> Enabled { set { AssignProperty(value); } }
+        public Expression<Func<FinalJs, bool>> Value { set { AssignProperty(value); } }
     }
 
 
@@ -31,18 +26,16 @@ namespace StaticSharp {
 
 
     [RelatedScript]
-    public class Slider : Block {
+    public class Checkbox : Block, IInline {
 
-        public new SliderBindings<SliderJs> Bindings => new(Properties);
-        protected override string TagName => "slider";
-
-        
+        public new SliderBindings<CheckboxJs> Bindings => new(Properties);
+        protected override string TagName => "checkbox";
 
 
-        public Slider(Slider other, string callerFilePath, int callerLineNumber)
+        public Checkbox(Checkbox other, string callerFilePath, int callerLineNumber)
             : base(other, callerFilePath, callerLineNumber) { }
 
-        public Slider([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
+        public Checkbox([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
 
         /*public override void AddRequiredInclues(IIncludes includes) {
             base.AddRequiredInclues(includes);
@@ -58,6 +51,12 @@ namespace StaticSharp {
                 });
         }
 
+        public async Task<Tag> GenerateInlineHtmlAsync(Context context, string? id) {
+            return new Tag("input", id) {
+                ["type"] = "checkbox",
+
+            };
+        }
     }
 
     

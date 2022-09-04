@@ -19,7 +19,7 @@ namespace StaticSharp {
             Formatting = formatting;
         }        
 
-        public async Task<Tag> GenerateInlineHtmlAsync(Context context) {
+        public async Task<Tag> GenerateInlineHtmlAsync(Context context, string? id) {
             
             var chars = Value.ToPrintableChars();
             HashSet<string> families = new();

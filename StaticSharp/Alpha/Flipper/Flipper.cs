@@ -28,7 +28,7 @@ namespace StaticSharp {
 
         public new FlipperBindings<FlipperJs> Bindings => new(Properties);
 
-        public override string TagName => "flipper";
+        protected override string TagName => "flipper";
 
         public Block First { get; init; }
         public Block Second { get; init; }

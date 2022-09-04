@@ -3,12 +3,20 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<!--<ImplicitUsings>enable</ImplicitUsings>-->
 		<Nullable>enable</Nullable>
+		
+		
+		
+		
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
-
 		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+		
+		
 	</PropertyGroup>
 
+
+	
+	
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -55,12 +63,32 @@
 		
 		<ProjectReference Include="..\StaticSharpEngine\StaticSharpEngine.csproj" />
 	</ItemGroup>
+
 	
 	
 	
-	<ItemGroup>
-		<Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+	
+	
+	
+	
+	<!--Source generators-->
+	<PropertyGroup>
+		<UseDebugGeneratorOutput>false</UseDebugGeneratorOutput>
+	</PropertyGroup>
+
+	<ItemGroup Condition="$(UseDebugGeneratorOutput)">
+		<Compile Include=".generated\**" />
 	</ItemGroup>
 
+	<ItemGroup Condition="!$(UseDebugGeneratorOutput)">
+		<ProjectReference Include="..\MixinGenerator\MixinGenerator.csproj" OutputItemType="Analyzer"  />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\MixinGenerator\MixinGenerator.csproj" />
+	</ItemGroup>
+
+	
+	
 
 </Project>

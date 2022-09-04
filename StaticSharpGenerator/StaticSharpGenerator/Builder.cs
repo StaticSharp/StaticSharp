@@ -1,6 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
-//using Scopes;
-//using Scopes.C;
+﻿using Exo.RoslynSourceGeneratorDebuggable;
+
+using Microsoft.CodeAnalysis;
 using System.Linq;
 
 namespace StaticSharpGenerator {

@@ -32,7 +32,7 @@ namespace StaticSharp {
 
         public new SpaceBindings<HierarchicalJs> Bindings => new(Properties);
 
-        public override string TagName => "ws";
+        protected override string TagName => "ws";
         public Space([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber) { }
 

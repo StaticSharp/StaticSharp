@@ -41,6 +41,7 @@ namespace StaticSharp {
 
         public static void Add<T>(this T collector, Paragraph paragraph) where T : IBlockCollector =>
             collector.Add(null, paragraph);
+
         public static void Add<T>(this T collector, string? id, Paragraph paragraph) where T : IBlockCollector {
             if (paragraph != null) {
                 ((IBlockCollector)collector).Add(id, paragraph);                

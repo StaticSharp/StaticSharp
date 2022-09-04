@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+
+	<Import Project="MixinGenerator.csproj" Condition="Exists('MixinGenerator.csproj')" />
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Scopes" Version="0.0.16" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\CSharpSyntaxTreeInspector\CSharpSyntaxTreeInspector.csproj" />
+	  <ProjectReference Include="..\RoslynSourceGeneratorDebuggable\RoslynSourceGeneratorDebuggable.csproj" />
+	</ItemGroup>
+
+
+</Project>

@@ -31,7 +31,7 @@ namespace StaticSharp.Gears {
 
         public Assets Assets { get; init; }
 
-        private ConcurrentDictionary<string, IAsset> Scripts { get; } = new();
+        private List<KeyValuePair<string, IAsset>> Scripts { get; } = new();
 
         public FontFamily[] FontFamilies { get; set; } = null!;
         public FontStyle FontStyle { get; set; } = new();
@@ -42,11 +42,13 @@ namespace StaticSharp.Gears {
         }
 
         public void AddScript(IAsset asset) {
-            Scripts.TryAdd(asset.Key, asset);
+            if (Scripts.Any(x => x.Key == asset.Key))
+                return; 
+            Scripts.Add(new KeyValuePair<string, IAsset>(asset.Key, asset));
         }
 
         public Html.Tag GenerateScript() {
-            var scriptCode = string.Join('\n', Scripts.Values.Select(x => x.ReadAllText()));
+            var scriptCode = string.Join('\n', Scripts.Select(x => x.Value.ReadAllText()));
             return new Html.Tag("script") {
                 new Html.PureHtmlNode(scriptCode)
             };

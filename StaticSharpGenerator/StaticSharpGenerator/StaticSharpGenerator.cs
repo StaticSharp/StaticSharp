@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using Exo.RoslynSourceGeneratorDebuggable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
@@ -95,9 +97,14 @@ namespace StaticSharpGenerator {
 
 
     [Generator]
-    public class StaticSharpGenerator : SourceGenerator {
+    public class StaticSharpGenerator : SourceGeneratorDebuggable {
         //Alpha
 
+#if SOURCE_GENERATOR_EXECUTABLE_MODE
+        public static async Task Main() {
+            await Launcher.MainAsync();
+        }
+#endif
 
         public override void Initialize(IGeneratorInitializationContext context) {
             //Debugger.Launch();

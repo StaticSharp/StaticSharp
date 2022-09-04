@@ -13,7 +13,7 @@ namespace StaticSharp {
 
     [RelatedScript]
     public class Row : Block, IBlockCollector {
-        public override string TagName => "row";
+        protected override string TagName => "row";
         protected Blocks children { get; } = new();
         public Row Children => this;
         public void Add(string? id, IBlock? value) {

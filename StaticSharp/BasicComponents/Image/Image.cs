@@ -27,7 +27,7 @@ namespace StaticSharp {
             None
         }
 
-        public override string TagName => "div";
+        protected override string TagName => "div";
 
         protected IGenome<IAsset> assetGenome;
 

@@ -34,7 +34,7 @@ function Hierarchical(element) {
     };
 
     element.Sibling = function (id) {
-        return Parent.Child(id)        
+        return element.Parent.Child(id)        
     }
 
     element.Child = function (id) {

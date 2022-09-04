@@ -48,7 +48,7 @@ namespace StaticSharp {
 
     }
 
-
+    [Mix(typeof(BlockBindings<BlockJs>))]
     [RelatedScript]
     public partial class Block : Hierarchical, IBlock {
         public new BlockBindings<BlockJs> Bindings => new(Properties);
