@@ -12,14 +12,13 @@ namespace StaticSharp {
 
 
     [RelatedScript]
-    public class Row : Block, IBlockCollector {
+    public class Row : Block {
         protected override string TagName => "row";
-        protected Blocks children { get; } = new();
-        public Row Children => this;
-        public void Add(string? id, IBlock? value) {
+        public Blocks Children { get; } = new();
+        /*public void Add(string? id, IBlock? value) {
             if (value!=null)
                 children.Add(id, value);
-        }
+        }*/
 
         public static Space DefaultSpace = new Space();
 
@@ -27,7 +26,7 @@ namespace StaticSharp {
 
         protected override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
             return new Tag() {
-                await children.Select(x=> x.Value.GenerateHtmlAsync(context,x.Key)).SequentialOrParallel(),
+                await Children.Select(x=> x.Value.GenerateHtmlAsync(context,x.Key)).SequentialOrParallel(),
             };
         }
     }

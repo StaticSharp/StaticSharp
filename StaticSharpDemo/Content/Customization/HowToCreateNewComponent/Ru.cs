@@ -3,7 +3,7 @@
     [Representative]
     partial class Ru : Material {
         public override string Title => "Как создать новый компонент";
-        public override Paragraph Description => $"Компоненты для создания страниц.";
+        public override Inlines Description => $"Компоненты для создания страниц.";
 
         public override Group Content => new() {
             $"сначала напишу все в кучу, а потом правильно распределю..",

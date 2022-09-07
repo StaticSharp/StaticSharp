@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "RoslynSourceGeneratorDebuggable": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ProjectPath": "$(MSBuildProjectDirectory)/../StaticSharpDemo/StaticSharpDemo.csproj"
+      }
+    }
+  }
+}

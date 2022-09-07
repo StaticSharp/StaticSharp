@@ -20,7 +20,7 @@ namespace StaticSharpDemo.Root {
         }
 
         Paragraph CreateParagraph(int numChars, Random random) {
-            return new Paragraph() { RandomString(numChars, random) };
+            return new Paragraph(RandomString(numChars, random));
         }
 
         IEnumerable<Paragraph> CreateParagraphs(int count) {
@@ -29,70 +29,77 @@ namespace StaticSharpDemo.Root {
         }
 
 
-        public IInline GithubUrl(string text = "GitHub repository") {
-            return new InlineModifier() { text }
-            .Url("https://github.com/antilatency/Antilatency.Copilot")
-            .ForegroundColor(Color.FromArgb(172, 196, 53));
+        public Link GithubUrl(string text = "GitHub repository") {
+            return new Link {
+                HRef = "https://github.com/antilatency/Antilatency.Copilot",
+                ForegroundColor = Color.FromArgb(172, 196, 53),
+                Children = {
+                    text
+                }
+            };
         }
 
-        public IInline DiscordUrl(string text = "Discord server") {
-            return new InlineModifier() { text }
-            .Url("https://discord.gg/ZTqmfPsGEr")
-            .ForegroundColor(Color.FromArgb(139, 148, 245));
+        public Link DiscordUrl(string text = "Discord server") {
+            return new Link {
+                HRef = "https://discord.gg/ZTqmfPsGEr",
+                NewTab = true,
+                ForegroundColor = Color.FromArgb(139, 148, 245),
+                Children = {
+                    text
+                }
+            };
         }
 
         public override Group? Content => new() {
 
+            
+            $"Text {new CheckboxInline():#play Play}",
 
 
             new Video("T4TEdzSLyi0"){
-
-                Bindings = {
-                    PreferPlatformPlayer = e=>e.Sibling("videoProperties").Child<CheckboxJs>("play").Value
-                }
+                PreferPlatformPlayer = new (e=>e.Sibling("videoProperties").Child<MCheckboxJs>("play").Value)                
             },
 
-            {"videoProperties", $"{new Checkbox():#play Play}" },
+            {"videoProperties", $"{new CheckboxInline():#play Play}" },
 
+            new CheckboxBlock(){
+                O = new(e=>e.Enabled?1:0),
+
+                Value = true,
+                
+            },
 
             //new Image(new HttpRequestGenome("https://upload.wikimedia.org/wikipedia/commons/4/49/Koala_climbing_tree.jpg")),
 
-            new Column(){ 
-                Modifiers = { 
-                    new Modifier(){ 
-                        Bindings ={ 
-                            BackgroundColor = e=>Color.FromArgb(255,32,32,32),
-                        }
-                    }
-                },
-                Children = {
 
-                    new Paragraph($"Refer to {GithubUrl()} for more information, and join our {DiscordUrl()} to learn more about getting early access to Copilot."){ 
-                        Modifiers = {
-                            new (){ 
-                                LineHeight = 1.8f,
-                                LetterSpacing = 0.2f
-                            }
-                        }
-                    },
+            new Column(){
+                BackgroundColor = Color.FromArgb(255,32,32,32),
+                
+                
+
+                Children = {                   
+                    $"Refer to {GithubUrl()} for more information, and join our {DiscordUrl()} to learn more about getting early access to Copilot.",
                     
-                    new Flipper(){
-                        Bindings = {
-                            MarginLeft = e=>e.ParentBlock.PaddingLeft,
-                            MarginRight = e=>e.ParentBlock.PaddingRight,
-                        },
+                    new Flipper() {
+                        MarginLeft = new (e=>e.ParentBlock.PaddingLeft),
+                        MarginRight = new (e=>e.ParentBlock.PaddingRight),
+                        
                         First = new Column(){
-                            Bindings = {
-                                MarginLeft = e=>10,
-                                MarginRight = e=>10,
-                            },
+                            MarginLeft = 10,
+                            MarginRight = 10,
+
                             Children = {
-                                H4("Antilatency Copilot.\nPositional solution for drones"),
-                                "Copilot is an Antilatency project. We use our accurate optical-inertial tracking system with Raspberry Pi to provide you with precise indoor navigation and outdoor landing for drones in different use cases."
+                                new Space(),
+                                H4("Antilatency Copilot.\nPositional solution for drones").Modify(x=>{
+                                    x.LineHeight = 1.3f;
+                                }),
+                                "Copilot is an Antilatency project. We use our accurate optical-inertial tracking system with Raspberry Pi to provide you with precise indoor navigation and outdoor landing for drones in different use cases.",
+                                new Space(0,2),
                             }
                         },
                         Second = new Image(new FileGenome(AbsolutePath("Copilot/SchemeDark.svg"))){
                             Embed = Image.TEmbed.Image,
+
                             /*Bindings = {
                                 MarginLeft = e=>10,
                                 MarginRight = e=>10,
@@ -104,24 +111,20 @@ namespace StaticSharpDemo.Root {
             }.ConsumeParentHorizontalMargins(),
 
             new Flipper(){
-                Bindings = { 
-                    MarginLeft = e=>e.ParentBlock.MarginLeft,
-                    MarginRight = e=>e.ParentBlock.MarginRight,                    
-                },
+                MarginLeft = new(e=>e.ParentBlock.MarginLeft),
+                MarginRight = new(e=>e.ParentBlock.MarginRight),
+
                 First = new Image(new FileGenome(AbsolutePath("Copilot/Delivery.svg"))){ 
                     Embed = Image.TEmbed.Image,
-                    Bindings = { 
-                        MarginLeft = e=>24,
-                        MarginRight = e=>24,
-                        MarginTop = e=>24,
-                        MarginBottom = e=>24,
-                    }
+                    MarginLeft = 24,
+                    MarginRight = 24,
+                    MarginTop = 24,
+                    MarginBottom = 24,                    
                 },
                 Second = new Column(){
-                    Bindings = { 
-                        MarginLeft = e=>10,
-                        MarginRight = e=>10,
-                    },
+                    MarginLeft = 10,
+                    MarginRight = 10,
+
                     Children ={
                         new Space(),                        
                         //$"{new Checkbox():#id}",
@@ -155,11 +158,10 @@ namespace StaticSharpDemo.Root {
             {
                 "Slider",
                 new Slider {
-                    Bindings = {
-                        MarginTop = e=>e.Value,
-                        Min = e=> 10,
-                        Max = e=> 200
-                    }
+                    
+                    //MarginTop = e=>e.Value,
+                    Min = 10,
+                    Max = 200                    
                 }
             },
 

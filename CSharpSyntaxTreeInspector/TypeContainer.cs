@@ -43,5 +43,13 @@ namespace Exo.CSharpSyntaxTreeInspector {
             var t = GetOrCreateType(typeDeclaration.Identifier.ValueText, parameters);
             t.Parts.Add(typeDeclaration);
         }
+
+        public void AddTypeDeclaration(EnumDeclarationSyntax typeDeclaration) {
+            //var parameters = typeDeclaration.TypeParameterList?.Parameters.Select(x => x.Identifier.ValueText).ToArray();
+            var t = GetOrCreateType(typeDeclaration.Identifier.ValueText, null);
+            t.Parts.Add(typeDeclaration);
+        }
+        
+
     }
 }

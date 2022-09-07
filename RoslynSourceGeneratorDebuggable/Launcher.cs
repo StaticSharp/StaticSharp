@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace Exo.RoslynSourceGeneratorDebuggable {
     public class Launcher {
-        public static string GetProjectPath(string solutionDirectory) {
+        /*public static string GetProjectPath(string solutionDirectory) {
             //var solutionDirectory = Path.GetFullPath(Path.Combine(ProjectDirectory.Path, ".."));
             var soutionFilePath = Directory.GetFiles(solutionDirectory, "*.sln")[0];
             var solutionFile = SolutionFile.Parse(soutionFilePath);
@@ -34,15 +34,7 @@ namespace Exo.RoslynSourceGeneratorDebuggable {
 
 
             return projects[0].AbsolutePath;
-
-
-
-            /*if (projects.Length == 1) {
-                
-            }
-
-            throw new Exception("Project not found.");*/
-        }
+        }*/
 
 
         public static async Task<Compilation> GetCompilationAsync(string projectPath) {
@@ -50,7 +42,7 @@ namespace Exo.RoslynSourceGeneratorDebuggable {
 
             var project = await workspace.OpenProjectAsync(projectPath);
 
-            project = project.WithAnalyzerReferences(Enumerable.Empty<AnalyzerReference>());
+            //project = project.WithAnalyzerReferences(Enumerable.Empty<AnalyzerReference>());
 
             
 
@@ -59,29 +51,16 @@ namespace Exo.RoslynSourceGeneratorDebuggable {
             return result;
         }
 
-        public static async Task MainAsync() {
+        public static async Task Main() {
             MSBuildLocator.RegisterDefaults();
 
-            var p = GetProjectPath("D:/StaticSharp");
 
             var projectPath = Environment.GetEnvironmentVariable("ProjectPath");
             projectPath = Path.GetFullPath(projectPath);
             //TODO: check. 
 
-
-
-
             var compilation = await GetCompilationAsync(projectPath);
 
-            Console.WriteLine(compilation.SyntaxTrees.Count());
-
-
-            var outputDirectoryRoot = Path.Combine(Path.GetDirectoryName(projectPath), ".generated");
-
-
-
-
-            //return;
 
             /*
 
@@ -98,6 +77,9 @@ namespace Exo.RoslynSourceGeneratorDebuggable {
 
             var syntaxTrees = files.Select(x=> CSharpSyntaxTree.ParseText(File.ReadAllText(x.FullName)));
             */
+
+            
+            var outputDirectoryRoot = Path.Combine(Path.GetDirectoryName(projectPath), ".generated");
 
             var assembly = Assembly.GetEntryAssembly();
             var types = assembly.GetTypes();

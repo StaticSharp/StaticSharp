@@ -8,7 +8,7 @@ namespace StaticSharpDemo.Root.Components {
 
     [Representative]
     public partial class Ru : Material {
-        public override Paragraph Description => $"Компоненты для создания {8} страниц.";
+        public override Inlines Description => $"Компоненты для создания {8} страниц.";
 
 
 

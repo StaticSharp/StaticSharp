@@ -28,7 +28,9 @@ function BaseModifier(element) {
     if (!element.isHierarchical) {
         Hierarchical(element)
     }
-    //console.log("element.Modifier",element.Modifier)
+
+
+
     if (element.isModifier)
         return
     //Hierarchical(element)

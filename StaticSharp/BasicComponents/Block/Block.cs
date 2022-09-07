@@ -10,8 +10,7 @@ using System.Threading.Tasks;
 namespace StaticSharp {
     namespace Gears {
         [System.Diagnostics.DebuggerNonUserCode]
-        public class BlockJs : HierarchicalJs {
-            public BlockJs() { }
+        public class MBlockJs : HierarchicalJs {
             public float X => NotEvaluatableValue<float>();
             public float Y => NotEvaluatableValue<float>();
             public float Width => NotEvaluatableValue<float>();
@@ -26,40 +25,42 @@ namespace StaticSharp {
             public float PaddingBottom => NotEvaluatableValue<float>();
             public float FontSize => NotEvaluatableValue<float>();
         }
-        public class BlockBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {
-            public BlockBindings(Dictionary<string, string> properties) : base(properties) {
-            }
-            public Expression<Func<FinalJs, float>> X { set { AssignProperty(value); } }
-            public Expression<Func<FinalJs, float>> Y { set { AssignProperty(value); } }
-            public Expression<Func<FinalJs, float>> Width { set { AssignProperty(value); } }
-            public Expression<Func<FinalJs, float>> Height { set { AssignProperty(value); } }
-            public Expression<Func<FinalJs, float>> MarginLeft { set { AssignProperty(value); } }
-            public Expression<Func<FinalJs, float>> MarginRight { set { AssignProperty(value); } }
-            public Expression<Func<FinalJs, float>> MarginTop { set { AssignProperty(value); } }
-            public Expression<Func<FinalJs, float>> MarginBottom { set { AssignProperty(value); } }
-            public Expression<Func<FinalJs, float>> PaddingLeft { set { AssignProperty(value); } }
-            public Expression<Func<FinalJs, float>> PaddingRight { set { AssignProperty(value); } }
-            public Expression<Func<FinalJs, float>> PaddingTop { set { AssignProperty(value); } }
-            public Expression<Func<FinalJs, float>> PaddingBottom { set { AssignProperty(value); } }
 
-            public Expression<Func<FinalJs, float>> FontSize { set { AssignProperty(value); } }
+
+        
+
+        public class MBlockBindings<FinalJs> : MBaseModifierBindings<FinalJs> where FinalJs : new() {
+
+            public Binding<float> O {set {Apply(value);}}
+            public Binding<float> X { set { Apply(value); } }
+            public Binding<float> Y { set { Apply(value); } }
+            public Binding<float> Width { set { Apply(value); } }
+            public Binding<float> Height { set { Apply(value); } }
+            public Binding<float> MarginLeft { set { Apply(value); } }
+            public Binding<float> MarginRight { set { Apply(value); } }
+            public Binding<float> MarginTop { set { Apply(value); } }
+            public Binding<float> MarginBottom { set { Apply(value); } }
+            public Binding<float> PaddingLeft { set { Apply(value); } }
+            public Binding<float> PaddingRight { set { Apply(value); } }
+            public Binding<float> PaddingTop { set { Apply(value); } }
+            public Binding<float> PaddingBottom { set { Apply(value); } }
+            public Binding<float> FontSize { set { Apply(value); } }
 
         }
 
     }
 
-    [Mix(typeof(BlockBindings<BlockJs>))]
-    [RelatedScript]
-    public partial class Block : Hierarchical, IBlock {
-        public new BlockBindings<BlockJs> Bindings => new(Properties);
 
-        public virtual List<Modifier> Modifiers { get; } = new();
+    [Mix(typeof(MBlockBindings<MBlockJs>))]
+    [RelatedScript]
+    public partial class Block : BaseModifier, IBlock {
+        //public virtual List<Modifier> Modifiers { get; } = new();
 
         protected Block(Block other,
             string callerFilePath = "",
             int callerLineNumber = 0) : base(other, callerFilePath, callerLineNumber) {
 
-            Modifiers = new(other.Modifiers);
+            //Modifiers = new(other.Modifiers);
         }
         public Block([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
         
@@ -70,22 +71,27 @@ namespace StaticSharp {
 
             await AddRequiredInclues(context);
 
-            foreach (var m in Modifiers) {
+            /*foreach (var m in Modifiers) {
                 await m.AddRequiredInclues(context);
                 context = m.ModifyContext(context);
-            }
+            }*/
+
+            context = ModifyContext(context);
 
             var tag = new Tag(TagName, id) { };
 
-            foreach (var m in Modifiers)
-                m.ModifyTag(tag);
+            /*foreach (var m in Modifiers)
+                m.ModifyTag(tag);*/
+
+            ModifyTag(tag);
+
 
             //tag.Add(await CreateScripts(context).SequentialOrParallel());
 
             tag.Add(await CreateConstructorScriptAsync(context));
 
-            foreach (var m in Modifiers)
-                tag.Add(await m.CreateConstructorScriptAsync(context));
+            /*foreach (var m in Modifiers)
+                tag.Add(await m.CreateConstructorScriptAsync(context));*/
 
 
             tag.Add(await GenerateHtmlInternalAsync(context, tag));
@@ -98,10 +104,10 @@ namespace StaticSharp {
 
     public static partial class Static {
         public static T ConsumeParentHorizontalMargins<T>(this T _this) where T : Block {
-            _this.Bindings.X = e => -e.ParentBlock.MarginLeft;
-            _this.Bindings.Width = e => e.ParentBlock.Width + e.ParentBlock.MarginLeft + e.ParentBlock.MarginRight;
-            _this.Bindings.PaddingLeft = e => e.ParentBlock.MarginLeft;
-            _this.Bindings.PaddingRight = e => e.ParentBlock.MarginRight;
+            _this.X = new(e => -e.ParentBlock.MarginLeft);
+            _this.Width = new(e => e.ParentBlock.Width + e.ParentBlock.MarginLeft + e.ParentBlock.MarginRight);
+            _this.PaddingLeft = new(e => e.ParentBlock.MarginLeft);
+            _this.PaddingRight = new(e => e.ParentBlock.MarginRight);
             return _this;
         }
     

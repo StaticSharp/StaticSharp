@@ -102,7 +102,7 @@ namespace StaticSharpGenerator {
 
 #if SOURCE_GENERATOR_EXECUTABLE_MODE
         public static async Task Main() {
-            await Launcher.MainAsync();
+            await Launcher.Main();
         }
 #endif
 

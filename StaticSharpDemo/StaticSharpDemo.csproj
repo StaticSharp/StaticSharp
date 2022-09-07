@@ -16,17 +16,16 @@
 	
 	
 
-	<ItemGroup>
+	<!--<ItemGroup>
 		<PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="3.9.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; native; contentfiles; analyzers; </IncludeAssets>
-			<!-- build; buildtransitive-->
 		</PackageReference>
 	</ItemGroup>
 
-	<!--<ItemGroup Condition="!$(UseDebugGeneratorOutput)">-->
+	<ItemGroup Condition="!$(UseDebugGeneratorOutput)">
 
-	<!--</ItemGroup>-->
+	</ItemGroup>-->
 
 	<ItemGroup>
 		
@@ -37,7 +36,7 @@
 
 	<!--Source generators-->
 	<PropertyGroup>
-		<UseDebugGeneratorOutput>true</UseDebugGeneratorOutput>
+		<UseDebugGeneratorOutput>false</UseDebugGeneratorOutput>
 	</PropertyGroup>
 	
 	<ItemGroup Condition="$(UseDebugGeneratorOutput)">
@@ -45,6 +44,9 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="!$(UseDebugGeneratorOutput)">
+
+		<ProjectReference Include="..\MixinGenerator\MixinGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+
 		<ProjectReference Include="..\StaticSharpGenerator\StaticSharpGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
 	

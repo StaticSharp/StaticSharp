@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     [System.Diagnostics.DebuggerNonUserCode]
-    public class SliderJs : BlockJs {
+    public class SliderJs : MBlockJs {
         public float Min =>     NotEvaluatableValue<float>();
         public float Max =>     NotEvaluatableValue<float>();
         public float Step =>    NotEvaluatableValue<float>();
@@ -17,23 +17,22 @@ namespace StaticSharp {
     }
 
 
-    public class SliderBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
-        public SliderBindings(Dictionary<string, string> properties) : base(properties) {}
+    public class MSliderBindings<FinalJs> : MBlockBindings<FinalJs> where FinalJs : new() {
 
-        public Expression<Func<FinalJs, float>> Min { set { AssignProperty(value); } }
-        public Expression<Func<FinalJs, float>> Max { set { AssignProperty(value); } }
-        public Expression<Func<FinalJs, float>> Step { set { AssignProperty(value); } }
-        public Expression<Func<FinalJs, float>> Value { set { AssignProperty(value); } }
+        public Binding<float> Min { set { Apply(value); } }
+        public Binding<float> Max { set { Apply(value); } }
+        public Binding<float> Step { set { Apply(value); } }
+        public Binding<float> Value { set { Apply(value); } }
     }
 
 
 
 
+    [Mix(typeof(MSliderBindings<SliderJs>))]
 
     [RelatedScript]
-    public class Slider : Block {
+    public partial class Slider : Block {
 
-        public new SliderBindings<SliderJs> Bindings => new(Properties);
         protected override string TagName => "slider";
 
         

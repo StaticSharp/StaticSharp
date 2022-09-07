@@ -9,73 +9,66 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     [System.Diagnostics.DebuggerNonUserCode]
-    public class CheckboxJs : BlockJs {
-        public bool Enabled =>     NotEvaluatableValue<bool>();
-        public bool Value =>   NotEvaluatableValue<bool>();
+    public class MCheckboxJs : ObjectJs {
+        public bool Enabled => NotEvaluatableValue<bool>();
+        public bool Value => NotEvaluatableValue<bool>();
     }
 
 
-    public class CheckboxBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
-        public CheckboxBindings(Dictionary<string, string> properties) : base(properties) {}
-        public Expression<Func<FinalJs, bool>> Enabled { set { AssignProperty(value); } }
-        public Expression<Func<FinalJs, bool>> Value { set { AssignProperty(value); } }
+    [Mix(typeof(MCheckboxJs))]
+    [Mix(typeof(MBlockJs))]
+    public partial class CheckboxBlockJs {
+    }
+
+    [Mix(typeof(MCheckboxJs))]
+    public class CheckboxInlineJs {
+    }
+
+
+
+    public class MCheckboxBindings<FinalJs> : MBindings<FinalJs> where FinalJs : new() {
+        public Binding<bool> Enabled { set { Apply(value); } }
+        public Binding<bool> Value { set { Apply(value); } }
     }
 
 
 
 
+    [Mix(typeof(MCheckboxBindings<CheckboxBlockJs>))]
+    [Mix(typeof(MBlockBindings<CheckboxBlockJs>))]
 
-    [RelatedScript]
-    public class Checkbox : Block, IInline {
+    [RelatedScript("Checkbox")]
+    public partial class CheckboxBlock : Block {
 
-        public new SliderBindings<CheckboxJs> Bindings => new(Properties);
         protected override string TagName => "checkbox";
-
-
-        public Checkbox(Checkbox other, string callerFilePath, int callerLineNumber)
-            : base(other, callerFilePath, callerLineNumber) { }
-
-        public Checkbox([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
-
-        /*public override void AddRequiredInclues(IIncludes includes) {
-            base.AddRequiredInclues(includes);
-            includes.Require(new Script(ThisFilePathWithNewExtension("js")));
-        }*/
+        public CheckboxBlock(CheckboxBlock other, string callerFilePath, int callerLineNumber): base(other, callerFilePath, callerLineNumber) { }
+        public CheckboxBlock([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
 
         protected override Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
 
-            context.Includes.Require(new Style(AbsolutePath("Slider.scss")));
-
             return Task.FromResult<Tag?>(new Tag("input") {
-                    ["type"] = "range"
-                });
-        }
-
-        public async Task<Tag> GenerateInlineHtmlAsync(Context context, string? id) {
-            return new Tag("input", id) {
-                ["type"] = "checkbox",
-
-            };
-        }
+                ["type"] = "checkbox"
+            });
+        }        
     }
 
-    
-    /*public sealed class Slider : Slider<SliderJs> {
-        
+    [Mix(typeof(MCheckboxBindings<CheckboxInlineJs>))]
+    public partial class CheckboxInline : Inline {
+        protected override string TagName => "checkbox";
+        public CheckboxInline(CheckboxInline other, string callerFilePath, int callerLineNumber) : base(other, callerFilePath, callerLineNumber) { }
+        public CheckboxInline([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
 
-        public Slider(Slider other, string callerFilePath, int callerLineNumber)
-            : base(other, callerFilePath, callerLineNumber) {
-
-            Min = other.Min;
-            Max = other.Max;
-            Step = other.Step;
-            Value = other.Value;
+        protected override Task<Tag?> GenerateInlineHtmlInternalAsync(Context context, Tag elementTag) {
+            return Task.FromResult<Tag?>(new Tag("input") {
+                ["type"] = "checkbox"
+            });
         }
-        public Slider([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
-            : base(callerFilePath, callerLineNumber) { }
 
-        
+    }
 
-        
-    }*/
+
+
+
+
+
 }

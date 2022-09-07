@@ -109,7 +109,10 @@ public class LambdaScriptifier {
 
             case UnaryExpression unaryExpression: {
                 if (expression.NodeType == ExpressionType.Convert) {
-                    Console.WriteLine("ExpressionType.Convert");
+                    //TODO: implement smarter
+                    return Eval(unaryExpression.Operand);
+                    
+                    
                     /*if (unaryExpression.Operand is ParameterExpression parameterExpression) {
                         var resultType = expression.Type;
                         if (parameterExpression.Type == typeof(NotEvaluatable<>).MakeGenericType(resultType)) {

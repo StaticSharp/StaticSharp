@@ -9,7 +9,7 @@ namespace StaticSharp {
 
 
     [RelatedScript]
-    public class Column : Block, IBlockCollector {
+    public class Column : Block {
         protected override string TagName => "column";
         public Blocks Children { get; } = new();
 
@@ -20,11 +20,11 @@ namespace StaticSharp {
         public Column([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
 
         //public Column Children => this;
-        public void Add(string? id, IBlock? value) {
+        /*public void Add(string? id, IBlock? value) {
             if (value != null) {
                 Children.Add(id, value);
             }
-        }
+        }*/
 
         protected override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
             return new Tag() {

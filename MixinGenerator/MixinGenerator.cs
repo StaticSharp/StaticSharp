@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Scopes.C;
+using System;
 using System.Collections.Generic;
 
 //using SourceGeneratorHelpers;
@@ -44,7 +45,7 @@ namespace MixinGenerator {
 
 #if SOURCE_GENERATOR_EXECUTABLE_MODE
         public static async Task Main(string[] args) {
-            await Exo.RoslynSourceGeneratorDebuggable.Launcher.MainAsync();        
+            await Exo.RoslynSourceGeneratorDebuggable.Launcher.Main();        
         }
 #endif
 
@@ -56,7 +57,9 @@ namespace MixinGenerator {
         public override void Execute(IGeneratorExecutionContext context) {
 
             var assemblyInfo = new AssemblyInfo(context.Compilation);
-            
+
+            context.AddSource("Alive.cs", "//Alive");
+
 
             var result = new Scopes.Group() {
             "#pragma warning disable CS0109 // Member does not hide an inherited member; new keyword is not required"
@@ -95,18 +98,27 @@ namespace MixinGenerator {
 
                 foreach (var attribute in attributes) {
 
-                    var fillName = typeof(MixAttribute).FullName;
-                    var mixAttributeMetadata = context.Compilation.GetTypeByMetadataName(fillName);
+                    //var fillName = typeof(MixAttribute).FullName;
+                    //var mixAttributeMetadata = context.Compilation.GetTypeByMetadataName(fillName);
+
+                    
+
 
                     var attributeClass = attribute.AttributeClass;
-                    if (attributeClass.ConstructedFrom.ToString() != "MixAttribute<>") {
+                    if (attributeClass.ConstructedFrom.ToString() != "MixAttribute") {
                         continue;
                     }
 
-                    var mixinTypeUsage = attributeClass.TypeArguments.First() as INamedTypeSymbol;
+                    var arguments = attribute.ConstructorArguments;
+                    if (arguments[0].Value is INamedTypeSymbol mixinTypeUsage) {
+                        
+                        result.Add(Mix(aggregateTypeSymbol, mixinTypeUsage));
+                    }
+
+                    //var mixinTypeUsage = attributeClass.TypeArguments.First() as INamedTypeSymbol;
 
 
-                    result.Add( Mix(aggregateTypeSymbol, mixinTypeUsage));
+                    
 
                 }
 
@@ -218,7 +230,7 @@ namespace MixinGenerator {
                         var resultTypeString = methodSymbol.ReturnsVoid ? "void" : methodSymbol.ReturnType.ToDisplayString(symbolDisplayFormat);
 
                         result.Add(new Scope($"new public {resultTypeString} {methodSymbol.Name}({callParemeterList})") {
-                            SetAggrigator((methodSymbol.ReturnsVoid?"":"return ")+$"{mixinVariableName}.{methodSymbol.Name} ({string.Join(',', parametersCall)});")
+                            SetAggrigator((methodSymbol.ReturnsVoid?"":"return ")+$"{mixinVariableName}.{methodSymbol.Name} ({string.Join(",", parametersCall)});")
                             
 
                         });

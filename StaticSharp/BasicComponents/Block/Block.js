@@ -27,7 +27,7 @@ function CalcOffset(container, child, sideName) {
 
 function Block(element) {
 
-    Hierarchical(element)
+    BaseModifier(element)
 
     element.isBlock = true
     element.Reactive = {

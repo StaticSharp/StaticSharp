@@ -19,52 +19,46 @@ namespace StaticSharp.Alpha {
             [CallerLineNumber] int callerLineNumber = 0) {
 
             return new Paragraph(text, callerFilePath, callerLineNumber) {
-                Bindings = {
-                    FontSize = e=>fontSize,
-                },
-                Modifiers = {
-                    new Modifier(callerFilePath,callerLineNumber) {
-                        FontStyle = new FontStyle(fontWeight)
-                    }
-                }
+                FontSize = fontSize,
+                FontStyle = new FontStyle(fontWeight),
             };
         }
-        public static IBlock H1(
+        public static Paragraph H1(
             string text,
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0
             ) {
             return HX(text,96,FontWeight.ExtraLight, callerFilePath,callerLineNumber);
         }
-        public static IBlock H2(
+        public static Paragraph H2(
             string text,
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0
             ) {
             return HX(text, 60, FontWeight.Light, callerFilePath, callerLineNumber);
         }
-        public static IBlock H3(
+        public static Paragraph H3(
             string text,
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0
             ) {
             return HX(text, 48, FontWeight.Regular, callerFilePath, callerLineNumber);
         }
-        public static IBlock H4(
+        public static Paragraph H4(
             string text,
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0
             ) {
             return HX(text, 34, FontWeight.Medium, callerFilePath, callerLineNumber);
         }
-        public static IBlock H5(
+        public static Paragraph H5(
             string text,
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0
             ) {
             return HX(text, 24, FontWeight.SemiBold, callerFilePath, callerLineNumber);
         }
-        public static IBlock H6(
+        public static Paragraph H6(
             string text,
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0

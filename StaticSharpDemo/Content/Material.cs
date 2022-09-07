@@ -5,35 +5,25 @@ using System.Runtime.CompilerServices;
 namespace StaticSharpDemo.Root {
     public partial class Material : StaticSharp.Material {
 
-        protected override void SetupBundings(MaterialBindings<MaterialJs> bindings) {
-            base.SetupBundings(bindings);
-            bindings.ContentWidth = e => 960;// (e.WindowWidth > 960) ? 960 : 640;
+        protected override void Setup() {
+            base.Setup();
+            ContentWidth = 960;// (e.WindowWidth > 960) ? 960 : 640;
         }
         public override IBlock LeftSideBar => new Column() {
 
-            Modifiers = {
-                new Modifier() {
-                    Bindings = {
-                        BackgroundColor = e=>Color.FromArgb(255,0xA0,0x70,0x30),
-                    }
-                }
-            },
+
+            BackgroundColor = Color.FromArgb(255, 0xA0, 0x70, 0x30),
+
 
             Children = {
                 "Menu Item 1",
                 "Menu item 2",
                 new Space(){
-                    Bindings = {
-                        Between = e=>1
-                    }
+                    Between = 1
                 },
 
-                new Paragraph(){
+                new Paragraph("Social links"){
                     ["Width"] = "() => element.LayoutWidth",
-                    Children = {
-                        "Social links"
-                    }
-
                 }
             }
 
@@ -45,58 +35,53 @@ namespace StaticSharpDemo.Root {
             [CallerLineNumber] int callerLineNumber = 0
             ) {
             var paragraph = new Paragraph(text, callerFilePath, callerLineNumber) {
-                Bindings = {
-                    FontSize = e=>18,
-                },
-                Modifiers = {
-                    new Modifier(callerFilePath, callerLineNumber) {
-                        FontStyle = new FontStyle(FontWeight.Bold)
-                    }
-                }
+                FontSize = 18,
+                FontStyle = new FontStyle(FontWeight.Bold)
             };
             return paragraph;
         }
 
         public override IBlock? Footer => new Row {
-            Modifiers = {
-                new Modifier(){ 
-                    Bindings = { 
-                        BackgroundColor = e=>Color.Black,
-                    }
-                }
-            },
-            Bindings = {
-                X = e=> -e.ParentBlock.MarginLeft,
 
-                Width = e=>e.ParentBlock.Width + e.ParentBlock.MarginLeft + e.ParentBlock.MarginRight,
+            BackgroundColor = Color.Black,
 
-                PaddingTop = e=>20,
-                PaddingBottom = e=>20,
+            X = new(e => -e.ParentBlock.MarginLeft),
 
-                PaddingLeft = e => e.ParentBlock.MarginLeft,
-                PaddingRight = e => e.ParentBlock.MarginRight,
-            },
+            Width = new(e => e.ParentBlock.Width + e.ParentBlock.MarginLeft + e.ParentBlock.MarginRight),
+
+            PaddingTop = 20,
+            PaddingBottom = 20,
+
+            PaddingLeft = new(e => e.ParentBlock.MarginLeft),
+            PaddingRight = new(e => e.ParentBlock.MarginRight),
+
 
             Children = {
 
                 new Blocks(){
                     new Space(float.Epsilon,1,float.Epsilon),
                     new Column{
-                        FooterTitle("Links"),
-                        "тут будут ссылки"
+                        Children = {
+                            FooterTitle("Links"),
+                            "тут будут ссылки"
+                        }
                     },
                     new Space(float.Epsilon,1,float.Epsilon),
                     new Column{
-                        FooterTitle("Column 2"),
-                        "тут будут еще ссылки"
+                        Children = {
+                            FooterTitle("Column 2"),
+                            "тут будут еще ссылки"
+                        }
 
                     },
                     new Space(float.Epsilon,1,float.Epsilon),
                     new Column{
-                        FooterTitle("Column 3"),
-                        "и тут будут ссылки",
-                        "line 2",
-                        "line 3"
+                        Children = {
+                            FooterTitle("Column 3"),
+                            "и тут будут ссылки",
+                            "line 2",
+                            "line 3"
+                        }
                     },
                     new Space(float.Epsilon,1,float.Epsilon),
 
@@ -104,17 +89,17 @@ namespace StaticSharpDemo.Root {
                 }.Modify(x=>{
                     foreach (var c in x.Values.OfType<Column>()){
 
-                        c.Bindings.MarginLeft = e=> 10;
-                        c.Bindings.MarginRight = e=> 10;
-                        c.Bindings.MarginTop = e=> 20;
-                        c.Bindings.MarginBottom = e=> 20;
+                        c.MarginLeft = 10;
+                        c.MarginRight = 10;
+                        c.MarginTop = 20;
+                        c.MarginBottom = 20;
 
                         c.Children.Values.OfType<Block>().First().Modify(x=>{
-                            x.Bindings.MarginTop = e=> 0;
+                            x.MarginTop = 0;
                         });
 
                         c.Children.Values.OfType<Block>().Last().Modify(x=>{
-                            x.Bindings.MarginBottom = e=> 0;
+                            x.MarginBottom = 0;
                         });
 
                         /*foreach (var b in c.Children.Values.OfType<Block>()){

@@ -10,23 +10,20 @@ namespace StaticSharp {
 
     namespace Gears {
         [System.Diagnostics.DebuggerNonUserCode]
-        public class FlipperJs : BlockJs {
+        public class FlipperJs : MBlockJs {
             //public float Before => throw new NotEvaluatableException();
         }
 
 
 
-        public class FlipperBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
-            public FlipperBindings(Dictionary<string, string> properties) : base(properties) {
-            }
-            //public Expression<Func<SpaceJs, float>> Before { set { AssignProperty(value); } }
+        public class MFlipperBindings<FinalJs> : MBlockBindings<FinalJs> where FinalJs : new() {
         }
     }
 
+
+    [Mix(typeof(MFlipperBindings<FlipperJs>))]
     [RelatedScript]
     public sealed class Flipper : Block, IBlock {
-
-        public new FlipperBindings<FlipperJs> Bindings => new(Properties);
 
         protected override string TagName => "flipper";
 

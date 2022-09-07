@@ -39,13 +39,15 @@ namespace StaticSharp {
             }
         }
 
-        public static void Add<T>(this T collector, Paragraph paragraph) where T : IBlockCollector =>
-            collector.Add(null, paragraph);
+        public static void Add<T>(this T collector, Inlines inlines) where T : IBlockCollector =>
+            collector.Add(null, new Paragraph(inlines));
 
-        public static void Add<T>(this T collector, string? id, Paragraph paragraph) where T : IBlockCollector {
-            if (paragraph != null) {
+        public static void Add<T>(this T collector, string? id, Inlines inlines) where T : IBlockCollector {
+            collector.Add(id, new Paragraph(inlines));
+            /*if (paragraph != null) {
+
                 ((IBlockCollector)collector).Add(id, paragraph);                
-            }
+            }*/
         }
 
         public static void Add<T>(
@@ -54,9 +56,7 @@ namespace StaticSharp {
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0) where T : IBlockCollector {
             collector.Add(
-                new Paragraph(callerFilePath, callerLineNumber) {
-                    new Text(text, true, callerFilePath, callerLineNumber)
-                }
+                new Paragraph(text, callerFilePath, callerLineNumber)
                 //,null
                 );
         }

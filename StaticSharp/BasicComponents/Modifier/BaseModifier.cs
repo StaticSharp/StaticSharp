@@ -19,35 +19,33 @@ namespace StaticSharp {
 
     }
 
-    public class BaseModifierBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {
-        public BaseModifierBindings(Dictionary<string, string> properties) : base(properties) {}
+    public class MBaseModifierBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {
         
-        public Expression<Func<FinalJs, Color>> BackgroundColor { set { AssignProperty(value); } }
-
-        public Expression<Func<FinalJs, Color>> ForegroundColor { set { AssignProperty(value); } }
+        public Binding<Color> BackgroundColor { set { Apply(value); } }
+        public Binding<Color> ForegroundColor { set { Apply(value); } }
 
     }
 
 
     public static partial class BaseModifierStatic { // For bindings
 
-        public static T BackgroundColor<T>(this T _this, Expression<Func<BaseModifierJs, Color>> expression) where T : BaseModifier {
-            _this.Bindings.BackgroundColor = expression;
+        /*public static T BackgroundColor<T>(this T _this, Expression<Func<BaseModifierJs, Color>> expression) where T : BaseModifier {
+            _this.BackgroundColor = expression;
             return _this;
         }
         public static T BackgroundColor<T>(this T _this, Color value) where T : BaseModifier {
-            _this.Bindings.BackgroundColor = e => value;
+            _this.BackgroundColor = e => value;
             return _this;
         }
 
         public static T ForegroundColor<T>(this T _this, Expression<Func<BaseModifierJs, Color>> expression) where T : BaseModifier {
-            _this.Bindings.ForegroundColor = expression;
+            _this.ForegroundColor = expression;
             return _this;
         }
         public static T ForegroundColor<T>(this T _this, Color value) where T : BaseModifier {
-            _this.Bindings.ForegroundColor = e => value;
+            _this.ForegroundColor = e => value;
             return _this;
-        }
+        }*/
 
     }
 
@@ -90,10 +88,9 @@ namespace StaticSharp {
 
     namespace Gears {
 
+        [Mix(typeof(MBaseModifierBindings<BaseModifierJs>))]
         [RelatedScript]
-        public abstract class BaseModifier: Hierarchical {
-
-            public new BaseModifierBindings<BaseModifierJs> Bindings => new(Properties);
+        public abstract partial class BaseModifier: Hierarchical {
 
             public FontFamily[]? FontFamilies = null;
             public FontStyle? FontStyle = null;
@@ -103,8 +100,11 @@ namespace StaticSharp {
             public float? LineHeight = null;//line-height
             public float? LetterSpacing = null;//letter-spacing
 
-            public BaseModifier(string callerFilePath, int callerLineNumber)
-            : base(callerFilePath, callerLineNumber) { }
+
+            protected BaseModifier(Hierarchical other, string callerFilePath, int callerLineNumber) : base(other, callerFilePath, callerLineNumber) {
+            }
+
+            public BaseModifier(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
 
 
             /*public override void AddRequiredInclues(IIncludes includes) {

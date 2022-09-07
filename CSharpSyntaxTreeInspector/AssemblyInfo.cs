@@ -87,6 +87,11 @@ namespace Exo.CSharpSyntaxTreeInspector {
 
         private bool ParseType(SyntaxNode node, TypeContainer typeContainer) {
 
+            if (node is EnumDeclarationSyntax enumDeclarationSyntax) {
+                typeContainer.AddTypeDeclaration(enumDeclarationSyntax);
+                return true;
+            }
+
             if (node is TypeDeclarationSyntax typeDeclarationSyntax) {
                 typeContainer.AddTypeDeclaration(typeDeclarationSyntax);
                 return true;

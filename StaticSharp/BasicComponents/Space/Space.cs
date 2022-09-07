@@ -19,18 +19,17 @@ namespace StaticSharp {
 
 
         public class SpaceBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {
-            public SpaceBindings(Dictionary<string, string> properties) : base(properties) {
-            }
-            public Expression<Func<SpaceJs, float>> Before { set { AssignProperty(value); } }
-            public Expression<Func<SpaceJs, float>> Between { set { AssignProperty(value); } }
-            public Expression<Func<SpaceJs, float>> After { set { AssignProperty(value); } }
+            public Binding<float> Before { set { Apply(value); } }
+            public Binding<float> Between { set { Apply(value); } }
+            public Binding<float> After { set { Apply(value); } }
         }
     }
 
+    [Mix(typeof(SpaceBindings<SpaceJs>))]
     [RelatedScript]
-    public sealed class Space : Hierarchical, IBlock {
+    public sealed partial class Space : Hierarchical, IBlock {
 
-        public new SpaceBindings<HierarchicalJs> Bindings => new(Properties);
+
 
         protected override string TagName => "ws";
         public Space([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
@@ -38,9 +37,9 @@ namespace StaticSharp {
 
         public Space(float before, float between = 1, float after = 0, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber) {
-            if (before != 0) Bindings.Before = e => before;
-            if (between != 1) Bindings.Between = e => between;
-            if (after != 0) Bindings.After = e => after;
+            if (before != 0) Before = before;
+            if (between != 1) Between = between;
+            if (after != 0) After = after;
         }
 
         public async Task<Tag> GenerateHtmlAsync(Context context, string? id = null) {

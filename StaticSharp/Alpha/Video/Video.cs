@@ -15,7 +15,7 @@ namespace StaticSharp {
 
     namespace Gears {
         [System.Diagnostics.DebuggerNonUserCode]
-        public class VideoJs : BlockJs {
+        public class VideoJs : MBlockJs {
             public bool PreferPlatformPlayer => NotEvaluatableValue<bool>();
             public bool Controls => NotEvaluatableValue<bool>();
             public bool Play => NotEvaluatableValue<bool>();
@@ -25,31 +25,22 @@ namespace StaticSharp {
 
 
 
-        public class VideoBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
-            public VideoBindings(Dictionary<string, string> properties) : base(properties) {
-            }
-            public Expression<Func<FinalJs, bool>> PreferPlatformPlayer { set { AssignProperty(value); } }
-            public Expression<Func<FinalJs, bool>> Controls { set { AssignProperty(value); } }
-            public Expression<Func<FinalJs, bool>> Play { set { AssignProperty(value); } }
-            public Expression<Func<FinalJs, bool>> Sound { set { AssignProperty(value); } }
-            public Expression<Func<FinalJs, bool>> Loop { set { AssignProperty(value); } }
+        public class MVideoBindings<FinalJs> : MBlockBindings<FinalJs> where FinalJs : new() {
+            public Binding<bool> PreferPlatformPlayer { set { Apply(value); } }
+            public Binding<bool> Controls { set { Apply(value); } }
+            public Binding<bool> Play { set { Apply(value); } }
+            public Binding<bool> Sound { set { Apply(value); } }
+            public Binding<bool> Loop { set { Apply(value); } }
 
         }
     }
 
-    public interface IVideoJs {
-        bool PreferPlatformPlayer { set { 
-            
-            }
-        }
-    }
 
 
-
+    [Mix(typeof(MVideoBindings<VideoJs>))]
     [RelatedScript]
-    public sealed class Video : Block, IBlock , IVideoJs {
+    public sealed partial class Video : Block, IBlock  {
 
-        public new VideoBindings<VideoJs> Bindings => new(Properties);
         protected override string TagName => "player";
 
         public string Identifier { get; init; }

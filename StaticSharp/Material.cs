@@ -17,7 +17,7 @@ namespace StaticSharp {
 
     public interface IMaterial {
         string Title { get; }
-        Paragraph? Description { get; }//TODO: IPlainTextProvider
+        Inlines? Description { get; }//TODO: IPlainTextProvider
         //IImage TitleImage { get; }
     }
 
@@ -34,10 +34,9 @@ namespace StaticSharp {
 
         }
 
-        public class MaterialBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {            
-            public MaterialBindings(Dictionary<string, string> properties) : base(properties) {}
-            public Expression<Func<FinalJs, float>> ContentWidth { set { AssignProperty(value); } }
-            public Expression<Func<FinalJs, float>> FontSize { set { AssignProperty(value); } }
+        public class MMaterialBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {            
+            public Binding<float> ContentWidth { set { Apply(value); } }
+            public Binding<float> FontSize { set { Apply(value); } }
 
 
         }
@@ -45,15 +44,15 @@ namespace StaticSharp {
     }
 
 
-
+    [Mix(typeof(MMaterialBindings<MaterialJs>))]
     [RelatedScript]
     [RelatedScript("Watch")]
     [RelatedScript("Color")]
     [RelatedScript("Cookies")]
 
-    public abstract class Material : Hierarchical, IMaterial, IInline, IPage, IPlainTextProvider {
-        protected virtual void SetupBundings(MaterialBindings<MaterialJs> bindings) {
-            bindings.FontSize = e => 16;
+    public abstract partial class Material : Hierarchical, IMaterial, IInline, IPage, IPlainTextProvider {
+        protected virtual void Setup() {
+            FontSize = 16;
         }
 
         //public class TChildren : List<object> { }
@@ -65,11 +64,10 @@ namespace StaticSharp {
                 return n[(n.LastIndexOf('.') + 1)..];
             }
         }
-        public virtual Paragraph? Description => null;
+        public virtual Inlines? Description => null;
 
         public virtual Group? Content => null;
         public virtual IBlock? Footer => null;
-        public virtual int ContentWidth => 400;
 
         //public virtual RightSideBar RightSideBar => null;
         public virtual IBlock? LeftSideBar => null;
@@ -95,7 +93,7 @@ namespace StaticSharp {
 
         public async Task<string> GeneratePageHtmlAsync(Context context) {
 
-            SetupBundings(new(Properties));
+            Setup();
 
             //context.Includes.Require(new Script(AbsolutePath("StaticSharp.js")));
             context.Includes.Require(new Style(AbsolutePath("Normalization.scss")));
@@ -154,7 +152,9 @@ namespace StaticSharp {
         public static async Task<Tag> GenerateFontsAsync(Context context) {
             var fontStyle = new StringBuilder();
 
-            foreach (var i in context.Fonts.Values) {
+            var sortedFonts = context.Fonts.OrderBy(x => x.Key);
+
+            foreach (var i in sortedFonts.Select(x=>x.Value)) {
                 fontStyle.AppendLine(await i.GenerateIncludeAsync());
             }
             return new Tag("style") {
@@ -202,14 +202,15 @@ namespace StaticSharp {
             return new Tag(null) {
                 await LeftSideBar?.GenerateHtmlAsync(context,"LeftSideBar"),
 
-                await new Column() {
-                    Content,
-                    new Space(){ 
-                        Bindings = { 
-                            Between = e=>1
-                        }
-                    },
-                    Footer
+                await new Column {
+                    Children = {
+                        Content,
+                        new Space(){
+                            Between = 1
+                        },
+                        Footer
+                    }
+                    
                 }.GenerateHtmlAsync(context,"Content"),
             };
         }

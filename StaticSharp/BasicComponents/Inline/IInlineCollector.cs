@@ -11,11 +11,13 @@ namespace StaticSharp {
 
     public static class InlineCollectorStatic {
 
-        public static void Add<T>(this T collector, Paragraph paragraph) where T : IInlineCollector {
+        /*public static void Add<T>(this T collector, Paragraph paragraph) where T : IInlineCollector {
             if (paragraph != null) {
-                collector.Add(paragraph);
+                foreach (var i in paragraph.Children) {
+                    collector.Add(i);
+                }                
             }
-        }
+        }*/
 
         public static void Add<T>(this T collector, IInline? value) where T : IInlineCollector {
             collector.Add(null, value);

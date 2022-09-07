@@ -25,17 +25,50 @@ namespace StaticSharp {
         }
 
 
-        public class ReactiveBindings<FinalJs> where FinalJs : new() {
-            private Dictionary<string, string> Properties;
-            protected void AssignProperty<J, T>(Expression<Func<J, T>> expression, [System.Runtime.CompilerServices.CallerMemberName] string memberName = "") where J : new() {
-                
-                Properties[memberName] = new BindingScriptifier(expression, new J()).Eval();
+        
 
-                
-                
+
+
+        public class MBindings<FinalJs> where FinalJs : new() {
+            public class Binding<T> : IVoidEnumerable {
+
+                private T? Value;
+                private Expression<Func<FinalJs, T>>? Expression;
+
+                public Binding(Expression<Func<FinalJs, T>> expression) {
+                    Expression = expression;
+                }
+                public Binding(T value) {
+                    Value = value;
+                }
+
+                public static implicit operator Binding<T>(T value) {
+                    return new Binding<T>(value);
+                }
+                public string CreateScriptExpression() {
+                    if (Expression != null) {
+                        return new BindingScriptifier(Expression, new FinalJs()).Eval();
+                    }
+                    return Static.ObjectToJsValue(Value);
+                }
             }
-            public ReactiveBindings(Dictionary<string, string> properties) {
-                Properties = properties;
+
+            protected void Apply<T>(Binding<T> binding, [System.Runtime.CompilerServices.CallerMemberName] string memberName = "") {
+                var aggregator = (Aggregator.Current as Reactive);
+                if (aggregator == null)
+                    throw new InvalidOperationException($"{nameof(MBindings<FinalJs>)} must be aggregated into {nameof(Reactive)} only");
+
+                aggregator.Properties[memberName] = binding.CreateScriptExpression();
+            }
+
+
+            protected void AssignProperty<J, T>(Expression<Func<J, T>> expression, [System.Runtime.CompilerServices.CallerMemberName] string memberName = "") where J : new() {
+                var aggregator = (Aggregator.Current as Reactive);
+                if (aggregator == null)
+                    throw new InvalidOperationException($"{nameof(MBindings<FinalJs>)} must be aggregated into {nameof(Reactive)} only");
+
+                aggregator.Properties[memberName] = new BindingScriptifier(expression, new J()).Eval();
+               
             }
         }
 
@@ -47,7 +80,6 @@ namespace StaticSharp {
         public abstract class Reactive : CallerInfo {
             public Dictionary<string, string> Properties { get; } = new();
 
-            public ReactiveBindings<ReactiveJs> Bindings => new(Properties);
 
             public string this[string propertyName] {
                 get {
@@ -81,7 +113,7 @@ namespace StaticSharp {
                 foreach (var i in GetBaseTypes()) {
                     var attributes = i.GetCustomAttributes<RelatedScriptAttribute>(false);
                     foreach (var attribute in attributes) {
-                        if (attribute.FileName == null) { // Script for class. Not editional
+                        if (attribute.FileName == null) { // Script for class. Not aditional
                             return i.Name;
                         }
                     }

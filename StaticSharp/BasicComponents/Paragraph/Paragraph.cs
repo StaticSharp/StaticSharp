@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     [RelatedScript]
-    [InterpolatedStringHandler]
-    public class Paragraph : Block, IInline, IInlineCollector {
+    
+    public class Paragraph : Block {
         protected override string TagName => "paragraph";
-        protected List<KeyValuePair<string?, IInline>> children { get; } = new();
-        public Paragraph Children => this;
+        //protected List<KeyValuePair<string?, IInline>> children { get; } = new();
+        public Inlines Children { get; } = new();
 
 
         /*public static implicit operator Paragraph(string text) {
@@ -23,33 +23,28 @@ namespace StaticSharp {
             paragraph.AppendLiteral(text, callerFilePath, callerLineNumber);
             return paragraph;
         }*/
-
-        public Paragraph(string text,
-            [CallerFilePath] string callerFilePath = "",
-            [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
-            AppendLiteral(text, callerFilePath, callerLineNumber);
-        }
-
         public Paragraph(Paragraph other,
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0) : base(other, callerFilePath, callerLineNumber) {
 
-            children = new(other.children);
+            Children = new(other.Children);
         }
 
-        public Paragraph(
-            int literalLength,
-            int formattedCount,
+
+
+        public Paragraph(string text,
             [CallerFilePath] string callerFilePath = "",
-            [CallerLineNumber] int callerLineNumber = 0)
-            : base(callerFilePath, callerLineNumber) {
+            [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
+            Children.AppendLiteral(text, callerFilePath, callerLineNumber);
         }
 
-        public Paragraph(
+        public Paragraph(Inlines inlines,
             [CallerFilePath] string callerFilePath = "",
-            [CallerLineNumber] int callerLineNumber = 0)
-            : base(callerFilePath, callerLineNumber) {
+            [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
+            Children = new(inlines);
         }
+
+
 
         /*public void Add(IInline? value) {
             if (value != null) {
@@ -62,64 +57,32 @@ namespace StaticSharp {
             Add(new Text(value, true, callerFilePath, callerLineNumber));
         }*/
 
-        public void AppendLiteral(string value,
-            [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
 
-            this.Add(new Text(value, true, callerFilePath, callerLineNumber));
-        }
 
-        public void AppendFormatted(string value,
-            [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
 
-            this.Add(new Text(value, false, callerFilePath, callerLineNumber));
-        }
 
-        public void AppendFormatted(IInline value, string? format = null) {
-            string? id = null;
-            if (format != null) {
-                if (format.StartsWith("##")) {
-                    format = format.Substring(1);
-                } else {
-                    if (format.StartsWith("#")) {
-                        var separatorSpacePosition = format.IndexOf(' ');
-                        if (separatorSpacePosition > 0) {
-                            id = format.Substring(1, separatorSpacePosition-1);
-                            format = format.Substring(separatorSpacePosition + 1);
-                        } else {
-                            id = format;
-                            format = null;
-                        }
-                    }
-                }
-            }
 
-            this.Add(id, value);
-        }
-        public void AppendFormatted<T>(T t) where T : struct {
-            //TODO: inplement
-            //Console.WriteLine($"\tAppendFormatted called: {{{t}}} is of type {typeof(T)}");
-        }
 
-        public void Add(string? id, IInline? value) {
+        /*public void Add(string? id, IInline? value) {
             if (value != null) {
                 children.Add(new KeyValuePair<string?, IInline>(id, value));
             }
-        }
+        }*/
 
 
 
 
         protected override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
             return new Tag("p") {
-                    await children.Select(x=>x.Value.GenerateInlineHtmlAsync(context,x.Key)).SequentialOrParallel()
+                    await Children.Select(x=>x.Value.GenerateInlineHtmlAsync(context,x.Key)).SequentialOrParallel()
             };
         }
 
-        async Task<Tag> IInline.GenerateInlineHtmlAsync(Context context, string? id) {
+        /*async Task<Tag> IInline.GenerateInlineHtmlAsync(Context context, string? id) {
             return new Tag() {
                 await Task.WhenAll(children.Select(x=>x.Value.GenerateInlineHtmlAsync(context,x.Key)))
             };
-        }
+        }*/
 
         
     }

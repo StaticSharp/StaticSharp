@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -85,8 +86,9 @@ public abstract record Genome<TFinalGenome,TCacheable> : Genome, IGenome<TCachea
             
             return (TCacheable)(await task);
         }
-        finally {
-
+        catch (Exception e) {
+            Console.WriteLine(e);
+            throw e;
             //Cache.Unlock();
         }
 

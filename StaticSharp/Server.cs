@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
+using Microsoft.Net.Http.Headers;
 using StaticSharp.Utils;
 using StaticSharpEngine;
 using System;
@@ -14,9 +14,17 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+
+
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+
+
+
 
 namespace StaticSharp {
 
@@ -108,8 +116,8 @@ namespace StaticSharp {
                 var asset = Assets.GetByFilePath(filePath);
                 if (asset == null)
                     return;
-
-                response.Headers.ContentType = asset.MediaType;
+                var headers = HeaderDictionaryTypeExtensions.GetTypedHeaders(response);
+                headers.ContentType = new MediaTypeHeaderValue( asset.MediaType);
                 
                 /*if (asset.FileExtension == ".mp4") {
                     HandleVideoAssetsRequestAsync(request, response, routeData);
@@ -137,25 +145,41 @@ namespace StaticSharp {
             }
         }
 
-        private static async Task<JObject> ParseJsonRequest(HttpRequest request) {
-            var streamReader = new StreamReader(request.Body);
-            var body = await streamReader.ReadToEndAsync();
-            return JObject.Parse(body);
+        /*private static async Task<JObject> ParseJsonRequest(HttpRequest request) {
+            //var streamReader = new StreamReader(request.Body);
+            //var body = await streamReader.ReadToEndAsync();
+            return "";// JObject.Parse(body);
+        }*/
+
+
+        private static string ReadAllText(HttpRequest request) {
+            //TODO: Encoding
+            using (StreamReader reader = new StreamReader(request.Body, Encoding.UTF8)) {
+                return reader.ReadToEnd();
+            }
         }
+
+
 
         protected virtual async Task HandleRefreshPageAsync(HttpRequest request, HttpResponse responce, RouteData routeData) {
             //TODO: try catch
 
-           
+            //var requestText = ReadAllText(request);
 
-            var result = await ParseJsonRequest(request);
-            var page = FindPage(result["location"]?.ToString());
+            var headers = HeaderDictionaryTypeExtensions.GetTypedHeaders(request);
+            var path = headers.Referer.LocalPath;
+            var pageHash = headers.Cookie.First(x => x.Name == "pageKey")?.Value.Value;
+
+            var page = FindPage(path);
             if (page == null) { return; }            
-            var html = await page.GeneratePageHtmlAsync(CreateContext(request));           
+            var html = await page.GeneratePageHtmlAsync(CreateContext(request));
 
-            await responce.WriteAsync((html.ToHashString() != result[_pageKey].ToString()).ToString().ToLower());
+            var newPageHash = html.ToHashString();
+            if (newPageHash != pageHash) {
+                Console.WriteLine("Page changed.");
+            }
 
-            
+            await responce.WriteAsync((newPageHash != pageHash).ToString().ToLower());            
         }
 
 
@@ -169,18 +193,19 @@ namespace StaticSharp {
         }*/
 
         protected virtual async Task FindVisualStudio(HttpRequest request, HttpResponse response, RouteData routeData) {
-            var jsonBody = await ParseJsonRequest(request);
+            /*var jsonBody = await ParseJsonRequest(request);
             StaticSharp.Gears.VisualStudio.Open(jsonBody["file"].ToString(), int.Parse(jsonBody["line"].ToString()));
-            await response.WriteAsync("true");
+            await response.WriteAsync("true");*/
         }
 
         public async Task RunAsync() {
-            _host = WebHost.CreateDefaultBuilder().ConfigureServices(x =>
-                x.AddLogging(builder =>
-                    builder.AddFilter("Microsoft", LogLevel.Warning)
-                        .AddFilter("System", LogLevel.Warning)
-                        //.AddFilter("NToastNotify", LogLevel.Warning)
-                        .AddConsole()))
+            _host = WebHost.CreateDefaultBuilder().ConfigureServices(
+                x => {
+                    x.AddRouting();
+                    x.AddLogging(builder => builder.AddFilter("Microsoft", LogLevel.Warning).AddFilter("System", LogLevel.Warning).AddConsole());
+                    
+                }
+                )
              .Configure(app => app
                 //.UseExceptionHandler("/error")
                 .UseExceptionHandler(a => a.Run(async c => {

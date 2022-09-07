@@ -13,17 +13,16 @@ namespace StaticSharp {
             public string Id => NotEvaluatableValue<String>();
             public HierarchicalJs Parent => NotEvaluatableObject<HierarchicalJs>();
 
-            public BlockJs ParentBlock => NotEvaluatableObject<BlockJs>();
+            public MBlockJs ParentBlock => NotEvaluatableObject<MBlockJs>();
 
-            public T Sibling<T>(string id) where T : HierarchicalJs, new() => NotEvaluatableObject<T>();
+            public T Sibling<T>(string id) where T :  new() => NotEvaluatableObject<T>();
             public HierarchicalJs Sibling(string id) => NotEvaluatableObject<HierarchicalJs>();
-            public T Child<T>(string id) where T : HierarchicalJs, new() => NotEvaluatableObject<T>();
+            public T Child<T>(string id) where T :  new() => NotEvaluatableObject<T>();
 
         }
 
-        public class HierarchicalBindings<FinalJs> : ReactiveBindings<FinalJs> where FinalJs : new() {
-            public HierarchicalBindings(Dictionary<string, string> properties) : base(properties) {
-            }
+        public class HierarchicalBindings<FinalJs> : MBindings<FinalJs> where FinalJs : new() {
+
         }
 
     }
@@ -32,13 +31,12 @@ namespace StaticSharp {
     [RelatedScript]
     public abstract class Hierarchical : Reactive {
 
-        public new HierarchicalBindings<HierarchicalJs> Bindings => new(Properties);
         protected virtual string TagName => "div";
         
         
         protected Hierarchical(Hierarchical other,
-            string callerFilePath = "",
-            int callerLineNumber = 0) : base(other, callerFilePath, callerLineNumber) {
+            string callerFilePath,
+            int callerLineNumber) : base(other, callerFilePath, callerLineNumber) {
 
             
         }

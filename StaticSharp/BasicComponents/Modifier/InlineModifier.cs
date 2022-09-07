@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
+
     public sealed class InlineModifier : BaseModifier, IInline, IInlineCollector {
 
         private List<KeyValuePair<string?, IInline>> children { get; } = new();
