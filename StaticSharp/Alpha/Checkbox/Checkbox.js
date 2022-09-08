@@ -1,6 +1,5 @@
 
 function Checkbox(element) {
-    Block(element)
 
     console.log("Checkbox")
 
@@ -21,12 +20,7 @@ function Checkbox(element) {
         }
     })
 
-    new Reaction(() => {
-        element.input.style.width = element.Width+"px"
-    })
-    new Reaction(() => {
-        element.input.style.height = element.Height + "px"
-    })
+    
     new Reaction(() => {
         element.input.min = element.Min
     })
@@ -37,6 +31,4 @@ function Checkbox(element) {
         element.input.step = element.Step <= 0 ? "any" : element.Step
     })
 
-    WidthToStyle(element)
-    HeightToStyle(element)
 }

@@ -45,10 +45,10 @@ namespace StaticSharp {
 
 
     [Mix(typeof(MMaterialBindings<MaterialJs>))]
-    [RelatedScript]
-    [RelatedScript("Watch")]
-    [RelatedScript("Color")]
-    [RelatedScript("Cookies")]
+    [ConstructorJs]
+    [ConstructorJs("Watch")]
+    [ConstructorJs("Color")]
+    [ConstructorJs("Cookies")]
 
     public abstract partial class Material : Hierarchical, IMaterial, IInline, IPage, IPlainTextProvider {
         protected virtual void Setup() {

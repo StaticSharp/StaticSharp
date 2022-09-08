@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     [System.Diagnostics.DebuggerNonUserCode]
-    public class SliderJs : MBlockJs {
+    public class SliderJs : BlockJs {
         public float Min =>     NotEvaluatableValue<float>();
         public float Max =>     NotEvaluatableValue<float>();
         public float Step =>    NotEvaluatableValue<float>();
@@ -17,7 +17,7 @@ namespace StaticSharp {
     }
 
 
-    public class MSliderBindings<FinalJs> : MBlockBindings<FinalJs> where FinalJs : new() {
+    public class MSliderBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
 
         public Binding<float> Min { set { Apply(value); } }
         public Binding<float> Max { set { Apply(value); } }
@@ -30,7 +30,7 @@ namespace StaticSharp {
 
     [Mix(typeof(MSliderBindings<SliderJs>))]
 
-    [RelatedScript]
+    [ConstructorJs]
     public partial class Slider : Block {
 
         protected override string TagName => "slider";

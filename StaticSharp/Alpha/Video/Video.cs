@@ -15,7 +15,7 @@ namespace StaticSharp {
 
     namespace Gears {
         [System.Diagnostics.DebuggerNonUserCode]
-        public class VideoJs : MBlockJs {
+        public class VideoJs : BlockJs {
             public bool PreferPlatformPlayer => NotEvaluatableValue<bool>();
             public bool Controls => NotEvaluatableValue<bool>();
             public bool Play => NotEvaluatableValue<bool>();
@@ -25,7 +25,7 @@ namespace StaticSharp {
 
 
 
-        public class MVideoBindings<FinalJs> : MBlockBindings<FinalJs> where FinalJs : new() {
+        public class MVideoBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
             public Binding<bool> PreferPlatformPlayer { set { Apply(value); } }
             public Binding<bool> Controls { set { Apply(value); } }
             public Binding<bool> Play { set { Apply(value); } }
@@ -38,7 +38,7 @@ namespace StaticSharp {
 
 
     [Mix(typeof(MVideoBindings<VideoJs>))]
-    [RelatedScript]
+    [ConstructorJs]
     public sealed partial class Video : Block, IBlock  {
 
         protected override string TagName => "player";

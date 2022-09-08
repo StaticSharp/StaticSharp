@@ -32,6 +32,7 @@ namespace StaticSharpDemo.Root {
         public Link GithubUrl(string text = "GitHub repository") {
             return new Link {
                 HRef = "https://github.com/antilatency/Antilatency.Copilot",
+                NewTab = true,
                 ForegroundColor = Color.FromArgb(172, 196, 53),
                 Children = {
                     text
@@ -52,24 +53,23 @@ namespace StaticSharpDemo.Root {
 
         public override Group? Content => new() {
 
-            
-            $"Text {new CheckboxInline():#play Play}",
 
 
             new Video("T4TEdzSLyi0"){
-                PreferPlatformPlayer = new (e=>e.Sibling("videoProperties").Child<MCheckboxJs>("play").Value)                
+                Play = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("play").Value),
+                Sound = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("sound").Value),
+            },            
+            
+
+            {"videoProperties",
+                $"""
+                {new CheckboxInline():#play Play}
+                {new CheckboxInline():#sound Sound}                
+                """            
             },
 
-            {"videoProperties", $"{new CheckboxInline():#play Play}" },
 
-            new CheckboxBlock(){
-                O = new(e=>e.Enabled?1:0),
 
-                Value = true,
-                
-            },
-
-            //new Image(new HttpRequestGenome("https://upload.wikimedia.org/wikipedia/commons/4/49/Koala_climbing_tree.jpg")),
 
 
             new Column(){
@@ -77,7 +77,8 @@ namespace StaticSharpDemo.Root {
                 
                 
 
-                Children = {                   
+                Children = {
+
                     $"Refer to {GithubUrl()} for more information, and join our {DiscordUrl()} to learn more about getting early access to Copilot.",
                     
                     new Flipper() {
@@ -99,11 +100,6 @@ namespace StaticSharpDemo.Root {
                         },
                         Second = new Image(new FileGenome(AbsolutePath("Copilot/SchemeDark.svg"))){
                             Embed = Image.TEmbed.Image,
-
-                            /*Bindings = {
-                                MarginLeft = e=>10,
-                                MarginRight = e=>10,
-                            }*/
                         }
                     }
                 }

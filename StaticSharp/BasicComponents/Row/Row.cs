@@ -11,7 +11,7 @@ namespace StaticSharp {
 
 
 
-    [RelatedScript]
+    [ConstructorJs]
     public class Row : Block {
         protected override string TagName => "row";
         public Blocks Children { get; } = new();

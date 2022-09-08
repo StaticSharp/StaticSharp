@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
 
-    [RelatedScript]
+    [ConstructorJs]
     public class Column : Block {
         protected override string TagName => "column";
         public Blocks Children { get; } = new();

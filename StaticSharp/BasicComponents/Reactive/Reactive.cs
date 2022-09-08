@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.FileProviders;
-using StaticSharp.Gears;
+using StaticSharp.Core;
 using StaticSharp.Html;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
-    
+
 
     namespace Gears {
 
@@ -29,7 +29,7 @@ namespace StaticSharp {
 
 
 
-        public class MBindings<FinalJs> where FinalJs : new() {
+        public class Bindings<FinalJs> where FinalJs : new() {
             public class Binding<T> : IVoidEnumerable {
 
                 private T? Value;
@@ -56,7 +56,7 @@ namespace StaticSharp {
             protected void Apply<T>(Binding<T> binding, [System.Runtime.CompilerServices.CallerMemberName] string memberName = "") {
                 var aggregator = (Aggregator.Current as Reactive);
                 if (aggregator == null)
-                    throw new InvalidOperationException($"{nameof(MBindings<FinalJs>)} must be aggregated into {nameof(Reactive)} only");
+                    throw new InvalidOperationException($"{nameof(Bindings<FinalJs>)} must be aggregated into {nameof(Reactive)} only");
 
                 aggregator.Properties[memberName] = binding.CreateScriptExpression();
             }
@@ -65,18 +65,18 @@ namespace StaticSharp {
             protected void AssignProperty<J, T>(Expression<Func<J, T>> expression, [System.Runtime.CompilerServices.CallerMemberName] string memberName = "") where J : new() {
                 var aggregator = (Aggregator.Current as Reactive);
                 if (aggregator == null)
-                    throw new InvalidOperationException($"{nameof(MBindings<FinalJs>)} must be aggregated into {nameof(Reactive)} only");
+                    throw new InvalidOperationException($"{nameof(Bindings<FinalJs>)} must be aggregated into {nameof(Reactive)} only");
 
                 aggregator.Properties[memberName] = new BindingScriptifier(expression, new J()).Eval();
                
             }
         }
 
-        [RelatedScript("ReactiveUtils")]
-        [RelatedScript("Math")]
-        [RelatedScript("Constants")]
-        [RelatedScript("Constructor")]
-        [RelatedScript("Bindings")]
+        [ConstructorJs("ReactiveUtils")]
+        [ConstructorJs("Math")]
+        [ConstructorJs("Constants")]
+        [ConstructorJs("Constructor")]
+        [ConstructorJs("Bindings")]
         public abstract class Reactive : CallerInfo {
             public Dictionary<string, string> Properties { get; } = new();
 
@@ -111,7 +111,7 @@ namespace StaticSharp {
 
             string FindScriptRoot() {
                 foreach (var i in GetBaseTypes()) {
-                    var attributes = i.GetCustomAttributes<RelatedScriptAttribute>(false);
+                    var attributes = i.GetCustomAttributes<ConstructorJsAttribute>(false);
                     foreach (var attribute in attributes) {
                         if (attribute.FileName == null) { // Script for class. Not aditional
                             return i.Name;
@@ -140,7 +140,7 @@ namespace StaticSharp {
                 }
 
                 var assembly = type.Assembly;
-                var scriptsAttributes = type.GetCustomAttributes<RelatedScriptAttribute>(false);
+                var scriptsAttributes = type.GetCustomAttributes<ConstructorJsAttribute>(false);
                 var typeName = type.Name;
 
                 foreach (var i in scriptsAttributes) {
@@ -201,56 +201,10 @@ namespace StaticSharp {
                 };
             }
 
-            /*public Tag CreateScriptBefore() {
-                var className = FindScriptRoot<ScriptBeforeAttribute>(GetType());
-                    return new Tag("script") {
-                    new PureHtmlNode($"ConstructorBefore(\"{className}\")")
-                };
-            }
-
-            public Tag CreateScriptAfter() {
-                var className = FindScriptRoot<ScriptAfterAttribute>(GetType());
-                return new Tag("script") {
-                    new PureHtmlNode($"ConstructorAfter(\"{className}\")")
-                };
-            }*/
-
-
-            /*public IEnumerable<KeyValuePair<string,string>> GetBindings() {
-
-                foreach (var i in GetType().GetProperties()) {
-                    //MethodInfo? getter = i.GetGetMethod(nonPublic: true);
-                    if (i.CanRead) {
-                        if (i.PropertyType.IsGenericType) {
-                            if (i.PropertyType.GetGenericTypeDefinition() == typeof(Binding<>)) {
-                                var value = i.GetValue(this)?.ToString();
-                                if (value != null) {
-                                    yield return new KeyValuePair<string, string>(i.Name, value);
-                                }
-                            }
-                        }
-                    }
-                }
-            }*/
-
             public virtual IAsyncEnumerable<KeyValuePair<string, string>> GetGeneratedBundingsAsync() {
                 return AsyncEnumerable.Empty<KeyValuePair<string, string>>();
             }
 
-            private async Task<string> CombineGeneratedBindingsAsync() {
-                var generatedBundings = await GetGeneratedBundingsAsync().ToArrayAsync();
-                return string.Join(',', generatedBundings.Select(x => $"{x.Key}:{x.Value}"));
-            }
-
-            /*public string PropertiesInitializers() {
-                var bindings = GetBindings().ToArray();
-
-
-                if (bindings.Length == 0)
-                    return "";
-
-                return string.Join(',', bindings.Select(x=>$"{x.Key}:{x.Value}"));
-            }*/
 
         }
     }

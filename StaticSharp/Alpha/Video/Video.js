@@ -86,7 +86,9 @@ function Video(element) {
 
 
 
-
+    new Reaction(() => {
+        console.log(element.Play)
+    })
 
 
     /*
@@ -191,8 +193,8 @@ function Video(element) {
 
 
     new Reaction(() => {
-
-        console.log(element.Parent.Sibling("videoProperties"))
+        console.log("element._ ", element.__Play)
+        console.log(element.Sibling("videoProperties").Child("play").Value)
 
         if (element.PreferPlatformPlayer) {
             if (element.dataset.youtubeId !== undefined) {

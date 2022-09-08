@@ -1,5 +1,5 @@
 function Link(element) {
-    BaseModifier(element)
+    Inline(element)
 
     element.Reactive = {
         HRef: undefined,

@@ -13,13 +13,13 @@ namespace StaticSharp {
         public bool NewTab => NotEvaluatableValue<bool>();
     }
 
-    public class MLinkBindings<FinalJs> : MBaseModifierBindings<FinalJs> where FinalJs : new() {
+    public class LinkBindings<FinalJs> : BaseModifierBindings<FinalJs> where FinalJs : new() {
         public Binding<string> HRef { set { Apply(value); } }
         public Binding<bool> NewTab { set { Apply(value); } }
     }
 
-    [Mix(typeof(MLinkBindings<LinkJs>))]
-    [RelatedScript]
+    [Mix(typeof(LinkBindings<LinkJs>))]
+    [ConstructorJs]
     public partial class Link : Inline {
         protected override string TagName => "a";
 

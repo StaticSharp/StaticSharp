@@ -19,7 +19,7 @@ namespace StaticSharp {
 
     }
 
-    public class MBaseModifierBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {
+    public class BaseModifierBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {
         
         public Binding<Color> BackgroundColor { set { Apply(value); } }
         public Binding<Color> ForegroundColor { set { Apply(value); } }
@@ -88,8 +88,8 @@ namespace StaticSharp {
 
     namespace Gears {
 
-        [Mix(typeof(MBaseModifierBindings<BaseModifierJs>))]
-        [RelatedScript]
+        [Mix(typeof(BaseModifierBindings<BaseModifierJs>))]
+        [ConstructorJs]
         public abstract partial class BaseModifier: Hierarchical {
 
             public FontFamily[]? FontFamilies = null;

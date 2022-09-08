@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    [RelatedScript]
+    [ConstructorJs]
     
     public class Paragraph : Block {
         protected override string TagName => "paragraph";

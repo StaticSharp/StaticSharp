@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    [RelatedScript]
+    [ConstructorJs]
     public sealed  class Modifier : BaseModifier {
         public Modifier([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber) { }

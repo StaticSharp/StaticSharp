@@ -16,20 +16,4 @@ function Constructor(name) {
     var element = _deleteScript()
     _call(name, element)
     return element;
-    /*try {
-        eval(script)
-    } catch (e) {
-        console.error(script, "\n", e)
-    }*/
 }
-/*
-function ConstructorBefore(name) {
-    var element = _deleteScript()
-    _call(name + "Before", element)
-}
-
-
-function ConstructorAfter(name) {
-    var element = _deleteScript()
-    _call(name + "After", element)
-}*/

@@ -15,7 +15,7 @@ namespace StaticSharp {
     }*/
 
 
-    [RelatedScript]
+    [ConstructorJs]
 
     public class Template : Block {
         protected IGenome<IAsset> assetGenome { get; }

@@ -26,7 +26,7 @@ namespace StaticSharp {
     }
 
     [Mix(typeof(SpaceBindings<SpaceJs>))]
-    [RelatedScript]
+    [ConstructorJs]
     public sealed partial class Space : Hierarchical, IBlock {
 
 

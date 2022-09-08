@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace StaticSharp.Gears{
 
-
+    [ConstructorJs]
     public partial class Inline : BaseModifier, IInline {
         public Inline(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) {
         }

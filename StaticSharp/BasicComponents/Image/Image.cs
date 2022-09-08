@@ -13,12 +13,12 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     namespace Gears {
-        public class ImageJs : MBlockJs {
+        public class ImageJs : BlockJs {
 
         }
     }
 
-    [RelatedScript]
+    [ConstructorJs]
     public class Image : Block {
 
         public enum TEmbed { 
