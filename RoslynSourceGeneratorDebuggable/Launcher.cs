@@ -103,7 +103,7 @@ namespace Exo.RoslynSourceGeneratorDebuggable {
                 generator.Execute(executionContext);
 
                 foreach (var r in executionContext.Results) {
-                    var outputPath = Path.Combine(outputDirectory, r.Key + ".cs");
+                    var outputPath = Path.Combine(outputDirectory, r.Key);
                     filesToDelete.Remove(outputPath);
                     File.WriteAllText(outputPath, r.Value);
                 }

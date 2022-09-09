@@ -95,9 +95,9 @@
 		<ProjectReference Include="..\MixinGenerator\MixinGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
 	</ItemGroup>
 
-	<!--<ItemGroup>
+	<ItemGroup Condition="$(UseDebugGeneratorOutput)">
 		<ProjectReference Include="..\MixinGenerator\MixinGenerator.csproj" />
-	</ItemGroup>-->
+	</ItemGroup>
 
 	
 	

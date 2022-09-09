@@ -30,9 +30,9 @@ namespace StaticSharp {
         public Link(Link other, string callerFilePath, int callerLineNumber) : base(other, callerFilePath, callerLineNumber) {
         }
 
-        protected override async Task<Tag?> GenerateInlineHtmlInternalAsync(Context context, Tag elementTag) {
+        protected override async Task<Tag?> GenerateInlineHtmlInternalAsync(Context context, Tag elementTag, string? format) {
             return new Tag() {
-                await Children.Select(x=> x.Value.GenerateInlineHtmlAsync(context,x.Key)).SequentialOrParallel(),
+                await Children.Select(x=> x.Value.GenerateInlineHtmlAsync(context, x.Id, x.Format)).SequentialOrParallel(),
             };
         }
 

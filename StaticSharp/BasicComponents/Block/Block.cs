@@ -30,8 +30,6 @@ namespace StaticSharp {
 
     namespace Gears {
         public class BlockBindings<FinalJs> : BaseModifierBindings<FinalJs> where FinalJs : new() {
-
-            public Binding<float> O {set {Apply(value);}}
             public Binding<float> X { set { Apply(value); } }
             public Binding<float> Y { set { Apply(value); } }
             public Binding<float> Width { set { Apply(value); } }

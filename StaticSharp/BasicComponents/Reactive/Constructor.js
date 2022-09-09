@@ -5,15 +5,10 @@ function _deleteScript() {
     return parent
 }
 
-function _call(name, element) {
-    var func = window[name]
-    if (!func)
-        throw new Error(`function ${name} not found`)
-    func(element)
-}
-
-function Constructor(name) {
+function Constructor() {
     var element = _deleteScript()
-    _call(name, element)
+    for (let i of arguments) {
+        i(element)
+    }    
     return element;
 }

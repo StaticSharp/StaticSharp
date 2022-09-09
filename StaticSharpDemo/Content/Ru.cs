@@ -56,15 +56,17 @@ namespace StaticSharpDemo.Root {
 
 
             new Video("T4TEdzSLyi0"){
-                Play = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("play").Value),
-                Sound = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("sound").Value),
+                Play = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("play").InputValue),
+                Sound = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("sound").InputValue),
+                PreferPlatformPlayer = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("preferPlatformPlayer").InputValue),
             },            
             
 
             {"videoProperties",
                 $"""
-                {new CheckboxInline():#play Play}
-                {new CheckboxInline():#sound Sound}                
+                {new CheckboxInline(){ Label = { "Play" } }:#play}
+                {new CheckboxInline(){ Label = { "Sound" } }:#sound}
+                {new CheckboxInline(){ Label = { "Prefer platform player" } }:#preferPlatformPlayer}
                 """            
             },
 

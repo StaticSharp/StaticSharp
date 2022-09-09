@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace StaticSharp.Gears {
 
-    public struct Context { 
+    public class Context { 
 
         public INodeToUrl NodeToUrlConverter { get; init; }
         public Uri? NodeToUrl(INode node) { 
@@ -35,6 +35,14 @@ namespace StaticSharp.Gears {
 
         public FontFamily[] FontFamilies { get; set; } = null!;
         public FontStyle FontStyle { get; set; } = new();
+
+        private int nextIdNumber = 0;
+        public string GetUniqueId() {
+            var result = $"luid{nextIdNumber}";
+            nextIdNumber++;
+            return result;
+        }
+
 
         public Uri AddAsset(IAsset asset) {
             Assets.Add(asset);

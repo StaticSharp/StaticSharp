@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
     public interface IInline {
-        public Task<Tag> GenerateInlineHtmlAsync(Context context, string? id);
+        public Task<Tag> GenerateInlineHtmlAsync(Context context, string? id, string? format);
     }
 
 }

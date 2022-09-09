@@ -6,17 +6,30 @@ using System.Runtime.CompilerServices;
 
 namespace StaticSharp {
 
+    namespace Gears {
+        public struct InlineIdFormatValue {
+            public string? Id;
+            public string? Format;
+            public IInline Value;
+
+            public InlineIdFormatValue(string? id, string? format, IInline value) {
+                Id = id;
+                Format = format;
+                Value = value;
+            }
+        }
+    }
 
     [InterpolatedStringHandler]
-    public class Inlines : List<KeyValuePair<string?, IInline>>, IInlineCollector {
+    public class Inlines : List<InlineIdFormatValue>, IInlineCollector {
         public Inlines() : base() { }
         public Inlines(Inlines other) : base(other) { }
 
         public IEnumerable<IInline> Values => this.Select(x => x.Value);
-        public void Add(string? id, IInline? value) {
+        public void Add(string? id, string? format, IInline? value) {
             if (value != null) {
                 //base.Add(id, block);
-                Add(new KeyValuePair<string?, IInline>(id, value));
+                Add(new InlineIdFormatValue(id, format, value));
             }
         }
 
@@ -41,7 +54,8 @@ namespace StaticSharp {
 
         public void AppendFormatted(Inlines values, string? format = null) {
             foreach (var value in values) {
-                AppendFormatted(value.Value, value.Key);
+                Add(value.Id, value.Format, value.Value);
+                //AppendFormatted(value.Value, value.Key);
             }
         }
         public void AppendFormatted(IInline value, string? format = null) {
@@ -56,13 +70,13 @@ namespace StaticSharp {
                             id = format.Substring(1, separatorSpacePosition - 1);
                             format = format.Substring(separatorSpacePosition + 1);
                         } else {
-                            id = format;
+                            id = format.Substring(1);
                             format = null;
                         }
                     }
                 }
             }
-            this.Add(id, value);
+            this.Add(id, format, value);
         }
 
 

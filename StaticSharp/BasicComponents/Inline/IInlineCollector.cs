@@ -5,7 +5,7 @@ namespace StaticSharp {
 
     namespace Gears {
         public interface IInlineCollector : IVoidEnumerable {
-            void Add(string? id, IInline? value);
+            void Add(string? id, string? format, IInline? value);
         }
     }
 
@@ -20,7 +20,7 @@ namespace StaticSharp {
         }*/
 
         public static void Add<T>(this T collector, IInline? value) where T : IInlineCollector {
-            collector.Add(null, value);
+            collector.Add(null,null, value);
         }
 
         public static void Add<T>(
@@ -29,6 +29,7 @@ namespace StaticSharp {
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0) where T : IInlineCollector {
             collector.Add(
+                null,
                 null,
                 new Text(text, true, callerFilePath, callerLineNumber)
             );

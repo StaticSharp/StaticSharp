@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.FileProviders;
-using StaticSharp.Core;
+
 using StaticSharp.Html;
 using System;
 using System.Collections.Generic;
@@ -62,21 +62,13 @@ namespace StaticSharp {
             }
 
 
-            protected void AssignProperty<J, T>(Expression<Func<J, T>> expression, [System.Runtime.CompilerServices.CallerMemberName] string memberName = "") where J : new() {
-                var aggregator = (Aggregator.Current as Reactive);
-                if (aggregator == null)
-                    throw new InvalidOperationException($"{nameof(Bindings<FinalJs>)} must be aggregated into {nameof(Reactive)} only");
-
-                aggregator.Properties[memberName] = new BindingScriptifier(expression, new J()).Eval();
-               
-            }
         }
 
-        [ConstructorJs("ReactiveUtils")]
-        [ConstructorJs("Math")]
-        [ConstructorJs("Constants")]
-        [ConstructorJs("Constructor")]
-        [ConstructorJs("Bindings")]
+        [RelatedScript("ReactiveUtils")]
+        [RelatedScript("Math")]
+        [RelatedScript("Constants")]
+        [RelatedScript("Constructor")]
+        [RelatedScript("Bindings")]
         public abstract class Reactive : CallerInfo {
             public Dictionary<string, string> Properties { get; } = new();
 
@@ -109,16 +101,15 @@ namespace StaticSharp {
             //public abstract Task<Tag> GenerateHtmlAsync(Context context);
 
 
-            string FindScriptRoot() {
+            string[] FindJsConstructorsNames() {
                 foreach (var i in GetBaseTypes()) {
                     var attributes = i.GetCustomAttributes<ConstructorJsAttribute>(false);
-                    foreach (var attribute in attributes) {
-                        if (attribute.FileName == null) { // Script for class. Not aditional
-                            return i.Name;
-                        }
+                    if (attributes.Any()) {
+
+                        return attributes.Select(x=> string.IsNullOrEmpty(x.FileName)? i.Name: x.FileName).ToArray();
                     }
                 }
-                throw new Exception("There is no class in hierarchy, with related js component script");
+                throw new Exception($"{nameof(ConstructorJsAttribute)} not found for {GetType().FullName}");
             }
 
             private IEnumerable<Type> GetBaseTypes() {
@@ -140,7 +131,7 @@ namespace StaticSharp {
                 }
 
                 var assembly = type.Assembly;
-                var scriptsAttributes = type.GetCustomAttributes<ConstructorJsAttribute>(false);
+                var scriptsAttributes = type.GetCustomAttributes<RelatedScriptAttribute>(false);
                 var typeName = type.Name;
 
                 foreach (var i in scriptsAttributes) {
@@ -160,9 +151,7 @@ namespace StaticSharp {
 
                         var script = await (new AssemblyResourceGenome(assembly, relativeResourcePath)).CreateOrGetCached();
                         context.AddScript(script);
-                    }
-
-                    
+                    }                    
                 }
             }
 
@@ -183,14 +172,15 @@ namespace StaticSharp {
                 var sripts = new List<string>();
 
 
-                var className = FindScriptRoot();
+                var jsConstructorsNames = FindJsConstructorsNames();
+
 
                 var propertiesInitializers = await GetGeneratedBundingsAsync().ToListAsync();
                 propertiesInitializers.AddRange(Properties);
 
                 var propertiesInitializersScript = string.Join(',', propertiesInitializers.Select(x => $"{x.Key}:{x.Value}"));
 
-                string script = $"{{let element = Constructor(\"{className}\");";
+                string script = $"{{let element = Constructor({string.Join(',', jsConstructorsNames)});";
                 if (!string.IsNullOrEmpty(propertiesInitializersScript)) {
                     script += $"element.Reactive={{{propertiesInitializersScript}}}";
                 }

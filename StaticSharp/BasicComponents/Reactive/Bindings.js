@@ -287,6 +287,20 @@ function Property(value) {
         return _this.value
     }
 
+
+    /*_this.setValueKeepBinding = function (value) {
+
+        if (_this.value === value)
+            return
+        _this.value = value
+        var d = Reaction.beginDeferred()
+        _this.makeDependentReactionsDirty()
+        d.end()
+        if (_this.binding) {
+            _this.binding.dirty = false
+        }
+    }*/
+
     _this.setValue = function(value) {
         //console.log("setValue " + value + " " + _this.onChanged.size)
         if (typeof value === 'function') {
@@ -308,20 +322,18 @@ function Property(value) {
                 _this.binding = undefined
             }
 
-            if (_this.value === value)//TODO: delete
+            if (_this.value === value)
                 return
 
             _this.value = value
         }
 
         var d = Reaction.beginDeferred()
-
         _this.makeDependentReactionsDirty()
-
-        if (d)
-            d.end()
-
+        d.end()
     }
+
+
 
     _this.attach = function(object, name) {
         //let property = this

@@ -31,17 +31,15 @@ namespace MixinGenerator {
 
     [Microsoft.CodeAnalysis.Generator]
     public class MixinGenerator : SourceGeneratorDebuggable {
-        /*public AssemblyInfo AssemblyInfo { get; private set; }
-        public CSharpCompilation Compilation { get; }
 
 
-        public MixinGenerator(AssemblyInfo assemblyInfo) {
-            AssemblyInfo = assemblyInfo;
-            Compilation = AssemblyInfo.Compilation;
-        }*/
+        private static readonly SymbolDisplayFormat SymbolDisplayFormat = new SymbolDisplayFormat(
+                typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
+                genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters
+                );
 
-/*
-   Use this, if it is not possible to use an entrypoint from nuget */
+        /*
+           Use this, if it is not possible to use an entrypoint from nuget */
 
 #if SOURCE_GENERATOR_EXECUTABLE_MODE
         public static async Task Main(string[] args) {
@@ -57,8 +55,6 @@ namespace MixinGenerator {
         public override void Execute(IGeneratorExecutionContext context) {
 
             var assemblyInfo = new AssemblyInfo(context.Compilation);
-
-            context.AddSource("Alive.cs", "//Alive");
 
 
             var result = new Scopes.Group() {
@@ -132,23 +128,47 @@ namespace MixinGenerator {
 
         }
 
+
+        public void GetAllPublicMembers(INamedTypeSymbol type, Dictionary<string, ISymbol> result) {
+            if (type.BaseType != null) {
+                var name = type.BaseType.ToDisplayString(SymbolDisplayFormat);
+                if (name != typeof(Object).FullName) {
+                    GetAllPublicMembers(type.BaseType, result);
+                }
+                
+            }
+
+
+            foreach (var member in type.GetMembers()
+                .Where(x => !x.IsStatic)
+                .Where(x => x.DeclaredAccessibility == Accessibility.Public)
+                ) {
+                var name = member.Name;
+                if (member is IMethodSymbol methodSymbol) {//TODO: Test me
+
+                    var genericParametersCount = methodSymbol.TypeParameters.Length;
+                    var parametersTypes = string.Join(",", methodSymbol.Parameters.Select(x => x.Type.ToDisplayString(SymbolDisplayFormat)));
+                    name = $"{name}<{genericParametersCount}>({parametersTypes})";
+                }
+                result[name] = member;
+            }
+        }
+
+
         public Scope Mix(INamedTypeSymbol aggregateType, INamedTypeSymbol mixinType/*, Dictionary<string, INamedTypeSymbol> mixinSpecializationMap*/) {
             
-             var symbolDisplayFormat = new SymbolDisplayFormat(                 
-                typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
-                genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters
-                );
+             
 
             var keyword = aggregateType.TypeKind.ToString().ToLower();
 
             //TODO: think more about private variable naming
-            var mixinVariableName = mixinType.ToDisplayString(symbolDisplayFormat).Replace('.','_').Replace('<', '_').Replace('>', '_');
+            var mixinVariableName = mixinType.ToDisplayString(SymbolDisplayFormat).Replace('.','_').Replace('<', '_').Replace('>', '_');
 
 
             
 
             var result = new Scope($"partial {keyword} {aggregateType.Name}") {
-                $"private {mixinType.ToDisplayString(symbolDisplayFormat)} {mixinVariableName} = new {mixinType.ToDisplayString(symbolDisplayFormat)}();"
+                $"private {mixinType.ToDisplayString(SymbolDisplayFormat)} {mixinVariableName} = new {mixinType.ToDisplayString(SymbolDisplayFormat)}();"
             };
 
 
@@ -171,16 +191,20 @@ namespace MixinGenerator {
                 };
             }
 
+            var members = new Dictionary<string, ISymbol>();
+            GetAllPublicMembers(mixinType, members);
 
-            foreach (var member in mixinType.GetMembers()
-                .Where(x=>!x.IsStatic)
-                .Where(x=> x.DeclaredAccessibility == Accessibility.Public)
-                ) {
+
+
+
+            foreach (var member in members.Values) {
                 var name = member.Name;
+
+
 
                 if (member is IFieldSymbol fieldSymbol) {
                     result.Add(
-                        new Scope($"new public {fieldSymbol.Type.ToDisplayString(symbolDisplayFormat)} {name}") { 
+                        new Scope($"new public {fieldSymbol.Type.ToDisplayString(SymbolDisplayFormat)} {name}") { 
                             new Scope("get"){ 
                                 $"return {mixinVariableName}.{name};" 
                             },
@@ -193,7 +217,7 @@ namespace MixinGenerator {
                 }
 
                 if (member is IPropertySymbol propertySymbol) {
-                    var property = new Scope($"new public {propertySymbol.Type.ToDisplayString(symbolDisplayFormat)} {name}");
+                    var property = new Scope($"new public {propertySymbol.Type.ToDisplayString(SymbolDisplayFormat)} {name}");
                     result.Add(property);
 
                     if (propertySymbol.GetMethod != null) {
@@ -220,23 +244,40 @@ namespace MixinGenerator {
                         var parametersCall = new List<string>();
                         var parametersDeclaration = new List<string>();
 
+                        var genericFragment = methodSymbol.TypeParameters.Any()
+                            ? $"<{string.Join(",", methodSymbol.TypeParameters.Select(x => x.Name))}>"
+                            : "";
+
+
+                        var constraintClauses = new List<string>();
+
+                        foreach (var t in methodSymbol.OriginalDefinition.DeclaringSyntaxReferences) {
+                            var syntax = t.GetSyntax();
+                            if (syntax is MethodDeclarationSyntax methodDeclarationSyntax) {
+                                foreach (var c in methodDeclarationSyntax.ConstraintClauses) { 
+                                    var normalized = c.NormalizeWhitespace();
+                                    var text = normalized.ToString();
+                                    constraintClauses.Add(" "+text);
+                                }                                
+                             }
+                        }
+                        var constraintClausesFragment = string.Concat(constraintClauses);
+
+
                         foreach (var p in methodSymbol.Parameters) {
                             var refKinds = p.RefKind.ToParameterPrefix();
                             parametersCall.Add(refKinds + p.Name);
-                            parametersDeclaration.Add(refKinds + p.Type.ToDisplayString(symbolDisplayFormat)+" "+p.Name);
+                            parametersDeclaration.Add(refKinds + p.Type.ToDisplayString(SymbolDisplayFormat)+" "+p.Name);
                         }
                         var callParemeterList = string.Join(", ", parametersDeclaration);
 
-                        var resultTypeString = methodSymbol.ReturnsVoid ? "void" : methodSymbol.ReturnType.ToDisplayString(symbolDisplayFormat);
+                        var resultTypeString = methodSymbol.ReturnsVoid ? "void" : methodSymbol.ReturnType.ToDisplayString(SymbolDisplayFormat);
 
-                        result.Add(new Scope($"new public {resultTypeString} {methodSymbol.Name}({callParemeterList})") {
-                            SetAggrigator((methodSymbol.ReturnsVoid?"":"return ")+$"{mixinVariableName}.{methodSymbol.Name} ({string.Join(",", parametersCall)});")
-                            
-
+                        result.Add(new Scope($"new public {resultTypeString} {methodSymbol.Name}{genericFragment}({callParemeterList}){constraintClausesFragment}") {
+                            SetAggrigator((methodSymbol.ReturnsVoid?"":"return ")+$"{mixinVariableName}.{methodSymbol.Name}{genericFragment}({string.Join(",", parametersCall)});")
                         });
 
-                    }                                        
-
+                    }
                     continue;                                
                 }
 
@@ -244,7 +285,7 @@ namespace MixinGenerator {
             }
 
 
-            var namespaceName = aggregateType.ContainingNamespace.ToDisplayString(symbolDisplayFormat);
+            var namespaceName = aggregateType.ContainingNamespace.ToDisplayString(SymbolDisplayFormat);
             
             if (!string.IsNullOrEmpty(namespaceName)) {
                 result = new Scope($"namespace {namespaceName}") {

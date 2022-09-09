@@ -1,34 +1,36 @@
 
 function Checkbox(element) {
-
-    console.log("Checkbox")
-
+    console.log("Checkbox", element.id)
     element.Reactive = {
+        Value: false,
+        InputValue: () => element.InputValue
+    }
 
-        Value: false
-        
+    function input() {
+        return element.children[0]
+    }
+
+    function getInputValue() {
+        return !!(input().checked)
     }
 
     new Reaction(() => {
-        element.input = element.children[0]
-        element.input.value = element.Value
 
-        element.input.oninput = function () {
-            let d = Reaction.beginDeferred()
-            element.Value = this.valueAsNumber
-            d.end()
+
+        //console.log("this.checked", this.checked)
+        element.InputValue = getInputValue()
+
+        input().oninput = function () {   
+            //console.log("input().oninput", this.checked, element)
+            element.InputValue = getInputValue()
         }
     })
 
-    
     new Reaction(() => {
-        element.input.min = element.Min
+        //console.log("Reaction", getInputValue(), "=>", element.Value, element)
+        input().checked = element.Value
+        element.InputValue = element.Value
     })
-    new Reaction(() => {
-        element.input.max = element.Max
-    })
-    new Reaction(() => {
-        element.input.step = element.Step <= 0 ? "any" : element.Step
-    })
+
 
 }

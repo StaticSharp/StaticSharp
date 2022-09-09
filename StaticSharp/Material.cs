@@ -46,9 +46,9 @@ namespace StaticSharp {
 
     [Mix(typeof(MMaterialBindings<MaterialJs>))]
     [ConstructorJs]
-    [ConstructorJs("Watch")]
-    [ConstructorJs("Color")]
-    [ConstructorJs("Cookies")]
+    [RelatedScript("Watch")]
+    [RelatedScript("Color")]
+    [RelatedScript("Cookies")]
 
     public abstract partial class Material : Hierarchical, IMaterial, IInline, IPage, IPlainTextProvider {
         protected virtual void Setup() {
@@ -342,7 +342,7 @@ namespace StaticSharp {
             
 //        }
 
-        public async Task<Tag> GenerateInlineHtmlAsync(Context context, string? id) {
+        public async Task<Tag> GenerateInlineHtmlAsync(Context context, string? id, string? format) {
             var representative = this as  StaticSharpEngine.IRepresentative;
             //todo: material outside of the tree exceprion
             var uri = context.NodeToUrl(representative?.Node);

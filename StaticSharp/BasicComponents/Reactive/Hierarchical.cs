@@ -11,12 +11,18 @@ namespace StaticSharp {
         public class HierarchicalJs : ObjectJs {
 
             public string Id => NotEvaluatableValue<String>();
+
             public HierarchicalJs Parent => NotEvaluatableObject<HierarchicalJs>();
 
             public BlockJs ParentBlock => NotEvaluatableObject<BlockJs>();
 
-            public T Sibling<T>(string id) where T :  new() => NotEvaluatableObject<T>();
+            //public T GetParent<T>() where T : new() => NotEvaluatableObject<T>();
+
             public HierarchicalJs Sibling(string id) => NotEvaluatableObject<HierarchicalJs>();
+            public T Sibling<T>(string id) where T :  new() => NotEvaluatableObject<T>();
+
+
+            public HierarchicalJs Child(string id) => NotEvaluatableObject<HierarchicalJs>();
             public T Child<T>(string id) where T :  new() => NotEvaluatableObject<T>();
 
         }

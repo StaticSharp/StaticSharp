@@ -127,6 +127,7 @@ public class LambdaScriptifier {
                 var Op = unaryExpression.NodeType switch {
                     ExpressionType.UnaryPlus => "+",
                     ExpressionType.Negate => "-",
+                    ExpressionType.Not => "!"
                 };
                 return $"({Op}{Eval(unaryExpression.Operand)})";
             }

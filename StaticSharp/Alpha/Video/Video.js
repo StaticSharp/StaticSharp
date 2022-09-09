@@ -41,7 +41,7 @@ YouTube.Reactive = {
 var uniqueID = 0;
 function getUniqueID() {
     uniqueID++;
-    return "uniqueId" + uniqueID;
+    return "juid" + uniqueID;
 }
 
 
@@ -65,12 +65,12 @@ function Video(element) {
         InternalWidth: () => First(element.Height * element.Aspect, element.dataset.width),
         InternalHeight: () => First(element.Width / element.Aspect, element.dataset.height),
 
-        PreferPlatformPlayer: false,
+        PreferPlatformPlayer: true,
 
 
         Controls: () => !element.Hover,
 
-        Play: true,
+        Play: false,
         Position: 0,
         Sound: true,
         Loop: true,
@@ -86,9 +86,7 @@ function Video(element) {
 
 
 
-    new Reaction(() => {
-        console.log(element.Play)
-    })
+
 
 
     /*
@@ -108,8 +106,7 @@ function Video(element) {
             currentPosition = getCurrentPosition()
 
         if (playerDestructor) {
-            playerDestructor()
-            
+            playerDestructor()            
         }
 
         element.VideoPlayerType = "youtube"
@@ -149,7 +146,11 @@ function Video(element) {
         
         playerDestructor = function () {
             playerDestructor = undefined
+            getCurrentPosition = undefined
+
             player.destroy()
+            element.removeChild(iframe)
+
             let d = Reaction.beginDeferred()
             element.Player = undefined
             element.YoutubePlayerReady = false
@@ -186,6 +187,53 @@ function Video(element) {
 
     function InitializeHtml5Video() {
         element.VideoPlayerType = "video"
+
+        var currentPosition = 0
+        if (getCurrentPosition)
+            currentPosition = getCurrentPosition()
+
+        if (playerDestructor) {
+            playerDestructor()
+        }
+
+        let player = document.createElement("video")
+        element.appendChild(player)
+        player.style.width = "100%"
+
+        player.src = sources[0].url
+
+
+        function onLoadedMetadata(event) {
+            player.currentTime = currentPosition
+        }
+
+        function onTimeUpdate() {
+            //console.log("onTimeUpdate", videoElement.currentTime)
+        }
+
+        player.onloadedmetadata = (event) => { onLoadedMetadata(event) }
+        player.ontimeupdate = onTimeUpdate;
+
+
+
+        element.Player = player
+
+        getCurrentPosition = function () {
+            return player.currentTime
+        }
+
+        playerDestructor = function () {
+            playerDestructor = undefined
+            getCurrentPosition = undefined
+
+            element.removeChild(player)
+
+            let d = Reaction.beginDeferred()
+            element.Player = undefined
+            d.end()
+        }
+
+
     }
 
 
@@ -193,8 +241,10 @@ function Video(element) {
 
 
     new Reaction(() => {
-        console.log("element._ ", element.__Play)
-        console.log(element.Sibling("videoProperties").Child("play").Value)
+        //console.log("element._ ", element.__Play)
+        
+
+
 
         if (element.PreferPlatformPlayer) {
             if (element.dataset.youtubeId !== undefined) {
@@ -210,6 +260,7 @@ function Video(element) {
             }
 
         } else {
+
             InitializeHtml5Video()
 
         }
@@ -224,6 +275,8 @@ function Video(element) {
             } else {
                 element.Player.pauseVideo()
             }
+        } else {
+            element.Play ? element.Player.play() : element.Player.pause()
         }
     })
 
@@ -239,24 +292,7 @@ function Video(element) {
     })
 
 
-
-
-
-    element.onclick = () => {
-        element.Sound = !element.Sound
-
-    }
-
-
-    var videoElement = undefined
-    function onLoadedMetadata(event) {
-        //console.log("onLoadedMetadata")
-        //videoElement.play()
-    }
-
-    function onTimeUpdate() {
-        //console.log("onTimeUpdate", videoElement.currentTime)
-    }
+    
 
     
 
