@@ -6,19 +6,23 @@ function Slider(element) {
         Min: 0,
         Max: 1,
         Step: 0,
-        Value: ()=>element.Min,
+
+        Value: () => First(element.ValueInput, element.Min),
+        ValueInput: undefined,
+
         Height: 20,
         
     }
 
     new Reaction(() => {
         element.input = element.children[0]
-        element.input.value = element.Value
+        //element.input.value = element.Value
 
         element.input.oninput = function () {
-            let d = Reaction.beginDeferred()
-            element.Value = this.valueAsNumber
-            d.end()
+            console.log("Slider.oninput", this.valueAsNumber)
+            //let d = Reaction.beginDeferred()
+            element.ValueInput = this.valueAsNumber
+            //d.end()
         }
     })
 
@@ -36,6 +40,10 @@ function Slider(element) {
     })
     new Reaction(() => {
         element.input.step = element.Step <= 0 ? "any" : element.Step
+    })
+    new Reaction(() => {
+        console.log("element.input.value = element.Value", element.Value)
+        element.input.value = element.Value
     })
 
     WidthToStyle(element)

@@ -54,20 +54,31 @@ namespace StaticSharpDemo.Root {
         public override Group? Content => new() {
 
 
+            {"video",
+                new Video("T4TEdzSLyi0"/*"tPEE9ZwTmy0"*/){
+                    Play = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("play").ValueInput),
+                    Mute = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("Mute").ValueInput),
+                    PreferPlatformPlayer = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("preferPlatformPlayer").ValueInput),
+                    Controls = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("controls").ValueInput),
+                    Loop =  new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("loop").ValueInput),
+                    Volume = new (e=>e.Sibling<SliderJs>("VolumeSlider").ValueInput)
+                }
+            },
 
-            new Video("T4TEdzSLyi0"){
-                Play = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("play").InputValue),
-                Sound = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("sound").InputValue),
-                PreferPlatformPlayer = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("preferPlatformPlayer").InputValue),
-            },            
-            
+            {"VolumeSlider",
+                new Slider { Value = new(e=>e.Sibling<VideoJs>("video").VolumeInput) }
+            },
+            /*
 
+            */
             {"videoProperties",
                 $"""
-                {new CheckboxInline(){ Label = { "Play" } }:#play}
-                {new CheckboxInline(){ Label = { "Sound" } }:#sound}
+                {new CheckboxInline(){ Value = new(e=>e.Parent.Sibling<VideoJs>("video").PlayInput), Label = { "Play" } }:#play}
+                {new CheckboxInline(){ Label = { "Mute" } }:#Mute}
                 {new CheckboxInline(){ Label = { "Prefer platform player" } }:#preferPlatformPlayer}
-                """            
+                {new CheckboxInline(){ Label = { "Controls" } }:#controls}
+                {new CheckboxInline(){ Label = { "Loop" } }:#loop}
+                """
             },
 
 
@@ -76,17 +87,17 @@ namespace StaticSharpDemo.Root {
 
             new Column(){
                 BackgroundColor = Color.FromArgb(255,32,32,32),
-                
-                
+
+
 
                 Children = {
 
                     $"Refer to {GithubUrl()} for more information, and join our {DiscordUrl()} to learn more about getting early access to Copilot.",
-                    
+
                     new Flipper() {
                         MarginLeft = new (e=>e.ParentBlock.PaddingLeft),
                         MarginRight = new (e=>e.ParentBlock.PaddingRight),
-                        
+
                         First = new Column(){
                             MarginLeft = 10,
                             MarginRight = 10,
@@ -105,19 +116,19 @@ namespace StaticSharpDemo.Root {
                         }
                     }
                 }
-                
+
             }.ConsumeParentHorizontalMargins(),
 
             new Flipper(){
                 MarginLeft = new(e=>e.ParentBlock.MarginLeft),
                 MarginRight = new(e=>e.ParentBlock.MarginRight),
 
-                First = new Image(new FileGenome(AbsolutePath("Copilot/Delivery.svg"))){ 
+                First = new Image(new FileGenome(AbsolutePath("Copilot/Delivery.svg"))){
                     Embed = Image.TEmbed.Image,
                     MarginLeft = 24,
                     MarginRight = 24,
                     MarginTop = 24,
-                    MarginBottom = 24,                    
+                    MarginBottom = 24,
                 },
                 Second = new Column(){
                     MarginLeft = 10,
@@ -159,7 +170,7 @@ namespace StaticSharpDemo.Root {
                     
                     //MarginTop = e=>e.Value,
                     Min = 10,
-                    Max = 200                    
+                    Max = 200
                 }
             },
 

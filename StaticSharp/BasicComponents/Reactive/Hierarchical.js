@@ -15,6 +15,7 @@ function Hierarchical(element) {
 
 
     element.Reactive = {
+        Root: () => element.Parent.Root,
         Parent: () => GetParentElementByPredicate(element.parentElement, x => x.isHierarchical),
         ParentBlock: () => GetParentElementByPredicate(element.Parent, x => x.isBlock),
         FirstChild: undefined,
@@ -45,6 +46,7 @@ function Hierarchical(element) {
             }
             i = i.NextSibling
         }
+        //console.warn(`element ${element.tagName} do not have child "${id}"`)
     }
 
     if (element.Parent) {

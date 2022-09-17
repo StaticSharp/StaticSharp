@@ -1,4 +1,4 @@
-
+﻿
 function Material(element) {
 
     Hierarchical(element)
@@ -24,6 +24,8 @@ function Material(element) {
 
 
     element.Reactive = {
+        Root: element,
+        UserInteracted: false,
         WindowWidth: getWindowWidth(),
         WindowHeight: getWindowHeight(),
 
@@ -43,7 +45,14 @@ function Material(element) {
         Footer: undefined,
     }
 
-
+    /*window.ontouchend = () => {
+        console.log("ontouchend")
+        element.UserInteracted = true
+    }*/
+    window.onmousedown = () => {
+        //console.log("onmousedown")
+        element.UserInteracted = true
+    }
 
     window.onresize = function (event) {        
         let d = Reaction.beginDeferred()
@@ -58,7 +67,7 @@ function Material(element) {
     function onLoadEvent() {
         loadEventsToWait--
         if (loadEventsToWait == 0) {
-            
+            console.log("-------------Reactions------------");
             loadingDeffered.end()
             element.style.visibility = "visible";
             /*let d = Reaction.beginDeferred()

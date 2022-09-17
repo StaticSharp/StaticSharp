@@ -10,10 +10,11 @@ namespace StaticSharp {
 
     [System.Diagnostics.DebuggerNonUserCode]
     public class SliderJs : BlockJs {
-        public float Min =>     NotEvaluatableValue<float>();
-        public float Max =>     NotEvaluatableValue<float>();
-        public float Step =>    NotEvaluatableValue<float>();
-        public float Value =>   NotEvaluatableValue<float>();
+        public float Min =>         NotEvaluatableValue<float>();
+        public float Max =>         NotEvaluatableValue<float>();
+        public float Step =>        NotEvaluatableValue<float>();
+        public float Value =>       NotEvaluatableValue<float>();
+        public float ValueInput =>  NotEvaluatableValue<float>();
     }
 
 

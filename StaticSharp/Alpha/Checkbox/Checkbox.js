@@ -2,34 +2,34 @@
 function Checkbox(element) {
     console.log("Checkbox", element.id)
     element.Reactive = {
-        Value: false,
-        InputValue: () => element.InputValue
+        Value: () => First(element.ValueInput, false),
+        ValueInput: () => element.Value
     }
 
     function input() {
         return element.children[0]
     }
 
-    function getInputValue() {
+    function getValueInput() {
         return !!(input().checked)
     }
 
     new Reaction(() => {
 
-
         //console.log("this.checked", this.checked)
-        element.InputValue = getInputValue()
+        element.ValueInput = getValueInput()
 
         input().oninput = function () {   
             //console.log("input().oninput", this.checked, element)
-            element.InputValue = getInputValue()
+            element.ValueInput = getValueInput()
         }
     })
 
     new Reaction(() => {
-        //console.log("Reaction", getInputValue(), "=>", element.Value, element)
-        input().checked = element.Value
-        element.InputValue = element.Value
+        //console.log("Reaction", getValueInput(), "=>", element.Value, element)
+        let newValue = element.Value
+        input().checked = newValue
+        element.ValueInput = newValue
     })
 
 

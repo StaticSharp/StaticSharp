@@ -13,23 +13,27 @@ using YoutubeExplode;
 
 namespace StaticSharp {
 
+
+    [System.Diagnostics.DebuggerNonUserCode]
+    public class VideoJs : BlockJs {
+        public bool PreferPlatformPlayer => NotEvaluatableValue<bool>();
+        public bool Controls => NotEvaluatableValue<bool>();
+        public bool Play => NotEvaluatableValue<bool>();
+        public bool PlayInput => NotEvaluatableValue<bool>();
+        public bool Mute => NotEvaluatableValue<bool>();
+        public float Volume => NotEvaluatableValue<float>();
+        public float VolumeInput => NotEvaluatableValue<float>();        
+        public bool Loop => NotEvaluatableValue<bool>();
+    }
+
+
     namespace Gears {
-        [System.Diagnostics.DebuggerNonUserCode]
-        public class VideoJs : BlockJs {
-            public bool PreferPlatformPlayer => NotEvaluatableValue<bool>();
-            public bool Controls => NotEvaluatableValue<bool>();
-            public bool Play => NotEvaluatableValue<bool>();
-            public bool Sound => NotEvaluatableValue<bool>();
-            public bool Loop => NotEvaluatableValue<bool>();
-        }
-
-
-
         public class MVideoBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
             public Binding<bool> PreferPlatformPlayer { set { Apply(value); } }
             public Binding<bool> Controls { set { Apply(value); } }
             public Binding<bool> Play { set { Apply(value); } }
-            public Binding<bool> Sound { set { Apply(value); } }
+            public Binding<bool> Mute { set { Apply(value); } }
+            public Binding<float> Volume { set { Apply(value); } }
             public Binding<bool> Loop { set { Apply(value); } }
 
         }
