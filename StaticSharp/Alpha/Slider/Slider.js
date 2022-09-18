@@ -7,8 +7,8 @@ function Slider(element) {
         Max: 1,
         Step: 0,
 
-        Value: () => First(element.ValueInput, element.Min),
-        ValueInput: undefined,
+        Value: () => element.Min,
+        ValueActual: () => element.Value,
 
         Height: 20,
         
@@ -21,7 +21,7 @@ function Slider(element) {
         element.input.oninput = function () {
             console.log("Slider.oninput", this.valueAsNumber)
             //let d = Reaction.beginDeferred()
-            element.ValueInput = this.valueAsNumber
+            element.ValueActual = this.valueAsNumber
             //d.end()
         }
     })

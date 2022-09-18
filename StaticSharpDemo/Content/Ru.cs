@@ -55,25 +55,23 @@ namespace StaticSharpDemo.Root {
 
 
             {"video",
-                new Video("T4TEdzSLyi0"/*"tPEE9ZwTmy0"*/){
-                    Play = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("play").ValueInput),
-                    Mute = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("Mute").ValueInput),
-                    PreferPlatformPlayer = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("preferPlatformPlayer").ValueInput),
-                    Controls = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("controls").ValueInput),
-                    Loop =  new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("loop").ValueInput),
-                    Volume = new (e=>e.Sibling<SliderJs>("VolumeSlider").ValueInput)
+                new Video("T4TEdzSLyi0"){
+                    Play = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("play").ValueActual),
+                    Mute = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("Mute").ValueActual),
+                    PreferPlatformPlayer = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("preferPlatformPlayer").ValueActual),
+                    Controls = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("controls").ValueActual),
+                    Loop =  new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("loop").ValueActual),
+                    Volume = new (e=>e.Sibling<SliderJs>("VolumeSlider").ValueActual)
                 }
             },
 
             {"VolumeSlider",
-                new Slider { Value = new(e=>e.Sibling<VideoJs>("video").VolumeInput) }
+                new Slider { Value = new(e=>e.Sibling<VideoJs>("video").VolumeActual) }
             },
-            /*
 
-            */
             {"videoProperties",
                 $"""
-                {new CheckboxInline(){ Value = new(e=>e.Parent.Sibling<VideoJs>("video").PlayInput), Label = { "Play" } }:#play}
+                {new CheckboxInline(){ Value = new(e=>e.Parent.Sibling<VideoJs>("video").PlayActual), Label = { "Play" } }:#play}
                 {new CheckboxInline(){ Label = { "Mute" } }:#Mute}
                 {new CheckboxInline(){ Label = { "Prefer platform player" } }:#preferPlatformPlayer}
                 {new CheckboxInline(){ Label = { "Controls" } }:#controls}
@@ -82,16 +80,9 @@ namespace StaticSharpDemo.Root {
             },
 
 
-
-
-
             new Column(){
                 BackgroundColor = Color.FromArgb(255,32,32,32),
-
-
-
                 Children = {
-
                     $"Refer to {GithubUrl()} for more information, and join our {DiscordUrl()} to learn more about getting early access to Copilot.",
 
                     new Flipper() {

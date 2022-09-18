@@ -11,42 +11,6 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
 
-
-    
-
-
-    /*public abstract class AbstractFontFamily {
-        public string Name { get; init; }
-
-
-    }
-
-    public class FontFamily : AbstractFontFamily {
-
-        public string Directory { get; init; }
-        public FontFamily(string directory) {
-            Directory = directory;
-
-            var name = Path.GetFileName(directory);
-            Name = char.ToUpper(name[0]) + name[1..];
-
-        }
-    }
-    public class SafeFontFamily : AbstractFontFamily {
-
-        
-
-        public SafeFontFamily(FontFamily fontFamily) {
-            Name = fontFamily.ToString();
-        }
-    }
-
-    public struct FontSettings {
-        public FontWeight Weight;
-        public bool Italic;
-        public float Size;
-    }*/
-
     public enum DefaultFont {
         Arial,
         TimesNewRoman,
@@ -57,17 +21,6 @@ namespace StaticSharp {
             FontFamily FontFamily,
             FontStyle FontStyle
             ) : Gears.Genome<Font, CacheableFont> {
-
-
-
-        /*        public Font(string directory, FontWeight weight = FontWeight.Regular, bool italic = false)
-                    : this(directory, FamilyFromDirectory(directory), weight, italic) { }
-                public Font(DefaultFont defaultFont, FontWeight weight = FontWeight.Regular, bool italic = false)
-                    : this("", defaultFont.ToString(), weight, italic) { }*/
-
-
-        
-
     }
 
 
@@ -223,10 +176,11 @@ namespace StaticSharp {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append("@font-face {");
             stringBuilder.Append("font-family: ").Append(Genome.FontFamily.Name).Append(";");
+            stringBuilder.Append("font-weight: ").Append((int)fontFamilyMember.FontStyle.Weight).Append(";");
+            stringBuilder.Append("font-style: ").Append(fontStyle).Append(";");
             //stringBuilder.AppendLine($"src:local('{Arguments.Family} {Arguments.Weight}{italicSuffix}'),");
             stringBuilder.Append($"src: url(data:application/font-{format};charset=utf-8;base64,{base64}) format('{format}');");
-            stringBuilder.Append("font-weight: ").Append((int)fontFamilyMember.FontStyle.Weight).Append(";");
-            stringBuilder.Append("font-style: ").Append(fontStyle).Append(";}");
+            stringBuilder.Append("}");
 
             return stringBuilder.ToString();            
         }

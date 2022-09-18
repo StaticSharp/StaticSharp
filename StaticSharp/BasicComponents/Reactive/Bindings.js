@@ -174,7 +174,21 @@ function Property(value) {
     }
 
     _this.makeDependentReactionsDirty = function () {
+
+        /********************************************
+         a deferred context is reqired here in case
+         makeDirty() is called from a callback
+         
+         window.setTimeout(() => {
+            element.Reactive.SomeProperty.makeDirty();
+        },50)
+
+         *******************************************/
+
+
+        var d = Reaction.beginDeferred() 
         _this.dependentReactions.forEach(x => x.makeDirty())
+        d.end()
     }
 
     /*_this.dependsOn = function (property) {

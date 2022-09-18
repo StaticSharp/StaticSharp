@@ -9,7 +9,7 @@ namespace StaticSharp {
     public class CheckboxJs : ObjectJs {
         public bool Enabled => NotEvaluatableValue<bool>();
         public bool Value => NotEvaluatableValue<bool>();
-        public bool ValueInput => NotEvaluatableValue<bool>();
+        public bool ValueActual => NotEvaluatableValue<bool>();
     }
 
     public class CheckboxBindings<FinalJs> : Bindings<FinalJs> where FinalJs : new() {

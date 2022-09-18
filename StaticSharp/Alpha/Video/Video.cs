@@ -16,24 +16,35 @@ namespace StaticSharp {
 
     [System.Diagnostics.DebuggerNonUserCode]
     public class VideoJs : BlockJs {
+        public bool Play => NotEvaluatableValue<bool>();
+        public bool PlayActual => NotEvaluatableValue<bool>();
+
+        public float Position => NotEvaluatableValue<float>();
+        public float PositionActual => NotEvaluatableValue<float>();
+
+        public bool Mute => NotEvaluatableValue<bool>();
+        public bool MuteActual => NotEvaluatableValue<bool>();
+
+        public float Volume => NotEvaluatableValue<float>();
+        public float VolumeActual => NotEvaluatableValue<float>();
+
+
         public bool PreferPlatformPlayer => NotEvaluatableValue<bool>();
         public bool Controls => NotEvaluatableValue<bool>();
-        public bool Play => NotEvaluatableValue<bool>();
-        public bool PlayInput => NotEvaluatableValue<bool>();
-        public bool Mute => NotEvaluatableValue<bool>();
-        public float Volume => NotEvaluatableValue<float>();
-        public float VolumeInput => NotEvaluatableValue<float>();        
         public bool Loop => NotEvaluatableValue<bool>();
     }
 
 
     namespace Gears {
         public class MVideoBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
-            public Binding<bool> PreferPlatformPlayer { set { Apply(value); } }
-            public Binding<bool> Controls { set { Apply(value); } }
             public Binding<bool> Play { set { Apply(value); } }
+            public Binding<float> Position { set { Apply(value); } }
             public Binding<bool> Mute { set { Apply(value); } }
             public Binding<float> Volume { set { Apply(value); } }
+
+
+            public Binding<bool> PreferPlatformPlayer { set { Apply(value); } }
+            public Binding<bool> Controls { set { Apply(value); } }            
             public Binding<bool> Loop { set { Apply(value); } }
 
         }

@@ -14,7 +14,7 @@ namespace StaticSharp {
         public float Max =>         NotEvaluatableValue<float>();
         public float Step =>        NotEvaluatableValue<float>();
         public float Value =>       NotEvaluatableValue<float>();
-        public float ValueInput =>  NotEvaluatableValue<float>();
+        public float ValueActual =>  NotEvaluatableValue<float>();
     }
 
 

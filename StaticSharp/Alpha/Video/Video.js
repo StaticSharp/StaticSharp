@@ -67,17 +67,39 @@ function Video(element) {
 
         Loop: false,
 
-        Play: () => First(element.PlayInput,false),
-        PlayInput: () => element.Play,
+        Play: false,
+        PlayActual: () => element.Play,
 
-        Position: () => First(element.PositionInput,0),
-        PositionInput: () => element.Position,
+        Position: 0,
 
-        Mute: () => First(element.MuteInput, true),
-        MuteInput: false,
+        //use timeupdate for hrml5
+        PositionActual: () => {
+            console.log("update element.PositionActual")
+            if (!element.Player || !element.PositionInitialized)
+                return element.Position
 
-        Volume: () => First(element.VolumeInput, 1),
-        VolumeInput: () => element.Volume,
+            let result = 0
+
+            if (element.VideoPlayerType == "youtube") {
+                result = element.Player.getCurrentTime()
+            } else {
+                result = element.Player.currentTime
+            }
+
+            if (element.PlayActual) {                
+                window.setTimeout(() => {
+                    element.Reactive.PositionActual.makeDirty();
+                },50)
+            }
+            return result;
+
+        },
+
+        Mute: false,
+        MuteActual: () => element.Mute,
+
+        Volume: 1,
+        VolumeActual: () => element.Volume,
 
 
 
@@ -87,13 +109,19 @@ function Video(element) {
         PositionUpdateTimer: 0
     }
 
-    window.setInterval(() => {
+    //PositionActual
+    /*new Reaction(() => {
+        console.log("element.PositionActual",element.PositionActual)
+    })*/
+
+
+
+    /*window.setInterval(() => {
         element.PositionUpdateTimer++;
-    },50)
+    },50)*/
 
 
     var playerDestructor = undefined
-    var getCurrentPosition = undefined
 
 
     new Reaction(() => {
@@ -136,9 +164,13 @@ function Video(element) {
         let playerVars = {
             rel: 0,
             //"autoplay": autoPlay ? 1 : 0,
-            controls: element.Controls ? 1 : 0
-        }
 
+            //???showinfo: 0,
+
+            controls: element.Controls ? 1 : 0,
+            origin: window.location.origin
+        }
+        console.log("window.location.origin", window.origin)
         if (element.Loop) {
             playerVars.loop = 1
             playerVars.playlist = youtubeId
@@ -158,6 +190,8 @@ function Video(element) {
         iframe.style.height = "100%"
 
 
+        let volumeTimeout = undefined
+
         let player = new YT.Player(iframe.id, {
             //height: '100%',
             //width: '100%',
@@ -169,20 +203,34 @@ function Video(element) {
                     /*if (currentPosition !== 0) {
                         player.seekTo(currentPosition, true)
                     }*/
+                    
+
+                    element.VolumeActual = () => {
+                        clearTimeout(volumeTimeout)
+
+                        if (!element.Player)
+                            return element.Volume
+
+                        let result = element.Player.getVolume() * 0.01
+
+                        volumeTimeout = window.setTimeout(() => {
+                            element.Reactive.VolumeActual.makeDirty()
+                        }, 100)
+                        return result
+                    }
+
 
                     element.Player = player
                     //element.PlayerReady = true
                 },
                 onStateChange: function (event) {
                     if (event.data == YT.PlayerState.ENDED) {
-                        element.PlayInput = false
+                        element.PlayActual = false
                     } else if (event.data == YT.PlayerState.PLAYING) {
-                        element.PlayInput = true
+                        element.PlayActual = true
                     } else if (event.data == YT.PlayerState.PAUSED) {
-                        element.PlayInput = false
+                        element.PlayActual = false
                     }
-                    //console.log("onStateChange", event, element.PlayInput)
-                    //onYoutubePlayerStateChange(event)
                 }
             }
         })
@@ -192,6 +240,8 @@ function Video(element) {
         }
         
         playerDestructor = function () {
+            clearTimeout(volumeTimeout)
+
             playerDestructor = undefined
             getCurrentPosition = undefined
 
@@ -205,6 +255,32 @@ function Video(element) {
         }
 
         
+    }
+
+
+
+    /*new Reaction(() => {
+        if (element.Hover) {
+            element.Player.src = sources[1].url
+        } else {
+            element.Player.src = sources[0].url
+        }
+
+    })*/
+
+
+    let source
+
+    element.onclick = () => {
+        /*let source = document.createElement("source")
+        source.type = "video/mp4"
+        source.sizes = "1280x720"
+        //source.media = "(min-width:70000px)"
+        source.src = sources[1].url
+        element.Player.appendChild(source)*/
+
+
+        //source.src = sources[1].url
     }
 
     function InitializeHtml5Video() {
@@ -221,9 +297,26 @@ function Video(element) {
         let player = document.createElement("video")
         element.appendChild(player)
         player.style.width = "100%"
+        player.style.height = "100%"
 
-        player.src = sources[1].url
+        //player.src = sources[1].url
         player.muted = true
+
+        //<source type="video/mp4" src="/uploads/video_Small.mp4">
+        let source = document.createElement("source")
+        source.type = "video/mp4"
+        source.sizes = "1280x720"
+        //source.media = "(min-width:70000px)"
+        source.src = sources[1].url
+        player.appendChild(source)
+
+        source = document.createElement("source")
+        source.type = "video/mp4"
+        source.sizes = "640x360"
+        //source.media = "(min-width:200px)"
+        source.src = sources[0].url
+        player.appendChild(source)
+        //https://stackoverflow.com/questions/38626993/change-video-quality-with-sources-pointing-to-different-quality-versions
 
         /*function onLoadedMetadata(event) {
             player.currentTime = currentPosition
@@ -237,9 +330,13 @@ function Video(element) {
 
         player.ontimeupdate = onTimeUpdate;
 
-        player.onplay = () => element.PlayInput = true
-        player.onpause = () => element.PlayInput = false        
-        player.onvolumechange = () => element.VolumeInput = player.volume
+        player.onplay = () => element.PlayActual = true
+        player.onpause = () => element.PlayActual = false  
+
+
+
+        element.VolumeActual = player.volume
+        player.onvolumechange = () => element.VolumeActual = player.volume
         
 
         /*player.onended = (event) => {
@@ -284,11 +381,8 @@ function Video(element) {
                     InitializeHtml5Video()
                 }
             }
-
         } else {
-
             InitializeHtml5Video()
-
         }
     })
 
@@ -318,22 +412,7 @@ function Video(element) {
     })
 
 
-    //PositionInput
-    new Reaction(() => {
-        if (!element.Player)
-            return
 
-        if (!element.PositionInitialized)
-            return   
-
-        element.PositionUpdateTimer
-
-        if (element.VideoPlayerType == "youtube") {
-            element.PositionInput = element.Player.getCurrentTime()
-        } else {
-            element.PositionInput = element.Player.currentTime
-        }        
-    })
 
     
     

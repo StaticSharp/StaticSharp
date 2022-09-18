@@ -1,35 +1,35 @@
 
 function Checkbox(element) {
-    console.log("Checkbox", element.id)
+
     element.Reactive = {
-        Value: () => First(element.ValueInput, false),
-        ValueInput: () => element.Value
+        Value: false,
+        ValueActual: () => element.Value
     }
 
     function input() {
         return element.children[0]
     }
 
-    function getValueInput() {
+    function getValueActual() {
         return !!(input().checked)
     }
 
     new Reaction(() => {
 
         //console.log("this.checked", this.checked)
-        element.ValueInput = getValueInput()
+        element.ValueActual = getValueActual()
 
         input().oninput = function () {   
             //console.log("input().oninput", this.checked, element)
-            element.ValueInput = getValueInput()
+            element.ValueActual = getValueActual()
         }
     })
 
     new Reaction(() => {
-        //console.log("Reaction", getValueInput(), "=>", element.Value, element)
+        //console.log("Reaction", getValueActual(), "=>", element.Value, element)
         let newValue = element.Value
         input().checked = newValue
-        element.ValueInput = newValue
+        element.ValueActual = newValue
     })
 
 

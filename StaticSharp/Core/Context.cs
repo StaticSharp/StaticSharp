@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace StaticSharp.Gears {
 
-    public class Context { 
+    public struct Context { 
 
         public INodeToUrl NodeToUrlConverter { get; init; }
         public Uri? NodeToUrl(INode node) { 
