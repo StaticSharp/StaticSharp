@@ -3,7 +3,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace StaticSharpDemo.Root {
-    public partial class Material : StaticSharp.Material {
+    public partial class Material : StaticSharp.Page {
 
         protected override void Setup() {
             base.Setup();

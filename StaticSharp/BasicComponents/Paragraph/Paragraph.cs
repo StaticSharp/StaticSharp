@@ -69,13 +69,30 @@ namespace StaticSharp {
             }
         }*/
 
-
+        struct C {
+            public List<int> l = new();
+            public Ref<int> i = new(0);
+            public C() {
+            }
+        }
 
 
         protected override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
-            return new Tag("p") {
-                    await Children.Select(x=>x.Value.GenerateInlineHtmlAsync(context, x.Id, x.Format)).SequentialOrParallel()
-            };
+
+
+
+            /*var c = context;
+            c.GetUniqueId();
+
+            var d = c;
+            d.GetUniqueId();*/
+
+
+            var result = new Tag("p");
+            foreach (var i in Children) {
+                result.Add(await i.Value.GenerateInlineHtmlAsync(context, i.Id, i.Format));
+            }
+            return result;
         }
 
         /*async Task<Tag> IInline.GenerateInlineHtmlAsync(Context context, string? id) {

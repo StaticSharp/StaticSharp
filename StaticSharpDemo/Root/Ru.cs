@@ -56,7 +56,7 @@ namespace StaticSharpDemo.Root {
 
             {"video",
                 new Video("T4TEdzSLyi0"){
-                    Play = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("play").ValueActual),
+                    Play = true,//new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("play").ValueActual),
                     Mute = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("Mute").ValueActual),
                     PreferPlatformPlayer = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("preferPlatformPlayer").ValueActual),
                     Controls = new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("controls").ValueActual),

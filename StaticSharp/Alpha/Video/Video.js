@@ -62,8 +62,7 @@ function Video(element) {
 
         PreferPlatformPlayer: true,
 
-        Controls: () => element.ControlsInput,
-        ControlsInput: () => element.Controls,
+        Controls: true,
 
         Loop: false,
 
@@ -106,7 +105,10 @@ function Video(element) {
         VideoPlayerType: undefined,//youtube, video
         Player: undefined,
         PositionInitialized: false,
-        PositionUpdateTimer: 0
+
+        SourceIndex: undefined
+
+
     }
 
     //PositionActual
@@ -141,6 +143,49 @@ function Video(element) {
 
 
      */
+
+    new Reaction(() => {
+        if (element.VideoPlayerType == "html5") {
+            if (element.Player) {
+                if (element.Width == undefined)
+                    return;
+
+                /*let lossFunction = (source) => {
+                    return Math.abs(element.Width - source.size.x)
+                }*/
+                let lossFunction = (source) => {
+                    let pixelWidth = element.Root.DevicePixelRatio * element.Width
+                    if (source.size.x < pixelWidth) {
+                        return 8 * (pixelWidth - source.size.x)
+                    }
+                    return source.size.x - pixelWidth
+                }
+
+                let closestSourceLoss = lossFunction(sources[0])
+                let closestSourceIndex = 0
+                for (let i = 1; i < sources.length; i++) {
+                    let loss = lossFunction(sources[i])
+                    if (loss < closestSourceLoss) {
+                        closestSourceLoss = loss
+                        closestSourceIndex = i
+                    }
+                }
+
+                element.SourceIndex = closestSourceIndex
+            }
+        }
+    })
+
+    new Reaction(() => {
+        if (element.VideoPlayerType == "html5") {
+            if (!element.Player)
+                return
+
+            let position = element.Player.currentTime
+            element.Player.src = sources[element.SourceIndex].url
+            element.Player.currentTime = position
+        }
+    })
 
 
 
@@ -284,7 +329,7 @@ function Video(element) {
     }
 
     function InitializeHtml5Video() {
-        element.VideoPlayerType = "video"
+        element.VideoPlayerType = "html5"
 
         /*var currentPosition = 0
         if (getCurrentPosition)
@@ -299,11 +344,11 @@ function Video(element) {
         player.style.width = "100%"
         player.style.height = "100%"
 
-        //player.src = sources[1].url
+        player.src = sources[1].url
         player.muted = true
 
         //<source type="video/mp4" src="/uploads/video_Small.mp4">
-        let source = document.createElement("source")
+        /*let source = document.createElement("source")
         source.type = "video/mp4"
         source.sizes = "1280x720"
         //source.media = "(min-width:70000px)"
@@ -315,7 +360,7 @@ function Video(element) {
         source.sizes = "640x360"
         //source.media = "(min-width:200px)"
         source.src = sources[0].url
-        player.appendChild(source)
+        player.appendChild(source)*/
         //https://stackoverflow.com/questions/38626993/change-video-quality-with-sources-pointing-to-different-quality-versions
 
         /*function onLoadedMetadata(event) {
@@ -433,6 +478,9 @@ function Video(element) {
                 element.Player.pauseVideo()
             }
         } else {
+            if (element.SourceIndex == undefined)
+                return
+
             element.Play ? element.Player.play() : element.Player.pause()
         }        
     })
@@ -459,7 +507,7 @@ function Video(element) {
     //Volume
     new Reaction(() => {
         if (element.Player) {
-            console.log("element.Volume", element.Volume)
+            //console.log("element.Volume", element.Volume)
             if (element.Volume == undefined)
                 return
 

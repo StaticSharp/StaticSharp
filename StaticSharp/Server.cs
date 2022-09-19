@@ -81,6 +81,9 @@ namespace StaticSharp {
         }
 
 
+
+
+
         protected virtual async Task HandleHtmlRequestAsync(HttpRequest request, HttpResponse response, RouteData routeData) {
 
             try {
@@ -97,7 +100,10 @@ namespace StaticSharp {
                 
 
                 var html = await page.GeneratePageHtmlAsync(CreateContext(request));
-                response.Cookies.Append(_pageKey, html.ToHashString());
+
+                html = html.Replace("t!dcsctAYNTSYMJaKLcdZPtZ#n@KPIjkK)ppteSZ4t%W)N*3RC8k645V4DUMW5G!", html.ToHashString());
+
+                //response.Cookies.Append(_pageKey, html.ToHashString());
                 await response.WriteAsync(html);
 
             } catch (Exception e) {
@@ -159,12 +165,17 @@ namespace StaticSharp {
             }
         }
 
-
+        struct RefreshPageParameters {
+            public string pageKey;
+            public string location;
+        }
 
         protected virtual async Task HandleRefreshPageAsync(HttpRequest request, HttpResponse responce, RouteData routeData) {
             //TODO: try catch
 
-            //var requestText = ReadAllText(request);
+            var requestText = ReadAllText(request);
+            var requestJson = JsonSerializer.Deserialize<RefreshPageParameters>(request.Body);
+
 
             var headers = HeaderDictionaryTypeExtensions.GetTypedHeaders(request);
             var path = headers.Referer.LocalPath;

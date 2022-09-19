@@ -36,10 +36,10 @@ namespace StaticSharp.Gears {
         public FontFamily[] FontFamilies { get; set; } = null!;
         public FontStyle FontStyle { get; set; } = new();
 
-        private int nextIdNumber = 0;
+        public Ref<int> nextIdNumber;
         public string GetUniqueId() {
             var result = $"luid{nextIdNumber}";
-            nextIdNumber++;
+            nextIdNumber.Value++;
             return result;
         }
 
@@ -81,6 +81,8 @@ namespace StaticSharp.Gears {
             Includes = new Includes();
             //Parents = Enumerable.Empty<object>();
             NodeToUrlConverter = nodeToUrlConverter;
+
+            nextIdNumber = new(0);
         }
     }
 }

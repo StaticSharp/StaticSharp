@@ -4,9 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StaticSharp { 
-
-}
 
 
 namespace StaticSharp.Utils {

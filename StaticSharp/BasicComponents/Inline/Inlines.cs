@@ -80,10 +80,16 @@ namespace StaticSharp {
         }
 
 
-        public void AppendFormatted<T>(T t) where T : struct {
+        /*public void AppendFormatted<T>(T t) where T : struct {
             //TODO: inplement
             Console.WriteLine($"\tAppendFormatted called: {{{t}}} is of type {typeof(T)}");
+        }*/
+
+
+        public void AppendFormatted(StaticSharpEngine.ITypedRepresentativeProvider<Page> item, string? format = null) {
+            AppendFormatted(item.Representative, format);
         }
+
 
 
 

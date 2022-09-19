@@ -1,7 +1,11 @@
 ﻿
-function Material(element) {
+function Page(element) {
 
     Hierarchical(element)
+
+
+    
+
 
 
     function getWindowWidth() {
@@ -26,6 +30,7 @@ function Material(element) {
     element.Reactive = {
         Root: element,
         UserInteracted: false,
+        DevicePixelRatio: window.devicePixelRatio,
         WindowWidth: getWindowWidth(),
         WindowHeight: getWindowHeight(),
 
@@ -44,6 +49,28 @@ function Material(element) {
         RightSideBar: () => element.Child("RightSideBar"),
         Footer: undefined,
     }
+
+
+    function createDevicePixelRatioCallback(func) {
+        let matchMedia = window.matchMedia(`screen and (resolution: ${window.devicePixelRatio}dppx)`)
+        matchMedia.addEventListener(
+            "change",
+            () => {
+                func()
+                createDevicePixelRatioCallback(func)
+            },
+            { once: true }
+        );
+    }
+
+    createDevicePixelRatioCallback(() => element.DevicePixelRatio = window.devicePixelRatio)
+
+
+
+
+
+
+
 
     /*window.ontouchend = () => {
         console.log("ontouchend")

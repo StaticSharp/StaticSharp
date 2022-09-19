@@ -42,7 +42,7 @@ function Slider(element) {
         element.input.step = element.Step <= 0 ? "any" : element.Step
     })
     new Reaction(() => {
-        console.log("element.input.value = element.Value", element.Value)
+        //console.log("element.input.value = element.Value", element.Value)
         element.input.value = element.Value
     })
 
