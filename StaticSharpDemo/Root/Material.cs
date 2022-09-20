@@ -12,7 +12,7 @@ namespace StaticSharpDemo.Root {
         public override IBlock LeftSideBar => new Column() {
 
 
-            BackgroundColor = Color.FromArgb(255, 0xA0, 0x70, 0x30),
+            BackgroundColor = Color.FromArgb(0xff355070),
 
 
             Children = {

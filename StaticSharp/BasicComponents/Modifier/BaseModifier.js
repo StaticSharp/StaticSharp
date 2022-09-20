@@ -25,20 +25,23 @@ function GetModifier(element) {
 
 function BaseModifier(element) {
 
-    if (!element.isHierarchical) {
+    Hierarchical(element)
+
+
+
+    /*if (!element.isHierarchical) {
         Hierarchical(element)
     }
 
 
 
     if (element.isModifier)
-        return
+        return*/
     //Hierarchical(element)
     element.isModifier = true
 
     element.Reactive = {
         Modifier: element,
-
         //BackgroundColor: undefined,
         ForegroundColor: () => {            
             if (element.BackgroundColor == undefined)
@@ -53,6 +56,7 @@ function BaseModifier(element) {
 
     new Reaction(() => {
         if (element.BackgroundColor) {
+            console.log(element,"element.BackgroundColor", element.BackgroundColor)
             element.style.backgroundColor = element.BackgroundColor// element.BackgroundColor.toString(16)
         }
     })

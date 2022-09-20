@@ -16,7 +16,7 @@ namespace StaticSharp.Gears {
     public struct Context { 
 
         public INodeToUrl NodeToUrlConverter { get; init; }
-        public Uri? NodeToUrl(INode node) { 
+        public Uri NodeToUrl(INode node) { 
             return NodeToUrlConverter.NodeToUrl(BaseUrl, node);
         }
         public Uri BaseUrl { get; init; }

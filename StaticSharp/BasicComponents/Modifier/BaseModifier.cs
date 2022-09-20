@@ -51,10 +51,10 @@ namespace StaticSharp {
 
     public static partial class BaseModifierStatic {
         
-        public static T Url<T>(this T _this, string url) where T: BaseModifier {
+        /*public static T Url<T>(this T _this, string url) where T: BaseModifier {
             _this.Url = url;
             return _this;
-        }
+        }*/
         public static T Title<T>(this T _this, string title) where T : BaseModifier {
             _this.Title = title;
             return _this;
@@ -94,23 +94,16 @@ namespace StaticSharp {
 
             public FontFamily[]? FontFamilies = null;
             public FontStyle? FontStyle = null;
-            public string? Url = null;
+            //public string? Url = null;
             public string? Title = null;
 
             public float? LineHeight = null;//line-height
             public float? LetterSpacing = null;//letter-spacing
 
 
-            protected BaseModifier(Hierarchical other, string callerFilePath, int callerLineNumber) : base(other, callerFilePath, callerLineNumber) {
-            }
-
+            protected BaseModifier(Hierarchical other, string callerFilePath, int callerLineNumber) : base(other, callerFilePath, callerLineNumber) {}
             public BaseModifier(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
 
-
-            /*public override void AddRequiredInclues(IIncludes includes) {
-                base.AddRequiredInclues(includes);
-                includes.Require(new Script(ThisFilePathWithNewExtension("js")));
-            }*/
 
             public Context ModifyContext(Context context) {
                 if (FontFamilies != null) {
@@ -123,10 +116,10 @@ namespace StaticSharp {
             }
 
             public void ModifyTag(Tag tag) {
-                if (Url != null) {
+                /*if (Url != null) {
                     tag.Name = "a";
                     tag["href"] = Url;
-                }
+                }*/
 
                 if (Title != null) {
                     tag["title"] = Title;
@@ -149,44 +142,6 @@ namespace StaticSharp {
                 }
             }
 
-            /*
-             
-             */
-
-
-
-            /*protected async Task<Tag> GenerateHtmlWithChildrenAsync(Context context, string? id, Func<Context,IEnumerable<Task<Tag>?>> children, string tagName = "m") {
-
-                Dictionary<string, object> style = new();
-
-
-                if (FontFamilies != null) {
-                    context.FontFamilies = FontFamilies;
-                    style["font-family"] = string.Join(',', FontFamilies.Select(x => x.Name));
-                    //tag.Style["font-family"] = "abc";
-                }
-                if (FontStyle != null) {
-                    context.FontStyle = FontStyle;
-                    style["font-weight"] = (int)FontStyle.Weight;
-                    style["font-style"] = FontStyle.CssFontStyle;
-
-                }
-
-                var tag = new Tag(tagName,id) {
-                    
-                    Children = {
-                        await CreateScript(context),
-                        //CreateScriptBefore(),
-                        await children(context).SequentialOrParallel(),
-                        //CreateScriptAfter()
-                    }
-                };
-
-                tag.Style = style;
-
-
-                return tag;
-            }*/
         }
     }
 }

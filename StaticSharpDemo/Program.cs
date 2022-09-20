@@ -173,7 +173,7 @@ namespace StaticSharpDemo {
         }
 
 
-        public override Uri? NodeToUrl(Uri baseUrl, INode node) {
+        public override Uri NodeToUrl(Uri baseUrl, INode node) {
             if (node is ProtoNode protoNode) {
                 string path;
                 if (protoNode.Path.Length == 0) {//root

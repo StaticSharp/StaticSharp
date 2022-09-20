@@ -175,7 +175,7 @@ namespace StaticSharp {
                 var jsConstructorsNames = FindJsConstructorsNames();
 
 
-                var propertiesInitializers = await GetGeneratedBundingsAsync().ToListAsync();
+                var propertiesInitializers = await GetGeneratedBundingsAsync(context).ToListAsync();
                 propertiesInitializers.AddRange(Properties);
 
                 var propertiesInitializersScript = string.Join(',', propertiesInitializers.Select(x => $"{x.Key}:{x.Value}"));
@@ -191,7 +191,7 @@ namespace StaticSharp {
                 };
             }
 
-            public virtual IAsyncEnumerable<KeyValuePair<string, string>> GetGeneratedBundingsAsync() {
+            public virtual IAsyncEnumerable<KeyValuePair<string, string>> GetGeneratedBundingsAsync(Context context) {
                 return AsyncEnumerable.Empty<KeyValuePair<string, string>>();
             }
 

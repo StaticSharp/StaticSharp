@@ -1,10 +1,10 @@
 ﻿
 function Page(element) {
 
-    Hierarchical(element)
+    let loadingDeffered = Reaction.beginDeferred()
 
-
-    
+    BaseModifier(element)
+   
 
 
 
@@ -38,7 +38,7 @@ function Page(element) {
         HierarchyFontSize: () => element.FontSize || element.Parent.HierarchyFontSize,
 
         ContentWidth: 960,
-        BarsCollapsed: () =>
+        BarsCollapsed: () => 
             element.WindowWidth < Sum(
                 element.ContentWidth,
                 element.LeftSideBar ? element.LeftSideBar.Width : 0,
@@ -89,7 +89,7 @@ function Page(element) {
 
     }
 
-    let loadingDeffered = Reaction.beginDeferred()
+    
     let loadEventsToWait = 2
     function onLoadEvent() {
         loadEventsToWait--

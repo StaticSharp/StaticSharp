@@ -165,21 +165,17 @@ namespace StaticSharp {
             }
         }
 
-        struct RefreshPageParameters {
-            public string pageKey;
-            public string location;
-        }
 
         protected virtual async Task HandleRefreshPageAsync(HttpRequest request, HttpResponse responce, RouteData routeData) {
             //TODO: try catch
 
-            var requestText = ReadAllText(request);
-            var requestJson = JsonSerializer.Deserialize<RefreshPageParameters>(request.Body);
+            var pageHash = ReadAllText(request);
+            //var requestJson = JsonSerializer.Deserialize<RefreshPageParameters>(request.Body);
 
 
             var headers = HeaderDictionaryTypeExtensions.GetTypedHeaders(request);
             var path = headers.Referer.LocalPath;
-            var pageHash = headers.Cookie.First(x => x.Name == "pageKey")?.Value.Value;
+            //var pageHash = headers.Cookie.First(x => x.Name == "pageKey")?.Value.Value;
 
             var page = FindPage(path);
             if (page == null) { return; }            

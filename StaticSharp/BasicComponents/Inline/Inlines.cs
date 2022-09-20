@@ -21,7 +21,7 @@ namespace StaticSharp {
     }
 
     [InterpolatedStringHandler]
-    public class Inlines : List<InlineIdFormatValue>, IInlineCollector {
+    public class Inlines : List<InlineIdFormatValue> {
         public Inlines() : base() { }
         public Inlines(Inlines other) : base(other) { }
 
@@ -31,6 +31,18 @@ namespace StaticSharp {
                 //base.Add(id, block);
                 Add(new InlineIdFormatValue(id, format, value));
             }
+        }
+
+        public void Add(IInline? value) {
+            Add(null, null, value);
+        }
+
+        public void Add(
+            string text,
+            [CallerFilePath] string callerFilePath = "",
+            [CallerLineNumber] int callerLineNumber = 0){
+
+            Add(null,null,new Text(text, true, callerFilePath, callerLineNumber));
         }
 
         public Inlines(
@@ -86,8 +98,13 @@ namespace StaticSharp {
         }*/
 
 
-        public void AppendFormatted(StaticSharpEngine.ITypedRepresentativeProvider<Page> item, string? format = null) {
-            AppendFormatted(item.Representative, format);
+        public void AppendFormatted(StaticSharpEngine.ITypedRepresentativeProvider<Page> node, string? format = null, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
+            var link = new NodeLink(node, callerFilePath, callerLineNumber) {
+                Children = {
+                    (format != null)?format:node.Representative.Title
+                }
+            };
+            AppendFormatted(link);
         }
 
 

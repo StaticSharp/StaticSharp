@@ -1,5 +1,6 @@
 ﻿using StaticSharp.Gears;
 using StaticSharp.Html;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -35,6 +36,33 @@ namespace StaticSharp {
                 await Children.Select(x=> x.Value.GenerateInlineHtmlAsync(context, x.Id, x.Format)).SequentialOrParallel(),
             };
         }
-
     }
+
+
+    public partial class NodeLink : Link {
+
+        StaticSharpEngine.INode Node;
+        public NodeLink(StaticSharpEngine.INode node, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
+            Node = node;
+        }
+        public NodeLink(NodeLink other, string callerFilePath, int callerLineNumber) : base(other, callerFilePath, callerLineNumber) {
+            Node = other.Node;
+        }
+
+
+        public override async IAsyncEnumerable<KeyValuePair<string, string>> GetGeneratedBundingsAsync(Context context) {
+            await foreach (var i in base.GetGeneratedBundingsAsync(context)) {
+                yield return i;
+            }
+            var url = context.NodeToUrl(Node);
+            yield return new("HRef", $"\"{url}\"");
+        }
+
+        protected override Task<Tag?> GenerateInlineHtmlInternalAsync(Context context, Tag elementTag, string? format) {            
+            return base.GenerateInlineHtmlInternalAsync(context, elementTag, format);
+        }
+    }
+
+
+
 }

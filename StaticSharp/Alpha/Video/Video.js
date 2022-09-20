@@ -55,6 +55,7 @@ function Video(element) {
     var sources = JSON.parse(sourcesJson)
 
 
+
     element.Reactive = {
         Aspect: element.dataset.width / element.dataset.height,
         InternalWidth: () => First(element.Height * element.Aspect, element.dataset.width),
@@ -71,28 +72,7 @@ function Video(element) {
 
         Position: 0,
 
-        //use timeupdate for hrml5
-        PositionActual: () => {
-            console.log("update element.PositionActual")
-            if (!element.Player || !element.PositionInitialized)
-                return element.Position
-
-            let result = 0
-
-            if (element.VideoPlayerType == "youtube") {
-                result = element.Player.getCurrentTime()
-            } else {
-                result = element.Player.currentTime
-            }
-
-            if (element.PlayActual) {                
-                window.setTimeout(() => {
-                    element.Reactive.PositionActual.makeDirty();
-                },50)
-            }
-            return result;
-
-        },
+        PositionActual: undefined,
 
         Mute: false,
         MuteActual: () => element.Mute,
@@ -103,7 +83,10 @@ function Video(element) {
 
 
         VideoPlayerType: undefined,//youtube, video
+
         Player: undefined,
+        Positioner: undefined,
+
         PositionInitialized: false,
 
         SourceIndex: undefined
@@ -188,23 +171,58 @@ function Video(element) {
     })
 
 
+    function FitOutside(child, childAspect, parentWidth, parentHeight) {
+
+    }
+
+    function FitInside(child, childAspect, parentWidth, parentHeight) {
+        let parentAspect = parentWidth / parentHeight
+
+        if (parentAspect > childAspect) {
+            child.style.top = 0
+            child.style.height = element.Height + "px"
+
+            let calculatedWidth = element.Height * element.Aspect
+            child.style.left = 0.5 * (element.Width - calculatedWidth) + "px"
+            child.style.width = calculatedWidth + "px"
+        } else {
+            child.style.left = 0
+            child.style.width = element.Width + "px"
+
+            let calculatedHeight = element.Width / element.Aspect
+            child.style.top = 0.5 * (element.Height - calculatedHeight) + "px"
+            child.style.height = calculatedHeight + "px"
+        }
+    }
+    
+
+
+    new Reaction(() => {
+        let positioner = element.Positioner
+        if (!positioner)
+            return
+
+        FitInside(positioner, element.Aspect, element.Width, element.Height)        
+    })
+
 
     function InitializeYoutubeIFrame() {
-
-        /*var currentPosition = 0
-        if (getCurrentPosition)
-            currentPosition = getCurrentPosition()*/
-
         if (playerDestructor) {
             playerDestructor()            
         }
 
         element.VideoPlayerType = "youtube"
 
+        var positioner = document.createElement("youtubeIFramePositioner");
+        element.appendChild(positioner);
+        element.Positioner = positioner
+
         var iframe = document.createElement("div");
         iframe.id = getUniqueID();
-        element.appendChild(iframe);
 
+        positioner.appendChild(iframe);
+        iframe.style.width = "100%"
+        iframe.style.height = "100%"
 
         let playerVars = {
             rel: 0,
@@ -221,25 +239,10 @@ function Video(element) {
             playerVars.playlist = youtubeId
         }
 
-        /*if (!element.Controls) {
-            iframe.style.pointerEvents = "none"        
-            iframe.style.top = "-50%"
-            iframe.style.position = "absolute"
-            iframe.style.width = "100%"
-            iframe.style.height = "200%"
-        } else {
-            iframe.style.width = "100%"
-            iframe.style.height = "100%"
-        }*/
-        iframe.style.width = "100%"
-        iframe.style.height = "100%"
-
-
         let volumeTimeout = undefined
+        let positionTimeout = undefined
 
         let player = new YT.Player(iframe.id, {
-            //height: '100%',
-            //width: '100%',
             videoId: youtubeId,
             host: "http://www.youtube-nocookie.com",
             playerVars: playerVars,
@@ -248,13 +251,29 @@ function Video(element) {
                     /*if (currentPosition !== 0) {
                         player.seekTo(currentPosition, true)
                     }*/
-                    
+
+                    element.PositionActual = () => {
+                        clearTimeout(positionTimeout)
+
+                        if (!element.Player)
+                            return undefined
+
+                        let result = element.Player.getCurrentTime()
+                        if (element.PlayActual) {
+                            positionTimeout = window.setTimeout(() => {
+                                element.Reactive.PositionActual.makeDirty()
+                            }, 50)
+                        }
+                        return result
+                    }
+
+
 
                     element.VolumeActual = () => {
                         clearTimeout(volumeTimeout)
 
                         if (!element.Player)
-                            return element.Volume
+                            return undefined
 
                         let result = element.Player.getVolume() * 0.01
 
@@ -279,61 +298,31 @@ function Video(element) {
                 }
             }
         })
-
-        getCurrentPosition = function () {
-            return player.getCurrentTime()
-        }
+        
         
         playerDestructor = function () {
             clearTimeout(volumeTimeout)
-
+            clearTimeout(positionTimeout)
+            
             playerDestructor = undefined
-            getCurrentPosition = undefined
 
             player.destroy()
             element.removeChild(iframe)
 
             let d = Reaction.beginDeferred()
             element.Player = undefined
-            //element.PlayerReady = false
             d.end()
-        }
-
-        
+        }        
     }
 
 
+    new Reaction(() => {
+        console.log("element.PositionActual",element.PositionActual)
+    })
 
-    /*new Reaction(() => {
-        if (element.Hover) {
-            element.Player.src = sources[1].url
-        } else {
-            element.Player.src = sources[0].url
-        }
-
-    })*/
-
-
-    let source
-
-    element.onclick = () => {
-        /*let source = document.createElement("source")
-        source.type = "video/mp4"
-        source.sizes = "1280x720"
-        //source.media = "(min-width:70000px)"
-        source.src = sources[1].url
-        element.Player.appendChild(source)*/
-
-
-        //source.src = sources[1].url
-    }
 
     function InitializeHtml5Video() {
         element.VideoPlayerType = "html5"
-
-        /*var currentPosition = 0
-        if (getCurrentPosition)
-            currentPosition = getCurrentPosition()*/
 
         if (playerDestructor) {
             playerDestructor()
@@ -341,75 +330,33 @@ function Video(element) {
 
         let player = document.createElement("video")
         element.appendChild(player)
-        player.style.width = "100%"
-        player.style.height = "100%"
+        element.Positioner = player
 
         player.src = sources[1].url
         player.muted = true
 
-        //<source type="video/mp4" src="/uploads/video_Small.mp4">
-        /*let source = document.createElement("source")
-        source.type = "video/mp4"
-        source.sizes = "1280x720"
-        //source.media = "(min-width:70000px)"
-        source.src = sources[1].url
-        player.appendChild(source)
-
-        source = document.createElement("source")
-        source.type = "video/mp4"
-        source.sizes = "640x360"
-        //source.media = "(min-width:200px)"
-        source.src = sources[0].url
-        player.appendChild(source)*/
-        //https://stackoverflow.com/questions/38626993/change-video-quality-with-sources-pointing-to-different-quality-versions
-
-        /*function onLoadedMetadata(event) {
-            player.currentTime = currentPosition
-        }*/
-
-        function onTimeUpdate() {
-            //console.log("onTimeUpdate", videoElement.currentTime)
-        }
-
-        //player.onloadedmetadata = (event) => { onLoadedMetadata(event) }
-
-        player.ontimeupdate = onTimeUpdate;
+        player.ontimeupdate = () => element.PositionActual = element.Player.currentTime
 
         player.onplay = () => element.PlayActual = true
         player.onpause = () => element.PlayActual = false  
 
-
-
         element.VolumeActual = player.volume
         player.onvolumechange = () => element.VolumeActual = player.volume
-        
-
-        /*player.onended = (event) => {
-            console.log("player.onended",event)
-        }*/
-
-        //player.volume = 1
-
 
         element.Player = player
 
-        getCurrentPosition = function () {
-            return player.currentTime
-        }
-
         playerDestructor = function () {
             playerDestructor = undefined
-            getCurrentPosition = undefined
+
+            player.ontimeupdate = undefined
             player.onpause = undefined
+            player.onplay = undefined
+            player.onvolumechange = undefined
 
             element.Player = undefined
-
             element.removeChild(player)            
         }
     }
-
-
-
 
 
     new Reaction(() => {
@@ -456,10 +403,6 @@ function Video(element) {
 
     })
 
-
-
-
-    
     
 
     //Play
@@ -541,9 +484,7 @@ function Video(element) {
                 element.Player.controls = element.Controls                
             }
         }
-    })
-
-    
+    })    
 
     WidthToStyle(element)
     HeightToStyle(element)

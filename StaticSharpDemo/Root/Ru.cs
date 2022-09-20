@@ -51,7 +51,7 @@ namespace StaticSharpDemo.Root {
             };
         }
 
-        public override Group? Content => new() {
+        public override Blocks? Content => new() {
 
 
             {"video",

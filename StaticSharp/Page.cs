@@ -25,7 +25,7 @@ namespace StaticSharp {
 
     namespace Gears {
         [System.Diagnostics.DebuggerNonUserCode]
-        public class MaterialJs : HierarchicalJs {
+        public class PageJs : BaseModifierJs {
             public float WindowWidth =>  NotEvaluatableValue<float>();
             public float WindowHeight => NotEvaluatableValue<float>();
             public float ContentWidth => NotEvaluatableValue<float>();
@@ -34,7 +34,7 @@ namespace StaticSharp {
 
         }
 
-        public class MMaterialBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {            
+        public class PageBindings<FinalJs> : BaseModifierBindings<FinalJs> where FinalJs : new() {            
             public Binding<float> ContentWidth { set { Apply(value); } }
             public Binding<float> FontSize { set { Apply(value); } }
 
@@ -44,20 +44,17 @@ namespace StaticSharp {
     }
 
 
-    [Mix(typeof(MMaterialBindings<MaterialJs>))]
+    [Mix(typeof(PageBindings<PageJs>))]
     [ConstructorJs]
     [RelatedScript("Watch")]
     [RelatedScript("Color")]
     [RelatedScript("Cookies")]
 
-    public abstract partial class Page : Hierarchical, IMaterial, IInline, IPage, IPlainTextProvider {
+    public abstract partial class Page : BaseModifier, IMaterial, IPage, IPlainTextProvider {
         protected virtual void Setup() {
             FontSize = 16;
         }
 
-        //public class TChildren : List<object> { }
-
-        //public virtual IImage TitleImage => null;
         public virtual string Title {
             get {
                 var n = GetType().Namespace;
@@ -65,37 +62,24 @@ namespace StaticSharp {
             }
         }
         public virtual Inlines? Description => null;
-
-        public virtual Group? Content => null;
+        public virtual Blocks? Content => null;
         public virtual IBlock? Footer => null;
 
         //public virtual RightSideBar RightSideBar => null;
         public virtual IBlock? LeftSideBar => null;
-
-        
-        public List<Modifier> Modifiers => new(){
-            new(){
-                FontFamilies = new[]{
-                        new FontFamily("Roboto")
-                    },
-                FontStyle = new FontStyle(FontWeight.Regular)
-            },
-        };
-
         protected override string TagName => "body";
 
         public Page([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
-            : base(callerFilePath, callerLineNumber) {}
+            : base(callerFilePath, callerLineNumber) {
 
-
-
-        //public virtual Font Font => new(Path.Combine(AbsolutePath(), "Fonts", "roboto"), FontWeight.Regular);
+            FontFamilies = new[] { new FontFamily("Roboto") };
+            FontStyle = new FontStyle(FontWeight.Regular);
+        }
 
         public async Task<string> GeneratePageHtmlAsync(Context context) {
 
             Setup();
 
-            //context.Includes.Require(new Script(AbsolutePath("StaticSharp.js")));
             context.Includes.Require(new Style(AbsolutePath("Normalization.scss")));
 
             context.Includes.Require(new Style(AbsolutePath("Debug.scss")));
@@ -162,38 +146,19 @@ namespace StaticSharp {
             };
         }
 
-
-
-        /*public override void AddRequiredInclues(IIncludes includes) {
-            base.AddRequiredInclues(includes);
-            includes.Require(new Script(AbsolutePath("Material.js")));
-        }*/
-
-
         public virtual async Task<Tag> GenerateHtmlAsync(Context context, string? id = null) {
 
             await AddRequiredInclues(context);
 
-            foreach (var m in Modifiers) {
-                await m.AddRequiredInclues(context);
-                context = m.ModifyContext(context);
-            }
+            context = ModifyContext(context);
 
             var tag = new Tag(TagName, id) { };
 
-            foreach (var m in Modifiers)
-                m.ModifyTag(tag);
-
-            //tag.Add(await CreateScripts(context).SequentialOrParallel());
+            ModifyTag(tag);
 
             tag.Add(await CreateConstructorScriptAsync(context));
 
-            foreach (var m in Modifiers)
-                tag.Add(await m.CreateConstructorScriptAsync(context));
-
-
             tag.Add(await GenerateChildrenHtmlAsync(context, tag));
-            //tag.Add(After());
 
             return tag;
         }
@@ -342,7 +307,18 @@ namespace StaticSharp {
             
 //        }
 
-        public async Task<Tag> GenerateInlineHtmlAsync(Context context, string? id, string? format) {
+
+        /*public Link GetLink([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
+            if (this is StaticSharpEngine.IRepresentative representative) {
+                return new NodeLink(representative.Node, callerFilePath, callerLineNumber);
+            } else {
+                throw new InvalidOperationException();//TODO: details
+            }
+            
+
+        }*/
+
+        /*public async Task<Tag> GenerateInlineHtmlAsync(Context context, string? id, string? format) {
             var representative = this as  StaticSharpEngine.IRepresentative;
             //todo: material outside of the tree exceprion
             var uri = context.NodeToUrl(representative?.Node);
@@ -360,7 +336,7 @@ namespace StaticSharp {
             }
 
             return result;
-        }
+        }*/
 
         public async Task<string> GetPlaneTextAsync(Context context) {
             return Title;
