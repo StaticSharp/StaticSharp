@@ -4,8 +4,6 @@ function Page(element) {
     let loadingDeffered = Reaction.beginDeferred()
 
     BaseModifier(element)
-   
-
 
 
     function getWindowWidth() {
@@ -29,6 +27,7 @@ function Page(element) {
 
     element.Reactive = {
         Root: element,
+
         UserInteracted: false,
         DevicePixelRatio: window.devicePixelRatio,
         WindowWidth: getWindowWidth(),
@@ -50,6 +49,7 @@ function Page(element) {
         Footer: undefined,
     }
 
+    DepthToStyle(element)
 
     function createDevicePixelRatioCallback(func) {
         let matchMedia = window.matchMedia(`screen and (resolution: ${window.devicePixelRatio}dppx)`)

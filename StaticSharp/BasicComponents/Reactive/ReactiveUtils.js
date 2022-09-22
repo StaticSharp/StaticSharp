@@ -2,6 +2,13 @@ function ToCssSize(value) {
     return (value!=undefined) ? value + "px" : ""
 }
 
+function DepthToStyle(element) {
+    return new Reaction(() => {
+        element.style.zIndex = element.Depth
+    })
+}
+
+
 function XToStyle(element) {
     return new Reaction(() => {
         element.style.left = ToCssSize(element.X)

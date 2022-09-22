@@ -5,7 +5,7 @@ function Column(element) {
         InternalWidth: () => {
 
             let internalWidth = undefined
-            for (let child of element.children) {
+            for (let child of element.Children) {
                 let left = CalcOffset(element, child, "Left")
                 let right = CalcOffset(element, child, "Right")
 
@@ -88,7 +88,7 @@ function Column(element) {
         contentHeight = 0
 
 
-        for (let i of element.children) {
+        for (let i of element.Children) {
             if (!addElement(i, false)) {
                 return
             }
@@ -129,7 +129,7 @@ function Column(element) {
 
         contentHeight = 0
 
-        for (let i of element.children) {
+        for (let i of element.Children) {
             if (!addElement(i, true)) {
                 return
             }

@@ -53,13 +53,30 @@ namespace StaticSharp {
                 }
             }
 
-            protected void Apply<T>(Binding<T> binding, [System.Runtime.CompilerServices.CallerMemberName] string memberName = "") {
+            protected void Apply<T>(Binding<T> binding,
+                [System.Runtime.CompilerServices.CallerMemberName] string? memberName = null,
+                string? memberName1 = null,
+                string? memberName2 = null,
+                string? memberName3 = null) {
+
+                var memberNames = new string?[] { memberName, memberName1, memberName2, memberName3 };
+
                 var aggregator = (Aggregator.Current as Reactive);
                 if (aggregator == null)
                     throw new InvalidOperationException($"{nameof(Bindings<FinalJs>)} must be aggregated into {nameof(Reactive)} only");
 
-                aggregator.Properties[memberName] = binding.CreateScriptExpression();
+                foreach (var i in memberNames) {
+                    if (i != null) {
+                        aggregator.Properties[i] = binding.CreateScriptExpression();
+                    }
+                }                
             }
+
+            /*protected void Apply<T>(Binding<T> binding, params string[] memberNames) {
+
+
+            }*/
+
 
 
         }

@@ -99,7 +99,7 @@ namespace StaticSharp {
 
 
         public void AppendFormatted(StaticSharpEngine.ITypedRepresentativeProvider<Page> node, string? format = null, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
-            var link = new NodeLink(node, callerFilePath, callerLineNumber) {
+            var link = new LinkInline(node, callerFilePath, callerLineNumber) {
                 Children = {
                     (format != null)?format:node.Representative.Title
                 }

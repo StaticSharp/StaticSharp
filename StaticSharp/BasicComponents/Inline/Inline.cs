@@ -9,6 +9,14 @@ namespace StaticSharp.Gears{
 
     }
 
+    namespace Gears {
+        public class InlineBindings<FinalJs> : BaseModifierBindings<FinalJs> where FinalJs : new() {
+        
+        }
+    }
+
+
+
 
     [ConstructorJs]
     public partial class Inline : BaseModifier, IInline {

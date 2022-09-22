@@ -20,8 +20,8 @@ namespace StaticSharp {
         public class YoutubeVideoManifestResourceData {
             public List<YoutubeVideoManifestItem> Items = new();
         }
-        public class YoutubeVideoManifestItem : IStreamInfo, Gears.IKeyProvider {
-            public string Key => Gears.KeyUtils.Combine<YoutubeVideoManifestItem>(Url);
+        public class YoutubeVideoManifestItem : IStreamInfo, IKeyProvider {
+            public string Key => KeyUtils.Combine<YoutubeVideoManifestItem>(Url);
 
             public string Url;
             public string Container;

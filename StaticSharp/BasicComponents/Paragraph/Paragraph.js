@@ -4,8 +4,8 @@ function Paragraph(element) {
 
 
     element.Reactive = {
-
-        InternalWidth: () => element.MaxContentWidth,
+        Selectable: true,
+        InternalWidth: () => Sum(element.MaxContentWidth,element.PaddingLeft, element.PaddingRight),
 
         InternalHeight: undefined,
 
@@ -80,10 +80,10 @@ function Paragraph(element) {
             return
         }
 
-        content.style.width = element.style.width
+        content.style.width = Sum(element.style.width, -element.PaddingLeft, -element.PaddingRight) 
 
         var rect = content.getBoundingClientRect()
-        element.InternalHeight = rect.height
+        element.InternalHeight = Sum(rect.height, element.PaddingTop, element.PaddingBottom)
 
     })
 

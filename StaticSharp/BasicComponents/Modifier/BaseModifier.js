@@ -42,21 +42,28 @@ function BaseModifier(element) {
 
     element.Reactive = {
         Modifier: element,
+        Selectable: undefined,
+
         //BackgroundColor: undefined,
         ForegroundColor: () => {            
             if (element.BackgroundColor == undefined)
                 return undefined
             return element.BackgroundColor.contrastColor()
-        }
-        
-        
+        }        
     }
 
+
+    new Reaction(() => {
+        let selectable = element.Selectable
+        if (selectable!=undefined)
+            element.style.userSelect = element.Selectable ? "text" : "none"
+        else
+            element.style.userSelect = ""
+    })
     
 
     new Reaction(() => {
         if (element.BackgroundColor) {
-            console.log(element,"element.BackgroundColor", element.BackgroundColor)
             element.style.backgroundColor = element.BackgroundColor// element.BackgroundColor.toString(16)
         }
     })

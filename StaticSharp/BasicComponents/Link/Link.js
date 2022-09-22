@@ -1,6 +1,4 @@
 function Link(element) {
-    Inline(element)
-
     element.Reactive = {
         HRef: undefined,
         NewTab: false

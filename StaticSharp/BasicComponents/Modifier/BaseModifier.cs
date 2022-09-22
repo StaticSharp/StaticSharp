@@ -13,9 +13,8 @@ namespace StaticSharp {
     public class BaseModifierJs : HierarchicalJs {
         
         public Color BackgroundColor => NotEvaluatableValue<Color>();
-
         public Color ForegroundColor => NotEvaluatableValue<Color>();
-
+        public bool Hover => NotEvaluatableValue<bool>();
 
     }
 
@@ -23,6 +22,8 @@ namespace StaticSharp {
         
         public Binding<Color> BackgroundColor { set { Apply(value); } }
         public Binding<Color> ForegroundColor { set { Apply(value); } }
+        public Binding<bool> Hover { set { Apply(value); } }
+
 
     }
 

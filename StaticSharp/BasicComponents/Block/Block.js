@@ -26,12 +26,19 @@ function CalcOffset(container, child, sideName) {
 
 
 function Block(element) {
+    
 
     BaseModifier(element)
 
     element.isBlock = true
+
+    
+
     element.Reactive = {
-        
+        //OverlayDepth: () => element.Parent.OverlayDepth + element.overlaySign != 0 ? 1 : 0,
+
+        //Depth: () => element.Parent.Depth + (element.overlaySign == 0) ? Depth.nestingIncrement : Depth.getOverlayIncrement(element.OverlayDepth),
+
         PaddingLeft: undefined,
         PaddingTop: undefined,
         PaddingRight: undefined,
@@ -67,9 +74,45 @@ function Block(element) {
         Hover: false
     }
 
+    DepthToStyle(element)
+
+    if (element.overlaySign != 0) {
+        new Reaction(() => {
+            let top = element.MarginTop
+            let bottom = element.MarginBottom
+            let left =   element.MarginLeft
+            let right = element.MarginRight
+
+            element.LayoutX = First(left,0)
+            element.LayoutY = First(top,0)
+
+            element.LayoutWidth = Sum( element.Parent.Width, -left, -right)
+            element.LayoutHeight = Sum( element.Parent.Height, -top, -bottom)
+        })
+    }
+
+
+
+
     XToStyle(element);
 
     YToStyle(element);
+
+    new Reaction(() => {
+        element.style.paddingLeft = ToCssSize(element.PaddingLeft)
+    })
+    new Reaction(() => {
+        element.style.paddingRight = ToCssSize(element.PaddingRight)
+    })
+
+    new Reaction(() => {
+        element.style.paddingTop = ToCssSize(element.PaddingTop)
+    })
+    new Reaction(() => {
+        element.style.paddingBottom = ToCssSize(element.PaddingBottom)
+    })
+
+
 
     new Reaction(() => {
         element.style.fontSize = ToCssSize(element.FontSize)

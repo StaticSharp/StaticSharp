@@ -28,7 +28,7 @@ namespace StaticSharp {
             //eot,
         }
 
-        public class CacheableFontFamily : Gears.Cacheable<FontFamily> {
+        public class CacheableFontFamily : Cacheable<FontFamily> {
 
             private List<FontFamilyMember>[/*italic*/] members = new[]{
                 new List<FontFamilyMember>(),

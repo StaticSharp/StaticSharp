@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace StaticSharp {
     
     [System.Diagnostics.DebuggerNonUserCode]
-    public class BlockJs : HierarchicalJs {
+    public class BlockJs : BaseModifierJs {
         public float X => NotEvaluatableValue<float>();
         public float Y => NotEvaluatableValue<float>();
         public float Width => NotEvaluatableValue<float>();
@@ -34,14 +34,33 @@ namespace StaticSharp {
             public Binding<float> Y { set { Apply(value); } }
             public Binding<float> Width { set { Apply(value); } }
             public Binding<float> Height { set { Apply(value); } }
+
+
+
             public Binding<float> MarginLeft { set { Apply(value); } }
             public Binding<float> MarginRight { set { Apply(value); } }
             public Binding<float> MarginTop { set { Apply(value); } }
             public Binding<float> MarginBottom { set { Apply(value); } }
+
+            public Binding<float> MarginsHorizontal { set { Apply(value, "MarginLeft", "MarginRight"); } }
+            public Binding<float> MarginsVertical { set { Apply(value, "MarginTop", "MarginBottom"); } }
+            public Binding<float> Margins { set { Apply(value, "MarginLeft", "MarginRight", "MarginTop", "MarginBottom"); } }
+
+
+
+
             public Binding<float> PaddingLeft { set { Apply(value); } }
             public Binding<float> PaddingRight { set { Apply(value); } }
             public Binding<float> PaddingTop { set { Apply(value); } }
             public Binding<float> PaddingBottom { set { Apply(value); } }
+
+            public Binding<float> PaddingsHorizontal { set { Apply(value, "PaddingLeft", "PaddingRight"); } }
+            public Binding<float> PaddingsVertical { set { Apply(value, "PaddingTop", "PaddingBottom"); } }
+            public Binding<float> Paddings { set { Apply(value, "PaddingLeft", "PaddingRight", "PaddingTop", "PaddingBottom"); } }
+
+
+
+
             public Binding<float> FontSize { set { Apply(value); } }
 
         }
@@ -53,6 +72,8 @@ namespace StaticSharp {
     [ConstructorJs]
     public partial class Block : BaseModifier, IBlock {
         //public virtual List<Modifier> Modifiers { get; } = new();
+
+        public Block? Overlay;
 
         protected Block(Block other,
             string callerFilePath = "",
@@ -93,6 +114,19 @@ namespace StaticSharp {
 
 
             tag.Add(await GenerateHtmlInternalAsync(context, tag));
+
+
+            if (Overlay != null) {
+                string? overlayId = null;
+                if (id != null) {
+                    overlayId = id + "Overlay";
+                }
+                tag.Add(new Tag("overlay") {
+                    await Overlay.GenerateHtmlAsync(context,overlayId)
+                });
+            }
+
+
             //tag.Add(After());
 
             return tag;
@@ -101,14 +135,21 @@ namespace StaticSharp {
     }
 
     public static partial class Static {
-        public static T ConsumeParentHorizontalMargins<T>(this T _this) where T : Block {
+        public static T ParentHorizontalMarginsToPaddings<T>(this T _this) where T : Block {
             _this.X = new(e => -e.ParentBlock.MarginLeft);
             _this.Width = new(e => e.ParentBlock.Width + e.ParentBlock.MarginLeft + e.ParentBlock.MarginRight);
             _this.PaddingLeft = new(e => e.ParentBlock.MarginLeft);
             _this.PaddingRight = new(e => e.ParentBlock.MarginRight);
             return _this;
         }
-    
+
+        public static T ParentHorizontalMarginsToWidth<T>(this T _this) where T : Block {
+            _this.X = new(e => -e.ParentBlock.MarginLeft);
+            _this.Width = new(e => e.ParentBlock.Width + e.ParentBlock.MarginLeft + e.ParentBlock.MarginRight);
+            return _this;
+        }
+
+
     }
 
 

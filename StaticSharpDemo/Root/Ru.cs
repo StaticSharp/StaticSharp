@@ -29,8 +29,8 @@ namespace StaticSharpDemo.Root {
         }
 
 
-        public Link GithubUrl(string text = "GitHub repository") {
-            return new Link {
+        public LinkInline GithubUrl(string text = "GitHub repository") {
+            return new LinkInline {
                 HRef = "https://github.com/antilatency/Antilatency.Copilot",
                 NewTab = true,
                 ForegroundColor = Color.FromArgb(172, 196, 53),
@@ -40,8 +40,8 @@ namespace StaticSharpDemo.Root {
             };
         }
 
-        public Link DiscordUrl(string text = "Discord server") {
-            return new Link {
+        public LinkInline DiscordUrl(string text = "Discord server") {
+            return new LinkInline {
                 HRef = "https://discord.gg/ZTqmfPsGEr",
                 NewTab = true,
                 ForegroundColor = Color.FromArgb(139, 148, 245),
@@ -108,7 +108,7 @@ namespace StaticSharpDemo.Root {
                     }
                 }
 
-            }.ConsumeParentHorizontalMargins(),
+            }.ParentHorizontalMarginsToPaddings(),
 
             new Flipper(){
                 MarginLeft = new(e=>e.ParentBlock.MarginLeft),

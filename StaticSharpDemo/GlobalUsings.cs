@@ -6,3 +6,4 @@ global using static StaticSharp.Static;
 global using static StaticSharp.Alpha.Static;
 
 global using Color = System.Drawing.Color;
+global using ColorTranslator = System.Drawing.ColorTranslator;

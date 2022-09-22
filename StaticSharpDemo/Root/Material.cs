@@ -12,7 +12,7 @@ namespace StaticSharpDemo.Root {
         public override IBlock LeftSideBar => new Column() {
 
 
-            BackgroundColor = Color.FromArgb(0xff355070),
+            BackgroundColor = ColorTranslator.FromHtml("#6d597a"),
 
 
             Children = {
@@ -43,7 +43,7 @@ namespace StaticSharpDemo.Root {
 
         public override IBlock? Footer => new Row {
 
-            BackgroundColor = Color.Black,
+            BackgroundColor = ColorTranslator.FromHtml("#355070"),
 
             X = new(e => -e.ParentBlock.MarginLeft),
 

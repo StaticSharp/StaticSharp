@@ -101,7 +101,7 @@ namespace StaticSharp {
                     CreateCacheSubDirectory();
 
                     Content = await httpResponseMessage.Content.ReadAsByteArrayAsync();
-                    CachedData.ContentHash = Gears.Hash.CreateFromBytes(Content).ToString();
+                    CachedData.ContentHash = Hash.CreateFromBytes(Content).ToString();
 
                     await FileUtils.WriteAllBytesAsync(ContentFilePath, Content);
 

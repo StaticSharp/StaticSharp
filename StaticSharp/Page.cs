@@ -49,7 +49,7 @@ namespace StaticSharp {
     [RelatedScript("Watch")]
     [RelatedScript("Color")]
     [RelatedScript("Cookies")]
-
+    [RelatedScript("Depth")]
     public abstract partial class Page : BaseModifier, IMaterial, IPage, IPlainTextProvider {
         protected virtual void Setup() {
             FontSize = 16;

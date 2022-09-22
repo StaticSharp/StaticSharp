@@ -57,6 +57,8 @@ function Video(element) {
 
 
     element.Reactive = {
+        Selectable: false,
+
         Aspect: element.dataset.width / element.dataset.height,
         InternalWidth: () => First(element.Height * element.Aspect, element.dataset.width),
         InternalHeight: () => First(element.Width / element.Aspect, element.dataset.height),
@@ -94,10 +96,6 @@ function Video(element) {
 
     }
 
-    //PositionActual
-    /*new Reaction(() => {
-        console.log("element.PositionActual",element.PositionActual)
-    })*/
 
 
 
@@ -316,9 +314,6 @@ function Video(element) {
     }
 
 
-    new Reaction(() => {
-        console.log("element.PositionActual",element.PositionActual)
-    })
 
 
     function InitializeHtml5Video() {
