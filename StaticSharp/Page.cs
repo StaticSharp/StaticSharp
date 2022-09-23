@@ -30,6 +30,10 @@ namespace StaticSharp {
             public float WindowHeight => NotEvaluatableValue<float>();
             public float ContentWidth => NotEvaluatableValue<float>();
 
+            public float DevicePixelRatio => NotEvaluatableValue<float>();
+            public bool Touch => NotEvaluatableValue<bool>();
+            public bool UserInteracted => NotEvaluatableValue<bool>();
+
             public float FontSize => NotEvaluatableValue<float>();
 
         }

@@ -15,6 +15,7 @@ namespace StaticSharp {
         public Color BackgroundColor => NotEvaluatableValue<Color>();
         public Color ForegroundColor => NotEvaluatableValue<Color>();
         public bool Hover => NotEvaluatableValue<bool>();
+        public bool Selectable => NotEvaluatableValue<bool>();
 
     }
 
@@ -22,69 +23,10 @@ namespace StaticSharp {
         
         public Binding<Color> BackgroundColor { set { Apply(value); } }
         public Binding<Color> ForegroundColor { set { Apply(value); } }
-        public Binding<bool> Hover { set { Apply(value); } }
-
-
-    }
-
-
-    public static partial class BaseModifierStatic { // For bindings
-
-        /*public static T BackgroundColor<T>(this T _this, Expression<Func<BaseModifierJs, Color>> expression) where T : BaseModifier {
-            _this.BackgroundColor = expression;
-            return _this;
-        }
-        public static T BackgroundColor<T>(this T _this, Color value) where T : BaseModifier {
-            _this.BackgroundColor = e => value;
-            return _this;
-        }
-
-        public static T ForegroundColor<T>(this T _this, Expression<Func<BaseModifierJs, Color>> expression) where T : BaseModifier {
-            _this.ForegroundColor = expression;
-            return _this;
-        }
-        public static T ForegroundColor<T>(this T _this, Color value) where T : BaseModifier {
-            _this.ForegroundColor = e => value;
-            return _this;
-        }*/
-
-    }
-
-    public static partial class BaseModifierStatic {
+        public Binding<bool> Selectable { set { Apply(value); } }
         
-        /*public static T Url<T>(this T _this, string url) where T: BaseModifier {
-            _this.Url = url;
-            return _this;
-        }*/
-        public static T Title<T>(this T _this, string title) where T : BaseModifier {
-            _this.Title = title;
-            return _this;
-        }
-        public static T FontFamilies<T>(this T _this, FontFamily[] fontFamilies) where T : BaseModifier {
-            _this.FontFamilies = fontFamilies;
-            return _this;
-        }
-        public static T FontStyle<T>(this T _this, FontStyle fontStyle) where T : BaseModifier {
-            _this.FontStyle = fontStyle;
-            return _this;
-        }
-
-        public static T FontStyle<T>(this T _this, FontWeight weight = FontWeight.Regular,bool italic = false) where T : BaseModifier {
-            _this.FontStyle = new FontStyle(weight, italic);
-            return _this;
-        }
-
-        public static T LineHeight<T>(this T _this, float lineHeight) where T : BaseModifier {
-            _this.LineHeight = lineHeight;
-            return _this;
-        }
-
-        public static T LetterSpacing<T>(this T _this, float letterSpacing) where T : BaseModifier {
-            _this.LetterSpacing = letterSpacing;
-            return _this;
-        }
-
     }
+
 
 
     namespace Gears {

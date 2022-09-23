@@ -47,5 +47,6 @@ function First() {
         if (i === null) continue;
         return i
     }
+    return undefined
 }
 

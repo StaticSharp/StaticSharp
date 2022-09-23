@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace StaticSharp.Gears;
@@ -62,37 +63,42 @@ public abstract record Genome<TFinalGenome,TCacheable> : Genome, IGenome<TCachea
     where TFinalGenome : Genome<TFinalGenome, TCacheable>
     where TCacheable : ICacheable<TFinalGenome>, new() {
 
+
+
+
     public async Task<TCacheable> CreateOrGetCached() {
 
-
-        //Cache.Lock();
-
-        try {
-            Task<object>? task = Cache.Get(Key);
-            if (task == null) {
-                task = CreateAsync().ContinueWith(x => (object)x.Result);
-                Cache.Add(Key, task);
-                return (TCacheable)(await task);
-            }
-            
-            var value = (TCacheable)(await task);
-            if (value is IMutableAsset mutable) {
-                if (!await mutable.GetValidAsync()) {
-                    mutable.DeleteCacheSubDirectory();
+        using (await Cache.AsyncLock.LockAsync()) {
+            try {
+                Task<object>? task = Cache.Get(Key);
+                if (task == null) {
                     task = CreateAsync().ContinueWith(x => (object)x.Result);
                     Cache.Add(Key, task);
+                    return (TCacheable)(await task);
                 }
-            } 
-            
-            return (TCacheable)(await task);
-        }
-        catch (Exception e) {
-            Console.WriteLine(e);
-            throw e;
-            //Cache.Unlock();
+
+                var value = (TCacheable)(await task);
+                if (value is IMutableAsset mutable) {
+                    if (!await mutable.GetValidAsync()) {
+                        mutable.DeleteCacheSubDirectory();
+                        task = CreateAsync().ContinueWith(x => (object)x.Result);
+                        Cache.Add(Key, task);
+                    }
+                }
+
+                return (TCacheable)(await task);
+            }
+            catch (Exception e) {
+                Console.WriteLine(e);
+                throw e;
+                //Cache.Unlock();
+            }
+
         }
 
-        
+
+
+
     }
 
     public async Task<TCacheable> CreateAsync() {

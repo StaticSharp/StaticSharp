@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿
+using NeoSmart.AsyncLock;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace StaticSharp.Gears;
-
 public static partial class Cache { 
 
     public static string Directory { get; set; }
@@ -14,15 +14,17 @@ public static partial class Cache {
 
     private static readonly Dictionary<string, Task<object>> items = new();
 
+    public static AsyncLock AsyncLock { get; } = new();
+    public static SingleThreadTaskScheduler TaskScheduler { get; } = new SingleThreadTaskScheduler().Start();
 
 
-    public static void Lock() {
+    /*public static void Lock() {
         Monitor.Enter(items);
     }
 
     public static void Unlock() {
         Monitor.Exit(items);
-    }
+    }*/
 
     public static Task<object>? Get(string key) {
         if (items.TryGetValue(key, out var resultTask)) {

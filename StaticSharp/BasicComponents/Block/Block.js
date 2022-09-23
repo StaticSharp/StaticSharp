@@ -32,12 +32,27 @@ function Block(element) {
 
     element.isBlock = true
 
-    
+
 
     element.Reactive = {
-        //OverlayDepth: () => element.Parent.OverlayDepth + element.overlaySign != 0 ? 1 : 0,
+        
+        Depth: () => {
+            if (element.overlaySign == 0) {
+                return 0;
+            } else {
+                if (element.overlaySign == 1) {//overlay
+                    return Sum(element.OverlayIndex * 100, - element.NestingDepth)
+                } else {//underlay
+                    return -1
+                }
+            }
+        },
+        OverlayIndex: () => element.IsRoot ? 0 : (element.overlaySign ? Sum(element.Parent.OverlayIndex, 1) : element.Parent.OverlayIndex),
 
-        //Depth: () => element.Parent.Depth + (element.overlaySign == 0) ? Depth.nestingIncrement : Depth.getOverlayIncrement(element.OverlayDepth),
+        Overlay: undefined,
+        Underlay: undefined,
+
+
 
         PaddingLeft: undefined,
         PaddingTop: undefined,
@@ -63,13 +78,12 @@ function Block(element) {
         X: () => element.LayoutX,
         Y: () => element.LayoutY,
 
+        AbsoluteX: () => element.IsRoot ? 0 : Sum(element.Parent.AbsoluteX, element.X),
+        AbsoluteY: () => element.IsRoot ? 0 : Sum(element.Parent.AbsoluteY, element.Y),
+
         Width: () => First(element.LayoutWidth, element.InternalWidth),
         Height: () => First(element.LayoutHeight, element.InternalHeight),
 
-        //FontSize: undefined,
-        HierarchyFontSize: () => element.FontSize || element.Parent.HierarchyFontSize,
-
-        //public Expression<Func< FinalJs, float >> FontSize { set { AssignProperty(value); } }
 
         Hover: false
     }
@@ -91,12 +105,20 @@ function Block(element) {
         })
     }
 
+    if (element.overlaySign == 1) {
+        new Reaction(() => {
+            element.style.left = ToCssSize(element.AbsoluteX)
+        })
+        new Reaction(() => {
+            element.style.top = ToCssSize(element.AbsoluteY)
+        })
+    } else {
+        XToStyle(element);
+        YToStyle(element);
+    }
 
 
-
-    XToStyle(element);
-
-    YToStyle(element);
+    
 
     new Reaction(() => {
         element.style.paddingLeft = ToCssSize(element.PaddingLeft)
@@ -120,15 +142,11 @@ function Block(element) {
 
 
     element.addEventListener('mouseenter', e => {
-        let d = Reaction.beginDeferred()
         element.Hover = true
-        d.end()
     });
 
     element.addEventListener('mouseleave', e => {
-        let d = Reaction.beginDeferred()
         element.Hover = false
-        d.end()
     });
 
 }

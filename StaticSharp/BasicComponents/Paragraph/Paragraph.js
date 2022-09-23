@@ -60,27 +60,33 @@ function Paragraph(element) {
         //console.log("element.Width", element.Parent, element)
         element.style.width = element.Width + "px"
 
-        if (element.MinContentWidth > element.Width) {
+        let minContentWidthWithPaddings = Sum(element.MinContentWidth, element.PaddingLeft, element.PaddingRight)
+
+        if (minContentWidthWithPaddings > element.Width) {
             //element.title = "element.MinContentWidth > element.Width"
 
             content.style.width = "min-content"
             content.style.transformOrigin = "top left"
 
-            let scale = element.Width / element.MinContentWidth
+            let scale = Sum(element.Width, -element.PaddingLeft, -element.PaddingRight) / element.MinContentWidth
             content.style.transform = `scale(${scale}, ${scale})`
-            element.InternalHeight = element.MaxContentHeight * scale
+            element.InternalHeight = Sum(element.MaxContentHeight * scale, element.PaddingTop, element.PaddingBottom) 
             return
         }
-        if (Math.abs(element.Width - element.MaxContentWidth) < 0.001) {
+
+        let maxContentWidthWithPaddings = Sum(element.MaxContentWidth, element.PaddingLeft, element.PaddingRight)
+        if (Math.abs(element.Width - maxContentWidthWithPaddings) < 0.001) {
             //element.title = "element.Width == element.MaxContentWidth"
 
-            element.InternalHeight = element.MinContentHeight
+            element.InternalHeight = Sum(element.MinContentHeight, element.PaddingTop, element.PaddingBottom) 
             content.style.width = "max-content"
 
             return
         }
+        
+        //content.style.width = Sum(element.style.width, -element.PaddingLeft, -element.PaddingRight) 
+        //console.log("element.style.width", element.style.width + 1000, element)
 
-        content.style.width = Sum(element.style.width, -element.PaddingLeft, -element.PaddingRight) 
 
         var rect = content.getBoundingClientRect()
         element.InternalHeight = Sum(rect.height, element.PaddingTop, element.PaddingBottom)

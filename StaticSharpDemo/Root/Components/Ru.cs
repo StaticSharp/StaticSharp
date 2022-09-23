@@ -20,7 +20,7 @@ namespace StaticSharpDemo.Root.Components {
                     new Paragraph($"Paragraph"){ 
                         Overlay = new LinkBlock(Node.Parent){
                             BackgroundColor = ColorTranslator.FromHtml("#80000000"),
-                            Margins = -20
+                            Margins = new (e=>e.Root.Touch? -20 : 0)
                         }                       
                     },
                     $"{new LinkInline{HRef = "https://developers.antilatency.com/" , Children = { "First" }}}",
@@ -32,6 +32,7 @@ namespace StaticSharpDemo.Root.Components {
             .Modify(x=>{
                 var items = x.Children.Values.OfType<Block>().ToArray();
                 foreach (var i in items) {
+                    i.Selectable = false;
                     i.Margins = 0;
                     i.Paddings = 20;
                     i.BackgroundColor = new(e=>e.Hover? ColorTranslator.FromHtml("#e56b6f") : ColorTranslator.FromHtml("#00000000"));
@@ -48,7 +49,7 @@ namespace StaticSharpDemo.Root.Components {
                         new Space(),
                         H3("Video"),
                         $"""
-                        Компонент Video пожет отображаться как iframe или как video tag, в зависимости от настроек
+                        Компонент Video может отображаться как iframe или как video tag, в зависимости от настроек
                         Подробнее {Node.VideoPlayer}
                         """,
                         new Space()

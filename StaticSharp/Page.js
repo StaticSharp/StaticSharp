@@ -30,11 +30,13 @@ function Page(element) {
 
         UserInteracted: false,
         DevicePixelRatio: window.devicePixelRatio,
+
+
         WindowWidth: getWindowWidth(),
         WindowHeight: getWindowHeight(),
 
         FontSize: 16,
-        HierarchyFontSize: () => element.FontSize || element.Parent.HierarchyFontSize,
+        HierarchyFontSize: () => element.FontSize,
 
         ContentWidth: 960,
         BarsCollapsed: () => 
@@ -65,7 +67,13 @@ function Page(element) {
 
     createDevicePixelRatioCallback(() => element.DevicePixelRatio = window.devicePixelRatio)
 
+    let touchMedia = window.matchMedia("(pointer: coarse)")
+    element.Reactive.Touch = touchMedia.matches
+    touchMedia.onchange = (e) => {
+        element.Touch = e.matches
+    }
 
+    new Reaction(() => console.log("element.Touch", element.Touch))
 
 
 

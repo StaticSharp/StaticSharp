@@ -12,6 +12,7 @@ namespace StaticSharp {
 
             public string Id => NotEvaluatableValue<String>();
 
+            public PageJs Root => NotEvaluatableObject<PageJs>();
             public HierarchicalJs Parent => NotEvaluatableObject<HierarchicalJs>();
 
             public BlockJs ParentBlock => NotEvaluatableObject<BlockJs>();
