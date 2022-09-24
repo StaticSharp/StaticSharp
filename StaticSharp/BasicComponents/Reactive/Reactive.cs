@@ -123,7 +123,7 @@ namespace StaticSharp {
                     var attributes = i.GetCustomAttributes<ConstructorJsAttribute>(false);
                     if (attributes.Any()) {
 
-                        return attributes.Select(x=> string.IsNullOrEmpty(x.FileName)? i.Name: x.FileName).ToArray();
+                        return attributes.Select(x=> string.IsNullOrEmpty(x.ClassName)? i.Name: x.ClassName).ToArray();
                     }
                 }
                 throw new Exception($"{nameof(ConstructorJsAttribute)} not found for {GetType().FullName}");
@@ -147,29 +147,13 @@ namespace StaticSharp {
                     }
                 }
 
-                var assembly = type.Assembly;
-                var scriptsAttributes = type.GetCustomAttributes<RelatedScriptAttribute>(false);
-                var typeName = type.Name;
-
-                foreach (var i in scriptsAttributes) {
-                    string directory = Path.GetDirectoryName(i.CallerFilePath) ?? "";
-                    var fileName = i.FileName ?? typeName;
-                    var extension = i.Extension;
-
-                    string absoluteFilePath = Path.GetFullPath(Path.Combine(directory, fileName+ extension));
-
-                    if (File.Exists(absoluteFilePath)) {
-                        var scriptFromFile = await (new FileGenome(absoluteFilePath)).CreateOrGetCached();
-                        context.AddScript(scriptFromFile);
-
-                    } else {
-                        var relativeFilePath = AssemblyResourcesUtils.GetFilePathRelativeToProject(assembly, absoluteFilePath);
-                        var relativeResourcePath = AssemblyResourcesUtils.GetResourcePath(relativeFilePath);
-
-                        var script = await (new AssemblyResourceGenome(assembly, relativeResourcePath)).CreateOrGetCached();
-                        context.AddScript(script);
-                    }                    
+                foreach (var i in type.GetCustomAttributes<RelatedScriptAttribute>(false)) {
+                    context.AddScript(await i.GetAssetAsync(type));
                 }
+                foreach (var i in type.GetCustomAttributes<RelatedStyleAttribute>(false)) {
+                    context.AddStyle(await i.GetAssetAsync(type));
+                }
+
             }
 
             public virtual async Task AddRequiredInclues(Context context) {

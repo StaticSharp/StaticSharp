@@ -38,7 +38,7 @@ namespace StaticSharp {
             public FontFamily[]? FontFamilies = null;
             public FontStyle? FontStyle = null;
             //public string? Url = null;
-            public string? Title = null;
+            public string? Tooltip = null;
 
             public float? LineHeight = null;//line-height
             public float? LetterSpacing = null;//letter-spacing
@@ -64,8 +64,8 @@ namespace StaticSharp {
                     tag["href"] = Url;
                 }*/
 
-                if (Title != null) {
-                    tag["title"] = Title;
+                if (Tooltip != null) {
+                    tag["title"] = Tooltip;
                 }
 
                 if (LineHeight != null) {

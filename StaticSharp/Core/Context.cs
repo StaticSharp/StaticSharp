@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace StaticSharp.Gears {
@@ -30,6 +31,8 @@ namespace StaticSharp.Gears {
         public UniqueTagCollection SvgDefs { get; } = new("s");
 
         public Assets Assets { get; init; }
+
+        private List<KeyValuePair<string, IAsset>> Styles { get; } = new();
 
         private List<KeyValuePair<string, IAsset>> Scripts { get; } = new();
 
@@ -56,11 +59,39 @@ namespace StaticSharp.Gears {
         }
 
         public Html.Tag GenerateScript() {
-            var scriptCode = string.Join('\n', Scripts.Select(x => x.Value.ReadAllText()));
+            var content = string.Join('\n', Scripts.Select(x => x.Value.ReadAllText()));
             return new Html.Tag("script") {
-                new Html.PureHtmlNode(scriptCode)
+                new Html.PureHtmlNode(content)
             };
         }
+
+        public void AddStyle(IAsset asset) {
+            if (Styles.Any(x => x.Key == asset.Key))
+                return;
+            Styles.Add(new KeyValuePair<string, IAsset>(asset.Key, asset));
+        }
+
+        public Html.Tag GenerateStyle() {
+            var content = string.Join('\n', Styles.Select(x => x.Value.ReadAllText()));
+            return new Html.Tag("style") {
+                new Html.PureHtmlNode(content)
+            };
+        }
+
+        public async Task<Html.Tag> GenerateFontsAsync() {
+            var fontStyle = new StringBuilder();
+
+            var sortedFonts = Fonts.OrderBy(x => x.Key);
+
+            foreach (var i in sortedFonts.Select(x => x.Value)) {
+                fontStyle.AppendLine(await i.GenerateIncludeAsync());
+            }
+            return new Html.Tag("style") {
+                new Html.PureHtmlNode(fontStyle.ToString())
+            };
+        }
+
+
 
         public async Task AddScriptFromResource(string fileName, [CallerFilePath] string callerFilePath = "") {
             var assembly = Assembly.GetCallingAssembly();

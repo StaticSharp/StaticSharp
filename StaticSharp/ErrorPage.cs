@@ -1,4 +1,5 @@
-﻿using StaticSharp.Html;
+﻿using StaticSharp.BasicComponents.Page;
+using StaticSharp.Html;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace StaticSharp.Gears {
 
-    public class ErrorPage : IPage {
+    public class ErrorPage : IPageGenerator {
         public Exception Exception { get; }
         public string Title => "Internal server error";
 

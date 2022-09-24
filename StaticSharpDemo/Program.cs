@@ -1,4 +1,4 @@
-﻿using StaticSharp.Gears;
+﻿using StaticSharp.BasicComponents.Page;
 using StaticSharpDemo.Root;
 using StaticSharpEngine;
 using StaticSharpWeb;
@@ -41,7 +41,7 @@ namespace StaticSharpWeb {
 
         public virtual string GetLanguage(INode page) => "en";
 
-        public IEnumerable<IPage> Pages
+        public IEnumerable<IPageGenerator> Pages
             => GetRoots().SelectMany(x => GetPages(x));
 
 
@@ -73,8 +73,8 @@ namespace StaticSharpWeb {
             return map;
         }
 
-        private IEnumerable<IPage> GetPages(INode node) {
-            IEnumerable<IPage> result = node.Representative is IPage page ? Enumerable.Repeat(page, 1) : Enumerable.Empty<IPage>();
+        private IEnumerable<IPageGenerator> GetPages(INode node) {
+            IEnumerable<IPageGenerator> result = node.Representative is IPageGenerator page ? Enumerable.Repeat(page, 1) : Enumerable.Empty<IPageGenerator>();
             foreach (var i in node.Children) {
                 result = result.Concat(GetPages(i));
             }
@@ -134,7 +134,7 @@ namespace StaticSharpDemo {
 
         
 
-        public override IPage? FindPage(string requestPath) {
+        public override IPageGenerator? FindPage(string requestPath) {
             if (requestPath == null) {
                 return null;
             }
@@ -169,7 +169,7 @@ namespace StaticSharpDemo {
                 result = result.Children.FirstOrDefault(x => x.Name.ToLower() == pathPart.ToLower());
                 if (result == null) return null;
             }
-            return result.Representative as IPage;
+            return result.Representative as IPageGenerator;
         }
 
 

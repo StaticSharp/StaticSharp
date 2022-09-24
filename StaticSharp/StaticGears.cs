@@ -9,6 +9,17 @@ namespace StaticSharp.Gears {
             return await x.ToListAsync();
         }*/
 
+        /*public static async Task<IEnumerable<T>> UnwrapSequentialAsync<T>(this IEnumerable<Task<T>?> x) {
+            var result = new List<T>();
+            foreach (var i in x) {
+                if (i != null) {
+                    var item = await i;
+                    result.Add(item);
+                }
+            }
+            return result;
+        }*/
+
         public static async Task<IEnumerable<T>> SequentialOrParallel<T>(this IEnumerable<Task<T>?> x) {
 #if DEBUG
             

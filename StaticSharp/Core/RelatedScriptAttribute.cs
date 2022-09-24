@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.CompilerServices;
 
 namespace StaticSharp.Gears {
@@ -9,14 +10,29 @@ namespace StaticSharp.Gears {
 
 
     public class RelatedScriptAttribute : RelatedFileAttribute {
-        public RelatedScriptAttribute(string? fileName = null, [CallerFilePath] string callerFilePath = "") : base(fileName, callerFilePath) { }
-        public override string Extension => ".js";
+
+        const string Extension = ".js";
+        public RelatedScriptAttribute(string filePathOrExtension = Extension, [CallerFilePath] string callerFilePath = "")
+            : base(Path.HasExtension(filePathOrExtension)? filePathOrExtension: filePathOrExtension+ Extension, callerFilePath) { }
+    
+    }
+
+
+    public class RelatedStyleAttribute : RelatedFileAttribute {
+        
+        const string Extension = ".css";
+        public RelatedStyleAttribute(string filePathOrExtension = Extension, [CallerFilePath] string callerFilePath = "")
+            : base(Path.HasExtension(filePathOrExtension) ? filePathOrExtension : filePathOrExtension + Extension, callerFilePath) { }
     }
 
 
     public class ConstructorJsAttribute : RelatedScriptAttribute {
-        public ConstructorJsAttribute(string? fileName = null, [CallerFilePath] string callerFilePath = "") : base(fileName, callerFilePath) { }
+        public string ClassName { get; }
+        public ConstructorJsAttribute(string className = "", [CallerFilePath] string callerFilePath = "") : base(className + ".js", callerFilePath){
+            ClassName = className;
+        }
 
+        
     }
 
 

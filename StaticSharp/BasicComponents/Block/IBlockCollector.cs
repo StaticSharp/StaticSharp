@@ -15,7 +15,9 @@ namespace StaticSharp {
     public static class BlockCollectorStatic {
 
         
-        public static void Add<T>(this T collector, IEnumerable<KeyValuePair<string?, IBlock>> values) where T : IBlockCollector {
+        public static void Add<T>(this T collector, IEnumerable<KeyValuePair<string?, IBlock>>? values) where T : IBlockCollector {
+            if (values == null)
+                return;
             foreach (var i in values)
                 collector.Add(i.Key, i.Value);
         }
@@ -25,17 +27,11 @@ namespace StaticSharp {
             collector.Add(null, value);
         }
 
-        public static void Add<T>(this T collector, IEnumerable<IBlock?> value) where T : IBlockCollector {
-            foreach (var i in value) {
+        public static void Add<T>(this T collector, IEnumerable<IBlock?>? values) where T : IBlockCollector {
+            if (values == null)
+                return;
+            foreach (var i in values) {
                 collector.Add(null, i);
-            }
-        }
-
-        public static void Add<T>(this T collector, Group? group) where T : IBlockCollector {
-            if (group != null) {
-                foreach (var i in group.Children) {
-                    collector.Add(i.Key,i.Value);
-                }
             }
         }
 

@@ -1,6 +1,8 @@
 ﻿using StaticSharp.Gears;
+using StaticSharp.Html;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace StaticSharp {
 
@@ -16,6 +18,16 @@ namespace StaticSharp {
                 Add(new KeyValuePair<string?, IBlock>(id, block));
             }            
         }
+
+        public virtual async Task<Tag> GenerateHtmlAsync(Context context) {
+            var result = new Tag();
+            foreach (var i in this) {
+                result.Add(await i.Value.GenerateHtmlAsync(context, i.Key));
+            }
+            return result;
+        }
+
+
     }
 
 }

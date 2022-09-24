@@ -1,20 +1,18 @@
 ﻿using StaticSharp.Gears;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace StaticSharpDemo.Root {
-    public partial class Material : StaticSharp.Page {
+    public partial class Material : StaticSharp.PageSideMenus {
 
-        protected override void Setup() {
-            base.Setup();
-            ContentWidth = 960;// (e.WindowWidth > 960) ? 960 : 640;
+        protected override Task Setup(Context context) {
+            ContentWidth = 960;
+            return base.Setup(context);
         }
-        public override IBlock LeftSideBar => new Column() {
 
-
+        public override Block LeftSideBar => new Column() {
             BackgroundColor = ColorTranslator.FromHtml("#6d597a"),
-
-
             Children = {
                 "Menu Item 1",
                 "Menu item 2",
@@ -26,7 +24,6 @@ namespace StaticSharpDemo.Root {
                     ["Width"] = "() => element.LayoutWidth",
                 }
             }
-
         };
 
 
@@ -41,7 +38,7 @@ namespace StaticSharpDemo.Root {
             return paragraph;
         }
 
-        public override IBlock? Footer => new Row {
+        public override Block? Footer => new Row {
 
             BackgroundColor = ColorTranslator.FromHtml("#355070"),
 

@@ -1,15 +1,18 @@
-﻿using System.Drawing;
+﻿using StaticSharp.Gears;
+using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace StaticSharpDemo.Root.Components {
 
     [Representative]
     public partial class Ru : Material {
 
-        protected override void Setup() {
-            base.Setup();
+        protected override Task Setup(Context context) {
             BackgroundColor = ColorTranslator.FromHtml("#f8edeb");
+            return base.Setup(context);
         }
+
         public override Inlines Description => $"Компоненты для создания страниц.";
 
         public override Blocks Content => new(){

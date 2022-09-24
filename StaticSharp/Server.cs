@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
+using StaticSharp.BasicComponents.Page;
 using StaticSharp.Utils;
 using StaticSharpEngine;
 using System;
@@ -33,7 +34,7 @@ namespace StaticSharp {
 
         private IWebHost _host = null;
 
-        public abstract Gears.IPage? FindPage(string requestPath);
+        public abstract IPageGenerator? FindPage(string requestPath);
 
         //public abstract Uri BaseUrl { get; }
 
@@ -43,7 +44,7 @@ namespace StaticSharp {
         public abstract string TempDirectory { get; }
 
         public Gears.Assets Assets = new Gears.Assets();
-        public virtual Gears.IPage Get404(HttpRequest request) {
+        public virtual IPageGenerator Get404(HttpRequest request) {
             return null;
         }
 

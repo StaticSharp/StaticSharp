@@ -162,19 +162,7 @@ function RowBuilder(element) {
     }
     
 
-    _this.try = function (child) {
-        //console.log("try._this.margin", _this.margin)
-        let spaceLeft = First(Max(_this.margin, child.MarginLeft),0)
-        return {
-            newPosition: _this.currentX + spaceLeft + child.Width,
-            newMargin: child.MarginRight
-        }
-    }
 
-    _this.add = function (resultOfTry) {
-        _this.currentX = resultOfTry.newPosition
-        _this.margin = resultOfTry.newMargin
-    }
 
 
 }
