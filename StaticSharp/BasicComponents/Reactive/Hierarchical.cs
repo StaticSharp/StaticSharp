@@ -14,7 +14,6 @@ namespace StaticSharp {
 
             public PageJs Root => NotEvaluatableObject<PageJs>();
             public HierarchicalJs Parent => NotEvaluatableObject<HierarchicalJs>();
-
             public BlockJs ParentBlock => NotEvaluatableObject<BlockJs>();
 
             //public T GetParent<T>() where T : new() => NotEvaluatableObject<T>();

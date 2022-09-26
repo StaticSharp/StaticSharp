@@ -1,5 +1,4 @@
-﻿using StaticSharp.Gears;
-using System;
+﻿using System;
 using System.Linq.Expressions;
 
 namespace StaticSharp.Gears;
@@ -9,7 +8,7 @@ public class BindingScriptifier : LambdaScriptifier {
     public object ParameterValue { get; }
     public string ParameterName { get; }
 
-    public BindingScriptifier(LambdaExpression expression, object parameterValue, string parameterName = "element"): base(expression) {
+    public BindingScriptifier(LambdaExpression expression, object parameterValue, string parameterName = "element") : base(expression) {
 
         if (ParametersExpressions.Length != 1) {
             throw new InvalidOperationException("BindingScriptifier expression must have exactly 1 parameter");

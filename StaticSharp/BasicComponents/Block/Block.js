@@ -41,7 +41,7 @@ function Block(element) {
                 return 0;
             } else {
                 if (element.overlaySign == 1) {//overlay
-                    return Sum(element.OverlayIndex * 100, - element.NestingDepth)
+                    return Sum(element.OverlayIndex * 100, - element.Parent.NestingDepth)
                 } else {//underlay
                     return -1
                 }

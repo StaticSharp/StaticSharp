@@ -1,7 +1,6 @@
 ﻿using System;
-namespace StaticSharp;
 
-
+namespace StaticSharp.Gears;
 public class ObjectJs {
 
     [ThreadStatic] public static bool NotEvaluatableFound = false;
@@ -10,10 +9,14 @@ public class ObjectJs {
         NotEvaluatableFound = true;        
         return new();
     }
-
     protected static T NotEvaluatableValue<T>(){
         NotEvaluatableFound = true;
         return default;
     }
+}
 
+public static class ObjectJsStatic {
+
+    [ConvertToJs("{0}")]
+    public static T As<T>(this ObjectJs _) where T : ObjectJs, new() => new();
 }

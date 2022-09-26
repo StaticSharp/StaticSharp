@@ -107,6 +107,10 @@
 		<ProjectReference Include="..\MixinGenerator\MixinGenerator.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="BasicComponents\Reactive\Scriptifier\" />
+	</ItemGroup>
+
 	
 	
 

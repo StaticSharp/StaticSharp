@@ -5,14 +5,15 @@ using System.Threading.Tasks;
 namespace StaticSharp {
     public class PageSideMenusJs : PageJs {
         public float ContentWidth => NotEvaluatableValue<float>();
-        public bool BarsCollapsed => NotEvaluatableValue<bool>();       
+        public bool BarsCollapsed => NotEvaluatableValue<bool>();        
+        public float SideBarsIconsSize => NotEvaluatableValue<float>();
 
     }
 
     namespace Gears {
         public class PageSideMenusBindings<FinalJs> : PageBindings<FinalJs> where FinalJs : new() {
             public Binding<float> ContentWidth { set { Apply(value); } }
-
+            public Binding<float> SideBarsIconsSize { set { Apply(value); } }
         }
     }
 
@@ -20,6 +21,10 @@ namespace StaticSharp {
     [Mix(typeof(PageSideMenusBindings<PageJs>))]
     public partial class PageSideMenus : Page {
 
+        protected override Task Setup(Context context) {
+            SideBarsIconsSize = 48;
+            return base.Setup(context);
+        }
         public override string Title {
             get {
                 var n = GetType().Namespace;
@@ -29,13 +34,12 @@ namespace StaticSharp {
 
         public virtual Block? TopBar => new Row{
             Children = {
-                new Space(),
-                new Paragraph(Title+"\nLower text") {
-                    FontSize = 48,
+                new Space(before: 1),
+                new Paragraph(Title) {
+                    FontSize = new (e=>e.Root.As<PageSideMenusJs>().SideBarsIconsSize),
                     LineHeight = 1,
-                    ["Height"] = "()=>Max(element.InternalHeight,64)"
                 },
-                new Space(),
+                new Space(after: 1),
             }
         };
 
@@ -44,6 +48,8 @@ namespace StaticSharp {
 
 
         public virtual Block? Footer => null;
+
+        
         public virtual Block? RightSideBar => null;
         public virtual Block? LeftSideBar => null;
 
@@ -55,7 +61,7 @@ namespace StaticSharp {
                 {"RightSideBar" ,RightSideBar},
                 {"Content", new Column {
                     Children = {
-                        TopBar,
+                        { "TopBar", TopBar },
                         Content,
                         new Space(),
                         Footer

@@ -13,6 +13,7 @@ function Page(element) {
         return document.documentElement.clientHeight//window.innerHeight
     }
 
+
     //detect slim scroll or thick
     document.documentElement.style.overflowX = "hidden"
     document.documentElement.style.overflowY = "scroll"
@@ -27,7 +28,6 @@ function Page(element) {
 
     element.Reactive = {
         Root: element,
-
         UserInteracted: false,
         DevicePixelRatio: window.devicePixelRatio,
 
@@ -59,9 +59,6 @@ function Page(element) {
     touchMedia.onchange = (e) => {
         element.Touch = e.matches
     }
-
-    new Reaction(() => console.log("element.Touch", element.Touch))
-
 
 
 

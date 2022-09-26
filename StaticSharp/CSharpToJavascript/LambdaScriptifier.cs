@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -25,13 +26,13 @@ public class LambdaScriptifier {
     public virtual string Eval() {
         var result = $"({string.Join(',', ParametersNames)}) => {Eval(LambdaExpression.Body)}";
         return result;
-    }    
+    }
     protected string Eval(Expression expression) {
         var lambda = Expression.Lambda(expression, ParametersExpressions);
-        
-        
-        
-        
+
+
+
+
 
         /*try {*/
 
@@ -59,7 +60,7 @@ public class LambdaScriptifier {
         Console.WriteLine("compiled + DynamicInvoke " + stopwatch.ElapsedMilliseconds + " ms");
 
 
-        
+
         /*}
         catch (TargetInvocationException ex) {
             if (ex.InnerException != null && (ex.InnerException is NotEvaluatableException)) {
@@ -71,10 +72,10 @@ public class LambdaScriptifier {
             } else
                 throw;
         }*/
-        
+
     }
 
-    
+
 
     private string StringifyMethodCall(MethodCallExpression expression) {
         var arguments = expression.Arguments.ToArray();
@@ -84,11 +85,25 @@ public class LambdaScriptifier {
             argumentsValues[i] = Eval(arguments[i]);
         }
 
-        if (expression.Object != null) {
-            return $"{Eval(expression.Object)}.{expression.Method.Name}({string.Join(',', argumentsValues)})";
+        var customConverter = expression.Method.GetCustomAttribute<ConvertToJsAttribute>()?.Format;
+
+
+        if (customConverter != null) {
+            if (expression.Object != null) {
+                return string.Format(customConverter, argumentsValues.ToList().Prepend(Eval(expression.Object)));
+            }
+            return string.Format(customConverter, argumentsValues);
+
+        } else {
+
+            if (expression.Object != null) {
+                return $"{Eval(expression.Object)}.{expression.Method.Name}({string.Join(',', argumentsValues)})";
+            }
+
+            return $"{expression.Method.Name}({string.Join(',', argumentsValues)})";
         }
 
-        return $"{expression.Method.Name}({string.Join(',', argumentsValues)})";
+
     }
 
 
@@ -100,19 +115,19 @@ public class LambdaScriptifier {
 
         switch (expression) {
             case MethodCallExpression methodCallExpression: {
-                    return StringifyMethodCall(methodCallExpression);
-                }
+                return StringifyMethodCall(methodCallExpression);
+            }
 
             case MemberExpression memberExpression: {
-                    return Eval(memberExpression.Expression) + "." + memberExpression.Member.Name;
-                }
+                return Eval(memberExpression.Expression) + "." + memberExpression.Member.Name;
+            }
 
             case UnaryExpression unaryExpression: {
                 if (expression.NodeType == ExpressionType.Convert) {
                     //TODO: implement smarter
                     return Eval(unaryExpression.Operand);
-                    
-                    
+
+
                     /*if (unaryExpression.Operand is ParameterExpression parameterExpression) {
                         var resultType = expression.Type;
                         if (parameterExpression.Type == typeof(NotEvaluatable<>).MakeGenericType(resultType)) {
@@ -133,42 +148,42 @@ public class LambdaScriptifier {
             }
 
             case ConditionalExpression conditionalExpression: {
-                    return $"({Eval(conditionalExpression.Test)}?{Eval(conditionalExpression.IfTrue)}:{Eval(conditionalExpression.IfFalse)})";
-                }
+                return $"({Eval(conditionalExpression.Test)}?{Eval(conditionalExpression.IfTrue)}:{Eval(conditionalExpression.IfFalse)})";
+            }
 
             case BinaryExpression binaryExpression: {
-                    var Op = binaryExpression.NodeType switch {
-                        ExpressionType.Add => "+",
-                        ExpressionType.Subtract => "-",
-                        ExpressionType.Multiply => "*",
-                        ExpressionType.Divide => "/",
-                        ExpressionType.Modulo => "%",
+                var Op = binaryExpression.NodeType switch {
+                    ExpressionType.Add => "+",
+                    ExpressionType.Subtract => "-",
+                    ExpressionType.Multiply => "*",
+                    ExpressionType.Divide => "/",
+                    ExpressionType.Modulo => "%",
 
-                        ExpressionType.And => "&",
-                        ExpressionType.AndAlso => "&&",
+                    ExpressionType.And => "&",
+                    ExpressionType.AndAlso => "&&",
 
-                        ExpressionType.Or => "|",
-                        ExpressionType.OrElse => "||",
+                    ExpressionType.Or => "|",
+                    ExpressionType.OrElse => "||",
 
-                        ExpressionType.ExclusiveOr => "^",
+                    ExpressionType.ExclusiveOr => "^",
 
-                        ExpressionType.LessThan => "<",
-                        ExpressionType.LessThanOrEqual => "<=",
-                        ExpressionType.GreaterThan => ">",
-                        ExpressionType.GreaterThanOrEqual => ">=",
+                    ExpressionType.LessThan => "<",
+                    ExpressionType.LessThanOrEqual => "<=",
+                    ExpressionType.GreaterThan => ">",
+                    ExpressionType.GreaterThanOrEqual => ">=",
 
 
-                        ExpressionType.Equal => "==",
-                        ExpressionType.NotEqual => "!=",
-                        ExpressionType.Not => "!",
+                    ExpressionType.Equal => "==",
+                    ExpressionType.NotEqual => "!=",
+                    ExpressionType.Not => "!",
 
-                        _ => throw NotImplemented(expression)
-                    };
-                    return $"({Eval(binaryExpression.Left)}{Op}{Eval(binaryExpression.Right)})";
-                }
+                    _ => throw NotImplemented(expression)
+                };
+                return $"({Eval(binaryExpression.Left)}{Op}{Eval(binaryExpression.Right)})";
+            }
 
             default:
-                throw NotImplemented(expression);
+            throw NotImplemented(expression);
         }
 
     }

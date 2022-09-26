@@ -132,7 +132,6 @@ function RowBuilder(element) {
     _this.layout = function (child) {
         let spaceLeft = First(Max(_this.margin, child.MarginLeft), 0)
         let spaceRight = Max(endMargin, child.MarginRight)
-
         if (child.isBlock) {
 
             if ((_this.currentX + spaceLeft + child.InternalWidth + spaceRight) > maxWidth) {
@@ -149,7 +148,8 @@ function RowBuilder(element) {
             } else {
                 child.LayoutWidth = undefined
             }
-            _this.currentX += spaceLeft + child.Width
+            _this.currentX += Sum(spaceLeft, child.Width)
+            //console.log("_this.currentX", _this.currentX)
             _this.margin = child.MarginRight
 
             //_this.currentLine.push(child)

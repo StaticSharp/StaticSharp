@@ -116,7 +116,7 @@ Reaction.beginDeferred = function () {
 }
 
 
-/*Reaction.beginNonReactive = function () {
+Reaction.beginNonReactive = function () {
     if (!Reaction.current) {
         let oldCurrent = Reaction.current
         Reaction.current = undefined
@@ -129,7 +129,7 @@ Reaction.beginDeferred = function () {
     return {
         end: function () { }
     };
-}*/
+}
 
 
 
@@ -428,8 +428,8 @@ Object.defineProperty(Object.prototype, "Reactive", {
     }
 });
 
-/*
-Property.prototype.OnChanged = function (func) {
+
+/*Property.prototype.OnChanged = function (func) {
     let _this = this
     let previous = _this.getValue()
 
@@ -444,18 +444,20 @@ Property.prototype.OnChanged = function (func) {
 
 
 
-/*
-Property.prototype.OnTruthify = function (func) {
-    let previous = this.getValue()
 
-    return new Reaction(() => {
-        let current = this.getValue()
-        if (current && !previous) {
-            func(previous, current)
-            previous = current
+function OnTruthify(predicate, action) {
+    
+    let previous = undefined
+    return new Reaction(() => {        
+        let current = predicate()
+        if (current === true && (!previous === true)) {
+            let n = Reaction.beginNonReactive()
+            action()            
+            n.end()
         }
+        previous = current
     })
-}*/
+}
 
 function PropertyTest() {
 
