@@ -30,6 +30,8 @@ function Paragraph(element) {
         const testFontSize = 128;
 
         let content = element.children[0]
+
+        //content.style.position = "initial"
         content.style.fontSize = testFontSize + "px";
         content.style.width = "min-content"
         var minWidthRect = content.getBoundingClientRect()

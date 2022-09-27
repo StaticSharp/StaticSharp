@@ -429,18 +429,18 @@ Object.defineProperty(Object.prototype, "Reactive", {
 });
 
 
-/*Property.prototype.OnChanged = function (func) {
-    let _this = this
-    let previous = _this.getValue()
-
+function OnChanged(getter, action) {
+    let previous = undefined
     return new Reaction(() => {
-        let current = _this.getValue()
+        let current = getter
         if (current != previous) {
-            func(previous, current)
+            let n = Reaction.beginNonReactive()
+            action(previous, current)
+            n.end()
             previous = current
         }
     })
-}*/
+}
 
 
 

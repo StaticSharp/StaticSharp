@@ -43,7 +43,39 @@ function GetDirection(swipe) {
     }
 }
 
-
+/*function DetectSwipe(element, action) {
+    if (typeof action != 'function') { return; }
+    let swipe = {
+        clientStartX: 0,
+        clientStartY: 0,
+        startX: 0,
+        startY: 0,
+        moveX: 0,
+        moveY: 0,
+        get swipeX() { return this.moveX - this.startX; },
+        get swipeY() { return this.moveY - this.startY; },
+    };
+    element.addEventListener('touchstart', (e) => {
+        var touch = e.touches[0];
+        swipe.clientStartX = touch.clientX;
+        swipe.clientStartY = touch.clientY;
+        swipe.startX = touch.screenX;
+        swipe.startY = touch.screenY;
+    }, false);
+    element.addEventListener('touchmove', (e) => {
+        var touch = e.touches[0];
+        swipe.moveX = touch.screenX;
+        swipe.moveY = touch.screenY;
+        direction = GetDirection(swipe);
+        if (direction == null) { return; }
+        action(direction, swipe, false, e);
+    }, false);
+    element.addEventListener('touchend', (e) => {
+        direction = GetDirection(swipe);
+        if (direction == null) { return; }
+        action(GetDirection(swipe), swipe, true, e);
+    }, false);
+}*/
 
 
 

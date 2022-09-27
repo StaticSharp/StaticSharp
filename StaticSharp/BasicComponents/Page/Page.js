@@ -7,10 +7,10 @@ function Page(element) {
 
 
     function getWindowWidth() {
-        return document.documentElement.clientWidth//window.innerWidth
+        return window.innerWidth //document.documentElement.clientWidth
     }
     function getWindowHeight() {
-        return document.documentElement.clientHeight//window.innerHeight
+        return window.innerHeight // document.documentElement.clientHeight
     }
 
 
@@ -73,7 +73,8 @@ function Page(element) {
         element.UserInteracted = true
     }
 
-    window.onresize = function (event) {        
+    window.onresize = function (event) {
+        console.log("resize", getWindowHeight(), window.innerHeight)
         let d = Reaction.beginDeferred()
         element.WindowWidth = getWindowWidth()
         element.WindowHeight = getWindowHeight()

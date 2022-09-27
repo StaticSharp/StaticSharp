@@ -41,7 +41,7 @@ body {
     white-space: inherit;
 }
 
-p {
+p > * {
     position: static;
 }
 

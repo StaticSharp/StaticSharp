@@ -26,6 +26,15 @@ namespace StaticSharpDemo.Root {
             }
         };
 
+        public override Block RightSideBar => new Column() {
+            BackgroundColor = ColorTranslator.FromHtml("#7a596d"),
+            Children = {
+                "En",
+                "Ru",
+            }
+        };
+
+
 
         public static Paragraph FooterTitle(string text,
             [CallerFilePath] string callerFilePath = "",
