@@ -74,7 +74,7 @@ function Page(element) {
     }
 
     window.onresize = function (event) {
-        console.log("resize", getWindowHeight(), window.innerHeight)
+        //console.log("resize", getWindowHeight(), window.innerHeight)
         let d = Reaction.beginDeferred()
         element.WindowWidth = getWindowWidth()
         element.WindowHeight = getWindowHeight()

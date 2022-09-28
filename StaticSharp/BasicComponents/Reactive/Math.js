@@ -29,6 +29,10 @@ function Min() {
     return result
 }
 
+function Clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value))
+}
+
 function Sum() {
     let resultValid = false
     let result = 0

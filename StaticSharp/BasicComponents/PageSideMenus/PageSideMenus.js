@@ -14,7 +14,7 @@ function SwipeDetector(element) {
         var touch = e.touches[0];
         startX = touch.clientX;
         startY = touch.clientY;
-        
+
     });
 
     element.addEventListener('touchmove', (e) => {
@@ -31,7 +31,7 @@ function SwipeDetector(element) {
         element.Swipe = false
     }, false);
 
-    
+
 
 }
 
@@ -53,7 +53,7 @@ function Glass(element) {
     //element.style.backgroundColor = "black"
     element.style.zIndex = 99
     element.style.position = "fixed"
-    
+
 
     element.Reactive = {
         Color: new Color(0xff000000),
@@ -114,72 +114,31 @@ function PageSideMenus(element) {
         },
 
 
-        MinSwipeToOpen_LeftSideBar: () => element.LeftSideBar ? Min(minSwipeToOpen, element.LeftSideBar.Width) : undefined,        
+        MinSwipeToOpen_LeftSideBar: () => element.LeftSideBar ? Min(minSwipeToOpen, element.LeftSideBar.Width) : undefined,
         MinSwipeToOpen_RightSideBar: () => element.RightSideBar ? Min(minSwipeToOpen, element.RightSideBar.Width) : undefined,
 
         SwipeX: 0,
         SwipeY: 0,
-        Swipe: false
+        Swipe: false,
+
+        TouchMoveListener: undefined
     }
 
     let startX = 0
     let startY = 0
     let swipeDirection = undefined
 
-    /*function touchStart(event) {
-        var touch = event.touches[0];
-        startX = touch.clientX;
-        startY = touch.clientY;
-        
-    }*/
-    
-    function elementTouchMove(event) {
-        if (event.cancelable) {
-            var touch = event.touches[0];
-            let deltaX = Math.abs(touch.clientX - startX)
-            if (deltaX > swipeThreshold) {
-                element.removeEventListener('touchmove', elementTouchMove)
-                element.addEventListener('touchmove', horizontalTouchMove, { passive: false })
-            }
-        }     
-    }
 
-    element.addEventListener('touchstart', (event) => {
-        swipeDirection = undefined
-        touchStart(event)
-    }, { passive: false });
 
-    element.addEventListener('touchmove', elementTouchMove)
-    element.addEventListener('touchend', touchEnd)
-
-    function horizontalTouchMove(event) {
-        var touch = event.touches[0];
-        console.log(touch.clientX,startX)
-        let d = Reaction.beginDeferred()
-        element.SwipeX = touch.clientX - startX
-        element.SwipeY = touch.clientY - startY
-        element.Swipe = true
-        d.end()
-        event.preventDefault()
-    }
-
-    function touchEnd(event) {
-        element.Swipe = false
-        if (element.SideBarOpen == 0) {
-            //element.addEventListener('touchmove', elementTouchMove)
-        }
-    }
-
-   
     function touchStart(event) {
         var touch = event.touches[0];
         startX = touch.clientX;
         startY = touch.clientY;
-        //event.preventDefault()
+        
     }
-
-    function touchMove(event) {
+    function horizontalTouchMove(event) {
         var touch = event.touches[0];
+        console.log(touch.clientX, startX)
         let d = Reaction.beginDeferred()
         element.SwipeX = touch.clientX - startX
         element.SwipeY = touch.clientY - startY
@@ -187,31 +146,61 @@ function PageSideMenus(element) {
         d.end()
         event.preventDefault()
     }
-    function touchEnd(event) {
-        element.Swipe = false
-        event.preventDefault()
+
+
+    element.Events.TouchStart = {
+
+        handler: (event) => {
+
+            touchStart(event)
+
+            element.Events.TouchMove = (event) => {
+                console.log("TouchMove", event.cancelable)
+                if (event.cancelable) {
+                    var touch = event.touches[0];
+                    let deltaX = Math.abs(touch.clientX - startX)
+                    if (deltaX > swipeThreshold) {
+                        element.Events.TouchMove = {
+                            handler: horizontalTouchMove,
+                            passive: false
+                        }
+                    }
+                } else {
+                    console.log("element.Events.TouchMove = undefined")
+                    element.Events.TouchMove = undefined
+                    element.Events.TouchEnd = undefined
+                }
+            }
+
+            element.Events.TouchEnd = () => {
+                element.Swipe = false
+                element.Events.TouchMove = undefined
+                element.Events.TouchEnd = undefined
+            }
+        },
+        passive: false
+        
     }
 
-    function addTouchEventListeners(target) {
-        target.addEventListener('touchstart', touchStart, { passive: false });
-        target.addEventListener('touchmove', touchMove, { passive: false });
-        target.addEventListener('touchend', touchEnd);
+
+    glass.Events.TouchStart = {
+        handler: (e) => {
+            touchStart(event)
+
+            glass.Events.TouchMove = {
+                handler: horizontalTouchMove,
+                passive: false
+            }
+
+            glass.Events.TouchEnd = () => {
+                element.Swipe = false
+                glass.Events.TouchMove = undefined
+                glass.Events.TouchEnd = undefined
+            }
+        },
+        passive: false
     }
 
-    //addTouchEventListeners(element)    
-    addTouchEventListeners(glass) 
-
-
-    /*new Reaction(() => {
-        if (element.LeftSideBar) 
-            addTouchEventListeners(element.LeftSideBar)
-        if (element.RightBarSize)
-            addTouchEventListeners(element.RightBarSize)        
-    })*/
-
-
-
-    //SwipeDetector(element)
 
 
     new Reaction(() => {
@@ -221,7 +210,7 @@ function PageSideMenus(element) {
             } else {
                 element.TopBar.MarginLeft = 0
             }
-        }            
+        }
     })
     new Reaction(() => {
         if (element.TopBar) {
@@ -254,7 +243,7 @@ function PageSideMenus(element) {
         if (element.LeftSideBar) {
             element.LeftSideBar.Depth = 100
             element.LeftSideBar.style.position = "fixed"
-            element.LeftSideBar.Height = ()=>element.WindowHeight
+            element.LeftSideBar.Height = () => element.WindowHeight
         }
     })
 
@@ -267,7 +256,7 @@ function PageSideMenus(element) {
     })
 
 
-    
+
 
     OnTruthify(
         () => !element.Swipe,
@@ -337,22 +326,21 @@ function PageSideMenus(element) {
             if (element.BarsCollapsed) {
                 if (element.SideBarOpen == 0) {
                     if (element.Swipe) {
-                        element.LeftSideBar.X = Min(-element.LeftSideBar.Width + element.SwipeXAboveThreshold, 0)                        
+                        element.LeftSideBar.X = -element.LeftSideBar.Width + Clamp(element.SwipeXAboveThreshold, 0, element.LeftSideBar.Width)
                     } else {
                         element.LeftSideBar.X = -element.LeftSideBar.Width
                     }
-                    //
-                } else if (element.SideBarOpen==-1){                    
+                } else if (element.SideBarOpen == -1) {
                     if (element.Swipe) {
-                        element.LeftSideBar.X = Min(0, Max(element.SwipeXAboveThreshold, -element.LeftSideBar.Width))
-                        
+                        element.LeftSideBar.X = Clamp(element.SwipeXAboveThreshold, -element.LeftSideBar.Width, 0)
+
                     } else {
                         element.LeftSideBar.X = 0
                     }
                 }
             } else {
                 element.LeftSideBar.X = 0
-            }            
+            }
         }
     })
 
@@ -361,15 +349,13 @@ function PageSideMenus(element) {
             if (element.BarsCollapsed) {
                 if (element.SideBarOpen == 0) {
                     if (element.Swipe) {
-                        element.RightSideBar.X = element.WindowWidth + Max(element.SwipeXAboveThreshold, -element.RightSideBar.Width)
-                        
+                        element.RightSideBar.X = element.WindowWidth + Clamp(element.SwipeXAboveThreshold, -element.RightSideBar.Width, 0)
                     } else {
                         element.RightSideBar.X = element.WindowWidth
-
                     }
                 } else if (element.SideBarOpen == 1) {
                     if (element.Swipe) {
-                        element.RightSideBar.X = element.WindowWidth - element.RightSideBar.Width + Max(0, element.SwipeXAboveThreshold)
+                        element.RightSideBar.X = element.WindowWidth - element.RightSideBar.Width + Clamp(element.SwipeXAboveThreshold, 0, element.RightSideBar.Width)
                     } else {
                         element.RightSideBar.X = element.WindowWidth - element.RightSideBar.Width
                     }
@@ -404,7 +390,7 @@ function PageSideMenus(element) {
             element.Content.MarginRight = contentSpace
 
             element.Content.LayoutX = LeftBarSize + contentSpace
-            element.Content.LayoutHeight = Math.max(element.Content.InternalHeight, element.WindowHeight)
+            element.Content.LayoutHeight = Max(element.Content.InternalHeight, element.WindowHeight)
         }
 
     })

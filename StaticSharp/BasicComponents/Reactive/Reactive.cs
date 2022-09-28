@@ -86,6 +86,7 @@ namespace StaticSharp {
         [RelatedScript("Constants")]
         [RelatedScript("Constructor")]
         [RelatedScript("Bindings")]
+        [RelatedScript("Events")]
         public abstract class Reactive : CallerInfo {
             public Dictionary<string, string> Properties { get; } = new();
 
