@@ -36,6 +36,10 @@ function Page(element) {
 
         FontSize: 16,
         HierarchyFontSize: () => element.FontSize,
+
+        ScrollX: 0,
+        ScrollY: 0,
+
     }
 
     DepthToStyle(element)
@@ -81,6 +85,16 @@ function Page(element) {
         d.end()
 
     }
+
+
+    window.Events.Scroll = () => {
+        let d = Reaction.beginDeferred()
+        element.ScrollX = this.scrollX
+        element.ScrollY = this.scrollY
+        d.end()
+    }
+
+
 
     
     let loadEventsToWait = 2

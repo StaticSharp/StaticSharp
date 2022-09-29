@@ -1,40 +1,3 @@
-
-function SwipeDetector(element) {
-
-    element.Reactive = {
-        SwipeX: 0,
-        SwipeY: 0,
-        Swipe: false
-    }
-
-    let startX = 0
-    let startY = 0
-
-    element.addEventListener('touchstart', (e) => {
-        var touch = e.touches[0];
-        startX = touch.clientX;
-        startY = touch.clientY;
-
-    });
-
-    element.addEventListener('touchmove', (e) => {
-        var touch = e.touches[0];
-        let d = Reaction.beginDeferred()
-        element.SwipeX = touch.clientX - startX
-        element.SwipeY = touch.clientY - startY
-        element.Swipe = true
-
-        d.end()
-    }, false);
-
-    element.addEventListener('touchend', (e) => {
-        element.Swipe = false
-    }, false);
-
-
-
-}
-
 var glass = undefined
 
 function getGlass() {
@@ -58,7 +21,7 @@ function Glass(element) {
     element.Reactive = {
         Color: new Color(0xff000000),
         Visibility: 1,
-        MaxOpacity: 0.8
+        MaxOpacity: 0.7
     }
     new Reaction(() => {
         element.style.backgroundColor = element.Color
@@ -70,7 +33,6 @@ function Glass(element) {
         element.style.display = element.Visibility == 0 ? "none" : "block"
     })
 }
-
 
 
 function PageSideMenus(element) {
@@ -120,25 +82,75 @@ function PageSideMenus(element) {
         SwipeX: 0,
         SwipeY: 0,
         Swipe: false,
-
-        TouchMoveListener: undefined
     }
 
     let startX = 0
     let startY = 0
-    let swipeDirection = undefined
+
+    function CreateButton() {
+        let button = document.createElement("icon")
+        element.LeftSideBar.appendChild(button)
+        button.style.zIndex = -1
+        button.style.position = "relative"
+        button.style.width = element.SideBarsIconsSize+"px"
+        button.style.height = element.SideBarsIconsSize + "px"
+        button.style.backgroundColor = "red"
+        button.style.borderRadius = "50%"
+        const transitionDuration = 0.2
+        button.style.transition = `all ${transitionDuration}s`;
+        return button
+    }
+
+
+    let leftButton = undefined
+
+    new Reaction(() => {
+        const buttonMargin = 10
+
+        if (element.LeftSideBar) {
+            if (leftButton === undefined) {
+                leftButton = CreateButton()
+                leftButton.Events.AnimationEnd = () => {
+                    console.log(event)
+                }
+            }
+            if (element.BarsCollapsed) {
+                leftButton.style.display = "block"
+                if (element.ScrollY > 0) {
+                    const collapsedButtonWidth = 6
+                    const collapsedButtonHeight = 80
+                    leftButton.style.top = (buttonMargin) + "px"
+                    leftButton.style.left = element.LeftSideBar.Width  + "px"
+                    leftButton.style.width = collapsedButtonWidth + "px"
+                    leftButton.style.height = collapsedButtonHeight + "px"
+                    leftButton.style.borderRadius = collapsedButtonWidth + "px"
+                    leftButton.style.borderTopLeftRadius = 0
+                    leftButton.style.borderBottomLeftRadius = 0
+
+                } else {
+
+                    leftButton.style.top = (buttonMargin) + "px"
+                    leftButton.style.left = element.LeftSideBar.Width + (buttonMargin) + "px"
+                    leftButton.style.width = element.SideBarsIconsSize + "px"
+                    leftButton.style.height = element.SideBarsIconsSize + "px"
+                    leftButton.style.borderRadius = (0.5 * element.SideBarsIconsSize) + "px"
+                }
+            } else {
+                leftButton.style.display = "none"
+            }
+        }        
+    })
 
 
 
-    function touchStart(event) {
+    function touchStart() {
         var touch = event.touches[0];
         startX = touch.clientX;
         startY = touch.clientY;
         
     }
-    function horizontalTouchMove(event) {
+    function horizontalTouchMove() {
         var touch = event.touches[0];
-        console.log(touch.clientX, startX)
         let d = Reaction.beginDeferred()
         element.SwipeX = touch.clientX - startX
         element.SwipeY = touch.clientY - startY
@@ -150,12 +162,9 @@ function PageSideMenus(element) {
 
     element.Events.TouchStart = {
 
-        handler: (event) => {
-
-            touchStart(event)
-
-            element.Events.TouchMove = (event) => {
-                console.log("TouchMove", event.cancelable)
+        handler: () => {
+            touchStart()
+            element.Events.TouchMove = () => {
                 if (event.cancelable) {
                     var touch = event.touches[0];
                     let deltaX = Math.abs(touch.clientX - startX)
@@ -166,26 +175,23 @@ function PageSideMenus(element) {
                         }
                     }
                 } else {
-                    console.log("element.Events.TouchMove = undefined")
                     element.Events.TouchMove = undefined
                     element.Events.TouchEnd = undefined
                 }
             }
-
             element.Events.TouchEnd = () => {
                 element.Swipe = false
                 element.Events.TouchMove = undefined
                 element.Events.TouchEnd = undefined
             }
         },
-        passive: false
-        
+        passive: false        
     }
 
 
     glass.Events.TouchStart = {
-        handler: (e) => {
-            touchStart(event)
+        handler: () => {
+            touchStart()
 
             glass.Events.TouchMove = {
                 handler: horizontalTouchMove,
@@ -234,9 +240,7 @@ function PageSideMenus(element) {
 
 
 
-    window.addEventListener('scroll', e => {
-        //console.log(e);
-    });
+    
 
 
     new Reaction(() => {
