@@ -7,7 +7,7 @@ function Page(element) {
 
 
     function getWindowWidth() {
-        return window.innerWidth //document.documentElement.clientWidth
+        return document.documentElement.clientWidth //window.innerWidth
     }
     function getWindowHeight() {
         return window.innerHeight // document.documentElement.clientHeight
@@ -22,6 +22,17 @@ function Page(element) {
         //console.log("document.documentElement.style.overflowY = auto")
     } else {
         //console.log("document.documentElement.style.overflowY = scroll")
+    }
+
+    let animationFrame = 0
+    window.Reactive = {
+        AnimationFrame: () => {
+            animationFrame++
+            window.requestAnimationFrame(() => {
+                window.Reactive.AnimationFrame.makeDirty()
+            });
+            return animationFrame
+        }
     }
 
 
@@ -101,8 +112,9 @@ function Page(element) {
     function onLoadEvent() {
         loadEventsToWait--
         if (loadEventsToWait == 0) {
-            console.log("-------------Reactions------------");
+            console.log("-------------Reactions------------", performance.now());
             loadingDeffered.end()
+            console.log("-------------Reactions-done-------", performance.now());
             element.style.visibility = "visible";
             /*let d = Reaction.beginDeferred()
             element.WindowWidth = getWindowWidth()

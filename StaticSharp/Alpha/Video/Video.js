@@ -231,7 +231,7 @@ function Video(element) {
             controls: element.Controls ? 1 : 0,
             origin: window.location.origin
         }
-        console.log("window.location.origin", window.origin)
+
         if (element.Loop) {
             playerVars.loop = 1
             playerVars.playlist = youtubeId

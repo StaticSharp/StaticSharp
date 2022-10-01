@@ -9,12 +9,12 @@ function getGlass() {
     return glass
 }
 
-
+const glassZIndex = 99
 function Glass(element) {
     element.style.width = "100vw"
     element.style.height = "100vh"
     //element.style.backgroundColor = "black"
-    element.style.zIndex = 99
+    element.style.zIndex = glassZIndex
     element.style.position = "fixed"
 
 
@@ -34,16 +34,51 @@ function Glass(element) {
     })
 }
 
+function lerp(a, b, t) {
+    return a + t * (b - a)
+}
+
+function AnimateTo(targetValue, duration) {
+    let result = (property) => {
+
+        let startValue = property.value
+        let startTime = performance.now()
+
+        return () => {
+            let elapsed = performance.now() - startTime
+            if (elapsed < duration) {
+                window.AnimationFrame
+            }
+            let mormalizedTime = Math.min(elapsed / duration, 1)
+            let t = (typeof targetValue === "function") ? targetValue() : targetValue
+            return lerp(startValue, t, mormalizedTime)
+        }
+    }
+    result.isBindingConstructor = true
+    return result
+}
+
+
+
 
 function PageSideMenus(element) {
     Page(element)
 
 
+ 
     let glass = getGlass()
 
     const minSwipeToOpen = 40
     const minSwipeToClose = 20
     const swipeThreshold = 20
+
+    let toggle = false
+    element.Events.Click = () => {
+        toggle = !toggle
+        element.ContentWidth = AnimateTo(
+            () => toggle ? (element.WindowWidth - 100) : 500,
+            10000)
+    }
 
     element.Reactive = {
         ContentWidth: 960,
@@ -60,6 +95,7 @@ function PageSideMenus(element) {
         SideBarOpen: 0, //-1 left , 1 right
 
         LeftSideBar: () => element.Child("LeftSideBar"),
+
 
         RightSideBar: () => element.Child("RightSideBar"),
 
@@ -82,66 +118,19 @@ function PageSideMenus(element) {
         SwipeX: 0,
         SwipeY: 0,
         Swipe: false,
+
+        LeftSideBarSwipeProgress : 0,
+        RightSideBarSwipeProgress: 0,
+
     }
 
     let startX = 0
     let startY = 0
 
-    function CreateButton() {
-        let button = document.createElement("icon")
-        element.LeftSideBar.appendChild(button)
-        button.style.zIndex = -1
-        button.style.position = "relative"
-        button.style.width = element.SideBarsIconsSize+"px"
-        button.style.height = element.SideBarsIconsSize + "px"
-        button.style.backgroundColor = "red"
-        button.style.borderRadius = "50%"
-        const transitionDuration = 0.2
-        button.style.transition = `all ${transitionDuration}s`;
-        return button
-    }
-
-
-    let leftButton = undefined
-
-    new Reaction(() => {
-        const buttonMargin = 10
-
-        if (element.LeftSideBar) {
-            if (leftButton === undefined) {
-                leftButton = CreateButton()
-                leftButton.Events.AnimationEnd = () => {
-                    console.log(event)
-                }
-            }
-            if (element.BarsCollapsed) {
-                leftButton.style.display = "block"
-                if (element.ScrollY > 0) {
-                    const collapsedButtonWidth = 6
-                    const collapsedButtonHeight = 80
-                    leftButton.style.top = (buttonMargin) + "px"
-                    leftButton.style.left = element.LeftSideBar.Width  + "px"
-                    leftButton.style.width = collapsedButtonWidth + "px"
-                    leftButton.style.height = collapsedButtonHeight + "px"
-                    leftButton.style.borderRadius = collapsedButtonWidth + "px"
-                    leftButton.style.borderTopLeftRadius = 0
-                    leftButton.style.borderBottomLeftRadius = 0
-
-                } else {
-
-                    leftButton.style.top = (buttonMargin) + "px"
-                    leftButton.style.left = element.LeftSideBar.Width + (buttonMargin) + "px"
-                    leftButton.style.width = element.SideBarsIconsSize + "px"
-                    leftButton.style.height = element.SideBarsIconsSize + "px"
-                    leftButton.style.borderRadius = (0.5 * element.SideBarsIconsSize) + "px"
-                }
-            } else {
-                leftButton.style.display = "none"
-            }
-        }        
-    })
-
-
+    const iconMargin = 10
+    const collapsedIconWidth = 6
+    const collapsedIconHeight = 120
+    
 
     function touchStart() {
         var touch = event.touches[0];
@@ -158,7 +147,6 @@ function PageSideMenus(element) {
         d.end()
         event.preventDefault()
     }
-
 
     element.Events.TouchStart = {
 
@@ -187,8 +175,6 @@ function PageSideMenus(element) {
         },
         passive: false        
     }
-
-
     glass.Events.TouchStart = {
         handler: () => {
             touchStart()
@@ -207,12 +193,18 @@ function PageSideMenus(element) {
         passive: false
     }
 
+    glass.Events.Click = () => {
+        console.log("clicked")
+        element.SideBarOpen = 0
+    }
+
+
 
 
     new Reaction(() => {
         if (element.TopBar) {
             if (element.LeftSideBar && element.BarsCollapsed) {
-                element.TopBar.MarginLeft = element.SideBarsIconsSize
+                element.TopBar.MarginLeft = element.SideBarsIconsSize + iconMargin
             } else {
                 element.TopBar.MarginLeft = 0
             }
@@ -221,7 +213,7 @@ function PageSideMenus(element) {
     new Reaction(() => {
         if (element.TopBar) {
             if (element.RightSideBar && element.BarsCollapsed) {
-                element.TopBar.MarginRight = element.SideBarsIconsSize
+                element.TopBar.MarginRight = element.SideBarsIconsSize + iconMargin
             } else {
                 element.TopBar.MarginRight = 0
             }
@@ -245,7 +237,7 @@ function PageSideMenus(element) {
 
     new Reaction(() => {
         if (element.LeftSideBar) {
-            element.LeftSideBar.Depth = 100
+            element.LeftSideBar.Depth = glassZIndex + 1
             element.LeftSideBar.style.position = "fixed"
             element.LeftSideBar.Height = () => element.WindowHeight
         }
@@ -253,7 +245,7 @@ function PageSideMenus(element) {
 
     new Reaction(() => {
         if (element.RightSideBar) {
-            element.RightSideBar.Depth = 100
+            element.RightSideBar.Depth = glassZIndex + 1
             element.RightSideBar.style.position = "fixed"
             element.RightSideBar.Height = () => element.WindowHeight
         }
@@ -349,6 +341,7 @@ function PageSideMenus(element) {
     })
 
     new Reaction(() => {
+        
         if (element.RightSideBar) {
             if (element.BarsCollapsed) {
                 if (element.SideBarOpen == 0) {
@@ -363,6 +356,8 @@ function PageSideMenus(element) {
                     } else {
                         element.RightSideBar.X = element.WindowWidth - element.RightSideBar.Width
                     }
+                } else if (element.SideBarOpen == -1) {
+                    element.RightSideBar.X = element.WindowWidth 
                 }
             } else {
                 element.RightSideBar.X = element.WindowWidth - element.RightSideBar.Width
@@ -385,18 +380,120 @@ function PageSideMenus(element) {
         let contentSpace = (width - innerWidth) * 0.5
 
         if (element.Content) {
-
-
             element.Content.Width = width - 2 * contentSpace
-
             element.Content.MarginLeft = contentSpace
-
             element.Content.MarginRight = contentSpace
-
             element.Content.LayoutX = LeftBarSize + contentSpace
             element.Content.LayoutHeight = Max(element.Content.InternalHeight, element.WindowHeight)
         }
-
     })
+
+    new Reaction(() => {
+        element.style.width = ToCssSize(element.WindowWidth)
+        element.style.height = ToCssSize(element.Content.Height)
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+    function CreateButton() {
+        let button = document.createElement("icon")
+        button.style.position = "fixed"
+        button.style.backgroundColor = "red"
+        const transitionDuration = 0.2
+        button.style.transition = `all ${transitionDuration}s, left 0s`;
+        element.appendChild(button)
+        return button
+    }
+
+    let leftButton = undefined
+    new Reaction(() => {
+        
+
+        if (element.LeftSideBar) {
+            if (leftButton === undefined) {
+                leftButton = CreateButton()
+                leftButton.style.backgroundColor = "red"
+            }
+            if (element.BarsCollapsed) {
+                leftButton.style.display = "block"
+                let barVisible = (element.LeftSideBar.Width + element.LeftSideBar.X) > 0
+                if (element.ScrollY > 0 || barVisible) {
+                    leftButton.style.left = element.LeftSideBar.X + element.LeftSideBar.Width + "px"
+                    leftButton.style.zIndex = barVisible ? glassZIndex + 1 : glassZIndex - 1 
+                    leftButton.style.top = (iconMargin) + "px"
+                    leftButton.style.marginLeft = 0
+                    leftButton.style.width = collapsedIconWidth + "px"
+                    leftButton.style.height = collapsedIconHeight + "px"
+                    leftButton.style.borderRadius = collapsedIconWidth + "px"
+                    leftButton.style.borderTopLeftRadius = 0
+                    leftButton.style.borderBottomLeftRadius = 0
+                } else {
+
+                    leftButton.style.zIndex = 98 
+                    leftButton.style.left = 0
+                    leftButton.style.top = iconMargin + "px"
+                    leftButton.style.marginLeft = iconMargin + "px"
+                    leftButton.style.width = element.SideBarsIconsSize + "px"
+                    leftButton.style.height = element.SideBarsIconsSize + "px"
+                    leftButton.style.borderRadius = (0.5 * element.SideBarsIconsSize) + "px"
+                }
+            } else {
+                leftButton.style.display = "none"
+            }
+        }
+    })
+
+    let rightButton = undefined
+
+    new Reaction(() => {
+
+        if (element.RightSideBar) {
+            if (rightButton === undefined) {
+                rightButton = CreateButton()
+                rightButton.style.backgroundColor = "blue"
+            }
+            if (element.BarsCollapsed) {
+                rightButton.style.display = "block"
+                let barVisible = (element.RightSideBar.X) < element.WindowWidth
+                if (element.ScrollY > 0 || barVisible) {
+
+                    rightButton.style.left = element.RightSideBar.X + "px"
+                    rightButton.style.zIndex = barVisible ? glassZIndex + 1 : glassZIndex - 1 
+                    rightButton.style.top = (iconMargin) + "px"
+                    rightButton.style.marginLeft =  - collapsedIconWidth + "px"
+                    rightButton.style.width = collapsedIconWidth + "px"
+                    rightButton.style.height = collapsedIconHeight + "px"
+                    rightButton.style.borderRadius = collapsedIconWidth + "px"
+                    rightButton.style.borderTopRightRadius = 0
+                    rightButton.style.borderBottomRightRadius = 0
+
+
+                } else {
+                    rightButton.style.zIndex = 98
+                    rightButton.style.left = (element.RightSideBar.X)+"px"
+                    rightButton.style.top = iconMargin + "px"
+                    rightButton.style.marginLeft = (-element.SideBarsIconsSize - iconMargin) + "px"
+                    rightButton.style.width = element.SideBarsIconsSize + "px"
+                    rightButton.style.height = element.SideBarsIconsSize + "px"
+                    rightButton.style.borderRadius = (0.5 * element.SideBarsIconsSize) + "px"
+                }
+            } else {
+                rightButton.style.display = "none"
+            }
+        }
+    })
+
+
+
 
 }

@@ -174,7 +174,6 @@ function Property(value) {
     }
 
     _this.makeDependentReactionsDirty = function () {
-
         /********************************************
          a deferred context is reqired here in case
          makeDirty() is called from a callback
@@ -184,8 +183,6 @@ function Property(value) {
         },50)
 
          *******************************************/
-
-
         var d = Reaction.beginDeferred() 
         _this.dependentReactions.forEach(x => x.makeDirty())
         d.end()
@@ -235,9 +232,6 @@ function Property(value) {
 
         if (_this.binding) { //wechat (this.binding?.dirty) not supported
             if (_this.binding.dirty) {
-
-
-
                 if (_this.executionInProgress) {
 
 
@@ -251,9 +245,7 @@ function Property(value) {
                     return _this.value
                 }
                 try {
-
                     var oldValue = _this.value
-
                     try {
                         _this.executionInProgress = true
                         _this.value = _this.binding.execute()
@@ -277,9 +269,7 @@ function Property(value) {
                                 d.end()
                             }
 
-                            if (_this.reactionsWhoReceivedOldValue) {//<- TODO: delete
-                                _this.reactionsWhoReceivedOldValue = undefined
-                            }
+                            _this.reactionsWhoReceivedOldValue = undefined                            
 
                         }
                         
@@ -318,6 +308,11 @@ function Property(value) {
     _this.setValue = function(value) {
         //console.log("setValue " + value + " " + _this.onChanged.size)
         if (typeof value === 'function') {
+
+            if (value.isBindingConstructor) {
+                value = value(_this)
+            }
+
             if (_this.binding) {
                 if (_this.binding.func === value) {
                     return
@@ -432,7 +427,7 @@ Object.defineProperty(Object.prototype, "Reactive", {
 function OnChanged(getter, action) {
     let previous = undefined
     return new Reaction(() => {
-        let current = getter
+        let current = getter()
         if (current != previous) {
             let n = Reaction.beginNonReactive()
             action(previous, current)
