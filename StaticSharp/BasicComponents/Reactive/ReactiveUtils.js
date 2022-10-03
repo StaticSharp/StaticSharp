@@ -33,6 +33,7 @@ function HeightToStyle(element) {
 }
 
 
+
 function Try(func, defaultValue, exceptions) {
     //console.log("try", func, defaultValue, exceptions)
     try {

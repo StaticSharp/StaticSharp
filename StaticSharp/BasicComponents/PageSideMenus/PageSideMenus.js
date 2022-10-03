@@ -74,10 +74,11 @@ function PageSideMenus(element) {
 
     let toggle = false
     element.Events.Click = () => {
-        toggle = !toggle
+        
+        /*toggle = !toggle
         element.ContentWidth = AnimateTo(
             () => toggle ? (element.WindowWidth - 100) : 500,
-            10000)
+            10000)*/
     }
 
     element.Reactive = {
@@ -95,9 +96,10 @@ function PageSideMenus(element) {
         SideBarOpen: 0, //-1 left , 1 right
 
         LeftSideBar: () => element.Child("LeftSideBar"),
-
+        LeftSideBarIcon: () => element.Child("LeftSideBarIcon"),
 
         RightSideBar: () => element.Child("RightSideBar"),
+        RightSideBarIcon: () => element.Child("RightSideBarIcon"),
 
         TopBar: () => element.Child("Content").Child("TopBar"),
 
@@ -123,6 +125,10 @@ function PageSideMenus(element) {
         RightSideBarSwipeProgress: 0,
 
     }
+
+
+
+
 
     let startX = 0
     let startY = 0
@@ -198,7 +204,7 @@ function PageSideMenus(element) {
         element.SideBarOpen = 0
     }
 
-
+    
 
 
     new Reaction(() => {
@@ -416,14 +422,21 @@ function PageSideMenus(element) {
     }
 
     let leftButton = undefined
+
+    new Reaction(() => {
+        if (element.LeftSideBar && element.LeftSideBarIcon) {
+            element.LeftSideBarIcon.Y = () => iconMargin
+            element.LeftSideBarIcon.X = () => iconMargin + element.LeftSideBar.X + element.LeftSideBar.Width
+            element.LeftSideBarIcon.Width = () => element.SideBarsIconsSize
+            element.LeftSideBarIcon.Radius = () => 0.5 * element.SideBarsIconsSize
+            element.LeftSideBarIcon.Visibility = () => (element.BarsCollapsed)?1:0
+        }
+    })
+
     new Reaction(() => {
         
 
-        if (element.LeftSideBar) {
-            if (leftButton === undefined) {
-                leftButton = CreateButton()
-                leftButton.style.backgroundColor = "red"
-            }
+        if (element.LeftSideBar && element.LeftSideBarIcon) {
             if (element.BarsCollapsed) {
                 leftButton.style.display = "block"
                 let barVisible = (element.LeftSideBar.Width + element.LeftSideBar.X) > 0
@@ -448,7 +461,9 @@ function PageSideMenus(element) {
                     leftButton.style.borderRadius = (0.5 * element.SideBarsIconsSize) + "px"
                 }
             } else {
-                leftButton.style.display = "none"
+                console.log("element.LeftSideBarIcon.Visibility = 0")
+                element.LeftSideBarIcon.Visibility = 0
+                //leftButton.style.display = "none"
             }
         }
     })

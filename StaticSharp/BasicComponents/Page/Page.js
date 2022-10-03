@@ -112,10 +112,17 @@ function Page(element) {
     function onLoadEvent() {
         loadEventsToWait--
         if (loadEventsToWait == 0) {
+
             console.log("-------------Reactions------------", performance.now());
             loadingDeffered.end()
             console.log("-------------Reactions-done-------", performance.now());
             element.style.visibility = "visible";
+            if (location.hash !== "") {
+                location.href = location.hash
+            }
+
+
+
             /*let d = Reaction.beginDeferred()
             element.WindowWidth = getWindowWidth()
             element.WindowHeight = getWindowHeight()

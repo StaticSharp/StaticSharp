@@ -44,6 +44,8 @@ namespace StaticSharpDemo.Root.Components {
             })
             .ParentHorizontalMarginsToPaddings(),
 
+            
+
 
             new Flipper{
                 First = new Video("-LF5M9nlFQs"),

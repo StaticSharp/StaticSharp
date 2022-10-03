@@ -21,8 +21,4 @@ namespace StaticSharp {
     public static class Checkbox { 
          
     }
-
-
-
-
 }

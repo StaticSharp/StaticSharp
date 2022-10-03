@@ -17,6 +17,12 @@ namespace StaticSharp {
         public bool Hover => NotEvaluatableValue<bool>();
         public bool Selectable => NotEvaluatableValue<bool>();
 
+        public float Radius => NotEvaluatableValue<float>();
+        public float RadiusTopLeft => NotEvaluatableValue<float>();
+        public float RadiusTopRight => NotEvaluatableValue<float>();
+        public float RadiusBottomLeft => NotEvaluatableValue<float>();
+        public float RadiusBottomRight => NotEvaluatableValue<float>();
+
     }
 
     public class BaseModifierBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {
@@ -24,7 +30,14 @@ namespace StaticSharp {
         public Binding<Color> BackgroundColor { set { Apply(value); } }
         public Binding<Color> ForegroundColor { set { Apply(value); } }
         public Binding<bool> Selectable { set { Apply(value); } }
-        
+
+        public Binding<float> Radius            { set { Apply(value); } }
+        public Binding<float> RadiusTopLeft     { set { Apply(value); } }
+        public Binding<float> RadiusTopRight    { set { Apply(value); } }
+        public Binding<float> RadiusBottomLeft  { set { Apply(value); } }
+        public Binding<float> RadiusBottomRight { set { Apply(value); } }       
+
+
     }
 
 

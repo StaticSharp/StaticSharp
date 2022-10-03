@@ -85,7 +85,7 @@ function Block(element) {
         Height: () => First(element.LayoutHeight, element.InternalHeight),
 
 
-        Hover: false
+        
     }
 
     DepthToStyle(element)

@@ -42,9 +42,8 @@
 		<EmbeddedResource Include="**\*.js" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <None Remove="Depth.js" />
-	</ItemGroup>
+
+	
 
 
 

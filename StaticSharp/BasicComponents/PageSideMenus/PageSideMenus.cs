@@ -50,14 +50,23 @@ namespace StaticSharp {
         public virtual Block? Footer => null;
 
         
-        public virtual Block? RightSideBar => null;
+
+        public virtual Block? LeftSideBarIcon => null;
         public virtual Block? LeftSideBar => null;
+
+
+        public virtual Block? RightSideBarIcon => null;
+        public virtual Block? RightSideBar => null;
+        
 
 
         protected override async Task<Tag> GenerateChildrenHtmlAsync(Context context, Tag elementTag) {
 
             return await new Blocks {
+                {"LeftSideBarIcon" ,LeftSideBarIcon},
                 {"LeftSideBar" ,LeftSideBar},
+
+                {"RightSideBarIcon" ,RightSideBarIcon},
                 {"RightSideBar" ,RightSideBar},
                 {"Content", new Column {
                     Children = {

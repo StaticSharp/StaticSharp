@@ -11,6 +11,10 @@ namespace StaticSharpDemo.Root {
             return base.Setup(context);
         }
 
+        public override Block? LeftSideBarIcon => new MaterialDesignIconBlock(MaterialDesignIcons.Menu) { 
+            BackgroundColor = ColorTranslator.FromHtml("#6d597a"),
+            Paddings = 8
+        };
         public override Block LeftSideBar => new Column() {
             BackgroundColor = ColorTranslator.FromHtml("#6d597a"),
             Children = {
