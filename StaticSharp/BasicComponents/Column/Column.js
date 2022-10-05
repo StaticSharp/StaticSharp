@@ -107,8 +107,8 @@ function Column(element) {
 
         freeSpacePixels = element.Height - contentHeight;// Math.max( element.Height - contentHeight, 0)
 
-        if (freeSpacePixels < 0) {
-            element.style.overflowY = "scroll"
+        if (freeSpacePixels < 0) {//overflow-y: overlay;
+            element.style.overflowY = "auto"
             freeSpacePixels = 0
             if (!element.innerSizeHolder) {
                 element.innerSizeHolder = document.createElement('holder')

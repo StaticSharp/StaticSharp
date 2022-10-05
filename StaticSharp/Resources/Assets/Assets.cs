@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NeoSmart.AsyncLock;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,16 +13,21 @@ public class Assets {
     public Uri BaseUrl { get; init; }
 
     private static readonly Dictionary<string, IAsset> assets = new();
+    public static AsyncLock AsyncLock { get; } = new();
 
+    public async Task AddAsync(IAsset asset) {
+        using (await Cache.AsyncLock.LockAsync()) {
 
-
-    public void Add(IAsset asset) {
-        if (assets.TryGetValue(asset.Key, out var existingAsset)) {
-            if (existingAsset.ContentHash == asset.ContentHash) {
-                return;
+            if (assets.TryGetValue(asset.Key, out var existingAsset)) {
+                if (existingAsset.ContentHash == asset.ContentHash) {
+                    return;
+                }
+            } else {
+                Console.WriteLine("!assets.TryGetValue");
             }
+
+            assets[asset.Key] = asset;
         }
-        assets[asset.Key] = asset;
     }
 
     public IAsset? GetByFilePath(string filePath) {

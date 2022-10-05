@@ -135,7 +135,20 @@ namespace StaticSharp {
     }
 
     public static partial class Static {
-        public static T ParentHorizontalMarginsToPaddings<T>(this T _this) where T : Block {
+
+        public static T FillWidth<T>(this T _this) where T : Block {
+            _this.X = 0;
+            _this.Width = new(e => e.ParentBlock.Width);
+            return _this;
+        }
+
+        public static T InheritPaddings<T>(this T _this) where T : Block {
+            _this.PaddingLeft = new(e => e.ParentBlock.PaddingLeft);
+            _this.PaddingRight = new(e => e.ParentBlock.PaddingRight);
+            return _this;
+        }
+
+        /*public static T ParentHorizontalMarginsToPaddings<T>(this T _this) where T : Block {
             _this.X = new(e => -e.ParentBlock.MarginLeft);
             _this.Width = new(e => e.ParentBlock.Width + e.ParentBlock.MarginLeft + e.ParentBlock.MarginRight);
             _this.PaddingLeft = new(e => e.ParentBlock.MarginLeft);
@@ -147,7 +160,7 @@ namespace StaticSharp {
             _this.X = new(e => -e.ParentBlock.MarginLeft);
             _this.Width = new(e => e.ParentBlock.Width + e.ParentBlock.MarginLeft + e.ParentBlock.MarginRight);
             return _this;
-        }
+        }*/
 
 
     }

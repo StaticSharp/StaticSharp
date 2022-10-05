@@ -78,13 +78,15 @@ function Block(element) {
         X: () => element.LayoutX,
         Y: () => element.LayoutY,
 
-        AbsoluteX: () => element.IsRoot ? 0 : Sum(element.Parent.AbsoluteX, element.X),
-        AbsoluteY: () => element.IsRoot ? 0 : Sum(element.Parent.AbsoluteY, element.Y),
+        AbsoluteX: () => element.IsRoot ? 0 : Sum(element.Parent.AbsoluteX, element.Parent.ScrollX, element.X),
+        AbsoluteY: () => element.IsRoot ? 0 : Sum(element.Parent.AbsoluteY, -element.Parent.ScrollY, element.Y),
 
         Width: () => First(element.LayoutWidth, element.InternalWidth),
         Height: () => First(element.LayoutHeight, element.InternalHeight),
 
 
+        ScrollX: 0,
+        ScrollY: 0,
         
     }
 
@@ -121,10 +123,19 @@ function Block(element) {
     
 
     new Reaction(() => {
-        element.style.paddingLeft = ToCssSize(element.PaddingLeft)
+        let l = element.PaddingLeft
+        let r = element.PaddingRight
+        let w = element.Width
+        if (l + r > w) {
+            let m = w / (l + r)
+            l *= m
+            r *= m
+        }
+        element.style.paddingLeft = ToCssSize(l)
+        element.style.paddingRight = ToCssSize(r)
     })
     new Reaction(() => {
-        element.style.paddingRight = ToCssSize(element.PaddingRight)
+        
     })
 
     new Reaction(() => {
@@ -148,5 +159,14 @@ function Block(element) {
     element.addEventListener('mouseleave', e => {
         element.Hover = false
     });
+
+    element.Events.Scroll = () => {
+        console.log(element.scrollTop)
+        let d = Reaction.beginDeferred()
+        element.ScrollX = element.scrollLeft
+        element.ScrollY = element.scrollTop
+        d.end()
+    }
+
 
 }

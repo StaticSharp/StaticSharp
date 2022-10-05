@@ -77,7 +77,7 @@ namespace StaticSharp {
 
 
                 var video = await new YoutubeVideoGenome(item).CreateOrGetCached();
-                var url = context.AddAsset(video);
+                var url = await context.AddAssetAsync(video);
 
                 elementTag["data-youtube-id"] = youtubeVideoId;
                 elementTag["data-width"] = item.Width;
@@ -86,7 +86,7 @@ namespace StaticSharp {
                 var sources = new List<object>();
                 foreach (var i in youtubeVideoManifest.Items) {
                     var iVideo = await new YoutubeVideoGenome(i).CreateOrGetCached();
-                    var iUrl = context.AddAsset(iVideo);
+                    var iUrl = await context.AddAssetAsync(iVideo);
 
                     sources.Add(new {
                         size = new {

@@ -108,7 +108,7 @@ namespace StaticSharpDemo.Root {
                     }
                 }
 
-            }.ParentHorizontalMarginsToPaddings(),
+            }.FillWidth().InheritPaddings(),
 
             new Flipper(){
                 MarginLeft = new(e=>e.ParentBlock.MarginLeft),

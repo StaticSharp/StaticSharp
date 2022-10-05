@@ -15,14 +15,14 @@ function Page(element) {
 
 
     //detect slim scroll or thick
-    document.documentElement.style.overflowX = "hidden"
+    /*document.documentElement.style.overflowX = "hidden"
     document.documentElement.style.overflowY = "scroll"
     if (window.innerWidth == document.documentElement.clientWidth) {
         document.documentElement.style.overflowY = "auto"
         //console.log("document.documentElement.style.overflowY = auto")
     } else {
         //console.log("document.documentElement.style.overflowY = scroll")
-    }
+    }*/
 
     let animationFrame = 0
     window.Reactive = {
@@ -48,8 +48,6 @@ function Page(element) {
         FontSize: 16,
         HierarchyFontSize: () => element.FontSize,
 
-        ScrollX: 0,
-        ScrollY: 0,
 
     }
 
@@ -98,12 +96,7 @@ function Page(element) {
     }
 
 
-    window.Events.Scroll = () => {
-        let d = Reaction.beginDeferred()
-        element.ScrollX = this.scrollX
-        element.ScrollY = this.scrollY
-        d.end()
-    }
+    
 
 
 
@@ -132,10 +125,12 @@ function Page(element) {
 
     document.fonts.ready
         .then(() => {
+            console.log("-------------Fonts ready--", performance.now());
             onLoadEvent()            
         })
 
     document.addEventListener("DOMContentLoaded", function (event) {
+        console.log("------DOMContentLoaded--", performance.now());
         onLoadEvent()
     })
 

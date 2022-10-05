@@ -50,8 +50,8 @@ function BaseModifier(element) {
     new Reaction(() => {
         element.style.borderTopLeftRadius       = ToCssSize(element.RadiusTopLeft)
         element.style.borderTopRightRadius      = ToCssSize(element.RadiusTopRight)
-        element.style.borderBottomRightRadius   = ToCssSize(element.RadiusBottomLeft)
-        element.style.borderBottomLeftRadius    = ToCssSize(element.RadiusBottomRight)
+        element.style.borderBottomLeftRadius    = ToCssSize(element.RadiusBottomLeft)
+        element.style.borderBottomRightRadius   = ToCssSize(element.RadiusBottomRight)
     })
 
 

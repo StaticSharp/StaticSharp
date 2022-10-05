@@ -39,18 +39,21 @@ function lerp(a, b, t) {
 }
 
 function AnimateTo(targetValue, duration) {
+    
     let result = (property) => {
-
+        
         let startValue = property.value
         let startTime = performance.now()
 
         return () => {
             let elapsed = performance.now() - startTime
+            
             if (elapsed < duration) {
                 window.AnimationFrame
             }
-            let mormalizedTime = Math.min(elapsed / duration, 1)
             let t = (typeof targetValue === "function") ? targetValue() : targetValue
+            let mormalizedTime = Math.min(elapsed / duration, 1)
+            
             return lerp(startValue, t, mormalizedTime)
         }
     }
@@ -244,7 +247,7 @@ function PageSideMenus(element) {
     new Reaction(() => {
         if (element.LeftSideBar) {
             element.LeftSideBar.Depth = glassZIndex + 1
-            element.LeftSideBar.style.position = "fixed"
+            //element.LeftSideBar.style.position = "fixed"
             element.LeftSideBar.Height = () => element.WindowHeight
         }
     })
@@ -252,7 +255,7 @@ function PageSideMenus(element) {
     new Reaction(() => {
         if (element.RightSideBar) {
             element.RightSideBar.Depth = glassZIndex + 1
-            element.RightSideBar.style.position = "fixed"
+            //element.RightSideBar.style.position = "fixed"
             element.RightSideBar.Height = () => element.WindowHeight
         }
     })
@@ -386,17 +389,18 @@ function PageSideMenus(element) {
         let contentSpace = (width - innerWidth) * 0.5
 
         if (element.Content) {
-            element.Content.Width = width - 2 * contentSpace
-            element.Content.MarginLeft = contentSpace
-            element.Content.MarginRight = contentSpace
-            element.Content.LayoutX = LeftBarSize + contentSpace
+            element.Content.Height = element.WindowHeight
+            element.Content.Width = width// - 2 * contentSpace
+            element.Content.PaddingLeft = contentSpace
+            element.Content.PaddingRight = contentSpace
+            element.Content.LayoutX = LeftBarSize
             element.Content.LayoutHeight = Max(element.Content.InternalHeight, element.WindowHeight)
         }
     })
 
     new Reaction(() => {
         element.style.width = ToCssSize(element.WindowWidth)
-        element.style.height = ToCssSize(element.Content.Height)
+        element.style.height = ToCssSize(element.WindowHeight) //ToCssSize(element.Content.Height)
     })
 
 
@@ -423,17 +427,51 @@ function PageSideMenus(element) {
 
     let leftButton = undefined
 
-    new Reaction(() => {
-        if (element.LeftSideBar && element.LeftSideBarIcon) {
-            element.LeftSideBarIcon.Y = () => iconMargin
-            element.LeftSideBarIcon.X = () => iconMargin + element.LeftSideBar.X + element.LeftSideBar.Width
-            element.LeftSideBarIcon.Width = () => element.SideBarsIconsSize
-            element.LeftSideBarIcon.Radius = () => 0.5 * element.SideBarsIconsSize
-            element.LeftSideBarIcon.Visibility = () => (element.BarsCollapsed)?1:0
-        }
-    })
 
-    new Reaction(() => {
+
+    function ConfugureIcon(icon) {
+        icon.Reactive = {
+            AnimationProgress: 1,
+            AnimationTarget: () => element.Content.ScrollY > 0 || icon.BarVisible ? 0 : 1
+        }
+
+        OnChanged(
+            () => icon.AnimationTarget,
+            (p, c) => {
+                
+                icon.AnimationProgress = AnimateTo(c?1:0, 200)
+            }
+        )
+
+        icon.Y = () => iconMargin
+        
+        icon.Width = () => lerp(collapsedIconWidth, element.SideBarsIconsSize, icon.AnimationProgress)
+        icon.Height = () => lerp(collapsedIconHeight, element.SideBarsIconsSize, icon.AnimationProgress)
+
+        icon.Radius = () => lerp(icon.Width, 0.5 * icon.Width, icon.AnimationProgress)
+        icon.Visibility = () => (element.BarsCollapsed) ? 1 : 0
+        icon.Depth = () => icon.BarVisible ? glassZIndex + 1 : glassZIndex - 1 
+
+    }
+
+    OnChanged(
+        () => element.LeftSideBar && element.LeftSideBarIcon,
+        (p, c) => {
+            if (c) {
+                let icon = element.LeftSideBarIcon
+                ConfugureIcon(icon)
+                icon.Reactive.BarVisible = () => (element.LeftSideBar.Width + element.LeftSideBar.X) > 0                
+                
+                icon.X = () => iconMargin * icon.AnimationProgress + element.LeftSideBar.X + element.LeftSideBar.Width
+
+                icon.RadiusTopLeft = () => 0.5 * icon.Width * icon.AnimationProgress
+                icon.RadiusBottomLeft = () => 0.5 * icon.Width * icon.AnimationProgress
+            }
+        }
+    )
+
+
+    /*new Reaction(() => {
         
 
         if (element.LeftSideBar && element.LeftSideBarIcon) {
@@ -466,7 +504,7 @@ function PageSideMenus(element) {
                 //leftButton.style.display = "none"
             }
         }
-    })
+    })*/
 
     let rightButton = undefined
 

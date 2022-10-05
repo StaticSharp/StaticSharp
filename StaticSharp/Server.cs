@@ -101,9 +101,9 @@ namespace StaticSharp {
                 
 
                 var html = await page.GeneratePageHtmlAsync(CreateContext(request));
-
+                prevHtml = html;
                 html = html.Replace("t!dcsctAYNTSYMJaKLcdZPtZ#n@KPIjkK)ppteSZ4t%W)N*3RC8k645V4DUMW5G!", html.ToHashString());
-
+                
                 //response.Cookies.Append(_pageKey, html.ToHashString());
                 await response.WriteAsync(html);
 
@@ -166,11 +166,11 @@ namespace StaticSharp {
             }
         }
 
-
-        protected virtual async Task HandleRefreshPageAsync(HttpRequest request, HttpResponse responce, RouteData routeData) {
+        string prevHtml = "";
+        protected virtual async Task HandleGetPageHashAsync(HttpRequest request, HttpResponse responce, RouteData routeData) {
             //TODO: try catch
 
-            var pageHash = ReadAllText(request);
+            //var pageHash = ReadAllText(request);
             //var requestJson = JsonSerializer.Deserialize<RefreshPageParameters>(request.Body);
 
 
@@ -182,12 +182,20 @@ namespace StaticSharp {
             if (page == null) { return; }            
             var html = await page.GeneratePageHtmlAsync(CreateContext(request));
 
-            var newPageHash = html.ToHashString();
-            if (newPageHash != pageHash) {
-                Console.WriteLine("Page changed.");
+            if (html != prevHtml) {
+                File.WriteAllText(Path.Combine(Gears.Cache.Directory, "current.html"), html);
+                File.WriteAllText(Path.Combine(Gears.Cache.Directory, "prevHtml.html"), prevHtml);
             }
 
-            await responce.WriteAsync((newPageHash != pageHash).ToString().ToLower());            
+            var pageHash = html.ToHashString();
+
+
+            
+            /*if (newPageHash != pageHash) {
+                Console.WriteLine("Page changed.");
+            }*/
+
+            await responce.WriteAsync(pageHash);            
         }
 
 
@@ -223,7 +231,7 @@ namespace StaticSharp {
                 }))
                 .UseRouter(r => r
                     .MapPost("/api/v1/visual_studio", FindVisualStudio)
-                    .MapPost("/api/v1/refresh_required", HandleRefreshPageAsync)
+                    .MapGet("/api/get_page_hash", HandleGetPageHashAsync)
                     .MapGet("/Assets/{**catchAll}", HandleAssetsRequestAsync)
                     .MapGet("/{**catchAll}", HandleAnyRequestAsync)
                     //.MapGet("/error", HandleErrorAsync)

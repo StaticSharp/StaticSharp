@@ -47,8 +47,8 @@ namespace StaticSharp.Gears {
         }
 
 
-        public Uri AddAsset(IAsset asset) {
-            Assets.Add(asset);
+        public async Task<Uri> AddAssetAsync(IAsset asset) {
+            await Assets.AddAsync(asset);
             return new Uri(BaseAssetsUrl, asset.FilePath);
         }
 

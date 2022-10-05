@@ -42,7 +42,7 @@ namespace StaticSharpDemo.Root.Components {
                 }
                 items[items.Length-1].BackgroundColor = new(e=>e.Hover? ColorTranslator.FromHtml("#ffb703") : ColorTranslator.FromHtml("#00000000"));
             })
-            .ParentHorizontalMarginsToPaddings(),
+            .FillWidth().InheritPaddings(),
 
             
 

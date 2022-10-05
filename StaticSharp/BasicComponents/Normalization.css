@@ -5,10 +5,9 @@ html {
 
 body {
     position: absolute;
-    //display: contents;
-    position: absolute;
+    overflow-x: hidden;
+    overflow-y: hidden;
     visibility: hidden;
-
     //position: relative;
     //top: 0;
     //min-height: 100vh;
@@ -18,8 +17,47 @@ body {
     white-space: pre-wrap;
     line-height: 1.5;
 }
+/*
+::-webkit-scrollbar {
+    width: 50px;
+    overflow: visible;
+}
+
+
+::-webkit-scrollbar-track {
+    background: red;
+    overflow: visible;
+}
+
+::-webkit-scrollbar-thumb {
+    position: absolute;
+    background: green;
+    width: 20px;
+    left: -20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #6E6E6E;
+}
+::-webkit-scrollbar-track {
+    position: absolute;
+    //right: -40px;
+    //top: -50px;
+}*/
 
 * {
+    scrollbar-width: none;
+}
+::-webkit-scrollbar {
+    width: 0;
+}
+
+
+* {
+    overflow-x: visible;
+    overflow-y: visible;
+    overflow-x: overlay;
+    overflow-y: overlay;
     z-index: inherit;
     position: absolute;
     //position: inherit;

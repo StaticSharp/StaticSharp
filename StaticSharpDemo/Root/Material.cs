@@ -55,19 +55,10 @@ namespace StaticSharpDemo.Root {
 
             BackgroundColor = ColorTranslator.FromHtml("#355070"),
 
-            X = new(e => -e.ParentBlock.MarginLeft),
-
-            Width = new(e => e.ParentBlock.Width + e.ParentBlock.MarginLeft + e.ParentBlock.MarginRight),
-
             PaddingTop = 20,
             PaddingBottom = 20,
 
-            PaddingLeft = new(e => e.ParentBlock.MarginLeft),
-            PaddingRight = new(e => e.ParentBlock.MarginRight),
-
-
             Children = {
-
                 new Blocks(){
                     new Space(float.Epsilon,1,float.Epsilon),
                     new Column{
@@ -120,7 +111,7 @@ namespace StaticSharpDemo.Root {
                 })
 
             }
-        };
+        }.FillWidth().InheritPaddings();
 
 
 
