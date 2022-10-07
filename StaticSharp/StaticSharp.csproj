@@ -78,6 +78,7 @@
 
 		<PackageReference Include="envdte" Version="17.3.32804.24" />
 		<PackageReference Include="MimeTypeMapOfficial" Version="1.0.17" />
+		<ProjectReference Include="..\MaterialDesignIcons\Source\MaterialDesignIcons.csproj" />
 		
 		<ProjectReference Include="..\StaticSharpEngine\StaticSharpEngine.csproj" />
 	</ItemGroup>
@@ -106,9 +107,7 @@
 		<ProjectReference Include="..\MixinGenerator\MixinGenerator.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="BasicComponents\Reactive\Scriptifier\" />
-	</ItemGroup>
+
 
 	
 	

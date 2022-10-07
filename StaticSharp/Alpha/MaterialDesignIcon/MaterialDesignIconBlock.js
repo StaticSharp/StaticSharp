@@ -1,17 +1,19 @@
 function MaterialDesignIconBlock(element) {
     Block(element)
 
+    let width = Number(element.dataset.width)
+    let height = Number(element.dataset.height)
 
 
     element.Reactive = {
 
-        Aspect: element.dataset.width / element.dataset.height,
+        Aspect: width / height,
 
         VerticalPaddingSum: () => Sum(element.PaddingTop, element.PaddingBottom),
         HorizontalPaddingSum: () => Sum(element.PaddingLeft, element.PaddingRight),
 
-        InternalWidth: () => First((element.Height - element.VerticalPaddingSum) * element.Aspect + element.HorizontalPaddingSum, Sum(element.dataset.width, element.HorizontalPaddingSum)),
-        InternalHeight: () => First((element.Width - element.HorizontalPaddingSum) / element.Aspect + element.VerticalPaddingSum, Sum(element.dataset.height, element.VerticalPaddingSum)),
+        InternalWidth: () => First((element.Height - element.VerticalPaddingSum) * element.Aspect + element.HorizontalPaddingSum, Sum(width, element.HorizontalPaddingSum)),
+        InternalHeight: () => First((element.Width - element.HorizontalPaddingSum) / element.Aspect + element.VerticalPaddingSum, Sum(height, element.VerticalPaddingSum)),
     }
 
 

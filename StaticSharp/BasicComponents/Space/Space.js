@@ -3,8 +3,8 @@ function Space(element) {
     Hierarchical(element)
 
     element.Reactive = {
-        Before: 0,
+        Before: 1,
         Between: 1,
-        After: 0
+        After: 1
     }
 }

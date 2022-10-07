@@ -1,4 +1,6 @@
-﻿namespace StaticSharp.Gears;
+﻿using StaticSharp.Html;
+
+namespace StaticSharp.Gears;
 
 public abstract class CallerInfo{
     protected readonly string callerFilePath;
@@ -12,4 +14,10 @@ public abstract class CallerInfo{
         throw new InvalidUsageException(callerFilePath, callerLineNumber);
     }
 
+    public void AddSourceCodeNavigationData(Tag tag, Context context) {
+        if (context.DeveloperMode) {
+            tag["data-caller-file-path"] = callerFilePath;
+            tag["data-caller-line-number"] = callerLineNumber;
+        }
+    }
 }

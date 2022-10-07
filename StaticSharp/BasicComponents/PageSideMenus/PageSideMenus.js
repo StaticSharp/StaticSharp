@@ -89,7 +89,7 @@ function PageSideMenus(element) {
         SideBarsIconsSize: 48,
 
         BarsCollapsed: () =>
-            element.WindowWidth < Sum(
+            element.Width < Sum(
                 element.ContentWidth,
                 element.LeftSideBar ? element.LeftSideBar.Width : 0,
                 element.RightSideBar ? element.RightSideBar.Width : 0),
@@ -248,7 +248,7 @@ function PageSideMenus(element) {
         if (element.LeftSideBar) {
             element.LeftSideBar.Depth = glassZIndex + 1
             //element.LeftSideBar.style.position = "fixed"
-            element.LeftSideBar.Height = () => element.WindowHeight
+            element.LeftSideBar.Height = () => element.Height
         }
     })
 
@@ -256,7 +256,7 @@ function PageSideMenus(element) {
         if (element.RightSideBar) {
             element.RightSideBar.Depth = glassZIndex + 1
             //element.RightSideBar.style.position = "fixed"
-            element.RightSideBar.Height = () => element.WindowHeight
+            element.RightSideBar.Height = () => element.Height
         }
     })
 
@@ -355,21 +355,21 @@ function PageSideMenus(element) {
             if (element.BarsCollapsed) {
                 if (element.SideBarOpen == 0) {
                     if (element.Swipe) {
-                        element.RightSideBar.X = element.WindowWidth + Clamp(element.SwipeXAboveThreshold, -element.RightSideBar.Width, 0)
+                        element.RightSideBar.X = element.Width + Clamp(element.SwipeXAboveThreshold, -element.RightSideBar.Width, 0)
                     } else {
-                        element.RightSideBar.X = element.WindowWidth
+                        element.RightSideBar.X = element.Width
                     }
                 } else if (element.SideBarOpen == 1) {
                     if (element.Swipe) {
-                        element.RightSideBar.X = element.WindowWidth - element.RightSideBar.Width + Clamp(element.SwipeXAboveThreshold, 0, element.RightSideBar.Width)
+                        element.RightSideBar.X = element.Width - element.RightSideBar.Width + Clamp(element.SwipeXAboveThreshold, 0, element.RightSideBar.Width)
                     } else {
-                        element.RightSideBar.X = element.WindowWidth - element.RightSideBar.Width
+                        element.RightSideBar.X = element.Width - element.RightSideBar.Width
                     }
                 } else if (element.SideBarOpen == -1) {
-                    element.RightSideBar.X = element.WindowWidth 
+                    element.RightSideBar.X = element.Width 
                 }
             } else {
-                element.RightSideBar.X = element.WindowWidth - element.RightSideBar.Width
+                element.RightSideBar.X = element.Width - element.RightSideBar.Width
             }
         }
     })
@@ -384,23 +384,23 @@ function PageSideMenus(element) {
 
         let RightBarSize = (element.RightSideBar && !element.BarsCollapsed) ? Max(element.RightSideBar.Width, 0) : 0
 
-        let width = element.WindowWidth - LeftBarSize - RightBarSize
+        let width = element.Width - LeftBarSize - RightBarSize
         let innerWidth = Math.min(width, element.ContentWidth)
         let contentSpace = (width - innerWidth) * 0.5
 
         if (element.Content) {
-            element.Content.Height = element.WindowHeight
+            //element.Content.Height = element.WindowHeight
             element.Content.Width = width// - 2 * contentSpace
             element.Content.PaddingLeft = contentSpace
             element.Content.PaddingRight = contentSpace
             element.Content.LayoutX = LeftBarSize
-            element.Content.LayoutHeight = Max(element.Content.InternalHeight, element.WindowHeight)
+            element.Content.LayoutHeight = Max(element.Content.InternalHeight, element.Height)
         }
     })
 
     new Reaction(() => {
-        element.style.width = ToCssSize(element.WindowWidth)
-        element.style.height = ToCssSize(element.WindowHeight) //ToCssSize(element.Content.Height)
+        element.style.width = ToCssSize(element.Width)
+        element.style.height = ToCssSize(element.Height) //ToCssSize(element.Content.Height)
     })
 
 
@@ -413,19 +413,6 @@ function PageSideMenus(element) {
 
 
 
-
-
-    function CreateButton() {
-        let button = document.createElement("icon")
-        button.style.position = "fixed"
-        button.style.backgroundColor = "red"
-        const transitionDuration = 0.2
-        button.style.transition = `all ${transitionDuration}s, left 0s`;
-        element.appendChild(button)
-        return button
-    }
-
-    let leftButton = undefined
 
 
 
@@ -438,12 +425,11 @@ function PageSideMenus(element) {
         OnChanged(
             () => icon.AnimationTarget,
             (p, c) => {
-                
-                icon.AnimationProgress = AnimateTo(c?1:0, 200)
+                icon.AnimationProgress = AnimateTo(c ? 1 : 0, 200)
             }
         )
 
-        icon.Y = () => iconMargin
+        icon.Y = () => icon.MarginTop
         
         icon.Width = () => lerp(collapsedIconWidth, element.SideBarsIconsSize, icon.AnimationProgress)
         icon.Height = () => lerp(collapsedIconHeight, element.SideBarsIconsSize, icon.AnimationProgress)
@@ -462,13 +448,36 @@ function PageSideMenus(element) {
                 ConfugureIcon(icon)
                 icon.Reactive.BarVisible = () => (element.LeftSideBar.Width + element.LeftSideBar.X) > 0                
                 
-                icon.X = () => iconMargin * icon.AnimationProgress + element.LeftSideBar.X + element.LeftSideBar.Width
+                icon.X = () => icon.MarginLeft * icon.AnimationProgress + element.LeftSideBar.X + element.LeftSideBar.Width
 
                 icon.RadiusTopLeft = () => 0.5 * icon.Width * icon.AnimationProgress
                 icon.RadiusBottomLeft = () => 0.5 * icon.Width * icon.AnimationProgress
+
+                icon.Events.Click = () => element.SideBarOpen = -1
             }
         }
     )
+
+    OnChanged(
+        () => element.RightSideBar && element.RightSideBarIcon,
+        (p, c) => {
+            if (c) {
+                let icon = element.RightSideBarIcon
+                ConfugureIcon(icon)
+                icon.Reactive.BarVisible = () => element.RightSideBar.X < element.Width
+
+                icon.X = () => element.RightSideBar.X - icon.MarginRight * icon.AnimationProgress - element.RightSideBarIcon.Width
+
+                icon.RadiusTopRight = () => 0.5 * icon.Width * icon.AnimationProgress
+                icon.RadiusBottomRight = () => 0.5 * icon.Width * icon.AnimationProgress
+
+                icon.Events.Click = () => element.SideBarOpen = 1
+            }
+        }
+    )
+
+
+
 
 
     /*new Reaction(() => {
@@ -506,7 +515,7 @@ function PageSideMenus(element) {
         }
     })*/
 
-    let rightButton = undefined
+    /*let rightButton = undefined
 
     new Reaction(() => {
 
@@ -544,7 +553,7 @@ function PageSideMenus(element) {
                 rightButton.style.display = "none"
             }
         }
-    })
+    })*/
 
 
 

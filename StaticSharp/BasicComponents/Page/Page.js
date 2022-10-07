@@ -42,12 +42,14 @@ function Page(element) {
         UserInteracted: false,
         DevicePixelRatio: window.devicePixelRatio,
 
-        WindowWidth: getWindowWidth(),
-        WindowHeight: getWindowHeight(),
+        Width: getWindowWidth(),
+        Height: getWindowHeight(),
 
         FontSize: 16,
         HierarchyFontSize: () => element.FontSize,
 
+        HierarchyBackgroundColor: () => element.BackgroundColor,
+        HierarchyForegroundColor: () => element.ForegroundColor,
 
     }
 
@@ -87,12 +89,12 @@ function Page(element) {
     }
 
     window.onresize = function (event) {
-        //console.log("resize", getWindowHeight(), window.innerHeight)
+        //let startTime = performance.now()
         let d = Reaction.beginDeferred()
-        element.WindowWidth = getWindowWidth()
-        element.WindowHeight = getWindowHeight()
+        element.Width = getWindowWidth()
+        element.Height = getWindowHeight()
         d.end()
-
+        //console.log("resize", performance.now() - startTime)
     }
 
 

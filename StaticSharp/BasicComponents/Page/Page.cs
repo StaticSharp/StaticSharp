@@ -127,6 +127,8 @@ namespace StaticSharp {
 
             ModifyTag(tag);
 
+            AddSourceCodeNavigationData(tag, context);
+
             tag.Add(await CreateConstructorScriptAsync(context));
 
             tag.Add(await GenerateChildrenHtmlAsync(context, tag));

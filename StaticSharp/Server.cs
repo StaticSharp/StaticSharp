@@ -52,7 +52,7 @@ namespace StaticSharp {
 
         private Gears.Context CreateContext(HttpRequest request) {
             var baseUrl = new Uri($"{request.Scheme}://{request.Host}") ;
-            var context = new Gears.Context(Assets, baseUrl, this);
+            var context = new Gears.Context(Assets, baseUrl, this, true);
             return context;
         }
 
@@ -153,9 +153,12 @@ namespace StaticSharp {
         }
 
         /*private static async Task<JObject> ParseJsonRequest(HttpRequest request) {
-            //var streamReader = new StreamReader(request.Body);
-            //var body = await streamReader.ReadToEndAsync();
-            return "";// JObject.Parse(body);
+            var streamReader = new StreamReader(request.Body);
+            var body = await streamReader.ReadToEndAsync();
+            
+            JsonConvert.DeserializeObject()
+
+            return JObject.Parse(body);
         }*/
 
 
@@ -208,10 +211,18 @@ namespace StaticSharp {
             await response.WriteAsync(await GenerateErrorPageAsync(CreateContext(request), exception));
         }*/
 
-        protected virtual async Task FindVisualStudio(HttpRequest request, HttpResponse response, RouteData routeData) {
-            /*var jsonBody = await ParseJsonRequest(request);
-            StaticSharp.Gears.VisualStudio.Open(jsonBody["file"].ToString(), int.Parse(jsonBody["line"].ToString()));
-            await response.WriteAsync("true");*/
+
+        class ShowSourceCodeParameters { 
+            public string callerFilePath { get; set; } = "";
+            public int callerLineNumber { get; set; } = 0;
+        }
+        protected virtual async Task ShowSourceCode(HttpRequest request, HttpResponse response, RouteData routeData) {
+
+            var parameters = JsonSerializer.Deserialize<ShowSourceCodeParameters>(request.Body);
+
+            StaticSharp.Gears.VisualStudio.Open(parameters.callerFilePath, parameters.callerLineNumber);
+
+
         }
 
         public async Task RunAsync() {
@@ -230,7 +241,7 @@ namespace StaticSharp {
                     await c.Response.WriteAsync(await GenerateErrorPageAsync(CreateContext(c.Request), exception));
                 }))
                 .UseRouter(r => r
-                    .MapPost("/api/v1/visual_studio", FindVisualStudio)
+                    .MapPut("/api/show_source_code", ShowSourceCode)
                     .MapGet("/api/get_page_hash", HandleGetPageHashAsync)
                     .MapGet("/Assets/{**catchAll}", HandleAssetsRequestAsync)
                     .MapGet("/{**catchAll}", HandleAnyRequestAsync)

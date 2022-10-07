@@ -14,7 +14,9 @@ using System.Threading.Tasks;
 
 namespace StaticSharp.Gears {
 
-    public struct Context { 
+    public struct Context {
+
+        public bool DeveloperMode { get; init; }
 
         public INodeToUrl NodeToUrlConverter { get; init; }
         public Uri NodeToUrl(INode node) { 
@@ -105,7 +107,7 @@ namespace StaticSharp.Gears {
         }
 
 
-        public Context(Assets assets, Uri baseUrl, INodeToUrl nodeToUrlConverter) {
+        public Context(Assets assets, Uri baseUrl, INodeToUrl nodeToUrlConverter, bool developerMode = false) {
             Assets = assets;
             //Urls = urls;
             BaseUrl = baseUrl;
@@ -114,6 +116,7 @@ namespace StaticSharp.Gears {
             NodeToUrlConverter = nodeToUrlConverter;
 
             nextIdNumber = new(0);
+            DeveloperMode = developerMode;
         }
     }
 }

@@ -44,9 +44,8 @@ function RowBuilder(element) {
         let x = 0
         let newLineHardY = 0
         let newLineSoftY = 0
-
-        let availableSpace = maxWidth - _this.currentX - Max(_this.margin, element.PaddingRight)
         
+        let availableSpace = maxWidth - _this.currentX - Max(_this.margin, element.PaddingRight, 0)
         let spaceUnits = 0
         for (let i = 0; i < _this.currentLine.length; i++) {
             let child = _this.currentLine[i]
@@ -64,7 +63,7 @@ function RowBuilder(element) {
 
             }
         }
-
+        
         let pixelBySpaceUnits = spaceUnits>0 ?  availableSpace / spaceUnits : 0
 
         for (let i = 0; i < _this.currentLine.length; i++){
@@ -91,7 +90,7 @@ function RowBuilder(element) {
 
                 //continue
             }
-
+            
             if (child.isSpace) {
                 switch (i) {
                     case 0:

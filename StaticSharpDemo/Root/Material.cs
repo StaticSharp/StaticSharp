@@ -11,10 +11,14 @@ namespace StaticSharpDemo.Root {
             return base.Setup(context);
         }
 
-        public override Block? LeftSideBarIcon => new MaterialDesignIconBlock(MaterialDesignIcons.Menu) { 
+        public override Block? LeftSideBarIcon => new MaterialDesignIconBlock(MaterialDesignIcons.IconName.Menu) { 
             BackgroundColor = ColorTranslator.FromHtml("#6d597a"),
-            Paddings = 8
+            Paddings = 8,
+            Margins = 8
         };
+
+
+
         public override Block LeftSideBar => new Column() {
             BackgroundColor = ColorTranslator.FromHtml("#6d597a"),
             Children = {
@@ -30,8 +34,14 @@ namespace StaticSharpDemo.Root {
             }
         };
 
+
+        public override Block? RightSideBarIcon => new MaterialDesignIconBlock(MaterialDesignIcons.IconName.Translate) {
+            BackgroundColor = ColorTranslator.FromHtml("#7a5924"),
+            Paddings = 8,
+            Margins = 8
+        };
         public override Block RightSideBar => new Column() {
-            BackgroundColor = ColorTranslator.FromHtml("#7a596d"),
+            BackgroundColor = ColorTranslator.FromHtml("#7a5924"),
             Children = {
                 "En",
                 "Ru",

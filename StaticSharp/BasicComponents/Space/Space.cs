@@ -35,11 +35,11 @@ namespace StaticSharp {
         /*public Space([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber) { }*/
 
-        public Space(float before = 0, float between = 1, float after = 0, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
+        public Space(float before = 1, float between = 1, float after = 1, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber) {
-            if (before != 0) Before = before;
+            if (before != 1) Before = before;
             if (between != 1) Between = between;
-            if (after != 0) After = after;
+            if (after != 1) After = after;
         }
 
         public async Task<Tag> GenerateHtmlAsync(Context context, string? id = null) {
@@ -47,6 +47,7 @@ namespace StaticSharp {
             var tag = new Tag(TagName, id) {
                 await CreateConstructorScriptAsync(context)
             };
+            AddSourceCodeNavigationData(tag,context);
             return tag;
         }
     }

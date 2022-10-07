@@ -35,9 +35,9 @@ namespace StaticSharp.Gears{
 
             var tag = new Tag(TagName, id) { };
 
+            AddSourceCodeNavigationData(tag, context);
 
             tag.Add(await CreateConstructorScriptAsync(context));
-
 
             tag.Add(await GenerateInlineHtmlInternalAsync(context, tag, format));
             //tag.Add(After());

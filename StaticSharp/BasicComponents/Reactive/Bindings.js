@@ -133,8 +133,8 @@ Reaction.beginNonReactive = function () {
 
 
 
-function Binging(func, onBecameDirty) {
-    //console.log("function Binging(func, onChange)", onChange)
+function Binding(func, onBecameDirty) {
+    //console.log("function Binding(func, onChange)", onChange)
     let _this = this
 
     ReactionBase.call(_this, func)
@@ -151,8 +151,8 @@ function Binging(func, onBecameDirty) {
         onBecameDirty()
     }
 }
-Binging.prototype = Object.create(ReactionBase.prototype);
-Binging.prototype.constructor = Binging;
+Binding.prototype = Object.create(ReactionBase.prototype);
+Binding.prototype.constructor = Binding;
 
 
 
@@ -321,7 +321,7 @@ function Property(value) {
                 //console.log("change binding from", _this.binding.func, "to", value)
             }
             
-            _this.binding = new Binging(value, _this.onBindingBecameDirty)
+            _this.binding = new Binding(value, _this.onBindingBecameDirty)
 
 
         } else {

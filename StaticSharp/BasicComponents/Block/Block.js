@@ -75,8 +75,8 @@ function Block(element) {
         InternalHeight: undefined,
 
 
-        X: () => element.LayoutX,
-        Y: () => element.LayoutY,
+        X: () => First(element.LayoutX,0),
+        Y: () => First(element.LayoutY,0),
 
         AbsoluteX: () => element.IsRoot ? 0 : Sum(element.Parent.AbsoluteX, element.Parent.ScrollX, element.X),
         AbsoluteY: () => element.IsRoot ? 0 : Sum(element.Parent.AbsoluteY, -element.Parent.ScrollY, element.Y),
@@ -151,17 +151,11 @@ function Block(element) {
         element.style.fontSize = ToCssSize(element.FontSize)
     })
 
+    element.Events.MouseEnter = () => element.Hover = true
+    element.Events.MouseLeave = () => element.Hover = false
 
-    element.addEventListener('mouseenter', e => {
-        element.Hover = true
-    });
-
-    element.addEventListener('mouseleave', e => {
-        element.Hover = false
-    });
 
     element.Events.Scroll = () => {
-        console.log(element.scrollTop)
         let d = Reaction.beginDeferred()
         element.ScrollX = element.scrollLeft
         element.ScrollY = element.scrollTop

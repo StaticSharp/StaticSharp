@@ -28,16 +28,17 @@ namespace StaticSharp {
         public override string Title {
             get {
                 var n = GetType().Namespace;
-                return n[(n.LastIndexOf('.') + 1)..];
+                return n[(n.LastIndexOf('.') + 1)..].Replace('_',' ');
             }
         }
 
         public virtual Block? TopBar => new Row{
+            ["Height"] = "() => Min(element.Root.SideBarsIconsSize,element.InternalHeight)",
             Children = {
                 new Space(before: 1),
                 new Paragraph(Title) {
+                    MarginsVertical = 0,
                     FontSize = new (e=>e.Root.As<PageSideMenusJs>().SideBarsIconsSize),
-                    LineHeight = 1,
                 },
                 new Space(after: 1),
             }

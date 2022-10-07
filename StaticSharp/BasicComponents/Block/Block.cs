@@ -104,8 +104,7 @@ namespace StaticSharp {
 
             ModifyTag(tag);
 
-
-            //tag.Add(await CreateScripts(context).SequentialOrParallel());
+            AddSourceCodeNavigationData(tag, context);
 
             tag.Add(await CreateConstructorScriptAsync(context));
 

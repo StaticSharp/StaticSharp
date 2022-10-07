@@ -72,7 +72,10 @@ namespace StaticSharp {
 
                     var httpResponseMessage = await HttpClientStatic.Instance.SendAsync(Genome.HttpRequestMessage);
                     if (!httpResponseMessage.IsSuccessStatusCode) {
-                        throw new Exception(); //TODO: details
+                        throw new Exception($"Failed to get {Genome.HttpRequestMessage.RequestUri} with code {httpResponseMessage.StatusCode}");
+                        //FIXME:
+                        //appears as
+                        //One or more errors occurred. (Failed to get https://raw.githubusercontent.com/Templarian/MaterialDesign/master/svg/book-variant-multiple.svg with code NotFound)Failed to get https://raw.githubusercontent.com/Templarian/MaterialDesign/master/svg/book-variant-multiple.svg with code NotFound
                     }
 
                     CachedData.CharSet = (httpResponseMessage.Content.Headers.ContentType?.CharSet);
