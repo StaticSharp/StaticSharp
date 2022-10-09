@@ -5,16 +5,15 @@ using System.Xml.Linq;
 
 namespace StaticSharp {
 
-    [System.Diagnostics.DebuggerNonUserCode]
-    public class MaterialDesignIconJs : ObjectJs {
-        //public bool Enabled => NotEvaluatableValue<bool>();
+    namespace Js {
+        public class MaterialDesignIcon : Object {
+            //public bool Enabled => NotEvaluatableValue<bool>();
 
+        }
     }
     namespace Gears {
         public class MaterialDesignIconBindings<FinalJs> : Bindings<FinalJs> where FinalJs : new() {
             //public Binding<bool> Enabled { set { Apply(value); } }
-
-
         }
     }
 
@@ -46,10 +45,7 @@ namespace StaticSharp {
     }
 
 
-    [Mix(typeof(MaterialDesignIconJs))]
-    [Mix(typeof(BlockJs))]
-    public partial class MaterialDesignIconBlockJs {
-    }
+    
 
 
 

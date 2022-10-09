@@ -87,7 +87,6 @@ function Column(element) {
         freeSpaceUnits = 0
         contentHeight = 0
 
-
         for (let i of element.Children) {
             if (!addElement(i, false)) {
                 return

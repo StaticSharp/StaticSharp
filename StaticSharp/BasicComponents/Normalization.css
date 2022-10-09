@@ -54,6 +54,7 @@ body {
 
 
 * {
+    display: block;
     overflow-x: visible;
     overflow-y: visible;
     overflow-x: overlay;
@@ -81,7 +82,9 @@ body {
 
 p * {
     position: static;
+
 }
+
 
 overlay {
     display: contents;

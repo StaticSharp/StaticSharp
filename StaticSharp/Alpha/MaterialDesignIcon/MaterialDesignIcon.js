@@ -1,0 +1,3 @@
+function MaterialDesignIcon(element) {
+
+}

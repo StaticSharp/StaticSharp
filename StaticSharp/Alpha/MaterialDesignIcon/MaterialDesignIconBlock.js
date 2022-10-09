@@ -1,5 +1,9 @@
+
+
 function MaterialDesignIconBlock(element) {
     Block(element)
+    MaterialDesignIcon(element)
+
 
     let width = Number(element.dataset.width)
     let height = Number(element.dataset.height)

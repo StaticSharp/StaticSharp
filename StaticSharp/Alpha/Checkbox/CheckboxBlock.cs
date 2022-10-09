@@ -5,24 +5,21 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-
-    [Mix(typeof(CheckboxJs))]
-    [Mix(typeof(BlockJs))]
-    public partial class CheckboxBlockJs {
+    namespace Js {
+        [Mix(typeof(Checkbox))]
+        [Mix(typeof(Block))]
+        public partial class CheckboxBlock {
+        }
     }
 
 
-
-
-
-    [Mix(typeof(CheckboxBindings<CheckboxBlockJs>))]
-    [Mix(typeof(BlockBindings<CheckboxBlockJs>))]
+    [Mix(typeof(CheckboxBindings<Js.CheckboxBlock>))]
+    [Mix(typeof(BlockBindings<Js.CheckboxBlock>))]
 
     [ConstructorJs("Checkbox")]
     [ConstructorJs]
     public partial class CheckboxBlock : Block {
 
-        protected override string TagName => "checkboxBlock";
         public CheckboxBlock(CheckboxBlock other, string callerFilePath, int callerLineNumber): base(other, callerFilePath, callerLineNumber) { }
         public CheckboxBlock([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
 

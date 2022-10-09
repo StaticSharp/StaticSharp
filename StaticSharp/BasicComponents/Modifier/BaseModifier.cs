@@ -9,42 +9,41 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    [System.Diagnostics.DebuggerNonUserCode]
-    public class BaseModifierJs : HierarchicalJs {
-        
-        public Color BackgroundColor => NotEvaluatableValue<Color>();
-        public Color ForegroundColor => NotEvaluatableValue<Color>();
-        public bool Hover => NotEvaluatableValue<bool>();
-        public bool Selectable => NotEvaluatableValue<bool>();
+    namespace Js {
+        public class BaseModifier : Hierarchical {
 
-        public float Radius => NotEvaluatableValue<float>();
-        public float RadiusTopLeft => NotEvaluatableValue<float>();
-        public float RadiusTopRight => NotEvaluatableValue<float>();
-        public float RadiusBottomLeft => NotEvaluatableValue<float>();
-        public float RadiusBottomRight => NotEvaluatableValue<float>();
+            public Color BackgroundColor => NotEvaluatableValue<Color>();
+            public Color ForegroundColor => NotEvaluatableValue<Color>();
+            public bool Hover => NotEvaluatableValue<bool>();
+            public bool Selectable => NotEvaluatableValue<bool>();
 
+            public float Radius => NotEvaluatableValue<float>();
+            public float RadiusTopLeft => NotEvaluatableValue<float>();
+            public float RadiusTopRight => NotEvaluatableValue<float>();
+            public float RadiusBottomLeft => NotEvaluatableValue<float>();
+            public float RadiusBottomRight => NotEvaluatableValue<float>();
+
+        }
     }
 
-    public class BaseModifierBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {
-        
-        public Binding<Color> BackgroundColor { set { Apply(value); } }
-        public Binding<Color> ForegroundColor { set { Apply(value); } }
-        public Binding<bool> Selectable { set { Apply(value); } }
+    namespace Gears {
+        public class BaseModifierBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {
+            public Binding<Color> BackgroundColor { set { Apply(value); } }
+            public Binding<Color> ForegroundColor { set { Apply(value); } }
+            public Binding<bool> Selectable { set { Apply(value); } }
 
-        public Binding<float> Radius            { set { Apply(value); } }
-        public Binding<float> RadiusTopLeft     { set { Apply(value); } }
-        public Binding<float> RadiusTopRight    { set { Apply(value); } }
-        public Binding<float> RadiusBottomLeft  { set { Apply(value); } }
-        public Binding<float> RadiusBottomRight { set { Apply(value); } }       
+            public Binding<float> Radius { set { Apply(value); } }
+            public Binding<float> RadiusTopLeft { set { Apply(value); } }
+            public Binding<float> RadiusTopRight { set { Apply(value); } }
+            public Binding<float> RadiusBottomLeft { set { Apply(value); } }
+            public Binding<float> RadiusBottomRight { set { Apply(value); } }
 
-
+        }
     }
-
-
 
     namespace Gears {
 
-        [Mix(typeof(BaseModifierBindings<BaseModifierJs>))]
+        [Mix(typeof(BaseModifierBindings<Js.BaseModifier>))]
         [ConstructorJs]
         public abstract partial class BaseModifier: Hierarchical {
 

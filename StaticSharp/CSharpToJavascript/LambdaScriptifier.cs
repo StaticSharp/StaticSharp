@@ -48,30 +48,14 @@ public class LambdaScriptifier {
 
         var compiled = lambda.Compile();
 
-        ObjectJs.NotEvaluatableFound = false;
+        Js.Object.NotEvaluatableFound = false;
         var value = compiled.DynamicInvoke(GetParametersValues());
-        if (ObjectJs.NotEvaluatableFound) {
+        if (Js.Object.NotEvaluatableFound) {
             var result = Stringify(expression);
             return result;
         } else {
             return Static.ObjectToJsValue(value);
         }
-
-        Console.WriteLine("compiled + DynamicInvoke " + stopwatch.ElapsedMilliseconds + " ms");
-
-
-
-        /*}
-        catch (TargetInvocationException ex) {
-            if (ex.InnerException != null && (ex.InnerException is NotEvaluatableException)) {
-
-                Stopwatch stopwatch = Stopwatch.StartNew();
-                var result = Stringify(expression);
-                Console.WriteLine($"Stringify {expression.ToString()} " + stopwatch.ElapsedMilliseconds + " ms");
-                return result;
-            } else
-                throw;
-        }*/
 
     }
 
@@ -142,7 +126,8 @@ public class LambdaScriptifier {
                 var Op = unaryExpression.NodeType switch {
                     ExpressionType.UnaryPlus => "+",
                     ExpressionType.Negate => "-",
-                    ExpressionType.Not => "!"
+                    ExpressionType.Not => "!",
+                    _ => throw NotImplemented(expression)
                 };
                 return $"({Op}{Eval(unaryExpression.Operand)})";
             }

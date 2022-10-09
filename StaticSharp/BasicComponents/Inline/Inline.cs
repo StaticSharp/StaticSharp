@@ -1,12 +1,14 @@
-﻿using StaticSharp.Html;
+﻿using StaticSharp.Gears;
+using StaticSharp.Html;
 using System.Threading.Tasks;
 
-namespace StaticSharp.Gears{
+namespace StaticSharp{
 
 
-    [System.Diagnostics.DebuggerNonUserCode]
-    public class InlineJs : HierarchicalJs {
+    namespace Js {
+        public class Inline : Hierarchical {
 
+        }
     }
 
     namespace Gears {
@@ -22,7 +24,7 @@ namespace StaticSharp.Gears{
     public partial class Inline : BaseModifier, IInline {
         public Inline(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) {
         }
-        public Inline(Hierarchical other, string callerFilePath, int callerLineNumber) : base(other, callerFilePath, callerLineNumber) {
+        public Inline(Inline other, string callerFilePath, int callerLineNumber) : base(other, callerFilePath, callerLineNumber) {
         }
 
         protected virtual Task<Tag?> GenerateInlineHtmlInternalAsync(Context context, Tag elementTag, string? format) {

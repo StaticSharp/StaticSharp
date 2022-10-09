@@ -4,15 +4,15 @@ using System.Runtime.CompilerServices;
 
 namespace StaticSharp {
 
-
-    [Mix(typeof(LinkJs))]
-    [Mix(typeof(BlockJs))]
-    public partial class LinkBlockJs {
+    namespace Js {
+        [Mix(typeof(Js.Link))]
+        [Mix(typeof(Block))]
+        public partial class LinkBlock {
+        }
     }
 
-
-    [Mix(typeof(LinkBindings<LinkBlockJs>))]
-    [Mix(typeof(BlockBindings<LinkBlockJs>))]
+    [Mix(typeof(LinkBindings<Js.LinkBlock>))]
+    [Mix(typeof(BlockBindings<Js.LinkBlock>))]
     [ConstructorJs("Link")]
     [ConstructorJs]
     public partial class LinkBlock : Block {

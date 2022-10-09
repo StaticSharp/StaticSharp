@@ -16,15 +16,16 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
+    namespace Js {
+        public class Page : BaseModifier {
+            public float WindowWidth => NotEvaluatableValue<float>();
+            public float WindowHeight => NotEvaluatableValue<float>();
+            public float DevicePixelRatio => NotEvaluatableValue<float>();
+            public bool Touch => NotEvaluatableValue<bool>();
+            public bool UserInteracted => NotEvaluatableValue<bool>();
+            public float FontSize => NotEvaluatableValue<float>();
 
-    public class PageJs : BaseModifierJs {
-        public float WindowWidth => NotEvaluatableValue<float>();
-        public float WindowHeight => NotEvaluatableValue<float>();
-        public float DevicePixelRatio => NotEvaluatableValue<float>();
-        public bool Touch => NotEvaluatableValue<bool>();
-        public bool UserInteracted => NotEvaluatableValue<bool>();
-        public float FontSize => NotEvaluatableValue<float>();
-
+        }
     }
 
     namespace Gears {
@@ -37,7 +38,7 @@ namespace StaticSharp {
 
 
 
-    [Mix(typeof(PageBindings<PageJs>))]
+    [Mix(typeof(PageBindings<Js.Page>))]
     [ConstructorJs]
     [RelatedScript("../Watch")]
     [RelatedScript("../Color")]

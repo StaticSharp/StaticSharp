@@ -16,8 +16,6 @@ namespace StaticSharpGenerator {
 
         public NamespaceInfo NamespaceInfo { get; }
 
-        //List<TypeInfo> Representatives { get; set; }
-        private TypeInfo Root;
 
         public string RootNamespaceName;
         private StateParameter[] State;

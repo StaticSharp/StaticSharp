@@ -1,22 +1,28 @@
-﻿using System;
+﻿using StaticSharp.Gears;
+using System;
 
-namespace StaticSharp.Gears;
-public class ObjectJs {
+namespace StaticSharp {
+    namespace Js {
+        public class Object {
 
-    [ThreadStatic] public static bool NotEvaluatableFound = false;
+            [ThreadStatic] public static bool NotEvaluatableFound = false;
 
-    protected static T NotEvaluatableObject<T>() where T: new() {
-        NotEvaluatableFound = true;        
-        return new();
+            protected static T NotEvaluatableObject<T>() where T : new() {
+                NotEvaluatableFound = true;
+                return new();
+            }
+            protected static T NotEvaluatableValue<T>() {
+                NotEvaluatableFound = true;
+                return default;
+            }
+        }
     }
-    protected static T NotEvaluatableValue<T>(){
-        NotEvaluatableFound = true;
-        return default;
+
+    public static partial class Static {
+        [ConvertToJs("{0}")]
+        public static T As<T>(this Js.Object _) where T : Js.Object, new() => new();
     }
+
+
 }
 
-public static class ObjectJsStatic {
-
-    [ConvertToJs("{0}")]
-    public static T As<T>(this ObjectJs _) where T : ObjectJs, new() => new();
-}

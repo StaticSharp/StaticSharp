@@ -394,7 +394,7 @@ function PageSideMenus(element) {
             element.Content.PaddingLeft = contentSpace
             element.Content.PaddingRight = contentSpace
             element.Content.LayoutX = LeftBarSize
-            element.Content.LayoutHeight = Max(element.Content.InternalHeight, element.Height)
+            element.Content.LayoutHeight = element.Height//(element.Content.InternalHeight, element.Height)
         }
     })
 

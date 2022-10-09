@@ -7,7 +7,7 @@ namespace StaticSharpDemo.Root.Components.MaterialDesignIcons {
     public partial class En : Material {
         
         public override Blocks? Content => new() {
-            H5(nameof(MaterialDesignIconBlock)),
+            H5(nameof(StaticSharp.MaterialDesignIconBlock)),
 
             new Row{ 
                 Children = { 
@@ -19,15 +19,17 @@ namespace StaticSharpDemo.Root.Components.MaterialDesignIcons {
                     new MaterialDesignIconBlock(global::MaterialDesignIcons.IconName.Vimeo),
                     new Space(),
                 }
-            }.Modify(x=>{
+            }.Modify((Action<Row>)(x=>{
                 foreach (var i in x.Children.Values.OfType<Block>()){
                     i.Paddings = 6;
                 }
-            }),
+            })),
 
-            H5(nameof(MaterialDesignIconBlock)),
-            "Привет!"
-            //$"{MaterialDesignIconBlock}"
+            H5(nameof(StaticSharp.MaterialDesignIconInline)),
+            $"This -> {new MaterialDesignIconInline(global::MaterialDesignIcons.IconName.Github)} is as SVG icon",
+
+
+            $"{(new MaterialDesignIconInline(global::MaterialDesignIcons.IconName.Github))}"
 
         };
     }

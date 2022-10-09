@@ -3,11 +3,14 @@ using StaticSharp.Html;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
-    public class PageSideMenusJs : PageJs {
-        public float ContentWidth => NotEvaluatableValue<float>();
-        public bool BarsCollapsed => NotEvaluatableValue<bool>();        
-        public float SideBarsIconsSize => NotEvaluatableValue<float>();
 
+    namespace Js {
+        public class PageSideMenus : Page {
+            public float ContentWidth => NotEvaluatableValue<float>();
+            public bool BarsCollapsed => NotEvaluatableValue<bool>();
+            public float SideBarsIconsSize => NotEvaluatableValue<float>();
+
+        }
     }
 
     namespace Gears {
@@ -18,7 +21,7 @@ namespace StaticSharp {
     }
 
     [ConstructorJs]
-    [Mix(typeof(PageSideMenusBindings<PageJs>))]
+    [Mix(typeof(PageSideMenusBindings<Js.PageSideMenus>))]
     public partial class PageSideMenus : Page {
 
         protected override Task Setup(Context context) {
@@ -38,7 +41,7 @@ namespace StaticSharp {
                 new Space(before: 1),
                 new Paragraph(Title) {
                     MarginsVertical = 0,
-                    FontSize = new (e=>e.Root.As<PageSideMenusJs>().SideBarsIconsSize),
+                    FontSize = new (e=>e.Root.As<Js.PageSideMenus>().SideBarsIconsSize),
                 },
                 new Space(after: 1),
             }

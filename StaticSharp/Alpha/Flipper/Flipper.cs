@@ -10,7 +10,7 @@ namespace StaticSharp {
 
     namespace Gears {
         [System.Diagnostics.DebuggerNonUserCode]
-        public class FlipperJs : BlockJs {
+        public class FlipperJs : Block {
             //public float Before => throw new NotEvaluatableException();
         }
 

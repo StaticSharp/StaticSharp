@@ -14,29 +14,30 @@ using YoutubeExplode;
 namespace StaticSharp {
 
 
-    [System.Diagnostics.DebuggerNonUserCode]
-    public class VideoJs : BlockJs {
-        public bool Play => NotEvaluatableValue<bool>();
-        public bool PlayActual => NotEvaluatableValue<bool>();
+    namespace Js {
+        public class Video : Block {
+            public bool Play => NotEvaluatableValue<bool>();
+            public bool PlayActual => NotEvaluatableValue<bool>();
 
-        public float Position => NotEvaluatableValue<float>();
-        public float PositionActual => NotEvaluatableValue<float>();
+            public float Position => NotEvaluatableValue<float>();
+            public float PositionActual => NotEvaluatableValue<float>();
 
-        public bool Mute => NotEvaluatableValue<bool>();
-        public bool MuteActual => NotEvaluatableValue<bool>();
+            public bool Mute => NotEvaluatableValue<bool>();
+            public bool MuteActual => NotEvaluatableValue<bool>();
 
-        public float Volume => NotEvaluatableValue<float>();
-        public float VolumeActual => NotEvaluatableValue<float>();
+            public float Volume => NotEvaluatableValue<float>();
+            public float VolumeActual => NotEvaluatableValue<float>();
 
 
-        public bool PreferPlatformPlayer => NotEvaluatableValue<bool>();
-        public bool Controls => NotEvaluatableValue<bool>();
-        public bool Loop => NotEvaluatableValue<bool>();
+            public bool PreferPlatformPlayer => NotEvaluatableValue<bool>();
+            public bool Controls => NotEvaluatableValue<bool>();
+            public bool Loop => NotEvaluatableValue<bool>();
+        }
     }
 
 
     namespace Gears {
-        public class MVideoBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
+        public class VideoBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
             public Binding<bool> Play { set { Apply(value); } }
             public Binding<float> Position { set { Apply(value); } }
             public Binding<bool> Mute { set { Apply(value); } }
@@ -52,7 +53,7 @@ namespace StaticSharp {
 
 
 
-    [Mix(typeof(MVideoBindings<VideoJs>))]
+    [Mix(typeof(VideoBindings<Js.Video>))]
     [ConstructorJs]
     public sealed partial class Video : Block, IBlock  {
 

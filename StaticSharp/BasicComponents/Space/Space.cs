@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    namespace Gears {
-        [System.Diagnostics.DebuggerNonUserCode]
-        public class SpaceJs : HierarchicalJs {
-            public float Before =>      NotEvaluatableValue<float>();
-            public float Between =>     NotEvaluatableValue<float>();
-            public float After =>       NotEvaluatableValue<float>();
+    namespace Js {
+        public class Space : Hierarchical {
+            public float Before => NotEvaluatableValue<float>();
+            public float Between => NotEvaluatableValue<float>();
+            public float After => NotEvaluatableValue<float>();
         }
+    }
 
 
-
+    namespace Gears {
         public class SpaceBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {
             public Binding<float> Before { set { Apply(value); } }
             public Binding<float> Between { set { Apply(value); } }
@@ -25,12 +25,9 @@ namespace StaticSharp {
         }
     }
 
-    [Mix(typeof(SpaceBindings<SpaceJs>))]
+    [Mix(typeof(SpaceBindings<Js.Space>))]
     [ConstructorJs]
     public sealed partial class Space : Hierarchical, IBlock {
-
-
-
         protected override string TagName => "ws";
         /*public Space([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber) { }*/

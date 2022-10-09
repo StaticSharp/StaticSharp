@@ -20,14 +20,6 @@ namespace StaticSharp {
     namespace Gears {
 
 
-        [System.Diagnostics.DebuggerNonUserCode]
-        public class ReactiveJs {
-        }
-
-
-        
-
-
 
         public class Bindings<FinalJs> where FinalJs : new() {
             public class Binding<T> : IVoidEnumerable {

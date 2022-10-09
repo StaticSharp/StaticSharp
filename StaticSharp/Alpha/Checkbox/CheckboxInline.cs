@@ -5,14 +5,15 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    [Mix(typeof(InlineJs))]
-    [Mix(typeof(CheckboxJs))]
-    public partial class CheckboxInlineJs {
+    namespace Js {
+        [Mix(typeof(Inline))]
+        [Mix(typeof(Checkbox))]
+        public partial class CheckboxInline {
+        }
     }
 
 
-
-    [Mix(typeof(CheckboxBindings<CheckboxInlineJs>))]
+    [Mix(typeof(CheckboxBindings<Js.CheckboxInline>))]
     [ConstructorJs("Checkbox")]
 
     [ConstructorJs]

@@ -1,5 +1,5 @@
 ﻿using StaticSharp.Gears;
-using StaticSharp.Gears.Gears;
+
 using StaticSharp.Html;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,14 +8,16 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-
-    [Mix(typeof(LinkJs))]
-    [Mix(typeof(InlineJs))]
-    public partial class LinkInlineJs {
+    namespace Js {
+        [Mix(typeof(Js.Link))]
+        [Mix(typeof(Js.Inline))]
+        public partial class LinkInline {
+        }
     }
 
-    [Mix(typeof(LinkBindings<LinkInlineJs>))]
-    [Mix(typeof(InlineBindings<LinkInlineJs>))]
+
+    [Mix(typeof(LinkBindings<Js.LinkInline>))]
+    [Mix(typeof(InlineBindings<Js.LinkInline>))]
     [ConstructorJs("Link")]
     [ConstructorJs]
     public partial class LinkInline : Inline {

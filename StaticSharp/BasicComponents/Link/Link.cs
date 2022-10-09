@@ -3,12 +3,12 @@
 namespace StaticSharp {
 
 
-    [System.Diagnostics.DebuggerNonUserCode]
-    public class LinkJs : ObjectJs {
-        public string HRef => NotEvaluatableValue<string>();
-        public bool NewTab => NotEvaluatableValue<bool>();
+    namespace Js {
+        public class Link : Object {
+            public string HRef => NotEvaluatableValue<string>();
+            public bool NewTab => NotEvaluatableValue<bool>();
+        }
     }
-
 
     namespace Gears {
         public class LinkBindings<FinalJs> : Bindings<FinalJs> where FinalJs : new() {
@@ -16,14 +16,10 @@ namespace StaticSharp {
             public Binding<bool> NewTab { set { Apply(value); } }
         }
 
-
-
         public static class LinkStatic { 
             
         
         }
-
-
     }
 
     

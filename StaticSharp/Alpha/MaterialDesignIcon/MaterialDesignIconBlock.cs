@@ -7,21 +7,25 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace StaticSharp {
-    [Mix(typeof(MaterialDesignIconBindings<MaterialDesignIconBlockJs>))]
-    [Mix(typeof(BlockBindings<MaterialDesignIconBlockJs>))]
 
-    //[ConstructorJs("Checkbox")]
-    
+    namespace Js {
+        [Mix(typeof(MaterialDesignIcon))]
+        [Mix(typeof(Block))]
+        public partial class MaterialDesignIconBlock {
+        }
+    }
+
+    [Mix(typeof(MaterialDesignIconBindings<Js.MaterialDesignIconBlock>))]
+    [Mix(typeof(BlockBindings<Js.MaterialDesignIconBlock>))]
+    [ConstructorJs("MaterialDesignIcon")]
     [ConstructorJs]
     public partial class MaterialDesignIconBlock : Block {
 
         MaterialDesignIcons.IconName Icon;
-        protected override string TagName => "materialDesignIconBlock";
         public MaterialDesignIconBlock(CheckboxBlock other, string callerFilePath, int callerLineNumber) : base(other, callerFilePath, callerLineNumber) { }
         public MaterialDesignIconBlock(MaterialDesignIcons.IconName icon, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
             Icon = icon;
         }
-
         protected override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
 
             var code = MaterialDesignIcon.GetSvgTag(Icon, out var width, out var height);

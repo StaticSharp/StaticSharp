@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     namespace Gears {
-        public class ImageJs : BlockJs {
+        public class ImageJs : Block {
 
         }
     }

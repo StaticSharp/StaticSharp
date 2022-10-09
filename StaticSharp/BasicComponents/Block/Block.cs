@@ -8,22 +8,23 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
-    
-    [System.Diagnostics.DebuggerNonUserCode]
-    public class BlockJs : BaseModifierJs {
-        public float X => NotEvaluatableValue<float>();
-        public float Y => NotEvaluatableValue<float>();
-        public float Width => NotEvaluatableValue<float>();
-        public float Height => NotEvaluatableValue<float>();
-        public float MarginLeft => NotEvaluatableValue<float>();
-        public float MarginRight => NotEvaluatableValue<float>();
-        public float MarginTop => NotEvaluatableValue<float>();
-        public float MarginBottom => NotEvaluatableValue<float>();
-        public float PaddingLeft => NotEvaluatableValue<float>();
-        public float PaddingRight => NotEvaluatableValue<float>();
-        public float PaddingTop => NotEvaluatableValue<float>();
-        public float PaddingBottom => NotEvaluatableValue<float>();
-        public float FontSize => NotEvaluatableValue<float>();
+
+    namespace Js {
+        public class Block : BaseModifier {
+            public float X => NotEvaluatableValue<float>();
+            public float Y => NotEvaluatableValue<float>();
+            public float Width => NotEvaluatableValue<float>();
+            public float Height => NotEvaluatableValue<float>();
+            public float MarginLeft => NotEvaluatableValue<float>();
+            public float MarginRight => NotEvaluatableValue<float>();
+            public float MarginTop => NotEvaluatableValue<float>();
+            public float MarginBottom => NotEvaluatableValue<float>();
+            public float PaddingLeft => NotEvaluatableValue<float>();
+            public float PaddingRight => NotEvaluatableValue<float>();
+            public float PaddingTop => NotEvaluatableValue<float>();
+            public float PaddingBottom => NotEvaluatableValue<float>();
+            public float FontSize => NotEvaluatableValue<float>();
+        }
     }
 
 
@@ -68,7 +69,7 @@ namespace StaticSharp {
     }
 
 
-    [Mix(typeof(BlockBindings<BlockJs>))]
+    [Mix(typeof(BlockBindings<Js.Block>))]
     [ConstructorJs]
     public partial class Block : BaseModifier, IBlock {
         //public virtual List<Modifier> Modifiers { get; } = new();

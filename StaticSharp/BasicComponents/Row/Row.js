@@ -221,7 +221,7 @@ function Row(element) {
         var hA = Sum(builder.currentLineHardY, element.PaddingBottom)
         var hB = builder.currentLineSoftY
 
-        element.Height = Max(hA, hB)
+        element.InternalHeight = Max(hA, hB)
 
 
     })
