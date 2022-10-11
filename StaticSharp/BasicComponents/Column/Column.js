@@ -16,6 +16,7 @@ function Column(element) {
 
                 internalWidth = Max(internalWidth, internalWidthByCurrentChild)
             }
+            //console.log("internalWidth", internalWidth)
             return internalWidth
         },
 
@@ -135,7 +136,5 @@ function Column(element) {
         }
     })
 
-    WidthToStyle(element)
-    HeightToStyle(element)
 
 }

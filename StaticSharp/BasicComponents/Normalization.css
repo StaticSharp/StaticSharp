@@ -16,6 +16,7 @@ body {
     //background-color: chartreuse;
     white-space: pre-wrap;
     line-height: 1.5;
+    touch-action: none;
 }
 /*
 ::-webkit-scrollbar {
@@ -45,15 +46,24 @@ body {
     //top: -50px;
 }*/
 
+scrolllayout {
+    touch-action: manipulation;
+}
+
 * {
     scrollbar-width: none;
 }
 ::-webkit-scrollbar {
-    width: 0;
+    display: none;
+    //width: 0;
 }
 
+head {
+    display: none;
+}
 
 * {
+    touch-action: inherit;
     display: block;
     overflow-x: visible;
     overflow-y: visible;

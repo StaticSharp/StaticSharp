@@ -13,8 +13,8 @@ function MaterialDesignIconBlock(element) {
 
         Aspect: width / height,
 
-        VerticalPaddingSum: () => Sum(element.PaddingTop, element.PaddingBottom),
-        HorizontalPaddingSum: () => Sum(element.PaddingLeft, element.PaddingRight),
+        VerticalPaddingSum: () => Sum(element.PaddingTop, element.PaddingBottom, 0),
+        HorizontalPaddingSum: () => Sum(element.PaddingLeft, element.PaddingRight, 0),
 
         InternalWidth: () => First((element.Height - element.VerticalPaddingSum) * element.Aspect + element.HorizontalPaddingSum, Sum(width, element.HorizontalPaddingSum)),
         InternalHeight: () => First((element.Width - element.HorizontalPaddingSum) / element.Aspect + element.VerticalPaddingSum, Sum(height, element.VerticalPaddingSum)),
@@ -42,6 +42,5 @@ function MaterialDesignIconBlock(element) {
     })
 
 
-    WidthToStyle(element)
-    HeightToStyle(element)
+    
 }

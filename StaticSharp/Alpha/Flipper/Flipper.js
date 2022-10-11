@@ -94,7 +94,4 @@ function Flipper(element) {
         After: 0
     }*/
 
-
-    WidthToStyle(element)
-    HeightToStyle(element)
 }

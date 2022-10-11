@@ -132,7 +132,6 @@ function PageSideMenus(element) {
 
 
 
-
     let startX = 0
     let startY = 0
 
@@ -142,68 +141,76 @@ function PageSideMenus(element) {
     
 
     function touchStart() {
-        var touch = event.touches[0];
-        startX = touch.clientX;
-        startY = touch.clientY;
+        //var touch = event.touches[0];
+        startX = event.clientX;
+        startY = event.clientY;
         
     }
     function horizontalTouchMove() {
-        var touch = event.touches[0];
+        //var touch = event.touches[0];
+        //console.log("horizontalTouchMove", event.clientX)
         let d = Reaction.beginDeferred()
-        element.SwipeX = touch.clientX - startX
-        element.SwipeY = touch.clientY - startY
+        element.SwipeX = event.clientX - startX
+        element.SwipeY = event.clientY - startY
         element.Swipe = true
         d.end()
         event.preventDefault()
     }
 
-    element.Events.TouchStart = {
-
+    element.Events.PointerDown = {        
         handler: () => {
+            if (event.pointerType != "touch") return
+
+            //console.log("PointerDown", event.clientX)
             touchStart()
-            element.Events.TouchMove = () => {
+            element.Events.PointerMove = () => {
+                //console.log("PointerMove", event.clientX, event.cancelable)
                 if (event.cancelable) {
-                    var touch = event.touches[0];
-                    let deltaX = Math.abs(touch.clientX - startX)
+                    //var touch = event.touches[0];
+                    let deltaX = Math.abs(event.clientX - startX)
+                    //console.log("deltaX", deltaX, swipeThreshold)
                     if (deltaX > swipeThreshold) {
-                        element.Events.TouchMove = {
+                        //console.log("horizontalTouchMove...")
+                        element.Events.PointerMove = {
                             handler: horizontalTouchMove,
                             passive: false
                         }
                     }
                 } else {
-                    element.Events.TouchMove = undefined
-                    element.Events.TouchEnd = undefined
+                    element.Events.PointerMove = undefined
+                    element.Events.PointerUp = undefined
                 }
             }
-            element.Events.TouchEnd = () => {
+            element.Events.PointerUp = () => {
+                //console.log("PointerUp", event.clientX)
                 element.Swipe = false
-                element.Events.TouchMove = undefined
-                element.Events.TouchEnd = undefined
-            }
+                element.Events.PointerMove = undefined
+                element.Events.PointerUp = undefined
+            }            
         },
         passive: false        
     }
-    glass.Events.TouchStart = {
+
+    glass.Events.PointerDown = {
         handler: () => {
+            if (event.pointerType != "touch") return
             touchStart()
 
-            glass.Events.TouchMove = {
+            glass.Events.PointerMove = {
                 handler: horizontalTouchMove,
                 passive: false
             }
 
-            glass.Events.TouchEnd = () => {
+            glass.Events.PointerUp = () => {
                 element.Swipe = false
-                glass.Events.TouchMove = undefined
-                glass.Events.TouchEnd = undefined
+                glass.Events.PointerMove = undefined
+                glass.Events.PointerUp = undefined
             }
         },
         passive: false
     }
 
     glass.Events.Click = () => {
-        console.log("clicked")
         element.SideBarOpen = 0
     }
 
@@ -375,9 +382,6 @@ function PageSideMenus(element) {
     })
 
 
-    //document.documentElement.style.overflowX = "scroll"
-
-
     new Reaction(() => {
 
         let LeftBarSize = (element.LeftSideBar && !element.BarsCollapsed) ? Max(element.LeftSideBar.Width, 0) : 0
@@ -419,7 +423,7 @@ function PageSideMenus(element) {
     function ConfugureIcon(icon) {
         icon.Reactive = {
             AnimationProgress: 1,
-            AnimationTarget: () => element.Content.ScrollY > 0 || icon.BarVisible ? 0 : 1
+            AnimationTarget: () => element.Content.ScrollYActual > 0 || icon.BarVisible ? 0 : 1
         }
 
         OnChanged(
@@ -475,87 +479,6 @@ function PageSideMenus(element) {
             }
         }
     )
-
-
-
-
-
-    /*new Reaction(() => {
-        
-
-        if (element.LeftSideBar && element.LeftSideBarIcon) {
-            if (element.BarsCollapsed) {
-                leftButton.style.display = "block"
-                let barVisible = (element.LeftSideBar.Width + element.LeftSideBar.X) > 0
-                if (element.ScrollY > 0 || barVisible) {
-                    leftButton.style.left = element.LeftSideBar.X + element.LeftSideBar.Width + "px"
-                    leftButton.style.zIndex = barVisible ? glassZIndex + 1 : glassZIndex - 1 
-                    leftButton.style.top = (iconMargin) + "px"
-                    leftButton.style.marginLeft = 0
-                    leftButton.style.width = collapsedIconWidth + "px"
-                    leftButton.style.height = collapsedIconHeight + "px"
-                    leftButton.style.borderRadius = collapsedIconWidth + "px"
-                    leftButton.style.borderTopLeftRadius = 0
-                    leftButton.style.borderBottomLeftRadius = 0
-                } else {
-
-                    leftButton.style.zIndex = 98 
-                    leftButton.style.left = 0
-                    leftButton.style.top = iconMargin + "px"
-                    leftButton.style.marginLeft = iconMargin + "px"
-                    leftButton.style.width = element.SideBarsIconsSize + "px"
-                    leftButton.style.height = element.SideBarsIconsSize + "px"
-                    leftButton.style.borderRadius = (0.5 * element.SideBarsIconsSize) + "px"
-                }
-            } else {
-                console.log("element.LeftSideBarIcon.Visibility = 0")
-                element.LeftSideBarIcon.Visibility = 0
-                //leftButton.style.display = "none"
-            }
-        }
-    })*/
-
-    /*let rightButton = undefined
-
-    new Reaction(() => {
-
-        if (element.RightSideBar) {
-            if (rightButton === undefined) {
-                rightButton = CreateButton()
-                rightButton.style.backgroundColor = "blue"
-            }
-            if (element.BarsCollapsed) {
-                rightButton.style.display = "block"
-                let barVisible = (element.RightSideBar.X) < element.WindowWidth
-                if (element.ScrollY > 0 || barVisible) {
-
-                    rightButton.style.left = element.RightSideBar.X + "px"
-                    rightButton.style.zIndex = barVisible ? glassZIndex + 1 : glassZIndex - 1 
-                    rightButton.style.top = (iconMargin) + "px"
-                    rightButton.style.marginLeft =  - collapsedIconWidth + "px"
-                    rightButton.style.width = collapsedIconWidth + "px"
-                    rightButton.style.height = collapsedIconHeight + "px"
-                    rightButton.style.borderRadius = collapsedIconWidth + "px"
-                    rightButton.style.borderTopRightRadius = 0
-                    rightButton.style.borderBottomRightRadius = 0
-
-
-                } else {
-                    rightButton.style.zIndex = 98
-                    rightButton.style.left = (element.RightSideBar.X)+"px"
-                    rightButton.style.top = iconMargin + "px"
-                    rightButton.style.marginLeft = (-element.SideBarsIconsSize - iconMargin) + "px"
-                    rightButton.style.width = element.SideBarsIconsSize + "px"
-                    rightButton.style.height = element.SideBarsIconsSize + "px"
-                    rightButton.style.borderRadius = (0.5 * element.SideBarsIconsSize) + "px"
-                }
-            } else {
-                rightButton.style.display = "none"
-            }
-        }
-    })*/
-
-
 
 
 }

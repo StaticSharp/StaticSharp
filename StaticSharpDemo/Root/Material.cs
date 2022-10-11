@@ -7,7 +7,7 @@ namespace StaticSharpDemo.Root {
     public partial class Material : StaticSharp.PageSideMenus {
 
         protected override Task Setup(Context context) {
-            ContentWidth = 960;
+            ContentWidth = 800;
             return base.Setup(context);
         }
 
@@ -19,20 +19,46 @@ namespace StaticSharpDemo.Root {
 
 
 
-        public override Block LeftSideBar => new Column() {
-            BackgroundColor = ColorTranslator.FromHtml("#6d597a"),
-            Children = {
-                "Menu Item 1",
-                "Menu item 2",
-                new Space(){
-                    Between = 1
-                },
+        public override Block LeftSideBar =>
+            new ScrollLayout {
+                Content = new Column() {
+                    BackgroundColor = ColorTranslator.FromHtml("#6d597a"),
+                    Children = {
+                        "Menu Item 1",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
 
-                new Paragraph("Social links"){
-                    ["Width"] = "() => element.LayoutWidth",
+                        new Space(){
+                            Between = 1
+                        },
+
+                        new Paragraph("Social links"){
+                            ["Width"] = "() => element.LayoutWidth",
+                        }
+                    }
                 }
-            }
-        };
+            };
 
 
         public override Block? RightSideBarIcon => new MaterialDesignIconBlock(MaterialDesignIcons.IconName.Translate) {

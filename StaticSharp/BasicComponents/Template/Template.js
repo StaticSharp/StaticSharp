@@ -22,6 +22,4 @@ function Template(element) {
         element.ContentHeight = rect.height;
     })
 
-    WidthToStyle(element)
-    HeightToStyle(element)
 }

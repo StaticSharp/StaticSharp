@@ -101,7 +101,7 @@ namespace StaticSharp {
                 
 
                 var html = await page.GeneratePageHtmlAsync(CreateContext(request));
-                prevHtml = html;
+                //prevHtml = html;
                 html = html.Replace("t!dcsctAYNTSYMJaKLcdZPtZ#n@KPIjkK)ppteSZ4t%W)N*3RC8k645V4DUMW5G!", html.ToHashString());
                 
                 //response.Cookies.Append(_pageKey, html.ToHashString());
@@ -169,7 +169,7 @@ namespace StaticSharp {
             }
         }
 
-        string prevHtml = "";
+        //string prevHtml = "";
         protected virtual async Task HandleGetPageHashAsync(HttpRequest request, HttpResponse responce, RouteData routeData) {
             //TODO: try catch
 
@@ -185,10 +185,10 @@ namespace StaticSharp {
             if (page == null) { return; }            
             var html = await page.GeneratePageHtmlAsync(CreateContext(request));
 
-            if (html != prevHtml) {
+            /*if (html != prevHtml) {
                 File.WriteAllText(Path.Combine(Gears.Cache.Directory, "current.html"), html);
                 File.WriteAllText(Path.Combine(Gears.Cache.Directory, "prevHtml.html"), prevHtml);
-            }
+            }*/
 
             var pageHash = html.ToHashString();
 

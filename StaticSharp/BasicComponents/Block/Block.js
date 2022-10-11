@@ -78,15 +78,17 @@ function Block(element) {
         X: () => First(element.LayoutX,0),
         Y: () => First(element.LayoutY,0),
 
-        AbsoluteX: () => element.IsRoot ? 0 : Sum(element.Parent.AbsoluteX, element.Parent.ScrollX, element.X),
-        AbsoluteY: () => element.IsRoot ? 0 : Sum(element.Parent.AbsoluteY, -element.Parent.ScrollY, element.Y),
+        AbsoluteX: () => element.IsRoot ? 0 : Sum(element.Parent.AbsoluteX, element.Parent.ScrollXActual, element.X),
+        AbsoluteY: () => element.IsRoot ? 0 : Sum(element.Parent.AbsoluteY, -element.Parent.ScrollYActual, element.Y),
 
         Width: () => First(element.LayoutWidth, element.InternalWidth),
         Height: () => First(element.LayoutHeight, element.InternalHeight),
 
+        ScrollX: undefined,
+        ScrollY: undefined,
 
-        ScrollX: 0,
-        ScrollY: 0,
+        ScrollXActual: 0,
+        ScrollYActual: 0,
         
     }
 
@@ -119,6 +121,8 @@ function Block(element) {
         YToStyle(element);
     }
 
+    WidthToStyle(element)
+    HeightToStyle(element)
 
     
 
@@ -157,8 +161,8 @@ function Block(element) {
 
     element.Events.Scroll = () => {
         let d = Reaction.beginDeferred()
-        element.ScrollX = element.scrollLeft
-        element.ScrollY = element.scrollTop
+        element.ScrollXActual = element.scrollLeft
+        element.ScrollYActual = element.scrollTop
         d.end()
     }
 

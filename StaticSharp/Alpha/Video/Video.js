@@ -481,6 +481,4 @@ function Video(element) {
         }
     })    
 
-    WidthToStyle(element)
-    HeightToStyle(element)
 }

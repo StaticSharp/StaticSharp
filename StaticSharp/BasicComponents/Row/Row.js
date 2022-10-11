@@ -226,6 +226,4 @@ function Row(element) {
 
     })
 
-    WidthToStyle(element)
-    HeightToStyle(element)
 }

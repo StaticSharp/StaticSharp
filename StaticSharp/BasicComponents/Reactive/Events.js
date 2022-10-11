@@ -29,12 +29,14 @@ Object.defineProperty(Object.prototype, "Events", {
 
                         if (typeof (value) === "function") {
                             add({
-                                handler: value
+                                handler: value,
+                                capture: false,
                             })
                         } else if (typeof (value) === "object") {
                             if (typeof (value.handler) !== "function") {
                                 console.error("If the value is an object, it must have a 'handler' field of type 'function'")
                             }
+                            value.capture = false
                             add(value)
                         } else {
                             console.warn(`Type '${typeof(value)}' is invalid for event. To remove event handler assign 'undefined'`)

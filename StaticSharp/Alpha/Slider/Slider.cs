@@ -2,6 +2,7 @@
 using StaticSharp.Html;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -32,19 +33,29 @@ namespace StaticSharp {
     [ConstructorJs]
     public partial class Slider : Block {
 
-        protected override string TagName => "slider";
+        public static Func<Block> DefaultThumbConstructor = () => new Block() {
+            BackgroundColor = new(e=>e.Hover ? Color.FromArgb(128, 0, 0, 0) : Color.FromArgb(64, 0, 0, 0)),            
+            ["Radius"] = "() => Min(element.Width,element.Height) / 2"
+        };
+
+        public Block? Thumb { get; set; } = null;
         public Slider(Slider other, string callerFilePath, int callerLineNumber)
             : base(other, callerFilePath, callerLineNumber) { }
 
         public Slider([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
 
-        protected override Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
+        protected override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
+            var thumb = Thumb;
+            if (thumb == null) {
+                thumb = DefaultThumbConstructor();
+            }
 
-            context.Includes.Require(new Style(AbsolutePath("Slider.scss")));
+            return await thumb.GenerateHtmlAsync(context);
+            /*context.Includes.Require(new Style(AbsolutePath("Slider.scss")));
 
             return Task.FromResult<Tag?>(new Tag("input") {
                     ["type"] = "range"
-                });
+                });*/
         }
 
     }

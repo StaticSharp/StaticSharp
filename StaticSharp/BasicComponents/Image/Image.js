@@ -25,8 +25,5 @@ function Image(element) {
     })
 
 
-    WidthToStyle(element)
-    HeightToStyle(element)
-
     
 }

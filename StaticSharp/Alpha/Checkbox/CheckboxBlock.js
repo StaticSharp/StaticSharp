@@ -9,7 +9,4 @@ function Checkbox(element) {
         element.input.style.height = element.Height + "px"
     })
 
-
-    WidthToStyle(element)
-    HeightToStyle(element)
 }
