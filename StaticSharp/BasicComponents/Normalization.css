@@ -67,8 +67,6 @@ head {
     display: block;
     overflow-x: visible;
     overflow-y: visible;
-    overflow-x: overlay;
-    overflow-y: overlay;
     z-index: inherit;
     position: absolute;
     //position: inherit;

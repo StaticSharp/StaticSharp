@@ -2,7 +2,7 @@
 
 
     [Representative]
-    public partial class Ru : Material {
+    public partial class Ru : ComponentPage {
         public override Blocks? Content => new() {
 
             {"video",

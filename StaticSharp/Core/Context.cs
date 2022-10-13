@@ -1,5 +1,6 @@
 ﻿
 
+using StaticSharp.Gears;
 using StaticSharp.Resources;
 using StaticSharpEngine;
 using System;
@@ -12,7 +13,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StaticSharp.Gears {
+namespace StaticSharp {
 
     public struct Context {
 

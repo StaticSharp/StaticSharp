@@ -48,7 +48,7 @@ namespace StaticSharp {
         }*/
 
 
-        protected override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
+        protected override async ValueTask ModifyHtmlAsync(Context context, Tag elementTag) {
             string[] webExtensions = { ".jpg", ".jpeg", ".png", ".svg" };
 
             var source = await assetGenome.CreateOrGetCached();
@@ -60,7 +60,7 @@ namespace StaticSharp {
             elementTag["data-width"] = imageInfo.Width;
             elementTag["data-height"] = imageInfo.Height;
 
-            string url = "";
+            string url;
 
 
             if (Embed == TEmbed.Image) {
@@ -69,16 +69,18 @@ namespace StaticSharp {
                 } else {
                     url = source.GetDataUrlBase64();
                 }
-                return new Tag("img") {
+                elementTag.Add(new Tag("img") {
                     ["src"] = url
-                };
+                });
+                return;
             }
 
             url = (await context.AddAssetAsync(source)).ToString();
             if (Embed == TEmbed.None) {
-                return new Tag("img") {
+                elementTag.Add(new Tag("img") {
                     ["src"] = url
-                };
+                });
+                return;
             }
 
 
@@ -104,8 +106,7 @@ namespace StaticSharp {
 
             var pixel = imageColor.GetPixels().First().ToColor().ToHexString();*/
 
-
-            return new Tag("content") {
+            elementTag.Add(new Tag("content") {
                 new Tag("svg"){
                     ["width"] = "100%",
                     ["height"] = "100%",
@@ -138,10 +139,11 @@ namespace StaticSharp {
                     ["height"] = "100%",
                     ["src"] = url
                 }
-            };
+            }
+            );
 
 
-            /*;*/
+
         }
 
     }

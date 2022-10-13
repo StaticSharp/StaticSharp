@@ -10,13 +10,13 @@ namespace StaticSharp {
         [Mix(typeof(MaterialDesignIcon))]
         [Mix(typeof(Block))]
         public partial class MaterialDesignIconInline: MaterialDesignIcon {
-            public float BaselineOffset => NotEvaluatableValue<float>(); 
+            public double BaselineOffset => NotEvaluatableValue<double>(); 
         }
     }
 
     namespace Gears {
         public class MaterialDesignIconInlineBindings<FinalJs> : MaterialDesignIconBindings<FinalJs> where FinalJs : new() {
-            public Binding<float> BaselineOffset { set { Apply(value); } }
+            public Binding<double> BaselineOffset { set { Apply(value); } }
         }
     }
 

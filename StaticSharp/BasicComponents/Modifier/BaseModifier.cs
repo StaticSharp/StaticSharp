@@ -17,11 +17,11 @@ namespace StaticSharp {
             public bool Hover => NotEvaluatableValue<bool>();
             public bool Selectable => NotEvaluatableValue<bool>();
 
-            public float Radius => NotEvaluatableValue<float>();
-            public float RadiusTopLeft => NotEvaluatableValue<float>();
-            public float RadiusTopRight => NotEvaluatableValue<float>();
-            public float RadiusBottomLeft => NotEvaluatableValue<float>();
-            public float RadiusBottomRight => NotEvaluatableValue<float>();
+            public double Radius => NotEvaluatableValue<double>();
+            public double RadiusTopLeft => NotEvaluatableValue<double>();
+            public double RadiusTopRight => NotEvaluatableValue<double>();
+            public double RadiusBottomLeft => NotEvaluatableValue<double>();
+            public double RadiusBottomRight => NotEvaluatableValue<double>();
 
         }
     }
@@ -32,11 +32,11 @@ namespace StaticSharp {
             public Binding<Color> ForegroundColor { set { Apply(value); } }
             public Binding<bool> Selectable { set { Apply(value); } }
 
-            public Binding<float> Radius { set { Apply(value); } }
-            public Binding<float> RadiusTopLeft { set { Apply(value); } }
-            public Binding<float> RadiusTopRight { set { Apply(value); } }
-            public Binding<float> RadiusBottomLeft { set { Apply(value); } }
-            public Binding<float> RadiusBottomRight { set { Apply(value); } }
+            public Binding<double> Radius { set { Apply(value); } }
+            public Binding<double> RadiusTopLeft { set { Apply(value); } }
+            public Binding<double> RadiusTopRight { set { Apply(value); } }
+            public Binding<double> RadiusBottomLeft { set { Apply(value); } }
+            public Binding<double> RadiusBottomRight { set { Apply(value); } }
 
         }
     }
@@ -60,7 +60,7 @@ namespace StaticSharp {
             public BaseModifier(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
 
 
-            public Context ModifyContext(Context context) {
+            protected Context ModifyContext(Context context) {
                 if (FontFamilies != null) {
                     context.FontFamilies = FontFamilies;
                 }
@@ -70,7 +70,7 @@ namespace StaticSharp {
                 return context;
             }
 
-            public void ModifyTag(Tag tag) {
+            protected void ModifyTag(Tag tag) {
                 /*if (Url != null) {
                     tag.Name = "a";
                     tag["href"] = Url;

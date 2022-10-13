@@ -50,9 +50,9 @@ namespace StaticSharp {
 
         //public abstract IStorage Storage { get; }
 
-        private Gears.Context CreateContext(HttpRequest request) {
+        private Context CreateContext(HttpRequest request) {
             var baseUrl = new Uri($"{request.Scheme}://{request.Host}") ;
-            var context = new Gears.Context(Assets, baseUrl, this, true);
+            var context = new Context(Assets, baseUrl, this, true);
             return context;
         }
 
@@ -77,7 +77,7 @@ namespace StaticSharp {
         }
 
 
-        private async Task<string> GenerateErrorPageAsync(Gears.Context context, Exception e) {
+        private async Task<string> GenerateErrorPageAsync(Context context, Exception e) {
             return await new Gears.ErrorPage(e).GeneratePageHtmlAsync(context);
         }
 

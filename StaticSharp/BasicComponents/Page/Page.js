@@ -26,6 +26,8 @@ function Page(element) {
 
     let animationFrame = 0
     window.Reactive = {
+        Root: element,
+
         AnimationFrame: () => {
             animationFrame++
             window.requestAnimationFrame(() => {
@@ -34,6 +36,25 @@ function Page(element) {
             return animationFrame
         }
     }
+
+    let touchMedia = window.matchMedia("(pointer: coarse)")
+    window.Reactive.Touch = touchMedia.matches
+    touchMedia.onchange = (e) => {
+        window.Touch = e.matches
+    }
+
+    function createDevicePixelRatioCallback(func) {
+        let matchMedia = window.matchMedia(`screen and (resolution: ${window.devicePixelRatio}dppx)`)
+        matchMedia.addEventListener(
+            "change",
+            () => {
+                func()
+                createDevicePixelRatioCallback(func)
+            },
+            { once: true }
+        );
+    }
+    createDevicePixelRatioCallback(() => element.DevicePixelRatio = window.devicePixelRatio)
 
 
 
@@ -55,25 +76,9 @@ function Page(element) {
 
     DepthToStyle(element)
 
-    function createDevicePixelRatioCallback(func) {
-        let matchMedia = window.matchMedia(`screen and (resolution: ${window.devicePixelRatio}dppx)`)
-        matchMedia.addEventListener(
-            "change",
-            () => {
-                func()
-                createDevicePixelRatioCallback(func)
-            },
-            { once: true }
-        );
-    }
+    
 
-    createDevicePixelRatioCallback(() => element.DevicePixelRatio = window.devicePixelRatio)
-
-    let touchMedia = window.matchMedia("(pointer: coarse)")
-    element.Reactive.Touch = touchMedia.matches
-    touchMedia.onchange = (e) => {
-        element.Touch = e.matches
-    }
+    
 
 
 

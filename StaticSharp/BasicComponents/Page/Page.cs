@@ -18,19 +18,19 @@ namespace StaticSharp {
 
     namespace Js {
         public class Page : BaseModifier {
-            public float WindowWidth => NotEvaluatableValue<float>();
-            public float WindowHeight => NotEvaluatableValue<float>();
-            public float DevicePixelRatio => NotEvaluatableValue<float>();
+            public double WindowWidth => NotEvaluatableValue<double>();
+            public double WindowHeight => NotEvaluatableValue<double>();
+            public double DevicePixelRatio => NotEvaluatableValue<double>();
             public bool Touch => NotEvaluatableValue<bool>();
             public bool UserInteracted => NotEvaluatableValue<bool>();
-            public float FontSize => NotEvaluatableValue<float>();
+            public double FontSize => NotEvaluatableValue<double>();
 
         }
     }
 
     namespace Gears {
         public class PageBindings<FinalJs> : BaseModifierBindings<FinalJs> where FinalJs : new() {
-            public Binding<float> FontSize { set { Apply(value); } }
+            public Binding<double> FontSize { set { Apply(value); } }
 
         }
     }

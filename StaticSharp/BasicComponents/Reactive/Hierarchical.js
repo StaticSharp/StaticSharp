@@ -10,17 +10,10 @@ function GetParentElementByPredicate(firstParentToCompare, predicate) {
     return undefined
 }
 
-function getOverlaySign(element) {
-    if (element.parentElement.tagName == "OVERLAY")
-        return 1
-    if (element.parentElement.tagName == "UNDERLAY")
-        return -1
-    return 0
-}
+
 
 function Hierarchical(element) {
 
-    element.overlaySign = getOverlaySign(element)
 
     element.isHierarchical = true
 
@@ -71,24 +64,15 @@ function Hierarchical(element) {
 
 
     if (element.Parent) {
-        if (element.overlaySign == 0) {
-            if (!element.Parent.FirstChild) {
-                element.Parent.FirstChild = element
-                element.Parent.LastChild = element
-            } else {
-                element.Parent.LastChild.NextSibling = element
-                element.Parent.LastChild = element
-            }
+
+        if (!element.Parent.FirstChild) {
+            element.Parent.FirstChild = element
+            element.Parent.LastChild = element
         } else {
-            if (element.overlaySign == 1) {
-                document.body.appendChild(element.parentElement)
-                element.Parent.Overlay = element
-            } else {
-                element.Parent.Underlay = element
-            }
+            element.Parent.LastChild.NextSibling = element
+            element.Parent.LastChild = element
         }
     }
-    //if (!element.IsRoot)
-    //    
+ 
 
 }

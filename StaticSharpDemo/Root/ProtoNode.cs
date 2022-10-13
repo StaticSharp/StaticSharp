@@ -25,7 +25,7 @@ namespace StaticSharpDemo.Root {
         }
     }
 
-    public abstract partial class ProtoNode : StaticSharpEngine.INode {
+    public abstract partial class ProtoNode : StaticSharpEngine.INode{
 
         public ProtoNode(Language language) => Language = language;
         public abstract ProtoNode Parent { get; }

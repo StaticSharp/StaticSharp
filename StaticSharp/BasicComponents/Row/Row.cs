@@ -14,7 +14,9 @@ namespace StaticSharp {
     [ConstructorJs]
     public class Row : Block {
         protected override string TagName => "row";
-        public Blocks Children { get; } = new();
+
+
+
         /*public void Add(string? id, IBlock? value) {
             if (value!=null)
                 children.Add(id, value);
@@ -24,10 +26,10 @@ namespace StaticSharp {
 
         public Row([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
 
-        protected override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
+        /*protected override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
             return new Tag() {
                 await Children.Select(x=> x.Value.GenerateHtmlAsync(context,x.Key)).SequentialOrParallel(),
             };
-        }
+        }*/
     }
 }

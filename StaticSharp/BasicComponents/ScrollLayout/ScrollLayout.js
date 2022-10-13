@@ -4,13 +4,17 @@ function ScrollLayout(element) {
     element.Reactive = {
         InternalWidth: () => element.Content.InternalWidth,
         InternalHeight: () => element.Content.InternalHeight,
-        Content: () => element.FirstChild
+        Content: () => element.Child("Content")
     }
 
     element.style.overflow = "auto"
     element.style.outline = "0.1px solid #f00"
 
-
+    Create(element, Slider).Reactive = {
+        Depth: 1,
+        Width: () => element.Width,
+        Height : 8,
+    }
     /*new Reaction(() => {
         console.log("scroll", element.ScrollXActual)
     })*/

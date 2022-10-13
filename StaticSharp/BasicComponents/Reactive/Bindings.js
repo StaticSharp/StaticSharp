@@ -482,7 +482,7 @@ function PropertyTest() {
     root.Reactive.B = () => root.A * 2
     console.assert( root.B == 16)
 
-    root.Reactive.A = 10
+    root.A = 10
     console.assert( root.B == 20)
 
     

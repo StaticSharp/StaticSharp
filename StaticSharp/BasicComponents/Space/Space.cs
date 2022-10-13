@@ -10,18 +10,18 @@ namespace StaticSharp {
 
     namespace Js {
         public class Space : Hierarchical {
-            public float Before => NotEvaluatableValue<float>();
-            public float Between => NotEvaluatableValue<float>();
-            public float After => NotEvaluatableValue<float>();
+            public double Before => NotEvaluatableValue<double>();
+            public double Between => NotEvaluatableValue<double>();
+            public double After => NotEvaluatableValue<double>();
         }
     }
 
 
     namespace Gears {
         public class SpaceBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {
-            public Binding<float> Before { set { Apply(value); } }
-            public Binding<float> Between { set { Apply(value); } }
-            public Binding<float> After { set { Apply(value); } }
+            public Binding<double> Before { set { Apply(value); } }
+            public Binding<double> Between { set { Apply(value); } }
+            public Binding<double> After { set { Apply(value); } }
         }
     }
 
@@ -32,7 +32,7 @@ namespace StaticSharp {
         /*public Space([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber) { }*/
 
-        public Space(float before = 1, float between = 1, float after = 1, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
+        public Space(double before = 1, double between = 1, double after = 1, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber) {
             if (before != 1) Before = before;
             if (between != 1) Between = between;

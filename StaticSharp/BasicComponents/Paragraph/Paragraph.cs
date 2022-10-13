@@ -12,7 +12,7 @@ namespace StaticSharp {
     public class Paragraph : Block {
         protected override string TagName => "paragraph";
         //protected List<KeyValuePair<string?, IInline>> children { get; } = new();
-        public Inlines Children { get; } = new();
+        public Inlines Inlines { get; } = new();
 
 
         /*public static implicit operator Paragraph(string text) {
@@ -27,23 +27,26 @@ namespace StaticSharp {
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0) : base(other, callerFilePath, callerLineNumber) {
 
-            Children = new(other.Children);
+            Inlines = new(other.Inlines);
         }
-
 
 
         public Paragraph(string text,
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
-            Children.AppendLiteral(text, callerFilePath, callerLineNumber);
+            Inlines.AppendLiteral(text, callerFilePath, callerLineNumber);
         }
 
         public Paragraph(Inlines inlines,
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
-            Children = new(inlines);
+            Inlines = new(inlines);
         }
-
+        public Paragraph(Inline inline,
+            [CallerFilePath] string callerFilePath = "",
+            [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
+            Inlines = new() { inline };
+        }
 
 
         /*public void Add(IInline? value) {
@@ -77,29 +80,16 @@ namespace StaticSharp {
         }
 
 
-        protected override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
+        protected override async ValueTask ModifyHtmlAsync(Context context, Tag elementTag) {
 
-
-
-            /*var c = context;
-            c.GetUniqueId();
-
-            var d = c;
-            d.GetUniqueId();*/
-
-
-            var result = new Tag("p");
-            foreach (var i in Children) {
-                result.Add(await i.Value.GenerateInlineHtmlAsync(context, i.Id, i.Format));
+            var p = new Tag("p");
+            foreach (var i in Inlines) {
+                p.Add(await i.Value.GenerateInlineHtmlAsync(context, i.Id, i.Format));
             }
-            return result;
+            elementTag.Add(p);
+
         }
 
-        /*async Task<Tag> IInline.GenerateInlineHtmlAsync(Context context, string? id) {
-            return new Tag() {
-                await Task.WhenAll(children.Select(x=>x.Value.GenerateInlineHtmlAsync(context,x.Key)))
-            };
-        }*/
 
         
     }

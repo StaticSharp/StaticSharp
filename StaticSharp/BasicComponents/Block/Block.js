@@ -36,23 +36,7 @@ function Block(element) {
 
     element.Reactive = {
         
-        Depth: () => {
-            if (element.overlaySign == 0) {
-                return 0;
-            } else {
-                if (element.overlaySign == 1) {//overlay
-                    return Sum(element.OverlayIndex * 100, - element.Parent.NestingDepth)
-                } else {//underlay
-                    return -1
-                }
-            }
-        },
-        OverlayIndex: () => element.IsRoot ? 0 : (element.overlaySign ? Sum(element.Parent.OverlayIndex, 1) : element.Parent.OverlayIndex),
-
-        Overlay: undefined,
-        Underlay: undefined,
-
-
+        Depth: 0,
 
         PaddingLeft: undefined,
         PaddingTop: undefined,
@@ -94,33 +78,9 @@ function Block(element) {
 
     DepthToStyle(element)
 
-    if (element.overlaySign != 0) {
-        new Reaction(() => {
-            let top = element.MarginTop
-            let bottom = element.MarginBottom
-            let left =   element.MarginLeft
-            let right = element.MarginRight
 
-            element.LayoutX = First(left,0)
-            element.LayoutY = First(top,0)
-
-            element.LayoutWidth = Sum( element.Parent.Width, -left, -right)
-            element.LayoutHeight = Sum( element.Parent.Height, -top, -bottom)
-        })
-    }
-
-    if (element.overlaySign == 1) {
-        new Reaction(() => {
-            element.style.left = ToCssSize(element.AbsoluteX)
-        })
-        new Reaction(() => {
-            element.style.top = ToCssSize(element.AbsoluteY)
-        })
-    } else {
-        XToStyle(element);
-        YToStyle(element);
-    }
-
+    XToStyle(element);
+    YToStyle(element);
     WidthToStyle(element)
     HeightToStyle(element)
 

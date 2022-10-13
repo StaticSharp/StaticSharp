@@ -4,7 +4,7 @@ using System.Linq;
 namespace StaticSharpDemo.Root.Components.MaterialDesignIconsComponent {
 
     [Representative]
-    public partial class En : Material {
+    public partial class En : ComponentPage {
         
         public override Blocks? Content => new() {
             H5(nameof(MaterialDesignIconBlock)),

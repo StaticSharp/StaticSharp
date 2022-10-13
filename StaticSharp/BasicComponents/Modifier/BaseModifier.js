@@ -41,8 +41,8 @@ function BaseModifier(element) {
             element.style.visibility = ""
             element.style.opacity = ""
         } else {
-            element.style.opacity = ""
-            element.style.visibility = visibility
+            element.style.opacity = visibility
+            element.style.visibility = ""
         }        
     })
 

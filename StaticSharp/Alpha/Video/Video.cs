@@ -19,14 +19,14 @@ namespace StaticSharp {
             public bool Play => NotEvaluatableValue<bool>();
             public bool PlayActual => NotEvaluatableValue<bool>();
 
-            public float Position => NotEvaluatableValue<float>();
-            public float PositionActual => NotEvaluatableValue<float>();
+            public double Position => NotEvaluatableValue<double>();
+            public double PositionActual => NotEvaluatableValue<double>();
 
             public bool Mute => NotEvaluatableValue<bool>();
             public bool MuteActual => NotEvaluatableValue<bool>();
 
-            public float Volume => NotEvaluatableValue<float>();
-            public float VolumeActual => NotEvaluatableValue<float>();
+            public double Volume => NotEvaluatableValue<double>();
+            public double VolumeActual => NotEvaluatableValue<double>();
 
 
             public bool PreferPlatformPlayer => NotEvaluatableValue<bool>();
@@ -39,9 +39,9 @@ namespace StaticSharp {
     namespace Gears {
         public class VideoBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
             public Binding<bool> Play { set { Apply(value); } }
-            public Binding<float> Position { set { Apply(value); } }
+            public Binding<double> Position { set { Apply(value); } }
             public Binding<bool> Mute { set { Apply(value); } }
-            public Binding<float> Volume { set { Apply(value); } }
+            public Binding<double> Volume { set { Apply(value); } }
 
 
             public Binding<bool> PreferPlatformPlayer { set { Apply(value); } }
@@ -67,7 +67,7 @@ namespace StaticSharp {
             Identifier = identifier;        
         }
 
-        protected override async Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
+        protected override async ValueTask ModifyHtmlAsync(Context context, Tag elementTag) {
 
             var youtubeVideoId = YoutubeExplode.Videos.VideoId.TryParse(Identifier);
             if (youtubeVideoId != null) {
@@ -104,13 +104,6 @@ namespace StaticSharp {
 
                 elementTag["data-sources"] = json;
             }
-
-
-            
-
-
-            return new Tag() {
-            };
         }
     }
 }

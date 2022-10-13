@@ -12,17 +12,31 @@ function Color() {
     }
 
     if (args.length == 1) {
-
-        if (typeof args[0] == 'number') {
-            _this.r = (args[0] & 0xFF) / 255
-            _this.g = ((args[0] & 0xFF00) >>> 8) / 255
-            _this.b = ((args[0] & 0xFF0000) >>> 16) / 255
-            _this.a = ((args[0] & 0xFF000000) >>> 24) / 255
-            return;
-        } else {
-            console.warn("Color: Invalid arguments", arguments[0])
+        let input = args[0]
+        if (typeof input == 'number') {
+            _this.r = (input & 0xFF) / 255
+            _this.g = ((input & 0xFF00) >>> 8) / 255
+            _this.b = ((input & 0xFF0000) >>> 16) / 255
+            _this.a = ((input & 0xFF000000) >>> 24) / 255
             return;
         }
+
+        if (typeof input == 'string') {
+            
+            if (input.substr(0, 1) == "#") {
+                var collen = (input.length - 1) / 3;
+                var fact = [17, 1, 0.062272][collen - 1] / 255;
+                _this.r = parseInt(input.substr(1, collen), 16) * fact
+                _this.g = parseInt(input.substr(1 + collen, collen), 16) * fact
+                _this.b = parseInt(input.substr(1 + 2 * collen, collen), 16) * fact 
+                return
+            }
+
+            //} return input.split("(")[1].split(")")[0].split(",").map(x => +x)
+
+        }
+
+        console.warn("Color: Invalid arguments", input)
     }
 
     if (args.some(x => (typeof x) != 'number')) {
@@ -40,7 +54,7 @@ function Color() {
         }
         return
     }
-
+    
     console.warn("Color: Invalid arguments", args)
 
 }

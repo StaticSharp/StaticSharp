@@ -9,7 +9,7 @@ namespace StaticSharpDemo.Root.Components.ScrollLayoutComponent {
 
 
     [Representative]
-    public partial class Ru: Material {
+    public partial class Ru: ComponentPage {
         public override string Title => "Scroll Layout";
         public override Blocks? Content => new() { 
             new ScrollLayout(){ 
@@ -18,6 +18,7 @@ namespace StaticSharpDemo.Root.Components.ScrollLayoutComponent {
                     Width = 1024,
                     BackgroundColor = Color.MediumPurple,
                 }
+                
             },
             new Slider(){ 
                 

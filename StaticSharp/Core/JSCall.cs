@@ -17,7 +17,7 @@ namespace StaticSharpWeb.Html {
 namespace StaticSharpWeb {
 
 
-    public class JSCall {
+    /*public class JSCall {
 
         private static readonly JsonSerializerOptions JsonSerializerOptions = new() {
             IncludeFields = true,
@@ -42,7 +42,7 @@ namespace StaticSharpWeb {
                 new PureHtmlNode($"StaticSharpCall({FunctionName},{parametersJson});")
             };
         }
-    }
+    }*/
 
     /*internal class JSCall {
 

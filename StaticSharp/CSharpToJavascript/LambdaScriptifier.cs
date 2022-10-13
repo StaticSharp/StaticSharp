@@ -48,9 +48,9 @@ public class LambdaScriptifier {
 
         var compiled = lambda.Compile();
 
-        Js.Object.NotEvaluatableFound = false;
+        Js.Static.NotEvaluatableFound = false;
         var value = compiled.DynamicInvoke(GetParametersValues());
-        if (Js.Object.NotEvaluatableFound) {
+        if (Js.Static.NotEvaluatableFound) {
             var result = Stringify(expression);
             return result;
         } else {
@@ -62,21 +62,33 @@ public class LambdaScriptifier {
 
 
     private string StringifyMethodCall(MethodCallExpression expression) {
+        var parameters = expression.Method.GetParameters();
         var arguments = expression.Arguments.ToArray();
-        string[] argumentsValues = new string[arguments.Length];
+        List<string> argumentsValues = new ();
 
         for (int i = 0; i < arguments.Length; i++) {
-            argumentsValues[i] = Eval(arguments[i]);
+
+            var isParams = parameters[i].GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0;
+            if (isParams) {
+                if (arguments[i] is NewArrayExpression newArrayExpression) {
+                    foreach (var e in newArrayExpression.Expressions) {
+                        argumentsValues.Add(Eval(e));
+                    }
+                } else {
+                    NotImplemented(arguments[i]);
+                }
+            } else {
+                argumentsValues.Add(Eval(arguments[i]));
+            }
         }
 
         var customConverter = expression.Method.GetCustomAttribute<ConvertToJsAttribute>()?.Format;
 
-
         if (customConverter != null) {
             if (expression.Object != null) {
-                return string.Format(customConverter, argumentsValues.ToList().Prepend(Eval(expression.Object)));
+                return string.Format(customConverter, argumentsValues.Prepend(Eval(expression.Object)).ToArray());
             }
-            return string.Format(customConverter, argumentsValues);
+            return string.Format(customConverter, argumentsValues.ToArray());
 
         } else {
 
@@ -103,7 +115,15 @@ public class LambdaScriptifier {
             }
 
             case MemberExpression memberExpression: {
-                return Eval(memberExpression.Expression) + "." + memberExpression.Member.Name;
+                var prefix = "";
+                if (memberExpression.Expression == null) {//Static class
+                    var format = memberExpression.Member.DeclaringType?.GetCustomAttribute<ConvertToJsAttribute>()?.Format;
+                    if (format != null)
+                        prefix = format+".";
+                } else { 
+                    prefix = Eval(memberExpression.Expression) + ".";
+                }
+                return prefix + memberExpression.Member.Name;
             }
 
             case UnaryExpression unaryExpression: {

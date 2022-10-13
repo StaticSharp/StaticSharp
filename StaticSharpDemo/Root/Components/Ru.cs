@@ -1,12 +1,41 @@
-﻿using StaticSharp.Gears;
+﻿
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace StaticSharpDemo.Root.Components {
 
+
+
+
+    public partial class ComponentPage : Material {
+
+
+        Paragraph MenuItem(ITypedRepresentativeProvider<Page> node, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
+            return new Paragraph(node.Representative.Title, callerFilePath, callerLineNumber) {
+                Margins = 0,
+                PaddingsVertical = 10,
+                PaddingsHorizontal = 20,
+                Children = {
+                    new LinkBlock(node).FillHeight().FillWidth()
+                }
+            };
+        }
+
+        public override Block LeftSideBar => new ScrollLayout {
+            Content = new Column(){
+                Children = {
+                    Node.Children.OfType<ITypedRepresentativeProvider<Page>>().Select(x=>MenuItem(x))
+                }
+            }            
+        };
+    }
+
+
+
     [Representative]
-    public partial class Ru : Material {
+    public partial class Ru : ComponentPage {
 
         protected override Task Setup(Context context) {
             BackgroundColor = ColorTranslator.FromHtml("#f8edeb");
@@ -18,13 +47,16 @@ namespace StaticSharpDemo.Root.Components {
         public override Blocks Content => new(){
 
             new Row{
+                Depth = 1,
                 BackgroundColor = ColorTranslator.FromHtml("#b56576"),
                 Children = { 
                     new Paragraph($"Paragraph"){ 
-                        Overlay = new LinkBlock(Node.Parent){
-                            BackgroundColor = ColorTranslator.FromHtml("#80000000"),
-                            Margins = new (e=>e.Root.Touch? -20 : 0)
-                        }                       
+                        Children = {
+                            new LinkBlock(Node.Parent){
+                                BackgroundColor = ColorTranslator.FromHtml("#80000000"),
+                                Margins = new (e=>Js.Window.Touch? -20 : 0)
+                            }.FillWidth().FillHeight()
+                        }
                     },
                     $"{new LinkInline{HRef = "https://developers.antilatency.com/" , Children = { "First" }}}",
                     "Second",

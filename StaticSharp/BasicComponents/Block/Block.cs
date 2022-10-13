@@ -11,19 +11,20 @@ namespace StaticSharp {
 
     namespace Js {
         public class Block : BaseModifier {
-            public float X => NotEvaluatableValue<float>();
-            public float Y => NotEvaluatableValue<float>();
-            public float Width => NotEvaluatableValue<float>();
-            public float Height => NotEvaluatableValue<float>();
-            public float MarginLeft => NotEvaluatableValue<float>();
-            public float MarginRight => NotEvaluatableValue<float>();
-            public float MarginTop => NotEvaluatableValue<float>();
-            public float MarginBottom => NotEvaluatableValue<float>();
-            public float PaddingLeft => NotEvaluatableValue<float>();
-            public float PaddingRight => NotEvaluatableValue<float>();
-            public float PaddingTop => NotEvaluatableValue<float>();
-            public float PaddingBottom => NotEvaluatableValue<float>();
-            public float FontSize => NotEvaluatableValue<float>();
+            public double X => NotEvaluatableValue<double>();
+            public double Y => NotEvaluatableValue<double>();
+            public double Width => NotEvaluatableValue<double>();
+            public double Height => NotEvaluatableValue<double>();
+            public double MarginLeft => NotEvaluatableValue<double>();
+            public double MarginRight => NotEvaluatableValue<double>();
+            public double MarginTop => NotEvaluatableValue<double>();
+            public double MarginBottom => NotEvaluatableValue<double>();
+            public double PaddingLeft => NotEvaluatableValue<double>();
+            public double PaddingRight => NotEvaluatableValue<double>();
+            public double PaddingTop => NotEvaluatableValue<double>();
+            public double PaddingBottom => NotEvaluatableValue<double>();
+            public double FontSize => NotEvaluatableValue<double>();
+            public int Depth => NotEvaluatableValue<int>();
         }
     }
 
@@ -31,38 +32,36 @@ namespace StaticSharp {
 
     namespace Gears {
         public class BlockBindings<FinalJs> : BaseModifierBindings<FinalJs> where FinalJs : new() {
-            public Binding<float> X { set { Apply(value); } }
-            public Binding<float> Y { set { Apply(value); } }
-            public Binding<float> Width { set { Apply(value); } }
-            public Binding<float> Height { set { Apply(value); } }
+            public Binding<double> X { set { Apply(value); } }
+            public Binding<double> Y { set { Apply(value); } }
+            public Binding<double> Width { set { Apply(value); } }
+            public Binding<double> Height { set { Apply(value); } }
 
 
 
-            public Binding<float> MarginLeft { set { Apply(value); } }
-            public Binding<float> MarginRight { set { Apply(value); } }
-            public Binding<float> MarginTop { set { Apply(value); } }
-            public Binding<float> MarginBottom { set { Apply(value); } }
+            public Binding<double> MarginLeft { set { Apply(value); } }
+            public Binding<double> MarginRight { set { Apply(value); } }
+            public Binding<double> MarginTop { set { Apply(value); } }
+            public Binding<double> MarginBottom { set { Apply(value); } }
 
-            public Binding<float> MarginsHorizontal { set { Apply(value, "MarginLeft", "MarginRight"); } }
-            public Binding<float> MarginsVertical { set { Apply(value, "MarginTop", "MarginBottom"); } }
-            public Binding<float> Margins { set { Apply(value, "MarginLeft", "MarginRight", "MarginTop", "MarginBottom"); } }
-
-
-
-
-            public Binding<float> PaddingLeft { set { Apply(value); } }
-            public Binding<float> PaddingRight { set { Apply(value); } }
-            public Binding<float> PaddingTop { set { Apply(value); } }
-            public Binding<float> PaddingBottom { set { Apply(value); } }
-
-            public Binding<float> PaddingsHorizontal { set { Apply(value, "PaddingLeft", "PaddingRight"); } }
-            public Binding<float> PaddingsVertical { set { Apply(value, "PaddingTop", "PaddingBottom"); } }
-            public Binding<float> Paddings { set { Apply(value, "PaddingLeft", "PaddingRight", "PaddingTop", "PaddingBottom"); } }
+            public Binding<double> MarginsHorizontal { set { Apply(value, "MarginLeft", "MarginRight"); } }
+            public Binding<double> MarginsVertical { set { Apply(value, "MarginTop", "MarginBottom"); } }
+            public Binding<double> Margins { set { Apply(value, "MarginLeft", "MarginRight", "MarginTop", "MarginBottom"); } }
 
 
 
 
-            public Binding<float> FontSize { set { Apply(value); } }
+            public Binding<double> PaddingLeft { set { Apply(value); } }
+            public Binding<double> PaddingRight { set { Apply(value); } }
+            public Binding<double> PaddingTop { set { Apply(value); } }
+            public Binding<double> PaddingBottom { set { Apply(value); } }
+
+            public Binding<double> PaddingsHorizontal { set { Apply(value, "PaddingLeft", "PaddingRight"); } }
+            public Binding<double> PaddingsVertical { set { Apply(value, "PaddingTop", "PaddingBottom"); } }
+            public Binding<double> Paddings { set { Apply(value, "PaddingLeft", "PaddingRight", "PaddingTop", "PaddingBottom"); } }
+            public Binding<double> FontSize { set { Apply(value); } }
+
+            public Binding<int> Depth { set { Apply(value); } }
 
         }
 
@@ -73,19 +72,18 @@ namespace StaticSharp {
     [ConstructorJs]
     public partial class Block : BaseModifier, IBlock {
         //public virtual List<Modifier> Modifiers { get; } = new();
-
-        public Block? Overlay;
+        public Blocks Children { get; } = new();
+        //public Block? Overlay;
 
         protected Block(Block other,
             string callerFilePath = "",
             int callerLineNumber = 0) : base(other, callerFilePath, callerLineNumber) {
-
-            //Modifiers = new(other.Modifiers);
+            Children = new(other.Children);
         }
         public Block([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
         
-        protected virtual Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
-            return Task.FromResult<Tag?>(null);
+        protected virtual ValueTask ModifyHtmlAsync(Context context, Tag elementTag) {
+            return ValueTask.CompletedTask;
         }
         public virtual async Task<Tag> GenerateHtmlAsync(Context context, string? id = null) {
 
@@ -113,10 +111,13 @@ namespace StaticSharp {
                 tag.Add(await m.CreateConstructorScriptAsync(context));*/
 
 
-            tag.Add(await GenerateHtmlInternalAsync(context, tag));
+            await ModifyHtmlAsync(context, tag);
+
+            tag.Add(await Children.Select(x => x.Value.GenerateHtmlAsync(context, x.Key)).SequentialOrParallel());
+            
 
 
-            if (Overlay != null) {
+            /*if (Overlay != null) {
                 string? overlayId = null;
                 if (id != null) {
                     overlayId = id + "Overlay";
@@ -124,7 +125,7 @@ namespace StaticSharp {
                 tag.Add(new Tag("overlay") {
                     await Overlay.GenerateHtmlAsync(context,overlayId)
                 });
-            }
+            }*/
 
 
             //tag.Add(After());
@@ -137,8 +138,14 @@ namespace StaticSharp {
     public static partial class Static {
 
         public static T FillWidth<T>(this T _this) where T : Block {
-            _this.X = 0;
-            _this.Width = new(e => e.ParentBlock.Width);
+            _this.X = new(e => Js.Math.First(e.MarginLeft,0));
+            _this.Width = new(e => Js.Math.Sum(e.ParentBlock.Width, -e.MarginLeft, -e.MarginRight) );
+            return _this;
+        }
+
+        public static T FillHeight<T>(this T _this) where T : Block {
+            _this.Y = new(e => Js.Math.First(e.MarginTop, 0));
+            _this.Height = new(e => Js.Math.Sum(e.ParentBlock.Height, -e.MarginTop, -e.MarginLeft));
             return _this;
         }
 

@@ -58,35 +58,45 @@ function Slider(element) {
 
         ThumbLenght: () => (element.TrackLenght - element.ThumbThickhess) * (element.Range / (element.Max - element.Min)) + element.ThumbThickhess,
 
-        Thumb: () => element.FirstChild
+        //Thumb: () => element.FirstChild
+    }
+
+    let thumb = Create(element, Block)
+    thumb.Reactive = {
+        BackgroundColor: new Color("#555"),
+        Visibility: () => thumb.Hover ? 0.5: 0.25,
+        Width: () => element.IsVertical ? element.ThumbThickhess : element.ThumbLenght,
+        Height: () => element.IsVertical ? element.ThumbLenght : element.ThumbThickhess,
+        Radius: () => Min(thumb.Width, thumb.Height) / 2
+    }
+
+    thumb.Events.PointerDown = () => {
+        let startX = event.clientX
+        console.log("PointerDown", startX, event.pointerId)
+        event.stopPropagation()
+        thumb.setPointerCapture(event.pointerId)
+
+        //CaptureControl(thumb)
+        thumb.Events.PointerMove = () => {
+            let x = event.clientX
+            console.log("PointerMove", x - startX)
+            event.preventDefault()
+        }
+        thumb.Events.MouseUp = () => {
+            thumb.Events.MouseMove = undefined
+        }
     }
 
 
-
-    new Reaction(() => {
+    /*new Reaction(() => {
         let thumb = element.Thumb
         if (thumb) {
             thumb.Width = () => element.IsVertical ? element.ThumbThickhess : element.ThumbLenght
             thumb.Height = () => element.IsVertical ? element.ThumbLenght : element.ThumbThickhess 
 
-            thumb.Events.PointerDown = () => {
-                let startX = event.clientX
-                console.log("PointerDown", startX, event.pointerId)
-                event.stopPropagation()
-                thumb.setPointerCapture(event.pointerId)
-                
-                //CaptureControl(thumb)
-                thumb.Events.PointerMove = () => {
-                    let x = event.clientX
-                    console.log("PointerMove", x - startX)
-                    event.preventDefault()
-                }
-                thumb.Events.MouseUp = () => {
-                    thumb.Events.MouseMove = undefined
-                }
-            }
+            
         }
-    }) 
+    }) */
 
 
     

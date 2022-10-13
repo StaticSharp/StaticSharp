@@ -6,17 +6,17 @@ namespace StaticSharp {
 
     namespace Js {
         public class PageSideMenus : Page {
-            public float ContentWidth => NotEvaluatableValue<float>();
+            public double ContentWidth => NotEvaluatableValue<double>();
             public bool BarsCollapsed => NotEvaluatableValue<bool>();
-            public float SideBarsIconsSize => NotEvaluatableValue<float>();
+            public double SideBarsIconsSize => NotEvaluatableValue<double>();
 
         }
     }
 
     namespace Gears {
         public class PageSideMenusBindings<FinalJs> : PageBindings<FinalJs> where FinalJs : new() {
-            public Binding<float> ContentWidth { set { Apply(value); } }
-            public Binding<float> SideBarsIconsSize { set { Apply(value); } }
+            public Binding<double> ContentWidth { set { Apply(value); } }
+            public Binding<double> SideBarsIconsSize { set { Apply(value); } }
         }
     }
 
@@ -36,6 +36,7 @@ namespace StaticSharp {
         }
 
         public virtual Block? TopBar => new Row{
+            //Height = new(Js.Math.Min())
             ["Height"] = "() => Min(element.Root.SideBarsIconsSize,element.InternalHeight)",
             Children = {
                 new Space(before: 1),

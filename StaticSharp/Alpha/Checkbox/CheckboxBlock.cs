@@ -23,11 +23,13 @@ namespace StaticSharp {
         public CheckboxBlock(CheckboxBlock other, string callerFilePath, int callerLineNumber): base(other, callerFilePath, callerLineNumber) { }
         public CheckboxBlock([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
 
-        protected override Task<Tag?> GenerateHtmlInternalAsync(Context context, Tag elementTag) {
-
-            return Task.FromResult<Tag?>(new Tag("input") {
-                ["type"] = "checkbox"
-            });
+        protected override ValueTask ModifyHtmlAsync(Context context, Tag elementTag) {
+            elementTag.Add(
+                new Tag("input") {
+                    ["type"] = "checkbox"
+                }
+            );
+            return ValueTask.CompletedTask;
         }        
     }
 
