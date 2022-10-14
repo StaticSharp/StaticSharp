@@ -10,7 +10,7 @@ namespace StaticSharpDemo.Root.Components.ScrollLayoutComponent {
 
     [Representative]
     public partial class Ru: ComponentPage {
-        public override string Title => "Scroll Layout";
+        public override string Title => "Scroll|   Layout";
         public override Blocks? Content => new() { 
             new ScrollLayout(){ 
                 Height = 300,

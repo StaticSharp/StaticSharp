@@ -13,6 +13,45 @@ function Page(element) {
         return window.innerHeight // document.documentElement.clientHeight
     }
 
+    /*document.body.onmousedown = function (e) {
+        if (e.button === 1) return false;
+    }*/
+
+
+    /*document.Events.PointerDown = {
+        handler: () => {
+
+            //if (event.pointerType != "touch") return
+
+            console.log("document PointerDown", event.which)
+            //event.path[0].setPointerCapture(event.pointerId)
+
+            document.Events.PointerMove = () => {
+                console.log("document PointerMove", event.path, event.clientX, event.cancelable)
+                if (event.cancelable) {
+
+                } else {
+                    console.log("PointerMove = undefined")
+                    document.Events.PointerMove = undefined
+                    document.Events.PointerUp = undefined
+                }
+
+            }
+            document.Events.PointerUp = () => {
+                console.log("PointerUp", event.clientX)
+
+                document.Events.PointerMove = undefined
+                document.Events.PointerUp = undefined
+            }
+
+            //event.preventDefault();
+            //return false;
+        },
+        passive: false
+    }*/
+
+
+
 
     //detect slim scroll or thick
     /*document.documentElement.style.overflowX = "hidden"

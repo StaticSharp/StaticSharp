@@ -52,7 +52,7 @@ namespace StaticSharp {
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0) where T : IBlockCollector {
 
-            collector.Add(id, new Paragraph(inlines));
+            collector.Add(id, new Paragraph(inlines, callerFilePath, callerLineNumber));
         }
 
         public static void Add<T>(

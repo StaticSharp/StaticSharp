@@ -104,7 +104,7 @@ function PageSideMenus(element) {
         RightSideBar: () => element.Child("RightSideBar"),
         RightSideBarIcon: () => element.Child("RightSideBarIcon"),
 
-        TopBar: () => element.Child("Content").Child("TopBar"),
+        TopBar: () => element.Child("Content").Content.Child("TopBar"),
 
         Footer: undefined,
 
@@ -141,70 +141,78 @@ function PageSideMenus(element) {
     
 
     function touchStart() {
-        //var touch = event.touches[0];
-        startX = event.clientX;
-        startY = event.clientY;
+        var touch = event.touches[0];
+        startX = touch.clientX;
+        startY = touch.clientY;
         
     }
     function horizontalTouchMove() {
-        //var touch = event.touches[0];
-        //console.log("horizontalTouchMove", event.clientX)
+        var touch = event.touches[0];
+        console.log("horizontalTouchMove", touch.clientX)
         let d = Reaction.beginDeferred()
-        element.SwipeX = event.clientX - startX
-        element.SwipeY = event.clientY - startY
+        element.SwipeX = touch.clientX - startX
+        element.SwipeY = touch.clientY - startY
         element.Swipe = true
         d.end()
         event.preventDefault()
     }
 
-    element.Events.PointerDown = {        
-        handler: () => {
-            if (event.pointerType != "touch") return
 
-            //console.log("PointerDown", event.clientX)
+    element.pan = function (x, y) {
+        console.log("pan",element.tagName,x,y)
+        return [x,y]
+    }
+
+    
+    document.Events.TouchStart = {
+        handler: () => {
+            //if (event.pointerType != "touch") return
+
+            //console.log("document TouchStart", event.path)
             touchStart()
-            element.Events.PointerMove = () => {
-                //console.log("PointerMove", event.clientX, event.cancelable)
+            document.Events.TouchMove = () => {
+                //console.log("document PointerMove", event.path, event.clientX, event.cancelable)
                 if (event.cancelable) {
-                    //var touch = event.touches[0];
-                    let deltaX = Math.abs(event.clientX - startX)
+                    var touch = event.touches[0];
+                    let deltaX = Math.abs(touch.clientX - startX)
                     //console.log("deltaX", deltaX, swipeThreshold)
                     if (deltaX > swipeThreshold) {
                         //console.log("horizontalTouchMove...")
-                        element.Events.PointerMove = {
+                        element.Events.TouchMove = {
                             handler: horizontalTouchMove,
                             passive: false
                         }
                     }
                 } else {
-                    element.Events.PointerMove = undefined
-                    element.Events.PointerUp = undefined
+                    //console.log("PointerMove = undefined")
+                    document.Events.TouchMove = undefined
+                    document.Events.TouchEnd = undefined
                 }
             }
-            element.Events.PointerUp = () => {
-                //console.log("PointerUp", event.clientX)
+            element.Events.TouchEnd = () => {
+                //console.log("TouchEnd")
                 element.Swipe = false
-                element.Events.PointerMove = undefined
-                element.Events.PointerUp = undefined
-            }            
+                element.Events.TouchMove = undefined
+                element.Events.TouchEnd = undefined
+            }
         },
-        passive: false        
+        passive: false
     }
+    
 
-    glass.Events.PointerDown = {
+    glass.Events.TouchStart = {
         handler: () => {
-            if (event.pointerType != "touch") return
             touchStart()
 
-            glass.Events.PointerMove = {
+            glass.Events.TouchMove = {
                 handler: horizontalTouchMove,
                 passive: false
             }
 
-            glass.Events.PointerUp = () => {
+            glass.Events.TouchEnd = () => {
                 element.Swipe = false
-                glass.Events.PointerMove = undefined
-                glass.Events.PointerUp = undefined
+                glass.Events.TouchMove = undefined
+                glass.Events.TouchEnd = undefined
             }
         },
         passive: false
@@ -395,8 +403,12 @@ function PageSideMenus(element) {
         if (element.Content) {
             //element.Content.Height = element.WindowHeight
             element.Content.Width = width// - 2 * contentSpace
-            element.Content.PaddingLeft = contentSpace
-            element.Content.PaddingRight = contentSpace
+
+
+            element.Content.Content.PaddingLeft = contentSpace
+            element.Content.Content.PaddingRight = contentSpace
+            element.Content.Content.Width = width
+
             element.Content.LayoutX = LeftBarSize
             element.Content.LayoutHeight = element.Height//(element.Content.InternalHeight, element.Height)
         }

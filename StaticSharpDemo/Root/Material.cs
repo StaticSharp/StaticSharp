@@ -21,45 +21,44 @@ namespace StaticSharpDemo.Root {
 
         public override Block LeftSideBar =>
             new ScrollLayout {
-                Children = {
-                    new Column() {
-                        BackgroundColor = ColorTranslator.FromHtml("#6d597a"),
-                        Children = {
-                            "Menu Item 1",
-                            "Menu item 2",
-                            "Menu item 2",
-                            "Menu item 2",
-                            "Menu item 2",
-                            "Menu item 2",
-                            "Menu item 2",
-                            "Menu item 2",
-                            "Menu item 2",
-                            "Menu item 2",
-                            "Menu item 2",
-                            "Menu item 2",
-                            "Menu item 2",
-                            "Menu item 2",
-                            "Menu item 2",
-                            "Menu item 2",
-                            "Menu item 2",
-                            "Menu item 2",
-                            "Menu item 2",
-                            "Menu item 2",
-                            "Menu item 2",
-                            "Menu item 2",
-                            "Menu item 2",
-                            "Menu item 2",
+                Content = new Column() {
+                    BackgroundColor = ColorTranslator.FromHtml("#6d597a"),
+                    Children = {
+                        "Menu Item 1",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
+                        "Menu item 2",
 
-                            new Space(){
-                                Between = 1
-                            },
+                        new Space(){
+                            Between = 1
+                        },
 
-                            new Paragraph("Social links"){
-                                ["Width"] = "() => element.LayoutWidth",
-                            }
+                        new Paragraph("Social links"){
+                            ["Width"] = "() => element.LayoutWidth",
                         }
                     }
                 }
+                
             };
 
 

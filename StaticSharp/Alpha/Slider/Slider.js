@@ -35,6 +35,8 @@ function CaptureControl(element) {
 function Slider(element) {
     Block(element)
 
+    element.style.touchAction = "none"
+
     element.Reactive = {
         Min: 0,
         Max: 1,
@@ -63,29 +65,48 @@ function Slider(element) {
 
     let thumb = Create(element, Block)
     thumb.Reactive = {
-        BackgroundColor: new Color("#555"),
-        Visibility: () => thumb.Hover ? 0.5: 0.25,
+        BackgroundColor: new Color("#000"),
+        Visibility: () => thumb.Hover ? 1: 0.5,
         Width: () => element.IsVertical ? element.ThumbThickhess : element.ThumbLenght,
         Height: () => element.IsVertical ? element.ThumbLenght : element.ThumbThickhess,
         Radius: () => Min(thumb.Width, thumb.Height) / 2
     }
 
-    thumb.Events.PointerDown = () => {
-        let startX = event.clientX
-        console.log("PointerDown", startX, event.pointerId)
+    /*thumb.Events.TouchStart = () => {
         event.stopPropagation()
+        event.preventDefault()
+    }*/
+
+
+
+    thumb.Events.PointerDown = () => {
+        let startX = event.clientX - element.AbsoluteX
+        let startY = event.clientY - element.AbsoluteY
+
+
+        console.log("thumb PointerDown", startX, startY)
+        event.stopPropagation()
+        event.preventDefault()
         thumb.setPointerCapture(event.pointerId)
 
         //CaptureControl(thumb)
         thumb.Events.PointerMove = () => {
-            let x = event.clientX
-            console.log("PointerMove", x - startX)
-            event.preventDefault()
+            let x = event.clientX - element.AbsoluteX
+            let y = event.clientY - element.AbsoluteY
+            console.log("thumb PointerMove", x - startX)
+            //event.preventDefault()
+            //event.stopPropagation()
+            //let offset = 
+
         }
-        thumb.Events.MouseUp = () => {
-            thumb.Events.MouseMove = undefined
+        thumb.Events.PointerUp = () => {
+            thumb.Events.PointerUp = undefined
+            thumb.Events.PointerMove = undefined
         }
+        return false
     }
+
+
 
 
     /*new Reaction(() => {
@@ -112,7 +133,7 @@ function Slider(element) {
     })*/
 
 
-    new Reaction(() => {
+    /*new Reaction(() => {
         element.input = element.children[0]
         //element.input.value = element.Value
 
@@ -122,7 +143,7 @@ function Slider(element) {
             element.ValueActual = this.valueAsNumber
             //d.end()
         }
-    })
+    })*/
 
     /*new Reaction(() => {
         element.input.style.width = element.Width+"px"

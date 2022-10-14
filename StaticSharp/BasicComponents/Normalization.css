@@ -14,7 +14,7 @@ body {
     //display: flex;
     //flex-direction: column;
     //background-color: chartreuse;
-    white-space: pre-wrap;
+    white-space: pre-line;
     line-height: 1.5;
     touch-action: none;
 }
@@ -46,9 +46,8 @@ body {
     //top: -50px;
 }*/
 
-scrolllayout {
-    touch-action: manipulation;
-}
+
+
 
 * {
     scrollbar-width: none;
@@ -67,7 +66,7 @@ head {
     display: block;
     overflow-x: visible;
     overflow-y: visible;
-    z-index: inherit;
+    //z-index: inherit;
     position: absolute;
     //position: inherit;
     margin: 0;

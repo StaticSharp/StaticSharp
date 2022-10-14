@@ -68,11 +68,7 @@ function Block(element) {
         Width: () => First(element.LayoutWidth, element.InternalWidth),
         Height: () => First(element.LayoutHeight, element.InternalHeight),
 
-        ScrollX: undefined,
-        ScrollY: undefined,
-
-        ScrollXActual: 0,
-        ScrollYActual: 0,
+        
         
     }
 
@@ -119,12 +115,7 @@ function Block(element) {
     element.Events.MouseLeave = () => element.Hover = false
 
 
-    element.Events.Scroll = () => {
-        let d = Reaction.beginDeferred()
-        element.ScrollXActual = element.scrollLeft
-        element.ScrollYActual = element.scrollTop
-        d.end()
-    }
+    
 
 
 }

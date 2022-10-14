@@ -73,14 +73,16 @@ namespace StaticSharp {
 
                 {"RightSideBarIcon" ,RightSideBarIcon},
                 {"RightSideBar" ,RightSideBar},
-                {"Content", new Column {
-                    Children = {
-                        { "TopBar", TopBar },
-                        Content,
-                        new Space(),
-                        Footer
+                {"Content", new ScrollLayout {
+                    Content = new Column {
+                        Children = {
+                            { "TopBar", TopBar },
+                            Content,
+                            new Space(),
+                            Footer
+                        }
                     }
-                } }
+                }}
             }.GenerateHtmlAsync(context);
 
 
