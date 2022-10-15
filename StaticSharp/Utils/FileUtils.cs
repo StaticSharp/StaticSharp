@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace StaticSharp.Gears {
+
     public static class FileUtils {
 
         public static string ReadAllText(string path) {

@@ -50,6 +50,31 @@ function Paragraph(element) {
     })
 
     new Reaction(() => {
+        let content = element.children[0]
+        /*
+        Left,
+        Center,
+        Right,
+        Justify,
+        JustifyIncludingLastLine
+         */
+        
+
+        if (element.TextAlignmentHorizontal == "JustifyIncludingLastLine") {
+            content.style.textAlign = "justify"
+            content.style.textAlignLast = "justify"
+        } else {
+            content.style.textAlignLast = ""
+            if (element.TextAlignmentHorizontal === undefined) {
+                content.style.textAlign = ""
+            } else {
+                content.style.textAlign = element.TextAlignmentHorizontal.toLowerCase()
+            }
+        }
+    })
+
+
+    new Reaction(() => {
         //console.log("element.HierarchyFontSize", element.HierarchyFontSize, element)
         //console.log("element.Modifier", element, element.Modifier)
         //console.log("element.Modifier.HierarchyFontSize", element, element.Modifier.HierarchyFontSize)
@@ -86,9 +111,8 @@ function Paragraph(element) {
             return
         }
         
-        //content.style.width = Sum(element.style.width, -element.PaddingLeft, -element.PaddingRight) 
-        //console.log("element.style.width", element.style.width + 1000, element)
 
+        content.style.width = ToCssSize(Sum(element.Width, -element.PaddingLeft, -element.PaddingRight))
 
         var rect = content.getBoundingClientRect()
         element.InternalHeight = Sum(rect.height, element.PaddingTop, element.PaddingBottom)

@@ -68,11 +68,6 @@ function ScrollLayout(element) {
         Width: () => element.ScrollBarThickness,        
         Height: () => verticalThumb.ThumbTravel * verticalThumb.ThumbSizeScale,
     }
-
-    /*verticalThumb.Events.MouseDown = () => {
-        console.log("mouseDown")
-    }*/
-
     
 
     let horizontalThumb = Create(element, Thumb)
@@ -95,46 +90,39 @@ function ScrollLayout(element) {
     })
 
 
-    //element.style.overflow = "hidden"
-
     let scrollable = document.createElement("scrollable")
     element.appendChild(scrollable)
+
     scrollable.style.touchAction = "manipulation"
     scrollable.style.overflow = "auto"
     scrollable.style.outline = "0.1px solid #f00"
     scrollable.style.width = "100%"
     scrollable.style.height = "100%"
 
+
+    new Reaction(() => {
+        let left = CalcOffset(element, child, "Left")
+        let right = CalcOffset(element, child, "Right")
+        let top = CalcOffset(element, child, "Top")
+        let bottom = CalcOffset(element, child, "Bottom")
+
+    })
+
+
     scrollable.Events.Scroll = () => {
-        //console.log(scrollable.scrollLeft, scrollable.scrollTop, verticalThumb.ThumbTravel, element.Height)
         let d = Reaction.beginDeferred()
         element.ScrollXActual = scrollable.scrollLeft
         element.ScrollYActual = scrollable.scrollTop
         d.end()
     }
 
-    /*scrolllayout {
-    touch-action: manipulation;
-    overflow-x: scroll;
-    overflow-y: scroll;
-}
-*/
-
-    /*new Reaction(() => {
-        console.log("scroll", element.ScrollXActual)
-    })*/
 
     OnChanged(
         () => element.Content,
         (p, c) => {
-            if (c) {
-
-                
+            if (c) {                
                 scrollable.appendChild(c)
-                
 
-
-                //console.log(c.InternalWidth,c)
                 c.LayoutWidth = () => Max(c.InternalWidth, element.Width)
                 c.LayoutHeight = () => Max(c.InternalHeight, element.Height)
             }

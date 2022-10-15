@@ -7,9 +7,36 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
+    public enum TextAlignmentHorizontal { 
+        Left,
+        Center,
+        Right,
+        Justify,
+        JustifyIncludingLastLine
+    }
+
+
+    namespace Js {
+        public class Paragraph : Block {
+            public TextAlignmentHorizontal TextAlignmentHorizontal => NotEvaluatableValue<TextAlignmentHorizontal>();
+
+        }
+    }
+
+
+
+    namespace Gears {
+        public class ParagraphBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
+            public Binding<TextAlignmentHorizontal> TextAlignmentHorizontal { set { Apply(value); } }
+        }
+    }
+
+            //text-align
+
+
     [ConstructorJs]
-    
-    public class Paragraph : Block {
+    [Mix(typeof(ParagraphBindings<Js.Paragraph>))]
+    public partial class Paragraph : Block {
         protected override string TagName => "paragraph";
         //protected List<KeyValuePair<string?, IInline>> children { get; } = new();
         public Inlines Inlines { get; } = new();

@@ -4,17 +4,13 @@ html {
 }
 
 body {
+    display: block;
     position: absolute;
     overflow-x: hidden;
     overflow-y: hidden;
     visibility: hidden;
-    //position: relative;
-    //top: 0;
-    //min-height: 100vh;
-    //display: flex;
-    //flex-direction: column;
-    //background-color: chartreuse;
-    white-space: pre-line;
+
+    white-space: normal;
     line-height: 1.5;
     touch-action: none;
 }
@@ -62,8 +58,9 @@ head {
 }
 
 * {
+    tab-size: 4;
     touch-action: inherit;
-    display: block;
+    display: inherit;
     overflow-x: visible;
     overflow-y: visible;
     //z-index: inherit;
@@ -73,6 +70,8 @@ head {
     visibility: inherit;
     margin-block-start: 0;
     margin-block-end: 0;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
     line-height: inherit;
     text-decoration-color: inherit;
     color: inherit;
@@ -87,9 +86,13 @@ head {
     white-space: inherit;
 }
 
+p {
+    white-space: break-spaces;
+}
 p * {
     position: static;
-
+    display: inline;
+    
 }
 
 

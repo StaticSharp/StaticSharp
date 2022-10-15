@@ -41,7 +41,7 @@ namespace StaticSharp {
                     if (Expression != null) {
                         return new BindingScriptifier(Expression, new FinalJs()).Eval();
                     }
-                    return Static.ObjectToJsValue(Value);
+                    return CSValueToJSValueConverter.ObjectToJsValue(Value);
                 }
             }
 

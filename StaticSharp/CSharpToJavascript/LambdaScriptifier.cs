@@ -54,7 +54,7 @@ public class LambdaScriptifier {
             var result = Stringify(expression);
             return result;
         } else {
-            return Static.ObjectToJsValue(value);
+            return CSValueToJSValueConverter.ObjectToJsValue(value);
         }
 
     }

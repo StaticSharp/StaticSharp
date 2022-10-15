@@ -40,7 +40,7 @@ namespace StaticSharp {
 
     [ConstructorJs]
     public abstract class Hierarchical : Reactive {
-        protected virtual string TagName => GetType().Name;        
+        protected virtual string TagName => CaseUtils.CamelToKebab(GetType().Name);        
         
         protected Hierarchical(Hierarchical other,
             string callerFilePath,

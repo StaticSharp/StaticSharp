@@ -11,6 +11,25 @@ namespace StaticSharpDemo.Root.Components {
 
     public partial class ComponentPage : Material {
 
+        public override string Title {
+            get {
+                var result = GetType().Namespace;
+                result = result[(result.LastIndexOf('.') + 1)..];
+
+                var suffix = "Component";
+                if (result.EndsWith(suffix)) {
+                    result = result.Remove(result.Length - suffix.Length);
+                }
+
+                result = StaticSharp.Gears.CaseUtils.CamelCaseRegex.Replace(result, match => {
+                    if (match.Index == 0) return match.Value;
+                    return " "+match.Value;                   
+                    });                
+
+                return result;
+            }
+        }
+
 
         Paragraph MenuItem(ITypedRepresentativeProvider<Page> node, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
             return new Paragraph(node.Representative.Title, callerFilePath, callerLineNumber) {

@@ -1,5 +1,5 @@
 
-function CalcLeft(container, child) {
+/*function CalcLeft(container, child) {
     if (container.PaddingLeft != undefined) {
         return Math.max(container.PaddingLeft, First(child.MarginLeft,0))
     }
@@ -7,7 +7,7 @@ function CalcLeft(container, child) {
         return First(child.MarginLeft,0)
     }
     return Math.max(child.MarginLeft - container.MarginLeft, 0)
-}
+}*/
 
 function CalcOffset(container, child, sideName) {
     let paddingName = "Padding" + sideName

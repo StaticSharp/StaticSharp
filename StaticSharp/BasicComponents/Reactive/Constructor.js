@@ -27,9 +27,17 @@ function Constructor() {
     return element;
 }
 
+function CamelToKebab(value) {
+    return value.replace(
+        /[A-Z]+(?![a-z])|[A-Z]/g,
+        (substring, offset) => (offset ? "-" : "") + substring.toLowerCase()
+    )
+}
+
+
 function Create(parent, ...constructors) {
     let primary = constructors[0]
-    let tagName = primary.name.toLowerCase()
+    let tagName = CamelToKebab(primary.name)
     
     let element = document.createElement(tagName)
     parent.appendChild(element)
