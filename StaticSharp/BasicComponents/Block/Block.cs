@@ -149,7 +149,7 @@ namespace StaticSharp {
             return _this;
         }
 
-        public static T InheritPaddings<T>(this T _this) where T : Block {
+        public static T InheritHorizontalPaddings<T>(this T _this) where T : Block {
             _this.PaddingLeft = new(e => e.ParentBlock.PaddingLeft);
             _this.PaddingRight = new(e => e.ParentBlock.PaddingRight);
             return _this;

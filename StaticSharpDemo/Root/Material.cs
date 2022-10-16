@@ -148,7 +148,7 @@ namespace StaticSharpDemo.Root {
                 })
 
             }
-        }.FillWidth().InheritPaddings();
+        }.FillWidth().InheritHorizontalPaddings();
 
 
 

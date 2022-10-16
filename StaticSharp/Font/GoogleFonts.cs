@@ -34,9 +34,13 @@ namespace StaticSharp.Gears {
         }
 
         public static string MakeCssUrl(string fontFamily, FontStyle fontStyle, string text = "") {
+
+  
             var result = $"{UrlPrefix}?family={FormatFontFamily(fontFamily)}:ital,wght@{(fontStyle.Italic ? 1 : 0)},{(int)fontStyle.Weight}";
             if (!string.IsNullOrEmpty(text)) {
-                result = result + "&text=" + text;
+                var escapedText = Uri.EscapeDataString(text);
+
+                result = result + "&text=" + escapedText;
             }
             return result;
         }

@@ -53,13 +53,26 @@ function Hierarchical(element) {
 
     element.Child = function (id) {
         let i = element.FirstChild
-        while (i) {
-            if (i.id == id) {
-                return i
+        console.warn(typeof id, id)
+        
+        if (typeof id === "number") { 
+            console.warn("element.FirstChild",element.FirstChild)
+            for (let i = 0; i < id; i++) {
+                
+                i = i.NextSibling
+                console.warn(i)
             }
-            i = i.NextSibling
+
+        } else {
+            while (i) {
+                if (i.id == id) {
+                    return i
+                }
+                i = i.NextSibling
+            }
         }
         //console.warn(`element ${element.tagName} do not have child "${id}"`)
+        return i
     }
 
 

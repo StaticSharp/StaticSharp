@@ -20,6 +20,9 @@ namespace StaticSharp {
             public T Sibling<T>(string id) where T :  new() => NotEvaluatableObject<T>();
 
 
+            public T Child<T>(int id) where T : new() => NotEvaluatableObject<T>();
+
+
             public Hierarchical Child(string id) => NotEvaluatableObject<Hierarchical>();
             public T Child<T>(string id) where T :  new() => NotEvaluatableObject<T>();
 

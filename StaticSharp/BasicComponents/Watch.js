@@ -50,6 +50,7 @@ document.addEventListener("keyup", () => {
 document.addEventListener("mousemove", () => {
     var x = event.clientX
     var y = event.clientY
+
     developerMode.ElementMouseIsOver = document.elementsFromPoint(x, y).find(x=>x.isBlock);
     developerMode.CtrlKeyPressed = event.ctrlKey
 });

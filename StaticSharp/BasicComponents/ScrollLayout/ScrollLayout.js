@@ -2,7 +2,7 @@
 function Thumb(element) {
     Block(element)
     element.Reactive = {
-        BackgroundColor: new Color("#000"),
+        BackgroundColor: () => element.Parent.ForegroundColor,
         
         Radius: () => Min(element.Width, element.Height) / 2,
         Depth: 1,
@@ -44,6 +44,19 @@ function ScrollLayout(element) {
         InternalHeight: () => element.Content.InternalHeight,
         Content: () => element.Child("Content"),
 
+        MarginLeft: () => (element.PaddingLeft!=undefined) ? 0 : element.Content.MarginLeft,
+        MarginTop: () => (element.PaddingTop != undefined) ? 0 : element.Content.MarginTop,
+        MarginRight: () => (element.PaddingRight != undefined) ? 0 : element.Content.MarginRight,
+        MarginBottom: () => (element.PaddingBottom != undefined) ? 0 : element.Content.MarginBottom,
+
+        LeftOffset: () => CalcOffset(element, element.Content, "Left"),
+        RightOffset: () => CalcOffset(element, element.Content, "Right"),
+        TopOffset: () => CalcOffset(element, element.Content, "Top"),
+        BottomOffset: () => CalcOffset(element, element.Content, "Bottom"),
+
+        ContentAreaWidth: () => element.Width - element.LeftOffset - element.RightOffset,
+        ContentAreaHeight: () => element.Height - element.TopOffset - element.BottomOffset,
+
         ScrollX: undefined,
         ScrollY: undefined,
 
@@ -62,7 +75,7 @@ function ScrollLayout(element) {
     verticalThumb.Reactive = {
         ThumbTravel: () => element.Height - 2 * element.ScrollBarMargin,
         ThumbPositionScale: () => verticalThumb.ThumbTravel / element.Content.InternalHeight,
-        ThumbSizeScale: () => element.Height / element.Content.InternalHeight, 
+        ThumbSizeScale: () => element.ContentAreaHeight / element.Content.InternalHeight, 
         X: () => element.Width - verticalThumb.Width - element.ScrollBarMargin,
         Y: () => element.ScrollBarMargin + element.ScrollYActual * verticalThumb.ThumbPositionScale,
         Width: () => element.ScrollBarThickness,        
@@ -74,7 +87,7 @@ function ScrollLayout(element) {
     horizontalThumb.Reactive = {
         ThumbTravel: () => element.Width - 2 * element.ScrollBarMargin,
         ThumbPositionScale: () => horizontalThumb.ThumbTravel / element.Content.Width,
-        ThumbSizeScale: () => element.Width / element.Content.Width,        
+        ThumbSizeScale: () => element.ContentAreaWidth / element.Content.Width,        
         X: () => element.ScrollBarMargin + element.ScrollXActual * horizontalThumb.ThumbPositionScale,
         Y: () => element.Height - horizontalThumb.Height - element.ScrollBarMargin,
         Width: () => horizontalThumb.ThumbTravel * horizontalThumb.ThumbSizeScale,
@@ -95,18 +108,15 @@ function ScrollLayout(element) {
 
     scrollable.style.touchAction = "manipulation"
     scrollable.style.overflow = "auto"
-    scrollable.style.outline = "0.1px solid #f00"
-    scrollable.style.width = "100%"
-    scrollable.style.height = "100%"
-
-
+    //scrollable.style.outline = "0.1px solid #f00"
+    
     new Reaction(() => {
-        let left = CalcOffset(element, child, "Left")
-        let right = CalcOffset(element, child, "Right")
-        let top = CalcOffset(element, child, "Top")
-        let bottom = CalcOffset(element, child, "Bottom")
-
+        scrollable.style.left = ToCssSize(element.LeftOffset)
+        scrollable.style.top = ToCssSize(element.TopOffset)
+        scrollable.style.width = ToCssSize(element.ContentAreaWidth)
+        scrollable.style.height = ToCssSize(element.ContentAreaHeight)
     })
+
 
 
     scrollable.Events.Scroll = () => {
@@ -122,9 +132,10 @@ function ScrollLayout(element) {
         (p, c) => {
             if (c) {                
                 scrollable.appendChild(c)
+                
 
-                c.LayoutWidth = () => Max(c.InternalWidth, element.Width)
-                c.LayoutHeight = () => Max(c.InternalHeight, element.Height)
+                c.LayoutWidth = () => Max(c.InternalWidth, element.ContentAreaWidth)
+                c.LayoutHeight = () => Max(c.InternalHeight, element.ContentAreaHeight)
             }
 
             /*if (p) {

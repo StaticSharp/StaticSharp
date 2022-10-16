@@ -82,28 +82,7 @@ function Block(element) {
 
     
 
-    new Reaction(() => {
-        let l = element.PaddingLeft
-        let r = element.PaddingRight
-        let w = element.Width
-        if (l + r > w) {
-            let m = w / (l + r)
-            l *= m
-            r *= m
-        }
-        element.style.paddingLeft = ToCssSize(l)
-        element.style.paddingRight = ToCssSize(r)
-    })
-    new Reaction(() => {
-        
-    })
-
-    new Reaction(() => {
-        element.style.paddingTop = ToCssSize(element.PaddingTop)
-    })
-    new Reaction(() => {
-        element.style.paddingBottom = ToCssSize(element.PaddingBottom)
-    })
+    
 
 
 

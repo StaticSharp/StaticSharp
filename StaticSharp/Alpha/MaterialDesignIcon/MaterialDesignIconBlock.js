@@ -31,6 +31,8 @@ function MaterialDesignIconBlock(element) {
             content.style.height = ""
         } else {
             content.style.display = ""
+            content.style.left = ToCssSize(element.PaddingLeft)
+            content.style.top = ToCssSize(element.PaddingTop)
             content.style.width = ToCssSize(w)
             content.style.height = ToCssSize(h)
         }

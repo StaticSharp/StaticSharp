@@ -109,7 +109,7 @@ namespace StaticSharpDemo.Root {
                     }
                 }
 
-            }.FillWidth().InheritPaddings(),
+            }.FillWidth().InheritHorizontalPaddings(),
 
             new Flipper(){
                 MarginLeft = new(e=>e.ParentBlock.MarginLeft),

@@ -15,14 +15,42 @@ function Paragraph(element) {
         MaxContentHeight: undefined,
         MinContentHeight: undefined,
 
+        PaddingLeft: () => (element.BackgroundColor != undefined) ? 10 : undefined,
+        PaddingRight: () => (element.BackgroundColor != undefined) ? 10 : undefined,
+        PaddingTop: () => (element.BackgroundColor != undefined) ? 8 : undefined,
+        PaddingBottom: () => (element.BackgroundColor != undefined) ? 8 : undefined,
+
+        MarginLeft: () => (element.BackgroundColor != undefined) ? 0 : 10,
+        MarginRight: () => (element.BackgroundColor != undefined) ? 0 : 10,
+        MarginTop: () => (element.BackgroundColor != undefined) ? 0 : 8,
+        MarginBottom: () => (element.BackgroundColor != undefined) ? 0 : 8,
 
     }
 
-    element.MarginLeft = 10
-    element.MarginRight = 10
+    /*new Reaction(() => {
+        console.log(element, element.Child(0))
+    })*/
 
-    element.MarginTop = 8
-    element.MarginBottom = 8
+
+    /*new Reaction(() => {
+        let l = element.PaddingLeft
+        let r = element.PaddingRight
+        let w = element.Width
+        if (l + r > w) {
+            let m = w / (l + r)
+            l *= m
+            r *= m
+        }
+        element.style.paddingLeft = ToCssSize(l)
+        element.style.paddingRight = ToCssSize(r)
+    })
+
+    new Reaction(() => {
+        element.style.paddingTop = ToCssSize(element.PaddingTop)
+    })
+    new Reaction(() => {
+        element.style.paddingBottom = ToCssSize(element.PaddingBottom)
+    })*/
 
 
     new Reaction(() => {
@@ -78,26 +106,36 @@ function Paragraph(element) {
         //console.log("element.HierarchyFontSize", element.HierarchyFontSize, element)
         //console.log("element.Modifier", element, element.Modifier)
         //console.log("element.Modifier.HierarchyFontSize", element, element.Modifier.HierarchyFontSize)
+        element.style.width = ToCssSize(element.Width)
 
         let content = element.children[0]
 
         content.style.transformOrigin = ""
         content.style.transform = ""
         content.style.width = ""
-        //console.log("element.Width", element.Parent, element)
-        element.style.width = element.Width + "px"
+        content.style.display = ""
+        content.style.left = ToCssSize(element.PaddingLeft)
+        content.style.top = ToCssSize(element.PaddingTop)
 
         let minContentWidthWithPaddings = Sum(element.MinContentWidth, element.PaddingLeft, element.PaddingRight)
 
         if (minContentWidthWithPaddings > element.Width) {
             //element.title = "element.MinContentWidth > element.Width"
 
-            content.style.width = "min-content"
-            content.style.transformOrigin = "top left"
+            
 
             let scale = Sum(element.Width, -element.PaddingLeft, -element.PaddingRight) / element.MinContentWidth
-            content.style.transform = `scale(${scale}, ${scale})`
-            element.InternalHeight = Sum(element.MaxContentHeight * scale, element.PaddingTop, element.PaddingBottom) 
+
+            if (scale > 0) {
+                content.style.width = "min-content"
+                content.style.transformOrigin = "top left"
+                content.style.transform = `scale(${scale}, ${scale})`
+                element.InternalHeight = Sum(element.MaxContentHeight * scale, element.PaddingTop, element.PaddingBottom)
+            } else {
+                content.style.display = "hidden"
+            }
+
+            
             return
         }
 

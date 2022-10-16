@@ -38,6 +38,59 @@
 
             "Long paragraph separated by tabs\tLong paragraph separated by tabs\tLong paragraph separated by tabs\tLong paragraph separated by tabs\tLong paragraph separated by tabs\t",
 
+            new Paragraph("""
+                If background color is set, margins are replaced by paddings.
+                Default buinding for MarginLeft is (element.BackgroundColor != undefined) ? 0 : 10,
+                Default buinding for PaddingLeft is (element.BackgroundColor != undefined) ? 10 : undefined
+                """){
+                BackgroundColor = Color.BlueViolet,
+            },
+            new Paragraph("""
+                Paddings = 30
+                """){
+                BackgroundColor = Color.Purple,
+                Paddings = 30
+            },
+
+            new Paragraph("""
+                LongWordScaling_LongWordScaling_LongWordScaling
+                """){
+                FontSize = 50,
+                BackgroundColor = Color.DeepPink,
+                Paddings = 20
+            },
+
+            new Paragraph("""
+                Huge_paddings
+                """){
+                FontSize = 50,
+                BackgroundColor = Color.LightPink,
+                PaddingsHorizontal = 300,
+                PaddingsVertical = 10
+            },
+
+            new Paragraph("""
+                .FillWidth()
+                """){
+                BackgroundColor = Color.RebeccaPurple,
+            }.FillWidth(),
+
+            new Paragraph("""
+                .FillWidth().InheritHorizontalPaddings()
+                """){
+                BackgroundColor = Color.MediumPurple,
+            }.FillWidth().InheritHorizontalPaddings(),
+
+            new Paragraph("""
+                PaddingLeft = new(e=>Js.Math.Max(e.ParentBlock.PaddingLeft, 20)),
+                PaddingRight = new(e=>Js.Math.Max(e.ParentBlock.PaddingRight, 20)),
+                Resize to see difference with previous
+                """){
+                PaddingLeft = new(e=>Js.Math.Max(e.ParentBlock.PaddingLeft, 10)),
+                PaddingRight = new(e=>Js.Math.Max(e.ParentBlock.PaddingRight, 10)),
+                BackgroundColor = Color.BlueViolet,
+            }.FillWidth()
+
         };
     }
 }

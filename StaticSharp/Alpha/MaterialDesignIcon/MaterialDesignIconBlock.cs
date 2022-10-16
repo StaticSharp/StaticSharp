@@ -22,7 +22,7 @@ namespace StaticSharp {
     public partial class MaterialDesignIconBlock : Block {
 
         MaterialDesignIcons.IconName Icon;
-        public MaterialDesignIconBlock(CheckboxBlock other, string callerFilePath, int callerLineNumber) : base(other, callerFilePath, callerLineNumber) { }
+        protected MaterialDesignIconBlock(MaterialDesignIconBlock other, string callerFilePath, int callerLineNumber) : base(other, callerFilePath, callerLineNumber) { }
         public MaterialDesignIconBlock(MaterialDesignIcons.IconName icon, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
             Icon = icon;
         }
