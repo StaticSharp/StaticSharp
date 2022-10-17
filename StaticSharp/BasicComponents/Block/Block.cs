@@ -113,7 +113,14 @@ namespace StaticSharp {
 
             await ModifyHtmlAsync(context, tag);
 
-            tag.Add(await Children.Select(x => x.Value.GenerateHtmlAsync(context, x.Key)).SequentialOrParallel());
+            foreach (var c in Children) {
+                var childTag = await c.Value.GenerateHtmlAsync(context, c.Key);
+                childTag["child"] = "";
+                tag.Add(childTag);
+            }
+
+
+            //tag.Add(await Children.Select(x => x.Value.GenerateHtmlAsync(context, x.Key)).SequentialOrParallel());
             
 
 

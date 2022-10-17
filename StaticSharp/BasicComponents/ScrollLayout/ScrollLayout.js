@@ -2,7 +2,7 @@
 function Thumb(element) {
     Block(element)
     element.Reactive = {
-        BackgroundColor: () => element.Parent.ForegroundColor,
+        BackgroundColor: () => element.Parent.HierarchyForegroundColor,
         
         Radius: () => Min(element.Width, element.Height) / 2,
         Depth: 1,

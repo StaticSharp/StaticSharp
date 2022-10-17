@@ -73,7 +73,7 @@ function PageSideMenus(element) {
 
     const minSwipeToOpen = 40
     const minSwipeToClose = 20
-    const swipeThreshold = 20
+    const swipeThreshold = 10
 
     let toggle = false
     element.Events.Click = () => {
@@ -147,8 +147,9 @@ function PageSideMenus(element) {
         
     }
     function horizontalTouchMove() {
+        if (!event.cancelable) return
         var touch = event.touches[0];
-        console.log("horizontalTouchMove", touch.clientX)
+        //console.log("horizontalTouchMove", event.path)
         let d = Reaction.beginDeferred()
         element.SwipeX = touch.clientX - startX
         element.SwipeY = touch.clientY - startY
@@ -177,6 +178,7 @@ function PageSideMenus(element) {
                     let deltaX = Math.abs(touch.clientX - startX)
                     //console.log("deltaX", deltaX, swipeThreshold)
                     if (deltaX > swipeThreshold) {
+                        event.preventDefault()
                         //console.log("horizontalTouchMove...")
                         element.Events.TouchMove = {
                             handler: horizontalTouchMove,

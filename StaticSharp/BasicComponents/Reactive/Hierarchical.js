@@ -1,9 +1,40 @@
+
+
+
+
+/*function E() {
+    Create(undefined, Page, (parent) => {
+        parent.TopBar = Create(parent, Paragraph)
+            .AddChild((parent) => {
+
+            })
+
+        parent.AddChild(
+            Create(parent, ScrollLayout, (parent) => {
+
+            })
+        )
+    })
+}*/
+
+
+
+
+
+
+
+
+
 function GetParentElementByPredicate(firstParentToCompare, predicate) {
     var p = firstParentToCompare
     while (p != undefined) {
         if (predicate(p)) {
+            
             return p
         } else {
+            /*if (p.tagName == "SCROLLABLE") {
+                console.error("SCROLLABLE", p.parentElement)
+            }*/
             p = p.parentElement
         }
     }
@@ -16,8 +47,6 @@ function Hierarchical(element) {
 
 
     element.isHierarchical = true
-
-
     
 
     element.Reactive = {
@@ -26,17 +55,41 @@ function Hierarchical(element) {
         NestingDepth: () => (element.IsRoot || element.overlaySign==1) ? 0 : (element.Parent.NestingDepth + 1),
 
         Root: () => element.Parent.Root,
-        Parent: () => GetParentElementByPredicate(element.parentElement, x => x.isHierarchical),
+        Parent: () => {
+            /*if (element.parentElement.tagName == "SCROLLABLE") {
+                let p = GetParentElementByPredicate(element.parentElement, x => x.isHierarchical)
+                console.log("element.parentElement", element.parentElement.tagName, p)
+            }*/
+            let v = GetParentElementByPredicate(element.parentElement, x => x.isHierarchical)
+            /*if (v.tagName == "SCROLLABLE") {
+                console.error("SCROLLABLE")
+            }*/
+            return v
+        },
         ParentBlock: () => GetParentElementByPredicate(element.Parent, x => x.isBlock),
         FirstChild: undefined,
         LastChild: undefined,
         NextSibling: undefined,
-        //ParentModifier: GetModifier(element.parentElement),
-        //Modifier: () => element.ParentModifier,
-
-
-
     }
+
+    if (element.Parent) {
+        if (element.dataset.assign) {
+            element.Parent[element.dataset.assign] = element
+
+        } else {
+            if (!element.Parent.FirstChild) {
+                element.Parent.FirstChild = element
+                element.Parent.LastChild = element
+            } else {
+                element.Parent.LastChild.NextSibling = element
+                element.Parent.LastChild = element
+            }
+        }
+    }
+
+    
+
+
 
     element.Children = {}
     element.Children[Symbol.iterator] = function* () {
@@ -53,12 +106,9 @@ function Hierarchical(element) {
 
     element.Child = function (id) {
         let i = element.FirstChild
-        console.warn(typeof id, id)
         
         if (typeof id === "number") { 
-            console.warn("element.FirstChild",element.FirstChild)
-            for (let i = 0; i < id; i++) {
-                
+            for (let i = 0; i < id; i++) {                
                 i = i.NextSibling
                 console.warn(i)
             }
@@ -76,16 +126,7 @@ function Hierarchical(element) {
     }
 
 
-    if (element.Parent) {
-
-        if (!element.Parent.FirstChild) {
-            element.Parent.FirstChild = element
-            element.Parent.LastChild = element
-        } else {
-            element.Parent.LastChild.NextSibling = element
-            element.Parent.LastChild = element
-        }
-    }
+    
  
 
 }

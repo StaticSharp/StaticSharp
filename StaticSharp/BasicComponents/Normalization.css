@@ -1,6 +1,10 @@
 html {
+    display: block;
+    position: absolute;
     overscroll-behavior-x: none;
     //overscroll-behavior: contain;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 body {

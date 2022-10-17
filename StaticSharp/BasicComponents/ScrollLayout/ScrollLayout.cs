@@ -8,6 +8,13 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
 
+    public class Scrollable : Hierarchical {
+        public Scrollable([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
+
+    }
+
+
+    //[RelatedStyle]
     [ConstructorJs]
     public class ScrollLayout : Block {
 
@@ -19,7 +26,11 @@ namespace StaticSharp {
         public ScrollLayout([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
 
         protected override async ValueTask ModifyHtmlAsync(Context context, Tag elementTag) {
-            elementTag.Add(await Content.GenerateHtmlAsync(context, "Content"));
+
+            var content = await Content.GenerateHtmlAsync(context, "Content");
+            //content["data-assign"] = "content";
+
+            elementTag.Add(content);
         }
 
     }

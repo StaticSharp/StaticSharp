@@ -65,25 +65,27 @@ namespace StaticSharp {
         
 
 
-        protected override async Task<Tag> GenerateChildrenHtmlAsync(Context context, Tag elementTag) {
+        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
 
-            return await new Blocks {
-                {"LeftSideBarIcon" ,LeftSideBarIcon},
-                {"LeftSideBar" ,LeftSideBar},
+            elementTag.Add(
+                await new Blocks {
+                    {"LeftSideBarIcon" ,LeftSideBarIcon},
+                    {"LeftSideBar" ,LeftSideBar},
 
-                {"RightSideBarIcon" ,RightSideBarIcon},
-                {"RightSideBar" ,RightSideBar},
-                {"Content", new ScrollLayout {
-                    Content = new Column {
-                        Children = {
-                            { "TopBar", TopBar },
-                            Content,
-                            new Space(),
-                            Footer
+                    {"RightSideBarIcon" ,RightSideBarIcon},
+                    {"RightSideBar" ,RightSideBar},
+                    {"Content", new ScrollLayout {
+                        Content = new Column {
+                            Children = {
+                                { "TopBar", TopBar },
+                                Content,
+                                new Space(),
+                                Footer
+                            }
                         }
-                    }
-                }}
-            }.GenerateHtmlAsync(context);
+                    }}
+                }.GenerateHtmlAsync(context)
+                );
 
 
 

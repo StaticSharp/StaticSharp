@@ -108,6 +108,8 @@ function Page(element) {
         FontSize: 16,
         HierarchyFontSize: () => element.FontSize,
 
+        BackgroundColor: new Color("#fff"),
+
         HierarchyBackgroundColor: () => element.BackgroundColor,
         HierarchyForegroundColor: () => element.ForegroundColor,
 

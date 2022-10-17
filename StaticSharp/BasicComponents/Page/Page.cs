@@ -132,12 +132,14 @@ namespace StaticSharp {
 
             tag.Add(await CreateConstructorScriptAsync(context));
 
-            tag.Add(await GenerateChildrenHtmlAsync(context, tag));
+            await ModifyHtmlAsync(context, tag);
+
+            //tag.Add(await GenerateChildrenHtmlAsync(context, tag));
 
             return tag;
         }
 
-        protected abstract Task<Tag> GenerateChildrenHtmlAsync(Context context, Tag elementTag);
+        protected abstract Task ModifyHtmlAsync(Context context, Tag elementTag);
 
         public async Task<string> GetPlaneTextAsync(Context context) {
             return Title;

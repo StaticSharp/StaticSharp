@@ -12,10 +12,27 @@ function BaseModifier(element) {
         BackgroundColor: undefined,
         HierarchyBackgroundColor: () => element.BackgroundColor || element.Parent.HierarchyBackgroundColor,
 
-        ForegroundColor: () => {            
-            if (element.BackgroundColor == undefined)
-                return undefined
-            return element.BackgroundColor.contrastColor()
+        ForegroundColor: () => {   
+
+
+            /*if (element.parentElement.tagName == "SCROLLABLE") {
+                let p = GetParentElementByPredicate(element.parentElement, x => x.isHierarchical)
+                console.log("element.parentElement", element.parentElement.tagName, p)
+            }*/
+
+            if (element.HierarchyBackgroundColor == undefined) {
+                if (element.Parent.tagName == "SCROLLABLE") {
+                    let p = GetParentElementByPredicate(element.parentElement, x => x.isHierarchical)
+                    console.error("SCROLLABLE", element)
+
+                }
+
+                //console.log("element.HierarchyBackgroundColor == undefined", element, element.parentElement.tagName, element.Parent, element.Parent.BackgroundColor)
+                return
+            }
+           
+
+            return element.HierarchyBackgroundColor.contrastColor()
         },
         HierarchyForegroundColor: () => element.ForegroundColor || element.Parent.HierarchyForegroundColor,
 

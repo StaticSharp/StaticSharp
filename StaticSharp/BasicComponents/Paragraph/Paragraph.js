@@ -132,7 +132,8 @@ function Paragraph(element) {
                 content.style.transform = `scale(${scale}, ${scale})`
                 element.InternalHeight = Sum(element.MaxContentHeight * scale, element.PaddingTop, element.PaddingBottom)
             } else {
-                content.style.display = "hidden"
+                content.style.display = "none"
+                element.InternalHeight = Sum(element.PaddingTop, element.PaddingBottom)
             }
 
             

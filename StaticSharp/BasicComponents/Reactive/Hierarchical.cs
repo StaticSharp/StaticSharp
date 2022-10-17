@@ -49,8 +49,9 @@ namespace StaticSharp {
             string callerFilePath,
             int callerLineNumber) : base(other, callerFilePath, callerLineNumber) {            
         }
-        public Hierarchical(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { } 
-        
+        public Hierarchical(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
+
+
 
     }
 
