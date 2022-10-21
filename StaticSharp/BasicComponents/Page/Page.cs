@@ -116,7 +116,7 @@ namespace StaticSharp {
             return document.GetHtml();
         }
 
-
+        
 
         public virtual async Task<Tag> GenerateHtmlAsync(Context context, string? id = null) {
 
@@ -130,6 +130,11 @@ namespace StaticSharp {
 
             AddSourceCodeNavigationData(tag, context);
 
+            /*tag.Add(new Tag("script") {
+
+            });*/
+
+
             tag.Add(await CreateConstructorScriptAsync(context));
 
             await ModifyHtmlAsync(context, tag);
@@ -138,6 +143,10 @@ namespace StaticSharp {
 
             return tag;
         }
+
+
+
+
 
         protected abstract Task ModifyHtmlAsync(Context context, Tag elementTag);
 

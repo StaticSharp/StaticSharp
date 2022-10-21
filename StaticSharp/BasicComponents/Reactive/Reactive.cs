@@ -111,7 +111,7 @@ namespace StaticSharp {
             //public abstract Task<Tag> GenerateHtmlAsync(Context context);
 
 
-            string[] FindJsConstructorsNames() {
+            protected string[] FindJsConstructorsNames() {
                 foreach (var i in GetBaseTypes()) {
                     var attributes = i.GetCustomAttributes<ConstructorJsAttribute>(false);
                     if (attributes.Any()) {
@@ -163,7 +163,7 @@ namespace StaticSharp {
 
 
             public async Task<Tag> CreateConstructorScriptAsync(Context context) {
-                var sripts = new List<string>();
+                //var sripts = new List<string>();
 
 
                 var jsConstructorsNames = FindJsConstructorsNames();

@@ -67,6 +67,9 @@ namespace StaticSharp {
 
         protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
 
+
+
+
             elementTag.Add(
                 await new Blocks {
                     {"LeftSideBarIcon" ,LeftSideBarIcon},

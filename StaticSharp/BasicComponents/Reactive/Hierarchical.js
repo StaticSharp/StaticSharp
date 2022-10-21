@@ -2,12 +2,42 @@
 
 
 
-/*function E() {
+function CreatePage() {
+    let result = CreateInplace(document.body,Page)
+    result.Content = function (parent) {
+        let result = Create(ScrollLayout)
+        result.Parent = parent
+        result.Content = function (parent) {
+            let result = Create(parent, Column)
+            return result
+        }(result)
+
+        result.AddChild()
+
+        return result
+    }(result)
+
     Create(undefined, Page, (parent) => {
         parent.TopBar = Create(parent, Paragraph)
             .AddChild((parent) => {
 
             })
+
+        parent.Content = function(parent){
+            let result = Create(parent, ScrollLayout)
+            result.Content = function (parent) {
+                let result = Create(parent, Column)
+                return result
+            }(result)
+        }()
+
+
+        parent.Content = Create(parent, ScrollLayout).Modify((p) => {
+            p.Content =
+                Create(p, Column, (p) => {
+
+                })
+        })
 
         parent.AddChild(
             Create(parent, ScrollLayout, (parent) => {
@@ -15,7 +45,7 @@
             })
         )
     })
-}*/
+}
 
 
 

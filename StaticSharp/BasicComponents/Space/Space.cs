@@ -1,4 +1,5 @@
-﻿using StaticSharp.Gears;
+﻿using Scopes;
+using StaticSharp.Gears;
 using StaticSharp.Html;
 using System;
 using System.Collections.Generic;
@@ -46,6 +47,10 @@ namespace StaticSharp {
             };
             AddSourceCodeNavigationData(tag,context);
             return tag;
+        }
+
+        public async Task<Node> GenerateConstructor(Context context, string? id) {
+            return "";
         }
     }
 }
