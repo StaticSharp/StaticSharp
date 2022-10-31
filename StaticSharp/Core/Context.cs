@@ -14,7 +14,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
-
     public struct Context {
 
         public bool DeveloperMode { get; init; }

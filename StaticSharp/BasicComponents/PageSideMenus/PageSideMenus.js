@@ -94,17 +94,17 @@ function PageSideMenus(element) {
                 element.LeftSideBar ? element.LeftSideBar.Width : 0,
                 element.RightSideBar ? element.RightSideBar.Width : 0),
 
-        Content: () => element.Child("Content"),
+        //Content: () => element.Child("Content"),
 
         SideBarOpen: 0, //-1 left , 1 right
 
-        LeftSideBar: () => element.Child("LeftSideBar"),
-        LeftSideBarIcon: () => element.Child("LeftSideBarIcon"),
+        //LeftSideBar: () => element.LeftSideBar,
+        //LeftSideBarIcon: () => element.LeftSideBarIcon,
 
-        RightSideBar: () => element.Child("RightSideBar"),
-        RightSideBarIcon: () => element.Child("RightSideBarIcon"),
+        //RightSideBar: () => element.RightSideBar,
+        //RightSideBarIcon: () => element.RightSideBarIcon,
 
-        TopBar: () => element.Child("Content").Content.Child("TopBar"),
+        TopBar: () => element.Content.Content.TopBar,
 
         Footer: undefined,
 

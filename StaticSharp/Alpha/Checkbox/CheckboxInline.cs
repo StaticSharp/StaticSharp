@@ -24,29 +24,33 @@ namespace StaticSharp {
 
         public Inlines Label { get; set; } = new();
 
-        protected override async Task<Tag?> GenerateInlineHtmlInternalAsync(Context context, Tag elementTag, string? format) {
+        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
 
-            var input = new Tag("input") {
+            var result = new Tag("input") {
                 ["type"] = "checkbox"
             };
 
 
             if (Label.Count != 0) {
                 var luid = context.GetUniqueId();
-                input.Id = luid;
+                result.Id = luid;
 
                 var label = new Tag("label") { ["for"] = luid };
                 foreach (var i in Label) {
-                    label.Add(await i.Value.GenerateInlineHtmlAsync(context, i.Id, i.Format));
+                    var child = await i.Value.GenerateInlineHtmlAsync(context);
+                    if (i.Modifier!=null)
+                        await i.Modifier.Apply(child);
+                    label.Add(child);
                 }
 
-                return new Tag() {
-                    input,
+                result = new Tag() {
+                    result,
                     label
                 };
             }
 
-            return input;
+            elementTag.Add(result);
+
 
             /*if (string.IsNullOrEmpty(format)) {
                 return Task.FromResult<Tag?>(new Tag("input") {

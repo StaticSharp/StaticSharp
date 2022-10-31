@@ -25,8 +25,6 @@ namespace StaticSharp {
     [ConstructorJs]
     public sealed class Flipper : Block, IBlock {
 
-        protected override string TagName => "flipper";
-
         public Block First { get; init; }
         public Block Second { get; init; }
 
@@ -34,8 +32,12 @@ namespace StaticSharp {
             : base(callerFilePath, callerLineNumber) { }
 
         protected override async ValueTask ModifyHtmlAsync(Context context, Tag elementTag) {
-            elementTag.Add(await First.GenerateHtmlAsync(context, "first"));
-            elementTag.Add(await Second.GenerateHtmlAsync(context, "second"));            
+            elementTag.Add(                
+                (await First.GenerateHtmlAsync(context)).AssignParentProperty("first")
+            );
+            elementTag.Add(
+                (await Second.GenerateHtmlAsync(context)).AssignParentProperty("second")
+            );
         }
     }
 }

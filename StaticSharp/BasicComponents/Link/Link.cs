@@ -4,7 +4,7 @@ namespace StaticSharp {
 
 
     namespace Js {
-        public class Link : Object {
+        public class Link {
             public string HRef => NotEvaluatableValue<string>();
             public bool NewTab => NotEvaluatableValue<bool>();
         }

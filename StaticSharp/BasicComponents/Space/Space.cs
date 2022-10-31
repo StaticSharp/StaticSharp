@@ -40,17 +40,18 @@ namespace StaticSharp {
             if (after != 1) After = after;
         }
 
-        public async Task<Tag> GenerateHtmlAsync(Context context, string? id = null) {
+        public async Task<Tag> GenerateHtmlAsync(Context context) {
             await AddRequiredInclues(context);
-            var tag = new Tag(TagName, id) {
+            var tag = new Tag(TagName) {
                 await CreateConstructorScriptAsync(context)
             };
             AddSourceCodeNavigationData(tag,context);
+
             return tag;
         }
 
-        public async Task<Node> GenerateConstructor(Context context, string? id) {
+        /*public async Task<Node> GenerateConstructor(Context context, string? id) {
             return "";
-        }
+        }*/
     }
 }

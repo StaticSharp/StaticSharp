@@ -99,19 +99,18 @@ namespace StaticSharp {
             }
         }*/
 
-        struct C {
-            public List<int> l = new();
-            public Ref<int> i = new(0);
-            public C() {
-            }
-        }
+
 
 
         protected override async ValueTask ModifyHtmlAsync(Context context, Tag elementTag) {
 
             var p = new Tag("p");
             foreach (var i in Inlines) {
-                p.Add(await i.Value.GenerateInlineHtmlAsync(context, i.Id, i.Format));
+                var child = await i.Value.GenerateInlineHtmlAsync(context);
+                if (i.Modifier != null)
+                    await i.Modifier.Apply(child);
+                //child.AddAsChild();
+                p.Add(child);
             }
             elementTag.Add(p);
 

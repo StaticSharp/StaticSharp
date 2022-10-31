@@ -37,7 +37,7 @@ namespace StaticSharp {
             Scale = other.Scale;
         }
 
-        protected override Task<Tag?> GenerateInlineHtmlInternalAsync(Context context, Tag elementTag, string? format) {
+        protected override Task ModifyHtmlAsync(Context context, Tag elementTag) {
             
             var code = MaterialDesignIcon.GetSvgTag(Icon, out var width, out var height);
 
@@ -46,11 +46,10 @@ namespace StaticSharp {
             if (Scale != 1) {
                 elementTag["data-scale"] = Scale;
             }
-            return Task.FromResult<Tag?>(
-                new Tag(){
-                    new PureHtmlNode(code)
-                }
-            );
+
+            elementTag.Add(new PureHtmlNode(code));
+
+            return Task.CompletedTask;
         }
 
 

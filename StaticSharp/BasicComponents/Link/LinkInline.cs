@@ -46,10 +46,20 @@ namespace StaticSharp {
                 yield return new("HRef", $"\"{url}\"");
             }
         }
-        protected override async Task<Tag?> GenerateInlineHtmlInternalAsync(Context context, Tag elementTag, string? format) {
-            return new Tag() {
+        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
+            
+            foreach (var i in Children) {
+                var child = await i.Value.GenerateInlineHtmlAsync(context);
+                if (i.Modifier != null)
+                    await i.Modifier.Apply(child);
+                //child.AddAsChild();
+                elementTag.Add(child);
+            }
+
+
+            /*return new Tag() {
                 await Children.Select(x=> x.Value.GenerateInlineHtmlAsync(context, x.Id, x.Format)).SequentialOrParallel(),
-            };
+            };*/
         }
     }
 

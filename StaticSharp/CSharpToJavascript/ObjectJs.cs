@@ -4,10 +4,14 @@ using System;
 namespace StaticSharp {
     namespace Js {
 
-
         public class Object {
+            //public dynamic this[string propertyName] => NotEvaluatableObject<dynamic>();
 
+            [ConvertToJs("{0}[{1}]")]
+            public Object Property(string name) => NotEvaluatableObject<Object>();            
             
+            [ConvertToJs("{0}[{1}]")]
+            public T Property<T>(string name) where T : new() => NotEvaluatableObject<T>();
         }
     
 

@@ -42,7 +42,7 @@ function ScrollLayout(element) {
     element.Reactive = {
         InternalWidth: () => element.Content.InternalWidth,
         InternalHeight: () => element.Content.InternalHeight,
-        Content: () => element.Child("Content"),
+        //Content: () => element.Child("Content"),
 
         MarginLeft: () => (element.PaddingLeft!=undefined) ? 0 : element.Content.MarginLeft,
         MarginTop: () => (element.PaddingTop != undefined) ? 0 : element.Content.MarginTop,
@@ -127,23 +127,21 @@ function ScrollLayout(element) {
     }
 
 
-    OnChanged(
+    new Reaction(() => {
+        scrollable.appendChild(element.Content)
+        element.Content.LayoutWidth = () => Max(element.Content.InternalWidth, element.ContentAreaWidth)
+        element.Content.LayoutHeight = () => Max(element.Content.InternalHeight, element.ContentAreaHeight)
+    })
+
+
+   /*OnChanged(
         () => element.Content,
         (p, c) => {
             if (c) {                
-                scrollable.appendChild(c)
                 
-
-                c.LayoutWidth = () => Max(c.InternalWidth, element.ContentAreaWidth)
-                c.LayoutHeight = () => Max(c.InternalHeight, element.ContentAreaHeight)
             }
-
-            /*if (p) {
-                p.LayoutWidth = undefined
-                p.LayoutHeight = undefined
-            }*/
         }
-    )
+    )*/
 
 
 }

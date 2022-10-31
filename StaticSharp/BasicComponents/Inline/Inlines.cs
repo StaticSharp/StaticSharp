@@ -8,12 +8,12 @@ namespace StaticSharp {
 
     namespace Gears {
         public struct InlineIdFormatValue {
-            public string? Id;
+            public HtmlModifier? Modifier;
             public string? Format;
             public IInline Value;
 
-            public InlineIdFormatValue(string? id, string? format, IInline value) {
-                Id = id;
+            public InlineIdFormatValue(IInline? value, HtmlModifier? modifier, string? format) {
+                Modifier = modifier;
                 Format = format;
                 Value = value;
             }
@@ -26,23 +26,23 @@ namespace StaticSharp {
         public Inlines(Inlines other) : base(other) { }
 
         public IEnumerable<IInline> Values => this.Select(x => x.Value);
-        public void Add(string? id, string? format, IInline? value) {
+        public void Add(IInline? value, HtmlModifier? modifier = null, string? format = null) {
             if (value != null) {
                 //base.Add(id, block);
-                Add(new InlineIdFormatValue(id, format, value));
+                Add(new InlineIdFormatValue(value, modifier, format));
             }
         }
 
-        public void Add(IInline? value) {
-            Add(null, null, value);
-        }
+        /*public void Add(IInline? value) {
+            Add(value);
+        }*/
 
         public void Add(
             string text,
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0){
 
-            Add(null,null,new Text(text, true, callerFilePath, callerLineNumber));
+            Add(new Text(text, true, callerFilePath, callerLineNumber));
         }
 
         public Inlines(
@@ -58,20 +58,24 @@ namespace StaticSharp {
 
 
         public void AppendLiteral(string value, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
-            this.Add(new Text(value, true, callerFilePath, callerLineNumber));
+            Add(new Text(value, true, callerFilePath, callerLineNumber));
         }
         /*public void AppendFormatted(string value, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
             this.Add(new Text(value, false, callerFilePath, callerLineNumber));
         }*/
 
+
+        public void AppendFormatted(ValueTuple<string, IInline> value, string? format = null) {
+            Add(value.Item2, new HtmlModifier().AssignParentProperty(value.Item1), format);
+        }
+
         public void AppendFormatted(Inlines values, string? format = null) {
             foreach (var value in values) {
-                Add(value.Id, value.Format, value.Value);
-                //AppendFormatted(value.Value, value.Key);
+                Add(value.Value, value.Modifier, value.Format);
             }
         }
         public void AppendFormatted(IInline value, string? format = null) {
-            string? id = null;
+            /*string? id = null;
             if (format != null) {
                 if (format.StartsWith("##")) {
                     format = format.Substring(1);
@@ -87,8 +91,8 @@ namespace StaticSharp {
                         }
                     }
                 }
-            }
-            this.Add(id, format, value);
+            }*/
+            Add(value, null, format);
         }
 
 

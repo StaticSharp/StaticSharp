@@ -72,7 +72,7 @@ namespace StaticSharp {
 
             elementTag.Add(
                 await new Blocks {
-                    {"LeftSideBarIcon" ,LeftSideBarIcon},
+                    {"LeftSideBarIcon"  ,LeftSideBarIcon},
                     {"LeftSideBar" ,LeftSideBar},
 
                     {"RightSideBarIcon" ,RightSideBarIcon},

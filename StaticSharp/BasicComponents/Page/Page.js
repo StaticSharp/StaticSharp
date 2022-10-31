@@ -1,6 +1,6 @@
 ﻿
 function Page(element) {
-
+    element.isRoot = true
     let loadingDeffered = Reaction.beginDeferred()
 
     BaseModifier(element)

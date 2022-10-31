@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 namespace StaticSharp {
 
     namespace Js {
-        public class Checkbox : Object {
+        public class Checkbox {
             public bool Enabled => NotEvaluatableValue<bool>();
             public bool Value => NotEvaluatableValue<bool>();
             public bool ValueActual => NotEvaluatableValue<bool>();

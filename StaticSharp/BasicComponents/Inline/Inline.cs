@@ -27,22 +27,21 @@ namespace StaticSharp{
         public Inline(Inline other, string callerFilePath, int callerLineNumber) : base(other, callerFilePath, callerLineNumber) {
         }
 
-        protected virtual Task<Tag?> GenerateInlineHtmlInternalAsync(Context context, Tag elementTag, string? format) {
-            return Task.FromResult<Tag?>(null);
+        protected virtual Task ModifyHtmlAsync(Context context, Tag elementTag) {
+            return Task.CompletedTask;
         }
-        public virtual async Task<Tag> GenerateInlineHtmlAsync(Context context, string? id, string? format) {
+        public virtual async Task<Tag> GenerateInlineHtmlAsync(Context context) {
 
             await AddRequiredInclues(context);
 
 
-            var tag = new Tag(TagName, id) { };
+            var tag = new Tag(TagName) { };
 
             AddSourceCodeNavigationData(tag, context);
 
             tag.Add(await CreateConstructorScriptAsync(context));
+            await ModifyHtmlAsync(context, tag);
 
-            tag.Add(await GenerateInlineHtmlInternalAsync(context, tag, format));
-            //tag.Add(After());
 
             return tag;
         }

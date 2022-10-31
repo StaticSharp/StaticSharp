@@ -10,7 +10,7 @@ namespace StaticSharp {
 
     [ConstructorJs]
     public class Column : Block {
-        protected override string TagName => "column";
+        //protected override string TagName => "column";
         
 
         public Column(Column other, string callerFilePath, int callerLineNumber)

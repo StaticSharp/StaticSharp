@@ -6,7 +6,7 @@ using System.Xml.Linq;
 namespace StaticSharp {
 
     namespace Js {
-        public class MaterialDesignIcon : Object {
+        public class MaterialDesignIcon {
             //public bool Enabled => NotEvaluatableValue<bool>();
 
         }

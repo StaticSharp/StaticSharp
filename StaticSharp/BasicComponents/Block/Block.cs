@@ -87,7 +87,7 @@ namespace StaticSharp {
         protected virtual ValueTask ModifyHtmlAsync(Context context, Tag elementTag) {
             return ValueTask.CompletedTask;
         }
-        public virtual async Task<Tag> GenerateHtmlAsync(Context context, string? id = null) {
+        public virtual async Task<Tag> GenerateHtmlAsync(Context context) {
 
             await AddRequiredInclues(context);
 
@@ -98,7 +98,8 @@ namespace StaticSharp {
 
             context = ModifyContext(context);
 
-            var tag = new Tag(TagName, id) { };
+            var tag = new Tag(TagName) { };
+
 
             /*foreach (var m in Modifiers)
                 m.ModifyTag(tag);*/
@@ -116,14 +117,18 @@ namespace StaticSharp {
             await ModifyHtmlAsync(context, tag);
 
             foreach (var c in Children) {
-                var childTag = await c.Value.GenerateHtmlAsync(context, c.Key);
-                childTag["child"] = "";
+                var childTag = await c.Value.GenerateHtmlAsync(context);
+                if (c.Key != null) {
+                    await c.Key.Apply(childTag);
+                }
+                childTag.AddAsChild();
                 tag.Add(childTag);
             }
+
             return tag;
         }
 
-        public virtual async Task<Node> GenerateConstructor(Context context, string? id) {
+        /*public virtual async Task<Node> GenerateConstructor(Context context, string? id) {
             
             await AddRequiredInclues(context);
             context = ModifyContext(context);
@@ -155,7 +160,7 @@ namespace StaticSharp {
 
             result.Add("return result");
             return result;
-        }
+        }*/
     }
 
     public static partial class Static {

@@ -2,7 +2,7 @@
 
 
 
-function CreatePage() {
+/*function CreatePage() {
     let result = CreateInplace(document.body,Page)
     result.Content = function (parent) {
         let result = Create(ScrollLayout)
@@ -45,7 +45,7 @@ function CreatePage() {
             })
         )
     })
-}
+}*/
 
 
 
@@ -74,12 +74,13 @@ function GetParentElementByPredicate(firstParentToCompare, predicate) {
 
 
 function Hierarchical(element) {
-
-
     element.isHierarchical = true
-    
+
+    element.parent = element.isRoot ? undefined: element.parentElement
 
     element.Reactive = {
+
+
         IsRoot: () => element.Parent == undefined,
 
         NestingDepth: () => (element.IsRoot || element.overlaySign==1) ? 0 : (element.Parent.NestingDepth + 1),
@@ -102,19 +103,22 @@ function Hierarchical(element) {
         NextSibling: undefined,
     }
 
-    if (element.Parent) {
-        if (element.dataset.assign) {
-            element.Parent[element.dataset.assign] = element
+    if (element.parent) {
+        if (element.dataset.property) {
+            element.parent[element.dataset.property] = element
 
-        } else {
-            if (!element.Parent.FirstChild) {
-                element.Parent.FirstChild = element
-                element.Parent.LastChild = element
+        }
+        if (element.dataset.child!=undefined) {
+            
+            if (!element.parent.FirstChild) {
+                element.parent.FirstChild = element
+                element.parent.LastChild = element
             } else {
-                element.Parent.LastChild.NextSibling = element
-                element.Parent.LastChild = element
+                element.parent.LastChild.NextSibling = element
+                element.parent.LastChild = element
             }
         }
+        
     }
 
     

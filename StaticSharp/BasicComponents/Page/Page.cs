@@ -118,13 +118,13 @@ namespace StaticSharp {
 
         
 
-        public virtual async Task<Tag> GenerateHtmlAsync(Context context, string? id = null) {
+        public virtual async Task<Tag> GenerateHtmlAsync(Context context) {
 
             await AddRequiredInclues(context);
 
             context = ModifyContext(context);
 
-            var tag = new Tag(TagName, id) { };
+            var tag = new Tag(TagName) { };
 
             ModifyTag(tag);
 
