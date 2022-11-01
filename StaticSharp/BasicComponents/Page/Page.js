@@ -73,7 +73,10 @@ function Page(element) {
                 window.Reactive.AnimationFrame.makeDirty()
             });
             return animationFrame
-        }
+        },
+
+        UserInteracted: false,
+
     }
 
     let touchMedia = window.matchMedia("(pointer: coarse)")
@@ -99,7 +102,7 @@ function Page(element) {
 
     element.Reactive = {
         Root: element,
-        UserInteracted: false,
+        
         DevicePixelRatio: window.devicePixelRatio,
 
         Width: getWindowWidth(),
@@ -130,9 +133,14 @@ function Page(element) {
         element.UserInteracted = true
     }*/
     window.onmousedown = () => {
-        //console.log("onmousedown")
-        element.UserInteracted = true
+        console.log("onmousedown")
+        window.UserInteracted = true
     }
+
+    new Reaction(() => {
+        console.log("window.UserInteracted", window.UserInteracted)
+    })
+
 
     window.onresize = function (event) {
         //let startTime = performance.now()
@@ -157,7 +165,11 @@ function Page(element) {
             console.log("-------------Reactions------------", performance.now());
             loadingDeffered.end()
             console.log("-------------Reactions-done-------", performance.now());
-            element.style.visibility = "visible";
+            
+
+            document.body.style.visibility = "visible"
+            document.body.style.opacity = 1
+
             if (location.hash !== "") {
                 location.href = location.hash
             }
@@ -177,7 +189,7 @@ function Page(element) {
             onLoadEvent()            
         })
 
-    document.addEventListener("DOMContentLoaded", function (event) {
+    window.addEventListener("DOMContentLoaded", function (event) {
         console.log("------DOMContentLoaded--", performance.now());
         onLoadEvent()
     })

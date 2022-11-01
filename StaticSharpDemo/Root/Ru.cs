@@ -57,28 +57,14 @@ namespace StaticSharpDemo.Root {
 
             {"video",
                 new Video("T4TEdzSLyi0"){
-                    Play = true,//new (e=>e.Sibling("videoProperties").Child<CheckboxJs>("play").ValueActual),
-                    Mute = new (e=>e.Sibling("videoProperties").Child<Js.Checkbox>("Mute").ValueActual),
-                    PreferPlatformPlayer = new (e=>e.Sibling("videoProperties").Child<Js.Checkbox>("preferPlatformPlayer").ValueActual),
-                    Controls = new (e=>e.Sibling("videoProperties").Child<Js.Checkbox>("controls").ValueActual),
-                    Loop =  new (e=>e.Sibling("videoProperties").Child<Js.Checkbox>("loop").ValueActual),
-                    Volume = new (e=>e.Sibling<Js.Slider>("VolumeSlider").ValueActual)
+                    Play = true,
+                    Mute = true,
+                    PreferPlatformPlayer = false,
+                    Controls = false,
+                    Loop =  true,
                 }
             },
 
-            {"VolumeSlider",
-                new Slider { Value = new(e=>e.Sibling<Js.Video>("video").VolumeActual) }
-            },
-
-            {"videoProperties",
-                $"""
-                {new CheckboxInline(){ Value = new(e=>e.Parent.Sibling<Js.Video>("video").PlayActual), Label = { "Play" } }:#play}
-                {new CheckboxInline(){ Label = { "Mute" } }:#Mute}
-                {new CheckboxInline(){ Label = { "Prefer platform player" } }:#preferPlatformPlayer}
-                {new CheckboxInline(){ Label = { "Controls" } }:#controls}
-                {new CheckboxInline(){ Label = { "Loop" } }:#loop}
-                """
-            },
 
 
             new Column(){
@@ -112,9 +98,6 @@ namespace StaticSharpDemo.Root {
             }.FillWidth().InheritHorizontalPaddings(),
 
             new Flipper(){
-                MarginLeft = new(e=>e.ParentBlock.MarginLeft),
-                MarginRight = new(e=>e.ParentBlock.MarginRight),
-
                 First = new Image(new FileGenome(AbsolutePath("Copilot/Delivery.svg"))){
                     Embed = Image.TEmbed.Image,
                     MarginLeft = 24,
@@ -134,7 +117,7 @@ namespace StaticSharpDemo.Root {
                         new Space(),
                     }
                 }
-            },
+            }.FillWidth().InheritHorizontalPaddings(),
 
             "This product is still under development, but you can get early access to Copilot, join discussions, and share your ideas in our community on Discord",
 

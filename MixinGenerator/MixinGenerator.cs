@@ -199,8 +199,10 @@ namespace MixinGenerator {
 
             foreach (var member in members.Values) {
                 var name = member.Name;
-
-
+                foreach (var a in member.GetAttributes()) {
+                    result.Add($"[{a.ToString()}]");
+                }
+                
 
                 if (member is IFieldSymbol fieldSymbol) {
                     result.Add(
@@ -217,25 +219,41 @@ namespace MixinGenerator {
                 }
 
                 if (member is IPropertySymbol propertySymbol) {
-                    var property = new Scope($"new public {propertySymbol.Type.ToDisplayString(SymbolDisplayFormat)} {name}");
+                    bool get = (propertySymbol.GetMethod != null) && (propertySymbol.GetMethod.DeclaredAccessibility == Accessibility.Public);
+                    bool set = (propertySymbol.SetMethod != null) && (propertySymbol.SetMethod.DeclaredAccessibility == Accessibility.Public);
+                    Scope property;
+                    if (propertySymbol.IsIndexer) {
+                        var parametersDeclaration = string.Join(",", propertySymbol.Parameters.Select(x => $"{x.Type.ToDisplayString(SymbolDisplayFormat)} {x.Name}"));
+                        var parametersUsage = string.Join(",", propertySymbol.Parameters.Select(x => x.Name));
+                        property = new Scope($"new public {propertySymbol.Type.ToDisplayString(SymbolDisplayFormat)} this[{parametersDeclaration}]");
+                        
+                        if (get)
+                            property.Add(new Scope("get") {
+                            SetAggrigator($"return {mixinVariableName}[{parametersUsage}];")
+                        });
+                        if (set)
+                            property.Add(new Scope("set") {
+                            SetAggrigator($"{mixinVariableName}[{parametersUsage}] = value;")
+                        });
+
+                    } else {
+                        property = new Scope($"new public {propertySymbol.Type.ToDisplayString(SymbolDisplayFormat)} {name}");
+                        if (get)
+                            property.Add(new Scope("get") {
+                            SetAggrigator($"return {mixinVariableName}.{name};")
+                        });
+
+                        if (set)
+                            property.Add(new Scope("set") {
+                            SetAggrigator($"{mixinVariableName}.{name} = value;")
+                        });
+                    }
+
+
                     result.Add(property);
 
-                    if (propertySymbol.GetMethod != null) {
-                        if (propertySymbol.GetMethod.DeclaredAccessibility == Accessibility.Public) {
-                            property.Add(new Scope("get") {
-                                SetAggrigator($"return {mixinVariableName}.{name};")
-                            });
-                        }
-                        
-                    }
-
-                    if (propertySymbol.SetMethod != null) {
-                        if (propertySymbol.SetMethod.DeclaredAccessibility == Accessibility.Public) {
-                            property.Add(new Scope("set") {
-                                SetAggrigator($"{mixinVariableName}.{name} = value;")
-                            });
-                        }
-                    }
+                                           
+                    
                     continue;
                 }
 

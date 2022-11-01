@@ -7,8 +7,8 @@ function Flipper(element) {
         FlipWidth:  640,
         HorizontalSpace: 12,
         VerticalSpace: 12,
-        First: () => element.FirstChild,
-        SecondChild: () => element.FirstChild.NextSibling
+        //First: () => element.First,
+        //Second: () => element.First.NextSibling
     }
 
 
@@ -16,43 +16,43 @@ function Flipper(element) {
     new Reaction(() => {
 
         if (element.Width > element.FlipWidth) {
-            let left = CalcOffset(element, element.FirstChild, "Left")
-            let right = CalcOffset(element, element.SecondChild, "Right")
+            let left = CalcOffset(element, element.First, "Left")
+            let right = CalcOffset(element, element.Second, "Right")
 
-            let top1 = CalcOffset(element, element.FirstChild, "Top")
-            let top2 = CalcOffset(element, element.SecondChild, "Top")
+            let top1 = CalcOffset(element, element.First, "Top")
+            let top2 = CalcOffset(element, element.Second, "Top")
 
-            let bottom1 = CalcOffset(element, element.FirstChild, "Bottom")
-            let bottom2 = CalcOffset(element, element.SecondChild, "Bottom")
+            let bottom1 = CalcOffset(element, element.First, "Bottom")
+            let bottom2 = CalcOffset(element, element.Second, "Bottom")
 
-            //let spaceLeft = Max(element.PaddingLeft, element.FirstChild.MarginLeft,0)
-            //let spaceRight = Max(element.PaddingRight, element.SecondChild.MarginRight,0)
+            //let spaceLeft = Max(element.PaddingLeft, element.First.MarginLeft,0)
+            //let spaceRight = Max(element.PaddingRight, element.Second.MarginRight,0)
             let spaceMid = Max(
-                element.FirstChild.MarginRight,
-                element.SecondChild.MarginLeft,
+                element.First.MarginRight,
+                element.Second.MarginLeft,
                 element.HorizontalSpace
             )
 
-            element.FirstChild.LayoutX = left
-            element.FirstChild.LayoutWidth = (element.Width - spaceMid) * 0.5 - left
+            element.First.LayoutX = left
+            element.First.LayoutWidth = (element.Width - spaceMid) * 0.5 - left
 
-            element.SecondChild.LayoutX = (element.Width + spaceMid) * 0.5 
-            element.SecondChild.LayoutWidth = (element.Width - spaceMid) * 0.5 - right
+            element.Second.LayoutX = (element.Width + spaceMid) * 0.5 
+            element.Second.LayoutWidth = (element.Width - spaceMid) * 0.5 - right
 
-            element.FirstChild.LayoutY = top1
-            element.SecondChild.LayoutY = top2
+            element.First.LayoutY = top1
+            element.Second.LayoutY = top2
 
             let height = Max(
-                element.FirstChild.InternalHeight + top1 + bottom1,
-                element.SecondChild.InternalHeight + top2 + bottom2,
+                element.First.InternalHeight + top1 + bottom1,
+                element.Second.InternalHeight + top2 + bottom2,
             )
 
             element.InternalHeight = height
-            element.FirstChild.LayoutHeight = height - top1 - bottom1
-            element.SecondChild.LayoutHeight = height - top2 - bottom2
+            element.First.LayoutHeight = height - top1 - bottom1
+            element.Second.LayoutHeight = height - top2 - bottom2
 
         } else {
-            let orderedChildren = [element.FirstChild, element.SecondChild]
+            let orderedChildren = [element.First, element.Second]
             let margin = First(element.PaddingTop, 0)
             
             let y = 0
@@ -76,22 +76,8 @@ function Flipper(element) {
             
             element.InternalHeight = y + margin
         }
-
-
-        /*element.FirstChild.LayoutWidth = element.Width * 0.5
-
-        element.SecondChild.LayoutX = element.Width * 0.5
-        element.SecondChild.LayoutWidth = element.Width * 0.5*/
     })
 
-    new Reaction(() => {
-        
-    })
 
-    /*element.Reactive = {
-        Before: 0,
-        Between: 1,
-        After: 0
-    }*/
 
 }

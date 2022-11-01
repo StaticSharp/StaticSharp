@@ -1,5 +1,5 @@
 html {
-    display: block;
+    display: initial;
     position: absolute;
     overscroll-behavior-x: none;
     //overscroll-behavior: contain;
@@ -8,16 +8,33 @@ html {
 }
 
 body {
-    display: block;
     position: absolute;
     overflow-x: hidden;
     overflow-y: hidden;
     visibility: hidden;
-
+    opacity: 0;
     white-space: normal;
     line-height: 1.5;
     touch-action: none;
+    margin: 0;
 }
+
+
+input[type="checkbox"] {
+    //appearance: none;
+    //display: inline-block;
+    background-color: #fff;
+    margin: 0;
+    font: inherit;
+    color: currentColor;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.15em solid currentColor;
+    border-radius: 0.15em;
+    transform: translateY(+0.2em);
+}
+
+
 /*
 ::-webkit-scrollbar {
     width: 50px;
@@ -61,7 +78,7 @@ head {
     display: none;
 }
 
-* {
+body * {
     tab-size: 4;
     touch-action: inherit;
     display: inherit;

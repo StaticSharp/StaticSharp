@@ -60,7 +60,7 @@ namespace StaticSharp {
             public BaseModifier(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
 
 
-            protected Context ModifyContext(Context context) {
+            protected override Context ModifyContext(Context context) {
                 if (FontFamilies != null) {
                     context.FontFamilies = FontFamilies;
                 }
@@ -70,31 +70,34 @@ namespace StaticSharp {
                 return context;
             }
 
-            protected void ModifyTag(Tag tag) {
+            protected override Task ModifyHtmlAsync(Context context, Tag elementTag) {
+                //protected void ModifyTag(Tag tag) {
                 /*if (Url != null) {
                     tag.Name = "a";
                     tag["href"] = Url;
                 }*/
 
                 if (Tooltip != null) {
-                    tag["title"] = Tooltip;
+                    elementTag["title"] = Tooltip;
                 }
 
                 if (LineHeight != null) {
-                    tag.Style["line-height"] = LineHeight;
+                    elementTag.Style["line-height"] = LineHeight;
                 }
 
                 if (LetterSpacing != null){
-                    tag.Style["letter-spacing"] = LetterSpacing+"em";
+                    elementTag.Style["letter-spacing"] = LetterSpacing+"em";
                 }
 
                 if (FontFamilies != null) {
-                    tag.Style["font-family"] = string.Join(',', FontFamilies.Select(x => x.Name));
+                    elementTag.Style["font-family"] = string.Join(',', FontFamilies.Select(x => x.Name));
                 }
                 if (FontStyle != null) {
-                    tag.Style["font-weight"] = (int)FontStyle.Weight;
-                    tag.Style["font-style"] = FontStyle.CssFontStyle;
+                    elementTag.Style["font-weight"] = (int)FontStyle.Weight;
+                    elementTag.Style["font-style"] = FontStyle.CssFontStyle;
                 }
+
+                return base.ModifyHtmlAsync(context, elementTag);
             }
 
         }

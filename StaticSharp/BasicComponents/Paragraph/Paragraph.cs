@@ -31,25 +31,12 @@ namespace StaticSharp {
         }
     }
 
-            //text-align
-
 
     [ConstructorJs]
     [Mix(typeof(ParagraphBindings<Js.Paragraph>))]
     public partial class Paragraph : Block {
-        protected override string TagName => "paragraph";
-        //protected List<KeyValuePair<string?, IInline>> children { get; } = new();
         public Inlines Inlines { get; } = new();
 
-
-        /*public static implicit operator Paragraph(string text) {
-            string callerFilePath = "";
-            int callerLineNumber = 0;
-
-            var paragraph = new Paragraph(callerFilePath, callerLineNumber);
-            paragraph.AppendLiteral(text, callerFilePath, callerLineNumber);
-            return paragraph;
-        }*/
         public Paragraph(Paragraph other,
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0) : base(other, callerFilePath, callerLineNumber) {
@@ -76,37 +63,11 @@ namespace StaticSharp {
         }
 
 
-        /*public void Add(IInline? value) {
-            if (value != null) {
-                children.Add(value);
-            }
-        }
-
-        public void Add(string value,
-            [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
-            Add(new Text(value, true, callerFilePath, callerLineNumber));
-        }*/
-
-
-
-
-
-
-
-        /*public void Add(string? id, IInline? value) {
-            if (value != null) {
-                children.Add(new KeyValuePair<string?, IInline>(id, value));
-            }
-        }*/
-
-
-
-
-        protected override async ValueTask ModifyHtmlAsync(Context context, Tag elementTag) {
+        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {            
 
             var p = new Tag("p");
             foreach (var i in Inlines) {
-                var child = await i.Value.GenerateInlineHtmlAsync(context);
+                var child = await i.Value.GenerateHtmlAsync(context);
                 if (i.Modifier != null)
                     await i.Modifier.Apply(child);
                 //child.AddAsChild();
@@ -114,9 +75,7 @@ namespace StaticSharp {
             }
             elementTag.Add(p);
 
-        }
-
-
-        
+            await base.ModifyHtmlAsync(context, elementTag);
+        }        
     }
 }

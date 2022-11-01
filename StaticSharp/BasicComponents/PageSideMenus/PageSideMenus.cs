@@ -35,18 +35,25 @@ namespace StaticSharp {
             }
         }
 
-        public virtual Block? TopBar => new Row{
+        public virtual Block? TopBar => new Paragraph(Title) {
+            ["Height"] = "() => Min(element.Root.SideBarsIconsSize,element.InternalHeight)",
+            TextAlignmentHorizontal = TextAlignmentHorizontal.Center,
+            MarginsVertical = 0,
+            FontSize = new(e => e.Root.As<Js.PageSideMenus>().SideBarsIconsSize),
+        };
+
+
+
+
+            /*new Row{
             //Height = new(Js.Math.Min())
             ["Height"] = "() => Min(element.Root.SideBarsIconsSize,element.InternalHeight)",
             Children = {
                 new Space(before: 1),
-                new Paragraph(Title) {
-                    MarginsVertical = 0,
-                    FontSize = new (e=>e.Root.As<Js.PageSideMenus>().SideBarsIconsSize),
-                },
+                ,
                 new Space(after: 1),
             }
-        };
+        };*/
 
         public virtual Inlines? Description => null;
         public virtual Blocks? Content => null;
@@ -90,7 +97,7 @@ namespace StaticSharp {
                 }.GenerateHtmlAsync(context)
                 );
 
-
+            await base.ModifyHtmlAsync(context, elementTag);
 
             /*var result = new Tag(null);
             

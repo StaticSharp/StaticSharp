@@ -26,7 +26,7 @@ namespace StaticSharp {
         public MaterialDesignIconBlock(MaterialDesignIcons.IconName icon, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
             Icon = icon;
         }
-        protected override ValueTask ModifyHtmlAsync(Context context, Tag elementTag) {
+        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
 
             var code = MaterialDesignIcon.GetSvgTag(Icon, out var width, out var height);
 
@@ -34,7 +34,7 @@ namespace StaticSharp {
             elementTag["data-height"] = height;
             elementTag.Add(new PureHtmlNode(code));
 
-            return ValueTask.CompletedTask;
+            await base.ModifyHtmlAsync(context, elementTag);
 
         }
     }

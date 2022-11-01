@@ -67,7 +67,8 @@ namespace StaticSharp {
             Identifier = identifier;        
         }
 
-        protected override async ValueTask ModifyHtmlAsync(Context context, Tag elementTag) {
+        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
+            
 
             var youtubeVideoId = YoutubeExplode.Videos.VideoId.TryParse(Identifier);
             if (youtubeVideoId != null) {
@@ -104,6 +105,8 @@ namespace StaticSharp {
 
                 elementTag["data-sources"] = json;
             }
+
+            await base.ModifyHtmlAsync(context, elementTag);
         }
     }
 }

@@ -49,7 +49,7 @@ namespace StaticSharp {
         protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
             
             foreach (var i in Children) {
-                var child = await i.Value.GenerateInlineHtmlAsync(context);
+                var child = await i.Value.GenerateHtmlAsync(context);
                 if (i.Modifier != null)
                     await i.Modifier.Apply(child);
                 //child.AddAsChild();

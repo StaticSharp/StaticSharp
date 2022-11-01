@@ -11,6 +11,12 @@ namespace StaticSharpDemo.Root.Components {
 
     public partial class ComponentPage : Material {
 
+        protected override Task Setup(Context context) {
+            //BackgroundColor = Color.Black;
+            
+            return base.Setup(context);
+
+        }
         public override string Title {
             get {
                 var result = GetType().Namespace;
@@ -36,6 +42,7 @@ namespace StaticSharpDemo.Root.Components {
                 Margins = 0,
                 PaddingsVertical = 10,
                 PaddingsHorizontal = 20,
+                BackgroundColor = new(e => e.Hover ? Color.FromArgb(110, 110, 110) : Color.FromArgb(96, 96, 96)),
                 Children = {
                     new LinkBlock(node).FillHeight().FillWidth()
                 }
@@ -44,6 +51,7 @@ namespace StaticSharpDemo.Root.Components {
 
         public override Block LeftSideBar => new ScrollLayout {
             Content = new Column(){
+                BackgroundColor = Color.FromArgb(96,96,96),
                 Children = {
                     Node.Children.OfType<ITypedRepresentativeProvider<Page>>().Select(x=>MenuItem(x))
                 }

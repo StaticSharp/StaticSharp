@@ -49,7 +49,7 @@ namespace StaticSharp {
 
             elementTag.Add(new PureHtmlNode(code));
 
-            return Task.CompletedTask;
+            return base.ModifyHtmlAsync(context, elementTag);
         }
 
 

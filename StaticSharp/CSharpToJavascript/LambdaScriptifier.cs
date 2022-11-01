@@ -66,6 +66,11 @@ public class LambdaScriptifier {
         var arguments = expression.Arguments.ToArray();
         List<string> argumentsValues = new ();
 
+        //expression.Object.Type.GetDefaultMembers
+
+        //Console.WriteLine(expression.Method.Name);
+
+
         for (int i = 0; i < arguments.Length; i++) {
 
             var isParams = parameters[i].GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0;
@@ -111,6 +116,7 @@ public class LambdaScriptifier {
 
         switch (expression) {
             case MethodCallExpression methodCallExpression: {
+                
                 return StringifyMethodCall(methodCallExpression);
             }
 

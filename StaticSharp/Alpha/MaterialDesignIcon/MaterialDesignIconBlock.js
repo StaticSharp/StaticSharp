@@ -38,10 +38,7 @@ function MaterialDesignIconBlock(element) {
         }
     })
 
-    new Reaction(() => {
-        let content = element.children[0]
-        content.style.fill = element.HierarchyForegroundColor
-    })
+    
 
 
     

@@ -5,13 +5,18 @@ function _deleteScript() {
     return parent
 }
 
+var currentParent = undefined
+
 function Constructor() {
     var element = _deleteScript()
+    element.Parent = currentParent
+    currentParent = element
+    
     for (let i of arguments) {
         i(element)
     }
 
-    if (element.parentElement) {
+    /*if (element.parentElement) {
         if (element.parentElement.tagName == "OVERLAY") {
             let overlay = element.parentElement
             let parent = overlay.parentElement
@@ -22,10 +27,20 @@ function Constructor() {
         } else {
             element.Parent = element.parentElement
         }
-    }
+    }*/
 
     return element;
 }
+
+function Pop() {
+    let element = _deleteScript()
+    if (element.Parent) {
+        currentParent = element.Parent
+    } else {
+        delete currentParent
+    }
+}
+
 
 function CamelToKebab(value) {
     return value.replace(
@@ -41,6 +56,7 @@ function Create(parent, ...constructors) {
     
     let element = document.createElement(tagName)
     parent.appendChild(element)
+    element.Parent = parent
     for (let i of constructors) {
         i(element)
     }

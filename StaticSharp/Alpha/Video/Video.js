@@ -211,7 +211,7 @@ function Video(element) {
 
         element.VideoPlayerType = "youtube"
 
-        var positioner = document.createElement("youtubeIFramePositioner");
+        var positioner = document.createElement("youtube-iframe-positioner");
         element.appendChild(positioner);
         element.Positioner = positioner
 
@@ -305,7 +305,7 @@ function Video(element) {
             playerDestructor = undefined
 
             player.destroy()
-            element.removeChild(iframe)
+            element.removeChild(positioner)
 
             let d = Reaction.beginDeferred()
             element.Player = undefined
@@ -329,14 +329,36 @@ function Video(element) {
 
         player.src = sources[1].url
         player.muted = true
+        player.setAttribute("playsinline","")
+         
 
         player.ontimeupdate = () => element.PositionActual = element.Player.currentTime
 
-        player.onplay = () => element.PlayActual = true
-        player.onpause = () => element.PlayActual = false  
+        player.onplay = () => {
+            let d = Reaction.beginDeferred()
+            element.PlayActual = true
+            window.UserInteracted = true
+            d.end()
+        }
+        player.onpause = () => {
+            let d = Reaction.beginDeferred()
+            element.PlayActual = false
+            window.UserInteracted = true
+            d.end()
+        }
 
         element.VolumeActual = player.volume
-        player.onvolumechange = () => element.VolumeActual = player.volume
+        player.onvolumechange = () => {
+            let d = Reaction.beginDeferred()
+            window.UserInteracted = true
+            element.VolumeActual = player.volume
+            element.MuteActual = player.muted
+            d.end()
+        }
+
+        /*player.Events.MouseDown = () => {
+            console.log("MouseDown")
+        }*/
 
         element.Player = player
 
@@ -436,7 +458,8 @@ function Video(element) {
                 }
             } else {
                 if (element.Mute != undefined) {
-                    element.Player.muted = !element.Root.UserInteracted || element.Mute
+                    var value = (!window.UserInteracted) || element.Mute
+                    element.Player.muted = value
                 }
             }
         }

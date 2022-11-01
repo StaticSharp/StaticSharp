@@ -185,6 +185,13 @@ namespace StaticSharp {
                 };
             }
 
+            public Tag Pop() {
+                return new Tag("script") {
+                    new PureHtmlNode("Pop()")
+                };
+            }
+
+
             public virtual IAsyncEnumerable<KeyValuePair<string, string>> GetGeneratedBundingsAsync(Context context) {
                 return AsyncEnumerable.Empty<KeyValuePair<string, string>>();
             }

@@ -31,13 +31,14 @@ namespace StaticSharp {
         public Flipper([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber) { }
 
-        protected override async ValueTask ModifyHtmlAsync(Context context, Tag elementTag) {
+        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {            
             elementTag.Add(                
-                (await First.GenerateHtmlAsync(context)).AssignParentProperty("first")
+                (await First.GenerateHtmlAsync(context)).AssignParentProperty("First")
             );
             elementTag.Add(
-                (await Second.GenerateHtmlAsync(context)).AssignParentProperty("second")
+                (await Second.GenerateHtmlAsync(context)).AssignParentProperty("Second")
             );
+            await base.ModifyHtmlAsync(context, elementTag);
         }
     }
 }

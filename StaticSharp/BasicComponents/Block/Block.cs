@@ -84,49 +84,19 @@ namespace StaticSharp {
         }
         public Block([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
         
-        protected virtual ValueTask ModifyHtmlAsync(Context context, Tag elementTag) {
-            return ValueTask.CompletedTask;
-        }
-        public virtual async Task<Tag> GenerateHtmlAsync(Context context) {
-
-            await AddRequiredInclues(context);
-
-            /*foreach (var m in Modifiers) {
-                await m.AddRequiredInclues(context);
-                context = m.ModifyContext(context);
-            }*/
-
-            context = ModifyContext(context);
-
-            var tag = new Tag(TagName) { };
-
-
-            /*foreach (var m in Modifiers)
-                m.ModifyTag(tag);*/
-
-            ModifyTag(tag);
-
-            AddSourceCodeNavigationData(tag, context);
-
-            tag.Add(await CreateConstructorScriptAsync(context));
-
-            /*foreach (var m in Modifiers)
-                tag.Add(await m.CreateConstructorScriptAsync(context));*/
-
-
-            await ModifyHtmlAsync(context, tag);
-
+        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
             foreach (var c in Children) {
                 var childTag = await c.Value.GenerateHtmlAsync(context);
                 if (c.Key != null) {
                     await c.Key.Apply(childTag);
                 }
                 childTag.AddAsChild();
-                tag.Add(childTag);
+                elementTag.Add(childTag);
             }
-
-            return tag;
+            await base.ModifyHtmlAsync(context, elementTag);
         }
+
+        
 
         /*public virtual async Task<Node> GenerateConstructor(Context context, string? id) {
             

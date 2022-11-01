@@ -85,7 +85,7 @@ namespace StaticSharp {
 
 
             var body = await GenerateHtmlAsync(context);
-
+            //body.Style["visibility"] = "hidden";
 
 
             var document = new Tag(null) {
@@ -118,7 +118,7 @@ namespace StaticSharp {
 
         
 
-        public virtual async Task<Tag> GenerateHtmlAsync(Context context) {
+        /*public virtual async Task<Tag> GenerateHtmlAsync(Context context) {
 
             await AddRequiredInclues(context);
 
@@ -130,9 +130,6 @@ namespace StaticSharp {
 
             AddSourceCodeNavigationData(tag, context);
 
-            /*tag.Add(new Tag("script") {
-
-            });*/
 
 
             tag.Add(await CreateConstructorScriptAsync(context));
@@ -142,13 +139,13 @@ namespace StaticSharp {
             //tag.Add(await GenerateChildrenHtmlAsync(context, tag));
 
             return tag;
-        }
+        }*/
 
 
 
 
 
-        protected abstract Task ModifyHtmlAsync(Context context, Tag elementTag);
+        //protected abstract Task ModifyHtmlAsync(Context context, Tag elementTag);
 
         public async Task<string> GetPlaneTextAsync(Context context) {
             return Title;

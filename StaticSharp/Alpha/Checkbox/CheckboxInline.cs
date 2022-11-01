@@ -37,7 +37,7 @@ namespace StaticSharp {
 
                 var label = new Tag("label") { ["for"] = luid };
                 foreach (var i in Label) {
-                    var child = await i.Value.GenerateInlineHtmlAsync(context);
+                    var child = await i.Value.GenerateHtmlAsync(context);
                     if (i.Modifier!=null)
                         await i.Modifier.Apply(child);
                     label.Add(child);

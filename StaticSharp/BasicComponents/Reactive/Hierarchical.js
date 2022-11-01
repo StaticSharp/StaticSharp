@@ -76,7 +76,7 @@ function GetParentElementByPredicate(firstParentToCompare, predicate) {
 function Hierarchical(element) {
     element.isHierarchical = true
 
-    element.parent = element.isRoot ? undefined: element.parentElement
+    
 
     element.Reactive = {
 
@@ -86,36 +86,31 @@ function Hierarchical(element) {
         NestingDepth: () => (element.IsRoot || element.overlaySign==1) ? 0 : (element.Parent.NestingDepth + 1),
 
         Root: () => element.Parent.Root,
-        Parent: () => {
-            /*if (element.parentElement.tagName == "SCROLLABLE") {
-                let p = GetParentElementByPredicate(element.parentElement, x => x.isHierarchical)
-                console.log("element.parentElement", element.parentElement.tagName, p)
-            }*/
+        /*Parent: undefined() => {
+
             let v = GetParentElementByPredicate(element.parentElement, x => x.isHierarchical)
-            /*if (v.tagName == "SCROLLABLE") {
-                console.error("SCROLLABLE")
-            }*/
+
             return v
-        },
+        },*/
         ParentBlock: () => GetParentElementByPredicate(element.Parent, x => x.isBlock),
         FirstChild: undefined,
         LastChild: undefined,
         NextSibling: undefined,
     }
 
-    if (element.parent) {
+    if (element.Parent) {
         if (element.dataset.property) {
-            element.parent[element.dataset.property] = element
+            element.Parent[element.dataset.property] = element
 
         }
         if (element.dataset.child!=undefined) {
             
-            if (!element.parent.FirstChild) {
-                element.parent.FirstChild = element
-                element.parent.LastChild = element
+            if (!element.Parent.FirstChild) {
+                element.Parent.FirstChild = element
+                element.Parent.LastChild = element
             } else {
-                element.parent.LastChild.NextSibling = element
-                element.parent.LastChild = element
+                element.Parent.LastChild.NextSibling = element
+                element.Parent.LastChild = element
             }
         }
         

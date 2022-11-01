@@ -32,7 +32,7 @@ namespace StaticSharp {
     public abstract class Server: Gears.INodeToUrl {
         private const string _pageKey = "pageKey";
 
-        private IWebHost _host = null;
+        //private IWebHost _host = null;
 
         public abstract IPageGenerator? FindPage(string requestPath);
 
@@ -127,7 +127,8 @@ namespace StaticSharp {
                 headers.ContentType = new MediaTypeHeaderValue( asset.MediaType);
                 
                 /*if (asset.FileExtension == ".mp4") {
-                    HandleVideoAssetsRequestAsync(request, response, routeData);
+                    await HandleVideoAssetsRequestAsync(request, response, routeData);
+                    return;
                 }*/
 
                 var data = asset.ReadAllBites();                
@@ -137,7 +138,9 @@ namespace StaticSharp {
         }
 
         /*protected virtual async Task HandleVideoAssetsRequestAsync(HttpRequest request, HttpResponse response, RouteData routeData) {
-            response.Headers.AcceptRanges.Add("byte");
+
+            response.Headers.AcceptRanges.Add("bytes");
+
         }*/
 
 
@@ -226,7 +229,7 @@ namespace StaticSharp {
         }
 
         public async Task RunAsync() {
-            _host = WebHost.CreateDefaultBuilder().ConfigureServices(
+            var host = WebHost.CreateDefaultBuilder().ConfigureServices(
                 x => {
                     x.AddRouting();
                     x.AddLogging(builder => builder.AddFilter("Microsoft", LogLevel.Warning).AddFilter("System", LogLevel.Warning).AddConsole());
@@ -251,8 +254,8 @@ namespace StaticSharp {
              .UseUrls(Urls.Select(x=>x.ToString()).ToArray())
              .Build();
 
-            await _host.StartAsync();
-            await _host.WaitForShutdownAsync();
+            await host.StartAsync();
+            await host.WaitForShutdownAsync();
         }
 
 

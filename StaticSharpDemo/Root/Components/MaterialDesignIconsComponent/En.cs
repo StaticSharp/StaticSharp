@@ -27,7 +27,9 @@ namespace StaticSharpDemo.Root.Components.MaterialDesignIconsComponent {
 
             H5(nameof(MaterialDesignIconInline)),
             $"This -> {new MaterialDesignIconInline(MaterialDesignIcons.IconName.Github)} is as SVG icon",
-            $"Scale = 2 {new MaterialDesignIconInline(MaterialDesignIcons.IconName.Github){ Scale = 2 }}",
+            $"Scale = 2 {new MaterialDesignIconInline(MaterialDesignIcons.IconName.Github){
+                ForegroundColor = Color.Red,
+                Scale = 2 }}",
             $"BaselineOffset = 0 {new MaterialDesignIconInline(MaterialDesignIcons.IconName.Github){ BaselineOffset = 0 }}"
 
 

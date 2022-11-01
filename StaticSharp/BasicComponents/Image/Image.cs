@@ -48,7 +48,7 @@ namespace StaticSharp {
         }*/
 
 
-        protected override async ValueTask ModifyHtmlAsync(Context context, Tag elementTag) {
+        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
             string[] webExtensions = { ".jpg", ".jpeg", ".png", ".svg" };
 
             var source = await assetGenome.CreateOrGetCached();
@@ -142,7 +142,7 @@ namespace StaticSharp {
             }
             );
 
-
+            await base.ModifyHtmlAsync(context, elementTag);
 
         }
 
