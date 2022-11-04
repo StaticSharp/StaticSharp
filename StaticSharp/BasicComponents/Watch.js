@@ -8,17 +8,22 @@ function Watch() {
 
     function CheckRefresh() {
         fetch("/api/get_page_hash")
-            .then((response) => response.text())
-            .then((text) => {
-                let changed = text !== pageHash
-                if (changed) {
-                    console.info("Refreshing page...", pageHash, text);
-                    document.location.reload();
+            .then((response) => {
+                if (response.ok) {
+                    response.text().then((text) => {
+                        let changed = text !== pageHash
+                        if (changed) {
+                            console.info("Refreshing page...", pageHash, text);
+                            document.location.reload();
+                        } else {
+                            setTimeout(CheckRefresh, refreshIntervalMs);
+                        }
+                    })
                 } else {
                     setTimeout(CheckRefresh, refreshIntervalMs);
                 }
-
-            })
+                
+            })            
             .catch(err => {
                 setTimeout(CheckRefresh, refreshIntervalMs);
             })
@@ -56,17 +61,19 @@ document.addEventListener("mousemove", () => {
 });
 
 
-function ShowSourceCode(callerFilePath, callerLineNumber) {
-    fetch("/api/show_source_code",
-        {
-            method: "PUT",
-            body: JSON.stringify({
+function GoToSourceCode(callerFilePath, callerLineNumber) {
+    let json = JSON.stringify({
                 callerFilePath: callerFilePath,
                 callerLineNumber: Number(callerLineNumber)
-            })
+    })
+    fetch("/api/go_to_source_code",
+        {
+            method: "PUT",
+            body: json
         }
     )
 }
+
 
 
 new Reaction(() => {
@@ -79,10 +86,15 @@ new Reaction(() => {
             margin.style.zIndex = Number.MAX_SAFE_INTEGER
 
             margin.addEventListener("click", () => {
-                console.log("click")
+
                 let target = developerMode.ElementMouseIsOver
-                ShowSourceCode(target.dataset.callerFilePath, target.dataset.callerLineNumber)
+                if (target.dataset.callerFilePath !== undefined) {
+                    GoToSourceCode(target.dataset.callerFilePath, target.dataset.callerLineNumber || 0)
+                } else {
+                    console.warn("GoToSourceCode requires the 'data-caller-file-path' attribute to work")
+                }
                 event.preventDefault()
+                
             });
 
             let padding = document.createElement("padding")

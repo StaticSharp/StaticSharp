@@ -1,5 +1,3 @@
-
-global using StaticSharpEngine;
 global using StaticSharp;
 
 global using static StaticSharp.Static;

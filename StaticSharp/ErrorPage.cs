@@ -1,5 +1,4 @@
-﻿using StaticSharp.BasicComponents.Page;
-using StaticSharp.Html;
+﻿using StaticSharp.Html;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,6 +1,6 @@
-﻿using StaticSharp.BasicComponents.Page;
+﻿
 using StaticSharpDemo.Root;
-using StaticSharpEngine;
+using StaticSharp.Gears;
 using StaticSharpWeb;
 using System;
 using System.Collections.Generic;
@@ -16,6 +16,7 @@ using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using StaticSharp.Tree;
 
 namespace StaticSharpWeb {
 
@@ -25,7 +26,7 @@ namespace StaticSharpWeb {
         string TempDirectory { get; }
     }
 
-    public abstract class StaticGenerator : IStaticGenerator {
+    /*public abstract class StaticGenerator : IStaticGenerator {
         public Uri BaseUrl { get; set; }
 
         public string BaseDirectory { get; set; }
@@ -82,32 +83,16 @@ namespace StaticSharpWeb {
         }
 
 
-    }
+    }*/
 }
 
 namespace StaticSharpDemo {
 
-    public enum Language {
-        En,
-        Ru
-    }
+    
 
-    public class Server : StaticSharp.Server {
+    public class Server  {
 
-        static Server() { }
 
-        public override IEnumerable<Uri> Urls {
-            get
-            {
-                //new Uri[] {
-                yield return new("http://localhost/");
-                foreach (var i in GetLocalIPAddresses()) {
-                    Console.WriteLine($"http://{i}");
-                    yield return new($"http://{i}");
-                }
-                //yield return new(GetLocalIPAddress());
-            }
-        }
 
         //delete me
         //public override Uri BaseUrl => new("http://localhost/");
@@ -126,73 +111,22 @@ namespace StaticSharpDemo {
             }
         }*/
 
-        public override string BaseDirectory => throw new NotImplementedException();
+        //public override string BaseDirectory => throw new NotImplementedException();
 
-        public override string TempDirectory => AbsolutePath("../../StaticSharpCache");// @"D:\StaticSharpCache\";
+        //public override string TempDirectory => AbsolutePath("../../StaticSharpCache");// @"D:\StaticSharpCache\";
 
-        public string IntermidiateCache => Path.Combine(TempDirectory, "IntermediateCache");
+        //public string IntermidiateCache => Path.Combine(TempDirectory, "IntermediateCache");
 
         
 
-        public override IPageGenerator? FindPage(string requestPath) {
-            if (requestPath == null) {
-                return null;
-            }
-            
-            string[] path = requestPath.Split('/', StringSplitOptions.RemoveEmptyEntries);
-            Language language = default;
-
-
-            if (path.Length == 0) {
-                return new αRoot(default).Representative;
-            }
-
-            var htmlName = path.Last();
-            htmlName = htmlName[..htmlName.LastIndexOf('.')].ToLower();
-
-            var lastIndexOf_ = htmlName.LastIndexOf('_');            
-
-            if (lastIndexOf_ != -1) {
-                var languagePart = htmlName[(lastIndexOf_ + 1)..];
-                language = Enum.GetValues<Language>().FirstOrDefault(i => htmlName.EndsWith(i.ToString().ToLower()));
-                htmlName = htmlName[..lastIndexOf_];
-            }
-            path[^1] = htmlName;
-            
-            if (path.Length == 1 && path[0] == "index")
-                return new αRoot(language).Representative;
-
-            INode result = new αRoot(language);
-            var pathList = new List<string[]>();
-            //var root = new αRoot(language).Children.FirstOrDefault().Name;
-            foreach (var pathPart in path) {
-                result = result.Children.FirstOrDefault(x => x.Name.ToLower() == pathPart.ToLower());
-                if (result == null) return null;
-            }
-            return result.Representative as IPageGenerator;
-        }
-
-
-        public override Uri NodeToUrl(Uri baseUrl, INode node) {
-            if (node is ProtoNode protoNode) {
-                string path;
-                if (protoNode.Path.Length == 0) {//root
-                    path = "Index";
-                } else {
-                    path = string.Join('/', protoNode.Path);
-                }
-                return new Uri(baseUrl, path + "_" + protoNode.Language.ToString() + ".html");
-
-            } else {
-                throw new Exception($"ProtoNodeToUri. {node.GetType()} is not ProtoNode");
-            }
-        }
+        
 
     }
 
     internal class Program {
 
         private static async Task Main(string[] args) {
+
             //var generator = new Content.StaticGenerator(
             //        new Uri(@"D:/TestSite/"),
             //        new Storage(@"D:\TestSite", @"D:\TestSite\IntermediateCache"),
@@ -202,7 +136,9 @@ namespace StaticSharpDemo {
 
             StaticSharp.Gears.Cache.Directory = AbsolutePath(".cache");
 
-            await new Server().RunAsync();
+            await new StaticSharp.MultilanguageServer<Language>(
+                (language) => new αRoot(language)
+                ).RunAsync();
         }
     }
 }

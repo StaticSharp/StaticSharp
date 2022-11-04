@@ -17,14 +17,18 @@ namespace StaticSharp {
             public double Y => NotEvaluatableValue<double>();
             public double Width => NotEvaluatableValue<double>();
             public double Height => NotEvaluatableValue<double>();
+
+
             public double MarginLeft => NotEvaluatableValue<double>();
             public double MarginRight => NotEvaluatableValue<double>();
             public double MarginTop => NotEvaluatableValue<double>();
             public double MarginBottom => NotEvaluatableValue<double>();
+
             public double PaddingLeft => NotEvaluatableValue<double>();
             public double PaddingRight => NotEvaluatableValue<double>();
             public double PaddingTop => NotEvaluatableValue<double>();
             public double PaddingBottom => NotEvaluatableValue<double>();
+
             public double FontSize => NotEvaluatableValue<double>();
             public int Depth => NotEvaluatableValue<int>();
         }
@@ -50,9 +54,6 @@ namespace StaticSharp {
             public Binding<double> MarginsVertical { set { Apply(value, "MarginTop", "MarginBottom"); } }
             public Binding<double> Margins { set { Apply(value, "MarginLeft", "MarginRight", "MarginTop", "MarginBottom"); } }
 
-
-
-
             public Binding<double> PaddingLeft { set { Apply(value); } }
             public Binding<double> PaddingRight { set { Apply(value); } }
             public Binding<double> PaddingTop { set { Apply(value); } }
@@ -74,7 +75,7 @@ namespace StaticSharp {
     [ConstructorJs]
     public partial class Block : BaseModifier, IBlock {
         //public virtual List<Modifier> Modifiers { get; } = new();
-        public Blocks Children { get; } = new();
+        public virtual Blocks Children { get; } = new();
         //public Block? Overlay;
 
         protected Block(Block other,
@@ -134,6 +135,18 @@ namespace StaticSharp {
     }
 
     public static partial class Static {
+
+        public static T CenterHorizontally<T>(this T _this) where T : Block {
+            _this.X = new(e => 0.5 * (e.ParentBlock.Width - e.Width));
+            return _this;
+        }
+        public static T CenterVertically<T>(this T _this) where T : Block {
+            _this.Y = new(e => 0.5 * (e.ParentBlock.Height - e.Height));
+            return _this;
+        }
+        public static T Center<T>(this T _this) where T : Block {
+            return _this.CenterHorizontally().CenterVertically();
+        }
 
         public static T FillWidth<T>(this T _this) where T : Block {
             _this.X = new(e => Js.Math.First(e.MarginLeft,0));

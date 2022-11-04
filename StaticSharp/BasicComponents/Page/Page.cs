@@ -1,36 +1,22 @@
-﻿using StaticSharp;
-using StaticSharp.BasicComponents.Page;
-using StaticSharp.Gears;
+﻿using StaticSharp.Gears;
 using StaticSharp.Html;
-using StaticSharpWeb.Html;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
 
     namespace Js {
         public class Page : BaseModifier {
-            public double WindowWidth => NotEvaluatableValue<double>();
-            public double WindowHeight => NotEvaluatableValue<double>();
-            public double DevicePixelRatio => NotEvaluatableValue<double>();
-            public bool Touch => NotEvaluatableValue<bool>();
-            public bool UserInteracted => NotEvaluatableValue<bool>();
+            public double Width => NotEvaluatableValue<double>();
+            public double Height => NotEvaluatableValue<double>();
             public double FontSize => NotEvaluatableValue<double>();
 
         }
     }
 
     namespace Gears {
-        public class PageBindings<FinalJs> : BaseModifierBindings<FinalJs> where FinalJs : new() {
-            public Binding<double> FontSize { set { Apply(value); } }
+        public class PageBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
+            //public Binding<double> FontSize { set { Apply(value); } }
 
         }
     }
@@ -45,16 +31,12 @@ namespace StaticSharp {
     //[RelatedScript("Cookies")]
     [RelatedStyle("../Normalization")]
 
-    public abstract partial class Page : BaseModifier, IPageGenerator, IPlainTextProvider {
+    public abstract partial class Page : Block, IPageGenerator, IPlainTextProvider {
         protected virtual Task Setup(Context context) {
             FontSize = 16;
             return Task.CompletedTask;
         }
-
-
-        public abstract string Title { get; }
-
-        
+        public abstract string Title { get; }        
         protected override string TagName => "body";
 
         public Page([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
@@ -67,8 +49,6 @@ namespace StaticSharp {
         public async Task<string> GeneratePageHtmlAsync(Context context) {
 
             await Setup(context);
-
-
 
 
             var head = new Tag("head"){

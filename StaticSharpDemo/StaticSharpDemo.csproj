@@ -28,8 +28,7 @@
 	</ItemGroup>-->
 
 	<ItemGroup>
-		
-		<ProjectReference Include="..\StaticSharpEngine\StaticSharpEngine.csproj" />
+		<ProjectReference Include="..\StaticSharpServer\StaticSharpSever.csproj" />
 		<ProjectReference Include="..\StaticSharp\StaticSharp.csproj" />
 	</ItemGroup>
 
@@ -47,7 +46,7 @@
 
 		<ProjectReference Include="..\MixinGenerator\MixinGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 
-		<ProjectReference Include="..\StaticSharpGenerator\StaticSharpGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+		<ProjectReference Include="..\StaticSharpSourceGenerator\StaticSharpSourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
 	
 	

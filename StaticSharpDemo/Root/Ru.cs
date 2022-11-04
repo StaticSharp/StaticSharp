@@ -10,10 +10,10 @@ namespace StaticSharpDemo.Root {
 
 
     [Representative]
-    public partial class Ru : Material{
+    public partial class Ru : Material {
 
-        
-        
+
+
         static string RandomString(int length, Random random) {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789     ";
             return new string(Enumerable.Repeat(chars, length)
@@ -52,6 +52,25 @@ namespace StaticSharpDemo.Root {
             };
         }
 
+
+        /*public override ScrollLayout ScrollLayout => base.ScrollLayout.Modify(x => {
+            x.Children.Add(
+                new MaterialDesignIconBlock(MaterialDesignIcons.IconName.LanguageCsharp) {
+                    Depth = 3,
+                    BackgroundColor = Color.White,
+                    Height = 80,
+                    Radius = new(e => e.Height * 0.5),
+                    Paddings = 20,
+                    Children = {
+                    new LinkBlock("https://en.wikipedia.org/wiki/C_Sharp_(programming_language)").FillHeight().FillWidth()
+                }
+
+                }.Center()
+                );
+        });*/
+
+
+
         public override Blocks? Content => new() {
 
 
@@ -61,7 +80,7 @@ namespace StaticSharpDemo.Root {
                     Mute = true,
                     PreferPlatformPlayer = false,
                     Controls = false,
-                    Loop =  true,
+                    Loop =  true,                    
                 }
             },
 

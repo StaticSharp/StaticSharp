@@ -404,7 +404,7 @@ function PageSideMenus(element) {
 
         if (element.Content) {
             //element.Content.Height = element.WindowHeight
-            element.Content.Width = width// - 2 * contentSpace
+            element.Content.LayoutWidth = width// - 2 * contentSpace
 
 
             element.Content.Content.PaddingLeft = contentSpace
@@ -415,21 +415,6 @@ function PageSideMenus(element) {
             element.Content.LayoutHeight = element.Height//(element.Content.InternalHeight, element.Height)
         }
     })
-
-    new Reaction(() => {
-        element.style.width = ToCssSize(element.Width)
-        element.style.height = ToCssSize(element.Height) //ToCssSize(element.Content.Height)
-    })
-
-
-
-
-
-
-
-
-
-
 
 
 

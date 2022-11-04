@@ -14,7 +14,6 @@ namespace StaticSharp {
     }
 
 
-    //[RelatedStyle]
     [ConstructorJs]
     public class ScrollLayout : Block {
 

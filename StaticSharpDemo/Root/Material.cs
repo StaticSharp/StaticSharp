@@ -54,7 +54,7 @@ namespace StaticSharpDemo.Root {
                         },
 
                         new Paragraph("Social links"){
-                            ["Width"] = "() => element.LayoutWidth",
+                            //["Width"] = "() => element.LayoutWidth",
                         }
                     }
                 }

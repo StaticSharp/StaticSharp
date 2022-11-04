@@ -56,6 +56,26 @@ namespace StaticSharp {
         };*/
 
         public virtual Inlines? Description => null;
+
+
+        public virtual ScrollLayout ScrollLayout => new ScrollLayout {
+            Content = Column
+        };
+
+        public virtual Column Column => new Column {
+            Children = {
+                ColumnChildren
+            }
+        };
+
+        public virtual Blocks? ColumnChildren => new (){
+            { "TopBar", TopBar },
+            Content,
+            new Space(),
+            Footer
+        };
+
+
         public virtual Blocks? Content => null;
 
 
@@ -84,16 +104,7 @@ namespace StaticSharp {
 
                     {"RightSideBarIcon" ,RightSideBarIcon},
                     {"RightSideBar" ,RightSideBar},
-                    {"Content", new ScrollLayout {
-                        Content = new Column {
-                            Children = {
-                                { "TopBar", TopBar },
-                                Content,
-                                new Space(),
-                                Footer
-                            }
-                        }
-                    }}
+                    {"Content", ScrollLayout}
                 }.GenerateHtmlAsync(context)
                 );
 

@@ -104,7 +104,7 @@ namespace StaticSharp {
                 Properties = new(other.Properties);
             }
 
-            public Reactive(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) {
+            protected Reactive(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) {
                 
             }
 
@@ -149,7 +149,7 @@ namespace StaticSharp {
 
             }
 
-            public virtual async Task AddRequiredInclues(Context context) {
+            protected virtual async Task AddRequiredInclues(Context context) {
                 var type = GetType();
                 await AddRequiredIncluesForType(type, context);
 
@@ -162,7 +162,7 @@ namespace StaticSharp {
 
 
 
-            public async Task<Tag> CreateConstructorScriptAsync(Context context) {
+            protected async Task<Tag> CreateConstructorScriptAsync(Context context) {
                 //var sripts = new List<string>();
 
 
@@ -185,14 +185,14 @@ namespace StaticSharp {
                 };
             }
 
-            public Tag Pop() {
+            protected Tag Pop() {
                 return new Tag("script") {
                     new PureHtmlNode("Pop()")
                 };
             }
 
 
-            public virtual IAsyncEnumerable<KeyValuePair<string, string>> GetGeneratedBundingsAsync(Context context) {
+            protected virtual IAsyncEnumerable<KeyValuePair<string, string>> GetGeneratedBundingsAsync(Context context) {
                 return AsyncEnumerable.Empty<KeyValuePair<string, string>>();
             }
 

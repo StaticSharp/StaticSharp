@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     namespace Js {
-        [Mix(typeof(Js.Link))]
-        [Mix(typeof(Js.Inline))]
+        [Mix(typeof(Link))]
+        [Mix(typeof(Inline))]
         public partial class LinkInline {
         }
     }
@@ -22,8 +22,8 @@ namespace StaticSharp {
     [ConstructorJs]
     public partial class LinkInline : Inline {
         protected override string TagName => "a";
-        
-        StaticSharpEngine.INode? Node;
+
+        Tree.INode? Node;
         public Inlines Children { get; } = new();
 
 
@@ -31,7 +31,7 @@ namespace StaticSharp {
             HRef = url;
         }
 
-        public LinkInline(StaticSharpEngine.INode node, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
+        public LinkInline(Tree.INode node, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
             Node = node;
         }
         public LinkInline([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
@@ -39,7 +39,7 @@ namespace StaticSharp {
         public LinkInline(LinkInline other, string callerFilePath, int callerLineNumber) : base(other, callerFilePath, callerLineNumber) {
             Node = other.Node;
         }
-        public override async IAsyncEnumerable<KeyValuePair<string, string>> GetGeneratedBundingsAsync(Context context) {
+        protected override async IAsyncEnumerable<KeyValuePair<string, string>> GetGeneratedBundingsAsync(Context context) {
             await foreach (var i in base.GetGeneratedBundingsAsync(context)) { yield return i; }
             if (Node != null) {
                 var url = context.NodeToUrl(Node);

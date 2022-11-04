@@ -11,6 +11,7 @@ namespace StaticSharpDemo.Root.Components.ScrollLayoutComponent {
     [Representative]
     public partial class Ru: ComponentPage {
         public override string Title => "Scroll Layout";
+
         public override Blocks? Content => new() { 
             new ScrollLayout(){ 
                 Height = 300,
@@ -23,8 +24,8 @@ namespace StaticSharpDemo.Root.Components.ScrollLayoutComponent {
             "Paddings:",
             new ScrollLayout(){
                 Height = 200,
-                Paddings = 30,
-                BackgroundColor = Color.Purple,
+                Paddings = 20,
+                BackgroundColor = Color.Pink,
                 Content = new MaterialDesignIconBlock(MaterialDesignIcons.IconName.Carrot){
                     Width = 1024,
                     BackgroundColor = Color.MediumPurple,

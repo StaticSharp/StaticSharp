@@ -2,7 +2,7 @@
 
 using StaticSharp.Gears;
 using StaticSharp.Resources;
-using StaticSharpEngine;
+
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -14,17 +14,49 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
+
+    public record ContextOptions{
+        public ContextOptions(Assets assets, INodeToUrl nodeToUrlConverter, Uri baseUrl, Uri? assetsBaseUrl = null, bool developerMode = false) {
+            Assets = assets;
+            NodeToUrlConverter = nodeToUrlConverter;
+            BaseUrl = baseUrl;
+            this.assetsBaseUrl = assetsBaseUrl;
+            DeveloperMode = developerMode;
+        }
+
+        public Assets Assets { get; init; }
+        
+        public INodeToUrl NodeToUrlConverter { get; init; }
+        public Uri BaseUrl { get; init; }
+
+        private Uri? assetsBaseUrl;
+        public Uri AssetsBaseUrl {
+            get {
+                if (assetsBaseUrl == null)
+                    return new Uri(BaseUrl, "Assets/");
+                return assetsBaseUrl;
+            }
+            set {
+                assetsBaseUrl = value;
+            }
+        }
+
+        public bool DeveloperMode { get; init; }
+
+    }
+
+
     public struct Context {
 
         public bool DeveloperMode { get; init; }
 
         public INodeToUrl NodeToUrlConverter { get; init; }
-        public Uri NodeToUrl(INode node) { 
+        public Uri NodeToUrl(Tree.INode node) { 
             return NodeToUrlConverter.NodeToUrl(BaseUrl, node);
         }
         public Uri BaseUrl { get; init; }
 
-        public Uri BaseAssetsUrl => new Uri(BaseUrl, "Assets/");
+        public Uri AssetsBaseUrl { get; init; }
 
         public Includes Includes { get; init; }
 
@@ -51,7 +83,7 @@ namespace StaticSharp {
 
         public async Task<Uri> AddAssetAsync(IAsset asset) {
             await Assets.AddAsync(asset);
-            return new Uri(BaseAssetsUrl, asset.FilePath);
+            return new Uri(AssetsBaseUrl, asset.FilePath);
         }
 
         public void AddScript(IAsset asset) {
@@ -95,7 +127,7 @@ namespace StaticSharp {
 
 
 
-        public async Task AddScriptFromResource(string fileName, [CallerFilePath] string callerFilePath = "") {
+        /*public async Task AddScriptFromResource(string fileName, [CallerFilePath] string callerFilePath = "") {
             var assembly = Assembly.GetCallingAssembly();
             string directory = Path.GetDirectoryName(callerFilePath) ?? "";
             string absoluteFilePath = Path.Combine(directory, fileName);
@@ -104,10 +136,20 @@ namespace StaticSharp {
 
             var script = await (new AssemblyResourceGenome(assembly, relativeResourcePath)).CreateOrGetCached();
             AddScript(script);
+        }*/
+
+        public Context(ContextOptions contextOptions) {
+            Assets = contextOptions.Assets;
+            BaseUrl = contextOptions.BaseUrl;
+            NodeToUrlConverter = contextOptions.NodeToUrlConverter;
+            DeveloperMode = contextOptions.DeveloperMode;
+            AssetsBaseUrl = contextOptions.AssetsBaseUrl;
+
+            Includes = new Includes();
+            nextIdNumber = new(0);
+            
         }
-
-
-        public Context(Assets assets, Uri baseUrl, INodeToUrl nodeToUrlConverter, bool developerMode = false) {
+        /*public Context(Assets assets, Uri baseUrl, INodeToUrl nodeToUrlConverter, bool developerMode = false) {
             Assets = assets;
             //Urls = urls;
             BaseUrl = baseUrl;
@@ -117,6 +159,6 @@ namespace StaticSharp {
 
             nextIdNumber = new(0);
             DeveloperMode = developerMode;
-        }
+        }*/
     }
 }

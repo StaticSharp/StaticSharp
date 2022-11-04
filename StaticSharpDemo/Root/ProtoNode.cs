@@ -1,48 +1,19 @@
-﻿using StaticSharpEngine;
+﻿using StaticSharp.Gears;
+using StaticSharp.Tree;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace StaticSharpDemo.Root {
 
-    public partial class ProtoNode {
-        public Language Language { get; init; }
+    public enum Language {
+        En,
+        Ru
+    }
 
-        public Dictionary<string, ProtoNode>? GetAllParallelNodes() 
-            => Enum.GetValues(typeof(Language)).Cast<Language>()
-                .ToDictionary(l => l.ToString().ToLower(), l => WithLanguage(l));
-
-
-        protected T? SelectRepresentative<T>(IEnumerable<T> representatives) {
-            var findedLanguage = representatives.FirstOrDefault(r => r?.GetType().Name == Enum.GetName(Language));
-            if (findedLanguage is null) {
-                findedLanguage = representatives.FirstOrDefault(r => r?.GetType().Name == "En");
-            }
-            if (findedLanguage is null) {
-                findedLanguage = representatives.FirstOrDefault();
-            }
-            return findedLanguage;
+    public abstract class ProtoNode : MultilanguageProtoNode<Language> {
+        protected ProtoNode(Language language) : base(language) {
         }
     }
 
-    public abstract partial class ProtoNode : StaticSharpEngine.INode{
-
-        public ProtoNode(Language language) => Language = language;
-        public abstract ProtoNode Parent { get; }
-        INode INode.Parent => Parent;
-        public abstract ProtoNode Root { get; }
-        INode INode.Root => Root;
-
-        IRepresentative? INode.Representative => Representative as IRepresentative;
-        public abstract object Representative { get; }
-
-        public abstract IEnumerable<ProtoNode> Children { get; }
-        IEnumerable<INode> INode.Children => Children;
-
-        public abstract string Name { get; }
-
-        public abstract string[] Path { get; }
-
-        public abstract ProtoNode WithLanguage(global::StaticSharpDemo.Language language);
-    }
 }

@@ -7,10 +7,11 @@
         const string ProtoNode = "ProtoNode";
         const string VirtualNodePropertyName = "VirtualNode";
         const string NodePropertyName = "Node";
-        const string INode = "StaticSharpEngine.INode";
+        const string INode = "StaticSharp.Tree.INode";
         const string Representative = "Representative";
         const string Representatives = "Representatives";
-        const string IRepresentative = "StaticSharpEngine.IRepresentative";
-        const string ITypedRepresentativeProvider = "StaticSharpEngine.ITypedRepresentativeProvider";
+        const string IRepresentative = "StaticSharp.Tree.IRepresentative";
+        const string Page = "StaticSharp.Page";
+        const string ITypedRepresentativeProvider = "StaticSharp.Tree.ITypedRepresentativeProvider";
     }
 }

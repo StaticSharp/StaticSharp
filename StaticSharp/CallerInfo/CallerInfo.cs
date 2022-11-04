@@ -14,7 +14,7 @@ public abstract class CallerInfo{
         throw new InvalidUsageException(callerFilePath, callerLineNumber);
     }
 
-    public void AddSourceCodeNavigationData(Tag tag, Context context) {
+    protected void AddSourceCodeNavigationData(Tag tag, Context context) {
         if (context.DeveloperMode) {
             tag["data-caller-file-path"] = callerFilePath;
             tag["data-caller-line-number"] = callerLineNumber;

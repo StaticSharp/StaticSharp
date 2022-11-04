@@ -3,7 +3,7 @@ function Page(element) {
     element.isRoot = true
     let loadingDeffered = Reaction.beginDeferred()
 
-    BaseModifier(element)
+    Block(element)
 
 
     function getWindowWidth() {
@@ -13,55 +13,6 @@ function Page(element) {
         return window.innerHeight // document.documentElement.clientHeight
     }
 
-    /*document.body.onmousedown = function (e) {
-        if (e.button === 1) return false;
-    }*/
-
-
-    /*document.Events.PointerDown = {
-        handler: () => {
-
-            //if (event.pointerType != "touch") return
-
-            console.log("document PointerDown", event.which)
-            //event.path[0].setPointerCapture(event.pointerId)
-
-            document.Events.PointerMove = () => {
-                console.log("document PointerMove", event.path, event.clientX, event.cancelable)
-                if (event.cancelable) {
-
-                } else {
-                    console.log("PointerMove = undefined")
-                    document.Events.PointerMove = undefined
-                    document.Events.PointerUp = undefined
-                }
-
-            }
-            document.Events.PointerUp = () => {
-                console.log("PointerUp", event.clientX)
-
-                document.Events.PointerMove = undefined
-                document.Events.PointerUp = undefined
-            }
-
-            //event.preventDefault();
-            //return false;
-        },
-        passive: false
-    }*/
-
-
-
-
-    //detect slim scroll or thick
-    /*document.documentElement.style.overflowX = "hidden"
-    document.documentElement.style.overflowY = "scroll"
-    if (window.innerWidth == document.documentElement.clientWidth) {
-        document.documentElement.style.overflowY = "auto"
-        //console.log("document.documentElement.style.overflowY = auto")
-    } else {
-        //console.log("document.documentElement.style.overflowY = scroll")
-    }*/
 
     let animationFrame = 0
     window.Reactive = {
@@ -76,11 +27,12 @@ function Page(element) {
         },
 
         UserInteracted: false,
-
+        DevicePixelRatio: window.devicePixelRatio,
+        Touch: false,
     }
 
     let touchMedia = window.matchMedia("(pointer: coarse)")
-    window.Reactive.Touch = touchMedia.matches
+    window.Touch = touchMedia.matches
     touchMedia.onchange = (e) => {
         window.Touch = e.matches
     }
@@ -96,17 +48,15 @@ function Page(element) {
             { once: true }
         );
     }
-    createDevicePixelRatioCallback(() => element.DevicePixelRatio = window.devicePixelRatio)
+    createDevicePixelRatioCallback(() => window.DevicePixelRatio = window.devicePixelRatio)
 
 
 
     element.Reactive = {
-        Root: element,
-        
-        DevicePixelRatio: window.devicePixelRatio,
+        Root: element,        
 
-        Width: getWindowWidth(),
-        Height: getWindowHeight(),
+        LayoutWidth: getWindowWidth(),
+        LayoutHeight: getWindowHeight(),
 
         FontSize: 16,
         HierarchyFontSize: () => element.FontSize,
@@ -118,14 +68,6 @@ function Page(element) {
 
     }
 
-    DepthToStyle(element)
-
-    
-
-    
-
-
-
 
 
     /*window.ontouchend = () => {
@@ -133,27 +75,20 @@ function Page(element) {
         element.UserInteracted = true
     }*/
     window.onmousedown = () => {
-        console.log("onmousedown")
         window.UserInteracted = true
     }
 
-    new Reaction(() => {
-        console.log("window.UserInteracted", window.UserInteracted)
-    })
+
 
 
     window.onresize = function (event) {
         //let startTime = performance.now()
         let d = Reaction.beginDeferred()
-        element.Width = getWindowWidth()
-        element.Height = getWindowHeight()
+        element.LayoutWidth = getWindowWidth()
+        element.LayoutHeight = getWindowHeight()
         d.end()
         //console.log("resize", performance.now() - startTime)
     }
-
-
-    
-
 
 
     

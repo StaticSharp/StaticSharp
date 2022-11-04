@@ -13,7 +13,7 @@ namespace StaticSharpGenerator {
             if(parentClassName == null) {
                 body.AddLine($"public override {ProtoNode} Parent => null;");
             } else {
-                body.AddLine($"public override {ProtoNode} Parent => new {parentClassName}({State.ToCall()});");
+                body.AddLine($"public override {parentClassName} Parent => new {parentClassName}({State.ToCall()});");
             }
             body.AddLine($"public override {AlphaRoot} Root => new {AlphaRoot}({State.ToCall()});");
 
@@ -72,7 +72,7 @@ namespace StaticSharpGenerator {
 
             if(numRepresentatives == 0) {
                 //place.AddLine($"{IRepresentative} {INode}.{Representative} => null;");
-                place.AddLine($"public override {IRepresentative} {Representative} => null;");
+                place.AddLine($"public override {Page} {Representative} => null;");
             } else {
                 var symbols = representatives.Select(x => Compilation.GetTypeByMetadataName(x.FullyQualifiedName));
 
