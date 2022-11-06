@@ -21,22 +21,17 @@ namespace StaticSharp.Resources {
         }
 
         public string Add(TagGenerator tagGenerator) {
-
-            lock (this) {
-                if (items.TryGetValue(tagGenerator.Key, out var existing)) {
-                    return MakeId(existing.Key);
-                }
-                var result = MakeId(currentIdIndex);
-                items.Add(tagGenerator.Key, new(currentIdIndex, tagGenerator));
-                currentIdIndex++;
-                return result;
+            if (items.TryGetValue(tagGenerator.Key, out var existing)) {
+                return MakeId(existing.Key);
             }
+            var result = MakeId(currentIdIndex);
+            items.Add(tagGenerator.Key, new(currentIdIndex, tagGenerator));
+            currentIdIndex++;
+            return result;            
         }
 
-        public Task<IEnumerable<Tag>> GetAllAsync() {
-            lock (this) {
-                return items.Values.Select(x => x.Value.Generate(MakeId(x.Key))).SequentialOrParallel();
-            }
+        public async Task<IEnumerable<Tag>> GetAllAsync() {
+            return await Task.WhenAll(items.Values.Select(async x => await x.Value.Generate(MakeId(x.Key))));
         }
 
     }

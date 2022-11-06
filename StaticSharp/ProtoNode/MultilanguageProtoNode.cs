@@ -6,14 +6,13 @@ using System.Linq;
 
 namespace StaticSharp;
 
-public abstract class MultilanguageProtoNode<LanguageEnum> : ProtoNode where LanguageEnum : struct, Enum {
+public abstract class MultilanguageProtoNode<LanguageEnum> : ProtoNode<MultilanguageProtoNode<LanguageEnum>> where LanguageEnum : struct, Enum {
     public LanguageEnum Language { get; init; }
 
     public MultilanguageProtoNode(LanguageEnum language) => Language = language;
 
-    public Dictionary<string, ProtoNode>? GetAllParallelNodes()
-        => Enum.GetValues(typeof(LanguageEnum)).Cast<LanguageEnum>()
-            .ToDictionary(l => l.ToString().ToLower(), l => WithLanguage(l));
+    public IEnumerable<MultilanguageProtoNode<LanguageEnum>> GetAllParallelNodes()
+        => Enum.GetValues<LanguageEnum>().Select(l => WithLanguage(l));
 
     protected T? SelectRepresentative<T>(IEnumerable<T> representatives) {
         var findedLanguage = representatives.FirstOrDefault(r => r?.GetType().Name == Enum.GetName(Language));
@@ -25,7 +24,7 @@ public abstract class MultilanguageProtoNode<LanguageEnum> : ProtoNode where Lan
         }
         return findedLanguage;
     }
-    public abstract ProtoNode WithLanguage(LanguageEnum language);
+    public abstract MultilanguageProtoNode<LanguageEnum> WithLanguage(LanguageEnum language);
 
 
 }

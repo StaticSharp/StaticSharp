@@ -1,5 +1,3 @@
 
 
-using StaticSharp;
-
-await new SimpleServer().RunAsync();
+Console.WriteLine("DeleteMe");

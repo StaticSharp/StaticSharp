@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="TestAssets\**" />
+    <Content Remove="TestAssets\**" />
+    <EmbeddedResource Remove="TestAssets\**" />
+    <None Remove="TestAssets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\StaticSharp\StaticSharp.csproj" />
   </ItemGroup>
 

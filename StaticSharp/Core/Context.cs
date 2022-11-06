@@ -16,17 +16,16 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     public record ContextOptions{
-        public ContextOptions(Assets assets, INodeToUrl nodeToUrlConverter, Uri baseUrl, Uri? assetsBaseUrl = null, bool developerMode = false) {
+        public ContextOptions(Assets assets, INodeToPath nodeToPath, Uri baseUrl, Uri? assetsBaseUrl = null, bool developerMode = false) {
             Assets = assets;
-            NodeToUrlConverter = nodeToUrlConverter;
+            NodeToPath = nodeToPath;
             BaseUrl = baseUrl;
             this.assetsBaseUrl = assetsBaseUrl;
             DeveloperMode = developerMode;
         }
 
-        public Assets Assets { get; init; }
-        
-        public INodeToUrl NodeToUrlConverter { get; init; }
+        public Assets Assets { get; init; }        
+        public INodeToPath NodeToPath { get; init; }
         public Uri BaseUrl { get; init; }
 
         private Uri? assetsBaseUrl;
@@ -50,9 +49,9 @@ namespace StaticSharp {
 
         public bool DeveloperMode { get; init; }
 
-        public INodeToUrl NodeToUrlConverter { get; init; }
+        public INodeToPath NodeToPath { get; init; }
         public Uri NodeToUrl(Tree.INode node) { 
-            return NodeToUrlConverter.NodeToUrl(BaseUrl, node);
+            return new Uri(BaseUrl, NodeToPath.NodeToRelativeUrl(node));
         }
         public Uri BaseUrl { get; init; }
 
@@ -141,7 +140,7 @@ namespace StaticSharp {
         public Context(ContextOptions contextOptions) {
             Assets = contextOptions.Assets;
             BaseUrl = contextOptions.BaseUrl;
-            NodeToUrlConverter = contextOptions.NodeToUrlConverter;
+            NodeToPath = contextOptions.NodeToPath;
             DeveloperMode = contextOptions.DeveloperMode;
             AssetsBaseUrl = contextOptions.AssetsBaseUrl;
 

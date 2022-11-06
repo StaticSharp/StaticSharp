@@ -8,7 +8,7 @@ using System.Text.Json;
 
 namespace StaticSharp {
 
-    public class SimpleServer : Server {
+    /*public class SimpleServer : Server {
         public override IPageGenerator? FindPage(string requestPath) {
             throw new NotImplementedException();
         }
@@ -16,16 +16,22 @@ namespace StaticSharp {
         public override Uri? NodeToUrl(Uri baseUrl, INode node) {
             throw new NotImplementedException();
         }
-    }
+    }*/
 
-    public abstract class Server : INodeToUrl {
+    public class Server {
+
+        private IPageFinder PageFinder { get; }
+        private INodeToPath NodeToPath { get; }
+
 
         private Assets Assets { get; init; }
         private ContextOptions ContextOptions { get; init; }
 
-        protected Server() {
-            Assets = new Assets();
-            ContextOptions = new(Assets, this, null!, null, true);
+        public Server(IPageFinder pageFinder, INodeToPath nodeToPath) {
+            Assets = new Assets();            
+            PageFinder = pageFinder;
+            NodeToPath = nodeToPath;
+            ContextOptions = new(Assets, NodeToPath, null!, null, true);
         }
 
         protected virtual IEnumerable<Uri> Urls {
@@ -37,6 +43,7 @@ namespace StaticSharp {
                 }
             }
         }
+
         public static IEnumerable<string> GetLocalIPAddresses() { //todo: move to urils
             var interfaces = NetworkInterface.GetAllNetworkInterfaces()
                 .Where(x => x.OperationalStatus == OperationalStatus.Up)
@@ -57,8 +64,6 @@ namespace StaticSharp {
             }
         }
 
-        public abstract IPageGenerator? FindPage(string requestPath);
-        public abstract Uri? NodeToUrl(Uri baseUrl, INode node);
 
         public Task RunAsync(CancellationToken cancellationToken = default) {
 
@@ -99,7 +104,7 @@ namespace StaticSharp {
                 var referer = headers.Referer;
                 if (referer != null) {
                     var path = referer.LocalPath;
-                    var page = FindPage(path);
+                    var page = PageFinder.FindPage(path);
                     if (page != null) {
                         return new ResultAsync(async () => {
                             var context = new Context(ContextOptions with { BaseUrl = httpContext.Request.GetBaseUri() });
@@ -119,7 +124,7 @@ namespace StaticSharp {
                 return Results.BadRequest();
             }
 
-            var page = FindPage(path);
+            var page = PageFinder.FindPage(path);
             /*if (page == null) {
                 page = Get404(request);
             }*/

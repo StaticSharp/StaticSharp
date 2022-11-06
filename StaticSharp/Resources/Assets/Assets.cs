@@ -9,8 +9,6 @@ namespace StaticSharp.Gears;
 
 
 public class Assets {
-    public string Directory { get; init; }
-    public Uri BaseUrl { get; init; }
 
     private static readonly Dictionary<string, IAsset> assets = new();
     public static AsyncLock AsyncLock { get; } = new();
@@ -39,12 +37,14 @@ public class Assets {
         return null;
     }
 
-    private async Task StoreAssetAsync(IAsset asset) {
-        var fullFilePath = Path.Combine(Directory, asset.FilePath);
+    private async Task StoreAssetAsync(IAsset asset, string assetsBaseDirectory) {
+        var fullFilePath = Path.Combine(assetsBaseDirectory, asset.FilePath);
+        Directory.CreateDirectory(Path.GetDirectoryName(fullFilePath)!);
+
         await File.WriteAllBytesAsync(fullFilePath, asset.ReadAllBites());
     }
-    public async Task StoreAsync() {
-        await Task.WhenAll(assets.Values.Select(x=>StoreAssetAsync(x)).ToArray());
+    public async Task StoreAsync(string directory) {
+        await Task.WhenAll(assets.Values.Select(x=>StoreAssetAsync(x, directory)).ToArray());
     }   
 
 

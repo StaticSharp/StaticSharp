@@ -26,106 +26,44 @@ namespace StaticSharpWeb {
         string TempDirectory { get; }
     }
 
-    /*public abstract class StaticGenerator : IStaticGenerator {
-        public Uri BaseUrl { get; set; }
-
-        public string BaseDirectory { get; set; }
-
-        public string TempDirectory { get; set; }
-
-        public IEnumerable<INode> GetRoots()
-            => GetStates().Select(x => new αRoot(x));
-
-        public abstract IEnumerable<dynamic> GetStates();
-
-        public abstract Uri? ProtoNodeToUri<T>(T? node) where T : class, INode;
-
-        public virtual string GetLanguage(INode page) => "en";
-
-        public IEnumerable<IPageGenerator> Pages
-            => GetRoots().SelectMany(x => GetPages(x));
-
-
-        public IEnumerable<INode> GetAllNodes(INode root) {
-            var result = root.Children;
-            foreach (var node in result) {
-                result = result.Concat(GetAllNodes(node));
-            }
-            return result;
-        }
-
-        public StringBuilder CreateSiteMap() {
-            var map = new StringBuilder()
-                .AppendLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
-                .AppendLine("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" " +
-                    "xmlns:xhtml=\"http://www.w3.org/1999/xhtml\">");
-            var roots = GetRoots();
-            foreach (var node in roots.SelectMany(root => GetAllNodes(root))) {
-                map.AppendLine("\t<url>");
-                map.AppendLine($"\t<loc>{ProtoNodeToUri(node)}</loc>");
-                foreach (var l in (node as ProtoNode).GetAllParallelNodes()) {
-                    map.AppendLine($"\t\t<xhtml:link rel=\"alternate\" hreflang=\"{l.Key}\" href=\"{ProtoNodeToUri(l.Value)}\"/>");
-                }
-
-                map.AppendLine("\t</url>");
-            }
-
-            map.AppendLine("</urlset>");
-            return map;
-        }
-
-        private IEnumerable<IPageGenerator> GetPages(INode node) {
-            IEnumerable<IPageGenerator> result = node.Representative is IPageGenerator page ? Enumerable.Repeat(page, 1) : Enumerable.Empty<IPageGenerator>();
-            foreach (var i in node.Children) {
-                result = result.Concat(GetPages(i));
-            }
-            return result;
-        }
-
-
-    }*/
+    
 }
 
 namespace StaticSharpDemo {
 
-    
-
-    public class Server  {
-
-
-
-        //delete me
-        //public override Uri BaseUrl => new("http://localhost/");
-        
-
-        /*private IStorage _Storage;
-
-        public override IStorage Storage {
-            get {
-                if (_Storage is null) {
-                    Directory.CreateDirectory(TempDirectory);
-                    Directory.CreateDirectory(IntermidiateCache);
-                    _Storage = new Storage(TempDirectory, IntermidiateCache);
-                }
-                return _Storage;
-            }
-        }*/
-
-        //public override string BaseDirectory => throw new NotImplementedException();
-
-        //public override string TempDirectory => AbsolutePath("../../StaticSharpCache");// @"D:\StaticSharpCache\";
-
-        //public string IntermidiateCache => Path.Combine(TempDirectory, "IntermediateCache");
-
-        
-
-        
-
-    }
 
     internal class Program {
 
-        private static async Task Main(string[] args) {
+        private static void Main(string[] args) {
+
+            var entryPointName = Environment.GetEnvironmentVariable("ENTRY_POINT");
+            if (entryPointName == null) {
+                Console.WriteLine("EnvironmentVariable 'ENTRY_POINT' not found.");
+                return;
+            }
+
+            var entryPoint = typeof(Program).GetMethod(entryPointName,
+                System.Reflection.BindingFlags.Public
+                | System.Reflection.BindingFlags.Static
+                | System.Reflection.BindingFlags.FlattenHierarchy);
+
+            if (entryPoint == null) {
+                Console.WriteLine($"entryPoint {entryPointName} not found.");
+                return;
+            }
+
+
+
+            if (entryPoint.ReturnType == typeof(Task)) {
+                /*var task = entryPoint.Invoke(null, null);
+                if (task != null) {
+                    //(Generator()).Wait();
+                }*/
+            } else {
+                entryPoint.Invoke(null, null);
+            }
+
+            
 
             //var generator = new Content.StaticGenerator(
             //        new Uri(@"D:/TestSite/"),
@@ -134,11 +72,29 @@ namespace StaticSharpDemo {
             //);
             //await generator.GenerateAsync();
 
-            StaticSharp.Gears.Cache.Directory = AbsolutePath(".cache");
+            
+        }
 
-            await new StaticSharp.MultilanguageServer<Language>(
-                (language) => new αRoot(language)
+        public static async Task Server() {
+            Cache.Directory = AbsolutePath(".cache");
+
+            await new StaticSharp.Server(
+                new DefaultMultilanguagePageFinder<Language>((language) => new αRoot(language)),
+                new DefaultMultilanguageNodeToPath<Language>()
+
                 ).RunAsync();
+        }
+
+        public static async Task Generator() {
+           Cache.Directory = AbsolutePath(".cache");
+
+            /*var generator = new MultilanguageStaticGenerator<Language>(
+                new DefaultMultilanguageNodeToPath<Language>(),
+                new Uri("http://staticsharp.github.io"),
+                Path.GetFullPath(Path.Combine(ProjectDirectory.Path, "../staticsharp.github.io"))
+                );
+/* 
+            await generator.GenerateAsync(new αRoot(default));*/
         }
     }
 }
