@@ -90,7 +90,7 @@ namespace StaticSharpDemo.Root {
                 BackgroundColor = Color.FromArgb(255,32,32,32),
                 Children = {
                     $"Refer to {GithubUrl()} for more information, and join our {DiscordUrl()} to learn more about getting early access to Copilot.",
-
+                    "Fix selection\u200b",
                     new Flipper() {
                         MarginLeft = new (e=>e.ParentBlock.PaddingLeft),
                         MarginRight = new (e=>e.ParentBlock.PaddingRight),
@@ -110,6 +110,19 @@ namespace StaticSharpDemo.Root {
                         },
                         Second = new Image(new FileGenome(AbsolutePath("Copilot/SchemeDark.svg"))){
                             Embed = Image.TEmbed.Image,
+                        },
+                        Children = { 
+                            new MaterialDesignIconBlock(MaterialDesignIcons.IconName.Github){ 
+                                Width = 128,
+                                BackgroundColor = Color.White,
+                                Radius = new(e=>e.Width /2),
+                                Paddings = 12,
+                                Children = { 
+                                    new LinkBlock(){ 
+                                        HRef = "https://github.com/staticsharp"
+                                    }.FillHeight().FillWidth()
+                                }
+                            }.Center()
                         }
                     }
                 }

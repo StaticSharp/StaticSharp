@@ -1,6 +1,22 @@
 
 var pageHash = "t!dcsctAYNTSYMJaKLcdZPtZ#n@KPIjkK)ppteSZ4t%W)N*3RC8k645V4DUMW5G!";
 
+
+function getBrowserLanguage() {
+    if (!navigator) return null;
+    console.log("navigator.languages", navigator.languages)
+    console.log("navigator.userLanguage", navigator.userLanguage)
+    console.log("navigator.browserLanguage", navigator.browserLanguage)
+    console.log("navigator.language", navigator.language)
+
+    if (navigator.languages && navigator.languages.length > 0) return navigator.languages[0];
+    if (navigator.userLanguage) return navigator.userLanguage;
+    if (navigator.browserLanguage) return navigator.browserLanguage;
+    return navigator.language;
+}
+
+console.log("getBrowserLanguage",getBrowserLanguage())
+
 function Watch() {
 
     const refreshIntervalMs = 500;

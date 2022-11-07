@@ -23,12 +23,12 @@ public class Generator<NodeType> where NodeType : ProtoNode<NodeType> {
         BaseDirectory = baseDirectory;
     }
 
-    public Uri NodeToUrl(INode node) {
+    public Uri NodeToAbsoluteUrl(INode node) {
         return new Uri(BaseUrl, NodeToPath.NodeToRelativeUrl(node));
     }
 
     public string NodeToFilePath(INode node) {
-        return Path.Combine(BaseDirectory, NodeToPath.NodeToRelativeFilePath(node));
+        return Path.GetFullPath(BaseDirectory+ NodeToPath.NodeToRelativeFilePath(node));
     }
 
 
@@ -67,6 +67,39 @@ public class Generator<NodeType> where NodeType : ProtoNode<NodeType> {
     protected void SaveSitemap(string saveSitemap) {
         File.WriteAllText(Path.Combine(BaseDirectory, "sitemap.xml"), saveSitemap);
     }
+
+
+
+    protected void ClearBaseDirectory() {
+        string doNotDeleteFileName = "doNotDelete.txt";
+        string doNotDeleteFilePath = Path.Combine(BaseDirectory, doNotDeleteFileName);
+        DirectoryInfo directory = new DirectoryInfo(BaseDirectory);
+
+        var doNotDelete = new List<string>();
+        if (File.Exists(doNotDeleteFilePath)) {
+            doNotDelete = File.ReadAllLines(doNotDeleteFilePath).Where(x=>!string.IsNullOrWhiteSpace(x)).ToList();
+            doNotDelete.Add(doNotDeleteFileName);
+        }
+
+        foreach (FileInfo file in directory.GetFiles()) {
+            var fileName = Path.GetFileName(file.FullName);
+            if (!doNotDelete.Contains(fileName)) {
+                file.Delete();
+            }            
+        }
+        foreach (DirectoryInfo subDirectory in directory.GetDirectories()) {
+            var subDirectoryName = Path.GetFileName(subDirectory.FullName);
+            if (subDirectoryName.StartsWith(".")) //.git .svn
+                continue;
+            if (doNotDelete.Contains(subDirectoryName))
+                continue;
+            subDirectory.Delete(true);
+            
+        }
+
+
+    }
+
 }
 
 
@@ -86,6 +119,9 @@ public class MultilanguageStaticGenerator<LanguageEnum> : Generator<Multilanguag
     
 
     public override async Task GenerateAsync(MultilanguageProtoNode<LanguageEnum> root) {
+
+        ClearBaseDirectory();
+
         var nodes = GetAllNodes(root);
         var nodesMultilanguage = nodes.SelectMany(x => x.GetAllParallelNodes());
 
@@ -98,7 +134,19 @@ public class MultilanguageStaticGenerator<LanguageEnum> : Generator<Multilanguag
         await assets.StoreAsync(Path.Combine(BaseDirectory, "Assets"));
     }
 
-    
+    public void GenerateIndex() {
+        var html = """
+            <!DOCTYPE html>
+            <html>
+              <head>
+                <meta http-equiv="refresh" content="7; url='https://www.w3docs.com'" />
+              </head>
+              <body>
+                <p>Please follow <a href="https://www.w3docs.com">this link</a>.</p>
+              </body>
+            </html>
+            """;
+    }
 
     public string CreateSiteMap(MultilanguageProtoNode<LanguageEnum> root) {
         var nodes = GetAllNodes(root);
@@ -110,12 +158,12 @@ public class MultilanguageStaticGenerator<LanguageEnum> : Generator<Multilanguag
 
         foreach (var node in nodes) {
             map.AppendLine("\t<url>");
-            map.AppendLine($"\t<loc>{NodeToUrl(node)}</loc>");
+            map.AppendLine($"\t<loc>{NodeToAbsoluteUrl(node)}</loc>");
             foreach (var l in node.GetAllParallelNodes()) {
                 if (l.Representative == null)
                     continue;
                 var language = l.Language.ToString().ToLower();
-                map.AppendLine($"\t\t<xhtml:link rel=\"alternate\" hreflang=\"{language}\" href=\"{NodeToUrl(l)}\"/>");
+                map.AppendLine($"\t\t<xhtml:link rel=\"alternate\" hreflang=\"{language}\" href=\"{NodeToAbsoluteUrl(l)}\"/>");
             }
             map.AppendLine("\t</url>");
         }

@@ -87,6 +87,10 @@
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 	  <WarningsAsErrors>$(WarningsAsErrors);NU1605</WarningsAsErrors>
+	  <LangVersion>preview</LangVersion>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <LangVersion>preview</LangVersion>
 	</PropertyGroup>
 
 	<ItemGroup Condition="$(UseDebugGeneratorOutput)">

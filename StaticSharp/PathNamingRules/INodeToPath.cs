@@ -1,9 +1,10 @@
 ﻿using StaticSharp.Tree;
 using System;
+using System.Linq;
 
 namespace StaticSharp {
     public interface INodeToPath {
-        string NodeToPath(INode node);
+        string NodeToPath(INode node);//Starts with "/"
 
         string NodeToRelativeUrl(INode node) {
             return NodeToPath(node) + ".html";
@@ -16,13 +17,10 @@ namespace StaticSharp {
     public class DefaultMultilanguageNodeToPath<LanguageEnum> : INodeToPath where LanguageEnum : struct, Enum {
         public string NodeToPath(INode node) {
             if (node is MultilanguageProtoNode<LanguageEnum> protoNode) {
-                string path;
-                if (protoNode.Path.Length == 0) {//root
-                    path = "Index";
-                } else {
-                    path = string.Join('/', protoNode.Path);
+                if (protoNode.Path.Length == 0) { 
                 }
-                return path + "_" + protoNode.Language.ToString();
+                string path = string.Concat(protoNode.Path.Select(x=>'/'+x));                
+                return path + "/" + protoNode.Language.ToString();
 
             } else {
                 throw new Exception($"NodeToPath: {node.GetType()} is not {nameof(MultilanguageProtoNode<LanguageEnum>)}");

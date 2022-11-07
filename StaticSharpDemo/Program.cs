@@ -34,7 +34,7 @@ namespace StaticSharpDemo {
 
     internal class Program {
 
-        private static void Main(string[] args) {
+        private static async Task Main(string[] args) {
 
             var entryPointName = Environment.GetEnvironmentVariable("ENTRY_POINT");
             if (entryPointName == null) {
@@ -52,18 +52,15 @@ namespace StaticSharpDemo {
                 return;
             }
 
-
-
             if (entryPoint.ReturnType == typeof(Task)) {
-                /*var task = entryPoint.Invoke(null, null);
+                var task = entryPoint.Invoke(null, null) as Task;
                 if (task != null) {
-                    //(Generator()).Wait();
-                }*/
+                    await task;
+                }
             } else {
                 entryPoint.Invoke(null, null);
             }
 
-            
 
             //var generator = new Content.StaticGenerator(
             //        new Uri(@"D:/TestSite/"),
@@ -72,7 +69,7 @@ namespace StaticSharpDemo {
             //);
             //await generator.GenerateAsync();
 
-            
+
         }
 
         public static async Task Server() {
@@ -86,15 +83,15 @@ namespace StaticSharpDemo {
         }
 
         public static async Task Generator() {
-           Cache.Directory = AbsolutePath(".cache");
+            Cache.Directory = AbsolutePath(".cache");
 
-            /*var generator = new MultilanguageStaticGenerator<Language>(
+            var generator = new MultilanguageStaticGenerator<Language>(
                 new DefaultMultilanguageNodeToPath<Language>(),
                 new Uri("http://staticsharp.github.io"),
-                Path.GetFullPath(Path.Combine(ProjectDirectory.Path, "../staticsharp.github.io"))
+                Path.GetFullPath(Path.Combine(ProjectDirectory.Path, "../../StaticSharp.github.io"))
                 );
-/* 
-            await generator.GenerateAsync(new αRoot(default));*/
+
+            await generator.GenerateAsync(new αRoot(default));
         }
     }
 }

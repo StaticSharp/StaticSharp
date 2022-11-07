@@ -15,7 +15,9 @@ public static partial class Cache {
     private static readonly Dictionary<string, Task<object>> items = new();
 
     public static AsyncLock AsyncLock { get; } = new();
-    public static SingleThreadTaskScheduler TaskScheduler { get; } = new SingleThreadTaskScheduler().Start();
+    
+    
+    //public static SingleThreadTaskScheduler TaskScheduler { get; } = new SingleThreadTaskScheduler().Start();
 
 
     /*public static void Lock() {
