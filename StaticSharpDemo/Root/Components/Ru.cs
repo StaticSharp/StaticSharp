@@ -10,7 +10,7 @@ namespace StaticSharpDemo.Root.Components {
 
 
 
-    public partial class ComponentPage : Material {
+    public partial class ComponentPage : Page {
 
         protected override Task Setup(Context context) {
             //BackgroundColor = Color.Black;

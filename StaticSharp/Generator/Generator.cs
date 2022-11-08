@@ -30,6 +30,9 @@ public class Generator<NodeType> where NodeType : ProtoNode<NodeType> {
     public string NodeToFilePath(INode node) {
         return Path.GetFullPath(BaseDirectory+ NodeToPath.NodeToRelativeFilePath(node));
     }
+    public string NodeToRedirectFilePath(INode node) {
+        return Path.GetFullPath(BaseDirectory + NodeToPath.NodeToRelativeDirectory(node) + "/index.html");
+    }
 
 
     protected IEnumerable<NodeType> GetAllNodes(NodeType root) {
@@ -41,7 +44,7 @@ public class Generator<NodeType> where NodeType : ProtoNode<NodeType> {
     }
 
     protected Context CreateContext(Assets assets) {
-        return new Context(new ContextOptions(assets, NodeToPath, BaseUrl, new Uri(BaseUrl, "Assets")));
+        return new Context(new ContextOptions(assets, NodeToPath, BaseUrl, null));
     }
 
     protected async Task GetnerateAndSave(INode node, Context context) {
@@ -131,21 +134,19 @@ public class MultilanguageStaticGenerator<LanguageEnum> : Generator<Multilanguag
 
         SaveSitemap(CreateSiteMap(root));
 
+        foreach (var node in nodes) {
+            GetnerateAndSaveMultilanguageRedirect(node);
+        }
+
         await assets.StoreAsync(Path.Combine(BaseDirectory, "Assets"));
     }
 
-    public void GenerateIndex() {
-        var html = """
-            <!DOCTYPE html>
-            <html>
-              <head>
-                <meta http-equiv="refresh" content="7; url='https://www.w3docs.com'" />
-              </head>
-              <body>
-                <p>Please follow <a href="https://www.w3docs.com">this link</a>.</p>
-              </body>
-            </html>
-            """;
+    public void GetnerateAndSaveMultilanguageRedirect(INode node) {
+        if (node.Representative == null)
+            return;
+        var html = MultilanguageRedirect.GenerateHtml<LanguageEnum>();
+        var path = NodeToRedirectFilePath(node);
+        File.WriteAllText(path, html);
     }
 
     public string CreateSiteMap(MultilanguageProtoNode<LanguageEnum> root) {
@@ -157,11 +158,11 @@ public class MultilanguageStaticGenerator<LanguageEnum> : Generator<Multilanguag
                 "xmlns:xhtml=\"http://www.w3.org/1999/xhtml\">");
 
         foreach (var node in nodes) {
+            if (node.Representative == null)
+                continue;
             map.AppendLine("\t<url>");
             map.AppendLine($"\t<loc>{NodeToAbsoluteUrl(node)}</loc>");
             foreach (var l in node.GetAllParallelNodes()) {
-                if (l.Representative == null)
-                    continue;
                 var language = l.Language.ToString().ToLower();
                 map.AppendLine($"\t\t<xhtml:link rel=\"alternate\" hreflang=\"{language}\" href=\"{NodeToAbsoluteUrl(l)}\"/>");
             }

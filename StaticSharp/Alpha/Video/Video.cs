@@ -75,11 +75,7 @@ namespace StaticSharp {
 
                 var youtubeVideoManifest = await new YoutubeVideoManifestGenome(youtubeVideoId).CreateOrGetCached();
 
-                var item = youtubeVideoManifest.Items.MaxBy(x => x.Width);
-
-
-                var video = await new YoutubeVideoGenome(item).CreateOrGetCached();
-                var url = await context.AddAssetAsync(video);
+                var item = youtubeVideoManifest.Items.MaxBy(x => x.Width)!;
 
                 elementTag["data-youtube-id"] = youtubeVideoId;
                 elementTag["data-width"] = item.Width;

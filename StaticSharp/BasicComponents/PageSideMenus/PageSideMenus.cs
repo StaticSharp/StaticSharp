@@ -24,6 +24,7 @@ namespace StaticSharp {
     [Mix(typeof(PageSideMenusBindings<Js.PageSideMenus>))]
     public partial class PageSideMenus : Page {
 
+        public virtual string PageLanguage => "en";
         protected override Task Setup(Context context) {
             SideBarsIconsSize = 48;
             return base.Setup(context);

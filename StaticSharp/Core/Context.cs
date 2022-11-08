@@ -32,7 +32,7 @@ namespace StaticSharp {
         public Uri AssetsBaseUrl {
             get {
                 if (assetsBaseUrl == null)
-                    return new Uri(BaseUrl, "Assets/");
+                    return new Uri("/Assets/",UriKind.Relative);
                 return assetsBaseUrl;
             }
             set {
@@ -80,9 +80,9 @@ namespace StaticSharp {
         }
 
 
-        public async Task<Uri> AddAssetAsync(IAsset asset) {
+        public async Task<string> AddAssetAsync(IAsset asset) {
             await Assets.AddAsync(asset);
-            return new Uri(AssetsBaseUrl, asset.FilePath);
+            return AssetsBaseUrl + asset.FilePath;
         }
 
         public void AddScript(IAsset asset) {

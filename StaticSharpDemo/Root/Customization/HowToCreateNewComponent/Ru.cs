@@ -1,7 +1,7 @@
 ﻿namespace StaticSharpDemo.Root.Customization.HowToCreateNewComponent {
 
     [Representative]
-    partial class Ru : Material {
+    partial class Ru : Page {
 
         
         public override string Title => "Как создать новый компонент";

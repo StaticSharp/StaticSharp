@@ -26,7 +26,7 @@ namespace StaticSharp {
 
     [Mix(typeof(PageBindings<Js.Page>))]
     [ConstructorJs]
-    [RelatedScript("../Watch")]
+    //[RelatedScript("../Watch")]
     [RelatedScript("../Color")]
     //[RelatedScript("Cookies")]
     [RelatedStyle("../Normalization")]
@@ -45,6 +45,18 @@ namespace StaticSharp {
             FontFamilies = new[] { new FontFamily("Roboto") };
             FontStyle = new FontStyle(FontWeight.Regular);
         }
+
+        protected override async Task AddRequiredInclues(Context context) {
+
+            await base.AddRequiredInclues(context);
+
+            if (context.DeveloperMode) {
+                var asset = await RelatedFileAttribute.GetAssetAsync(typeof(Page), "../Watch.js");
+                context.AddScript(asset);
+            }
+            
+        }
+
 
         public async Task<string> GeneratePageHtmlAsync(Context context) {
 

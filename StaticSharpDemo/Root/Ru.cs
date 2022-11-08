@@ -10,7 +10,7 @@ namespace StaticSharpDemo.Root {
 
 
     [Representative]
-    public partial class Ru : Material {
+    public partial class Ru : Page {
 
 
 

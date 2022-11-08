@@ -20,10 +20,7 @@ public class Assets {
                 if (existingAsset.ContentHash == asset.ContentHash) {
                     return;
                 }
-            } else {
-                Console.WriteLine("!assets.TryGetValue");
             }
-
             assets[asset.Key] = asset;
         }
     }

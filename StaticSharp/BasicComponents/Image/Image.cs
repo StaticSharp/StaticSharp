@@ -75,7 +75,7 @@ namespace StaticSharp {
                 return;
             }
 
-            url = (await context.AddAssetAsync(source)).ToString();
+            url = await context.AddAssetAsync(source);
             if (Embed == TEmbed.None) {
                 elementTag.Add(new Tag("img") {
                     ["src"] = url

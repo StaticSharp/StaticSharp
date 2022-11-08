@@ -73,7 +73,7 @@ namespace StaticSharp {
             foreach (var i in Urls)
                 app.Urls.Add(i.ToString());            
 
-            app.MapGet("/", GetAny).WithName("get_any");
+            app.MapGet("{**path}", GetAny).WithName("get_any");
             app.MapGet("Assets/{**path}", GetAsset).WithName("get_asset");
             app.MapGet("api/get_page_hash", GetPageHash).WithName("get_page_hash");
             app.MapPut("api/go_to_source_code", GoToSourceCode).WithName("go_to_source_code");

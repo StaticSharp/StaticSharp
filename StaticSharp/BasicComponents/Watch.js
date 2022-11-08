@@ -2,20 +2,18 @@
 var pageHash = "t!dcsctAYNTSYMJaKLcdZPtZ#n@KPIjkK)ppteSZ4t%W)N*3RC8k645V4DUMW5G!";
 
 
-function getBrowserLanguage() {
-    if (!navigator) return null;
-    console.log("navigator.languages", navigator.languages)
-    console.log("navigator.userLanguage", navigator.userLanguage)
-    console.log("navigator.browserLanguage", navigator.browserLanguage)
-    console.log("navigator.language", navigator.language)
 
-    if (navigator.languages && navigator.languages.length > 0) return navigator.languages[0];
-    if (navigator.userLanguage) return navigator.userLanguage;
-    if (navigator.browserLanguage) return navigator.browserLanguage;
-    return navigator.language;
-}
 
-console.log("getBrowserLanguage",getBrowserLanguage())
+
+
+
+
+/*console.log("fr ru_ru -> ", matchLanguage(["fr", "ru_ru"]))
+console.log("fr -> ", matchLanguage(["fr"]))
+
+console.log("en_ca en -> ", matchLanguage(["en_ca"]))
+console.log("en -> ", matchLanguage(["en"]))
+console.log("zh en-> ", matchLanguage(["zh","en"]))*/
 
 function Watch() {
 
