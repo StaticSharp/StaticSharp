@@ -4,8 +4,12 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace StaticSharpDemo.Root {
-    public partial class Page : StaticSharp.PageSideMenus {
 
+
+
+    public abstract partial class Page : StaticSharp.PageSideMenus {
+
+        public override string PageLanguage => Node.Language.ToString().ToLower();
         protected override Task Setup(Context context) {
             ContentWidth = 800;
             return base.Setup(context);
@@ -70,8 +74,7 @@ namespace StaticSharpDemo.Root {
         public override Block RightSideBar => new Column() {
             BackgroundColor = ColorTranslator.FromHtml("#7a5924"),
             Children = {
-                "En",
-                "Ru",
+                VirtualNode.GetAllParallelNodes().Select(x=>MenuItem(x,x.Language.ToString())),
             }
         };
 

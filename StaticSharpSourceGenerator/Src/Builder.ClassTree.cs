@@ -23,7 +23,7 @@ namespace StaticSharpGenerator {
 
             var commonRepresentativeType = WriteRepresentatives(namespaceInfo, className, body);
 
-            nodeClass.Header += commonRepresentativeType == null ? "" : $", {ITypedRepresentativeProvider}<{commonRepresentativeType}>";
+            //nodeClass.Header += commonRepresentativeType == null ? "" : $", {ITypedRepresentativeProvider}<{commonRepresentativeType}>";
 
             WriteChildren(namespaceInfo, body);
 

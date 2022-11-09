@@ -17,6 +17,8 @@ namespace StaticSharp {
             public bool Hover => NotEvaluatableValue<bool>();
             public bool Selectable => NotEvaluatableValue<bool>();
 
+            public double Visibility => NotEvaluatableValue<double>();
+
             public double Radius => NotEvaluatableValue<double>();
             public double RadiusTopLeft => NotEvaluatableValue<double>();
             public double RadiusTopRight => NotEvaluatableValue<double>();
@@ -31,7 +33,7 @@ namespace StaticSharp {
             public Binding<Color> BackgroundColor { set { Apply(value); } }
             public Binding<Color> ForegroundColor { set { Apply(value); } }
             public Binding<bool> Selectable { set { Apply(value); } }
-
+            public Binding<double> Visibility { set { Apply(value); } }            
             public Binding<double> Radius { set { Apply(value); } }
             public Binding<double> RadiusTopLeft { set { Apply(value); } }
             public Binding<double> RadiusTopRight { set { Apply(value); } }

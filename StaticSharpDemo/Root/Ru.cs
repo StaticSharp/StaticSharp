@@ -12,7 +12,7 @@ namespace StaticSharpDemo.Root {
     [Representative]
     public partial class Ru : Page {
 
-
+        public override Inlines DescriptionContent => $"Статический генератор сайтов на максималках";
 
         static string RandomString(int length, Random random) {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789     ";
@@ -69,12 +69,18 @@ namespace StaticSharpDemo.Root {
                 );
         });*/
 
-
+        public override Block? MainVisual => new Video("T4TEdzSLyi0") {
+            Play = true,
+            Mute = true,
+            PreferPlatformPlayer = false,
+            Controls = false,
+            Loop = true,
+        };
 
         public override Blocks? Content => new() {
 
 
-            {"video",
+            /*{"video",
                 new Video("T4TEdzSLyi0"){
                     Play = true,
                     Mute = true,
@@ -82,8 +88,8 @@ namespace StaticSharpDemo.Root {
                     Controls = false,
                     Loop =  true,                    
                 }
-            },
-
+            },*/
+            $"{Node:ABC}",
 
 
             new Column(){
@@ -188,5 +194,7 @@ namespace StaticSharpDemo.Root {
             $"Если   понадобится компонент,которого нет среди стандартных.",
             $"Можно создать компонент прям в проекте вашего сайта."*/
         };
+
+        
     }
 }

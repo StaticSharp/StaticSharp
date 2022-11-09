@@ -18,11 +18,11 @@ namespace StaticSharp {
     public partial class LinkBlock : Block {
         protected override string TagName => "a";
 
-        Tree.INode? Node;
+        Tree.Node? Node;
         public LinkBlock(string url, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "" ) : base(callerFilePath, callerLineNumber) {
             HRef = url;
         }
-        public LinkBlock(Tree.INode node, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerFilePath, callerLineNumber) {
+        public LinkBlock(Tree.Node node, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerFilePath, callerLineNumber) {
             Node = node;
         }
         public LinkBlock([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerFilePath, callerLineNumber) {
@@ -33,7 +33,7 @@ namespace StaticSharp {
         protected override async IAsyncEnumerable<KeyValuePair<string, string>> GetGeneratedBundingsAsync(Context context) {
             await foreach (var i in base.GetGeneratedBundingsAsync(context)) { yield return i; }
             if (Node != null) {
-                var url = context.NodeToUrl(Node);
+                var url = context.NodeToAbsoluteUrl(Node);
                 yield return new("HRef", $"\"{url}\"");
             }
         }

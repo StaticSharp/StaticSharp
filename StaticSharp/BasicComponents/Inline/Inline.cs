@@ -21,11 +21,13 @@ namespace StaticSharp{
 
 
     [ConstructorJs]
-    public partial class Inline : BaseModifier, IInline {
+    public abstract partial class Inline : BaseModifier, IInline {
         public Inline(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) {
         }
         public Inline(Inline other, string callerFilePath, int callerLineNumber) : base(other, callerFilePath, callerLineNumber) {
         }
+
+        public virtual Task<string> GetPlaneTextAsync(Context context) => Task.FromResult("");
 
 
         /*public virtual async Task<Tag> GenerateHtmlAsync(Context context) {

@@ -55,7 +55,7 @@ namespace StaticSharp {
 
     [Mix(typeof(VideoBindings<Js.Video>))]
     [ConstructorJs]
-    public sealed partial class Video : Block, IBlock  {
+    public sealed partial class Video : Block, IBlock , IMainVisual {
 
         protected override string TagName => "player";
 
@@ -103,6 +103,27 @@ namespace StaticSharp {
             }
 
             await base.ModifyHtmlAsync(context, elementTag);
+        }
+
+
+
+        public async Task GetMetaAsync(Dictionary<string, string> meta, Context context) {
+
+            var youtubeVideoId = YoutubeExplode.Videos.VideoId.TryParse(Identifier);
+            if (youtubeVideoId != null) {
+                var youtubeVideoManifest = await new YoutubeVideoManifestGenome(youtubeVideoId).CreateOrGetCached();
+                var item = youtubeVideoManifest.Items.MaxBy(x => x.Width)!;
+                var video = await new YoutubeVideoGenome(item).CreateOrGetCached();
+                var url = await context.AddAssetAsync(video);
+
+                meta["og:type"] = "video";
+                meta["og:video"] = new Uri(context.BaseUrl, url).ToString();
+                meta["og:video:width"] = item.Width.ToString();
+                meta["og:video:height"] = item.Height.ToString();
+
+            } else {
+                throw new NotImplementedException();
+            }
         }
     }
 }

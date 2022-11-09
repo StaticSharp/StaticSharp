@@ -2,7 +2,7 @@
 
 using StaticSharp.Gears;
 using StaticSharp.Resources;
-
+using StaticSharp.Tree;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    public record ContextOptions{
+    /*public record ContextOptions{
         public ContextOptions(Assets assets, INodeToPath nodeToPath, Uri baseUrl, Uri? assetsBaseUrl = null, bool developerMode = false) {
             Assets = assets;
             NodeToPath = nodeToPath;
@@ -42,7 +42,7 @@ namespace StaticSharp {
 
         public bool DeveloperMode { get; init; }
 
-    }
+    }*/
 
 
     public struct Context {
@@ -50,9 +50,10 @@ namespace StaticSharp {
         public bool DeveloperMode { get; init; }
 
         public INodeToPath NodeToPath { get; init; }
-        public Uri NodeToUrl(Tree.INode node) { 
+        public Uri NodeToAbsoluteUrl(Tree.Node node) { 
             return new Uri(BaseUrl, NodeToPath.NodeToRelativeUrl(node));
         }
+
         public Uri BaseUrl { get; init; }
 
         public Uri AssetsBaseUrl { get; init; }
@@ -137,12 +138,16 @@ namespace StaticSharp {
             AddScript(script);
         }*/
 
-        public Context(ContextOptions contextOptions) {
-            Assets = contextOptions.Assets;
-            BaseUrl = contextOptions.BaseUrl;
-            NodeToPath = contextOptions.NodeToPath;
-            DeveloperMode = contextOptions.DeveloperMode;
-            AssetsBaseUrl = contextOptions.AssetsBaseUrl;
+        public Context(Assets assets, INodeToPath nodeToPath, Uri baseUrl, Uri? assetsBaseUrl = null, bool developerMode = false) {
+            Assets = assets;
+            BaseUrl = baseUrl;
+            NodeToPath = nodeToPath;
+            DeveloperMode = developerMode;
+
+            if (assetsBaseUrl == null)
+                AssetsBaseUrl = new Uri("/Assets/", UriKind.Relative);
+            else
+                AssetsBaseUrl = assetsBaseUrl;
 
             Includes = new Includes();
             nextIdNumber = new(0);

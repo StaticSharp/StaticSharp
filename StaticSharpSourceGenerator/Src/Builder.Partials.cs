@@ -47,15 +47,6 @@ namespace StaticSharpGenerator {
             var nodeClassName = string.Join(".", path.Select(x => α + x).Prepend(AlphaRoot));
 
 
-#if DEBUG
-            partials.AddLine("//DEBUG");
-#endif
-#if RELEASE
-            partials.AddLine("//RELEASE");
-#endif
-
-            partials.AddLine("//COMMENT");
-
             var classBody = partials.AddLine(new HeaderBracesWriter($"{accessibility} partial class {typeInfo.Name} : {IRepresentative}"))
                     .Content;
 
@@ -70,11 +61,11 @@ namespace StaticSharpGenerator {
             //classBody.AddLine($"//typeSymbol.BaseType.IsPartial(): {typeSymbol.BaseType.IsPartial()}");
 
             {
-                var virtualOrOverride = baseClassInfected ? "override" : "virtual";
-                classBody.AddLine($"protected {virtualOrOverride} {ProtoNode} {VirtualNodePropertyName} => {NodePropertyName};");
+                //var virtualOrOverride = baseClassInfected ? "override" : "virtual";
+                classBody.AddLine($"protected override {ProtoNode} {VirtualNodePropertyName} => {NodePropertyName};");
             }
             classBody.AddLine($"{nodeClassName} {NodePropertyName} => new({State.ToCall()});");
-            classBody.AddLine($"{INode} {IRepresentative}.{NodePropertyName} => {NodePropertyName};");
+            classBody.AddLine($"{Node} {IRepresentative}.{NodePropertyName} => {NodePropertyName};");
 
 
 

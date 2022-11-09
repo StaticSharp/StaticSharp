@@ -3,33 +3,33 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace StaticSharp {
 
     namespace Gears {
         public struct InlineIdFormatValue {
             public HtmlModifier? Modifier;
-            public string? Format;
             public IInline Value;
 
-            public InlineIdFormatValue(IInline? value, HtmlModifier? modifier, string? format) {
+            public InlineIdFormatValue(IInline value, HtmlModifier? modifier) {
                 Modifier = modifier;
-                Format = format;
                 Value = value;
             }
         }
     }
 
     [InterpolatedStringHandler]
-    public class Inlines : List<InlineIdFormatValue> {
+    public class Inlines : List<InlineIdFormatValue> , IPlainTextProvider {
         public Inlines() : base() { }
         public Inlines(Inlines other) : base(other) { }
 
         public IEnumerable<IInline> Values => this.Select(x => x.Value);
-        public void Add(IInline? value, HtmlModifier? modifier = null, string? format = null) {
+        public void Add(IInline? value, HtmlModifier? modifier = null) {
             if (value != null) {
                 //base.Add(id, block);
-                Add(new InlineIdFormatValue(value, modifier, format));
+                Add(new InlineIdFormatValue(value, modifier));
             }
         }
 
@@ -65,16 +65,16 @@ namespace StaticSharp {
         }*/
 
 
-        public void AppendFormatted(ValueTuple<string, IInline> value, string? format = null) {
-            Add(value.Item2, new HtmlModifier().AssignParentProperty(value.Item1), format);
+        public void AppendFormatted(ValueTuple<string, IInline> value) {
+            Add(value.Item2, new HtmlModifier().AssignParentProperty(value.Item1));
         }
 
-        public void AppendFormatted(Inlines values, string? format = null) {
+        public void AppendFormatted(Inlines values) {
             foreach (var value in values) {
-                Add(value.Value, value.Modifier, value.Format);
+                Add(value.Value, value.Modifier);
             }
         }
-        public void AppendFormatted(IInline value, string? format = null) {
+        public void AppendFormatted(IInline value) {
             /*string? id = null;
             if (format != null) {
                 if (format.StartsWith("##")) {
@@ -92,7 +92,7 @@ namespace StaticSharp {
                     }
                 }
             }*/
-            Add(value, null, format);
+            Add(value, null);
         }
 
 
@@ -102,18 +102,24 @@ namespace StaticSharp {
         }*/
 
 
-        public void AppendFormatted(Tree.ITypedRepresentativeProvider<Page> node, string? format = null, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
+
+        //Link
+        public void AppendFormatted(Tree.Node node, string? format = null, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
             var link = new LinkInline(node, callerFilePath, callerLineNumber) {
                 Children = {
-                    (format != null)?format:node.Representative.Title
+                    (format != null)?format: (node.Representative?.Title ?? "")
                 }
             };
             AppendFormatted(link);
         }
 
-
-
-
+        public async Task<string> GetPlaneTextAsync(Context context) {
+            var result = new StringBuilder();
+            foreach (var i in this) {
+                result.Append(await i.Value.GetPlaneTextAsync(context));                
+            }
+            return result.ToString();
+        }
     }
 
 }

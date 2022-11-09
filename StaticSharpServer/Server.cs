@@ -25,13 +25,13 @@ namespace StaticSharp {
 
 
         private Assets Assets { get; init; }
-        private ContextOptions ContextOptions { get; init; }
+
+
 
         public Server(IPageFinder pageFinder, INodeToPath nodeToPath) {
             Assets = new Assets();            
             PageFinder = pageFinder;
             NodeToPath = nodeToPath;
-            ContextOptions = new(Assets, NodeToPath, null!, null, true);
         }
 
         protected virtual IEnumerable<Uri> Urls {
@@ -42,6 +42,10 @@ namespace StaticSharp {
                     yield return new($"http://{i}");
                 }
             }
+        }
+
+        protected Context CreateContext(Uri baseUrl) {
+            return new Context(Assets, NodeToPath, baseUrl, null, true);
         }
 
         public static IEnumerable<string> GetLocalIPAddresses() { //todo: move to urils
@@ -107,7 +111,7 @@ namespace StaticSharp {
                     var page = PageFinder.FindPage(path);
                     if (page != null) {
                         return new ResultAsync(async () => {
-                            var context = new Context(ContextOptions with { BaseUrl = httpContext.Request.GetBaseUri() });
+                            var context = CreateContext(httpContext.Request.GetBaseUri());
                             var html = await page.GeneratePageHtmlAsync(context);
                             var hash = html.ToHashString();
                             return Results.Text(hash);
@@ -132,7 +136,7 @@ namespace StaticSharp {
             if (page == null) {
                 return Results.NotFound();
             }
-            var context = new Context(ContextOptions with { BaseUrl = httpContext.Request.GetBaseUri()});
+            var context = CreateContext(httpContext.Request.GetBaseUri());
 
             return new ResultAsync(async () => {
                 var html = await page.GeneratePageHtmlAsync(context);

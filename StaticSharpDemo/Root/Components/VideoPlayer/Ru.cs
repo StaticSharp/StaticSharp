@@ -3,6 +3,7 @@
 
     [Representative]
     public partial class Ru : ComponentPage {
+        public override Inlines DescriptionContent => $"StaticSharp VideoPlayer component.";
         public override Blocks? Content => new() {
 
             {"Video",

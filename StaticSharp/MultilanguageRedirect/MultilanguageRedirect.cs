@@ -41,10 +41,11 @@ public static class MultilanguageRedirect {
         var html = $"""
             <!DOCTYPE html>
             <html>
-              <head></head>
-              <body>
-                <script>{script}</script>
-              </body>
+                <head>
+                    <script>{script}</script>
+                    <meta http-equiv="refresh" content="0; url=https://google.com/" />
+                </head>
+                <body></body>
             </html>
             """;
 

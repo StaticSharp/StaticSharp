@@ -8,33 +8,6 @@ using System.Text;
 namespace StaticSharp.Html {
 
 
-    /*public class Collection<T> : IEnumerable, ICollection<T> {
-        protected readonly List<T> _innerList = new();
-        public int Count => _innerList.Count;
-
-        public bool IsReadOnly => false;
-
-        public void Add(T item) {
-            if(item == null)
-                return;
-            _innerList.Add(item);
-
-        }
-
-        public void Clear() => _innerList.Clear();
-
-        public bool Contains(T item) => _innerList.Contains(item);
-
-        public void CopyTo(T[] array, int arrayIndex) => _innerList.CopyTo(array, arrayIndex);
-
-        public IEnumerator<T> GetEnumerator() => _innerList.GetEnumerator();
-
-        public bool Remove(T item) => _innerList.Remove(item);
-
-        IEnumerator IEnumerable.GetEnumerator() => _innerList.GetEnumerator();
-    }*/
-
-
     public class Tag : IEnumerable, INode {
         protected readonly List<INode> children = new();
 
@@ -260,7 +233,12 @@ namespace StaticSharp.Html {
 
 
 
-
+        public static Tag Meta(string property, string content) {
+            return new Tag("meta") {
+                ["property"] = property,
+                ["content"] = content
+            };
+        }
 
 
     }

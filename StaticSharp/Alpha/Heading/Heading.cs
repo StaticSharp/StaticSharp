@@ -1,15 +1,6 @@
-﻿using StaticSharp;
-using StaticSharp.Gears;
-using StaticSharp.Html;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Linq;
+﻿using System.Runtime.CompilerServices;
 
 namespace StaticSharp.Alpha {
-
-
-
     public static partial class Static {
 
         public static Paragraph HX(string text,

@@ -1,5 +1,8 @@
 ﻿using StaticSharp.Gears;
 using StaticSharp.Html;
+using StaticSharp.Tree;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
@@ -22,6 +25,12 @@ namespace StaticSharp {
     }
 
 
+    
+
+    public interface IMainVisual {
+        Task GetMetaAsync(Dictionary<string,string> meta, Context context);
+    }
+
 
 
     [Mix(typeof(PageBindings<Js.Page>))]
@@ -31,13 +40,25 @@ namespace StaticSharp {
     //[RelatedScript("Cookies")]
     [RelatedStyle("../Normalization")]
 
-    public abstract partial class Page : Block, IPageGenerator, IPlainTextProvider {
+    public abstract partial class Page : Block, IPageGenerator {
         protected virtual Task Setup(Context context) {
             FontSize = 16;
             return Task.CompletedTask;
         }
-        public abstract string Title { get; }        
+
+        public virtual string? SiteName => null;
+        public abstract string PageLanguage { get; }
+        public abstract string Title { get; }
+        public abstract object? MainVisual { get; }
+        
+        public abstract Inlines? DescriptionContent { get; }
+        protected abstract Node VirtualNode { get; }
+
         protected override string TagName => "body";
+
+
+        protected abstract Blocks BodyContent { get; }
+
 
         public Page([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
             : base(callerFilePath, callerLineNumber) {
@@ -57,11 +78,44 @@ namespace StaticSharp {
             
         }
 
+        private async Task<Tag> GenerateMetaTagsAsync(Context context) {
+
+
+            var meta = new Dictionary<string, string>();
+            if (SiteName!=null)
+                meta["og:site_name"] = SiteName;
+
+            meta["og:title"] = Title;
+            meta["twitter:title"] = Title;
+            meta["twitter:card"] = "summary_large_image";
+
+            var url = context.NodeToAbsoluteUrl(VirtualNode).ToString();
+            meta["og:url"] = url;
+            meta["twitter:url"] = url;
+
+            if (DescriptionContent != null) {
+                string description = await DescriptionContent.GetPlaneTextAsync(context);
+                meta["description"] = description;
+                meta["og:description"] = description;
+                meta["twitter:description"] = description;
+            }
+
+            meta["og:type"] = "website";
+
+            if (MainVisual is IMainVisual mainVisual) {
+                await mainVisual.GetMetaAsync(meta,context);
+            }
+            var result = new Tag() {
+                meta.Select(x=>Tag.Meta(x.Key,x.Value))
+            };
+
+            return result;
+        }
 
         public async Task<string> GeneratePageHtmlAsync(Context context) {
 
             await Setup(context);
-
+            
 
             var head = new Tag("head"){
                     new Tag("meta"){["charset"] = "utf-8" },
@@ -72,6 +126,7 @@ namespace StaticSharp {
                     new Tag("title"){
                         Title
                     },
+                    await GenerateMetaTagsAsync(context)
                     //<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
                 };
 
@@ -82,8 +137,14 @@ namespace StaticSharp {
 
             var document = new Tag(null) {
                 new Tag("!doctype"){ ["html"] = ""},
-                head,
-                body
+                new Tag("html") {
+                    ["lang"] = PageLanguage,
+                    Children ={
+                        head,
+                        body
+                    }
+                }
+                
             };
 
             body.Add(
@@ -108,40 +169,12 @@ namespace StaticSharp {
             return document.GetHtml();
         }
 
-        
-
-        /*public virtual async Task<Tag> GenerateHtmlAsync(Context context) {
-
-            await AddRequiredInclues(context);
-
-            context = ModifyContext(context);
-
-            var tag = new Tag(TagName) { };
-
-            ModifyTag(tag);
-
-            AddSourceCodeNavigationData(tag, context);
-
-
-
-            tag.Add(await CreateConstructorScriptAsync(context));
-
-            await ModifyHtmlAsync(context, tag);
-
-            //tag.Add(await GenerateChildrenHtmlAsync(context, tag));
-
-            return tag;
-        }*/
-
-
-
-
-
-        //protected abstract Task ModifyHtmlAsync(Context context, Tag elementTag);
-
-        public async Task<string> GetPlaneTextAsync(Context context) {
-            return Title;
+        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
+            elementTag.Add(await BodyContent.GenerateHtmlAsync(context));
+            await base.ModifyHtmlAsync(context, elementTag);
         }
+
+
     }
 
 }

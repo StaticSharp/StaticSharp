@@ -135,8 +135,8 @@ namespace StaticSharpGenerator {
             var builder = new Builder(context.Compilation, context);
 
 
-            context.AddSource("classTree", builder.ClassTree.ToString());
-            context.AddSource("partials", builder.Partials.ToString());
+            context.AddSource("classTree.cs", builder.ClassTree.ToString());
+            context.AddSource("partials.cs", builder.Partials.ToString());
 
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;

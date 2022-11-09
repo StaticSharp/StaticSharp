@@ -67,5 +67,9 @@ namespace StaticSharp {
             return result;
 
         }
+
+        public Task<string> GetPlaneTextAsync(Context context) {
+            return Task.FromResult(Value);
+        }
     }
 }

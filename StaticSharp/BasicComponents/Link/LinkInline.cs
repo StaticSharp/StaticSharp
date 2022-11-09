@@ -23,7 +23,7 @@ namespace StaticSharp {
     public partial class LinkInline : Inline {
         protected override string TagName => "a";
 
-        Tree.INode? Node;
+        Tree.Node? Node;
         public Inlines Children { get; } = new();
 
 
@@ -31,7 +31,7 @@ namespace StaticSharp {
             HRef = url;
         }
 
-        public LinkInline(Tree.INode node, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
+        public LinkInline(Tree.Node node, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
             Node = node;
         }
         public LinkInline([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
@@ -42,7 +42,7 @@ namespace StaticSharp {
         protected override async IAsyncEnumerable<KeyValuePair<string, string>> GetGeneratedBundingsAsync(Context context) {
             await foreach (var i in base.GetGeneratedBundingsAsync(context)) { yield return i; }
             if (Node != null) {
-                var url = context.NodeToUrl(Node);
+                var url = context.NodeToAbsoluteUrl(Node);
                 yield return new("HRef", $"\"{url}\"");
             }
         }
@@ -60,6 +60,10 @@ namespace StaticSharp {
             /*return new Tag() {
                 await Children.Select(x=> x.Value.GenerateInlineHtmlAsync(context, x.Id, x.Format)).SequentialOrParallel(),
             };*/
+        }
+
+        public override Task<string> GetPlaneTextAsync(Context context) {
+            return ((IPlainTextProvider)Children).GetPlaneTextAsync(context);
         }
     }
 

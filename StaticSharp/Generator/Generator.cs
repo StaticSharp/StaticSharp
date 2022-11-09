@@ -23,14 +23,14 @@ public class Generator<NodeType> where NodeType : ProtoNode<NodeType> {
         BaseDirectory = baseDirectory;
     }
 
-    public Uri NodeToAbsoluteUrl(INode node) {
+    public Uri NodeToAbsoluteUrl(Node node) {
         return new Uri(BaseUrl, NodeToPath.NodeToRelativeUrl(node));
     }
 
-    public string NodeToFilePath(INode node) {
+    public string NodeToFilePath(Node node) {
         return Path.GetFullPath(BaseDirectory+ NodeToPath.NodeToRelativeFilePath(node));
     }
-    public string NodeToRedirectFilePath(INode node) {
+    public string NodeToRedirectFilePath(Node node) {
         return Path.GetFullPath(BaseDirectory + NodeToPath.NodeToRelativeDirectory(node) + "/index.html");
     }
 
@@ -44,10 +44,10 @@ public class Generator<NodeType> where NodeType : ProtoNode<NodeType> {
     }
 
     protected Context CreateContext(Assets assets) {
-        return new Context(new ContextOptions(assets, NodeToPath, BaseUrl, null));
+        return new Context(assets, NodeToPath, BaseUrl, null);
     }
 
-    protected async Task GetnerateAndSave(INode node, Context context) {
+    protected async Task GetnerateAndSave(Node node, Context context) {
         var page = node.Representative;
         if (page == null) return;
         var html = await page.GeneratePageHtmlAsync(context);
@@ -141,7 +141,7 @@ public class MultilanguageStaticGenerator<LanguageEnum> : Generator<Multilanguag
         await assets.StoreAsync(Path.Combine(BaseDirectory, "Assets"));
     }
 
-    public void GetnerateAndSaveMultilanguageRedirect(INode node) {
+    public void GetnerateAndSaveMultilanguageRedirect(Node node) {
         if (node.Representative == null)
             return;
         var html = MultilanguageRedirect.GenerateHtml<LanguageEnum>();

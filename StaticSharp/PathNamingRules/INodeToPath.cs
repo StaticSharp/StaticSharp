@@ -4,24 +4,24 @@ using System.Linq;
 
 namespace StaticSharp {
     public interface INodeToPath {
-        string NodeToRelativeDirectory(INode node);
-        string NodeToRelativePath(INode node);//Starts with "/"
+        string NodeToRelativeDirectory(Node node);
+        string NodeToRelativePath(Node node);//Starts with "/"
 
-        string NodeToRelativeUrl(INode node) {
+        string NodeToRelativeUrl(Node node) {
             return NodeToRelativePath(node);
         }
-        string NodeToRelativeFilePath(INode node) {
+        string NodeToRelativeFilePath(Node node) {
             return NodeToRelativePath(node) + ".html";
         }
     }
 
     public class DefaultMultilanguageNodeToPath<LanguageEnum> : INodeToPath where LanguageEnum : struct, Enum {
-        public string NodeToRelativeDirectory(INode node) {
+        public string NodeToRelativeDirectory(Node node) {
             string path = string.Concat(node.Path.Select(x => '/' + x));
             return path;            
         }
 
-        public string NodeToRelativePath(INode node) {
+        public string NodeToRelativePath(Node node) {
             string path = NodeToRelativeDirectory(node);
             if (node is MultilanguageProtoNode<LanguageEnum> protoNode) {
                 return path + "/" + protoNode.Language.ToString().ToLower();

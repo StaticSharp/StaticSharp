@@ -1,5 +1,6 @@
 ﻿using StaticSharp.Gears;
 using StaticSharp.Html;
+using System.Drawing;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
@@ -22,9 +23,9 @@ namespace StaticSharp {
 
     [ConstructorJs]
     [Mix(typeof(PageSideMenusBindings<Js.PageSideMenus>))]
-    public partial class PageSideMenus : Page {
+    public abstract partial class PageSideMenus : Page {
 
-        public virtual string PageLanguage => "en";
+        
         protected override Task Setup(Context context) {
             SideBarsIconsSize = 48;
             return base.Setup(context);
@@ -35,105 +36,51 @@ namespace StaticSharp {
                 return n[(n.LastIndexOf('.') + 1)..].Replace('_',' ');
             }
         }
+        public virtual Block? Description => (DescriptionContent != null) ? new Paragraph(DescriptionContent) : null;
 
         public virtual Block? TopBar => new Paragraph(Title) {
-            ["Height"] = "() => Min(element.Root.SideBarsIconsSize,element.InternalHeight)",
+            Height = new(e=>Js.Math.Max(e.Root.As<Js.PageSideMenus>().SideBarsIconsSize, e.InternalHeight)),
+            //["Height"] = "() => Min(element.Root.SideBarsIconsSize,element.InternalHeight)",
             TextAlignmentHorizontal = TextAlignmentHorizontal.Center,
             MarginsVertical = 0,
+            FontStyle = new FontStyle(FontWeight.ExtraLight),
             FontSize = new(e => e.Root.As<Js.PageSideMenus>().SideBarsIconsSize),
         };
 
-
-
-
-            /*new Row{
-            //Height = new(Js.Math.Min())
-            ["Height"] = "() => Min(element.Root.SideBarsIconsSize,element.InternalHeight)",
-            Children = {
-                new Space(before: 1),
-                ,
-                new Space(after: 1),
-            }
-        };*/
-
-        public virtual Inlines? Description => null;
-
-
-        public virtual ScrollLayout ScrollLayout => new ScrollLayout {
-            Content = Column
-        };
-
-        public virtual Column Column => new Column {
-            Children = {
-                ColumnChildren
-            }
-        };
-
-        public virtual Blocks? ColumnChildren => new (){
-            { "TopBar", TopBar },
-            Content,
-            new Space(),
-            Footer
-        };
-
-
+        public override Block? MainVisual => null;
         public virtual Blocks? Content => null;
-
-
         public virtual Block? Footer => null;
-
-        
-
         public virtual Block? LeftSideBarIcon => null;
         public virtual Block? LeftSideBar => null;
-
-
         public virtual Block? RightSideBarIcon => null;
         public virtual Block? RightSideBar => null;
-        
 
 
-        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
+        protected override Blocks BodyContent => new Blocks {
+            {"LeftSideBarIcon"  ,LeftSideBarIcon},
+            {"LeftSideBar" ,LeftSideBar},
 
-
-
-
-            elementTag.Add(
-                await new Blocks {
-                    {"LeftSideBarIcon"  ,LeftSideBarIcon},
-                    {"LeftSideBar" ,LeftSideBar},
-
-                    {"RightSideBarIcon" ,RightSideBarIcon},
-                    {"RightSideBar" ,RightSideBar},
-                    {"Content", ScrollLayout}
-                }.GenerateHtmlAsync(context)
-                );
-
-            await base.ModifyHtmlAsync(context, elementTag);
-
-            /*var result = new Tag(null);
-            
-            if (LeftSideBar != null) {
-                result.Add(await LeftSideBar.GenerateHtmlAsync(context, "LeftSideBar"));
-            }
-
-            if (RightSideBar != null) {
-                result.Add(await RightSideBar.GenerateHtmlAsync(context, "RightSideBar"));
-            }
-
-            result.Add(
-                await new Column {
+            {"RightSideBarIcon" ,RightSideBarIcon},
+            {"RightSideBar" ,RightSideBar},
+            {"Content", new ScrollLayout {
+                Content = new Column {
                     Children = {
+                        { "TopBar", TopBar },
+                        { "MainVisual", MainVisual },
+                        { "Description", Description },
+                        new Block(){ 
+                            Height = 1,
+                            BackgroundColor = Color.Gray,
+                            MarginBottom = 20
+                        },
                         Content,
                         new Space(),
-                        Footer
+                        { "Footer", Footer }
                     }
-
-                }.GenerateHtmlAsync(context, "Content")
-            );
-
-            return result;*/
-        }
+                }
+            }
+            }
+        };       
 
 
     }
