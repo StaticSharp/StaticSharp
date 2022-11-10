@@ -44,8 +44,8 @@ namespace StaticSharp {
             }
         }
 
-        protected Context CreateContext(Uri baseUrl) {
-            return new Context(Assets, NodeToPath, baseUrl, null, true);
+        protected Context CreateContext(Node node, Uri baseUrl) {
+            return new Context(node, Assets, NodeToPath, baseUrl, null, true);
         }
 
         public static IEnumerable<string> GetLocalIPAddresses() { //todo: move to urils
@@ -111,7 +111,7 @@ namespace StaticSharp {
                     var page = PageFinder.FindPage(path);
                     if (page != null) {
                         return new ResultAsync(async () => {
-                            var context = CreateContext(httpContext.Request.GetBaseUri());
+                            var context = CreateContext(page.VirtualNode, httpContext.Request.GetBaseUri());
                             var html = await page.GeneratePageHtmlAsync(context);
                             var hash = html.ToHashString();
                             return Results.Text(hash);
@@ -136,7 +136,7 @@ namespace StaticSharp {
             if (page == null) {
                 return Results.NotFound();
             }
-            var context = CreateContext(httpContext.Request.GetBaseUri());
+            var context = CreateContext(page.VirtualNode, httpContext.Request.GetBaseUri());
 
             return new ResultAsync(async () => {
                 var html = await page.GeneratePageHtmlAsync(context);

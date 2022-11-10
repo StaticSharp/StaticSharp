@@ -12,7 +12,7 @@ namespace StaticSharp {
             RootNodeConstructor = rootNodeConstructor;
         }
 
-        public IPageGenerator? FindPage(string requestPath) {
+        public Page? FindPage(string requestPath) {
             if (requestPath == null) {
                 return null;
             }

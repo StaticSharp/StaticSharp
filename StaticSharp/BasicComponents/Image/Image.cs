@@ -19,7 +19,7 @@ namespace StaticSharp {
     }
 
     [ConstructorJs]
-    public class Image : Block {
+    public class Image : Block, IMainVisual {
 
         public enum TEmbed { 
             Image,
@@ -41,22 +41,48 @@ namespace StaticSharp {
         public Image(IGenome<IAsset> assetGenome, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
             this.assetGenome = assetGenome;
         }
+        
+        public Image(string pathOrUrl, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
+            if (File.Exists(pathOrUrl)) {
+                assetGenome = new FileGenome(pathOrUrl);
+                return;
+            }
+            var absolutePath = AbsolutePath(pathOrUrl, callerFilePath);
+            if (File.Exists(absolutePath)) {
+                assetGenome = new FileGenome(absolutePath);
+                return;
+            }
+            if (Uri.TryCreate(pathOrUrl, UriKind.Absolute, out var uri)) {
+                assetGenome = new HttpRequestGenome(uri.ToString());
+                return;
+            }
+
+            //TODO: 
+            throw new FileNotFoundException("File or Url not found", pathOrUrl);
+        }
 
         /*public override void AddRequiredInclues(IIncludes includes) {
             base.AddRequiredInclues(includes);
             includes.Require(new Script(ThisFilePathWithNewExtension("js")));
         }*/
-
-
-        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
+        async Task<IAsset> GetSourceAsync() {
             string[] webExtensions = { ".jpg", ".jpeg", ".png", ".svg" };
 
             var source = await assetGenome.CreateOrGetCached();
             if (!webExtensions.Contains(source.FileExtension)) {
-                source = await (new JpegGenome(assetGenome)).CreateOrGetCached();
+                source = await new JpegGenome(assetGenome).CreateOrGetCached();
             }
+            return source;
+        }
 
-            var imageInfo = new MagickImageInfo(source.ReadAllBites());
+        MagickImageInfo GetImageInfo(IAsset source) {
+            return new MagickImageInfo(source.ReadAllBites());
+        }
+
+        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
+
+            var source = await GetSourceAsync();
+            var imageInfo = GetImageInfo(source);
             elementTag["data-width"] = imageInfo.Width;
             elementTag["data-height"] = imageInfo.Height;
 
@@ -112,6 +138,9 @@ namespace StaticSharp {
                     ["height"] = "100%",
                     ["viewBox"] = $"0 0 {thumbnail.Width} {thumbnail.Height}",
                     ["preserveAspectRatio"] = "none",
+                    Style = {
+                        ["overflow"] = "hidden",
+                    },
                     Children = {
                         new Tag("use"){
                             ["href"]="#"+thumbnailId,
@@ -146,20 +175,16 @@ namespace StaticSharp {
 
         }
 
+        async Task IMainVisual.GetMetaAsync(Dictionary<string, string> meta, Context context) {
+            var source = await GetSourceAsync();
+            var imageInfo = GetImageInfo(source);
+            var url = new Uri(context.BaseUrl, await context.AddAssetAsync(source)).ToString();
+            meta["og:image"] = url;
+            meta["og:image:width"] = imageInfo.Width.ToString();
+            meta["og:image:height"] = imageInfo.Height.ToString();
+
+            meta["twitter:image"] = url;
+        }
     }
 
-    
-    /*public sealed class Image : Image<Symbolic.ImageJs> {
-
-        public Image(Image other, string callerFilePath, int callerLineNumber)
-            : base(other, callerFilePath, callerLineNumber) {
-
-        }
-
-        public Image(IGenome<IAsset> assetGenome, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
-            : base(assetGenome, callerFilePath, callerLineNumber) {
-
-        }
-        
-    }*/
 }

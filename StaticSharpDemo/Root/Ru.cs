@@ -77,8 +77,8 @@ namespace StaticSharpDemo.Root {
             Loop = true,
         };
 
-        public override Blocks? Content => new() {
 
+        public override Blocks? Content => new() {
 
             /*{"video",
                 new Video("T4TEdzSLyi0"){
@@ -89,8 +89,7 @@ namespace StaticSharpDemo.Root {
                     Loop =  true,                    
                 }
             },*/
-            $"{Node:ABC}",
-
+            $"{Node} {Node.Components} {Node.Components.WithLanguage(Language.En)}",
 
             new Column(){
                 BackgroundColor = Color.FromArgb(255,32,32,32),

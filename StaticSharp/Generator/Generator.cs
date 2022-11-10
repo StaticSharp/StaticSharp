@@ -43,8 +43,8 @@ public class Generator<NodeType> where NodeType : ProtoNode<NodeType> {
         }
     }
 
-    protected Context CreateContext(Assets assets) {
-        return new Context(assets, NodeToPath, BaseUrl, null);
+    protected Context CreateContext(Node node, Assets assets) {
+        return new Context(node, assets, NodeToPath, BaseUrl, null);
     }
 
     protected async Task GetnerateAndSave(Node node, Context context) {
@@ -63,7 +63,7 @@ public class Generator<NodeType> where NodeType : ProtoNode<NodeType> {
     public virtual async Task GenerateAsync(NodeType root) {
         var nodes = GetAllNodes(root);
         var assets = new Assets();
-        await Task.WhenAll(nodes.Select(node => GetnerateAndSave(node, CreateContext(assets))));
+        await Task.WhenAll(nodes.Select(node => GetnerateAndSave(node, CreateContext(node, assets))));
         await assets.StoreAsync(Path.Combine(BaseDirectory,"Assets"));
     }
 
@@ -130,7 +130,7 @@ public class MultilanguageStaticGenerator<LanguageEnum> : Generator<Multilanguag
 
         var assets = new Assets();
 
-        await Task.WhenAll(nodesMultilanguage.Select(node => GetnerateAndSave(node, CreateContext(assets))));
+        await Task.WhenAll(nodesMultilanguage.Select(node => GetnerateAndSave(node, CreateContext(node, assets))));
 
         SaveSitemap(CreateSiteMap(root));
 

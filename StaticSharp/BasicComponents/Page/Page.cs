@@ -52,7 +52,7 @@ namespace StaticSharp {
         public abstract object? MainVisual { get; }
         
         public abstract Inlines? DescriptionContent { get; }
-        protected abstract Node VirtualNode { get; }
+        public abstract Node VirtualNode { get; }
 
         protected override string TagName => "body";
 

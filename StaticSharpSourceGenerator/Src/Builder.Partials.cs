@@ -62,7 +62,7 @@ namespace StaticSharpGenerator {
 
             {
                 //var virtualOrOverride = baseClassInfected ? "override" : "virtual";
-                classBody.AddLine($"protected override {ProtoNode} {VirtualNodePropertyName} => {NodePropertyName};");
+                classBody.AddLine($"public override {ProtoNode} {VirtualNodePropertyName} => {NodePropertyName};");
             }
             classBody.AddLine($"{nodeClassName} {NodePropertyName} => new({State.ToCall()});");
             classBody.AddLine($"{Node} {IRepresentative}.{NodePropertyName} => {NodePropertyName};");

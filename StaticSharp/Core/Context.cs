@@ -50,10 +50,21 @@ namespace StaticSharp {
         public bool DeveloperMode { get; init; }
 
         public INodeToPath NodeToPath { get; init; }
-        public Uri NodeToAbsoluteUrl(Tree.Node node) { 
+        public Uri NodeToAbsoluteUrl(Node node) { 
             return new Uri(BaseUrl, NodeToPath.NodeToRelativeUrl(node));
         }
 
+        public string NodeToUrlRelativeToCurrentNode(Node node) {
+            var origin = new Uri(NodeToPath.NodeToRelativeUrl(CurrentNode),UriKind.Relative);
+            var target = new Uri(NodeToPath.NodeToRelativeUrl(node), UriKind.Relative);
+            var relative = origin.MakeRelativeUri(target);
+            
+            var relativePath = Path.GetRelativePath("X:"+CurrentNodeRelativeUrl, "X:" + target);
+            return relativePath;
+        }
+
+        public Node CurrentNode { get; init; }
+        public string CurrentNodeRelativeUrl { get; init; }
         public Uri BaseUrl { get; init; }
 
         public Uri AssetsBaseUrl { get; init; }
@@ -138,7 +149,10 @@ namespace StaticSharp {
             AddScript(script);
         }*/
 
-        public Context(Assets assets, INodeToPath nodeToPath, Uri baseUrl, Uri? assetsBaseUrl = null, bool developerMode = false) {
+        public Context(Node currentNode, Assets assets, INodeToPath nodeToPath, Uri baseUrl, Uri? assetsBaseUrl = null, bool developerMode = false) {
+            CurrentNode = currentNode;
+            CurrentNodeRelativeUrl = nodeToPath.NodeToRelativeUrl(currentNode);
+
             Assets = assets;
             BaseUrl = baseUrl;
             NodeToPath = nodeToPath;

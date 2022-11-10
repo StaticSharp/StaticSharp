@@ -112,6 +112,17 @@ namespace StaticSharp {
             };
             AppendFormatted(link);
         }
+        public void AppendFormatted(string url, string format, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
+            var link = new LinkInline(url, callerFilePath, callerLineNumber) {
+                Children = {
+                    format
+                }
+            };
+            AppendFormatted(link);
+        }
+
+
+
 
         public async Task<string> GetPlaneTextAsync(Context context) {
             var result = new StringBuilder();
