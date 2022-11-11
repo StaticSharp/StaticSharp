@@ -12,11 +12,15 @@ namespace StaticSharp {
             RootNodeConstructor = rootNodeConstructor;
         }
 
-        public Page? FindPage(string requestPath) {
+        public Page? FindPage(string requestPath, out FilePath closest) {
+
+            var defaultLanguagePart = new FilePath(default(LanguageEnum).ToString().ToLower());
+
             if (requestPath == null) {
+                closest = defaultLanguagePart;
                 return null;
             }
-
+            
             var extension = Path.GetExtension(requestPath);
             if (string.IsNullOrEmpty(extension) || extension.ToLower() == ".html") {
 
@@ -25,54 +29,39 @@ namespace StaticSharp {
                 }
 
                 string[] path = requestPath.Split('/', StringSplitOptions.RemoveEmptyEntries);
-
-                LanguageEnum language = default;
+                
+                bool languageFound = false;
+                LanguageEnum language =  default;
                 if (path.Length > 0) {
                     var languageString = path[path.Length-1];
-                    
                     foreach (var i in Enum.GetValues<LanguageEnum>()) {
                         if (i.ToString().ToLower() == languageString) {
                             language = i;
                             path = path.SkipLast(1).ToArray();
+                            languageFound = true;
                             break;
                         }
                     }
                 }
 
                 var result = RootNodeConstructor(language);
-                //var pathList = new List<string[]>();
-                //var root = new αRoot(language).Children.FirstOrDefault().Name;
-                foreach (var pathPart in path) {
+                closest = new FilePath();
+                foreach (var pathPart in path) {                    
                     result = result.Children.FirstOrDefault(x => x.Name.ToLower() == pathPart.ToLower());
-                    if (result == null) return null;
+                    if (result == null) {
+                        closest += defaultLanguagePart;
+                        return null;
+                    }
+                    closest += pathPart;
                 }
+
+                closest += defaultLanguagePart;
+                if (!languageFound)
+                    return null;
 
                 return result.Representative;
-
-
-                /*if (path.Length == 0) {
-                    return RootNodeConstructor(default).Representative;
-                }
-
-                var htmlName = path.Last();
-                htmlName = htmlName[..htmlName.LastIndexOf('.')].ToLower();
-
-                var lastIndexOf_ = htmlName.LastIndexOf('_');
-
-                if (lastIndexOf_ != -1) {
-                    var languagePart = htmlName[(lastIndexOf_ + 1)..];
-                    language = Enum.GetValues<LanguageEnum>().FirstOrDefault(i => htmlName.EndsWith(i.ToString().ToLower()));
-                    htmlName = htmlName[..lastIndexOf_];
-                }
-                path[^1] = htmlName;
-
-                if (path.Length == 1 && path[0] == "index")
-                    return RootNodeConstructor(language).Representative;*/
-
-
-
-
             } else {
+                closest = defaultLanguagePart;
                 return null;
             }
 

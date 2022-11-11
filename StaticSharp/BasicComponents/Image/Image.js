@@ -13,15 +13,18 @@ function Image(element) {
         //Width: () => element.LayoutWidth || (element.Height * element.Aspect) || element.dataset.width,
 
         //Height: () => element.LayoutHeight || (element.Width / element.Aspect) || element.dataset.height,
-
-
-
     }
 
     new Reaction(() => {
         let content = element.children[0]
         content.style.width = "100%"
         content.style.height = "100%"
+
+        let thumbnail = content.querySelector("#thumbnail")
+        if (thumbnail) {
+            thumbnail.style.display = "block"
+        }
+
     })
 
 

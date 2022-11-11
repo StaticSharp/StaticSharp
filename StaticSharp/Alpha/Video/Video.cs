@@ -84,7 +84,7 @@ namespace StaticSharp {
                 var sources = new List<object>();
                 foreach (var i in youtubeVideoManifest.Items) {
                     var iVideo = await new YoutubeVideoGenome(i).CreateOrGetCached();
-                    var iUrl = await context.AddAssetAsync(iVideo);
+                    var iUrl = context.CurrentNodePath.To(await context.AddAssetAsync(iVideo)).ToString();
 
                     sources.Add(new {
                         size = new {
@@ -117,7 +117,7 @@ namespace StaticSharp {
                 var url = await context.AddAssetAsync(video);
 
                 meta["og:type"] = "video";
-                meta["og:video"] = new Uri(context.BaseUrl, url).ToString();
+                meta["og:video"] = (context.BaseUrl + url).ToString();
                 meta["og:video:width"] = item.Width.ToString();
                 meta["og:video:height"] = item.Height.ToString();
 

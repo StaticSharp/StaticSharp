@@ -43,7 +43,7 @@ public static class MultilanguageRedirect {
             <html>
                 <head>
                     <script>{script}</script>
-                    <meta http-equiv="refresh" content="0; url=https://google.com/" />
+                    <meta http-equiv="refresh" content="0; url={default(LanguageEnum).ToString().ToLower()}" />
                 </head>
                 <body></body>
             </html>

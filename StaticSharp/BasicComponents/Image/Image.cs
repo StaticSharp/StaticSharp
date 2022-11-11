@@ -27,7 +27,7 @@ namespace StaticSharp {
             None
         }
 
-        protected override string TagName => "div";
+        protected override string TagName => "image-block";
 
         protected IGenome<IAsset> assetGenome;
 
@@ -47,7 +47,7 @@ namespace StaticSharp {
                 assetGenome = new FileGenome(pathOrUrl);
                 return;
             }
-            var absolutePath = AbsolutePath(pathOrUrl, callerFilePath);
+            var absolutePath = MakeAbsolutePath(pathOrUrl, callerFilePath);
             if (File.Exists(absolutePath)) {
                 assetGenome = new FileGenome(absolutePath);
                 return;
@@ -101,7 +101,7 @@ namespace StaticSharp {
                 return;
             }
 
-            url = await context.AddAssetAsync(source);
+            url = context.CurrentNodePath.To(await context.AddAssetAsync(source)).ToString();
             if (Embed == TEmbed.None) {
                 elementTag.Add(new Tag("img") {
                     ["src"] = url
@@ -134,12 +134,14 @@ namespace StaticSharp {
 
             elementTag.Add(new Tag("content") {
                 new Tag("svg"){
+                    Id = "thumbnail",
                     ["width"] = "100%",
                     ["height"] = "100%",
                     ["viewBox"] = $"0 0 {thumbnail.Width} {thumbnail.Height}",
                     ["preserveAspectRatio"] = "none",
                     Style = {
                         ["overflow"] = "hidden",
+                        ["display"] = "none", //for not(.js)
                     },
                     Children = {
                         new Tag("use"){
@@ -178,7 +180,7 @@ namespace StaticSharp {
         async Task IMainVisual.GetMetaAsync(Dictionary<string, string> meta, Context context) {
             var source = await GetSourceAsync();
             var imageInfo = GetImageInfo(source);
-            var url = new Uri(context.BaseUrl, await context.AddAssetAsync(source)).ToString();
+            var url = (context.BaseUrl + await context.AddAssetAsync(source)).ToString();
             meta["og:image"] = url;
             meta["og:image:width"] = imageInfo.Width.ToString();
             meta["og:image:height"] = imageInfo.Height.ToString();

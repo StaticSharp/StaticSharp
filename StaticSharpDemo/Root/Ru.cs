@@ -113,7 +113,7 @@ namespace StaticSharpDemo.Root {
                                 new Space(0,2),
                             }
                         },
-                        Second = new Image(new FileGenome(AbsolutePath("Copilot/SchemeDark.svg"))){
+                        Second = new Image(new FileGenome(MakeAbsolutePath("Copilot/SchemeDark.svg"))){
                             Embed = Image.TEmbed.Image,
                         },
                         Children = { 
@@ -135,7 +135,7 @@ namespace StaticSharpDemo.Root {
             }.FillWidth().InheritHorizontalPaddings(),
 
             new Flipper(){
-                First = new Image(new FileGenome(AbsolutePath("Copilot/Delivery.svg"))){
+                First = new Image(new FileGenome(MakeAbsolutePath("Copilot/Delivery.svg"))){
                     Embed = Image.TEmbed.Image,
                     MarginLeft = 24,
                     MarginRight = 24,

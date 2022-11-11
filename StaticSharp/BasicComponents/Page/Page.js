@@ -1,5 +1,6 @@
 ﻿
 function Page(element) {
+    element.classList.add("js")
     element.isRoot = true
     let loadingDeffered = Reaction.beginDeferred()
 

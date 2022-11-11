@@ -44,7 +44,7 @@ namespace StaticSharp {
             }
         }
 
-        protected Context CreateContext(Node node, Uri baseUrl) {
+        protected Context CreateContext(Node node, AbsoluteUrl baseUrl) {
             return new Context(node, Assets, NodeToPath, baseUrl, null, true);
         }
 
@@ -82,7 +82,7 @@ namespace StaticSharp {
             app.MapGet("api/get_page_hash", GetPageHash).WithName("get_page_hash");
             app.MapPut("api/go_to_source_code", GoToSourceCode).WithName("go_to_source_code");
 
-            app.MapGet("api/test", ()=>"re").WithName("test");
+            //app.MapGet("api/test", ()=>"re").WithName("test");
 
             return app.RunAsync(cancellationToken);
         }
@@ -102,16 +102,24 @@ namespace StaticSharp {
             VisualStudio.Open(parameters.callerFilePath, parameters.callerLineNumber);
         }
 
+        public static AbsoluteUrl BaseUrlFromHttpRequest(HttpRequest httpRequest) {
+            return new AbsoluteUrl(httpRequest.Scheme, httpRequest.Host.Host);
+        }
+
+        private IResult RegirectToClosest(HttpContext httpContext, FilePath closest) {
+            return Results.Redirect(new AbsoluteUrl(httpContext.Request.Scheme, httpContext.Request.Host.Host, closest).ToString());
+        }
+
         private IResult GetPageHash(HttpContext httpContext) {
             var headers = httpContext.Request.GetTypedHeaders();
             if (headers != null) {
                 var referer = headers.Referer;
                 if (referer != null) {
                     var path = referer.LocalPath;
-                    var page = PageFinder.FindPage(path);
+                    var page = PageFinder.FindPage(path, out var closest);
                     if (page != null) {
                         return new ResultAsync(async () => {
-                            var context = CreateContext(page.VirtualNode, httpContext.Request.GetBaseUri());
+                            var context = CreateContext(page.VirtualNode, BaseUrlFromHttpRequest(httpContext.Request));
                             var html = await page.GeneratePageHtmlAsync(context);
                             var hash = html.ToHashString();
                             return Results.Text(hash);
@@ -128,15 +136,15 @@ namespace StaticSharp {
                 return Results.BadRequest();
             }
 
-            var page = PageFinder.FindPage(path);
+            var page = PageFinder.FindPage(path, out var closest);
             /*if (page == null) {
                 page = Get404(request);
             }*/
 
             if (page == null) {
-                return Results.NotFound();
+                return RegirectToClosest(httpContext, closest);
             }
-            var context = CreateContext(page.VirtualNode, httpContext.Request.GetBaseUri());
+            var context = CreateContext(page.VirtualNode, BaseUrlFromHttpRequest(httpContext.Request));
 
             return new ResultAsync(async () => {
                 var html = await page.GeneratePageHtmlAsync(context);
@@ -148,7 +156,7 @@ namespace StaticSharp {
 
         public IResult GetAsset(string path, HttpContext httpContext) {
 
-            var asset = Assets.GetByFilePath(path);
+            var asset = Assets.GetByFilePath(FilePath.FromOsPath(path));
             if (asset == null)
                 return Results.NotFound();
 

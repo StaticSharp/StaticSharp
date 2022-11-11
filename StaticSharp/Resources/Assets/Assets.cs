@@ -25,7 +25,7 @@ public class Assets {
         }
     }
 
-    public IAsset? GetByFilePath(string filePath) {
+    public IAsset? GetByFilePath(FilePath filePath) {
         foreach (var asset in assets.Values) {
             if (asset.FilePath == filePath) {
                 return asset;
@@ -34,13 +34,14 @@ public class Assets {
         return null;
     }
 
-    private async Task StoreAssetAsync(IAsset asset, string assetsBaseDirectory) {
-        var fullFilePath = Path.Combine(assetsBaseDirectory, asset.FilePath);
-        Directory.CreateDirectory(Path.GetDirectoryName(fullFilePath)!);
+    private async Task StoreAssetAsync(IAsset asset, FilePath assetsBaseDirectory) {
+        var fullFilePath = (assetsBaseDirectory + asset.FilePath);
+        var directory = fullFilePath.WithoutLast.OsPath;
+        Directory.CreateDirectory(directory);
 
-        await File.WriteAllBytesAsync(fullFilePath, asset.ReadAllBites());
+        await File.WriteAllBytesAsync(fullFilePath.OsPath, asset.ReadAllBites());
     }
-    public async Task StoreAsync(string directory) {
+    public async Task StoreAsync(FilePath directory) {
         await Task.WhenAll(assets.Values.Select(x=>StoreAssetAsync(x, directory)).ToArray());
     }   
 

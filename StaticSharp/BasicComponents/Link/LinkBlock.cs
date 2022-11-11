@@ -33,7 +33,7 @@ namespace StaticSharp {
         protected override async IAsyncEnumerable<KeyValuePair<string, string>> GetGeneratedBundingsAsync(Context context) {
             await foreach (var i in base.GetGeneratedBundingsAsync(context)) { yield return i; }
             if (Node != null) {
-                var url = context.NodeToAbsoluteUrl(Node);
+                var url = context.NodeToUrlRelativeToCurrentNode(Node);
                 yield return new("HRef", $"\"{url}\"");
             }
         }

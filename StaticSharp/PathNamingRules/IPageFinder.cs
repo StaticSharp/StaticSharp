@@ -3,7 +3,7 @@ using StaticSharp.Tree;
 
 namespace StaticSharp {
     public interface IPageFinder {
-        Page? FindPage(string requestPath);
+        Page? FindPage(string requestPath, out FilePath closest);
 
     }
 }

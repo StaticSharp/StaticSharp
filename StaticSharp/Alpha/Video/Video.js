@@ -163,7 +163,8 @@ function Video(element) {
                 return
 
             let position = element.Player.currentTime
-            element.Player.src = sources[element.SourceIndex].url
+            //console.log(window.location.href)
+            element.Player.src = window.location.href + "/" + sources[element.SourceIndex].url
             element.Player.currentTime = position
         }
     })

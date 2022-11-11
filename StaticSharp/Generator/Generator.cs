@@ -14,24 +14,24 @@ namespace StaticSharp;
 
 public class Generator<NodeType> where NodeType : ProtoNode<NodeType> {
     public INodeToPath NodeToPath { get; }
-    public Uri BaseUrl { get; }
-    public string BaseDirectory { get; }
+    public AbsoluteUrl BaseUrl { get; }
+    public FilePath BaseDirectory { get; }
 
-    public Generator(INodeToPath nodeToPath, Uri baseUrl, string baseDirectory) {
+    public Generator(INodeToPath nodeToPath, AbsoluteUrl baseUrl, FilePath baseDirectory) {
         NodeToPath = nodeToPath;
         BaseUrl = baseUrl;
         BaseDirectory = baseDirectory;
     }
 
-    public Uri NodeToAbsoluteUrl(Node node) {
-        return new Uri(BaseUrl, NodeToPath.NodeToRelativeUrl(node));
+    public AbsoluteUrl NodeToAbsoluteUrl(Node node) {
+        return BaseUrl + NodeToPath.NodeToRelativeUrl(node);
     }
 
-    public string NodeToFilePath(Node node) {
-        return Path.GetFullPath(BaseDirectory+ NodeToPath.NodeToRelativeFilePath(node));
+    public FilePath NodeToFilePath(Node node) {
+        return BaseDirectory + NodeToPath.NodeToRelativeFilePath(node);
     }
-    public string NodeToRedirectFilePath(Node node) {
-        return Path.GetFullPath(BaseDirectory + NodeToPath.NodeToRelativeDirectory(node) + "/index.html");
+    public FilePath NodeToRedirectFilePath(Node node) {
+        return BaseDirectory + NodeToPath.NodeToRelativeDirectory(node) + "index.html";
     }
 
 
@@ -53,34 +53,33 @@ public class Generator<NodeType> where NodeType : ProtoNode<NodeType> {
         var html = await page.GeneratePageHtmlAsync(context);
 
         var path = NodeToFilePath(node);
-        var directory = Path.GetDirectoryName(path);
-        if (directory != null)
-            Directory.CreateDirectory(directory);
+        var directory = path.WithoutLast;
+        Directory.CreateDirectory(directory.OsPath);
 
-        File.WriteAllText(path, html);
+        File.WriteAllText(path.OsPath, html);
     }
 
     public virtual async Task GenerateAsync(NodeType root) {
         var nodes = GetAllNodes(root);
         var assets = new Assets();
         await Task.WhenAll(nodes.Select(node => GetnerateAndSave(node, CreateContext(node, assets))));
-        await assets.StoreAsync(Path.Combine(BaseDirectory,"Assets"));
+        await assets.StoreAsync(BaseDirectory+"Assets");
     }
 
     protected void SaveSitemap(string saveSitemap) {
-        File.WriteAllText(Path.Combine(BaseDirectory, "sitemap.xml"), saveSitemap);
+        File.WriteAllText((BaseDirectory + "sitemap.xml").OsPath, saveSitemap);
     }
 
 
 
     protected void ClearBaseDirectory() {
         string doNotDeleteFileName = "doNotDelete.txt";
-        string doNotDeleteFilePath = Path.Combine(BaseDirectory, doNotDeleteFileName);
-        DirectoryInfo directory = new DirectoryInfo(BaseDirectory);
+        var doNotDeleteFilePath = BaseDirectory + doNotDeleteFileName;
+        DirectoryInfo directory = new DirectoryInfo(BaseDirectory.OsPath);
 
         var doNotDelete = new List<string>();
-        if (File.Exists(doNotDeleteFilePath)) {
-            doNotDelete = File.ReadAllLines(doNotDeleteFilePath).Where(x=>!string.IsNullOrWhiteSpace(x)).ToList();
+        if (File.Exists(doNotDeleteFilePath.OsPath)) {
+            doNotDelete = File.ReadAllLines(doNotDeleteFilePath.OsPath).Where(x=>!string.IsNullOrWhiteSpace(x)).ToList();
             doNotDelete.Add(doNotDeleteFileName);
         }
 
@@ -116,7 +115,7 @@ public class Generator<NodeType> where NodeType : ProtoNode<NodeType> {
 
 public class MultilanguageStaticGenerator<LanguageEnum> : Generator<MultilanguageProtoNode<LanguageEnum>> where LanguageEnum : struct, Enum {
 
-    public MultilanguageStaticGenerator(INodeToPath nodeToPath, Uri baseUrl, string baseDirectory) : base(nodeToPath,baseUrl,baseDirectory) {        
+    public MultilanguageStaticGenerator(INodeToPath nodeToPath, AbsoluteUrl baseUrl, FilePath baseDirectory) : base(nodeToPath,baseUrl,baseDirectory) {        
     }
 
     
@@ -138,7 +137,7 @@ public class MultilanguageStaticGenerator<LanguageEnum> : Generator<Multilanguag
             GetnerateAndSaveMultilanguageRedirect(node);
         }
 
-        await assets.StoreAsync(Path.Combine(BaseDirectory, "Assets"));
+        await assets.StoreAsync(BaseDirectory + "Assets");
     }
 
     public void GetnerateAndSaveMultilanguageRedirect(Node node) {
@@ -146,7 +145,7 @@ public class MultilanguageStaticGenerator<LanguageEnum> : Generator<Multilanguag
             return;
         var html = MultilanguageRedirect.GenerateHtml<LanguageEnum>();
         var path = NodeToRedirectFilePath(node);
-        File.WriteAllText(path, html);
+        File.WriteAllText(path.OsPath, html);
     }
 
     public string CreateSiteMap(MultilanguageProtoNode<LanguageEnum> root) {

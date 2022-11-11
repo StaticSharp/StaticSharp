@@ -14,7 +14,7 @@ public interface IAsset : IKeyProvider {
     public string ContentHash { get; }
     public string FileExtension { get; }
     public string? CharSet { get; }
-    public string FilePath => ContentHash + FileExtension;
+    public FilePath FilePath => new(ContentHash + FileExtension);
 
     public string GetDataUrlBase64() {
 

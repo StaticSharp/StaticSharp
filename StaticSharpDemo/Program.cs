@@ -73,7 +73,7 @@ namespace StaticSharpDemo {
         }
 
         public static async Task Server() {
-            Cache.Directory = AbsolutePath(".cache");
+            Cache.Directory = MakeAbsolutePath(".cache");
 
             await new StaticSharp.Server(
                 new DefaultMultilanguagePageFinder<Language>((language) => new αRoot(language)),
@@ -83,12 +83,15 @@ namespace StaticSharpDemo {
         }
 
         public static async Task Generator() {
-            Cache.Directory = AbsolutePath(".cache");
+            Cache.Directory = MakeAbsolutePath(".cache");
+
+            var projectPath = ProjectDirectory.Path;
+            var baseDirectory = Path.GetFullPath(Path.Combine(projectPath, "../../StaticSharp.github.io"));
 
             var generator = new MultilanguageStaticGenerator<Language>(
                 new DefaultMultilanguageNodeToPath<Language>(),
-                new Uri("http://staticsharp.github.io"),
-                Path.GetFullPath(Path.Combine(ProjectDirectory.Path, "../../StaticSharp.github.io"))
+                new AbsoluteUrl("http", "staticsharp.github.io"),
+                FilePath.FromOsPath(baseDirectory)
                 );
 
             await generator.GenerateAsync(new αRoot(default));

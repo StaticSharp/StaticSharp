@@ -20,7 +20,7 @@ namespace StaticSharp {
             return path;
         }
 
-        public static string AbsolutePath(string subPath = "", [CallerFilePath] string callerFilePath = "") {
+        public static string MakeAbsolutePath(string subPath = "", [CallerFilePath] string callerFilePath = "") {
             var path = Path.GetFullPath(subPath, Path.GetDirectoryName(callerFilePath));
             return path;
 

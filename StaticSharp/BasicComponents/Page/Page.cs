@@ -27,6 +27,9 @@ namespace StaticSharp {
 
     
 
+
+
+
     public interface IMainVisual {
         Task GetMetaAsync(Dictionary<string,string> meta, Context context);
     }

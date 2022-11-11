@@ -104,7 +104,7 @@ namespace StaticSharp.Gears {
         }
 
         public string GenerateSuperStyle() {
-            string functionPath = AbsolutePath("once.scss");
+            string functionPath = MakeAbsolutePath("once.scss");
             StringBuilder styleList = new StringBuilder();
             styleList.AppendLine("@import " + "\"" + functionPath.Replace("\\", "/") + "\"" + ";");
             foreach(var style in styles.Values) {

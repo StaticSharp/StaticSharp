@@ -57,7 +57,7 @@ namespace StaticSharp.Gears {
         public string ReadFile(string script) {
 
             var file = File.ReadAllText(script);
-            var thisFilePath = AbsolutePath(script);
+            var thisFilePath = MakeAbsolutePath(script);
 
             string result = 
                             file.Replace("☺thisFilePathHash☹", thisFilePath.ToString().ToHashString())

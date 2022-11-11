@@ -15,59 +15,24 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    /*public record ContextOptions{
-        public ContextOptions(Assets assets, INodeToPath nodeToPath, Uri baseUrl, Uri? assetsBaseUrl = null, bool developerMode = false) {
-            Assets = assets;
-            NodeToPath = nodeToPath;
-            BaseUrl = baseUrl;
-            this.assetsBaseUrl = assetsBaseUrl;
-            DeveloperMode = developerMode;
-        }
-
-        public Assets Assets { get; init; }        
-        public INodeToPath NodeToPath { get; init; }
-        public Uri BaseUrl { get; init; }
-
-        private Uri? assetsBaseUrl;
-        public Uri AssetsBaseUrl {
-            get {
-                if (assetsBaseUrl == null)
-                    return new Uri("/Assets/",UriKind.Relative);
-                return assetsBaseUrl;
-            }
-            set {
-                assetsBaseUrl = value;
-            }
-        }
-
-        public bool DeveloperMode { get; init; }
-
-    }*/
-
-
     public struct Context {
 
         public bool DeveloperMode { get; init; }
 
         public INodeToPath NodeToPath { get; init; }
-        public Uri NodeToAbsoluteUrl(Node node) { 
-            return new Uri(BaseUrl, NodeToPath.NodeToRelativeUrl(node));
+        public AbsoluteUrl NodeToAbsoluteUrl(Node node) { 
+            return BaseUrl + NodeToPath.NodeToRelativeUrl(node);
         }
 
-        public string NodeToUrlRelativeToCurrentNode(Node node) {
-            var origin = new Uri(NodeToPath.NodeToRelativeUrl(CurrentNode),UriKind.Relative);
-            var target = new Uri(NodeToPath.NodeToRelativeUrl(node), UriKind.Relative);
-            var relative = origin.MakeRelativeUri(target);
-            
-            var relativePath = Path.GetRelativePath("X:"+CurrentNodeRelativeUrl, "X:" + target);
-            return relativePath;
+        public FilePath NodeToUrlRelativeToCurrentNode(Node node) {
+            return CurrentNodePath.To(NodeToPath.NodeToRelativeUrl(node));
         }
 
         public Node CurrentNode { get; init; }
-        public string CurrentNodeRelativeUrl { get; init; }
-        public Uri BaseUrl { get; init; }
+        public FilePath CurrentNodePath { get; init; }
+        public AbsoluteUrl BaseUrl { get; init; }
 
-        public Uri AssetsBaseUrl { get; init; }
+        public FilePath AssetsBaseUrl { get; init; }
 
         public Includes Includes { get; init; }
 
@@ -92,7 +57,7 @@ namespace StaticSharp {
         }
 
 
-        public async Task<string> AddAssetAsync(IAsset asset) {
+        public async Task<FilePath> AddAssetAsync(IAsset asset) {
             await Assets.AddAsync(asset);
             return AssetsBaseUrl + asset.FilePath;
         }
@@ -149,9 +114,9 @@ namespace StaticSharp {
             AddScript(script);
         }*/
 
-        public Context(Node currentNode, Assets assets, INodeToPath nodeToPath, Uri baseUrl, Uri? assetsBaseUrl = null, bool developerMode = false) {
+        public Context(Node currentNode, Assets assets, INodeToPath nodeToPath, AbsoluteUrl baseUrl, FilePath? assetsBaseUrl = null, bool developerMode = false) {
             CurrentNode = currentNode;
-            CurrentNodeRelativeUrl = nodeToPath.NodeToRelativeUrl(currentNode);
+            CurrentNodePath = nodeToPath.NodeToRelativeUrl(currentNode);
 
             Assets = assets;
             BaseUrl = baseUrl;
@@ -159,9 +124,9 @@ namespace StaticSharp {
             DeveloperMode = developerMode;
 
             if (assetsBaseUrl == null)
-                AssetsBaseUrl = new Uri("/Assets/", UriKind.Relative);
+                AssetsBaseUrl = new("Assets");
             else
-                AssetsBaseUrl = assetsBaseUrl;
+                AssetsBaseUrl = assetsBaseUrl.Value;
 
             Includes = new Includes();
             nextIdNumber = new(0);

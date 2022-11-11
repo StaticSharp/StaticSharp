@@ -1,22 +1,26 @@
-html {
+html.js {
     display: initial;
     position: absolute;
     overscroll-behavior-x: none;
-    //overscroll-behavior: contain;
     overflow-x: hidden;
     overflow-y: hidden;
 }
 
-body {
+body.js {
     position: absolute;
     overflow-x: hidden;
     overflow-y: hidden;
-    visibility: hidden;
     opacity: 0;
     white-space: normal;
     line-height: 1.5;
     touch-action: none;
     margin: 0;
+}
+
+
+
+:not(.js) material-design-icon-block>svg {
+    width: 24px
 }
 
 
@@ -35,50 +39,18 @@ input[type="checkbox"] {
 }
 
 
-/*
-::-webkit-scrollbar {
-    width: 50px;
-    overflow: visible;
-}
-
-
-::-webkit-scrollbar-track {
-    background: red;
-    overflow: visible;
-}
-
-::-webkit-scrollbar-thumb {
-    position: absolute;
-    background: green;
-    width: 20px;
-    left: -20px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #6E6E6E;
-}
-::-webkit-scrollbar-track {
-    position: absolute;
-    //right: -40px;
-    //top: -50px;
-}*/
-
-
-
-
-* {
+body.js * {
     scrollbar-width: none;
 }
-::-webkit-scrollbar {
+body.js *::-webkit-scrollbar {
     display: none;
-    //width: 0;
 }
 
 head {
     display: none;
 }
 
-body * {
+body.js * {
     tab-size: 4;
     touch-action: inherit;
     display: inherit;
@@ -107,19 +79,16 @@ body * {
     white-space: inherit;
 }
 
-p {
+body.js p {
     white-space: break-spaces;
 }
-p * {
+body.js p * {
     position: static;
     display: inline;
-    
 }
 
 
-overlay {
-    display: contents;
-}
+
 /*w::after {
         color: black;
         content: "\00a0";
