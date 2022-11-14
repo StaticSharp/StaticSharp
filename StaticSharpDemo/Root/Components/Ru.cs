@@ -65,13 +65,14 @@ namespace StaticSharpDemo.Root.Components {
                 Children = { 
                     new Paragraph($"Paragraph"){ 
                         Children = {
-                            new LinkBlock(Node.Parent){
+                            new Block(){
+                                InternalLink = Node.Parent,
                                 BackgroundColor = ColorTranslator.FromHtml("#80000000"),
                                 Margins = new (e=>Js.Window.Touch? -20 : 0)
                             }.FillWidth().FillHeight()
                         }
                     },
-                    $"{new LinkInline{HRef = "https://developers.antilatency.com/" , Children = { "First" }}}",
+                    $"{new Inline{ExternalLink = "https://developers.antilatency.com/" , Children = { "First" }}}",
                     "Second",
                     new Space(),
                     "Last"

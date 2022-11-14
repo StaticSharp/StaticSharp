@@ -84,7 +84,7 @@ namespace StaticSharpDemo.Root {
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0
             ) {
-            var paragraph = new Paragraph(text, callerFilePath, callerLineNumber) {
+            var paragraph = new Paragraph(text, callerLineNumber, callerFilePath) {
                 FontSize = 18,
                 FontStyle = new FontStyle(FontWeight.Bold)
             };

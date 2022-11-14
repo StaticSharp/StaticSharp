@@ -33,10 +33,10 @@ namespace StaticSharp {
 
         protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {            
             elementTag.Add(                
-                (await First.GenerateHtmlAsync(context)).AssignParentProperty("First")
+                await First.GenerateHtmlAsync(context,new Role(false,"First"))
             );
             elementTag.Add(
-                (await Second.GenerateHtmlAsync(context)).AssignParentProperty("Second")
+                await Second.GenerateHtmlAsync(context, new Role(false, "Second"))
             );
             await base.ModifyHtmlAsync(context, elementTag);
         }

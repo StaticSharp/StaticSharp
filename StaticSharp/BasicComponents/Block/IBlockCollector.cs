@@ -7,7 +7,7 @@ namespace StaticSharp {
 
     namespace Gears {
         public interface IBlockCollector : IVoidEnumerable {
-            void Add(HtmlModifier? id, IBlock? value);
+            void Add(string? propertyName, IBlock? value);
         }
     }
 
@@ -15,7 +15,7 @@ namespace StaticSharp {
     public static class BlockCollectorStatic {
 
 
-        public static void Add<T>(this T collector, IEnumerable<KeyValuePair<HtmlModifier?, IBlock>>? values) where T : IBlockCollector {
+        public static void Add<T>(this T collector, IEnumerable<KeyValuePair<string?, IBlock>>? values) where T : IBlockCollector {
             if (values == null)
                 return;
             foreach (var i in values)
@@ -36,7 +36,7 @@ namespace StaticSharp {
         }
 
         public static void Add<T>(this T collector, string name, IBlock? value) where T : IBlockCollector {
-            collector.Add(new HtmlModifier().AssignParentProperty(name), value);         
+            collector.Add(name, value);         
         }
 
         #endregion
@@ -51,18 +51,18 @@ namespace StaticSharp {
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0) where T : IBlockCollector { 
 
-            collector.Add(null, new Paragraph(inlines, callerFilePath, callerLineNumber));
+            collector.Add(null, new Paragraph(inlines, callerLineNumber, callerFilePath));
         }
 
-        public static void Add<T>(
+        /*public static void Add<T>(
             this T collector,
-            HtmlModifier modifier,
+            Role modifier,
             Inlines inlines,
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0) where T : IBlockCollector {
 
-            collector.Add(modifier, new Paragraph(inlines, callerFilePath, callerLineNumber));
-        }
+            collector.Add(modifier, new Paragraph(inlines, callerLineNumber, callerFilePath));
+        }*/
         public static void Add<T>(
             this T collector,
             string name,
@@ -70,27 +70,27 @@ namespace StaticSharp {
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0) where T : IBlockCollector {
 
-            collector.Add(new HtmlModifier().AssignParentProperty(name), new Paragraph(inlines, callerFilePath, callerLineNumber));
+            collector.Add(name, new Paragraph(inlines, callerLineNumber, callerFilePath));
         }
 
         #endregion
 
 
-        public static void Add<T>(
+        /*public static void Add<T>(
             this T collector,
             HtmlModifier? modifier,
             Inline inline,
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0) where T : IBlockCollector {
-            collector.Add(modifier, new Paragraph(inline, callerFilePath, callerLineNumber));
-        }
+            collector.Add(modifier, new Paragraph(inline, callerLineNumber, callerFilePath));
+        }*/
 
         public static void Add<T>(
             this T collector,
             Inline inline,
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0) where T : IBlockCollector {
-            collector.Add(null, new Paragraph(inline, callerFilePath, callerLineNumber));
+            collector.Add(null, new Paragraph(inline, callerLineNumber, callerFilePath));
         }
 
 
@@ -100,7 +100,7 @@ namespace StaticSharp {
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0) where T : IBlockCollector {
             collector.Add(
-                new Paragraph(text, callerFilePath, callerLineNumber)
+                new Paragraph(text, callerLineNumber, callerFilePath)
                 //,null
                 );
         }

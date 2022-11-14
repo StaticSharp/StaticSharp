@@ -1,24 +1,24 @@
 ﻿using StaticSharp.Gears;
+using StaticSharp.Html;
 
 namespace StaticSharp {
 
 
     namespace Js {
         public class Link {
-            public string HRef => NotEvaluatableValue<string>();
+            //public string HRef => NotEvaluatableValue<string>();
             public bool NewTab => NotEvaluatableValue<bool>();
         }
     }
 
     namespace Gears {
         public class LinkBindings<FinalJs> : Bindings<FinalJs> where FinalJs : new() {
-            public Binding<string> HRef { set { Apply(value); } }
+            //public Binding<string> HRef { set { Apply(value); } }
             public Binding<bool> NewTab { set { Apply(value); } }
         }
 
-        public static class LinkStatic { 
+        public class Link {
             
-        
         }
     }
 

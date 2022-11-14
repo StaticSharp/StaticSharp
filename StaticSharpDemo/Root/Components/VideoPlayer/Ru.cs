@@ -24,11 +24,11 @@
 
             {"VideoProperties",
                 $"""                
-                {("Play", new CheckboxInline(){Value = new(e=>e.Parent.Parent["Video"].As<Js.Video>().PlayActual), Label = { "Play" } })}
-                {("Mute", new CheckboxInline(){Value = new(e=>e.Parent.Parent["Video"].As<Js.Video>().MuteActual), Label = { "Mute" } })}
-                {("PreferPlatformPlayer", new CheckboxInline(){Value = false, Label = { "PreferPlatformPlayer" } })}
-                {("Controls", new CheckboxInline(){Value = true, Label = { "Controls" } })}
-                {("Loop", new CheckboxInline(){Value = true, Label = { "Loop" } })}
+                {("Play", new CheckboxInline(){Value = new(e=>e.Parent.Parent["Video"].As<Js.Video>().PlayActual), Children = { "Play" } })}
+                {("Mute", new CheckboxInline(){Value = new(e=>e.Parent.Parent["Video"].As<Js.Video>().MuteActual), Children = { "Mute" } })}
+                {("PreferPlatformPlayer", new CheckboxInline(){Value = false, Children = { "PreferPlatformPlayer" } })}
+                {("Controls", new CheckboxInline(){Value = true, Children = { "Controls" } })}
+                {("Loop", new CheckboxInline(){Value = true, Children = { "Loop" } })}
                 """
             },
 

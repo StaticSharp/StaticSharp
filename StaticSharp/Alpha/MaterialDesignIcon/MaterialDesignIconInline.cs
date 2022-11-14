@@ -28,11 +28,11 @@ namespace StaticSharp {
 
         public IconName Icon { get; }
         public double Scale { get; set; } = 1;
-        public MaterialDesignIconInline(MaterialDesignIcons.IconName icon, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
+        public MaterialDesignIconInline(MaterialDesignIcons.IconName icon, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerLineNumber, callerFilePath) {
             Icon = icon;
         }
 
-        public MaterialDesignIconInline(MaterialDesignIconInline other, string callerFilePath, int callerLineNumber) : base(other, callerFilePath, callerLineNumber) {
+        public MaterialDesignIconInline(MaterialDesignIconInline other, string callerFilePath, int callerLineNumber) : base(other, callerLineNumber, callerFilePath) {
             Icon = other.Icon;
             Scale = other.Scale;
         }

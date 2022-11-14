@@ -44,7 +44,7 @@ public class Generator<NodeType> where NodeType : ProtoNode<NodeType> {
     }
 
     protected Context CreateContext(Node node, Assets assets) {
-        return new Context(node, assets, NodeToPath, BaseUrl, null);
+        return new Context(NodeToPath.NodeToRelativeDirectory(node), assets, NodeToPath, BaseUrl, null);
     }
 
     protected async Task GetnerateAndSave(Node node, Context context) {

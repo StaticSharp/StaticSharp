@@ -25,7 +25,8 @@ namespace StaticSharp {
             if (string.IsNullOrEmpty(extension) || extension.ToLower() == ".html") {
 
                 if (!string.IsNullOrEmpty(extension)) {
-                    requestPath = Path.GetFileNameWithoutExtension(requestPath);
+                    requestPath = requestPath[0..^extension.Length];
+                    //requestPath = Path.GetFileNameWithoutExtension(requestPath);
                 }
 
                 string[] path = requestPath.Split('/', StringSplitOptions.RemoveEmptyEntries);

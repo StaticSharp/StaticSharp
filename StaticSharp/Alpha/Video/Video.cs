@@ -84,7 +84,7 @@ namespace StaticSharp {
                 var sources = new List<object>();
                 foreach (var i in youtubeVideoManifest.Items) {
                     var iVideo = await new YoutubeVideoGenome(i).CreateOrGetCached();
-                    var iUrl = context.CurrentNodePath.To(await context.AddAssetAsync(iVideo)).ToString();
+                    var iUrl = context.PathFromHostToCurrentPage.To(await context.AddAssetAsync(iVideo)).ToString();
 
                     sources.Add(new {
                         size = new {

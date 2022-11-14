@@ -1,5 +1,5 @@
 
-var AbsoluteUrlRegExp = new RegExp('^(?:[a-z+]+:)?//', 'i');
+
 
 function Link(element) {
     element.Reactive = {

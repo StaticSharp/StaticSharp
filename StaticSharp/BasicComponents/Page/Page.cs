@@ -134,7 +134,7 @@ namespace StaticSharp {
                 };
 
 
-            var body = await GenerateHtmlAsync(context);
+            var body = await GenerateHtmlAsync(context,null);
             //body.Style["visibility"] = "hidden";
 
 

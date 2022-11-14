@@ -51,7 +51,7 @@ function Video(element) {
 
     let youtubeId = element.dataset.youtubeId
 
-    var sourcesJson = element.dataset.sources.replaceAll("'", '"');
+    var sourcesJson = element.dataset.sources.replace(/'/g, '"');// replaceAll("'", '"');
     var sources = JSON.parse(sourcesJson)
 
 
@@ -163,8 +163,7 @@ function Video(element) {
                 return
 
             let position = element.Player.currentTime
-            //console.log(window.location.href)
-            element.Player.src = window.location.href + "/" + sources[element.SourceIndex].url
+            element.Player.src = sources[element.SourceIndex].url
             element.Player.currentTime = position
         }
     })
@@ -328,9 +327,9 @@ function Video(element) {
         element.appendChild(player)
         element.Positioner = player
 
-        player.src = sources[1].url
+        player.src = "Assets/1537CB3B1F726B16D7FEA3FFFE36F72F.mp4"//sources[1].url
         player.muted = true
-        player.setAttribute("playsinline","")
+        //player.setAttribute("playsinline","")
          
 
         player.ontimeupdate = () => element.PositionActual = element.Player.currentTime

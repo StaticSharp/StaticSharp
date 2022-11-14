@@ -30,10 +30,10 @@ namespace StaticSharpDemo.Root {
         }
 
 
-        public LinkInline GithubUrl(string text = "GitHub repository") {
-            return new LinkInline {
-                HRef = "https://github.com/antilatency/Antilatency.Copilot",
-                NewTab = true,
+        public Inline GithubUrl(string text = "GitHub repository") {
+            return new Inline {
+                ExternalLink = "https://github.com/antilatency/Antilatency.Copilot",
+                OpenLinksInANewTab = true,
                 ForegroundColor = Color.FromArgb(172, 196, 53),
                 Children = {
                     text
@@ -41,10 +41,10 @@ namespace StaticSharpDemo.Root {
             };
         }
 
-        public LinkInline DiscordUrl(string text = "Discord server") {
-            return new LinkInline {
-                HRef = "https://discord.gg/ZTqmfPsGEr",
-                NewTab = true,
+        public Inline DiscordUrl(string text = "Discord server") {
+            return new Inline {
+                ExternalLink = "https://discord.gg/ZTqmfPsGEr",
+                OpenLinksInANewTab = true,
                 ForegroundColor = Color.FromArgb(139, 148, 245),
                 Children = {
                     text
@@ -73,8 +73,8 @@ namespace StaticSharpDemo.Root {
             Play = true,
             Mute = true,
             PreferPlatformPlayer = false,
-            Controls = false,
-            Loop = true,
+            //Controls = false,
+            //Loop = true,
         };
 
 
@@ -117,16 +117,12 @@ namespace StaticSharpDemo.Root {
                             Embed = Image.TEmbed.Image,
                         },
                         Children = { 
-                            new MaterialDesignIconBlock(MaterialDesignIcons.IconName.Github){ 
+                            new MaterialDesignIconBlock(MaterialDesignIcons.IconName.Github){
+                                ExternalLink = "https://github.com/staticsharp",
                                 Width = 128,
                                 BackgroundColor = Color.White,
                                 Radius = new(e=>e.Width /2),
                                 Paddings = 12,
-                                Children = { 
-                                    new LinkBlock(){ 
-                                        HRef = "https://github.com/staticsharp"
-                                    }.FillHeight().FillWidth()
-                                }
                             }.Center()
                         }
                     }

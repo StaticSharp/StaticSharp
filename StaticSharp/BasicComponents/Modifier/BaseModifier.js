@@ -1,7 +1,26 @@
 
 function BaseModifier(element) {
-
     Hierarchical(element)
+
+    if (element.parentElement.tagName == "A") {
+        if (window.location.protocol == "file:") {
+            let a = element.parentElement
+            let href = a.getAttribute("href")
+            let AbsoluteUrlRegExp = new RegExp('^(?:[a-z+]+:)?//', 'i')
+            if (!AbsoluteUrlRegExp.test(href)) {
+                a.setAttribute("href", href + ".html")
+            }
+        }        
+    }
+    
+
+
+    //var extension = (window.location.protocol == "file:") ? ".html" : ""
+    
+
+    //window.location.replace(matchLanguage([{{ languages }}]) + extension)
+
+
 
     element.isModifier = true
 

@@ -25,11 +25,11 @@ namespace StaticSharp {
         }
 
         public FilePath NodeToUrlRelativeToCurrentNode(Node node) {
-            return CurrentNodePath.To(NodeToPath.NodeToRelativeUrl(node));
+            return PathFromHostToCurrentPage.To(NodeToPath.NodeToRelativeUrl(node));
         }
 
-        public Node CurrentNode { get; init; }
-        public FilePath CurrentNodePath { get; init; }
+        //public Node CurrentNode { get; init; }
+        public FilePath PathFromHostToCurrentPage { get; init; }
         public AbsoluteUrl BaseUrl { get; init; }
 
         public FilePath AssetsBaseUrl { get; init; }
@@ -114,9 +114,9 @@ namespace StaticSharp {
             AddScript(script);
         }*/
 
-        public Context(Node currentNode, Assets assets, INodeToPath nodeToPath, AbsoluteUrl baseUrl, FilePath? assetsBaseUrl = null, bool developerMode = false) {
-            CurrentNode = currentNode;
-            CurrentNodePath = nodeToPath.NodeToRelativeUrl(currentNode);
+        public Context(FilePath pathFromHostToCurrentPage, Assets assets, INodeToPath nodeToPath, AbsoluteUrl baseUrl, FilePath? assetsBaseUrl = null, bool developerMode = false) {
+            //CurrentNode = currentNode;
+            PathFromHostToCurrentPage = pathFromHostToCurrentPage;
 
             Assets = assets;
             BaseUrl = baseUrl;

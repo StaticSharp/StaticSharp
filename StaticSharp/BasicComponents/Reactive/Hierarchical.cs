@@ -60,13 +60,15 @@ namespace StaticSharp {
         protected virtual Task ModifyHtmlAsync(Context context, Tag elementTag) {
             return Task.CompletedTask;
         }
-        public virtual async Task<Tag> GenerateHtmlAsync(Context context) {
+        public virtual async Task<Tag> GenerateHtmlAsync(Context context, Role? role) {
 
             await AddRequiredInclues(context);
 
             context = ModifyContext(context);
 
             var tag = new Tag(TagName) { };
+
+            role?.SetAttributes(tag);
 
             //ModifyTag(tag);
 

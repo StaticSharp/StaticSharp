@@ -19,10 +19,8 @@ namespace StaticSharp {
     [ConstructorJs]
     public partial class CheckboxInline : Inline {
         protected override string TagName => "checkboxInline";
-        public CheckboxInline(CheckboxInline other, string callerFilePath, int callerLineNumber) : base(other, callerFilePath, callerLineNumber) { }
-        public CheckboxInline([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
-
-        public Inlines Label { get; set; } = new();
+        public CheckboxInline(CheckboxInline other, string callerFilePath, int callerLineNumber) : base(other, callerLineNumber, callerFilePath) { }
+        public CheckboxInline([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerLineNumber, callerFilePath) { }
 
         protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
 
@@ -31,15 +29,13 @@ namespace StaticSharp {
             };
 
 
-            if (Label.Count != 0) {
+            if (Children.Count != 0) {
                 var luid = context.GetUniqueId();
                 result.Id = luid;
 
                 var label = new Tag("label") { ["for"] = luid };
-                foreach (var i in Label) {
-                    var child = await i.Value.GenerateHtmlAsync(context);
-                    if (i.Modifier!=null)
-                        await i.Modifier.Apply(child);
+                foreach (var i in Children) {
+                    var child = await i.Value.GenerateHtmlAsync(context,new Role(true,i.Key));
                     label.Add(child);
                 }
 

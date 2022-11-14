@@ -51,7 +51,7 @@ namespace StaticSharp {
             }
 
             elementTag.Add(
-                await thumb.GenerateHtmlAsync(context)
+                await thumb.GenerateHtmlAsync(context, new Role(false,"Thumb"))
                 );
             await base.ModifyHtmlAsync(context, elementTag);
         }

@@ -97,14 +97,16 @@ function Page(element) {
     function onLoadEvent() {
         loadEventsToWait--
         if (loadEventsToWait == 0) {
-
+            //document.body.style.display = "block"
+            //document.body.style.visibility = "hidden"
             console.log("-------------Reactions------------", performance.now());
             loadingDeffered.end()
             console.log("-------------Reactions-done-------", performance.now());
             
 
+            
             document.body.style.visibility = "visible"
-            document.body.style.opacity = 1
+            //document.body.style.opacity = 1
 
             if (location.hash !== "") {
                 location.href = location.hash

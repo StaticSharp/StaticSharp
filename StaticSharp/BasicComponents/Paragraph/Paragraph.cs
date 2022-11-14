@@ -37,29 +37,35 @@ namespace StaticSharp {
     public partial class Paragraph : Block {
         public Inlines Inlines { get; } = new();
 
+
+        public Paragraph(
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerFilePath] string callerFilePath = "") : base(callerFilePath, callerLineNumber) {
+        }
+
         public Paragraph(Paragraph other,
-            [CallerFilePath] string callerFilePath = "",
-            [CallerLineNumber] int callerLineNumber = 0) : base(other, callerFilePath, callerLineNumber) {
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerFilePath] string callerFilePath = "") : base(other, callerFilePath, callerLineNumber) {
 
             Inlines = new(other.Inlines);
         }
 
 
         public Paragraph(string text,
-            [CallerFilePath] string callerFilePath = "",
-            [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerFilePath] string callerFilePath = "") : base(callerFilePath, callerLineNumber) {
             Inlines.AppendLiteral(text, callerFilePath, callerLineNumber);
         }
 
         public Paragraph(Inlines inlines,
-            [CallerFilePath] string callerFilePath = "",
-            [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerFilePath] string callerFilePath = "") : base(callerFilePath, callerLineNumber) {
             Inlines = new(inlines);
         }
         public Paragraph(Inline inline,
-            [CallerFilePath] string callerFilePath = "",
-            [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
-            Inlines = new() { inline };
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerFilePath] string callerFilePath = "") : base(callerFilePath, callerLineNumber) {
+            Inlines = new() { { null, inline } };
         }
 
 
@@ -67,10 +73,7 @@ namespace StaticSharp {
 
             var p = new Tag("p");
             foreach (var i in Inlines) {
-                var child = await i.Value.GenerateHtmlAsync(context);
-                if (i.Modifier != null)
-                    await i.Modifier.Apply(child);
-                //child.AddAsChild();
+                var child = await i.Value.GenerateHtmlAsync(context, new Role(true,i.Key));
                 p.Add(child);
             }
             elementTag.Add(p);

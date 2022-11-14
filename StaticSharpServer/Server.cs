@@ -45,7 +45,7 @@ namespace StaticSharp {
         }
 
         protected Context CreateContext(Node node, AbsoluteUrl baseUrl) {
-            return new Context(node, Assets, NodeToPath, baseUrl, null, true);
+            return new Context(NodeToPath.NodeToRelativeDirectory(node), Assets, NodeToPath, baseUrl, null, true);
         }
 
         public static IEnumerable<string> GetLocalIPAddresses() { //todo: move to urils

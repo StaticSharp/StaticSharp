@@ -1,16 +1,19 @@
-html.js {
+html {
     display: initial;
-    position: absolute;
+    position: initial;
     overscroll-behavior-x: none;
+    overflow: hidden;
     overflow-x: hidden;
     overflow-y: hidden;
 }
 
 body.js {
+    //display: none;
+    visibility: hidden;
     position: absolute;
+    overflow: hidden;
     overflow-x: hidden;
     overflow-y: hidden;
-    opacity: 0;
     white-space: normal;
     line-height: 1.5;
     touch-action: none;

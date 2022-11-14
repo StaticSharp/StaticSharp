@@ -89,51 +89,11 @@ namespace StaticSharp {
         
         protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
             foreach (var c in Children) {
-                var childTag = await c.Value.GenerateHtmlAsync(context);
-                if (c.Key != null) {
-                    await c.Key.Apply(childTag);
-                }
-                childTag.AddAsChild();
+                var childTag = await c.Value.GenerateHtmlAsync(context, new Role(true, c.Key));
                 elementTag.Add(childTag);
             }
             await base.ModifyHtmlAsync(context, elementTag);
         }
-
-        
-
-        /*public virtual async Task<Node> GenerateConstructor(Context context, string? id) {
-            
-            await AddRequiredInclues(context);
-            context = ModifyContext(context);
-
-            var jsConstructorsNames = FindJsConstructorsNames();
-            var propertiesInitializers = await GetGeneratedBundingsAsync(context).ToListAsync();
-            propertiesInitializers.AddRange(Properties);
-
-
-
-            var result = new Group() {
-                $"let result = Create({string.Join(',', jsConstructorsNames)})",
-                "result.Parent = parent"
-            };
-
-
-            foreach (var child in Children) {
-                result.Add(new Indent($"result.AddChild(function(parent){{", "}(result))") {
-                    child.Value.GenerateConstructor(context, id)
-                });
-            }
-            
-
-            foreach (var initializer in propertiesInitializers) {
-                result.Add(new Indent($"result.{initializer.Key} = function(parent){{", "}(result)") {
-                    initializer.Value
-                });
-            }
-
-            result.Add("return result");
-            return result;
-        }*/
     }
 
     public static partial class Static {

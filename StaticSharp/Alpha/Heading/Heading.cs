@@ -9,7 +9,7 @@ namespace StaticSharp.Alpha {
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0) {
 
-            return new Paragraph(text, callerFilePath, callerLineNumber) {
+            return new Paragraph(text, callerLineNumber, callerFilePath) {
                 FontSize = fontSize,
                 FontStyle = new FontStyle(fontWeight),
             };

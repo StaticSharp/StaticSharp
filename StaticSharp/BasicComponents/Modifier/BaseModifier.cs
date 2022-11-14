@@ -49,6 +49,10 @@ namespace StaticSharp {
         [ConstructorJs]
         public abstract partial class BaseModifier: Hierarchical {
 
+            public string? ExternalLink { get; set; }
+            public Tree.Node? InternalLink { get; set; }
+            public bool OpenLinksInANewTab { get; set; }
+
             public FontFamily[]? FontFamilies = null;
             public FontStyle? FontStyle = null;
             //public string? Url = null;
@@ -60,6 +64,32 @@ namespace StaticSharp {
 
             protected BaseModifier(Hierarchical other, string callerFilePath, int callerLineNumber) : base(other, callerFilePath, callerLineNumber) {}
             public BaseModifier(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
+
+
+            public string? GetUrl(Context context) {
+                if (InternalLink != null) {
+                    var url = context.NodeToUrlRelativeToCurrentNode(InternalLink);
+                    return url.ToString();
+                } else {
+                    return ExternalLink;
+                }
+            }
+
+            public override async Task<Tag> GenerateHtmlAsync(Context context, Role? role) {
+                var url = GetUrl(context);
+                if (url == null) {
+                    return await base.GenerateHtmlAsync(context, role);
+                } else {
+                    return new Tag("a") {
+                        ["href"] = url,
+                        ["target"] = OpenLinksInANewTab ? "_blank" : "_self",
+                        Children = {
+                            await base.GenerateHtmlAsync(context, role)
+                        }
+                    };
+                }
+            }
+
 
 
             protected override Context ModifyContext(Context context) {
