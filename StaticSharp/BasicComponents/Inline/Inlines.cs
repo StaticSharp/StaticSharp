@@ -31,7 +31,7 @@ namespace StaticSharp {
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0){
 
-            Add(null, new Text(text, true, callerFilePath, callerLineNumber));
+            Add(null, new Text(text, true, callerLineNumber, callerFilePath));
         }
 
         public Inlines(
@@ -47,7 +47,7 @@ namespace StaticSharp {
 
 
         public void AppendLiteral(string value, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
-            Add(null, new Text(value, true, callerFilePath, callerLineNumber));
+            Add(null, new Text(value, true, callerLineNumber, callerFilePath));
         }
         /*public void AppendFormatted(string value, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
             this.Add(new Text(value, false, callerFilePath, callerLineNumber));

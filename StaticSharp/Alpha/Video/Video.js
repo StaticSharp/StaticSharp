@@ -315,7 +315,6 @@ function Video(element) {
 
 
 
-
     function InitializeHtml5Video() {
         element.VideoPlayerType = "html5"
 
@@ -327,41 +326,52 @@ function Video(element) {
         element.appendChild(player)
         element.Positioner = player
 
-        player.src = "Assets/1537CB3B1F726B16D7FEA3FFFE36F72F.mp4"//sources[1].url
+        player.src = sources[1].url
         player.muted = true
-        //player.setAttribute("playsinline","")
-         
+
+        player.setAttribute("playsinline", "true")
+        player.setAttribute("webkit-playsinline", "true")
+
+        player.setAttribute("x5-video-player-type", "h5")
+        //player.setAttribute("autoplay", "true")
+        
 
         player.ontimeupdate = () => element.PositionActual = element.Player.currentTime
+
+        function onPlayOrPause() {
+            if (element.Play == element.Player.paused) {//anction is done by user
+                window.UserInteracted = true
+            }
+        }
 
         player.onplay = () => {
             let d = Reaction.beginDeferred()
             element.PlayActual = true
-            window.UserInteracted = true
+            onPlayOrPause();
             d.end()
         }
         player.onpause = () => {
             let d = Reaction.beginDeferred()
             element.PlayActual = false
-            window.UserInteracted = true
+            onPlayOrPause()
             d.end()
         }
+
 
         element.VolumeActual = player.volume
         player.onvolumechange = () => {
             let d = Reaction.beginDeferred()
-            window.UserInteracted = true
+            //window.UserInteracted = true TODO
             element.VolumeActual = player.volume
             element.MuteActual = player.muted
             d.end()
         }
 
-        /*player.Events.MouseDown = () => {
-            console.log("MouseDown")
-        }*/
+        player.oncanplay = () => {
+            element.Player = player
+        }
 
-        element.Player = player
-
+        
         playerDestructor = function () {
             playerDestructor = undefined
 
@@ -441,10 +451,18 @@ function Video(element) {
             if (element.SourceIndex == undefined)
                 return
 
-            element.Play ? element.Player.play() : element.Player.pause()
+            window.UserInteracted //for wechat
+
+            if (element.Play == element.Player.paused) {
+                element.Play ? element.Player.play() : element.Player.pause()
+            }
+
+            //element.Player.play()
+            
+
+            
         }        
     })
-
 
 
     //Mute

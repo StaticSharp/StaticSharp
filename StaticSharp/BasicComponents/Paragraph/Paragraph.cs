@@ -31,7 +31,7 @@ namespace StaticSharp {
         }
     }
 
-
+    [RelatedStyle]
     [ConstructorJs]
     [Mix(typeof(ParagraphBindings<Js.Paragraph>))]
     public partial class Paragraph : Block {
@@ -76,6 +76,7 @@ namespace StaticSharp {
                 var child = await i.Value.GenerateHtmlAsync(context, new Role(true,i.Key));
                 p.Add(child);
             }
+            p.Add("\n");
             elementTag.Add(p);
 
             await base.ModifyHtmlAsync(context, elementTag);

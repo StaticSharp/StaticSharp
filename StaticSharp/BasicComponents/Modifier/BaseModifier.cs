@@ -52,8 +52,10 @@ namespace StaticSharp {
             public string? ExternalLink { get; set; }
             public Tree.Node? InternalLink { get; set; }
             public bool OpenLinksInANewTab { get; set; }
+            
+            public FontFamily[]? CodeFontFamilies { get; set; } = null;
+            public FontFamily[]? FontFamilies { get; set; } = null;
 
-            public FontFamily[]? FontFamilies = null;
             public FontStyle? FontStyle = null;
             //public string? Url = null;
             public string? Tooltip = null;
@@ -96,6 +98,10 @@ namespace StaticSharp {
                 if (FontFamilies != null) {
                     context.FontFamilies = FontFamilies;
                 }
+                if (CodeFontFamilies != null) {
+                    context.CodeFontFamilies = CodeFontFamilies;
+                }
+
                 if (FontStyle != null) {
                     context.FontStyle = FontStyle;
                 }

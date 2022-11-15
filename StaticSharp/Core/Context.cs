@@ -47,6 +47,7 @@ namespace StaticSharp {
         private List<KeyValuePair<string, IAsset>> Scripts { get; } = new();
 
         public FontFamily[] FontFamilies { get; set; } = null!;
+        public FontFamily[] CodeFontFamilies { get; set; } = null!;
         public FontStyle FontStyle { get; set; } = new();
 
         public Ref<int> nextIdNumber;

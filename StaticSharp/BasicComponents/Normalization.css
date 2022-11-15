@@ -82,13 +82,7 @@ body.js * {
     white-space: inherit;
 }
 
-body.js p {
-    white-space: break-spaces;
-}
-body.js p * {
-    position: static;
-    display: inline;
-}
+
 
 
 

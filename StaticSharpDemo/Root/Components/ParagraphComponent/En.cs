@@ -39,6 +39,16 @@
 
             "Long paragraph separated by tabs\tLong paragraph separated by tabs\tLong paragraph separated by tabs\tLong paragraph separated by tabs\tLong paragraph separated by tabs\t",
 
+            H3("Code"),
+
+            $"text with {new CodeInline("code inline")}",
+            new Paragraph($"text with {new CodeInline("code inline")}"){ 
+                ForegroundColor = Color.LightBlue,
+                BackgroundColor = Color.DarkBlue
+            },
+
+            H3("Background"),
+
             new Paragraph("""
                 If background color is set, margins are replaced by paddings.
                 Default buinding for MarginLeft is (element.BackgroundColor != undefined) ? 0 : 10,

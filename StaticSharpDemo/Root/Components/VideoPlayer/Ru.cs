@@ -5,7 +5,6 @@
     public partial class Ru : ComponentPage {
         public override Inlines DescriptionContent => $"StaticSharp VideoPlayer component.";
         public override Blocks? Content => new() {
-
             {"Video",
                 new Video("T4TEdzSLyi0"){
                     Play = new (e=>e.Parent["VideoProperties"]["Play"].As<Js.Checkbox>().ValueActual),
@@ -33,7 +32,7 @@
             },
 
             H4("Autoplay"),
-            new Video("bTLl8lzL6v4"){ 
+            new Video("T4TEdzSLyi0"){ 
                 Play = true,
                 Mute = true,
                 Loop = true,

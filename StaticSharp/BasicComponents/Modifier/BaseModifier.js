@@ -31,8 +31,11 @@ function BaseModifier(element) {
         BackgroundColor: undefined,
         HierarchyBackgroundColor: () => element.BackgroundColor || element.Parent.HierarchyBackgroundColor,
 
-        ForegroundColor: () => {   
-            return element.HierarchyBackgroundColor.contrastColor()
+        ForegroundColor: () => { 
+            if (element.BackgroundColor != undefined)
+                return element.BackgroundColor.contrastColor()
+            else
+                return undefined
         },
         HierarchyForegroundColor: () => element.ForegroundColor || element.Parent.HierarchyForegroundColor,
 

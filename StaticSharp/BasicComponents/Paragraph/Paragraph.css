@@ -1,0 +1,8 @@
+body.js paragraph p {
+    white-space: break-spaces;
+}
+
+body.js paragraph>p * {
+    position: static;
+    display: inline;
+}

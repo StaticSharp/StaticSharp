@@ -12,7 +12,7 @@ namespace StaticSharp {
         public string Value { get; }
         public bool Formatting { get; }
 
-        public Text(string text, bool formatting = true, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
+        public Text(string text, bool formatting = true, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
             : base(callerFilePath, callerLineNumber) {
 
             Value = text.Replace("\r\n", "\n").Replace("\r", "\n");

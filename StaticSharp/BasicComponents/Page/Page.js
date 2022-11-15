@@ -73,7 +73,7 @@ function Page(element) {
 
     /*window.ontouchend = () => {
         console.log("ontouchend")
-        element.UserInteracted = true
+        window.UserInteracted = true
     }*/
     window.onmousedown = () => {
         window.UserInteracted = true

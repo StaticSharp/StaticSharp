@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Globalization;
 
 namespace StaticSharp.Gears {
     public partial class CSValueToJSValueConverter {
@@ -20,6 +21,14 @@ namespace StaticSharp.Gears {
             if (value is Color valueAsColor) {                
                 var hex = valueAsColor.A.ToString("X2") + valueAsColor.B.ToString("X2") + valueAsColor.G.ToString("X2") + valueAsColor.R.ToString("X2");
                 return $"new Color(0x{hex})";//{valueAsColor.A},{valueAsColor.R},{valueAsColor.G},{valueAsColor.B}
+            }
+
+            if (value is double valueAsDouble) {
+                return valueAsDouble.ToString(CultureInfo.InvariantCulture);
+            }
+            
+            if (value is float valueAsFloat) {
+                return valueAsFloat.ToString(CultureInfo.InvariantCulture);
             }
 
             return value.ToString() ?? "";
