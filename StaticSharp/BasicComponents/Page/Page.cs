@@ -63,8 +63,8 @@ namespace StaticSharp {
         protected abstract Blocks BodyContent { get; }
 
 
-        public Page([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
-            : base(callerFilePath, callerLineNumber) {
+        public Page([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
+            : base(callerLineNumber, callerFilePath) {
             CodeFontFamilies = new[] { new FontFamily("Roboto Mono") };
             FontFamilies = new[] { new FontFamily("Roboto") };
             FontStyle = new FontStyle(FontWeight.Regular);

@@ -92,19 +92,15 @@ namespace StaticSharp {
                     Properties[propertyName] = value;
                 }
             }
-            
-
-
 
 
             protected Reactive(Reactive other,
-                string callerFilePath = "",
-                int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
-                
+                int callerLineNumber = 0,
+                string callerFilePath = "") : base(callerLineNumber, callerFilePath) {                
                 Properties = new(other.Properties);
             }
 
-            protected Reactive(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) {
+            protected Reactive(int callerLineNumber, string callerFilePath) : base(callerLineNumber, callerFilePath) {
                 
             }
 

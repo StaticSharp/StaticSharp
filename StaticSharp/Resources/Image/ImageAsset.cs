@@ -1,5 +1,4 @@
 ﻿using StaticSharp.Gears;
-using System.IO;
 using System.Threading.Tasks;
 
 
@@ -7,10 +6,22 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    public interface IImageAsset : IAsset {
-        int Width { get; }
-        int Height { get; }
+
+    namespace Gears {
+        public abstract class ImageAsset<TGenome, TData> : Cacheable<TGenome, TData>
+            where TGenome : class, IKeyProvider
+            where TData : class, new() {
+
+            public override string? CharSet => null;
+
+        }
+
+        public interface IImageAsset : IAsset {
+            int Width { get; }
+            int Height { get; }
+        }
     }
+    
 
 
     public abstract record ImageGenome<TFinalGenome, TCacheable> : AssetGenome<TFinalGenome, TCacheable>, IGenome<IImageAsset>
@@ -25,14 +36,6 @@ namespace StaticSharp {
         }
     }
 
-    namespace Gears {
-        public abstract class ImageAsset<TGenome, TData> : Cacheable<TGenome, TData>
-            where TGenome : class, IKeyProvider
-            where TData : class, new() {
-
-            public override string? CharSet => null;
-
-        }
-    }
+    
 }
 

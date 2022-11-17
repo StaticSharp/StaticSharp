@@ -48,6 +48,10 @@
 
 		<ProjectReference Include="..\StaticSharpSourceGenerator\StaticSharpSourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Root\Components\Code\" />
+	</ItemGroup>
 	
 	
 </Project>

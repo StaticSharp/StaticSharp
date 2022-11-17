@@ -34,7 +34,7 @@ namespace StaticSharp {
 
         public FilePath AssetsBaseUrl { get; init; }
 
-        public Includes Includes { get; init; }
+        //public Includes Includes { get; init; }
 
         public IncludesCache<Font, CacheableFont> Fonts { get; } = new();
 
@@ -129,7 +129,7 @@ namespace StaticSharp {
             else
                 AssetsBaseUrl = assetsBaseUrl.Value;
 
-            Includes = new Includes();
+            //Includes = new Includes();
             nextIdNumber = new(0);
             
         }

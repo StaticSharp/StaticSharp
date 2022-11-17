@@ -1,0 +1,16 @@
+body.js code-block {
+    overflow:hidden
+}
+
+body.js code-block pre {
+    white-space: pre;
+    position: absolute;
+    line-height: 1.2;
+}
+
+
+body.js code-block pre * {
+    display: inline;
+    position: static;
+        
+}

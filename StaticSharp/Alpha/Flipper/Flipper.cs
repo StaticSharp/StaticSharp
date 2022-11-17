@@ -28,8 +28,8 @@ namespace StaticSharp {
         public Block First { get; init; }
         public Block Second { get; init; }
 
-        public Flipper([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
-            : base(callerFilePath, callerLineNumber) { }
+        public Flipper([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
+            : base(callerLineNumber, callerFilePath) { }
 
         protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {            
             elementTag.Add(                

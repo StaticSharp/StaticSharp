@@ -1,4 +1,5 @@
 ﻿using StaticSharp.Gears;
+using StaticSharp.Generator;
 using StaticSharp.Tree;
 using System;
 using System.IO;

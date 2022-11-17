@@ -39,10 +39,10 @@ namespace StaticSharp {
         };
 
         public Block? Thumb { get; set; } = null;
-        public Slider(Slider other, string callerFilePath, int callerLineNumber)
-            : base(other, callerFilePath, callerLineNumber) { }
+        public Slider(Slider other, int callerLineNumber, string callerFilePath)
+            : base(other, callerLineNumber, callerFilePath) { }
 
-        public Slider([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
+        public Slider([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
 
         protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
             var thumb = Thumb;

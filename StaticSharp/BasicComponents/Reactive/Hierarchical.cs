@@ -8,7 +8,7 @@ namespace StaticSharp {
 
     namespace Js {
         public class Hierarchical : Object {
-            public string Id => NotEvaluatableValue<string>();
+            public string Id => NotEvaluatableString();
 
             public Page Root => NotEvaluatableObject<Page>();
             public Hierarchical Parent => NotEvaluatableObject<Hierarchical>();
@@ -49,10 +49,10 @@ namespace StaticSharp {
         protected virtual string TagName => CaseUtils.CamelToKebab(GetType().Name);        
         
         protected Hierarchical(Hierarchical other,
-            string callerFilePath,
-            int callerLineNumber) : base(other, callerFilePath, callerLineNumber) {            
+            int callerLineNumber,
+            string callerFilePath) : base(other, callerLineNumber, callerFilePath) {            
         }
-        public Hierarchical(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
+        public Hierarchical(int callerLineNumber, string callerFilePath) : base(callerLineNumber, callerFilePath) { }
 
         protected virtual Context ModifyContext(Context context) {
             return context;

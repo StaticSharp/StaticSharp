@@ -40,12 +40,12 @@ namespace StaticSharp {
 
         public Paragraph(
             [CallerLineNumber] int callerLineNumber = 0,
-            [CallerFilePath] string callerFilePath = "") : base(callerFilePath, callerLineNumber) {
+            [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
         }
 
         public Paragraph(Paragraph other,
             [CallerLineNumber] int callerLineNumber = 0,
-            [CallerFilePath] string callerFilePath = "") : base(other, callerFilePath, callerLineNumber) {
+            [CallerFilePath] string callerFilePath = "") : base(other, callerLineNumber, callerFilePath) {
 
             Inlines = new(other.Inlines);
         }
@@ -53,18 +53,18 @@ namespace StaticSharp {
 
         public Paragraph(string text,
             [CallerLineNumber] int callerLineNumber = 0,
-            [CallerFilePath] string callerFilePath = "") : base(callerFilePath, callerLineNumber) {
+            [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
             Inlines.AppendLiteral(text, callerFilePath, callerLineNumber);
         }
 
         public Paragraph(Inlines inlines,
             [CallerLineNumber] int callerLineNumber = 0,
-            [CallerFilePath] string callerFilePath = "") : base(callerFilePath, callerLineNumber) {
+            [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
             Inlines = new(inlines);
         }
         public Paragraph(Inline inline,
             [CallerLineNumber] int callerLineNumber = 0,
-            [CallerFilePath] string callerFilePath = "") : base(callerFilePath, callerLineNumber) {
+            [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
             Inlines = new() { { null, inline } };
         }
 

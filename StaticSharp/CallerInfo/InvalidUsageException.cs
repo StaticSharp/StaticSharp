@@ -2,11 +2,11 @@
 namespace StaticSharp;
 
 public class InvalidUsageException : Exception {
-    protected readonly string callerFilePath;
     protected readonly int callerLineNumber;
+    protected readonly string callerFilePath;   
 
-    public InvalidUsageException(string callerFilePath, int callerLineNumber) {
-        this.callerFilePath = callerFilePath;
+    public InvalidUsageException(int callerLineNumber, string callerFilePath) {
         this.callerLineNumber = callerLineNumber;
+        this.callerFilePath = callerFilePath;        
     }
 }

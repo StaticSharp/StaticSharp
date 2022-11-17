@@ -70,8 +70,8 @@ namespace StaticSharp {
             public float? LetterSpacing = null;//letter-spacing
 
 
-            protected BaseModifier(Hierarchical other, string callerFilePath, int callerLineNumber) : base(other, callerFilePath, callerLineNumber) {}
-            public BaseModifier(string callerFilePath, int callerLineNumber) : base(callerFilePath, callerLineNumber) { }
+            protected BaseModifier(Hierarchical other, int callerLineNumber, string callerFilePath) : base(other, callerLineNumber, callerFilePath) {}
+            public BaseModifier(int callerLineNumber, string callerFilePath) : base(callerLineNumber, callerFilePath) { }
 
 
             public string? GetUrl(Context context) {

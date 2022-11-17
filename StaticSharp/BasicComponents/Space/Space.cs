@@ -30,11 +30,9 @@ namespace StaticSharp {
     [ConstructorJs]
     public sealed partial class Space : Hierarchical, IBlock {
         protected override string TagName => "ws";
-        /*public Space([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
-            : base(callerFilePath, callerLineNumber) { }*/
 
-        public Space(double before = 1, double between = 1, double after = 1, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
-            : base(callerFilePath, callerLineNumber) {
+        public Space(double before = 1, double between = 1, double after = 1, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
+            : base(callerLineNumber, callerFilePath) {
             if (before != 1) Before = before;
             if (between != 1) Between = between;
             if (after != 1) After = after;

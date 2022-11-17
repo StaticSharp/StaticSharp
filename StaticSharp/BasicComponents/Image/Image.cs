@@ -34,31 +34,16 @@ namespace StaticSharp {
         public TEmbed Embed { get; set; } = TEmbed.Thumbnail;
 
 
-        public Image(Image other, string callerFilePath, int callerLineNumber)
-            : base(other, callerFilePath, callerLineNumber) {
+        public Image(Image other, int callerLineNumber, string callerFilePath)
+            : base(other, callerLineNumber, callerFilePath) {
             assetGenome = other.assetGenome;
         }
-        public Image(IGenome<IAsset> assetGenome, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
+        public Image(IGenome<IAsset> assetGenome, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
             this.assetGenome = assetGenome;
         }
         
-        public Image(string pathOrUrl, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
-            if (File.Exists(pathOrUrl)) {
-                assetGenome = new FileGenome(pathOrUrl);
-                return;
-            }
-            var absolutePath = MakeAbsolutePath(pathOrUrl, callerFilePath);
-            if (File.Exists(absolutePath)) {
-                assetGenome = new FileGenome(absolutePath);
-                return;
-            }
-            if (Uri.TryCreate(pathOrUrl, UriKind.Absolute, out var uri)) {
-                assetGenome = new HttpRequestGenome(uri.ToString());
-                return;
-            }
-
-            //TODO: 
-            throw new FileNotFoundException("File or Url not found", pathOrUrl);
+        public Image(string pathOrUrl, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
+            assetGenome = AssetGenome.GenomeFromPathOrUrl(pathOrUrl, callerFilePath);
         }
 
         /*public override void AddRequiredInclues(IIncludes includes) {

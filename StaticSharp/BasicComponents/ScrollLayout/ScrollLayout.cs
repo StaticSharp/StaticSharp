@@ -8,21 +8,29 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
 
-    public class Scrollable : Hierarchical {
-        public Scrollable([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
+    namespace Js {
+        public class ScrollLayout : Block {
+            public Block Content => NotEvaluatableObject<Block>();
 
+        }
     }
 
+    namespace Gears {
+        public class ScrollLayoutBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
 
+        }
+    }
+
+    [Mix(typeof(ScrollLayoutBindings<Js.ScrollLayout>))]
     [ConstructorJs]
-    public class ScrollLayout : Block {
+    public partial class ScrollLayout : Block {
 
         public Block Content { get; set; } = new();
-        public ScrollLayout(ScrollLayout other, string callerFilePath, int callerLineNumber)
-            : base(other, callerFilePath, callerLineNumber) {
+        public ScrollLayout(ScrollLayout other, int callerLineNumber, string callerFilePath)
+            : base(other, callerLineNumber, callerFilePath) {
             Content = other.Content;
         }
-        public ScrollLayout([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
+        public ScrollLayout([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
 
         protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {            
             var content = await Content.GenerateHtmlAsync(context,new Role(false, "Content"));

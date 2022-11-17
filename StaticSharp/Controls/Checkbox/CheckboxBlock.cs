@@ -20,8 +20,8 @@ namespace StaticSharp {
     [ConstructorJs]
     public partial class CheckboxBlock : Block {
 
-        public CheckboxBlock(CheckboxBlock other, string callerFilePath, int callerLineNumber): base(other, callerFilePath, callerLineNumber) { }
-        public CheckboxBlock([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
+        public CheckboxBlock(CheckboxBlock other, int callerLineNumber, string callerFilePath): base(other, callerLineNumber, callerFilePath) { }
+        public CheckboxBlock([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
 
         protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {            
             elementTag.Add(

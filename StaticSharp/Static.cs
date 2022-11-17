@@ -8,6 +8,10 @@ namespace StaticSharp {
 namespace StaticSharp {
     public static partial class Static {
 
+        public static string ThisFileName([CallerFilePath] string callerFilePath = "") {
+            return callerFilePath;
+        }
+
         public static string ThisFileNameWithoutExtension([CallerFilePath] string callerFilePath = "") {
             return Path.GetFileNameWithoutExtension(callerFilePath);
         }

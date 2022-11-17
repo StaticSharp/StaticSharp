@@ -12,19 +12,12 @@ public interface IGenome<TCacheable>: IKeyProvider {
 }
 
 public abstract record Genome: IKeyProvider {
-
-
     public string Key { get; }
-
     protected Genome() {
         Key = CalculateKey();
     }
     private string CalculateKey() {
         var type = GetType();
-
-
-
-        
 
         var stringBuilder = new StringBuilder();
         stringBuilder.Append(GetType().FullName);
@@ -39,10 +32,7 @@ public abstract record Genome: IKeyProvider {
             }
 
             type = type.BaseType;
-        }
-
-
-        
+        }      
         
 
         var key = stringBuilder.ToString();
@@ -62,10 +52,6 @@ public abstract record Genome: IKeyProvider {
 public abstract record Genome<TFinalGenome,TCacheable> : Genome, IGenome<TCacheable>
     where TFinalGenome : Genome<TFinalGenome, TCacheable>
     where TCacheable : ICacheable<TFinalGenome>, new() {
-
-
-
-
     public async Task<TCacheable> CreateOrGetCached() {
 
         using (await Cache.AsyncLock.LockAsync()) {
@@ -93,12 +79,7 @@ public abstract record Genome<TFinalGenome,TCacheable> : Genome, IGenome<TCachea
                 throw e;
                 //Cache.Unlock();
             }
-
         }
-
-
-
-
     }
 
     public async Task<TCacheable> CreateAsync() {
@@ -107,18 +88,6 @@ public abstract record Genome<TFinalGenome,TCacheable> : Genome, IGenome<TCachea
         await result.CreateAsync();
         return result;
     }    
-}
-
-public abstract record AssetGenome<TFinalGenome, TCacheable> : Genome<TFinalGenome, TCacheable>, IGenome<IAsset>
-    where TFinalGenome : AssetGenome<TFinalGenome, TCacheable>
-    where TCacheable : ICacheable<TFinalGenome>, IAsset, new() {
-
-    async Task<IAsset> IGenome<IAsset>.CreateAsync() {
-        return await base.CreateAsync();
-    }
-    async Task<IAsset> IGenome<IAsset>.CreateOrGetCached() {
-        return await base.CreateOrGetCached();
-    }
 }
 
 

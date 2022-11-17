@@ -22,10 +22,10 @@ namespace StaticSharp {
 
         protected Template(Template other,
             string callerFilePath = "",
-            int callerLineNumber = 0): base(other, callerFilePath, callerLineNumber) {
+            int callerLineNumber = 0): base(other, callerLineNumber, callerFilePath) {
             assetGenome = other.assetGenome;                
         }
-        public Template(IGenome<IAsset> assetGenome, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
+        public Template(IGenome<IAsset> assetGenome, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
             this.assetGenome = assetGenome;
         }
         /*public override void AddRequiredInclues(IIncludes includes) {

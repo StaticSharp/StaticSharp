@@ -86,11 +86,12 @@ namespace StaticSharp {
         //public Block? Overlay;
 
         protected Block(Block other,
-            string callerFilePath = "",
-            int callerLineNumber = 0) : base(other, callerFilePath, callerLineNumber) {
+            int callerLineNumber = 0,
+            string callerFilePath = ""
+            ) : base(other, callerLineNumber, callerFilePath) {
             Children = new(other.Children);
         }
-        public Block([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
+        public Block([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
         
         protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
             foreach (var c in Children) {

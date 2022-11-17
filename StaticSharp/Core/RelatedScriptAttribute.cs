@@ -7,8 +7,6 @@ namespace StaticSharp.Gears {
     [AttributeUsage(AttributeTargets.Class,
         AllowMultiple = true,
         Inherited = false)]
-
-
     public class RelatedScriptAttribute : RelatedFileAttribute {
 
         const string Extension = ".js";
@@ -17,7 +15,9 @@ namespace StaticSharp.Gears {
     
     }
 
-
+    [AttributeUsage(AttributeTargets.Class,
+       AllowMultiple = true,
+       Inherited = false)]
     public class RelatedStyleAttribute : RelatedFileAttribute {
         
         const string Extension = ".css";

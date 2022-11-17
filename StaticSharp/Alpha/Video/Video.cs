@@ -63,8 +63,8 @@ namespace StaticSharp {
         public string Identifier { get; init; }
 
 
-        public Video(string identifier, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0)
-            : base(callerFilePath, callerLineNumber) {
+        public Video(string identifier, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
+            : base(callerLineNumber, callerFilePath) {
             Identifier = identifier;        
         }
 

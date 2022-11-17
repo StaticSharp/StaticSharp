@@ -30,12 +30,12 @@ namespace StaticSharp{
         protected Inline(Inline other,
             int callerLineNumber = 0,
             string callerFilePath = ""
-            ) : base(other, callerFilePath, callerLineNumber) {
+            ) : base(other, callerLineNumber, callerFilePath) {
             Children = new(other.Children);
         }
         public Inline(
             int callerLineNumber = 0,
-            string callerFilePath = "") : base(callerFilePath, callerLineNumber) { }
+            string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
 
 
         public virtual Task<string> GetPlaneTextAsync(Context context) => Task.FromResult("");

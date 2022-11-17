@@ -10,28 +10,16 @@ public class UserApiAttribute : Attribute {
 }
 
 public abstract class CallerInfo{
-    protected readonly string callerFilePath;
     protected readonly int callerLineNumber;
+    protected readonly string callerFilePath;
 
-    public CallerInfo(string callerFilePath, int callerLineNumber) {
-        this.callerFilePath = callerFilePath;
+    public CallerInfo(int callerLineNumber, string callerFilePath) {
         this.callerLineNumber = callerLineNumber;
-        
-
-        /*StackTrace stackTrace = new StackTrace(true);
-        for (int i = 0; i < stackTrace.FrameCount; i++) { 
-            var frame = stackTrace.GetFrame(i);
-            var name = (frame?.GetFileName()??"<>")+ frame?.GetFileLineNumber().ToString();
-            if (name != null)
-                Console.WriteLine(name);
-        }*/
-
-        
-        //Console.WriteLine("StackTrace: '{0}'", stackTrace.GetFrame(0));
-
+        this.callerFilePath = callerFilePath;
     }
+
     protected void ThrowInvalidUsage() { 
-        throw new InvalidUsageException(callerFilePath, callerLineNumber);
+        throw new InvalidUsageException(callerLineNumber,callerFilePath);
     }
 
     protected void AddSourceCodeNavigationData(Tag tag, Context context) {

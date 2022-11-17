@@ -22,8 +22,8 @@ namespace StaticSharp {
     public partial class MaterialDesignIconBlock : Block {
 
         MaterialDesignIcons.IconName Icon;
-        protected MaterialDesignIconBlock(MaterialDesignIconBlock other, string callerFilePath, int callerLineNumber) : base(other, callerFilePath, callerLineNumber) { }
-        public MaterialDesignIconBlock(MaterialDesignIcons.IconName icon, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) {
+        protected MaterialDesignIconBlock(MaterialDesignIconBlock other, int callerLineNumber, string callerFilePath) : base(other, callerLineNumber, callerFilePath) { }
+        public MaterialDesignIconBlock(MaterialDesignIcons.IconName icon, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
             Icon = icon;
         }
         protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {

@@ -34,9 +34,15 @@ namespace StaticSharp {
                 NotEvaluatableFound = true;
                 return new();
             }
-            public static T NotEvaluatableValue<T>() {
+
+            public static T NotEvaluatableValue<T>() where T : struct {
                 NotEvaluatableFound = true;
                 return default;
+            }
+
+            public static string NotEvaluatableString() {
+                NotEvaluatableFound = true;
+                return "";
             }
 
         }

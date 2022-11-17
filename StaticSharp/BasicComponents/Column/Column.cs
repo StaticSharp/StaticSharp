@@ -13,11 +13,11 @@ namespace StaticSharp {
         //protected override string TagName => "column";
         
 
-        public Column(Column other, string callerFilePath, int callerLineNumber)
-            : base(other, callerFilePath, callerLineNumber) {
+        public Column(Column other, int callerLineNumber, string callerFilePath)
+            : base(other, callerLineNumber, callerFilePath) {
                   
         }
-        public Column([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerFilePath, callerLineNumber) { }
+        public Column([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
 
 
     }
