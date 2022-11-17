@@ -89,13 +89,14 @@ namespace StaticSharpDemo.Root {
                     Loop =  true,                    
                 }
             },*/
+            $"{new CheckboxInline("checkbox")} ",
+
             $"{Node} {Node.Components} {Node.Components.WithLanguage(Language.En)}",
 
             new Column(){
                 BackgroundColor = Color.FromArgb(255,32,32,32),
                 Children = {
                     $"Refer to {GithubUrl()} for more information, and join our {DiscordUrl()} to learn more about getting early access to Copilot.",
-                    "Fix selection\u200b",
                     new Flipper() {
                         MarginLeft = new (e=>e.ParentBlock.PaddingLeft),
                         MarginRight = new (e=>e.ParentBlock.PaddingRight),

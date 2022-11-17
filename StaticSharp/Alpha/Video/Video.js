@@ -135,7 +135,7 @@ function Video(element) {
                     return Math.abs(element.Width - source.size.x)
                 }*/
                 let lossFunction = (source) => {
-                    let pixelWidth = element.Root.DevicePixelRatio * element.Width
+                    let pixelWidth = window.DevicePixelRatio * element.Width
                     if (source.size.x < pixelWidth) {
                         return 8 * (pixelWidth - source.size.x)
                     }
@@ -143,6 +143,7 @@ function Video(element) {
                 }
 
                 let closestSourceLoss = lossFunction(sources[0])
+
                 let closestSourceIndex = 0
                 for (let i = 1; i < sources.length; i++) {
                     let loss = lossFunction(sources[i])
@@ -151,7 +152,6 @@ function Video(element) {
                         closestSourceIndex = i
                     }
                 }
-
                 element.SourceIndex = closestSourceIndex
             }
         }

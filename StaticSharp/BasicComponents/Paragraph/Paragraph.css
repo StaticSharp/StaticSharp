@@ -6,3 +6,7 @@ body.js paragraph>p * {
     position: static;
     display: inline;
 }
+
+body.js paragraph > p a * {
+    text-decoration-line: underline;
+}

@@ -39,6 +39,12 @@ function BaseModifier(element) {
         },
         HierarchyForegroundColor: () => element.ForegroundColor || element.Parent.HierarchyForegroundColor,
 
+        TextDecorationColor: () => {
+            if (element.ForegroundColor != undefined)
+                return element.ForegroundColor
+            else
+                return undefined
+        },
 
         FontSize: undefined,
         HierarchyFontSize: () => element.FontSize || element.Parent.HierarchyFontSize,
@@ -86,14 +92,14 @@ function BaseModifier(element) {
     
 
     new Reaction(() => {
-        if (element.BackgroundColor) {
-            element.style.backgroundColor = element.BackgroundColor
-        }
+        element.style.backgroundColor = ToCssValue(element.BackgroundColor)
     })
 
     new Reaction(() => {
-        if (element.ForegroundColor) {
-            element.style.color = element.ForegroundColor
-        }
+        element.style.color = ToCssValue(element.ForegroundColor)
+    })
+
+    new Reaction(() => {
+        element.style.textDecorationColor = ToCssValue(element.TextDecorationColor)
     })
 }

@@ -21,6 +21,11 @@ namespace StaticSharp {
             public double InternalHeight => NotEvaluatableValue<double>();
 
 
+            public double LayoutX => NotEvaluatableValue<double>();
+            public double LayoutY => NotEvaluatableValue<double>();
+            public double LayoutWidth => NotEvaluatableValue<double>();
+            public double LayoutHeight => NotEvaluatableValue<double>();
+
             public double MarginLeft => NotEvaluatableValue<double>();
             public double MarginRight => NotEvaluatableValue<double>();
             public double MarginTop => NotEvaluatableValue<double>();

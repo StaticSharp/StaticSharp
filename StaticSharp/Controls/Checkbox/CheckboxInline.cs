@@ -15,21 +15,31 @@ namespace StaticSharp {
 
     [Mix(typeof(CheckboxBindings<Js.CheckboxInline>))]
     [ConstructorJs("Checkbox")]
-
     [ConstructorJs]
+    [RelatedStyle("Checkbox")]
     public partial class CheckboxInline : Inline {
-        protected override string TagName => "checkboxInline";
-        public CheckboxInline(CheckboxInline other, string callerFilePath, int callerLineNumber) : base(other, callerLineNumber, callerFilePath) { }
-        public CheckboxInline([CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerLineNumber, callerFilePath) { }
+        protected override string TagName => "label";
+        public CheckboxInline(CheckboxInline other, int callerLineNumber, string callerFilePath) : base(other, callerLineNumber, callerFilePath) { }
+        public CheckboxInline([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
+        public CheckboxInline(Inlines children, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
+            Children = children;
+        }        
+        public CheckboxInline(string text, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
+            Children.Add(text);
+        }
 
         protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
+            elementTag.Add(
+                new Tag("input") {
+                    ["type"] = "checkbox"
+                }
+                );
 
-            var result = new Tag("input") {
-                ["type"] = "checkbox"
-            };
+            await base.ModifyHtmlAsync(context, elementTag);
+            
 
 
-            if (Children.Count != 0) {
+            /*if (Children.Count != 0) {
                 var luid = context.GetUniqueId();
                 result.Id = luid;
 
@@ -43,9 +53,9 @@ namespace StaticSharp {
                     result,
                     label
                 };
-            }
+            }*/
 
-            elementTag.Add(result);
+            //elementTag.Add(result);
 
 
             /*if (string.IsNullOrEmpty(format)) {

@@ -13,7 +13,11 @@ namespace StaticSharp {
         public class BaseModifier : Hierarchical {
 
             public Color BackgroundColor => NotEvaluatableValue<Color>();
+            public Color HierarchyBackgroundColor => NotEvaluatableValue<Color>();
+
             public Color ForegroundColor => NotEvaluatableValue<Color>();
+            public Color HierarchyForegroundColor => NotEvaluatableValue<Color>();
+
             public bool Hover => NotEvaluatableValue<bool>();
             public bool Selectable => NotEvaluatableValue<bool>();
 
@@ -32,6 +36,8 @@ namespace StaticSharp {
         public class BaseModifierBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {
             public Binding<Color> BackgroundColor { set { Apply(value); } }
             public Binding<Color> ForegroundColor { set { Apply(value); } }
+            public Binding<Color> TextDecorationColor { set { Apply(value); } }
+
             public Binding<bool> Selectable { set { Apply(value); } }
             public Binding<double> Visibility { set { Apply(value); } }            
             public Binding<double> Radius { set { Apply(value); } }
@@ -85,6 +91,9 @@ namespace StaticSharp {
                     return new Tag("a") {
                         ["href"] = url,
                         ["target"] = OpenLinksInANewTab ? "_blank" : "_self",
+                        Style = {
+                            ["display"] = "contents",
+                        },
                         Children = {
                             await base.GenerateHtmlAsync(context, role)
                         }

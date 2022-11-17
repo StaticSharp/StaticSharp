@@ -31,7 +31,7 @@ namespace StaticSharpDemo.Root.Components.MaterialDesignIconsComponent {
                 ForegroundColor = Color.Red,
                 Scale = 2 }}",
             $"BaselineOffset = 0 {new MaterialDesignIconInline(MaterialDesignIcons.IconName.Github){ BaselineOffset = 0 }}"
-
+            
 
         };
     }

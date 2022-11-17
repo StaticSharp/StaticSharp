@@ -1,0 +1,50 @@
+body.js paragraph>p label{
+    cursor: pointer;
+}
+
+
+body.js paragraph>p label>input[type=checkbox] {
+    /*appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;*/
+    display: inline-block;
+
+    width: 1.15em;
+    height: 1.15em;
+    transform: translateY(+0.15em);
+
+
+    margin-right: 0.5em;
+
+}
+
+/*body.js paragraph>p label>input[type=checkbox]::before {
+    content: "";
+    position: absolute;
+    left: -10px;
+    top: -8px;
+    display: block;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    background-color: black;
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.2s;
+}*/
+
+
+/*input[type="checkbox"] {
+    //appearance: none;
+    //display: inline-block;
+    background-color: #fff;
+    margin: 0;
+    font: inherit;
+    color: currentColor;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.15em solid currentColor;
+    border-radius: 0.15em;
+    transform: translateY(+0.2em);
+}*/

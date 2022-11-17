@@ -16,6 +16,7 @@ namespace StaticSharp {
 
     namespace Js {
         public class Video : Block {
+            public double Aspect => NotEvaluatableValue<double>();
             public bool Play => NotEvaluatableValue<bool>();
             public bool PlayActual => NotEvaluatableValue<bool>();
 

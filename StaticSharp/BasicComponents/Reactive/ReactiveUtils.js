@@ -2,6 +2,10 @@ function ToCssSize(value) {
     return (value!=undefined) ? value + "px" : ""
 }
 
+function ToCssValue(value) {
+    return (value != undefined) ? value : ""
+}
+
 function DepthToStyle(element) {
     return new Reaction(() => {
         element.style.zIndex = element.Depth

@@ -1,41 +1,14 @@
-﻿
-using StaticSharpDemo.Root;
+﻿using StaticSharpDemo.Root;
 using StaticSharp.Gears;
-using StaticSharpWeb;
-using System;
-using System.Collections.Generic;
-
-
-
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
-using StaticSharp.Tree;
-
-namespace StaticSharpWeb {
-
-    public interface IStaticGenerator /*: IUrls*/ {
-        Uri BaseUrl { get; }
-        string BaseDirectory { get; }
-        string TempDirectory { get; }
-    }
-
-    
-}
+using System;
 
 namespace StaticSharpDemo {
-
 
     internal class Program {
 
         private static async Task Main(string[] args) {
-
             var entryPointName = Environment.GetEnvironmentVariable("ENTRY_POINT");
             if (entryPointName == null) {
                 Console.WriteLine("EnvironmentVariable 'ENTRY_POINT' not found.");
@@ -60,16 +33,6 @@ namespace StaticSharpDemo {
             } else {
                 entryPoint.Invoke(null, null);
             }
-
-
-            //var generator = new Content.StaticGenerator(
-            //        new Uri(@"D:/TestSite/"),
-            //        new Storage(@"D:\TestSite", @"D:\TestSite\IntermediateCache"),
-            //        @"D:\staticsharp.github.io"
-            //);
-            //await generator.GenerateAsync();
-
-
         }
 
         public static async Task Server() {

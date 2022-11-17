@@ -38,7 +38,34 @@
                 Loop = true,
                 Controls = false,
                 PreferPlatformPlayer = false,
-            }
+            },
+
+            H4("Aspect"),
+
+            new Block(){ 
+                Height = new(e=>e.Child<Js.Block>(0).Height),
+                BackgroundColor = Color.Gray,
+                Children = {
+                    new Video("T4TEdzSLyi0"){
+                        Play = true,
+                        Mute = true,
+                        Loop = true,
+                        Controls = false,
+                        PreferPlatformPlayer = false,
+
+                        Width = new(e=>Js.Math.Min(e.Root.Height * e.Aspect * 0.8, e.ParentBlock.Width))
+                    }.CenterHorizontally(),
+                    
+                    new Paragraph("This video is always less then 80% of window height"){
+                        TextAlignmentHorizontal = TextAlignmentHorizontal.Center,
+                        BackgroundColor = Color.Black,
+                        Radius = 10,
+                        Width = new(e=>Js.Math.Min(e.ParentBlock.Width*0.8, e.InternalWidth))
+                    }.Center()
+                    
+                }
+            }.FillWidth(),
+            
 
 
         };

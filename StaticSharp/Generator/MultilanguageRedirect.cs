@@ -1,13 +1,13 @@
 using System;
 using System.Linq;
 
-namespace StaticSharp.Gears;
+namespace StaticSharp.Generator;
 
 public static class MultilanguageRedirect {
     public static string GenerateHtml<LanguageEnum>() where LanguageEnum : struct, Enum {
 
         var languages = string.Join(",", Enum.GetNames<LanguageEnum>().Select(x => $"\"{x.ToLower()}\""));
-        
+
         //if (navigator.userLanguage) return [navigator.userLanguage];
         //if (navigator.browserLanguage) return [navigator.browserLanguage];
 
@@ -37,7 +37,7 @@ public static class MultilanguageRedirect {
             var extension = (window.location.protocol=="file:") ? ".html" : ""
             window.location.replace(matchLanguage([{{languages}}]) + extension)
             """;
-        
+
         var html = $"""
             <!DOCTYPE html>
             <html>

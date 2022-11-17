@@ -6,12 +6,14 @@ function Page(element) {
 
     Block(element)
 
-
+    var html = document.body.parentNode
     function getWindowWidth() {
-        return document.documentElement.clientWidth //window.innerWidth
+        return html.clientWidth
+        //return document.documentElement.clientWidth //window.innerWidth
     }
-    function getWindowHeight() {
-        return window.innerHeight // document.documentElement.clientHeight
+    function getWindowHeight() {       
+        return html.clientHeight
+        //return window.innerHeight // document.documentElement.clientHeight
     }
 
 
@@ -56,8 +58,8 @@ function Page(element) {
     element.Reactive = {
         Root: element,        
 
-        LayoutWidth: getWindowWidth(),
-        LayoutHeight: getWindowHeight(),
+        LayoutWidth: undefined,
+        LayoutHeight: undefined,
 
         FontSize: 16,
         HierarchyFontSize: () => element.FontSize,
@@ -69,7 +71,10 @@ function Page(element) {
 
     }
 
-
+    new Reaction(() => {
+        element.LayoutWidth = getWindowWidth()
+        element.LayoutHeight = getWindowHeight()
+    })
 
     /*window.ontouchend = () => {
         console.log("ontouchend")
@@ -80,13 +85,17 @@ function Page(element) {
     }
 
 
-
+    function PrintWindowSize() {
+        console.log("onresize", window.innerWidth, window.innerHeight, document.documentElement.clientWidth, document.documentElement.clientHeight, document.body.parentNode.clientHeight)
+    }
+    PrintWindowSize()
 
     window.onresize = function (event) {
         //let startTime = performance.now()
         let d = Reaction.beginDeferred()
         element.LayoutWidth = getWindowWidth()
         element.LayoutHeight = getWindowHeight()
+        PrintWindowSize()
         d.end()
         //console.log("resize", performance.now() - startTime)
     }

@@ -24,7 +24,7 @@ namespace StaticSharp{
     [ConstructorJs]
     public partial class Inline : BaseModifier, IInline {
 
-        public Inlines Children { get; } = new();
+        public Inlines Children { get; init; } = new();
 
 
         protected Inline(Inline other,
