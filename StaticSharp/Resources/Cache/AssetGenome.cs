@@ -3,20 +3,21 @@ using System.IO;
 using System.Threading.Tasks;
 
 namespace StaticSharp.Gears;
-
-public abstract record AssetGenome<TFinalGenome, TCacheable> : Genome<TFinalGenome, TCacheable>, IGenome<IAsset>
+/*
+public abstract record AssetGenome<TFinalGenome, TCacheable> : Genome<TFinalGenome, TCacheable>, IGenome<Asset>
     where TFinalGenome : AssetGenome<TFinalGenome, TCacheable>
-    where TCacheable : ICacheable<TFinalGenome>, IAsset, new() {
+    where TCacheable : ICacheable<TFinalGenome>, Asset, new() {
 
-    async Task<IAsset> IGenome<IAsset>.CreateAsync() {
-        return await base.CreateAsync();
+    public override abstract Task<Asset> CreateAsync();
+    async Task<Asset> IGenome<Asset>.CreateAsync() {
+        return await CreateAsync();
     }
-    async Task<IAsset> IGenome<IAsset>.CreateOrGetCached() {
+    async Task<Asset> IGenome<Asset>.CreateOrGetCached() {
         return await base.CreateOrGetCached();
     }
 }
 public static class AssetGenome{
-    public static IGenome<IAsset> GenomeFromPathOrUrl(string pathOrUrl, string callerFilePath) {
+    public static IGenome<Asset> GenomeFromPathOrUrl(string pathOrUrl, string callerFilePath) {
         
         if (File.Exists(pathOrUrl)) {
             return new FileGenome(pathOrUrl);
@@ -32,7 +33,7 @@ public static class AssetGenome{
         throw new FileNotFoundException("File or Url not found", pathOrUrl);
     }
 
-}
+}*/
 
 
 

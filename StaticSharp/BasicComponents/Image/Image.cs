@@ -29,7 +29,7 @@ namespace StaticSharp {
 
         protected override string TagName => "image-block";
 
-        protected IGenome<IAsset> assetGenome;
+        protected IGenome<Asset> assetGenome;
 
         public TEmbed Embed { get; set; } = TEmbed.Thumbnail;
 
@@ -38,7 +38,7 @@ namespace StaticSharp {
             : base(other, callerLineNumber, callerFilePath) {
             assetGenome = other.assetGenome;
         }
-        public Image(IGenome<IAsset> assetGenome, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
+        public Image(IGenome<Asset> assetGenome, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
             this.assetGenome = assetGenome;
         }
         
@@ -50,7 +50,7 @@ namespace StaticSharp {
             base.AddRequiredInclues(includes);
             includes.Require(new Script(ThisFilePathWithNewExtension("js")));
         }*/
-        async Task<IAsset> GetSourceAsync() {
+        async Task<Asset> GetSourceAsync() {
             string[] webExtensions = { ".jpg", ".jpeg", ".png", ".svg" };
 
             var source = await assetGenome.CreateOrGetCached();
@@ -60,7 +60,7 @@ namespace StaticSharp {
             return source;
         }
 
-        MagickImageInfo GetImageInfo(IAsset source) {
+        MagickImageInfo GetImageInfo(Asset source) {
             return new MagickImageInfo(source.ReadAllBites());
         }
 

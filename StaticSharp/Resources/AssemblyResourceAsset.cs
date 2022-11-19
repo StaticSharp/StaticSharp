@@ -8,8 +8,32 @@ using System.Threading.Tasks;
 
 
 namespace StaticSharp {
-    public record AssemblyResourceGenome(Assembly Assembly, string Path) : AssetGenome<AssemblyResourceGenome, AssemblyResourceAsset> {
+    public record AssemblyResourceGenome(Assembly Assembly, string Path) : Genome<Asset> {
+        public override Task<Asset> CreateAsync() {
+            /*if (!LoadData<Data>(out var data)) {
+                data.ContentHash = Hash.CreateFromBytes(ReadAllBites()).ToString();
+                CreateCacheSubDirectory();
+                StoreData(data);
+            }
+            ContentHash = data.ContentHash;*/
 
+            var extension = System.IO.Path.GetExtension(Path);
+
+            return Task.FromResult(new Asset(
+                () => {
+                    var resourcePath = Assembly.GetName().Name + "." + Path;
+                    using var stream = Assembly.GetManifestResourceStream(resourcePath);
+                    //throw
+
+                    using (var memoryStream = new MemoryStream()) {
+                        stream.CopyTo(memoryStream);
+                        return memoryStream.ToArray();
+                    }
+                },
+                extension,
+                MimeTypeMap.GetMimeType(extension),
+                ));
+        }
     }
 
     //Instead of inheritance from CacheableHttpRequest, it is better to use aggregation
@@ -22,21 +46,21 @@ namespace StaticSharp {
         }
 
 
-        public class AssemblyResourceAsset : Cacheable<AssemblyResourceGenome, AssemblyResourceAsset.Data>, IAsset {
-            public class Data {
+        /*public class AssemblyResourceAsset : CacheableToFile<AssemblyResourceGenome>, Asset {
+            class Data {
                 public string ContentHash = null!;
             };
             public string MediaType => MimeTypeMap.GetMimeType(FileExtension);
-            public string ContentHash => CachedData.ContentHash;
+            public string ContentHash { get; private set; } = null!;
             public string FileExtension => Path.GetExtension(Genome.Path);
 
             protected override Task CreateAsync() {
-                if (!LoadData()) {
-                    CachedData = new();
-                    CachedData.ContentHash = Hash.CreateFromBytes(ReadAllBites()).ToString();
+                if (!LoadData<Data>(out var data)) {
+                    data.ContentHash = Hash.CreateFromBytes(ReadAllBites()).ToString();
                     CreateCacheSubDirectory();
-                    StoreData();
+                    StoreData(data);
                 }
+                ContentHash = data.ContentHash;
                 return Task.CompletedTask;
             }
 
@@ -54,7 +78,7 @@ namespace StaticSharp {
                 return Content;
             }
 
-        }
+        }*/
     }
 }
 

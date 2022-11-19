@@ -15,7 +15,7 @@ namespace StaticSharp.Gears {
         }
         //public abstract string Extension { get; }
 
-        public static async Task<IAsset> GetAssetAsync(Type type, string filePathOrExtension, [CallerFilePath] string callerFilePath = "") {
+        public static async Task<Asset> GetAssetAsync(Type type, string filePathOrExtension, [CallerFilePath] string callerFilePath = "") {
             var assembly = type.Assembly;
             var typeName = type.Name;
 
@@ -49,7 +49,7 @@ namespace StaticSharp.Gears {
             }
         }
 
-        public virtual async Task<IAsset> GetAssetAsync(Type type) {
+        public virtual async Task<Asset> GetAssetAsync(Type type) {
             return await GetAssetAsync(type, FilePathOrExtension, CallerFilePath);
         }
 

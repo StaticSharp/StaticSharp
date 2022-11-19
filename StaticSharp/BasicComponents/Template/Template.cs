@@ -18,14 +18,14 @@ namespace StaticSharp {
     [ConstructorJs]
 
     public class Template : Block {
-        protected IGenome<IAsset> assetGenome { get; }
+        protected IGenome<Asset> assetGenome { get; }
 
         protected Template(Template other,
             string callerFilePath = "",
             int callerLineNumber = 0): base(other, callerLineNumber, callerFilePath) {
             assetGenome = other.assetGenome;                
         }
-        public Template(IGenome<IAsset> assetGenome, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
+        public Template(IGenome<Asset> assetGenome, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
             this.assetGenome = assetGenome;
         }
         /*public override void AddRequiredInclues(IIncludes includes) {

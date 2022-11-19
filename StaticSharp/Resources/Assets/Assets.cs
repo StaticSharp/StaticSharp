@@ -10,10 +10,10 @@ namespace StaticSharp.Gears;
 
 public class Assets {
 
-    private static readonly Dictionary<string, IAsset> assets = new();
+    private static readonly Dictionary<string, Asset> assets = new();
     public static AsyncLock AsyncLock { get; } = new();
 
-    public async Task AddAsync(IAsset asset) {
+    public async Task AddAsync(Asset asset) {
         using (await Cache.AsyncLock.LockAsync()) {
 
             if (assets.TryGetValue(asset.Key, out var existingAsset)) {
@@ -25,7 +25,7 @@ public class Assets {
         }
     }
 
-    public IAsset? GetByFilePath(FilePath filePath) {
+    public Asset? GetByFilePath(FilePath filePath) {
         foreach (var asset in assets.Values) {
             if (asset.FilePath == filePath) {
                 return asset;
@@ -34,7 +34,7 @@ public class Assets {
         return null;
     }
 
-    private async Task StoreAssetAsync(IAsset asset, FilePath assetsBaseDirectory) {
+    private async Task StoreAssetAsync(Asset asset, FilePath assetsBaseDirectory) {
         var fullFilePath = (assetsBaseDirectory + asset.FilePath);
         var directory = fullFilePath.WithoutLast.OsPath;
         Directory.CreateDirectory(directory);

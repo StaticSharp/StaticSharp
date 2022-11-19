@@ -8,15 +8,14 @@ namespace StaticSharp {
 
 
     namespace Gears {
-        public abstract class ImageAsset<TGenome, TData> : Cacheable<TGenome, TData>
-            where TGenome : class, IKeyProvider
-            where TData : class, new() {
+        public abstract class ImageAsset<TGenome> : CacheableToFile<TGenome>
+            where TGenome : class, IKeyProvider{
 
             public override string? CharSet => null;
 
         }
 
-        public interface IImageAsset : IAsset {
+        public interface IImageAsset : Asset {
             int Width { get; }
             int Height { get; }
         }

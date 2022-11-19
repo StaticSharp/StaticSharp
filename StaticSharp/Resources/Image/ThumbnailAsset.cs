@@ -6,11 +6,46 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    public record ThumbnailGenome(IGenome<IAsset> Source) : ImageProcessorGenome<ThumbnailGenome, ThumbnailAsset>(Source) {}
+    public record ThumbnailGenome(Genome<Asset> Source) : ImageProcessorGenome(Source) {
+        protected override Task<MagickImage> Process(MagickImage image) {
+            var size = 32;
+            var maxDimension = Math.Max(image.Width, image.Height);
+            var scale = size / (float)maxDimension;
+
+            var finalWidth = (int)Math.Round(image.Width * scale);
+            var finalHeight = (int)Math.Round(image.Height * scale);
 
 
-    namespace Gears {
-        public class ThumbnailAsset : ImageProcessorAsset<ThumbnailGenome, ImageProcessorAssetData>, IImageAsset {
+
+            var numDownscales = (int)Math.Truncate(0.5f * Math.Log2(image.Width / (float)size));
+
+            MagickGeometry geometry = new MagickGeometry();
+            geometry.IgnoreAspectRatio = true;
+
+
+            for (int i = numDownscales; i >= 1; i--) {
+                geometry.Width = finalWidth * (1 << (2 * i));
+                geometry.Height = finalHeight * (1 << (2 * i));
+
+                image.InterpolativeResize(geometry, PixelInterpolateMethod.Average16);
+            }
+            geometry.Width = finalWidth;
+            geometry.Height = finalHeight;
+            image.InterpolativeResize(geometry, PixelInterpolateMethod.Average16);
+
+            image.Quality = 50;
+            image.Format = MagickFormat.Pjpeg;
+            image.Strip();
+
+            return Task.FromResult(image);
+
+        }
+
+    }
+
+
+    /*namespace Gears {
+        public class ThumbnailAsset : ImageProcessorAsset<ThumbnailGenome>, IImageAsset {
             public override string MediaType => "image/jpeg";
             public override string FileExtension => ".jpg";
 
@@ -26,8 +61,8 @@ namespace StaticSharp {
                 var maxDimension = Math.Max(image.Width, image.Height);
                 var scale = size / (float)maxDimension;
 
-                CachedData.Width = (int)Math.Round(image.Width * scale);
-                CachedData.Height = (int)Math.Round(image.Height * scale);
+                var finalWidth = (int)Math.Round(image.Width * scale);
+                var finalHeight = (int)Math.Round(image.Height * scale);
 
 
 
@@ -38,13 +73,13 @@ namespace StaticSharp {
 
 
                 for (int i = numDownscales; i >= 1; i--) {
-                    geometry.Width = CachedData.Width * (1 << (2 * i));
-                    geometry.Height = CachedData.Height * (1 << (2 * i));
+                    geometry.Width = finalWidth * (1 << (2 * i));
+                    geometry.Height = finalHeight * (1 << (2 * i));
 
                     image.InterpolativeResize(geometry, PixelInterpolateMethod.Average16);
                 }
-                geometry.Width = CachedData.Width;
-                geometry.Height = CachedData.Height;
+                geometry.Width = finalWidth;
+                geometry.Height = finalHeight;
                 image.InterpolativeResize(geometry, PixelInterpolateMethod.Average16);
 
                 image.Quality = 50;
@@ -55,7 +90,7 @@ namespace StaticSharp {
 
             }
         }
-    }
+    }*/
 
 }
 

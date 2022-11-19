@@ -9,12 +9,76 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
 
-    public record HttpRequestGenome(HttpRequestMessage HttpRequestMessage) : AssetGenome<HttpRequestGenome, HttpRequestAsset> {
+    public record HttpRequestGenome(HttpRequestMessage HttpRequestMessage) : Genome<Asset> {
         public HttpRequestGenome(string uri) : this(new Uri(uri)) { }
         public HttpRequestGenome(Uri uri) : this(new HttpRequestMessage(HttpMethod.Get, uri) {
 
-        }) { }
+        }) {}
 
+        class Data {
+            public string? CharSet;
+            public string MediaType = null!;
+            public string ContentHash = null!;
+            public string Extension = null!;
+        };
+
+        public override async Task<Asset> CreateAsync() {
+            Data data;
+            Func<byte[]> contentCreator = null!;
+            if (!LoadData(out data)) {
+
+                var httpResponseMessage = await HttpClientStatic.Instance.SendAsync(HttpRequestMessage);
+                if (!httpResponseMessage.IsSuccessStatusCode) {
+                    throw new Exception($"Failed to get {HttpRequestMessage.RequestUri} with code {httpResponseMessage.StatusCode}");
+                    //FIXME:
+                    //appears as
+                    //One or more errors occurred. (Failed to get https://raw.githubusercontent.com/Templarian/MaterialDesign/master/svg/book-variant-multiple.svg with code NotFound)Failed to get https://raw.githubusercontent.com/Templarian/MaterialDesign/master/svg/book-variant-multiple.svg with code NotFound
+                }
+
+                data.CharSet = (httpResponseMessage.Content.Headers.ContentType?.CharSet);
+
+                var mediaType = httpResponseMessage.Content.Headers.ContentType?.MediaType;
+                var path = HttpRequestMessage.RequestUri?.AbsolutePath;
+                var extension = Path.GetExtension(path);
+                if (string.IsNullOrEmpty(extension))
+                    extension = null;
+
+                if (mediaType != null) {
+                    if (extension == null) {
+                        extension = MimeTypeMap.GetExtension(mediaType, false);
+                    }
+                } else {
+                    mediaType = MimeTypeMap.GetMimeType(extension);
+                }
+
+                if (extension == null) {
+                    extension = ".unknown";
+                }
+
+                data.MediaType = mediaType;
+                data.Extension = extension;
+
+                CreateCacheSubDirectory();
+
+                var content = await httpResponseMessage.Content.ReadAsByteArrayAsync();
+                contentCreator = () => content;
+
+                data.ContentHash = Hash.CreateFromBytes(content).ToString();
+                await FileUtils.WriteAllBytesAsync(ContentFilePath, content);
+                StoreData(data);
+
+            } else {
+                contentCreator = ()=> FileUtils.ReadAllBytes(ContentFilePath);
+            }
+
+            return new Asset(
+                contentCreator,
+                data.Extension,
+                data.MediaType,
+                data.ContentHash,
+                data.CharSet
+                );
+        }
     }
 
     //Instead of inheritance from CacheableHttpRequest, it is better to use aggregation
@@ -35,9 +99,9 @@ namespace StaticSharp {
 
 
 
-        public class HttpRequestAsset : Cacheable<HttpRequestGenome, HttpRequestAsset.Data>, IAsset {
+       /* public class HttpRequestAsset : CacheableToFile<HttpRequestGenome>, Asset {
 
-            public class Data {
+            class Data {
                 public string? CharSet;
                 public string MediaType = null!;
                 public string ContentHash = null!;
@@ -47,11 +111,11 @@ namespace StaticSharp {
 
             public static readonly string DefaultMediaType = "application/octet-stream";
 
-            public override string? CharSet => CachedData.CharSet;
-            public string MediaType => CachedData.MediaType!=null ? CachedData.MediaType : DefaultMediaType;
-            
-            public string ContentHash => CachedData.ContentHash;
-            public string FileExtension => CachedData.Extension;
+            private Data data = null!;
+            public override string? CharSet  => data.CharSet;
+            public string MediaType => data.MediaType!=null ? data.MediaType : DefaultMediaType;            
+            public string ContentHash => data.ContentHash;
+            public string FileExtension => data.Extension;
 
             protected override void SetGenome(HttpRequestGenome arguments) {
                 base.SetGenome(arguments);
@@ -62,63 +126,18 @@ namespace StaticSharp {
                 }
             }
 
-
-
             protected override async Task CreateAsync() {
 
 
-                if (!LoadData()) {
-                    CachedData = new();
+                
 
-                    var httpResponseMessage = await HttpClientStatic.Instance.SendAsync(Genome.HttpRequestMessage);
-                    if (!httpResponseMessage.IsSuccessStatusCode) {
-                        throw new Exception($"Failed to get {Genome.HttpRequestMessage.RequestUri} with code {httpResponseMessage.StatusCode}");
-                        //FIXME:
-                        //appears as
-                        //One or more errors occurred. (Failed to get https://raw.githubusercontent.com/Templarian/MaterialDesign/master/svg/book-variant-multiple.svg with code NotFound)Failed to get https://raw.githubusercontent.com/Templarian/MaterialDesign/master/svg/book-variant-multiple.svg with code NotFound
-                    }
 
-                    CachedData.CharSet = (httpResponseMessage.Content.Headers.ContentType?.CharSet);
-
-                    var mediaType = httpResponseMessage.Content.Headers.ContentType?.MediaType;
-                    var path = Genome.HttpRequestMessage.RequestUri?.AbsolutePath;
-                    var extension = Path.GetExtension(path);
-                    if (string.IsNullOrEmpty(extension))
-                        extension = null;
-
-                    if (mediaType != null) {
-                        if (extension == null) {
-                            extension = MimeTypeMap.GetExtension(mediaType, false);
-                        }
-                    } else {
-                        mediaType = MimeTypeMap.GetMimeType(extension);
-                    }
-
-                    if (extension == null) {
-                        extension = ".unknown";
-                    }
-
-                    CachedData.MediaType = mediaType;
-                    CachedData.Extension = extension;
-
-                    CreateCacheSubDirectory();
-
-                    Content = await httpResponseMessage.Content.ReadAsByteArrayAsync();
-                    CachedData.ContentHash = Hash.CreateFromBytes(Content).ToString();
-
-                    await FileUtils.WriteAllBytesAsync(ContentFilePath, Content);
-
-                    StoreData();
-
-                } else {
-                    Content = await FileUtils.ReadAllBytesAsync(ContentFilePath);
-                }
 
             }
 
             
             
-        }
+        }*/
 
     }
 }

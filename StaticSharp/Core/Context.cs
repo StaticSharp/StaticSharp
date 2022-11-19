@@ -42,9 +42,9 @@ namespace StaticSharp {
 
         public Assets Assets { get; init; }
 
-        private List<KeyValuePair<string, IAsset>> Styles { get; } = new();
+        private List<KeyValuePair<string, Asset>> Styles { get; } = new();
 
-        private List<KeyValuePair<string, IAsset>> Scripts { get; } = new();
+        private List<KeyValuePair<string, Asset>> Scripts { get; } = new();
 
         public FontFamily[] FontFamilies { get; set; } = null!;
         public FontFamily[] CodeFontFamilies { get; set; } = null!;
@@ -58,15 +58,15 @@ namespace StaticSharp {
         }
 
 
-        public async Task<FilePath> AddAssetAsync(IAsset asset) {
+        public async Task<FilePath> AddAssetAsync(Asset asset) {
             await Assets.AddAsync(asset);
             return AssetsBaseUrl + asset.FilePath;
         }
 
-        public void AddScript(IAsset asset) {
+        public void AddScript(Asset asset) {
             if (Scripts.Any(x => x.Key == asset.Key))
                 return; 
-            Scripts.Add(new KeyValuePair<string, IAsset>(asset.Key, asset));
+            Scripts.Add(new KeyValuePair<string, Asset>(asset.Key, asset));
         }
 
         public Html.Tag GenerateScript() {
@@ -76,10 +76,10 @@ namespace StaticSharp {
             };
         }
 
-        public void AddStyle(IAsset asset) {
+        public void AddStyle(Asset asset) {
             if (Styles.Any(x => x.Key == asset.Key))
                 return;
-            Styles.Add(new KeyValuePair<string, IAsset>(asset.Key, asset));
+            Styles.Add(new KeyValuePair<string, Asset>(asset.Key, asset));
         }
 
         public Html.Tag GenerateStyle() {

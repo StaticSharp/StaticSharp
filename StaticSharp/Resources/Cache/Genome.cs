@@ -1,15 +1,17 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace StaticSharp.Gears;
 
-public interface IGenome<TCacheable>: IKeyProvider {
+/*public interface IGenome<TCacheable>: IKeyProvider {
     Task<TCacheable> CreateOrGetCached();
     Task<TCacheable> CreateAsync();
-}
+}*/
 
 public abstract record Genome: IKeyProvider {
     public string Key { get; }
@@ -47,11 +49,27 @@ public abstract record Genome: IKeyProvider {
     public override string ToString() {
         return Key;
     }
+
+
+
 }
 
-public abstract record Genome<TFinalGenome,TCacheable> : Genome, IGenome<TCacheable>
-    where TFinalGenome : Genome<TFinalGenome, TCacheable>
-    where TCacheable : ICacheable<TFinalGenome>, new() {
+
+
+
+public abstract record Genome<TCacheable> : Genome {
+
+    private static readonly JsonSerializerOptions JsonSerializerOptions = new() {
+        IncludeFields = true,
+       
+    };
+    private static readonly string CachedDataJsonFileName = "data.json";
+    protected string CachedDataJsonFilePath => Path.Combine(CacheSubDirectory, CachedDataJsonFileName);
+    protected string CacheSubDirectory => Path.Combine(Cache.Directory, KeyHash);
+    protected string ContentFilePath => Path.Combine(CacheSubDirectory, "content");
+    protected string KeyHash => Hash.CreateFromString(Key).ToString();
+
+
     public async Task<TCacheable> CreateOrGetCached() {
 
         using (await Cache.AsyncLock.LockAsync()) {
@@ -82,12 +100,58 @@ public abstract record Genome<TFinalGenome,TCacheable> : Genome, IGenome<TCachea
         }
     }
 
-    public async Task<TCacheable> CreateAsync() {
+    protected bool LoadData<T>(out T data) where T : new() {
+        if (!File.Exists(CachedDataJsonFilePath)) {
+            data = new();
+            return false;
+        }
+
+        var json = FileUtils.ReadAllText(CachedDataJsonFilePath);
+        var deserializationResult = JsonSerializer.Deserialize<T>(json, JsonSerializerOptions);
+        if (deserializationResult == null) {
+            data = new();
+            return false;
+        }
+        data = deserializationResult;
+        return true;
+    }
+
+    protected void StoreData<T>(T data) {
+        string json = JsonSerializer.Serialize(data, JsonSerializerOptions);
+        File.WriteAllText(CachedDataJsonFilePath, json);
+    }
+
+    protected void CreateCacheSubDirectory() {
+        Directory.CreateDirectory(CacheSubDirectory);
+    }
+
+    public void DeleteCacheSubDirectory() {
+        DeleteDirectory(CacheSubDirectory);
+    }
+
+    private void DeleteDirectory(string directoryPath) {
+        DirectoryInfo dir = new DirectoryInfo(directoryPath);
+
+        foreach (FileInfo file in dir.GetFiles()) {
+            file.Delete();
+        }
+
+        foreach (DirectoryInfo directory in dir.GetDirectories()) {
+            DeleteDirectory(directory.FullName);
+            directory.Delete();
+            while (directory.Exists) {
+                Thread.Sleep(100);
+            }
+        }
+    }
+
+
+    public abstract Task<TCacheable> CreateAsync(); /*{
         var result = new TCacheable();
         result.SetGenome((TFinalGenome)this);
         await result.CreateAsync();
         return result;
-    }    
+    }    */
 }
 
 

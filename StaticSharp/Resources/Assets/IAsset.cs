@@ -1,19 +1,58 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using StaticSharp.Html;
 
 namespace StaticSharp.Gears;
 
-public interface IAsset : IKeyProvider {
-    public byte[] ReadAllBites();
-    public string ReadAllText();
-    public string MediaType { get; }
-    public string ContentHash { get; }
-    public string FileExtension { get; }
-    public string? CharSet { get; }
+
+
+public class Asset {
+
+    public string FileExtension { get; init; }
+    public string MediaType { get; init; }
+
+    private string? contentHash = null;
+
+    public string ContentHash {
+        get {
+            if (contentHash == null) {
+                contentHash = Hash.CreateFromBytes(ReadAllBites()).ToString();
+            }
+            return contentHash;
+        }    
+    } 
+    
+    public string? CharSet { get; init; }
+    
+    private byte[]? content = null;
+
+    public Func<byte[]> ContentCreator { get; init; }
+
+    public Func<Task<bool>>? ContentValidator { get; set; }
+
+    public Asset(Func<byte[]> contentCreator, string fileExtension, string mediaType, string? contentHash = null, string? charSet = null) {
+        FileExtension = fileExtension;
+        MediaType = mediaType;
+        this.contentHash = contentHash;        
+        CharSet = charSet;
+        ContentCreator = contentCreator;
+    }
+
+    public virtual byte[] ReadAllBites() {
+        if (content == null) {
+            content = ContentCreator();
+        }
+        return content;
+    }
+    public string ReadAllText() {
+        var data = ReadAllBites();
+        return FileUtils.ReadAllText(data, CharSet);
+    }
+
     public FilePath FilePath => new(ContentHash + FileExtension);
 
     public string GetDataUrlBase64() {

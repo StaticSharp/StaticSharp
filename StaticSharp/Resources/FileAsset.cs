@@ -11,13 +11,32 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    public record FileGenome(string Path) : AssetGenome<FileGenome, FileAsset> {
+    public record FileGenome(string Path) : Genome<Asset> {
+
+        class Data {
+            public DateTime LastWriteTime;
+            public string ContentHash = null!;
+        };
+        public override Task<Asset> CreateAsync() {
+            if (!LoadData<Data>(out var data)) {
+
+                data.LastWriteTime = GetLastWriteTime();
+                data.ContentHash = Hash.CreateFromBytes(ReadAllBites()).ToString();
+
+                CreateCacheSubDirectory();
+                StoreData(data);
+            }
+            ContentHash = data.ContentHash;
+            LastWriteTime = data.LastWriteTime;
+
+            return Task.CompletedTask;
+        }
     }
 
     namespace Gears {
 
-        public class FileAsset : Cacheable<FileGenome, FileAsset.Data>, IAsset, IMutableAsset {
-            public class Data {
+        public class FileAsset : CacheableToFile<FileGenome>, Asset, IMutableAsset {
+            class Data {
                 public DateTime LastWriteTime;
                 public string ContentHash = null!;
             };
@@ -25,22 +44,24 @@ namespace StaticSharp {
                 return File.GetLastWriteTimeUtc(Genome.Path);            
             }
 
-            public Task<bool> GetValidAsync() => Task.FromResult(GetLastWriteTime() == CachedData.LastWriteTime);
+            public Task<bool> GetValidAsync() => Task.FromResult(GetLastWriteTime() == LastWriteTime);
             
             public string MediaType => MimeTypeMap.GetMimeType(FileExtension);
-            public string ContentHash => CachedData.ContentHash;
+            public string ContentHash { get; private set; } = null!;
             public string FileExtension => Path.GetExtension(Genome.Path);
-
+            public DateTime LastWriteTime { get; private set; }
             protected override Task CreateAsync() {
-                if (!LoadData()) {
-                    CachedData = new();
-
-                    CachedData.LastWriteTime = GetLastWriteTime();
-                    CachedData.ContentHash = Hash.CreateFromBytes(ReadAllBites()).ToString();
+                if (!LoadData<Data>(out var data)) {
+                    
+                    data.LastWriteTime = GetLastWriteTime();
+                    data.ContentHash = Hash.CreateFromBytes(ReadAllBites()).ToString();
 
                     CreateCacheSubDirectory();
-                    StoreData();
+                    StoreData(data);
                 }
+                ContentHash = data.ContentHash;
+                LastWriteTime = data.LastWriteTime;
+
                 return Task.CompletedTask;
             }
 

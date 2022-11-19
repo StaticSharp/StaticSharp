@@ -4,7 +4,7 @@ using System;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
-    public record SvgInlineImageGenerator(IGenome<IAsset> Source) : TagGenerator {
+    public record SvgInlineImageGenerator(IGenome<Asset> Source) : TagGenerator {
         public override async Task<Tag> Generate(string id) {
 
             var image = await Source.CreateOrGetCached();

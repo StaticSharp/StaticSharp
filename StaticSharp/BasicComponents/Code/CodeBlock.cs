@@ -64,23 +64,37 @@ namespace StaticSharp {
             }
         }
     }*/
+    #region Adf dfgdfff
+
+    #region B
+    public static partial class CodeUtils {
+
+        
+    }
+
+#endregion
+#endregion
+
+
 
     [RelatedStyle]
     [RelatedStyle("Code")]
     [ConstructorJs]
     public class CodeBlock : Block {
-        public string? ProgrammingLanguage { get; init; }
-
-        //private readonly ProgrammingLanguage ProgrammingLanguageBasedOnExtension;
-
         protected override string TagName => "code-block";
-        protected IGenome<IAsset> assetGenome;
+
+        public string? ProgrammingLanguage { get; init; } = null;
+        public string? RegionName { get; init; }
+        
+        protected Genome<Asset> assetGenome;
 
         public CodeBlock(CodeBlock other, int callerLineNumber, string callerFilePath)
             : base(other, callerLineNumber, callerFilePath) {
+            ProgrammingLanguage = other.ProgrammingLanguage;
+            RegionName = other.RegionName;
             assetGenome = other.assetGenome;
         }
-        public CodeBlock(IGenome<IAsset> assetGenome, string? programmingLanguage = null, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
+        public CodeBlock(Genome<Asset> assetGenome, string? programmingLanguage = null, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
             this.assetGenome = assetGenome;
             ProgrammingLanguage = programmingLanguage;
         }
@@ -249,12 +263,17 @@ namespace StaticSharp {
 
             var styleDictionary = StyleDictionary.DefaultLight;
 
+            var programmingLanguageName = ProgrammingLanguage ?? asset.FileExtension.TrimStart('.');
 
-            var formatter = new CodeFormatter(StyleDictionary.DefaultLight);
+            var languageProcessor = ProgrammingLanguageProcessor.FindByName(programmingLanguageName);
+
+            var html = languageProcessor.Highlight(code, programmingLanguageName, false);
+
+            /*var formatter = new CodeFormatter(StyleDictionary.DefaultLight);
 
             var programmingLanguage = Languages.FindById(ProgrammingLanguage);
 
-            var html = formatter.GetHtmlString(NormalizeCode(code), programmingLanguage);
+            var html = formatter.GetHtmlString(NormalizeCode(code), programmingLanguage);*/
 
             elementTag.Add(html);
 

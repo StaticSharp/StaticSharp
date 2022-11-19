@@ -20,7 +20,7 @@ namespace StaticSharp {
     public record Font(
             FontFamily FontFamily,
             FontStyle FontStyle
-            ) : Gears.Genome<Font, CacheableFont> {
+            ) : Gears.Genome<CacheableFont> {
     }
 
 
