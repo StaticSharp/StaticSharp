@@ -10,7 +10,7 @@ namespace StaticSharp {
 
 
 
-    public record YoutubeVideoManifestGenome(string VideoId) : Genome<YoutubeVideoManifestGenome, YoutubeVideoManifestResource>{
+    public record YoutubeVideoManifestGenome(string VideoId) : Genome<YoutubeVideoManifestResource>{
         public override async Task<YoutubeVideoManifestResource> CreateAsync() {
 
             var validContainers = new string[] { "mp4" };
@@ -38,10 +38,14 @@ namespace StaticSharp {
         }
     }
 
-
+    /*namespace Gears {
+        
+    }*/
 
     namespace Gears {
-
+        public class YoutubeVideoManifestResource {
+            public List<YoutubeVideoManifestItem> Items { get; set; } = new();
+        }
         public class YoutubeVideoManifestItem : IStreamInfo, IKeyProvider {
             public string Key => KeyUtils.Combine<YoutubeVideoManifestItem>(Url);
 
@@ -52,29 +56,12 @@ namespace StaticSharp {
 
             public int Width;
             public int Height;
-
-
             string IStreamInfo.Url => Url;
             Container IStreamInfo.Container => new Container(Container);
             FileSize IStreamInfo.Size => new FileSize(Size);
             Bitrate IStreamInfo.Bitrate => new Bitrate(Bitrate);
         }
-
-
-        public class YoutubeVideoManifestResource : CacheableToFile<YoutubeVideoManifestGenome> {
-
-            /*class Data {
-                public List<YoutubeVideoManifestItem> Items = new();
-            }*/
-
-            public override string? CharSet => null;
-
-            //Data data = null!;
-            public List<YoutubeVideoManifestItem> Items => new();
-            protected override async Task CreateAsync() {
-                
-            }
-        }
+        
     }
 
 

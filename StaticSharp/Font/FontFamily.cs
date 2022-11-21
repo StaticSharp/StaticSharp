@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StaticSharp.Gears;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,7 +10,32 @@ namespace StaticSharp {
     public record FontFamily(
             string Name
 
-            ) : Gears.Genome<FontFamily,Gears.CacheableFontFamily> {
+            ) : Gears.Genome<Gears.CacheableFontFamily> {
+
+
+        public override async Task<CacheableFontFamily> CreateAsync() {
+            var fullCssUrl = GoogleFonts.MakeCssUrl(Name);
+            var fullCssRequest = await new HttpRequestGenome(
+                GoogleFonts.MakeWoff2Request(fullCssUrl)
+                ) {
+
+            }.CreateOrGetCached();
+
+            var result = new CacheableFontFamily();
+
+            var fontInfos = GoogleFonts.ParseCss(fullCssRequest.ReadAllText());
+            foreach (var i in fontInfos) {
+                var italicSubset = result.Members[i.Italic ? 1 : 0];
+                var existing = italicSubset.Find(x => x.FontStyle.Weight == (FontWeight)i.Weight);
+                if (existing != null) {
+                    existing.Segments.AddRange(i.Segments);
+                } else {
+                    italicSubset.Add(new FontFamilyMember(new FontStyle((FontWeight)i.Weight, i.Italic), i.Segments));
+                }
+            }
+            return result;
+        }
+
 
         private static string FamilyFromDirectory(string directory) {
             var family = Path.GetFileName(directory);
@@ -28,9 +54,9 @@ namespace StaticSharp {
             //eot,
         }
 
-        public class CacheableFontFamily : Cacheable<FontFamily> {
+        public class CacheableFontFamily {
 
-            private List<FontFamilyMember>[/*italic*/] members = new[]{
+            public List<FontFamilyMember>[/*italic*/] Members { get;} = new[]{
                 new List<FontFamilyMember>(),
                 new List<FontFamilyMember>()
             };
@@ -41,7 +67,7 @@ namespace StaticSharp {
 
             public FontFamilyMember FindMember(FontStyle fontStyle) {
 
-                var weights = members[fontStyle.Italic ? 1 : 0];
+                var weights = Members[fontStyle.Italic ? 1 : 0];
                 var difWithPrevious = Math.Abs((int)fontStyle.Weight - (int)weights[0].FontStyle.Weight);
 
                 var selectedIndex = weights.Count - 1;
@@ -58,85 +84,7 @@ namespace StaticSharp {
                 return weights[selectedIndex];
             }
 
-            protected override void SetGenome(FontFamily arguments) {
-                base.SetGenome(arguments);
-                //Name = FamilyFromDirectory(Arguments.Directory);
-            }
-
-
-            protected override async Task CreateAsync() {
-
-                var fullCssUrl = GoogleFonts.MakeCssUrl(Genome.Name);
-                var fullCssRequest = await new HttpRequestGenome(
-                    GoogleFonts.MakeWoff2Request(fullCssUrl)
-                    ) {
-
-                }.CreateOrGetCached();
-
-                var fontInfos = GoogleFonts.ParseCss(fullCssRequest.ReadAllText());
-                foreach (var i in fontInfos) {
-                    var italicSubset = members[i.Italic ? 1 : 0];
-                    var existing = italicSubset.Find(x => x.FontStyle.Weight == (FontWeight)i.Weight);
-                    if (existing != null) {
-                        existing.Segments.AddRange(i.Segments);
-                    } else {
-                        italicSubset.Add(new FontFamilyMember(new FontStyle((FontWeight)i.Weight, i.Italic), i.Segments));
-                    }                    
-                }
-
-
-                /*if (!Directory.Exists(Arguments.Directory)) {
-                    throw new DirectoryNotFoundException(Arguments.Directory);
-                }
-                var lName = Name.ToLower();
-
-                foreach (var i in Directory.EnumerateFiles(Arguments.Directory)) {
-
-                    var extensionName = Path.GetExtension(i)[1..].ToLower();
-                    FontExtension extension;
-                    if (!Enum.TryParse(extensionName, out extension))
-                        continue;
-
-
-                    var fileName = Path.GetFileNameWithoutExtension(i);
-                    var lFileName = fileName.ToLower();
-                    if (lFileName.StartsWith(lName))
-                        lFileName = lFileName[lName.Length..].Trim('-', '_', ' ');
-
-
-                    bool italic = lFileName.Contains("italic");
-                    if (italic)
-                        lFileName = lFileName.Replace("italic", "").Trim('-', '_', ' ');
-
-                    FontWeight? weight = WeightFromName(lFileName);
-                    if (weight == null)
-                        continue;
-
-                    var replacementCandidateIndex = members[italic ? 1 : 0].FindIndex(x => x.Weight == weight);
-
-                    //var existing = members[italic ? 1 : 0].FirstOrDefault(x=>x.Weight == weight);
-                    if (replacementCandidateIndex >= 0) {
-                        if (members[italic ? 1 : 0][replacementCandidateIndex].Extension < extension) {
-                            continue;
-                        }                    
-                    }
-
-                    var newMember = new FontFamilyMember(
-                        FilePath: i,
-                        Extension: extension,
-                        Italic: italic,
-                        Weight: weight.Value
-                    );
-                    if (replacementCandidateIndex >= 0) {
-                        members[italic ? 1 : 0][replacementCandidateIndex] = newMember;
-                    } else {
-                        members[italic ? 1 : 0].Add(newMember);
-                    }
-                }
-
-                members[0].Sort((a, b) => a.Weight.CompareTo(b.Weight));
-                members[1].Sort((a, b) => a.Weight.CompareTo(b.Weight));*/
-            }
+            
 
             
 

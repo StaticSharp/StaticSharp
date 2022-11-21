@@ -36,15 +36,15 @@ namespace StaticSharp {
 
         //public Includes Includes { get; init; }
 
-        public IncludesCache<Font, CacheableFont> Fonts { get; } = new();
+        public IncludesCache<CacheableFont> Fonts { get; } = new();
 
         public UniqueTagCollection SvgDefs { get; } = new("s");
 
         public Assets Assets { get; init; }
 
-        private List<KeyValuePair<string, Asset>> Styles { get; } = new();
+        private List<KeyValuePair<string, Genome<Asset>>> Styles { get; } = new();
 
-        private List<KeyValuePair<string, Asset>> Scripts { get; } = new();
+        private List<KeyValuePair<string, Genome<Asset>>> Scripts { get; } = new();
 
         public FontFamily[] FontFamilies { get; set; } = null!;
         public FontFamily[] CodeFontFamilies { get; set; } = null!;
@@ -63,27 +63,29 @@ namespace StaticSharp {
             return AssetsBaseUrl + asset.FilePath;
         }
 
-        public void AddScript(Asset asset) {
-            if (Scripts.Any(x => x.Key == asset.Key))
+        public void AddScript(Genome<Asset> genome) {
+            if (Scripts.Any(x => x.Key == genome.Key))
                 return; 
-            Scripts.Add(new KeyValuePair<string, Asset>(asset.Key, asset));
+            Scripts.Add(new KeyValuePair<string, Genome<Asset>>(genome.Key, genome));
         }
 
-        public Html.Tag GenerateScript() {
-            var content = string.Join('\n', Scripts.Select(x => x.Value.ReadAllText()));
+        public async Task<Html.Tag> GenerateScriptAsync() {
+            var assets = await Task.WhenAll(Scripts.Select(x => x.Value.CreateOrGetCached()));
+            var content = string.Join('\n', assets.Select(x => x.ReadAllText()));
             return new Html.Tag("script") {
                 new Html.PureHtmlNode(content)
             };
         }
 
-        public void AddStyle(Asset asset) {
-            if (Styles.Any(x => x.Key == asset.Key))
+        public void AddStyle(Genome<Asset> genome) {
+            if (Styles.Any(x => x.Key == genome.Key))
                 return;
-            Styles.Add(new KeyValuePair<string, Asset>(asset.Key, asset));
+            Styles.Add(new KeyValuePair<string, Genome<Asset>>(genome.Key, genome));
         }
 
-        public Html.Tag GenerateStyle() {
-            var content = string.Join('\n', Styles.Select(x => x.Value.ReadAllText()));
+        public async Task<Html.Tag> GenerateStyleAsync() {
+            var assets = await Task.WhenAll(Styles.Select(x => x.Value.CreateOrGetCached()));
+            var content = string.Join('\n', assets.Select(x => x.ReadAllText()));
             return new Html.Tag("style") {
                 new Html.PureHtmlNode(content)
             };

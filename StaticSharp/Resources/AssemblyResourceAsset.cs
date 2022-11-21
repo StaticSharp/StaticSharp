@@ -31,7 +31,7 @@ namespace StaticSharp {
                     }
                 },
                 extension,
-                MimeTypeMap.GetMimeType(extension),
+                MimeTypeMap.GetMimeType(extension)
                 ));
         }
     }

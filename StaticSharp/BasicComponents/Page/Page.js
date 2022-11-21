@@ -84,23 +84,20 @@ function Page(element) {
         window.UserInteracted = true
     }
 
-
-    function PrintWindowSize() {
+    /*function PrintWindowSize() {
         console.log("onresize", window.innerWidth, window.innerHeight, document.documentElement.clientWidth, document.documentElement.clientHeight, document.body.parentNode.clientHeight)
-    }
-    PrintWindowSize()
+    }*/
+    //PrintWindowSize()
 
     window.onresize = function (event) {
         //let startTime = performance.now()
         let d = Reaction.beginDeferred()
         element.LayoutWidth = getWindowWidth()
         element.LayoutHeight = getWindowHeight()
-        PrintWindowSize()
+        //PrintWindowSize()
         d.end()
         //console.log("resize", performance.now() - startTime)
     }
-
-
     
     let loadEventsToWait = 2
     function onLoadEvent() {

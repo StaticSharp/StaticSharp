@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
 
-    namespace Gears {
+    /*namespace Gears {
         public abstract class ImageAsset<TGenome> : CacheableToFile<TGenome>
             where TGenome : class, IKeyProvider{
 
@@ -19,11 +19,11 @@ namespace StaticSharp {
             int Width { get; }
             int Height { get; }
         }
-    }
+    }*/
     
 
 
-    public abstract record ImageGenome<TFinalGenome, TCacheable> : AssetGenome<TFinalGenome, TCacheable>, IGenome<IImageAsset>
+    /*public abstract record ImageGenome<TFinalGenome, TCacheable> : AssetGenome<TFinalGenome, TCacheable>, IGenome<IImageAsset>
     where TFinalGenome : ImageGenome<TFinalGenome, TCacheable>
     where TCacheable : ICacheable<TFinalGenome>, IImageAsset, new() {
 
@@ -33,7 +33,7 @@ namespace StaticSharp {
         async Task<IImageAsset> IGenome<IImageAsset>.CreateOrGetCached() {
             return await base.CreateOrGetCached();
         }
-    }
+    }*/
 
     
 }

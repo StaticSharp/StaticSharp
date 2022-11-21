@@ -8,7 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace StaticSharp.Gears;
 
-public abstract class Cacheable<TGenome> : ICacheable<TGenome>, IKeyProvider
+/*public abstract class Cacheable<TGenome> : ICacheable<TGenome>, IKeyProvider
     where TGenome : class, IKeyProvider {
     public TGenome Genome { get; private set; } = null!;
     public string Key { get; private set; } = null!;
@@ -25,16 +25,9 @@ public abstract class Cacheable<TGenome> : ICacheable<TGenome>, IKeyProvider
 
     protected abstract Task CreateAsync();
     Task ICacheable<TGenome>.CreateAsync() => CreateAsync();
+}*/
 
-
-
-
-
-
-}
-
-public abstract class CacheableToFile<TGenome> : Cacheable<TGenome>
-        where TGenome : class, IKeyProvider
+public abstract class CacheableToFile<TGenome> 
     {
 
     
@@ -58,23 +51,12 @@ public abstract class CacheableToFile<TGenome> : Cacheable<TGenome>
         return FileUtils.ReadAllText(data, CharSet);
     }*/
 
-    protected override void SetGenome(TGenome genome) {
-        /*base.SetGenome(genome);
+    /*protected override void SetGenome(TGenome genome) {
+        base.SetGenome(genome);
         KeyHash = Hash.CreateFromString(Key).ToString();
         CacheSubDirectory = Path.Combine(Cache.Directory, KeyHash);
-        CachedDataJsonFilePath = Path.Combine(CacheSubDirectory, CachedDataJsonFileName);*/
-    }
-
-
-    
-
-
-    
-
-
-    
-
-
+        CachedDataJsonFilePath = Path.Combine(CacheSubDirectory, CachedDataJsonFileName);
+    }*/
 }
 
 

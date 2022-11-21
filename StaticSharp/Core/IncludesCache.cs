@@ -4,12 +4,10 @@ using System.Threading.Tasks;
 namespace StaticSharp.Gears {
 
 
-    public class IncludesCache<TGenome, TCacheable>: ConcurrentDictionary<string, TCacheable>
-        where TCacheable: Cacheable<TGenome>
-        where TGenome : class, IKeyProvider, IGenome<TCacheable> {
+    public class IncludesCache<TCacheable>: ConcurrentDictionary<string, TCacheable>{
 
 
-        public async Task<TCacheable> CreateOrGet(TGenome genome) {
+        public async Task<TCacheable> CreateOrGet(Genome<TCacheable> genome) {
             var key = genome.Key;
             TCacheable value;
 

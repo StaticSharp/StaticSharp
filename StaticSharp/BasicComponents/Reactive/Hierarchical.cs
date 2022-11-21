@@ -62,7 +62,7 @@ namespace StaticSharp {
         }
         public virtual async Task<Tag> GenerateHtmlAsync(Context context, Role? role) {
 
-            await AddRequiredInclues(context);
+            AddRequiredInclues(context);
 
             context = ModifyContext(context);
 

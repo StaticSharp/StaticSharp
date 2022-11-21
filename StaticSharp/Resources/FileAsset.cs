@@ -17,23 +17,42 @@ namespace StaticSharp {
             public DateTime LastWriteTime;
             public string ContentHash = null!;
         };
+
+        private DateTime GetLastWriteTime() {
+            return File.GetLastWriteTimeUtc(Path);
+        }
+
         public override Task<Asset> CreateAsync() {
+            Func<byte[]> contentCreator;
+
             if (!LoadData<Data>(out var data)) {
+                var content = FileUtils.ReadAllBytes(Path);
+                contentCreator = () => content;
 
                 data.LastWriteTime = GetLastWriteTime();
-                data.ContentHash = Hash.CreateFromBytes(ReadAllBites()).ToString();
+                data.ContentHash = Hash.CreateFromBytes(content).ToString();
 
                 CreateCacheSubDirectory();
                 StoreData(data);
+            } else {
+                contentCreator = () => FileUtils.ReadAllBytes(Path);
             }
-            ContentHash = data.ContentHash;
-            LastWriteTime = data.LastWriteTime;
 
-            return Task.CompletedTask;
+            var extension = System.IO.Path.GetExtension(Path);
+            var result = new Asset(
+                contentCreator,
+                extension,
+                MimeTypeMap.GetMimeType(extension),
+                data.ContentHash
+                );
+
+            result.ContentValidator = () => Task.FromResult(GetLastWriteTime() == data.LastWriteTime);
+
+            return Task.FromResult(result);
         }
     }
 
-    namespace Gears {
+    /*namespace Gears {
 
         public class FileAsset : CacheableToFile<FileGenome>, Asset, IMutableAsset {
             class Data {
@@ -73,6 +92,6 @@ namespace StaticSharp {
             }
 
         }
-    }
+    }*/
 }
 

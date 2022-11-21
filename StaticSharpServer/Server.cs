@@ -1,6 +1,7 @@
 ﻿using StaticSharp.Gears;
 using StaticSharp.Tree;
 using StaticSharp.Utils;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
@@ -115,16 +116,26 @@ namespace StaticSharp {
             if (headers != null) {
                 var referer = headers.Referer;
                 if (referer != null) {
+                    
                     var path = referer.LocalPath;
                     var page = PageFinder.FindPage(path, out var closest);
                     if (page != null) {
                         return new ResultAsync(async () => {
-                            var context = CreateContext(page.VirtualNode, BaseUrlFromHttpRequest(httpContext.Request));
-                            var html = await page.GeneratePageHtmlAsync(context);
-                            var hash = html.ToHashString();
+
+                            //while (true) {
+
+                                var s = Stopwatch.StartNew();
+                                var context = CreateContext(page.VirtualNode, BaseUrlFromHttpRequest(httpContext.Request));
+                                var html = await page.GeneratePageHtmlAsync(context);
+                                var hash = html.ToHashString();
+                                Console.WriteLine(s.ElapsedMilliseconds);
+                            //}
+                            //return Results.Text("");
+
                             return Results.Text(hash);
                         });
                     }
+                    
                 }
             }
             return Results.BadRequest();

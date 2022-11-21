@@ -15,9 +15,10 @@ public abstract record AssetGenome<TFinalGenome, TCacheable> : Genome<TFinalGeno
     async Task<Asset> IGenome<Asset>.CreateOrGetCached() {
         return await base.CreateOrGetCached();
     }
-}
+}*/
+
 public static class AssetGenome{
-    public static IGenome<Asset> GenomeFromPathOrUrl(string pathOrUrl, string callerFilePath) {
+    public static Genome<Asset> GenomeFromPathOrUrl(string pathOrUrl, string callerFilePath) {
         
         if (File.Exists(pathOrUrl)) {
             return new FileGenome(pathOrUrl);
@@ -33,7 +34,7 @@ public static class AssetGenome{
         throw new FileNotFoundException("File or Url not found", pathOrUrl);
     }
 
-}*/
+}
 
 
 

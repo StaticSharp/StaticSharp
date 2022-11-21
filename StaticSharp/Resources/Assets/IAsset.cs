@@ -9,8 +9,16 @@ using StaticSharp.Html;
 namespace StaticSharp.Gears;
 
 
+public interface IAsset {
+    public string FileExtension { get; }
+    public string ContentHash { get; }
+    public FilePath FilePath => new(ContentHash + FileExtension);
+    public string? CharSet { get; }
+}
 
-public class Asset {
+
+
+public class Asset : IAsset {
 
     public string FileExtension { get; init; }
     public string MediaType { get; init; }

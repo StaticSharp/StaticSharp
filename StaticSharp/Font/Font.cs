@@ -20,7 +20,13 @@ namespace StaticSharp {
     public record Font(
             FontFamily FontFamily,
             FontStyle FontStyle
-            ) : Gears.Genome<CacheableFont> {
+            ) : Genome<CacheableFont> {
+
+        public override async Task<CacheableFont> CreateAsync() {
+            var cacheableFontFamily = await FontFamily.CreateOrGetCached();
+            var fontFamilyMember = cacheableFontFamily.FindMember(FontStyle);
+            return new CacheableFont(FontFamily.Name, fontFamilyMember);
+        }
     }
 
 
@@ -53,19 +59,16 @@ namespace StaticSharp {
     
 
 
-    public class CacheableFont : Cacheable<Font>, ICacheable<Font> {
+    public class CacheableFont {
 
         public HashSet<char> usedChars = new();
-        private CacheableFontFamily cacheableFontFamily = null!;
+        private string fontFamilyName;
+        private FontFamilyMember fontFamilyMember;
 
-        private FontFamilyMember fontFamilyMember = null!;
-
-        protected override async Task CreateAsync() {
-            cacheableFontFamily = await Genome.FontFamily.CreateOrGetCached();
-            fontFamilyMember = cacheableFontFamily.FindMember(Genome.FontStyle);
+        public CacheableFont(string fontFamilyName, FontFamilyMember fontFamilyMember) {
+            this.fontFamilyName = fontFamilyName;
+            this.fontFamilyMember = fontFamilyMember;
         }
-
-
 
         public HashSet<char> AddChars(HashSet<char> chars) {
             
@@ -159,7 +162,7 @@ namespace StaticSharp {
             fontFamilyMember.Weight*/
             
 
-            var subfontCssUrl = GoogleFonts.MakeCssUrl(Genome.FontFamily.Name, fontFamilyMember.FontStyle, text);
+            var subfontCssUrl = GoogleFonts.MakeCssUrl(fontFamilyName, fontFamilyMember.FontStyle, text);
             var subFontCssRequest = await new HttpRequestGenome(GoogleFonts.MakeWoff2Request(subfontCssUrl)).CreateOrGetCached();
 
             var fontInfos = GoogleFonts.ParseCss(subFontCssRequest.ReadAllText());
@@ -175,7 +178,7 @@ namespace StaticSharp {
 
             var stringBuilder = new StringBuilder();
             stringBuilder.Append("@font-face {");
-            stringBuilder.Append("font-family: ").Append(Genome.FontFamily.Name).Append(";");
+            stringBuilder.Append("font-family: ").Append(fontFamilyName).Append(";");
             stringBuilder.Append("font-weight: ").Append((int)fontFamilyMember.FontStyle.Weight).Append(";");
             stringBuilder.Append("font-style: ").Append(fontStyle).Append(";");
             //stringBuilder.AppendLine($"src:local('{Arguments.Family} {Arguments.Weight}{italicSuffix}'),");

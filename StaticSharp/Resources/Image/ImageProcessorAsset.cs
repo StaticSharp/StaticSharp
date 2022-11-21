@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
 
-    public interface IImageProcessorGenome {
-        IGenome<Asset> Source { get; }
-    }
+
 
 
     public abstract record ImageProcessorGenome(Genome<Asset> Source) : Genome<Asset> {

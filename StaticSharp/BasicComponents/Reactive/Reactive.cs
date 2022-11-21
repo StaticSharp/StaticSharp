@@ -128,26 +128,26 @@ namespace StaticSharp {
                 }
             }
 
-            private async Task AddRequiredIncluesForType(Type type, Context context) {
+            private void AddRequiredIncluesForType(Type type, Context context) {
                 if (type != typeof(Reactive)) {
                     var baseType = type.BaseType;
                     if (baseType != null) {
-                        await AddRequiredIncluesForType(baseType, context);
+                        AddRequiredIncluesForType(baseType, context);
                     }
                 }
 
                 foreach (var i in type.GetCustomAttributes<RelatedScriptAttribute>(false)) {
-                    context.AddScript(await i.GetAssetAsync(type));
+                    context.AddScript(i.GetGenome(type));
                 }
                 foreach (var i in type.GetCustomAttributes<RelatedStyleAttribute>(false)) {
-                    context.AddStyle(await i.GetAssetAsync(type));
+                    context.AddStyle(i.GetGenome(type));
                 }
 
             }
 
-            protected virtual async Task AddRequiredInclues(Context context) {
+            protected virtual void AddRequiredInclues(Context context) {
                 var type = GetType();
-                await AddRequiredIncluesForType(type, context);
+                AddRequiredIncluesForType(type, context);
 
                 /*await context.AddScriptFromResource("ReactiveUtils.js");
                 await context.AddScriptFromResource("Math.js");

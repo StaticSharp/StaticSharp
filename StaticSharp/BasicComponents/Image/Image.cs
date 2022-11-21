@@ -29,7 +29,7 @@ namespace StaticSharp {
 
         protected override string TagName => "image-block";
 
-        protected IGenome<Asset> assetGenome;
+        protected Genome<Asset> assetGenome;
 
         public TEmbed Embed { get; set; } = TEmbed.Thumbnail;
 
@@ -38,7 +38,7 @@ namespace StaticSharp {
             : base(other, callerLineNumber, callerFilePath) {
             assetGenome = other.assetGenome;
         }
-        public Image(IGenome<Asset> assetGenome, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
+        public Image(Genome<Asset> assetGenome, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
             this.assetGenome = assetGenome;
         }
         
@@ -117,12 +117,14 @@ namespace StaticSharp {
 
             var pixel = imageColor.GetPixels().First().ToColor().ToHexString();*/
 
+            var thumbnailImageInfo = GetImageInfo(thumbnail);
+
             elementTag.Add(new Tag("content") {
                 new Tag("svg"){
                     Id = "thumbnail",
                     ["width"] = "100%",
                     ["height"] = "100%",
-                    ["viewBox"] = $"0 0 {thumbnail.Width} {thumbnail.Height}",
+                    ["viewBox"] = $"0 0 {thumbnailImageInfo.Width} {thumbnailImageInfo.Height}",
                     ["preserveAspectRatio"] = "none",
                     Style = {
                         ["overflow"] = "hidden",

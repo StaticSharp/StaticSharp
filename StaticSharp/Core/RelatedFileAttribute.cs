@@ -15,7 +15,7 @@ namespace StaticSharp.Gears {
         }
         //public abstract string Extension { get; }
 
-        public static async Task<Asset> GetAssetAsync(Type type, string filePathOrExtension, [CallerFilePath] string callerFilePath = "") {
+        public static Genome<Asset> GetGenome(Type type, string filePathOrExtension, [CallerFilePath] string callerFilePath = "") {
             var assembly = type.Assembly;
             var typeName = type.Name;
 
@@ -36,21 +36,21 @@ namespace StaticSharp.Gears {
 
 
             if (File.Exists(absoluteFilePath)) {
-                var result = await (new FileGenome(absoluteFilePath)).CreateOrGetCached();
+                var result = new FileGenome(absoluteFilePath);
                 return result;
 
             } else {
                 var relativeFilePath = AssemblyResourcesUtils.GetFilePathRelativeToProject(assembly, absoluteFilePath);
                 var relativeResourcePath = AssemblyResourcesUtils.GetResourcePath(relativeFilePath);
 
-                var result = await (new AssemblyResourceGenome(assembly, relativeResourcePath)).CreateOrGetCached();
+                var result = new AssemblyResourceGenome(assembly, relativeResourcePath);
                 return result;
 
             }
         }
 
-        public virtual async Task<Asset> GetAssetAsync(Type type) {
-            return await GetAssetAsync(type, FilePathOrExtension, CallerFilePath);
+        public virtual Genome<Asset> GetGenome(Type type) {
+            return GetGenome(type, FilePathOrExtension, CallerFilePath);
         }
 
     }

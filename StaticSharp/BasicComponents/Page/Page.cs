@@ -70,13 +70,13 @@ namespace StaticSharp {
             FontStyle = new FontStyle(FontWeight.Regular);
         }
 
-        protected override async Task AddRequiredInclues(Context context) {
+        protected override void AddRequiredInclues(Context context) {
 
-            await base.AddRequiredInclues(context);
+            base.AddRequiredInclues(context);
 
             if (context.DeveloperMode) {
-                var asset = await RelatedFileAttribute.GetAssetAsync(typeof(Page), "../Watch.js");
-                context.AddScript(asset);
+                var genome = RelatedFileAttribute.GetGenome(typeof(Page), "../Watch.js");
+                context.AddScript(genome);
             }
             
         }
@@ -165,8 +165,8 @@ namespace StaticSharp {
 
 
 
-            head.Add(context.GenerateScript());
-            head.Add(context.GenerateStyle());
+            head.Add(await context.GenerateScriptAsync());
+            head.Add(await context.GenerateStyleAsync());
             head.Add(await context.GenerateFontsAsync());
 
             return document.GetHtml();

@@ -2,7 +2,9 @@
 
 using StaticSharp.Gears;
 using StaticSharp.Tree;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -48,7 +50,9 @@ public class Generator<NodeType> where NodeType : ProtoNode<NodeType> {
     protected async Task GetnerateAndSave(Node node, Context context) {
         var page = node.Representative;
         if (page == null) return;
+        var s = Stopwatch.StartNew();
         var html = await page.GeneratePageHtmlAsync(context);
+        Console.WriteLine(s.ElapsedMilliseconds);
 
         var path = NodeToFilePath(node);
         var directory = path.WithoutLast;
@@ -60,7 +64,12 @@ public class Generator<NodeType> where NodeType : ProtoNode<NodeType> {
     public virtual async Task GenerateAsync(NodeType root) {
         var nodes = GetAllNodes(root);
         var assets = new Assets();
-        await Task.WhenAll(nodes.Select(node => GetnerateAndSave(node, CreateContext(node, assets))));
+
+        foreach (var i in nodes) {
+            await GetnerateAndSave(i, CreateContext(i, assets));
+        }
+
+        //await Task.WhenAll(nodes.Select(node => GetnerateAndSave(node, CreateContext(node, assets))));
         await assets.StoreAsync(BaseDirectory+"Assets");
     }
 

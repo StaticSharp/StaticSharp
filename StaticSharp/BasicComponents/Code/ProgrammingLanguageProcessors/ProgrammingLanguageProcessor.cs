@@ -13,21 +13,21 @@ namespace StaticSharp {
             var source = await Source.CreateOrGetCached();
 
             var language = ProgrammingLanguageProcessor.FindByName(source.FileExtension);
-            var content = source.ReadAllText();
+            string content = source.ReadAllText();
             content = language.GetRegion(content, RegionName);
 
             return new Asset(
-                ContentFilePath,
+                ()=> Encoding.UTF8.GetBytes(content),
                 source.FileExtension,
                 source.MediaType,
                 Hash.CreateFromString(content).ToString(),
-                source.CharSet,
-                )
+                source.CharSet
+                );
 
         }
     }
 
-    namespace Gears {
+    /*namespace Gears {
         public class CodeRegionAsset : Cacheable<CodeRegionGenome>, Asset {
 
             public class Data {
@@ -62,7 +62,7 @@ namespace StaticSharp {
                 return Content;
             }
         }
-    }
+    }*/
 }
 
 

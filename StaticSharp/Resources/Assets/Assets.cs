@@ -16,12 +16,13 @@ public class Assets {
     public async Task AddAsync(Asset asset) {
         using (await Cache.AsyncLock.LockAsync()) {
 
-            if (assets.TryGetValue(asset.Key, out var existingAsset)) {
-                if (existingAsset.ContentHash == asset.ContentHash) {
+            if (!assets.TryGetValue(asset.ContentHash, out var existingAsset)) {
+                assets[asset.ContentHash] = asset;
+                /*if (existingAsset.ContentHash == asset.ContentHash) {
                     return;
-                }
+                }*/
             }
-            assets[asset.Key] = asset;
+            
         }
     }
 
