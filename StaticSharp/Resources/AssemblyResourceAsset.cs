@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 
 namespace StaticSharp {
-    public record AssemblyResourceGenome(Assembly Assembly, string Path) : Genome<Asset> {
-        public override Task<Asset> CreateAsync() {
+    public record AssemblyResourceGenome(Assembly Assembly, string Path) : Genome<IAsset> {
+        public override Task<IAsset> CreateAsync() {
             /*if (!LoadData<Data>(out var data)) {
                 data.ContentHash = Hash.CreateFromBytes(ReadAllBites()).ToString();
                 CreateCacheSubDirectory();
@@ -17,7 +17,21 @@ namespace StaticSharp {
             }
             ContentHash = data.ContentHash;*/
 
-            var extension = System.IO.Path.GetExtension(Path);
+            var resourcePath = Assembly.GetName().Name + "." + Path;
+            using var stream = Assembly.GetManifestResourceStream(resourcePath);
+            //throw
+
+            using (var memoryStream = new MemoryStream()) {
+                stream.CopyTo(memoryStream);
+                var result = new AssemblyResourceAsset(memoryStream.ToArray(), Path);
+
+                return Task.FromResult<IAsset>(result);
+            }
+
+
+
+           /* var extension = System.IO.Path.GetExtension(Path);
+
 
             return Task.FromResult(new Asset(
                 () => {
@@ -32,8 +46,45 @@ namespace StaticSharp {
                 },
                 extension,
                 MimeTypeMap.GetMimeType(extension)
-                ));
+                ));*/
         }
+
+        public class AssemblyResourceAsset : AssetSync {
+            public string Path { get; }
+
+            byte[] data;
+
+            string? contentHash = null;
+            public AssemblyResourceAsset(byte[] data, string path) {
+                this.data = data;
+                Path = path;
+            }
+            public override string GetFileExtension() => System.IO.Path.GetExtension(Path);
+
+            public override string GetMediaType() {
+                return MimeTypeMap.GetMimeType(GetFileExtension());
+            }
+            public override string GetContentHash() {
+                if (contentHash == null) {
+                    contentHash = Hash.CreateFromBytes(GetBytes()).ToString();
+                }
+                return contentHash;
+            }
+            public override byte[] GetBytes() => data;            
+            public override string GetText() {
+                using (MemoryStream memoryStream = new(GetBytes())) {
+                    using (StreamReader streamReader = new StreamReader(memoryStream, true)) {
+                        var text = streamReader.ReadToEnd();
+                        return text;
+                    }
+                }
+            }
+            public override FilePath GetTargetFilePath() {
+                return new(GetContentHash() + GetFileExtension());
+            }
+        }
+
+
     }
 
     //Instead of inheritance from CacheableHttpRequest, it is better to use aggregation

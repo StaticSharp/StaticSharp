@@ -4,21 +4,47 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+using MimeTypes;
 using StaticSharp.Html;
 
 namespace StaticSharp.Gears;
 
 
+
 public interface IAsset {
-    public string FileExtension { get; }
-    public string ContentHash { get; }
-    public FilePath FilePath => new(ContentHash + FileExtension);
-    public string? CharSet { get; }
+    public Task<string> GetFileExtensionAsync();/* {
+        return MimeTypeMap.GetExtension(await GetMediaType());
+    }*/
+    public Task<string> GetMediaTypeAsync();/* {
+        return MimeTypeMap.GetMimeType(await GetFileExtension());
+    }*/
+    public Task<string> GetContentHashAsync();
+    public Task<FilePath> GetTargetFilePathAsync();
+    public Task<byte[]> GetBytesAsync();
+    public Task<string> GetTextAsync();
+}
+
+
+public abstract class AssetSync: IAsset {
+    public Task<string> GetFileExtensionAsync() => Task.FromResult(GetFileExtension());
+    public abstract string GetFileExtension();
+    public Task<string> GetMediaTypeAsync() => Task.FromResult(GetFileExtension());
+    public abstract string GetMediaType();
+    public Task<string> GetContentHashAsync() => Task.FromResult(GetContentHash());
+    public abstract string GetContentHash();
+    public Task<FilePath> GetTargetFilePathAsync() => Task.FromResult(GetTargetFilePath());
+    public abstract FilePath GetTargetFilePath();
+    public Task<byte[]> GetBytesAsync() => Task.FromResult(GetBytes());
+    public abstract byte[] GetBytes();
+    public Task<string> GetTextAsync() => Task.FromResult(GetText());
+    public abstract string GetText();
 }
 
 
 
-public class Asset : IAsset {
+
+public class Asset {
+
 
     public string FileExtension { get; init; }
     public string MediaType { get; init; }

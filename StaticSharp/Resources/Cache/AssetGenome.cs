@@ -18,7 +18,7 @@ public abstract record AssetGenome<TFinalGenome, TCacheable> : Genome<TFinalGeno
 }*/
 
 public static class AssetGenome{
-    public static Genome<Asset> GenomeFromPathOrUrl(string pathOrUrl, string callerFilePath) {
+    public static Genome<IAsset> GenomeFromPathOrUrl(string pathOrUrl, string callerFilePath) {
         
         if (File.Exists(pathOrUrl)) {
             return new FileGenome(pathOrUrl);

@@ -7,11 +7,18 @@ namespace StaticSharp {
     public struct FilePath: IEnumerable<string>, IEquatable<FilePath> {
         public string[] Items { get; init; }
 
+
         public FilePath(params string[] items) {
             Items = items;
         }
         public FilePath(IEnumerable<string> items) {
             Items = items.ToArray();
+        }
+
+        public static implicit operator bool(FilePath value) {
+            if (value.Items==null)
+                return false;
+            return value.Items.Length > 0; 
         }
 
         public static FilePath operator + (FilePath a, IEnumerable<string> b) {
@@ -38,7 +45,7 @@ namespace StaticSharp {
             return ((IEnumerable<string>)Items).GetEnumerator();
         }
         IEnumerator IEnumerable.GetEnumerator() {
-            return Items.GetEnumerator();
+            return GetEnumerator();
         }
 
         

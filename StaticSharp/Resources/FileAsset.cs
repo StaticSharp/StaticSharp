@@ -2,6 +2,7 @@
 using StaticSharp.Gears;
 using System;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 
@@ -11,8 +12,7 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    public record FileGenome(string Path) : Genome<Asset> {
-
+    public record FileGenome(string Path) : Genome<IAsset> {
         class Data {
             public DateTime LastWriteTime;
             public string ContentHash = null!;
@@ -21,35 +21,76 @@ namespace StaticSharp {
         private DateTime GetLastWriteTime() {
             return File.GetLastWriteTimeUtc(Path);
         }
-
-        public override Task<Asset> CreateAsync() {
-            Func<byte[]> contentCreator;
+        public override Task<IAsset> CreateAsync() {
+            var result = new FileAsset(Path);
 
             if (!LoadData<Data>(out var data)) {
-                var content = FileUtils.ReadAllBytes(Path);
-                contentCreator = () => content;
-
-                data.LastWriteTime = GetLastWriteTime();
-                data.ContentHash = Hash.CreateFromBytes(content).ToString();
-
+                result.LastWriteTime = data.LastWriteTime = GetLastWriteTime();
+                data.ContentHash = result.GetContentHash();
                 CreateCacheSubDirectory();
                 StoreData(data);
             } else {
-                contentCreator = () => FileUtils.ReadAllBytes(Path);
+                var lastWriteTime = GetLastWriteTime();
+                result.LastWriteTime = lastWriteTime;
+                if (lastWriteTime == data.LastWriteTime) {
+                    result.SetContentHash(data.ContentHash);
+                }
             }
-
-            var extension = System.IO.Path.GetExtension(Path);
-            var result = new Asset(
-                contentCreator,
-                extension,
-                MimeTypeMap.GetMimeType(extension),
-                data.ContentHash
-                );
-
-            result.ContentValidator = () => Task.FromResult(GetLastWriteTime() == data.LastWriteTime);
-
-            return Task.FromResult(result);
+            return Task.FromResult<IAsset>(result);
         }
+
+        public class FileAsset : AssetSync {
+
+            public string Path { get; }
+            public FilePath TargetPath { set; private get; }
+
+            public DateTime LastWriteTime { get; set; }
+            
+
+            byte[]? data = null;
+
+            string? contentHash = null;
+            public FileAsset(string path) {
+                Path = path;                
+            }
+            public override string GetFileExtension() => System.IO.Path.GetExtension(Path);
+            public override string GetMediaType() {
+                return MimeTypeMap.GetMimeType(GetFileExtension());
+            }
+            public void SetContentHash(string value) {
+                contentHash = value;
+            }
+            public override string GetContentHash() {                
+                if (contentHash == null) {
+                    contentHash = Hash.CreateFromBytes(GetBytes()).ToString();
+                }
+                return contentHash;
+            }
+            public override byte[] GetBytes() {
+                if (data == null) {
+                    using (var fileStream = new FileStream(Path, FileMode.Open, FileAccess.Read)) {
+                        data = new byte[fileStream.Length];
+                        fileStream.Read(data, 0, data.Length);
+                    }
+                }
+                return data;
+            }
+            public override string GetText() {
+                using (MemoryStream memoryStream = new(GetBytes())) {
+                    using (StreamReader streamReader = new StreamReader(memoryStream, true)) {
+                        var text = streamReader.ReadToEnd();
+                        return text;
+                    }
+                }
+            }
+            public override FilePath GetTargetFilePath() {
+                if (TargetPath)
+                    return TargetPath;
+                return new(GetContentHash() + GetFileExtension());
+            }
+        }
+
+
     }
 
     /*namespace Gears {

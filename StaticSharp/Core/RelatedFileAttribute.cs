@@ -15,7 +15,7 @@ namespace StaticSharp.Gears {
         }
         //public abstract string Extension { get; }
 
-        public static Genome<Asset> GetGenome(Type type, string filePathOrExtension, [CallerFilePath] string callerFilePath = "") {
+        public static Genome<IAsset> GetGenome(Type type, string filePathOrExtension, [CallerFilePath] string callerFilePath = "") {
             var assembly = type.Assembly;
             var typeName = type.Name;
 
@@ -49,7 +49,7 @@ namespace StaticSharp.Gears {
             }
         }
 
-        public virtual Genome<Asset> GetGenome(Type type) {
+        public virtual Genome<IAsset> GetGenome(Type type) {
             return GetGenome(type, FilePathOrExtension, CallerFilePath);
         }
 
