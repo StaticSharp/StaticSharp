@@ -1,27 +1,52 @@
 ﻿using MimeTypes;
-using StaticSharp.Gears;
 using System.IO;
 using System.Threading.Tasks;
 using YoutubeExplode;
 
 namespace StaticSharp {
 
+    namespace Gears {
 
-    public record YoutubeVideoGenome(YoutubeVideoManifestItem ManifestItem) : Genome<Asset> {
-        public override async Task<Asset> CreateAsync() {
-            if (!File.Exists(ContentFilePath)) {
-                var youtubeClient = new YoutubeClient();
-                CreateCacheSubDirectory();
-                await youtubeClient.Videos.Streams.DownloadAsync(ManifestItem, ContentFilePath);
+        public class YoutubeVideoAsset : IAsset {
+            YoutubeVideoManifestItem manifestItem;
+            byte[]? data;
+            public YoutubeVideoAsset(YoutubeVideoManifestItem manifestItem) {
+                this.manifestItem = manifestItem;
             }
-            string fileExtension = "." + ManifestItem.Container;
-            return new Asset(
-                () => File.ReadAllBytes(ContentFilePath),
-                fileExtension,
-                MimeTypeMap.GetMimeType(fileExtension),
-                Hash.CreateFromString(ManifestItem.Url).ToString()
-                );
+
+            public async Task<byte[]> GetBytesAsync() {
+                if (data == null) {
+                    var youtubeClient = new YoutubeClient();
+                    var stream = await youtubeClient.Videos.Streams.GetAsync(manifestItem);
+                    using (MemoryStream memoryStream = new MemoryStream()) {
+                        stream.CopyTo(memoryStream);
+                        data = memoryStream.ToArray();
+                    }
+                }
+                return data;
+            }
+
+            public Task<string> GetContentHashAsync() => Task.FromResult(GetContentHash(manifestItem));
+
+            public static string GetContentHash(YoutubeVideoManifestItem manifestItem) => Hash.CreateFromString(manifestItem.Url).ToString();
+
+            public Task<string> GetFileExtensionAsync() => Task.FromResult(GetFileExtension(manifestItem));
+
+            public static string GetFileExtension(YoutubeVideoManifestItem manifestItem) => "." + manifestItem.Container;
+
+            public Task<string> GetMediaTypeAsync() => Task.FromResult(GetMediaType(manifestItem));
+
+            public static string GetMediaType(YoutubeVideoManifestItem manifestItem) => MimeTypeMap.GetMimeType(GetFileExtension(manifestItem));
+
+            public Task<string> GetTextAsync() {
+                throw new System.NotImplementedException();
+            }
+
+
+
+
         }
+
     }
 
 

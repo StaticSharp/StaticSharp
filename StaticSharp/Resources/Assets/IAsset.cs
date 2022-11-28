@@ -19,7 +19,7 @@ public interface IAsset {
         return MimeTypeMap.GetMimeType(await GetFileExtension());
     }*/
     public Task<string> GetContentHashAsync();
-    public Task<FilePath> GetTargetFilePathAsync();
+
     public Task<byte[]> GetBytesAsync();
     public Task<string> GetTextAsync();
 }
@@ -27,19 +27,59 @@ public interface IAsset {
 
 public abstract class AssetSync: IAsset {
     public Task<string> GetFileExtensionAsync() => Task.FromResult(GetFileExtension());
-    public abstract string GetFileExtension();
     public Task<string> GetMediaTypeAsync() => Task.FromResult(GetFileExtension());
-    public abstract string GetMediaType();
     public Task<string> GetContentHashAsync() => Task.FromResult(GetContentHash());
-    public abstract string GetContentHash();
-    public Task<FilePath> GetTargetFilePathAsync() => Task.FromResult(GetTargetFilePath());
-    public abstract FilePath GetTargetFilePath();
     public Task<byte[]> GetBytesAsync() => Task.FromResult(GetBytes());
-    public abstract byte[] GetBytes();
     public Task<string> GetTextAsync() => Task.FromResult(GetText());
+
+    public abstract string GetFileExtension();    
+    public abstract string GetMediaType();    
+    public abstract string GetContentHash();    
+    public abstract byte[] GetBytes();    
     public abstract string GetText();
 }
 
+
+
+public static class AssetExtension {
+
+    public static async Task<FilePath> GetTargetFilePathAsync(this IAsset asset) {
+        return new(await asset.GetContentHashAsync() + await asset.GetFileExtensionAsync());
+    }
+
+
+    public static async Task<string> GetDataUrlBase64Async(this IAsset asset) {
+
+        /*var text = ReadAllText();
+        return $"data:{MediaType};utf8,{text}";*/
+
+        var base64 = Convert.ToBase64String(await asset.GetBytesAsync());
+        return $"data:{await asset.GetMediaTypeAsync()};base64,{base64}";
+    }
+
+    public static async Task<string> GetDataUrlXmlAsync(this IAsset asset) {
+        var text = await asset.GetTextAsync();
+
+        var document = XDocument.Parse(text);
+
+        //var svgElement = document.Elements().FirstOrDefault(x => x.Name.LocalName == "svg");
+
+        using (StringWriter stringWriter = new StringWriter()) {
+            using (XmlTextWriter xmlTextWriter = new XmlTextWriter(stringWriter)) {
+                xmlTextWriter.Formatting = Formatting.None;
+                xmlTextWriter.QuoteChar = '\'';
+                //writer.Settings.
+                document.WriteTo(xmlTextWriter);
+                xmlTextWriter.Flush();
+            }
+            text = stringWriter.ToString();
+        }
+
+        text = text.PercentageEncode(new char[] { '#', '%', '"' });
+
+        return $"data:{await asset.GetMediaTypeAsync()};utf8,{text}";
+    }
+}
 
 
 
@@ -89,37 +129,7 @@ public class Asset {
 
     public FilePath FilePath => new(ContentHash + FileExtension);
 
-    public string GetDataUrlBase64() {
-
-        /*var text = ReadAllText();
-        return $"data:{MediaType};utf8,{text}";*/
-
-        var base64 = Convert.ToBase64String(ReadAllBites());
-        return $"data:{MediaType};base64,{base64}";
-    }
-
-    public string GetDataUrlXml() {
-        var text = ReadAllText();
-
-        var document = XDocument.Parse(text);
-
-        //var svgElement = document.Elements().FirstOrDefault(x => x.Name.LocalName == "svg");
-        
-        using (StringWriter stringWriter = new StringWriter()) {
-            using (XmlTextWriter xmlTextWriter = new XmlTextWriter(stringWriter)) {
-                xmlTextWriter.Formatting = Formatting.None;
-                xmlTextWriter.QuoteChar = '\'';
-                //writer.Settings.
-                document.WriteTo(xmlTextWriter);
-                xmlTextWriter.Flush();
-            }
-            text = stringWriter.ToString();
-        }
-
-        text = text.PercentageEncode(new char[] {'#','%','"'});
-
-        return $"data:{MediaType};utf8,{text}";
-    }
+    
 
 }
 

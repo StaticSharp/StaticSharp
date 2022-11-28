@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Globalization;
+using System.IO;
 using System.Runtime.CompilerServices;
 
 
@@ -7,6 +8,13 @@ namespace StaticSharp {
 
 namespace StaticSharp {
     public static partial class Static {
+
+        public static string ToInvariant(this float value) {
+            return value.ToString(CultureInfo.InvariantCulture);
+        }
+        public static string ToInvariant(this double value) {
+            return value.ToString(CultureInfo.InvariantCulture);
+        }
 
         public static string ThisFileName([CallerFilePath] string callerFilePath = "") {
             return callerFilePath;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace StaticSharp {
-    public struct FilePath: IEnumerable<string>, IEquatable<FilePath> {
+    public class FilePath: IEnumerable<string>, IEquatable<FilePath> {
         public string[] Items { get; init; }
 
 
@@ -15,7 +15,10 @@ namespace StaticSharp {
             Items = items.ToArray();
         }
 
-        public static implicit operator bool(FilePath value) {
+        public static implicit operator bool(FilePath? value) {
+            if (value==null)
+                return false;
+
             if (value.Items==null)
                 return false;
             return value.Items.Length > 0; 
@@ -94,10 +97,14 @@ namespace StaticSharp {
         }
 
 
-        public static bool operator ==(FilePath a, FilePath b) {
+        public static bool operator ==(FilePath? a, FilePath? b) {
+            if (a is null && b is null)
+                return true;
+            if (a is null || b is null)
+                return false;
             return a.Equals(b);
         }
-        public static bool operator !=(FilePath a, FilePath b) {
+        public static bool operator !=(FilePath? a, FilePath? b) {
             return !a.Equals(b);
         }
 

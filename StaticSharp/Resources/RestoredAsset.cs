@@ -1,70 +1,64 @@
-﻿using ImageMagick;
-using StaticSharp.Gears;
-using System;
-using System.IO;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace StaticSharp {
 
-
-
-
-
-    public abstract record ImageProcessorGenome(Genome<Asset> Source) : Genome<Asset> {
-
-        class Data {
-            public string ContentHash = null!;
-            public string SourceHash = null!;
-            public string MimeType = null!;
-            //public int Width;
-            //public int Height;
-        };
-
-        public override async Task<Asset> CreateAsync() {
-            Data data;
-            Func<byte[]> contentCreator;
-            if (!LoadData(out data)) {
-                //CachedData = new();
-
-                var source = await Source.CreateOrGetCached();
-                data.SourceHash = source.ContentHash;
-
-                var image = new MagickImage(source.ReadAllBites());
-
-                image = await Process(image);
-
-                //data.Width = image.Width;
-                //data.Height = image.Height;
-
-                CreateCacheSubDirectory();
-                
-                data.MimeType = image.FormatInfo?.MimeType ?? source.MediaType;
-
-                var content = image.ToByteArray();
-                File.WriteAllBytes(ContentFilePath, content); //TODO: mb async?
-                data.ContentHash = Hash.CreateFromBytes(content).ToString();
-                contentCreator = () => content;
-                StoreData(data);
-            } else {
-                contentCreator = ()=>FileUtils.ReadAllBytes(ContentFilePath);
-            }
-
-            return new Asset(
-                contentCreator,
-                MimeTypes.MimeTypeMap.GetExtension(data.MimeType),
-                data.MimeType,
-                data.ContentHash
-                );
-        }
-
-        protected abstract Task<MagickImage> Process(MagickImage image);
-
-
-    }
-
     namespace Gears {
 
-        
+
+        public class TextAsset : AssetSync {
+
+            string extension;
+            string mediaType;
+            string? contentHash;
+            string text;
+
+            public TextAsset(string text, string extension, string mediaType, string? contentHash = null) {
+                this.extension = extension;
+                this.text = text;
+                this.mediaType = mediaType;
+                this.contentHash = contentHash;
+            }
+
+            public override string GetFileExtension() => extension;
+            public override string GetMediaType() => mediaType;
+            public override string GetContentHash() {
+                if (contentHash == null) {
+                    contentHash = Hash.CreateFromString(text).ToString();
+                }
+                return contentHash;
+            }
+            public override byte[] GetBytes() => Encoding.UTF8.GetBytes(text);
+            public override string GetText() => text;
+
+        }
+
+
+
+        public class RestoredAsset : AssetSync {
+
+            string extension;
+            string mediaType;
+            string contentHash;
+
+            byte[] data;
+
+            public RestoredAsset(string extension, string mediaType, string contentHash, byte[] data) {
+                this.extension = extension;
+                this.data = data;
+                this.mediaType = mediaType;
+                this.contentHash = contentHash;
+            }
+
+            public override string GetFileExtension() => extension;
+            public override string GetMediaType() => mediaType;
+            public override string GetContentHash() => contentHash;
+            public override byte[] GetBytes() => data;
+            public override string GetText() => Encoding.UTF8.GetString(data);
+
+        }
+
+
+
 
         /*public abstract class ImageProcessorAsset<TGenome> : ImageAsset<TGenome>, IMutableAsset
             where TGenome : class, IKeyProvider, IImageProcessorGenome {

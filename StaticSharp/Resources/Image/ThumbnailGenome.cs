@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    public record ThumbnailGenome(Genome<Asset> Source) : ImageProcessorGenome(Source) {
+    public record ThumbnailGenome(Genome<IAsset> Source) : ImageProcessorGenome(Source) {
         protected override Task<MagickImage> Process(MagickImage image) {
             var size = 32;
             var maxDimension = Math.Max(image.Width, image.Height);

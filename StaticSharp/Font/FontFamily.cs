@@ -23,7 +23,7 @@ namespace StaticSharp {
 
             var result = new CacheableFontFamily();
 
-            var fontInfos = GoogleFonts.ParseCss(fullCssRequest.ReadAllText());
+            var fontInfos = GoogleFonts.ParseCss(await fullCssRequest.GetTextAsync());
             foreach (var i in fontInfos) {
                 var italicSubset = result.Members[i.Italic ? 1 : 0];
                 var existing = italicSubset.Find(x => x.FontStyle.Weight == (FontWeight)i.Weight);

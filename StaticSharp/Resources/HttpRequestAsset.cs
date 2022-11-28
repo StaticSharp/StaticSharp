@@ -12,18 +12,13 @@ namespace StaticSharp {
 
     public record HttpRequestGenome(HttpRequestMessage HttpRequestMessage) : Genome<IAsset> {
         public HttpRequestGenome(string uri) : this(new Uri(uri)) { }
-        public HttpRequestGenome(Uri uri) : this(new HttpRequestMessage(HttpMethod.Get, uri) {
-
-        }) {}
+        public HttpRequestGenome(Uri uri) : this(new HttpRequestMessage(HttpMethod.Get, uri)) {}
 
         class Data {
             public string? CharSet;
             public string MediaType = null!;
             public string ContentHash = null!;
-            //public string Extension = null!;
         };
-
-
 
         private async Task SaveDataAsync(HttpRequestAsset asset) {
             Data data = new();
@@ -38,18 +33,14 @@ namespace StaticSharp {
 
         public override async Task<IAsset> CreateAsync() {
             Data data;
-            Func<byte[]> contentCreator = null!;
+
 
             var path = HttpRequestMessage.RequestUri?.AbsolutePath;
             var extension = Path.GetExtension(path);
 
-
             if (!LoadData(out data)) {
-                var httpResponseMessageTask = HttpClientStatic.Instance.SendAsync(HttpRequestMessage);
-
-                var successTask = httpResponseMessageTask.ContinueWith(x=>x.Result.IsSuccessStatusCode);
-
-
+                //var httpResponseMessageTask = HttpClientStatic.Instance.SendAsync(HttpRequestMessage);
+                //var successTask = httpResponseMessageTask.ContinueWith(x=>x.Result.IsSuccessStatusCode);
 
                 /*if (!httpResponseMessage.IsSuccessStatusCode) {
                     throw new Exception($"Failed to get {HttpRequestMessage.RequestUri} with code {httpResponseMessage.StatusCode}");
@@ -59,98 +50,65 @@ namespace StaticSharp {
                 }*/
 
                 var result = new HttpRequestAsset(
-                    extension,
+                    HttpRequestMessage
+                    /*extension,
                     successTask,
                     httpResponseMessageTask.ContinueWith(x => x.Result.Content.ReadAsByteArrayAsync()).ContinueWith(x => x.Result.Result),
                     httpResponseMessageTask.ContinueWith(x => x.Result.Content.Headers.ContentType?.MediaType),
                     httpResponseMessageTask.ContinueWith(x => x.Result.Content.Headers.ContentType?.CharSet),
-                    null
+                    null*/
                     );
 
                 _ = SaveDataAsync(result);
 
                 return result;
 
-
-                /*data.CharSet = (httpResponseMessage.Content.Headers.ContentType?.CharSet);
-
-                var mediaType = httpResponseMessage.Content.Headers.ContentType?.MediaType;
-                var path = HttpRequestMessage.RequestUri?.AbsolutePath;
-                var extension = Path.GetExtension(path);
-                if (string.IsNullOrEmpty(extension))
-                    extension = null;
-
-                if (mediaType != null) {
-                    if (extension == null) {
-                        extension = MimeTypeMap.GetExtension(mediaType, false);
-                    }
-                } else {
-                    mediaType = MimeTypeMap.GetMimeType(extension);
-                }
-
-                if (extension == null) {
-                    extension = ".unknown";
-                }
-
-                data.MediaType = mediaType;
-                data.Extension = extension;
-
-                CreateCacheSubDirectory();
-
-                var content = await httpResponseMessage.Content.ReadAsByteArrayAsync();
-                contentCreator = () => content;
-
-                data.ContentHash = Hash.CreateFromBytes(content).ToString();
-                await FileUtils.WriteAllBytesAsync(ContentFilePath, content);
-                StoreData(data);*/
-
             } else {
 
-                var result = new HttpRequestAsset(
+                return new RestoredAsset(
                     extension,
-                    Task.FromResult(true),
-                    Task.FromResult(FileUtils.ReadAllBytes(ContentFilePath)),
-                    Task.FromResult<string?>(data.MediaType),
-                    Task.FromResult(data.CharSet),
-                    data.ContentHash
+                    data.MediaType,
+                    data.ContentHash,
+                    FileUtils.ReadAllBytes(ContentFilePath)
                     );
-
-
-                //contentCreator = ()=> FileUtils.ReadAllBytes(ContentFilePath);
             }
-
-            /*return new Asset(
-                contentCreator,
-                data.Extension,
-                data.MediaType,
-                data.ContentHash,
-                data.CharSet
-                );*/
         }
 
         public class HttpRequestAsset : IAsset {
 
-            string? extension;
+            /*string? extension;
             Task<bool> successTask;
             Task<byte[]> dataTask;
             Task<string?> mediaTypeTask;
-            Task<string?> charSetTask;
-            string? contentHash;
-            public HttpRequestAsset(string? extension, Task<bool> successTask, Task<byte[]> dataTask, Task<string?> mediaTypeTask, Task<string?> charSetTask, string? contentHash) {
+            Task<string?> charSetTask;*/
+
+            string? contentHash = null;
+
+
+            HttpRequestMessage httpRequestMessage;
+            Task<HttpResponseMessage> httpResponseMessageTask;
+
+            public HttpRequestAsset(HttpRequestMessage httpRequestMessage) {
+                this.httpRequestMessage = httpRequestMessage;
+                httpResponseMessageTask = HttpClientStatic.Instance.SendAsync(httpRequestMessage);
+            }
+
+            /*public HttpRequestAsset(string? extension, Task<bool> successTask, Task<byte[]> dataTask, Task<string?> mediaTypeTask, Task<string?> charSetTask, string? contentHash) {
                 this.successTask = successTask;
                 this.extension = extension;
                 this.dataTask = dataTask;
                 this.mediaTypeTask = mediaTypeTask;
                 this.charSetTask = charSetTask;
                 this.contentHash = contentHash;
-            }
+            }*/
 
             public async Task<string?> GetCharSetAsync() {
-                return await charSetTask;
+                return (await httpResponseMessageTask).Content.Headers.ContentType?.CharSet;
+                //return await charSetTask;
             }
 
-            public Task<byte[]> GetBytesAsync() {
-                return dataTask;
+            public async Task<byte[]> GetBytesAsync() {
+                return await (await httpResponseMessageTask).Content.ReadAsByteArrayAsync();
             }
 
             public async Task<string> GetContentHashAsync() {
@@ -160,11 +118,26 @@ namespace StaticSharp {
                 return contentHash;
             }
 
+
+            private string? RawExtension() {
+                var path = httpRequestMessage.RequestUri?.AbsolutePath;
+                var extension = Path.GetExtension(path);
+                return extension;
+            }
+
+            private async Task<string?> RawMediaTypeAsync() {
+                var mediaType = (await httpResponseMessageTask).Content.Headers.ContentType?.MediaType;
+                return mediaType;
+            }
+
+
             public async Task<string> GetFileExtensionAsync() {
+                var extension = RawExtension();
+
                 if (extension != null)
                     return extension;
 
-                var mediaType = await mediaTypeTask;
+                var mediaType = await RawMediaTypeAsync();
                 if (mediaType != null) {
                     return MimeTypeMap.GetExtension(mediaType);
                 }
@@ -173,10 +146,11 @@ namespace StaticSharp {
             }
 
             public async Task<string> GetMediaTypeAsync() {
-                var mediaType = await mediaTypeTask;
+                var mediaType = await RawMediaTypeAsync();
                 if (mediaType != null) {
                     return mediaType;
                 }
+                var extension = RawExtension();
                 if (extension != null) {
                     mediaType = MimeTypeMap.GetMimeType(extension);
                     if (mediaType != null) {
@@ -192,7 +166,7 @@ namespace StaticSharp {
 
             public async Task<string> GetTextAsync() {
                 using (MemoryStream memoryStream = new(await GetBytesAsync())) {
-                    var charSet = await charSetTask;
+                    var charSet = await GetCharSetAsync();
                     Encoding encoding = charSet!=null ? Encoding.GetEncoding(charSet) : Encoding.UTF8;
 
                     using (StreamReader streamReader = new StreamReader(memoryStream, encoding, true)) {
@@ -222,49 +196,6 @@ namespace StaticSharp {
                     );
             }
         }
-
-
-
-       /* public class HttpRequestAsset : CacheableToFile<HttpRequestGenome>, Asset {
-
-            class Data {
-                public string? CharSet;
-                public string MediaType = null!;
-                public string ContentHash = null!;
-                public string Extension = null!;
-            };
-
-
-            public static readonly string DefaultMediaType = "application/octet-stream";
-
-            private Data data = null!;
-            public override string? CharSet  => data.CharSet;
-            public string MediaType => data.MediaType!=null ? data.MediaType : DefaultMediaType;            
-            public string ContentHash => data.ContentHash;
-            public string FileExtension => data.Extension;
-
-            protected override void SetGenome(HttpRequestGenome arguments) {
-                base.SetGenome(arguments);
-
-                var uri = Genome.HttpRequestMessage.RequestUri;
-                if (uri == null) {
-                    throw new ArgumentException("HttpRequestMessage.RequestUri");
-                }
-            }
-
-            protected override async Task CreateAsync() {
-
-
-                
-
-
-
-            }
-
-            
-            
-        }*/
-
     }
 }
 

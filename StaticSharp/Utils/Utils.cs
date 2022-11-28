@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,10 @@ using System.Threading.Tasks;
 
 namespace StaticSharp.Utils {
     public static class Utils {
+
+
+        
+
 
         /// <summary>
         /// Convert size in bytes to human-readable string

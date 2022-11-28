@@ -29,7 +29,7 @@ namespace StaticSharp {
 
         protected override string TagName => "image-block";
 
-        protected Genome<Asset> assetGenome;
+        protected Genome<IAsset> assetGenome;
 
         public TEmbed Embed { get; set; } = TEmbed.Thumbnail;
 
@@ -38,7 +38,7 @@ namespace StaticSharp {
             : base(other, callerLineNumber, callerFilePath) {
             assetGenome = other.assetGenome;
         }
-        public Image(Genome<Asset> assetGenome, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
+        public Image(Genome<IAsset> assetGenome, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
             this.assetGenome = assetGenome;
         }
         
@@ -50,24 +50,24 @@ namespace StaticSharp {
             base.AddRequiredInclues(includes);
             includes.Require(new Script(ThisFilePathWithNewExtension("js")));
         }*/
-        async Task<Asset> GetSourceAsync() {
+        async Task<IAsset> GetSourceAsync() {
             string[] webExtensions = { ".jpg", ".jpeg", ".png", ".svg" };
 
             var source = await assetGenome.CreateOrGetCached();
-            if (!webExtensions.Contains(source.FileExtension)) {
+            if (!webExtensions.Contains(await source.GetFileExtensionAsync())) {
                 source = await new JpegGenome(assetGenome).CreateOrGetCached();
             }
             return source;
         }
 
-        MagickImageInfo GetImageInfo(Asset source) {
-            return new MagickImageInfo(source.ReadAllBites());
+        async Task<MagickImageInfo> GetImageInfo(IAsset source) {
+            return new MagickImageInfo(await source.GetBytesAsync());
         }
 
         protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
 
             var source = await GetSourceAsync();
-            var imageInfo = GetImageInfo(source);
+            var imageInfo = await GetImageInfo(source);
             elementTag["data-width"] = imageInfo.Width;
             elementTag["data-height"] = imageInfo.Height;
 
@@ -75,10 +75,10 @@ namespace StaticSharp {
 
 
             if (Embed == TEmbed.Image) {
-                if (source.MediaType == "image/svg+xml") {
-                    url = source.GetDataUrlXml();
+                if (await source.GetMediaTypeAsync() == "image/svg+xml") {
+                    url = await source.GetDataUrlXmlAsync();
                 } else {
-                    url = source.GetDataUrlBase64();
+                    url = await source.GetDataUrlBase64Async();
                 }
                 elementTag.Add(new Tag("img") {
                     ["src"] = url
@@ -117,7 +117,7 @@ namespace StaticSharp {
 
             var pixel = imageColor.GetPixels().First().ToColor().ToHexString();*/
 
-            var thumbnailImageInfo = GetImageInfo(thumbnail);
+            var thumbnailImageInfo = await GetImageInfo(thumbnail);
 
             elementTag.Add(new Tag("content") {
                 new Tag("svg"){
@@ -166,7 +166,7 @@ namespace StaticSharp {
 
         async Task IMainVisual.GetMetaAsync(Dictionary<string, string> meta, Context context) {
             var source = await GetSourceAsync();
-            var imageInfo = GetImageInfo(source);
+            var imageInfo = await GetImageInfo(source);
             var url = (context.BaseUrl + await context.AddAssetAsync(source)).ToString();
             meta["og:image"] = url;
             meta["og:image:width"] = imageInfo.Width.ToString();

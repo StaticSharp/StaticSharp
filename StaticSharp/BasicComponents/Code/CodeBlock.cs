@@ -86,7 +86,7 @@ namespace StaticSharp {
         public string? ProgrammingLanguage { get; init; } = null;
         public string? RegionName { get; init; }
         
-        protected Genome<Asset> assetGenome;
+        protected Genome<IAsset> assetGenome;
 
         public CodeBlock(CodeBlock other, int callerLineNumber, string callerFilePath)
             : base(other, callerLineNumber, callerFilePath) {
@@ -94,7 +94,7 @@ namespace StaticSharp {
             RegionName = other.RegionName;
             assetGenome = other.assetGenome;
         }
-        public CodeBlock(Genome<Asset> assetGenome, string? programmingLanguage = null, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
+        public CodeBlock(Genome<IAsset> assetGenome, string? programmingLanguage = null, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
             this.assetGenome = assetGenome;
             ProgrammingLanguage = programmingLanguage;
         }
@@ -257,13 +257,13 @@ namespace StaticSharp {
         protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
 
             var asset = await assetGenome.CreateOrGetCached();
-            var code = asset.ReadAllText();
+            var code = await asset.GetTextAsync();
 
             //var styleDictionary = CreateStyleDictionary();
 
             var styleDictionary = StyleDictionary.DefaultLight;
 
-            var programmingLanguageName = ProgrammingLanguage ?? asset.FileExtension.TrimStart('.');
+            var programmingLanguageName = ProgrammingLanguage ?? (await asset.GetFileExtensionAsync()).TrimStart('.');
 
             var languageProcessor = ProgrammingLanguageProcessor.FindByName(programmingLanguageName);
 

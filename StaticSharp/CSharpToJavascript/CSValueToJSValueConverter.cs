@@ -24,11 +24,11 @@ namespace StaticSharp.Gears {
             }
 
             if (value is double valueAsDouble) {
-                return valueAsDouble.ToString(CultureInfo.InvariantCulture);
+                return valueAsDouble.ToInvariant();
             }
             
             if (value is float valueAsFloat) {
-                return valueAsFloat.ToString(CultureInfo.InvariantCulture);
+                return valueAsFloat.ToInvariant();
             }
 
             return value.ToString() ?? "";

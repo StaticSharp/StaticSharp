@@ -4,14 +4,14 @@ using System;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
-    public record SvgInlineImageGenerator(Genome<Asset> Source) : TagGenerator {
+    public record SvgInlineImageGenerator(Genome<IAsset> Source) : TagGenerator {
         public override async Task<Tag> Generate(string id) {
 
             var image = await Source.CreateOrGetCached();
-            var base64 = Convert.ToBase64String(image.ReadAllBites());
+            var base64 = Convert.ToBase64String(await image.GetBytesAsync());
 
             return new Tag("image", id) {
-                ["href"] = $"data:{image.MediaType};base64,{base64}"
+                ["href"] = $"data:{await image.GetMediaTypeAsync()};base64,{base64}"
             };
         }
     }

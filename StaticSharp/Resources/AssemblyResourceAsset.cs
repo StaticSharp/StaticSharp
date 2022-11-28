@@ -79,15 +79,11 @@ namespace StaticSharp {
                     }
                 }
             }
-            public override FilePath GetTargetFilePath() {
-                return new(GetContentHash() + GetFileExtension());
-            }
         }
 
 
     }
 
-    //Instead of inheritance from CacheableHttpRequest, it is better to use aggregation
     namespace Gears {
 
         public static partial class KeyCalculators {

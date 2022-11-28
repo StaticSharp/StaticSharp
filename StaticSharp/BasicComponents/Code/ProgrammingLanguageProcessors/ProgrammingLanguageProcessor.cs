@@ -8,21 +8,43 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
-    public record CodeRegionGenome(Genome<Asset> Source, string RegionName) : Genome<Asset> {
-        public override async Task<Asset> CreateAsync() {
+
+
+    
+
+
+    public record CodeRegionGenome(Genome<IAsset> Source, string RegionName) : Genome<IAsset> {
+
+        async Task<IAsset> CreateAssetAsync(IAsset sourceAsset) {
+            var extension = await sourceAsset.GetFileExtensionAsync();
+            var language = ProgrammingLanguageProcessor.FindByName(extension);
+            string content = await sourceAsset.GetTextAsync();
+            content = language.GetRegion(content, RegionName);            
+
+            return new TextAsset(
+                content,
+                extension,
+                await sourceAsset.GetMediaTypeAsync()
+                );
+
+        }
+
+        public override async Task<IAsset> CreateAsync() {
             var source = await Source.CreateOrGetCached();
 
-            var language = ProgrammingLanguageProcessor.FindByName(source.FileExtension);
-            string content = source.ReadAllText();
-            content = language.GetRegion(content, RegionName);
+            return new AsyncAsset(CreateAssetAsync(source));
 
-            return new Asset(
+
+
+            
+
+            /*return new Asset(
                 ()=> Encoding.UTF8.GetBytes(content),
                 source.FileExtension,
                 source.MediaType,
                 Hash.CreateFromString(content).ToString(),
                 source.CharSet
-                );
+                );*/
 
         }
     }

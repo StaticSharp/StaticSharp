@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
-    public record JpegGenome(Genome<Asset> Source, int? Quality = null) : ImageProcessorGenome(Source) {
+    public record JpegGenome(Genome<IAsset> Source, int? Quality = null) : ImageProcessorGenome(Source) {
         protected override Task<MagickImage> Process(MagickImage image) {
             if (Quality != null)
                 image.Quality = Quality.Value;

@@ -1,7 +1,7 @@
-﻿using MimeTypes;
+﻿using StaticSharp.Gears;
 using System;
 using System.IO;
-using System.Text;
+using System.Threading.Tasks;
 
 
 
@@ -9,51 +9,36 @@ using System.Text;
 
 
 namespace StaticSharp {
+    public record FileGenome(string Path) : Genome<IAsset> {
+        class Data {
+            public DateTime LastWriteTime;
+            public string ContentHash = null!;
+        };
 
-    namespace Gears {
-
-
-        public class FileAsset : AssetSync {
-            public string Path { get; }
-            public DateTime LastWriteTime { get; set; }
-
-            byte[]? data = null;
-
-            string? contentHash = null;
-            public FileAsset(string path) {
-                Path = path;
-            }
-            public override string GetFileExtension() => System.IO.Path.GetExtension(Path);
-            public override string GetMediaType() {
-                return MimeTypeMap.GetMimeType(GetFileExtension());
-            }
-            public void SetContentHash(string value) {
-                contentHash = value;
-            }
-            public override string GetContentHash() {
-                if (contentHash == null) {
-                    contentHash = Hash.CreateFromBytes(GetBytes()).ToString();
-                }
-                return contentHash;
-            }
-            public override byte[] GetBytes() {
-                if (data == null) {
-                    using (var fileStream = new FileStream(Path, FileMode.Open, FileAccess.Read)) {
-                        data = new byte[fileStream.Length];
-                        fileStream.Read(data, 0, data.Length);
-                    }
-                }
-                return data;
-            }
-            public override string GetText() {
-                using (MemoryStream memoryStream = new(GetBytes())) {
-                    using (StreamReader streamReader = new StreamReader(memoryStream, true)) {
-                        var text = streamReader.ReadToEnd();
-                        return text;
-                    }
-                }
-            }
+        private DateTime GetLastWriteTime() {
+            return File.GetLastWriteTimeUtc(Path);
         }
+        public override Task<IAsset> CreateAsync() {
+            var result = new FileAsset(Path);
+
+            if (!LoadData<Data>(out var data)) {
+                result.LastWriteTime = data.LastWriteTime = GetLastWriteTime();
+                data.ContentHash = result.GetContentHash();
+                CreateCacheSubDirectory();
+                StoreData(data);
+            } else {
+                var lastWriteTime = GetLastWriteTime();
+                result.LastWriteTime = lastWriteTime;
+                if (lastWriteTime == data.LastWriteTime) {
+                    result.SetContentHash(data.ContentHash);
+                }
+            }
+            return Task.FromResult<IAsset>(result);
+        }
+
+        
+
+
     }
 
     /*namespace Gears {

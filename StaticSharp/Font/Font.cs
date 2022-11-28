@@ -165,12 +165,12 @@ namespace StaticSharp {
             var subfontCssUrl = GoogleFonts.MakeCssUrl(fontFamilyName, fontFamilyMember.FontStyle, text);
             var subFontCssRequest = await new HttpRequestGenome(GoogleFonts.MakeWoff2Request(subfontCssUrl)).CreateOrGetCached();
 
-            var fontInfos = GoogleFonts.ParseCss(subFontCssRequest.ReadAllText());
+            var fontInfos = GoogleFonts.ParseCss(await subFontCssRequest.GetTextAsync());
             //TODO validation
             var fontInfo = fontInfos.First();
             var subFontRequest = await new HttpRequestGenome(fontInfo.Url).CreateOrGetCached();
 
-            var content = subFontRequest.ReadAllBites();
+            var content = await subFontRequest.GetBytesAsync();
 
             var base64 = Convert.ToBase64String(content);
             var format = "woff2";

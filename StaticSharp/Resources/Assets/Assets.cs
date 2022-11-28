@@ -10,14 +10,14 @@ namespace StaticSharp.Gears;
 
 public class Assets {
 
-    private static readonly Dictionary<string, Asset> assets = new();
+    private static readonly Dictionary<string, IAsset> assets = new();
     public static AsyncLock AsyncLock { get; } = new();
 
-    public async Task AddAsync(Asset asset) {
+    public async Task AddAsync(IAsset asset) {
         using (await Cache.AsyncLock.LockAsync()) {
-
-            if (!assets.TryGetValue(asset.ContentHash, out var existingAsset)) {
-                assets[asset.ContentHash] = asset;
+            var hash = await asset.GetContentHashAsync();
+            if (!assets.TryGetValue(hash, out var existingAsset)) {
+                assets[hash] = asset;
                 /*if (existingAsset.ContentHash == asset.ContentHash) {
                     return;
                 }*/
@@ -26,21 +26,21 @@ public class Assets {
         }
     }
 
-    public Asset? GetByFilePath(FilePath filePath) {
+    public async Task<IAsset?> GetByFilePath(FilePath filePath) {
         foreach (var asset in assets.Values) {
-            if (asset.FilePath == filePath) {
+            if (await asset.GetTargetFilePathAsync() == filePath) {
                 return asset;
             }
         }
         return null;
     }
 
-    private async Task StoreAssetAsync(Asset asset, FilePath assetsBaseDirectory) {
-        var fullFilePath = (assetsBaseDirectory + asset.FilePath);
+    private async Task StoreAssetAsync(IAsset asset, FilePath assetsBaseDirectory) {
+        var fullFilePath = (assetsBaseDirectory + await asset.GetTargetFilePathAsync());
         var directory = fullFilePath.WithoutLast.OsPath;
         Directory.CreateDirectory(directory);
 
-        await File.WriteAllBytesAsync(fullFilePath.OsPath, asset.ReadAllBites());
+        await File.WriteAllBytesAsync(fullFilePath.OsPath, await asset.GetBytesAsync());
     }
     public async Task StoreAsync(FilePath directory) {
         await Task.WhenAll(assets.Values.Select(x=>StoreAssetAsync(x, directory)).ToArray());

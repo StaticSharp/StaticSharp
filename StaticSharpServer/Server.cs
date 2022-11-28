@@ -167,15 +167,14 @@ namespace StaticSharp {
 
         public IResult GetAsset(string path, HttpContext httpContext) {
 
-            var asset = Assets.GetByFilePath(FilePath.FromOsPath(path));
-            if (asset == null)
-                return Results.NotFound();
-
-            var data = asset.ReadAllBites();
-
-            return Results.File(data, asset.MediaType, null, true);
+            return new ResultAsync(async () => {
+                var asset = await Assets.GetByFilePath(FilePath.FromOsPath(path));
+                if (asset == null)
+                    return Results.NotFound();
+                var data = await asset.GetBytesAsync();
+                return Results.File(data, await asset.GetMediaTypeAsync(), null, true);
+            });
+            
         }
-
-
     }
 }
