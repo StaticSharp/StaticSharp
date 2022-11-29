@@ -36,7 +36,7 @@ namespace StaticSharpDemo {
         }
 
         public static async Task Server() {
-            Cache.Directory = MakeAbsolutePath(".cache");
+            Cache2.Directory = MakeAbsolutePath(".cache");
 
             await new StaticSharp.Server(
                 new DefaultMultilanguagePageFinder<Language>((language) => new αRoot(language)),
@@ -46,7 +46,7 @@ namespace StaticSharpDemo {
         }
 
         public static async Task Generator() {
-            Cache.Directory = MakeAbsolutePath(".cache");
+            Cache2.Directory = MakeAbsolutePath(".cache");
 
             var projectPath = ProjectDirectory.Path;
             var baseDirectory = Path.GetFullPath(Path.Combine(projectPath, "../../StaticSharp.github.io"));

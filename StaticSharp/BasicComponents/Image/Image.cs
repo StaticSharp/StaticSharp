@@ -53,9 +53,9 @@ namespace StaticSharp {
         async Task<IAsset> GetSourceAsync() {
             string[] webExtensions = { ".jpg", ".jpeg", ".png", ".svg" };
 
-            var source = await assetGenome.CreateOrGetCached();
+            var source = assetGenome.CreateOrGetCached();
             if (!webExtensions.Contains(await source.GetFileExtensionAsync())) {
-                source = await new JpegGenome(assetGenome).CreateOrGetCached();
+                source = new JpegGenome(assetGenome).CreateOrGetCached();
             }
             return source;
         }
@@ -95,8 +95,10 @@ namespace StaticSharp {
             }
 
 
-            var thumbnail = await new ThumbnailGenome(assetGenome).CreateOrGetCached();
-            var thumbnailId = context.SvgDefs.Add(new SvgInlineImageGenerator(new ThumbnailGenome(assetGenome)));
+            var thumbnail = new ThumbnailGenome(assetGenome).CreateOrGetCached();
+
+
+            var thumbnailId = context.SvgDefs.Add(new SvgInlineImageGenome(new ThumbnailGenome(assetGenome)));
             var hBlurId = context.SvgDefs.Add(new SvgBlurFilterGenerator(0.5f, 0));
             var vBlurId = context.SvgDefs.Add(new SvgBlurFilterGenerator(0, 0.5f));
 

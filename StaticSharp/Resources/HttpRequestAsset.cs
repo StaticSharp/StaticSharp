@@ -31,7 +31,7 @@ namespace StaticSharp {
             StoreData(data);
         }
 
-        public override async Task<IAsset> CreateAsync() {
+        public override IAsset Create() {
             Data data;
 
 

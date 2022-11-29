@@ -18,14 +18,14 @@ namespace StaticSharp {
     [ConstructorJs]
 
     public class Template : Block {
-        protected Genome<Asset> assetGenome { get; }
+        protected Genome<IAsset> assetGenome { get; }
 
         protected Template(Template other,
             string callerFilePath = "",
             int callerLineNumber = 0): base(other, callerLineNumber, callerFilePath) {
             assetGenome = other.assetGenome;                
         }
-        public Template(Genome<Asset> assetGenome, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
+        public Template(Genome<IAsset> assetGenome, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
             this.assetGenome = assetGenome;
         }
         /*public override void AddRequiredInclues(IIncludes includes) {
@@ -38,7 +38,7 @@ namespace StaticSharp {
         }*/
 
         protected override async IAsyncEnumerable<KeyValuePair<string, string>> GetGeneratedBundingsAsync(Context context) {
-            var template = (await assetGenome.CreateOrGetCached()).ReadAllText();
+            var template = await assetGenome.CreateOrGetCached().GetTextAsync();
             yield return new("Html", $"()=>`{template}`");//
         }
     }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
     public record AssemblyResourceGenome(Assembly Assembly, string Path) : Genome<IAsset> {
-        public override Task<IAsset> CreateAsync() {
+        public override IAsset Create() {
             /*if (!LoadData<Data>(out var data)) {
                 data.ContentHash = Hash.CreateFromBytes(ReadAllBites()).ToString();
                 CreateCacheSubDirectory();
@@ -25,7 +25,7 @@ namespace StaticSharp {
                 stream.CopyTo(memoryStream);
                 var result = new AssemblyResourceAsset(memoryStream.ToArray(), Path);
 
-                return Task.FromResult<IAsset>(result);
+                return result;
             }
 
 

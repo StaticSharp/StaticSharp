@@ -65,8 +65,8 @@ namespace StaticSharp {
 
         public Page([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
             : base(callerLineNumber, callerFilePath) {
-            CodeFontFamilies = new[] { new FontFamily("Roboto Mono") };
-            FontFamilies = new[] { new FontFamily("Roboto") };
+            CodeFontFamilies = new[] { new FontFamilyGenome("Roboto Mono") };
+            FontFamilies = new[] { new FontFamilyGenome("Roboto") };
             FontStyle = new FontStyle(FontWeight.Regular);
         }
 

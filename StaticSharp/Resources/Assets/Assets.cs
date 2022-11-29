@@ -1,5 +1,6 @@
 ﻿using NeoSmart.AsyncLock;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,40 +11,47 @@ namespace StaticSharp.Gears;
 
 public class Assets {
 
-    private static readonly Dictionary<string, IAsset> assets = new();
-    public static AsyncLock AsyncLock { get; } = new();
+    private static readonly ConcurrentDictionary<FilePath, IAsset> assets = new(new FilePathEqualityComparer());
+    //public static AsyncLock AsyncLock { get; } = new();
+
+    private void Add(FilePath filePath, IAsset asset) {
+
+    
+    }
 
     public async Task AddAsync(IAsset asset) {
-        using (await Cache.AsyncLock.LockAsync()) {
+        var path = await asset.GetTargetFilePathAsync();
+        assets.GetOrAdd(path, asset);
+
+        /*using (await Cache.AsyncLock.LockAsync()) {
             var hash = await asset.GetContentHashAsync();
             if (!assets.TryGetValue(hash, out var existingAsset)) {
                 assets[hash] = asset;
-                /*if (existingAsset.ContentHash == asset.ContentHash) {
-                    return;
-                }*/
             }
             
-        }
+        }*/
     }
 
-    public async Task<IAsset?> GetByFilePath(FilePath filePath) {
-        foreach (var asset in assets.Values) {
+    public IAsset? GetByFilePath(FilePath filePath) {
+        return assets.GetValueOrDefault(filePath);
+
+
+        /*foreach (var asset in assets.Values) {
             if (await asset.GetTargetFilePathAsync() == filePath) {
                 return asset;
             }
         }
-        return null;
+        return null;*/
     }
 
-    private async Task StoreAssetAsync(IAsset asset, FilePath assetsBaseDirectory) {
-        var fullFilePath = (assetsBaseDirectory + await asset.GetTargetFilePathAsync());
+    private async Task StoreAssetAsync(IAsset asset, FilePath fullFilePath) {
         var directory = fullFilePath.WithoutLast.OsPath;
         Directory.CreateDirectory(directory);
 
         await File.WriteAllBytesAsync(fullFilePath.OsPath, await asset.GetBytesAsync());
     }
     public async Task StoreAsync(FilePath directory) {
-        await Task.WhenAll(assets.Values.Select(x=>StoreAssetAsync(x, directory)).ToArray());
+        await Task.WhenAll(assets.Select(x=>StoreAssetAsync(x.Value, directory + x.Key)).ToArray());
     }   
 
 

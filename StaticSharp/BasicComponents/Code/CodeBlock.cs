@@ -256,7 +256,7 @@ namespace StaticSharp {
 
         protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
 
-            var asset = await assetGenome.CreateOrGetCached();
+            var asset = assetGenome.CreateOrGetCached();
             var code = await asset.GetTextAsync();
 
             //var styleDictionary = CreateStyleDictionary();

@@ -24,7 +24,10 @@ namespace StaticSharp {
             var chars = Value.ToPrintableChars();
             HashSet<string> families = new();
             foreach (var i in context.FontFamilies) {
-                var font = await context.Fonts.CreateOrGet(new Font(i, context.FontStyle));
+                var fontGenome = new FontGenome(i, context.FontStyle);
+                var font = await fontGenome.CreateOrGetCached();
+                context.Fonts[fontGenome.Key] = font;
+
                 var numChars = chars.Count;
                 chars = font.AddChars(chars);
                 if (chars.Count < numChars) {

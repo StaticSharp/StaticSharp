@@ -7,15 +7,11 @@ using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
-    public record FontFamily(
-            string Name
-
-            ) : Gears.Genome<Gears.CacheableFontFamily> {
-
-
-        public override async Task<CacheableFontFamily> CreateAsync() {
+    public record FontFamilyGenome(string Name) : Genome<Task<CacheableFontFamily>> {
+        public override async Task<CacheableFontFamily> Create() {
             var fullCssUrl = GoogleFonts.MakeCssUrl(Name);
-            var fullCssRequest = await new HttpRequestGenome(
+
+            var fullCssRequest = new HttpRequestGenome(
                 GoogleFonts.MakeWoff2Request(fullCssUrl)
                 ) {
 
@@ -55,6 +51,9 @@ namespace StaticSharp {
         }
 
         public class CacheableFontFamily {
+
+
+
 
             public List<FontFamilyMember>[/*italic*/] Members { get;} = new[]{
                 new List<FontFamilyMember>(),

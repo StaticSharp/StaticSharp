@@ -17,15 +17,15 @@ namespace StaticSharp {
         CourierNew,
     }
 
-    public record Font(
-            FontFamily FontFamily,
+    public record FontGenome(
+            FontFamilyGenome FontFamilyGenome,
             FontStyle FontStyle
-            ) : Genome<CacheableFont> {
+            ) : Genome<Task<CacheableFont>> {
 
-        public override async Task<CacheableFont> CreateAsync() {
-            var cacheableFontFamily = await FontFamily.CreateOrGetCached();
+        public override async Task<CacheableFont> Create() {
+            var cacheableFontFamily = await FontFamilyGenome.CreateOrGetCached();
             var fontFamilyMember = cacheableFontFamily.FindMember(FontStyle);
-            return new CacheableFont(FontFamily.Name, fontFamilyMember);
+            return new CacheableFont(FontFamilyGenome.Name, fontFamilyMember);
         }
     }
 
@@ -163,12 +163,12 @@ namespace StaticSharp {
             
 
             var subfontCssUrl = GoogleFonts.MakeCssUrl(fontFamilyName, fontFamilyMember.FontStyle, text);
-            var subFontCssRequest = await new HttpRequestGenome(GoogleFonts.MakeWoff2Request(subfontCssUrl)).CreateOrGetCached();
+            var subFontCssRequest = new HttpRequestGenome(GoogleFonts.MakeWoff2Request(subfontCssUrl)).CreateOrGetCached();
 
             var fontInfos = GoogleFonts.ParseCss(await subFontCssRequest.GetTextAsync());
             //TODO validation
             var fontInfo = fontInfos.First();
-            var subFontRequest = await new HttpRequestGenome(fontInfo.Url).CreateOrGetCached();
+            var subFontRequest = new HttpRequestGenome(fontInfo.Url).CreateOrGetCached();
 
             var content = await subFontRequest.GetBytesAsync();
 

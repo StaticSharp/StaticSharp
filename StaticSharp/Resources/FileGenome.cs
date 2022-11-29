@@ -18,7 +18,7 @@ namespace StaticSharp {
         private DateTime GetLastWriteTime() {
             return File.GetLastWriteTimeUtc(Path);
         }
-        public override Task<IAsset> CreateAsync() {
+        public override IAsset Create() {
             var result = new FileAsset(Path);
 
             if (!LoadData<Data>(out var data)) {
@@ -33,7 +33,7 @@ namespace StaticSharp {
                     result.SetContentHash(data.ContentHash);
                 }
             }
-            return Task.FromResult<IAsset>(result);
+            return result;
         }
 
         

@@ -2,7 +2,7 @@
 
 namespace StaticSharp {
     public interface IMutableAsset {
-        Task<bool> GetValidAsync();
+        bool GetValid();
         public void DeleteCacheSubDirectory();
     }
 }

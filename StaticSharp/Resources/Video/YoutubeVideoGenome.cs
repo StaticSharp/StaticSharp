@@ -12,7 +12,7 @@ namespace StaticSharp {
         }
 
 
-        public override async Task<IAsset> CreateAsync() {
+        public override IAsset Create() {
 
             if (!File.Exists(ContentFilePath)) {                
                 var result = new YoutubeVideoAsset(ManifestItem);

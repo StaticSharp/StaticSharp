@@ -59,8 +59,8 @@ namespace StaticSharp {
             public Tree.Node? InternalLink { get; set; }
             public bool OpenLinksInANewTab { get; set; }
             
-            public FontFamily[]? CodeFontFamilies { get; set; } = null;
-            public FontFamily[]? FontFamilies { get; set; } = null;
+            public FontFamilyGenome[]? CodeFontFamilies { get; set; } = null;
+            public FontFamilyGenome[]? FontFamilies { get; set; } = null;
 
             public FontStyle? FontStyle = null;
             //public string? Url = null;

@@ -143,6 +143,14 @@ namespace StaticSharp {
 
         public IResult GetAny(HttpContext httpContext) {
             var path = httpContext.Request.Path.Value;
+
+            var extension = Path.GetExtension(path);
+            if (!string.IsNullOrEmpty(extension)) {
+                if (extension.ToLower() != ".html") {
+                    return Results.NotFound();
+                }
+            }
+
             if (path == null) {
                 return Results.BadRequest();
             }
@@ -155,22 +163,33 @@ namespace StaticSharp {
             if (page == null) {
                 return RegirectToClosest(httpContext, closest);
             }
+
+            Cache2.TrimMutatedItems();
+
             var context = CreateContext(page.VirtualNode, BaseUrlFromHttpRequest(httpContext.Request));
 
             return new ResultAsync(async () => {
                 var html = await page.GeneratePageHtmlAsync(context);
-                html = html.Replace("t!dcsctAYNTSYMJaKLcdZPtZ#n@KPIjkK)ppteSZ4t%W)N*3RC8k645V4DUMW5G!", html.ToHashString());
+
+                var hash = html.ToHashString();
+                var tempPath = Path.Combine(Cache2.Directory, hash + ".html");
+                if (!File.Exists(tempPath)) {
+                    File.WriteAllText(tempPath, html);
+                }
+                
+
+                html = html.Replace("t!dcsctAYNTSYMJaKLcdZPtZ#n@KPIjkK)ppteSZ4t%W)N*3RC8k645V4DUMW5G!", hash);
                 return new HtmlResult(html);
             });
         }
 
 
         public IResult GetAsset(string path, HttpContext httpContext) {
+            var asset = Assets.GetByFilePath(FilePath.FromOsPath(path));
+            if (asset == null)
+                return Results.NotFound();
 
-            return new ResultAsync(async () => {
-                var asset = await Assets.GetByFilePath(FilePath.FromOsPath(path));
-                if (asset == null)
-                    return Results.NotFound();
+            return new ResultAsync(async () => {                
                 var data = await asset.GetBytesAsync();
                 return Results.File(data, await asset.GetMediaTypeAsync(), null, true);
             });

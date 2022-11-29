@@ -1,12 +1,23 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace StaticSharp {
+
+    public class FilePathEqualityComparer : IEqualityComparer<FilePath> {
+        public bool Equals(FilePath? x, FilePath? y) {
+            return x == y;
+        }
+
+        public int GetHashCode([DisallowNull] FilePath obj) {
+            return obj.GetHashCode();
+        }
+    }
+
     public class FilePath: IEnumerable<string>, IEquatable<FilePath> {
         public string[] Items { get; init; }
-
 
         public FilePath(params string[] items) {
             Items = items;
@@ -82,12 +93,19 @@ namespace StaticSharp {
             return new FilePath(result);
         }
 
-        public bool Equals(FilePath other) {
+        public bool Equals(FilePath? other) {
+            if (other == null)
+                return false;
+            if (ReferenceEquals(this, other))
+                return true;
             if (other.Items.Length != Items.Length) return false;
             for (int i = 0; i < Items.Length; i++) { 
                 if (!Items[i].Equals(other.Items[i])) return false;
             }
             return true;
+        }
+        public override bool Equals(object? obj) {
+            return Equals(obj as FilePath);
         }
 
         public FilePath WithoutLast {
@@ -105,7 +123,7 @@ namespace StaticSharp {
             return a.Equals(b);
         }
         public static bool operator !=(FilePath? a, FilePath? b) {
-            return !a.Equals(b);
+            return !(a == b);
         }
 
         public static FilePath FromOsPath(string osPath) {
@@ -122,6 +140,12 @@ namespace StaticSharp {
             }
         }
 
-
+        public override int GetHashCode() {
+            var hash = new HashCode();
+            foreach (var i in Items) {
+                hash.Add(i);
+            }
+            return hash.ToHashCode();
+        }
     }
 }

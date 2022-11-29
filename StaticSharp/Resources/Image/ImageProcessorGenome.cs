@@ -20,6 +20,8 @@ namespace StaticSharp {
             //public int Height;
         };
 
+        public override Genome[]? Sources => new Genome[] { Source };
+
         private async Task SaveDataAsync(IAsset source, IAsset result) {
             Data data = new();
             data.Extension = await result.GetFileExtensionAsync();
@@ -39,11 +41,11 @@ namespace StaticSharp {
             return image;
         }
 
-        public override async Task<IAsset> CreateAsync() {
+        public override IAsset Create() {
             Data data;
             if (!LoadData(out data)) {
 
-                var source = await Source.CreateOrGetCached();
+                var source = Source.CreateOrGetCached();
                 var result = new MagickImageAsset(LoadAndProcessAsync(source));
                 _ = SaveDataAsync(source,result);
 

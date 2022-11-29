@@ -29,8 +29,8 @@ namespace StaticSharp {
 
         }
 
-        public override async Task<IAsset> CreateAsync() {
-            var source = await Source.CreateOrGetCached();
+        public override IAsset Create() {
+            var source = Source.CreateOrGetCached();
 
             return new AsyncAsset(CreateAssetAsync(source));
 

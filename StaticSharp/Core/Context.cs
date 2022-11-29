@@ -1,7 +1,7 @@
 ﻿
 
 using StaticSharp.Gears;
-using StaticSharp.Resources;
+
 using StaticSharp.Tree;
 using System;
 using System.Collections.Concurrent;
@@ -36,9 +36,9 @@ namespace StaticSharp {
 
         //public Includes Includes { get; init; }
 
-        public IncludesCache<CacheableFont> Fonts { get; } = new();
+        public Dictionary<string, CacheableFont> Fonts { get; } = new();
 
-        public UniqueTagCollection SvgDefs { get; } = new("s");
+        public SvgDefs SvgDefs { get; } = new();
 
         public Assets Assets { get; init; }
 
@@ -46,8 +46,8 @@ namespace StaticSharp {
 
         private List<KeyValuePair<string, Genome<IAsset>>> Scripts { get; } = new();
 
-        public FontFamily[] FontFamilies { get; set; } = null!;
-        public FontFamily[] CodeFontFamilies { get; set; } = null!;
+        public FontFamilyGenome[] FontFamilies { get; set; } = null!;
+        public FontFamilyGenome[] CodeFontFamilies { get; set; } = null!;
         public FontStyle FontStyle { get; set; } = new();
 
         public Ref<int> nextIdNumber;
@@ -70,7 +70,7 @@ namespace StaticSharp {
         }
 
         public async Task<Html.Tag> GenerateScriptAsync() {
-            var assets = await Task.WhenAll(Scripts.Select(x => x.Value.CreateOrGetCached()));
+            var assets = Scripts.Select(x => x.Value.CreateOrGetCached());// await Task.WhenAll(Scripts.Select(x => x.Value.CreateOrGetCached()));
             var strings = await Task.WhenAll(assets.Select(x => x.GetTextAsync()));
             var content = string.Join('\n', strings);
             return new Html.Tag("script") {
@@ -85,7 +85,7 @@ namespace StaticSharp {
         }
 
         public async Task<Html.Tag> GenerateStyleAsync() {
-            var assets = await Task.WhenAll(Styles.Select(x => x.Value.CreateOrGetCached()));
+            var assets = Styles.Select(x => x.Value.CreateOrGetCached());// await Task.WhenAll(Styles.Select(x => x.Value.CreateOrGetCached()));
             var strings = await Task.WhenAll(assets.Select(x => x.GetTextAsync()));
             var content = string.Join('\n', strings);
             return new Html.Tag("style") {
@@ -98,8 +98,8 @@ namespace StaticSharp {
 
             var sortedFonts = Fonts.OrderBy(x => x.Key);
 
-            foreach (var i in sortedFonts.Select(x => x.Value)) {
-                fontStyle.AppendLine(await i.GenerateIncludeAsync());
+            foreach (var i in sortedFonts) {
+                fontStyle.AppendLine(await i.Value.GenerateIncludeAsync());
             }
             return new Html.Tag("style") {
                 new Html.PureHtmlNode(fontStyle.ToString())
