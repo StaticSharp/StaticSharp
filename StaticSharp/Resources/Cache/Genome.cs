@@ -52,61 +52,19 @@ public abstract record Genome: IKeyProvider {
 
     public abstract object Create();
 
-}
-
-
-
-
-public abstract record Genome<TCacheable> : Genome where TCacheable : class {
-
     private static readonly JsonSerializerOptions JsonSerializerOptions = new() {
         IncludeFields = true,
-       
+
     };
     private static readonly string CachedDataJsonFileName = "data.json";
     protected string CachedDataJsonFilePath => Path.Combine(CacheSubDirectory, CachedDataJsonFileName);
-    protected string CacheSubDirectory => Path.Combine(Cache2.Directory, KeyHash);
+    protected string CacheSubDirectory => Path.Combine(Cache.Directory, KeyHash);
     protected string ContentFilePath => Path.Combine(CacheSubDirectory, "content");
     protected string KeyHash => Hash.CreateFromString(Key).ToString();
 
     public virtual Genome[]? Sources => null;
 
-
-    public TCacheable CreateOrGetCached() {
-        return Cache2.CreateOrGet(this);    
-    }
-
-        /*public async Task<TCacheable> CreateOrGetCached() {
-
-            using (await Cache.AsyncLock.LockAsync()) {
-                try {
-                    Task<object>? task = Cache.Get(Key);
-                    if (task == null) {
-                        task = Create().ContinueWith(x => (object)x.Result);
-                        Cache.Add(Key, task);
-                        return (TCacheable)(await task);
-                    }
-
-                    var value = (TCacheable)(await task);
-                    if (value is IMutableAsset mutable) {
-                        if (!await mutable.GetValid()) {
-                            mutable.DeleteCacheSubDirectory();
-                            task = Create().ContinueWith(x => (object)x.Result);
-                            Cache.Add(Key, task);
-                        }
-                    }
-
-                    return (TCacheable)(await task);
-                }
-                catch (Exception e) {
-                    Console.WriteLine(e);
-                    throw e;
-                    //Cache.Unlock();
-                }
-            }
-        }*/
-
-        protected bool LoadData<T>(out T data) where T : new() {
+    protected bool LoadData<T>(out T data) where T : new() {
         if (!File.Exists(CachedDataJsonFilePath)) {
             data = new();
             return false;
@@ -152,12 +110,20 @@ public abstract record Genome<TCacheable> : Genome where TCacheable : class {
     }
 
 
-    public override abstract TCacheable Create(); /*{
-        var result = new TCacheable();
-        result.SetGenome((TFinalGenome)this);
-        await result.CreateAsync();
-        return result;
-    }    */
+    
+
+
+}
+
+
+
+
+public abstract record Genome<TCacheable> : Genome where TCacheable : class {
+    public TCacheable CreateOrGetCached() {
+        return Cache.CreateOrGet(this);    
+    }
+
+    public override abstract TCacheable Create();
 }
 
 

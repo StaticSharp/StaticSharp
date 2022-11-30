@@ -157,7 +157,7 @@ namespace StaticSharp {
                     },
                     Children = {
                         new Tag("defs"){
-                            await context.SvgDefs.GetAllAsync()
+                            context.SvgDefs.GetOrderedItems()
                         }
                     }
                 }

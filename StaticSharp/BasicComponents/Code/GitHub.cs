@@ -1,4 +1,4 @@
-using StaticSharpWeb.Resources;
+
 using Octokit;
 using System;
 using System.IO;

@@ -3,7 +3,7 @@
 namespace StaticSharp {
     public interface IMutableAsset {
         bool GetValid();
-        public void DeleteCacheSubDirectory();
+        //public void DeleteCacheSubDirectory();
     }
 }
 

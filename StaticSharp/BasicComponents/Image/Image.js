@@ -2,17 +2,12 @@
 function Image(element) {
     Block(element)
 
-
-
-    element.Reactive = {        
+    element.Reactive = {
 
         Aspect: element.dataset.width / element.dataset.height,
 
         InternalWidth: () => First(element.Height * element.Aspect, element.dataset.width),
         InternalHeight: () => First(element.Width / element.Aspect, element.dataset.height),
-        //Width: () => element.LayoutWidth || (element.Height * element.Aspect) || element.dataset.width,
-
-        //Height: () => element.LayoutHeight || (element.Width / element.Aspect) || element.dataset.height,
     }
 
     new Reaction(() => {
@@ -24,9 +19,7 @@ function Image(element) {
         if (thumbnail) {
             thumbnail.style.display = "block"
         }
-
     })
-
 
     
 }

@@ -1,4 +1,4 @@
-﻿using NeoSmart.AsyncLock;
+﻿
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -10,38 +10,15 @@ namespace StaticSharp.Gears;
 
 
 public class Assets {
-
     private static readonly ConcurrentDictionary<FilePath, IAsset> assets = new(new FilePathEqualityComparer());
-    //public static AsyncLock AsyncLock { get; } = new();
-
-    private void Add(FilePath filePath, IAsset asset) {
-
-    
-    }
 
     public async Task AddAsync(IAsset asset) {
         var path = await asset.GetTargetFilePathAsync();
         assets.GetOrAdd(path, asset);
-
-        /*using (await Cache.AsyncLock.LockAsync()) {
-            var hash = await asset.GetContentHashAsync();
-            if (!assets.TryGetValue(hash, out var existingAsset)) {
-                assets[hash] = asset;
-            }
-            
-        }*/
     }
 
     public IAsset? GetByFilePath(FilePath filePath) {
         return assets.GetValueOrDefault(filePath);
-
-
-        /*foreach (var asset in assets.Values) {
-            if (await asset.GetTargetFilePathAsync() == filePath) {
-                return asset;
-            }
-        }
-        return null;*/
     }
 
     private async Task StoreAssetAsync(IAsset asset, FilePath fullFilePath) {

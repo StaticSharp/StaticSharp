@@ -61,9 +61,16 @@ public class Hash {
     public override string ToString() {
         //if (Data == null) return null;
         if (Data.Length == 0) return "";
-        return ByteToHexBitFiddle(Data);
 
+
+        return ByteToHexBitFiddle(Data);
     }
+    public string ToString(int size) {
+        //if (Data == null) return null;
+        if (Data.Length == 0) return "";
+        return ByteToHexBitFiddle(Data)[..size];
+    }
+
 
 }
 

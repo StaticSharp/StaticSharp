@@ -27,7 +27,7 @@ public interface IAsset {
 
 public abstract class AssetSync: IAsset {
     public Task<string> GetFileExtensionAsync() => Task.FromResult(GetFileExtension());
-    public Task<string> GetMediaTypeAsync() => Task.FromResult(GetFileExtension());
+    public Task<string> GetMediaTypeAsync() => Task.FromResult(GetMediaType());
     public Task<string> GetContentHashAsync() => Task.FromResult(GetContentHash());
     public Task<byte[]> GetBytesAsync() => Task.FromResult(GetBytes());
     public Task<string> GetTextAsync() => Task.FromResult(GetText());

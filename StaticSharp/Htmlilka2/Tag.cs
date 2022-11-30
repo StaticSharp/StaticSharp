@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿
+using StaticSharp.Gears;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
@@ -59,6 +61,13 @@ namespace StaticSharp.Html {
                 this["id"] = value;
             }
         }
+
+        public void MakeIdFromContent() {
+            Id = null;
+            Id = Hash.CreateFromString(this.GetHtml()).ToString(16);
+        }
+
+
 
         Dictionary<string, object>? attributes = null;
         public IDictionary<string, object> Attributes {

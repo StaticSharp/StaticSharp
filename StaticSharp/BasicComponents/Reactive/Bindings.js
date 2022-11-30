@@ -417,9 +417,7 @@ Object.defineProperty(Object.prototype, "Reactive", {
                 proxy[key] = value                
             }
         }
-        if (d) d.end()
-
-
+        d.end()
     }
 });
 

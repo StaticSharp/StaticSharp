@@ -15,19 +15,17 @@ namespace StaticSharp {
             public string ContentHash = null!;
         };
 
-        private DateTime GetLastWriteTime() {
-            return File.GetLastWriteTimeUtc(Path);
-        }
+        
         public override IAsset Create() {
             var result = new FileAsset(Path);
 
             if (!LoadData<Data>(out var data)) {
-                result.LastWriteTime = data.LastWriteTime = GetLastWriteTime();
+                result.LastWriteTime = data.LastWriteTime = FileAsset.GetLastWriteTime(Path);
                 data.ContentHash = result.GetContentHash();
                 CreateCacheSubDirectory();
                 StoreData(data);
             } else {
-                var lastWriteTime = GetLastWriteTime();
+                var lastWriteTime = FileAsset.GetLastWriteTime(Path);
                 result.LastWriteTime = lastWriteTime;
                 if (lastWriteTime == data.LastWriteTime) {
                     result.SetContentHash(data.ContentHash);

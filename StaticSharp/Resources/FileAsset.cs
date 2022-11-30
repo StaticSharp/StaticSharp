@@ -13,7 +13,7 @@ namespace StaticSharp {
     namespace Gears {
 
 
-        public class FileAsset : AssetSync {
+        public class FileAsset : AssetSync, IMutableAsset {
             public string Path { get; }
             public DateTime LastWriteTime { get; set; }
 
@@ -23,6 +23,11 @@ namespace StaticSharp {
             public FileAsset(string path) {
                 Path = path;
             }
+
+            public static DateTime GetLastWriteTime(string path) {
+                return File.GetLastWriteTimeUtc(path);
+            }
+
             public override string GetFileExtension() => System.IO.Path.GetExtension(Path);
             public override string GetMediaType() {
                 return MimeTypeMap.GetMimeType(GetFileExtension());
@@ -53,6 +58,11 @@ namespace StaticSharp {
                     }
                 }
             }
+
+            public bool GetValid() {
+                return LastWriteTime == GetLastWriteTime(Path);
+            }
+
         }
     }
 

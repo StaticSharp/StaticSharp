@@ -1,25 +1,15 @@
-﻿using Microsoft.Extensions.FileProviders;
+﻿
 
 using StaticSharp.Html;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
-
-
     namespace Gears {
-
-
 
         public class Bindings<FinalJs> where FinalJs : new() {
             public class Binding<T> : IVoidEnumerable {
@@ -63,15 +53,10 @@ namespace StaticSharp {
                     }
                 }                
             }
-
-            /*protected void Apply<T>(Binding<T> binding, params string[] memberNames) {
-
-
-            }*/
-
-
-
         }
+
+
+
 
         [RelatedScript("ReactiveUtils")]
         [RelatedScript("Math")]
@@ -148,22 +133,12 @@ namespace StaticSharp {
             protected virtual void AddRequiredInclues(Context context) {
                 var type = GetType();
                 AddRequiredIncluesForType(type, context);
-
-                /*await context.AddScriptFromResource("ReactiveUtils.js");
-                await context.AddScriptFromResource("Math.js");
-                await context.AddScriptFromResource("Constants.js");
-                await context.AddScriptFromResource("Constructor.js");
-                await context.AddScriptFromResource("Bindings.js");*/
             }
 
 
 
             protected async Task<Tag> CreateConstructorScriptAsync(Context context) {
-                //var sripts = new List<string>();
-
-
                 var jsConstructorsNames = FindJsConstructorsNames();
-
 
                 var propertiesInitializers = await GetGeneratedBundingsAsync(context).ToListAsync();
                 propertiesInitializers.AddRange(Properties);

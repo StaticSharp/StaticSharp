@@ -60,11 +60,13 @@ namespace StaticSharp {
             return source;
         }
 
+
         async Task<MagickImageInfo> GetImageInfo(IAsset source) {
             return new MagickImageInfo(await source.GetBytesAsync());
         }
 
         protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
+
 
             var source = await GetSourceAsync();
             var imageInfo = await GetImageInfo(source);
@@ -96,11 +98,13 @@ namespace StaticSharp {
 
 
             var thumbnail = new ThumbnailGenome(assetGenome).CreateOrGetCached();
+            var thumbnailUrlBase64 = await thumbnail.GetDataUrlBase64Async();
 
+            var thumbnailSvgDefTag = Svg.InlineImage(thumbnailUrlBase64);
+            var thumbnailId = context.SvgDefs.Add(thumbnailSvgDefTag);
 
-            var thumbnailId = context.SvgDefs.Add(new SvgInlineImageGenome(new ThumbnailGenome(assetGenome)));
-            var hBlurId = context.SvgDefs.Add(new SvgBlurFilterGenerator(0.5f, 0));
-            var vBlurId = context.SvgDefs.Add(new SvgBlurFilterGenerator(0, 0.5f));
+            var hBlurId = context.SvgDefs.Add(Svg.BlurFilter(0.5f, 0));
+            var vBlurId = context.SvgDefs.Add(Svg.BlurFilter(0, 0.5f));
 
 
             var quantizeSettings = new QuantizeSettings() {

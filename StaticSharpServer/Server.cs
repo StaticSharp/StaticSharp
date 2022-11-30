@@ -120,6 +120,9 @@ namespace StaticSharp {
                     var path = referer.LocalPath;
                     var page = PageFinder.FindPage(path, out var closest);
                     if (page != null) {
+
+                        Cache.TrimMutatedItems();
+
                         return new ResultAsync(async () => {
 
                             //while (true) {
@@ -164,7 +167,7 @@ namespace StaticSharp {
                 return RegirectToClosest(httpContext, closest);
             }
 
-            Cache2.TrimMutatedItems();
+            Cache.TrimMutatedItems();
 
             var context = CreateContext(page.VirtualNode, BaseUrlFromHttpRequest(httpContext.Request));
 
@@ -172,7 +175,7 @@ namespace StaticSharp {
                 var html = await page.GeneratePageHtmlAsync(context);
 
                 var hash = html.ToHashString();
-                var tempPath = Path.Combine(Cache2.Directory, hash + ".html");
+                var tempPath = Path.Combine(Cache.Directory, hash + ".html");
                 if (!File.Exists(tempPath)) {
                     File.WriteAllText(tempPath, html);
                 }

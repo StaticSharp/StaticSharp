@@ -1,5 +1,8 @@
 ﻿using System;
-namespace StaticSharp;
+
+
+
+namespace StaticSharp.Gears;
 
 public class InvalidUsageException : Exception {
     protected readonly int callerLineNumber;
@@ -9,4 +12,13 @@ public class InvalidUsageException : Exception {
         this.callerLineNumber = callerLineNumber;
         this.callerFilePath = callerFilePath;        
     }
+
+    public override string? StackTrace {
+        get { 
+            var stackTrace = base.StackTrace;
+            return "StaticSharp.Image.ModifyHtmlAsync(StaticSharp.Context, StaticSharp.Html.Tag) in Image.cs";
+        }
+    } 
+
+
 }
