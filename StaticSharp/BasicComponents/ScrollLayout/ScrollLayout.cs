@@ -24,8 +24,7 @@ namespace StaticSharp {
     [Mix(typeof(ScrollLayoutBindings<Js.ScrollLayout>))]
     [ConstructorJs]
     public partial class ScrollLayout : Block {
-
-        public Block Content { get; set; } = new();
+        public required Block Content { get; set; }
         public ScrollLayout(ScrollLayout other, int callerLineNumber, string callerFilePath)
             : base(other, callerLineNumber, callerFilePath) {
             Content = other.Content;

@@ -8,30 +8,31 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    namespace Gears {
-        [System.Diagnostics.DebuggerNonUserCode]
-        public class FlipperJs : Block {
-            //public float Before => throw new NotEvaluatableException();
-        }
-
-
-
-        public class MFlipperBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
+    namespace Js {
+        public class Flipper : Block {
+            public double FlipWidth => NotEvaluatableValue<double>();
         }
     }
 
 
-    [Mix(typeof(MFlipperBindings<FlipperJs>))]
-    [ConstructorJs]
-    public sealed class Flipper : Block, IBlock {
+    namespace Gears {
+        public class MFlipperBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
+            public Binding<double> FlipWidth { set { Apply(value); } }
+        }
+    }
 
-        public Block First { get; init; }
-        public Block Second { get; init; }
+
+    [Mix(typeof(MFlipperBindings<Js.Flipper>))]
+    [ConstructorJs]
+    public partial class Flipper : Block, IBlock {
+
+        public required Block First { get; init; }
+        public required Block Second { get; init; }
 
         public Flipper([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
             : base(callerLineNumber, callerFilePath) { }
 
-        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {            
+        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {  
             elementTag.Add(                
                 await First.GenerateHtmlAsync(context,new Role(false,"First"))
             );
