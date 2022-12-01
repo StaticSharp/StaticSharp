@@ -23,15 +23,15 @@ namespace StaticSharp {
             
             var chars = Value.ToPrintableChars();
             HashSet<string> families = new();
-            foreach (var i in context.FontFamilies) {
-                var fontGenome = new FontGenome(i, context.FontStyle);
-                var font = await fontGenome.CreateOrGetCached();
-                context.Fonts[fontGenome.Key] = font;
+            foreach (var fontFamilyGenome in context.FontFamilies) {
+                var fontFamily = await fontFamilyGenome.CreateOrGetCached();
+                var font = fontFamily.FindFont(context.FontStyle);
+                var fontSubset = context.FontSubsets.GetOrAdd(font.Key, key => new FontSubset(font));
 
                 var numChars = chars.Count;
-                chars = font.AddChars(chars);
+                chars = fontSubset.AddChars(chars);
                 if (chars.Count < numChars) {
-                    families.Add(i.Name);
+                    families.Add(fontFamily.Name);
                     numChars = chars.Count;
                 }
                 if (numChars == 0)

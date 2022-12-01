@@ -62,12 +62,14 @@ public class VisualStudio {
         try {
             var dte = Marshal2.GetActiveObject("VisualStudio.DTE") as DTE;
             dte.ExecuteCommand("File.OpenFile", filePath);
-            dte.ExecuteCommand("Edit.GoTo", line.ToString());
+            //dte.ExecuteCommand("Edit.GoTo", line.ToString());
 
             var selection = dte.ActiveDocument.Selection as EnvDTE.TextSelection;
-            if (!selection.ActivePoint.AtStartOfLine)
+            selection.GotoLine(line, true);
+
+            /*if (!selection.ActivePoint.AtStartOfLine)
                 selection.StartOfLine();
-            selection.LineDown(true, 1);
+            selection.LineDown(true, 1);*/
 
             return true;
         }

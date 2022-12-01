@@ -127,11 +127,11 @@ namespace StaticSharp {
 
                             //while (true) {
 
-                                var s = Stopwatch.StartNew();
+                                //var s = Stopwatch.StartNew();
                                 var context = CreateContext(page.VirtualNode, BaseUrlFromHttpRequest(httpContext.Request));
                                 var html = await page.GeneratePageHtmlAsync(context);
                                 var hash = html.ToHashString();
-                                Console.WriteLine(s.ElapsedMilliseconds);
+                                //Console.WriteLine(s.ElapsedMilliseconds);
                             //}
                             //return Results.Text("");
 
@@ -146,6 +146,8 @@ namespace StaticSharp {
 
         public IResult GetAny(HttpContext httpContext) {
             var path = httpContext.Request.Path.Value;
+            Console.WriteLine($"navigation to {httpContext.Request.Path.Value}");
+
 
             var extension = Path.GetExtension(path);
             if (!string.IsNullOrEmpty(extension)) {
@@ -164,6 +166,7 @@ namespace StaticSharp {
             }*/
 
             if (page == null) {
+                Console.WriteLine($"redirect to {closest}");
                 return RegirectToClosest(httpContext, closest);
             }
 

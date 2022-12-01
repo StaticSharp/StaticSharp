@@ -2,13 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
-    public record FontFamilyGenome(string Name) : Genome<Task<CacheableFontFamily>> {
-        public override async Task<CacheableFontFamily> Create() {
+    public record FontFamilyGenome(string Name) : Genome<Task<FontFamily>> {
+        public override async Task<FontFamily> Create() {
             var fullCssUrl = GoogleFonts.MakeCssUrl(Name);
 
             var fullCssRequest = new HttpRequestGenome(
@@ -17,7 +15,7 @@ namespace StaticSharp {
 
             }.CreateOrGetCached();
 
-            var result = new CacheableFontFamily();
+            var result = new FontFamily(Name);
 
             var fontInfos = GoogleFonts.ParseCss(await fullCssRequest.GetTextAsync());
             foreach (var i in fontInfos) {
@@ -26,7 +24,7 @@ namespace StaticSharp {
                 if (existing != null) {
                     existing.Segments.AddRange(i.Segments);
                 } else {
-                    italicSubset.Add(new FontFamilyMember(new FontStyle((FontWeight)i.Weight, i.Italic), i.Segments));
+                    italicSubset.Add(new Font(result, new FontStyle((FontWeight)i.Weight, i.Italic), i.Segments));
                 }
             }
             return result;
@@ -50,21 +48,25 @@ namespace StaticSharp {
             //eot,
         }
 
-        public class CacheableFontFamily {
+        public class FontFamily {
 
 
+            public string Name { get; }
 
+            public FontFamily(string name) {
+                Name = name;
+            }
 
-            public List<FontFamilyMember>[/*italic*/] Members { get;} = new[]{
-                new List<FontFamilyMember>(),
-                new List<FontFamilyMember>()
+            public List<Font>[/*italic*/] Members { get;} = new[]{
+                new List<Font>(),
+                new List<Font>()
             };
 
 
 
 
 
-            public FontFamilyMember FindMember(FontStyle fontStyle) {
+            public Font FindFont(FontStyle fontStyle) {
 
                 var weights = Members[fontStyle.Italic ? 1 : 0];
                 var difWithPrevious = Math.Abs((int)fontStyle.Weight - (int)weights[0].FontStyle.Weight);

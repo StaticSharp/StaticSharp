@@ -36,7 +36,7 @@ namespace StaticSharp {
 
         //public Includes Includes { get; init; }
 
-        public Dictionary<string, CacheableFont> Fonts { get; } = new();
+        public ConcurrentDictionary<string, FontSubset> FontSubsets { get; } = new(); //Key is Font.Key
 
         public SvgDefs SvgDefs { get; } = new();
 
@@ -96,7 +96,7 @@ namespace StaticSharp {
         public async Task<Html.Tag> GenerateFontsAsync() {
             var fontStyle = new StringBuilder();
 
-            var sortedFonts = Fonts.OrderBy(x => x.Key);
+            var sortedFonts = FontSubsets.OrderBy(x => x.Key);
 
             foreach (var i in sortedFonts) {
                 fontStyle.AppendLine(await i.Value.GenerateIncludeAsync());
