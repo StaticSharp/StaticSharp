@@ -1,6 +1,7 @@
 
 
 using StaticSharp.Tree;
+using System.Linq;
 
 namespace StaticSharpDemo.Root.Components.CodeComponent {
 
@@ -11,20 +12,32 @@ namespace StaticSharpDemo.Root.Components.CodeComponent {
 
         Block PagePreview(Node node) {
             var mainVisual = node.Representative?.MainVisual as Block;
-
+            mainVisual ??= new Block() { BackgroundColor = Color.Gray };
+            mainVisual.ClipByParent = true;
+            /*if (mainVisual is Image image) {
+                image.Aspect = 2;
+            }*/
             return new Flipper() {
                 MarginsHorizontal = 10,
                 MarginsVertical= 10,
                 Radius= 10,
-                BackgroundColor= Color.Red,
                 FlipWidth = 500,
+                InternalLink = node,
+
+                //Height = 200,
+
                 //Width = new(e=>e.LayoutWidth / 2),
-                First = mainVisual ?? new Block() { BackgroundColor = Color.Red },
+                First = mainVisual,
                 Second = new Column {
                     Children = {
                         H4(node.Representative.Title),
                         new Paragraph(node.Representative?.DescriptionContent),
                     }
+                },
+                Children= {
+                    new MaterialShadow {
+                        Elevation = 3,
+                    },
                 }
 
             };
@@ -47,25 +60,24 @@ namespace StaticSharpDemo.Root.Components.CodeComponent {
 
             PagePreview(Node.Parent.ImageComponent),
 
-            new Flipper(){
-                FlipWidth = 500,
-                //Width = new(e=>e.LayoutWidth / 2),
-                First = Node.Representative.MainVisual ?? new Block(){BackgroundColor = Color.Red},
-                Second = new Column{ 
-                    Children = { 
-                        H4(Node.Representative.Title),
-                        Node.Representative.Description,
+            PagePreview(Node.Parent.VideoPlayer),
+
+            Enumerable.Range(1,10).Select(x=>{
+                return new Block() {
+                    Height = 50,
+                    Margins = 10,
+                    Radius = 3,
+                    BackgroundColor= Color.White,
+                    Children= {
+                        new MaterialShadow {
+                            Elevation = new(e=>e.ParentBlock.Hover? 0.5*x : x)
+                        }
                     }
-                },
-                Children = { 
-                    new MaterialShadow()
+                };
+            })
 
 
-                }
-                
 
-
-            }
 
         };
     }

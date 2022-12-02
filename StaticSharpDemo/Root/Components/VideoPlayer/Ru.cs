@@ -3,6 +3,16 @@
 
     [Representative]
     public partial class Ru : ComponentPage {
+
+
+
+        public override Block? MainVisual => new Video("T4TEdzSLyi0") {
+            Play = true,
+            Mute = true,
+            Loop = true,
+            Controls = false,
+            PreferPlatformPlayer = false,
+        };
         public override Inlines DescriptionContent => $"StaticSharp VideoPlayer component.";
         public override Blocks? Content => new() {
             {"Video",

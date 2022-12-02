@@ -38,6 +38,10 @@ namespace StaticSharp {
 
             public double FontSize => NotEvaluatableValue<double>();
             public int Depth => NotEvaluatableValue<int>();
+
+            public bool ClipByParent => NotEvaluatableValue<bool>();
+
+            
         }
     }
 
@@ -72,6 +76,7 @@ namespace StaticSharp {
             public Binding<double> FontSize { set { Apply(value); } }
 
             public Binding<int> Depth { set { Apply(value); } }
+            public Binding<bool> ClipByParent { set { Apply(value); } }
 
         }
 

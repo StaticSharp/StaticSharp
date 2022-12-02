@@ -68,7 +68,7 @@ function Block(element) {
         Width: () => First(element.LayoutWidth, element.InternalWidth),
         Height: () => First(element.LayoutHeight, element.InternalHeight),
 
-        
+        ClipByParent: false
         
     }
 
@@ -80,10 +80,37 @@ function Block(element) {
     WidthToStyle(element)
     HeightToStyle(element)
 
-    
+    //element.style.clipPath = "path('M 0 200 L 0,75 A 5,5 0,0,1 150,75 L 200 200 z')"
+
+    new Reaction(() => {
+        if (element.Parent == undefined)
+            return
+
+        if (element.ClipByParent) {
+
+            let left = -element.X
+            let top = -element.Y
+            let right = -element.Parent.Width + element.Width - element.X
+            let bottom = -element.Parent.Height + element.Height - element.Y
+            let offsets = `${top}px ${right}px ${bottom}px ${left}px`
+            let round = ""
+            if (
+                element.Parent.RadiusTopLeft != undefined
+                || element.Parent.RadiusTopRight != undefined
+                || element.Parent.RadiusBottomLeft != undefined
+                || element.Parent.RadiusBottomRight != undefined
+            ) {
+                round = ` round ${element.Parent.RadiusTopLeft || 0}px ${element.Parent.RadiusTopRight || 0}px ${element.Parent.RadiusBottomRight || 0}px ${element.Parent.RadiusBottomLeft || 0}px`
+            }
+            element.style.clipPath = `inset(${offsets}${round})`
+        } else {
+            element.style.clipPath = ""
+        }
+
+    })
+
 
     
-
 
 
     new Reaction(() => {

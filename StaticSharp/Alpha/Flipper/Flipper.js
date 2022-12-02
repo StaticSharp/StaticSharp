@@ -48,10 +48,15 @@ function Flipper(element) {
             )
 
             element.InternalHeight = height
-            element.First.LayoutHeight = height - top1 - bottom1
-            element.Second.LayoutHeight = height - top2 - bottom2
+
+            element.First.LayoutHeight = element.Height - top1 - bottom1
+            element.Second.LayoutHeight = element.Height - top2 - bottom2
 
         } else {
+
+            element.First.LayoutHeight = undefined
+            element.Second.LayoutHeight = undefined
+
             let orderedChildren = [element.First, element.Second]
             let margin = First(element.PaddingTop, 0)
             

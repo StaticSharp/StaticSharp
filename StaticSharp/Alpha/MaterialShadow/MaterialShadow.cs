@@ -11,21 +11,21 @@ namespace StaticSharp {
 
     namespace Js {
         public class MaterialShadow : Block {
-            public double FlipWidth => NotEvaluatableValue<double>();
+            public double Elevation => NotEvaluatableValue<double>();
         }
     }
 
 
     namespace Gears {
         public class MaterialShadowBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {
-            public Binding<double> FlipWidth { set { Apply(value); } }
+            public Binding<double> Elevation { set { Apply(value); } }
         }
     }
 
 
     [Mix(typeof(MaterialShadowBindings<Js.MaterialShadow>))]
     [ConstructorJs]
-    public class MaterialShadow : Hierarchical, IBlock, IInline {
+    public partial class MaterialShadow : Hierarchical, IBlock, IInline {
         public MaterialShadow([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
             : base(callerLineNumber, callerFilePath) { }
         public MaterialShadow(Hierarchical other, int callerLineNumber, string callerFilePath) : base(other, callerLineNumber, callerFilePath) {}

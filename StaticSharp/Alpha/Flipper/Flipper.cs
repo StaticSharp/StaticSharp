@@ -16,13 +16,13 @@ namespace StaticSharp {
 
 
     namespace Gears {
-        public class MFlipperBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
+        public class FlipperBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
             public Binding<double> FlipWidth { set { Apply(value); } }
         }
     }
 
 
-    [Mix(typeof(MFlipperBindings<Js.Flipper>))]
+    [Mix(typeof(FlipperBindings<Js.Flipper>))]
     [ConstructorJs]
     public partial class Flipper : Block, IBlock {
 

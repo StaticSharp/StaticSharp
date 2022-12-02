@@ -12,14 +12,23 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    namespace Gears {
-        public class ImageJs : Block {
 
+    namespace Js {
+        public class Image : Block {
+            public double Aspect => NotEvaluatableValue<double>();
         }
     }
 
+
+    namespace Gears {
+        public class ImageBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
+            public Binding<double> Aspect { set { Apply(value); } }
+        }
+    }
+
+    [Mix(typeof(ImageBindings<Js.Image>))]
     [ConstructorJs]
-    public class Image : Block, IMainVisual {
+    public partial class Image : Block, IMainVisual {
 
         public enum TEmbed { 
             Image,
