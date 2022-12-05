@@ -3,11 +3,6 @@ using System.Text;
 
 namespace StaticSharp.Gears;
 
-/*public interface IGenome<TCacheable>: IKeyProvider {
-    Task<TCacheable> CreateOrGetCached();
-    Task<TCacheable> CreateAsync();
-}*/
-
 public abstract record KeyProvider: IKeyProvider {
 
     private string? key = null;

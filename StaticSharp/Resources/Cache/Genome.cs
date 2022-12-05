@@ -1,11 +1,8 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text.Json;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace StaticSharp.Gears;
-
 
 public abstract record Genome: KeyProvider {
 
@@ -67,11 +64,6 @@ public abstract record Genome: KeyProvider {
             }
         }
     }
-
-
-    
-
-
 }
 
 

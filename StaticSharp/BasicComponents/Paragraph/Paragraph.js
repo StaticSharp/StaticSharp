@@ -27,31 +27,6 @@ function Paragraph(element) {
 
     }
 
-    /*new Reaction(() => {
-        console.log(element, element.Child(0))
-    })*/
-
-
-    /*new Reaction(() => {
-        let l = element.PaddingLeft
-        let r = element.PaddingRight
-        let w = element.Width
-        if (l + r > w) {
-            let m = w / (l + r)
-            l *= m
-            r *= m
-        }
-        element.style.paddingLeft = ToCssSize(l)
-        element.style.paddingRight = ToCssSize(r)
-    })
-
-    new Reaction(() => {
-        element.style.paddingTop = ToCssSize(element.PaddingTop)
-    })
-    new Reaction(() => {
-        element.style.paddingBottom = ToCssSize(element.PaddingBottom)
-    })*/
-
 
     new Reaction(() => {
 
@@ -103,13 +78,8 @@ function Paragraph(element) {
 
 
     new Reaction(() => {
-        //console.log("element.HierarchyFontSize", element.HierarchyFontSize, element)
-        //console.log("element.Modifier", element, element.Modifier)
-        //console.log("element.Modifier.HierarchyFontSize", element, element.Modifier.HierarchyFontSize)
         element.style.width = ToCssSize(element.Width)
-
         let content = element.children[0]
-
         content.style.transformOrigin = ""
         content.style.transform = ""
         content.style.width = ""
@@ -119,10 +89,7 @@ function Paragraph(element) {
 
         let minContentWidthWithPaddings = Sum(element.MinContentWidth, element.PaddingLeft, element.PaddingRight)
 
-        if (minContentWidthWithPaddings > element.Width) {
-            //element.title = "element.MinContentWidth > element.Width"
-
-            
+        if (minContentWidthWithPaddings > element.Width) {          
 
             let scale = Sum(element.Width, -element.PaddingLeft, -element.PaddingRight) / element.MinContentWidth
 
@@ -134,15 +101,12 @@ function Paragraph(element) {
             } else {
                 content.style.display = "none"
                 element.InternalHeight = Sum(element.PaddingTop, element.PaddingBottom)
-            }
-
-            
+            }            
             return
         }
 
         let maxContentWidthWithPaddings = Sum(element.MaxContentWidth, element.PaddingLeft, element.PaddingRight)
         if (Math.abs(element.Width - maxContentWidthWithPaddings) < 0.001) {
-            //element.title = "element.Width == element.MaxContentWidth"
 
             element.InternalHeight = Sum(element.MinContentHeight, element.PaddingTop, element.PaddingBottom) 
             content.style.width = "max-content"

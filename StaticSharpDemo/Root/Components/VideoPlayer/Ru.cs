@@ -15,6 +15,7 @@
         };
         public override Inlines DescriptionContent => $"StaticSharp VideoPlayer component.";
         public override Blocks? Content => new() {
+
             {"Video",
                 new Video("T4TEdzSLyi0"){
                     Play = new (e=>e.Parent["VideoProperties"]["Play"].As<Js.Checkbox>().ValueActual),
@@ -26,14 +27,17 @@
                 }
             },
 
-            "Volume:",
+            /*"Volume:",
             {"VolumeSlider",
                 new Slider { Value = new(e=>e.Parent["Video"].As<Js.Video>().VolumeActual) }
-            },
+            },*/
 
             {"VideoProperties",
-                $"""                
-                {("Play", new CheckboxInline(){Value = new(e=>e.Parent.Parent["Video"].As<Js.Video>().PlayActual), Children = { "Play" } })}
+                $"""
+                {("Play", new CheckboxInline(){
+                    Value = new(e=>e.Parent.Parent["Video"].As<Js.Video>().PlayActual),
+                    Children = { "Play" }
+                })}
                 {("Mute", new CheckboxInline(){Value = new(e=>e.Parent.Parent["Video"].As<Js.Video>().MuteActual), Children = { "Mute" } })}
                 {("PreferPlatformPlayer", new CheckboxInline(){Value = false, Children = { "PreferPlatformPlayer" } })}
                 {("Controls", new CheckboxInline(){Value = true, Children = { "Controls" } })}

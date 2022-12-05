@@ -1,5 +1,6 @@
 ﻿
 using StaticSharp.Tree;
+using System;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -33,8 +34,6 @@ namespace StaticSharpDemo.Root.Components {
         }
 
 
-        
-
         public override Block LeftSideBar => new ScrollLayout {
             Content = new Column(){
                 BackgroundColor = Color.FromArgb(96,96,96),
@@ -59,7 +58,19 @@ namespace StaticSharpDemo.Root.Components {
 
         public override Blocks Content => new(){
 
-            new Row{
+            Enumerable.Range(1,20).Select(x=>new Paragraph(x.ToString()){
+                BackgroundColor = new(e=>e.Root.Width < 50*x ? Color.Pink: Color.Black),
+            }),
+
+
+            new Paragraph($"Paragraph {Node.ParagraphComponent}") {
+                BackgroundColor = new(e=>e.Root.Width < 800 ? Color.Pink: Color.Black),
+            }
+
+
+
+
+            /*new Row{
                 Depth = 1,
                 BackgroundColor = ColorTranslator.FromHtml("#b56576"),
                 Children = { 
@@ -106,7 +117,7 @@ namespace StaticSharpDemo.Root.Components {
                         new Space()
                     }
                 }
-            },
+            },*/
         };
 
     }
