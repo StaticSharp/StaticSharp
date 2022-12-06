@@ -19,10 +19,7 @@ namespace StaticSharpDemo.Root.Components.ImageComponent {
 
             H2("Psd format support"),
             $"Psd convertion is supported using {"https://github.com/dlemstra/Magick.NET":Magick.NET} library.",
-            new Image("ImageExample1.psd"){ 
-                Width = new(e=>e.Height)
-                
-            }
+            new Image("ImageExample1.psd")
             
 
 
