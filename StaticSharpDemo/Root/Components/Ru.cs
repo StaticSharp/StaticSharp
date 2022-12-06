@@ -1,9 +1,6 @@
 ﻿
-using StaticSharp.Tree;
-using System;
-using System.Drawing;
+
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace StaticSharpDemo.Root.Components {
@@ -36,7 +33,7 @@ namespace StaticSharpDemo.Root.Components {
 
         public override Block LeftSideBar => new ScrollLayout {
             Content = new Column(){
-                BackgroundColor = Color.FromArgb(96,96,96),
+                BackgroundColor = Color.FromGrayscale(0.25),
                 Children = {
                     Node.Children.Select(x=>MenuItem(x))
                 }
@@ -50,7 +47,7 @@ namespace StaticSharpDemo.Root.Components {
     public partial class Ru : ComponentPage {
 
         protected override Task Setup(Context context) {
-            BackgroundColor = ColorTranslator.FromHtml("#f8edeb");
+            BackgroundColor = new Color("#f8edeb");
             return base.Setup(context);
         }
 
@@ -59,7 +56,7 @@ namespace StaticSharpDemo.Root.Components {
         public override Blocks Content => new(){
 
             Enumerable.Range(1,20).Select(x=>new Paragraph(x.ToString()){
-                BackgroundColor = new(e=>e.Root.Width < 50*x ? Color.Pink: Color.Black),
+                BackgroundColor = new(e=>Js.Window.Touch ? Color.Pink: Color.Black),
             }),
 
 

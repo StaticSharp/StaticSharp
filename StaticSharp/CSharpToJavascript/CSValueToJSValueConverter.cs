@@ -2,6 +2,11 @@
 using System.Globalization;
 
 namespace StaticSharp.Gears {
+
+    public interface IConvertableToJsValue {
+        string ToJsValue();
+    }
+
     public partial class CSValueToJSValueConverter {
 
         public static string ObjectToJsValue(object? value) {
@@ -18,9 +23,8 @@ namespace StaticSharp.Gears {
                 return "\"" + value.ToString() + "\"";
             }
 
-            if (value is Color valueAsColor) {                
-                var hex = valueAsColor.A.ToString("X2") + valueAsColor.B.ToString("X2") + valueAsColor.G.ToString("X2") + valueAsColor.R.ToString("X2");
-                return $"new Color(0x{hex})";//{valueAsColor.A},{valueAsColor.R},{valueAsColor.G},{valueAsColor.B}
+            if (value is IConvertableToJsValue convertableToJsValue) {
+                return convertableToJsValue.ToJsValue();
             }
 
             if (value is double valueAsDouble) {

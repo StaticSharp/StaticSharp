@@ -64,7 +64,7 @@ public class LambdaScriptifier {
     private string StringifyMethodCall(MethodCallExpression expression) {
         var parameters = expression.Method.GetParameters();
         var arguments = expression.Arguments.ToArray();
-        List<string> argumentsValues = new ();
+        List<string> argumentsValues = new();
 
         //expression.Object.Type.GetDefaultMembers
 
@@ -114,19 +114,26 @@ public class LambdaScriptifier {
 
     private string Stringify(Expression expression) {
 
+
         switch (expression) {
             case MethodCallExpression methodCallExpression: {
-                
+
                 return StringifyMethodCall(methodCallExpression);
             }
 
             case MemberExpression memberExpression: {
                 var prefix = "";
                 if (memberExpression.Expression == null) {//Static class
-                    var format = memberExpression.Member.DeclaringType?.GetCustomAttribute<ConvertToJsAttribute>()?.Format;
-                    if (format != null)
-                        prefix = format+".";
-                } else { 
+                    if (memberExpression.Member.DeclaringType != null) {
+                        var format = memberExpression.Member.DeclaringType.GetCustomAttribute<ConvertToJsAttribute>()?.Format;
+                        if (format != null)
+                            prefix = format + ".";
+                        else
+                            prefix = memberExpression.Member.DeclaringType.Name + ".";
+                    } else {
+                        throw new NotImplementedException();
+                    }
+                } else {
                     prefix = Eval(memberExpression.Expression) + ".";
                 }
                 return prefix + memberExpression.Member.Name;
@@ -163,6 +170,15 @@ public class LambdaScriptifier {
             }
 
             case BinaryExpression binaryExpression: {
+
+                if (binaryExpression.Method != null) {
+                    var customConverter = binaryExpression.Method.GetCustomAttribute<ConvertToJsAttribute>()?.Format;
+                    if (customConverter != null) {
+                        return string.Format(customConverter, Eval(binaryExpression.Left), Eval(binaryExpression.Right));
+                    }
+                }
+
+
                 var Op = binaryExpression.NodeType switch {
                     ExpressionType.Add => "+",
                     ExpressionType.Subtract => "-",

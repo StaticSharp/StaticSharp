@@ -34,7 +34,7 @@ namespace StaticSharp {
     public partial class Slider : Block {
 
         public static Func<Block> DefaultThumbConstructor = () => new Block() {
-            BackgroundColor = new(e=>e.Hover ? Color.FromArgb(128, 0, 0, 0) : Color.FromArgb(64, 0, 0, 0)),            
+            BackgroundColor = new(e => e.Hover ? new Color(0, 0, 0, 0.5) : new Color(0, 0, 0, 0.25)),
             ["Radius"] = "() => Min(element.Width,element.Height) / 2"
         };
 

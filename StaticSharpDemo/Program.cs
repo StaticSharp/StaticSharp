@@ -3,12 +3,24 @@ using StaticSharp.Gears;
 using System.IO;
 using System.Threading.Tasks;
 using System;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace StaticSharpDemo {
+
+
+
+
 
     internal class Program {
 
         private static async Task Main(string[] args) {
+
+
+
+            //var ls = new LambdaScriptifier(() => Color2.Black + Color2.White);
+            //var code = ls.Eval();
+
+
             var entryPointName = Environment.GetEnvironmentVariable("ENTRY_POINT");
             if (entryPointName == null) {
                 Console.WriteLine("EnvironmentVariable 'ENTRY_POINT' not found.");

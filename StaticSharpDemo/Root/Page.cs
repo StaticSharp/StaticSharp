@@ -16,7 +16,7 @@ namespace StaticSharpDemo.Root {
         }
 
         public override Block? LeftSideBarIcon => new MaterialDesignIconBlock(MaterialDesignIcons.IconName.Menu) { 
-            BackgroundColor = ColorTranslator.FromHtml("#6d597a"),
+            BackgroundColor = new Color("#6d597a"),
             Paddings = 8,
             Margins = 8
         };
@@ -26,7 +26,7 @@ namespace StaticSharpDemo.Root {
         public override Block LeftSideBar =>
             new ScrollLayout {
                 Content = new Column() {
-                    BackgroundColor = ColorTranslator.FromHtml("#6d597a"),
+                    BackgroundColor = new Color("#6d597a"),
                     Children = {
                         "Menu Item 1",
                         "Menu item 2",
@@ -67,12 +67,12 @@ namespace StaticSharpDemo.Root {
 
 
         public override Block? RightSideBarIcon => new MaterialDesignIconBlock(MaterialDesignIcons.IconName.Translate) {
-            BackgroundColor = ColorTranslator.FromHtml("#7a5924"),
+            BackgroundColor = new Color("#7a5924"),
             Paddings = 8,
             Margins = 8
         };
         public override Block RightSideBar => new Column() {
-            BackgroundColor = ColorTranslator.FromHtml("#7a5924"),
+            BackgroundColor = new Color("#7a5924"),
             Children = {
                 VirtualNode.GetAllParallelNodes().Select(x=>MenuItem(x,x.Language.ToString())),
             }
@@ -93,7 +93,7 @@ namespace StaticSharpDemo.Root {
 
         public override Block? Footer => new Row {
 
-            BackgroundColor = ColorTranslator.FromHtml("#355070"),
+            BackgroundColor = new Color("#355070"),
 
             PaddingTop = 20,
             PaddingBottom = 20,

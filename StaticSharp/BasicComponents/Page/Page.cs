@@ -38,9 +38,6 @@ namespace StaticSharp {
 
     [Mix(typeof(PageBindings<Js.Page>))]
     [ConstructorJs]
-    //[RelatedScript("../Watch")]
-    [RelatedScript("../Color")]
-    //[RelatedScript("Cookies")]
     [RelatedStyle("../Normalization")]
 
     public abstract partial class Page : Block, IPageGenerator {

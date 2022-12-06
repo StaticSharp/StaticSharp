@@ -14,9 +14,10 @@ namespace StaticSharp {
 
             public Color BackgroundColor => NotEvaluatableValue<Color>();
             public Color HierarchyBackgroundColor => NotEvaluatableValue<Color>();
-
             public Color ForegroundColor => NotEvaluatableValue<Color>();
             public Color HierarchyForegroundColor => NotEvaluatableValue<Color>();
+
+
 
             public bool Hover => NotEvaluatableValue<bool>();
             public bool Selectable => NotEvaluatableValue<bool>();
@@ -52,6 +53,8 @@ namespace StaticSharp {
     namespace Gears {
 
         [Mix(typeof(BaseModifierBindings<Js.BaseModifier>))]
+
+        [RelatedScript("../../Color/Color")]
         [ConstructorJs]
         public abstract partial class BaseModifier: Hierarchical {
 

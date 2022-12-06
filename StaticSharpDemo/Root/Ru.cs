@@ -34,7 +34,7 @@ namespace StaticSharpDemo.Root {
             return new Inline {
                 ExternalLink = "https://github.com/antilatency/Antilatency.Copilot",
                 OpenLinksInANewTab = true,
-                ForegroundColor = Color.FromArgb(172, 196, 53),
+                ForegroundColor = Color.FromIntRGB(172, 196, 53),
                 Children = {
                     text
                 }
@@ -45,7 +45,7 @@ namespace StaticSharpDemo.Root {
             return new Inline {
                 ExternalLink = "https://discord.gg/ZTqmfPsGEr",
                 OpenLinksInANewTab = true,
-                ForegroundColor = Color.FromArgb(139, 148, 245),
+                ForegroundColor = Color.FromIntRGB(139, 148, 245),
                 Children = {
                     text
                 }
@@ -94,7 +94,7 @@ namespace StaticSharpDemo.Root {
             $"{Node} {Node.Components} {Node.Components.WithLanguage(Language.En)}",
 
             new Column(){
-                BackgroundColor = Color.FromArgb(255,32,32,32),
+                BackgroundColor = Color.FromGrayscale(0.15),
                 Children = {
                     $"Refer to {GithubUrl()} for more information, and join our {DiscordUrl()} to learn more about getting early access to Copilot.",
                     new Flipper() {
