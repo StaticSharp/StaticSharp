@@ -98,7 +98,7 @@ namespace StaticSharp {
 
             var stringBuilder = new StringBuilder();
             stringBuilder.Append("@font-face {");
-            stringBuilder.Append("font-family: ").Append(font.FontFamily.Name).Append(";");
+            stringBuilder.Append($"font-family: '{font.FontFamily.Name}';");
             stringBuilder.Append("font-weight: ").Append((int)font.FontStyle.Weight).Append(";");
             stringBuilder.Append("font-style: ").Append(fontStyle).Append(";");
             //stringBuilder.AppendLine($"src:local('{Arguments.Family} {Arguments.Weight}{italicSuffix}'),");

@@ -10,7 +10,8 @@ namespace StaticSharpDemo.Root {
 
 
     [Representative]
-    public partial class Ru : Page {
+    public partial class Ru : LandingPage {
+        public override string Title => "StaticSharp";
 
         public override Inlines DescriptionContent => $"Статический генератор сайтов на максималках";
 
@@ -89,9 +90,48 @@ namespace StaticSharpDemo.Root {
                     Loop =  true,                    
                 }
             },*/
-            $"{new CheckboxInline("checkbox")} ",
+            #region header
+            new Paragraph("StaticSharp"){ 
+                FontSize = 80,
+                TextAlignmentHorizontal = TextAlignmentHorizontal.Center,
+            },
+            new Paragraph(DescriptionContent) {
+                TextAlignmentHorizontal = TextAlignmentHorizontal.Center,
+            },
+            #endregion
 
-            $"{Node} {Node.Components} {Node.Components.WithLanguage(Language.En)}",
+
+            new ScrollLayout {
+                Radius = 8,
+                BackgroundColor = Color.FromGrayscale(0.95),
+                Margins = 0,
+
+                Content = new CodeBlock(new CodeRegionGenome(new FileGenome(ThisFileName()),"header")){
+                    
+                    //ClipByParent = true
+                }
+            },
+
+            new ScrollLayout {
+                Radius = 8,
+                BackgroundColor = Color.FromGrayscale(0.95),
+                Margins = 0,
+
+                Content = new Paragraph(
+                    """
+                    new Paragraph("StaticSharp"){ 
+                        FontSize = 80,
+                        TextAlignmentHorizontal = TextAlignmentHorizontal.Center,
+                    },
+                    """){ 
+                    FontStyle = new FontStyle(FontWeight.Regular),
+                    FontFamilies = new FontFamilyGenome[]{ 
+                        new FontFamilyGenome("Roboto Mono")
+                    }
+                }
+            },
+
+
 
             new Column(){
                 BackgroundColor = Color.FromGrayscale(0.15),

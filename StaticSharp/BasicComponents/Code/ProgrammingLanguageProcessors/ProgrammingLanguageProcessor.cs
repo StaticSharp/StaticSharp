@@ -3,6 +3,7 @@ using ColorCode.Styling;
 using StaticSharp.Gears;
 using StaticSharp.Html;
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -15,11 +16,15 @@ namespace StaticSharp {
 
     public record CodeRegionGenome(Genome<IAsset> Source, string RegionName) : Genome<IAsset> {
 
+        public override Genome[]? Sources => new Genome[] { Source };
         async Task<IAsset> CreateAssetAsync(IAsset sourceAsset) {
             var extension = await sourceAsset.GetFileExtensionAsync();
             var language = ProgrammingLanguageProcessor.FindByName(extension);
             string content = await sourceAsset.GetTextAsync();
             content = language.GetRegion(content, RegionName);            
+
+            
+
 
             return new TextAsset(
                 content,
@@ -127,7 +132,8 @@ namespace StaticSharp.Gears {
         }
 
         public virtual string? GetRegion(string code, string regionName) {
-            var stringBuilder = new StringBuilder();
+            var resultLines = new List<string>();
+
             var lines = Lines(code);
             for (int start = 0; start < lines.Length; start++) {
                 var matchStart = NamedRegionStartRegex.Match(lines[start]);
@@ -136,9 +142,9 @@ namespace StaticSharp.Gears {
                     for (int i = start+1; i < lines.Length; i++) {
                         var matchEnd = RegionEndRegex.Match(lines[i]);
                         if (!matchEnd.Success) {
-                            stringBuilder.AppendLine(lines[i]);
+                            resultLines.Add(lines[i]);
                         } else { 
-                            return stringBuilder.ToString();
+                            return string.Join('\n', resultLines);
                         }
                     }                    
                 }
@@ -147,10 +153,10 @@ namespace StaticSharp.Gears {
         }
 
 
-        public virtual Tag Highlight(string code, string programmingLanguageName, bool dark = false) {
+        public virtual Inlines Highlight(string code, string programmingLanguageName, bool dark = false) {
             var formatter = new CodeFormatter(dark ? StyleDictionary.DefaultDark : StyleDictionary.DefaultLight);
             var language = Languages.FindById(programmingLanguageName);
-            var html = formatter.GetHtmlString(code, language);
+            var html = formatter.GetInlines(code, language);
             return html;
         }
 

@@ -12,11 +12,11 @@ namespace StaticSharp.Gears {
         public CodeFormatter(StyleDictionary Style = null, ILanguageParser languageParser = null) : base(Style, languageParser) {
         }
 
-        public Tag GetHtmlString(string sourceCode, ILanguage language) {
+        public Inlines GetInlines(string sourceCode, ILanguage language) {
 
-            var result = new Tag("pre");
+            var result = new Inlines();
 
-            Tag CreateTagForScope(Scope scope) {
+            Inline CreateInlineForScope(Scope scope) {
                 string foreground = string.Empty;
                 string background = string.Empty;
                 bool italic = false;
@@ -27,27 +27,34 @@ namespace StaticSharp.Gears {
                     italic = style.Italic;
                     bold = style.Bold;
                 }
-                var result = new Tag("span") {
-                };
+                var result = new Inline();
+
                 if (!string.IsNullOrEmpty(foreground)) {
-                    result.Style["color"] = foreground.ToHtmlColor();
+                    result.ForegroundColor = new Color(foreground);
+                    //result.Style["color"] = foreground.ToHtmlColor();
                 }
                 if (!string.IsNullOrEmpty(background)) {
-                    result.Style["background-color"] = background.ToHtmlColor();
+                    result.BackgroundColor = new Color(background);
+                    //result.Style["background-color"] = background.ToHtmlColor();
                 }
-                if (italic) {
-                    result.Style["font-style"] = "italic";
+
+                result.FontStyle = new FontStyle(bold ? FontWeight.Bold : FontWeight.Regular, italic);
+
+                /*if (italic) {
+                    result.FontStyle.Italic = true;
+                    //result.Style["font-style"] = "italic";
                 }
                 if (bold) {
+                    result.FontStyle.
                     result.Style["font-weight"] = "bold";
-                }
+                }*/
 
                 return result;
             }
 
-            void WriteFragment(Tag tag, string parsedSourceCode, IList<Scope> scopes) {
+            void WriteFragment(Inlines inlines, string parsedSourceCode, IList<Scope> scopes) {
                 if (scopes.Count == 0) {
-                    tag.Add(parsedSourceCode);
+                    inlines.Add(parsedSourceCode);
                 } else {
                     scopes.SortStable((x, y) => x.Index.CompareTo(y.Index));
                     int offset = 0;
@@ -55,18 +62,18 @@ namespace StaticSharp.Gears {
                         var length = scope.Index - offset;
                         if (length > 0) {
                             var text = parsedSourceCode.Substring(offset, scope.Index - offset);
-                            tag.Add(text);
+                            inlines.Add(text);
                         }
-                        var scopeTag = CreateTagForScope(scope);
-                        WriteFragment(scopeTag, parsedSourceCode.Substring(scope.Index, scope.Length), scope.Children);
-                        tag.Add(scopeTag);
+                        var scopeInline = CreateInlineForScope(scope);
+                        WriteFragment(scopeInline.Children, parsedSourceCode.Substring(scope.Index, scope.Length), scope.Children);
+                        inlines.Add(scopeInline);
                         offset = scope.Index + scope.Length;
                     }
 
                     var rest = parsedSourceCode.Length - offset;
                     if (rest > 0) {
                         var text = parsedSourceCode.Substring(offset);
-                        tag.Add(text);
+                        inlines.Add(text);
                     }
                 }
             }

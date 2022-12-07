@@ -1,12 +1,19 @@
-body.js paragraph p {
+
+.inline-container {
     white-space: break-spaces;
 }
 
-body.js paragraph>p * {
+.inline-container * {
+    
     position: static;
     display: inline;
 }
 
-body.js paragraph > p a * {
+.inline-container a * {
     text-decoration-line: underline;
 }
+
+/*body.js paragraph>p * {
+    
+}*/
+

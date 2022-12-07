@@ -20,6 +20,10 @@ namespace StaticSharp {
             var resourcePath = Assembly.GetName().Name + "." + Path;
             using var stream = Assembly.GetManifestResourceStream(resourcePath);
             //throw
+            if (stream == null) { 
+                throw new FileNotFoundException(resourcePath);
+            }
+
 
             using (var memoryStream = new MemoryStream()) {
                 stream.CopyTo(memoryStream);

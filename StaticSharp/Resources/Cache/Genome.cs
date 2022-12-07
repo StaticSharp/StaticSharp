@@ -50,19 +50,28 @@ public abstract record Genome: KeyProvider {
     }
 
     private void DeleteDirectory(string directoryPath) {
-        DirectoryInfo dir = new DirectoryInfo(directoryPath);
+        if (!Directory.Exists(directoryPath))
+            return;
 
-        foreach (FileInfo file in dir.GetFiles()) {
+        Directory.Delete(directoryPath, true);        
+        while (Directory.Exists(directoryPath)) {
+            Thread.Sleep(100);
+        }
+        /*DirectoryInfo directory = new DirectoryInfo(directoryPath);
+        if (!directory.Exists)
+            return;
+
+        foreach (FileInfo file in directory.GetFiles()) {
             file.Delete();
         }
 
-        foreach (DirectoryInfo directory in dir.GetDirectories()) {
-            DeleteDirectory(directory.FullName);
-            directory.Delete();
-            while (directory.Exists) {
+        foreach (DirectoryInfo subDirectory in directory.GetDirectories()) {
+            DeleteDirectory(subDirectory.FullName);
+            subDirectory.Delete();
+            while (subDirectory.Exists) {
                 Thread.Sleep(100);
             }
-        }
+        }*/
     }
 }
 

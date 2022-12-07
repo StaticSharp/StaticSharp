@@ -40,14 +40,14 @@ function ScrollLayout(element) {
 
 
     element.Reactive = {
-        InternalWidth: () => element.Content.InternalWidth,
-        InternalHeight: () => element.Content.InternalHeight,
+        InternalWidth: () => Sum(element.Content.InternalWidth, element.MarginLeft, element.MarginRight),
+        InternalHeight: () => Sum(element.Content.InternalHeight, element.TopOffset, element.BottomOffset),
         //Content: () => element.Child("Content"),
 
-        MarginLeft: () => (element.PaddingLeft!=undefined) ? 0 : element.Content.MarginLeft,
+        /*MarginLeft: () => (element.PaddingLeft!=undefined) ? 0 : element.Content.MarginLeft,
         MarginTop: () => (element.PaddingTop != undefined) ? 0 : element.Content.MarginTop,
         MarginRight: () => (element.PaddingRight != undefined) ? 0 : element.Content.MarginRight,
-        MarginBottom: () => (element.PaddingBottom != undefined) ? 0 : element.Content.MarginBottom,
+        MarginBottom: () => (element.PaddingBottom != undefined) ? 0 : element.Content.MarginBottom,*/
 
         LeftOffset: () => CalcOffset(element, element.Content, "Left"),
         RightOffset: () => CalcOffset(element, element.Content, "Right"),

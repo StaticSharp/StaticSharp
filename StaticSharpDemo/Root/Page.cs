@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 
 namespace StaticSharpDemo.Root {
 
-
-
     public abstract partial class Page : StaticSharp.PageSideMenus {
 
         public override string PageLanguage => Node.Language.ToString().ToLower();

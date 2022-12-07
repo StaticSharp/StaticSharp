@@ -22,6 +22,13 @@ namespace StaticSharp {
             }
         }
 
+        public void Add(IInline? value) {
+            if (value != null) {
+                Add(new KeyValuePair<string?, IInline>(null, value));
+            }
+        }
+
+
         /*public void Add(IInline? value) {
             Add(value);
         }*/
