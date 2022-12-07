@@ -2,13 +2,20 @@
 
 	<PropertyGroup>
 		<Executable>false</Executable>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
+	<Target Name="CopyPackage" AfterTargets="Pack">
+		<Move
+		  SourceFiles="$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg"
+		  DestinationFolder="$(SolutionDir)/NugetPackages"/>
+	</Target>
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 
 		<IsRoslynComponent>true</IsRoslynComponent>
-		<IncludeBuildOutput>false</IncludeBuildOutput>
+		<IncludeBuildOutput>true</IncludeBuildOutput>
+		<!-- !!!! <IncludeBuildOutput>true</IncludeBuildOutput> - because it is referenced both as generator and as oridanary lib-->
 	</PropertyGroup>
 
 	<PropertyGroup Condition="$(Executable)">
@@ -26,6 +33,12 @@
 		</PackageReference>
 		
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- Package the generator in the analyzer directory of the nuget package -->
+		<!--None Include="$(OutputPath)\*"-->
+		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
 	</ItemGroup>
 		
 	<ItemGroup>

@@ -12,9 +12,15 @@
 		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
 
 		<WarningsAsErrors>CS0108</WarningsAsErrors><!--use the new keyword-->
+		
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
 
-
+	<Target Name="CopyPackage" AfterTargets="Pack">
+		<Move
+		  SourceFiles="$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg"
+		  DestinationFolder="$(SolutionDir)/NugetPackages"/>
+	</Target>
 	
 
 

@@ -45,13 +45,18 @@
 	<ItemGroup Condition="!$(UseDebugGeneratorOutput)">
 
 		<ProjectReference Include="..\MixinGenerator\MixinGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-
-		<ProjectReference Include="..\StaticSharpSourceGenerator\StaticSharpSourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
+
 
 	<ItemGroup>
 	  <Folder Include="Root\Components\Code\" />
+	</ItemGroup>	
+
+	<ItemGroup>
+	  <PackageReference Include="StaticSharpSourceGenerator" Version="1.0.0" />
 	</ItemGroup>
 	
 	
+	
+
 </Project>
