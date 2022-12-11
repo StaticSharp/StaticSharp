@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     public record ThumbnailGenome(Genome<IAsset> Source) : ImageProcessorGenome(Source) {
-        protected override Task<MagickImage> Process(MagickImage image) {
+        protected override MagickImage Process(MagickImage image) {
             var size = 32;
             var maxDimension = Math.Max(image.Width, image.Height);
             var scale = size / (float)maxDimension;
@@ -37,7 +37,7 @@ namespace StaticSharp {
             image.Format = MagickFormat.Pjpeg;
             image.Strip();
 
-            return Task.FromResult(image);
+            return image;
 
         }
 

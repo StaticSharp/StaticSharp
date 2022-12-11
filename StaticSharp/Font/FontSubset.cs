@@ -77,7 +77,7 @@ namespace StaticSharp {
             return chars;
         }
 
-        public async Task<string> GenerateIncludeAsync() {
+        public string GenerateInclude() {
 
             var sortedUsedChars = usedChars.OrderBy(c => c);
             var text = string.Concat(sortedUsedChars);
@@ -85,12 +85,12 @@ namespace StaticSharp {
             var subfontCssUrl = GoogleFonts.MakeCssUrl(font.FontFamily.Name, font.FontStyle, text);
             var subFontCssRequest = new HttpRequestGenome(GoogleFonts.MakeWoff2Request(subfontCssUrl)).CreateOrGetCached();
 
-            var fontInfos = GoogleFonts.ParseCss(await subFontCssRequest.GetTextAsync());
+            var fontInfos = GoogleFonts.ParseCss(subFontCssRequest.Text);
             //TODO validation
             var fontInfo = fontInfos.First();
             var subFontRequest = new HttpRequestGenome(fontInfo.Url).CreateOrGetCached();
 
-            var content = await subFontRequest.GetBytesAsync();
+            var content = subFontRequest.Data;
 
             var base64 = Convert.ToBase64String(content);
             var format = "woff2";

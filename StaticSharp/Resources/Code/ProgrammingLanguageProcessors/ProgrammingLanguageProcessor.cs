@@ -1,4 +1,5 @@
-﻿using ColorCode;
+﻿using AngleSharp.Html;
+using ColorCode;
 using ColorCode.Styling;
 using StaticSharp.Gears;
 using StaticSharp.Html;
@@ -11,25 +12,21 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
 
-    
 
 
-    public record CodeRegionGenome(Genome<IAsset> Source, string RegionName) : Genome<IAsset> {
+
+    /*public record CodeRegionGenome(Genome<IAsset> Source, string RegionName) : Genome<IAsset> {
 
         public override Genome[]? Sources => new Genome[] { Source };
-        async Task<IAsset> CreateAssetAsync(IAsset sourceAsset) {
-            var extension = await sourceAsset.GetFileExtensionAsync();
+        IAsset CreateAsset(IAsset sourceAsset) {
+            var extension = sourceAsset.FileExtension;
             var language = ProgrammingLanguageProcessor.FindByName(extension);
-            string content = await sourceAsset.GetTextAsync();
+            string content = sourceAsset.Text;
             content = language.GetRegion(content, RegionName);            
-
-            
-
-
             return new TextAsset(
                 content,
                 extension,
-                await sourceAsset.GetMediaTypeAsync()
+                sourceAsset.GetMediaType()
                 );
 
         }
@@ -37,22 +34,9 @@ namespace StaticSharp {
         public override IAsset Create() {
             var source = Source.CreateOrGetCached();
 
-            return new AsyncAsset(CreateAssetAsync(source));
-
-
-
-            
-
-            /*return new Asset(
-                ()=> Encoding.UTF8.GetBytes(content),
-                source.FileExtension,
-                source.MediaType,
-                Hash.CreateFromString(content).ToString(),
-                source.CharSet
-                );*/
-
+            return new AsyncAsset(CreateAsset(source));
         }
-    }
+    }*/
 
     /*namespace Gears {
         public class CodeRegionAsset : Cacheable<CodeRegionGenome>, Asset {

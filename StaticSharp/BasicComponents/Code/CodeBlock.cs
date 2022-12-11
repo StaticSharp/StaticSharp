@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
+/*
 namespace StaticSharp {
 
     public enum ProgrammingLanguage {
@@ -39,41 +39,7 @@ namespace StaticSharp {
         JavaScript
     }
 
-    /*public interface ICodeResource : IResource {
-    }
 
-    public class CodeResource : ICodeResource {
-        private readonly string _inputFilePath;
-        private string _code;
-        private string _extension;
-
-        public CodeResource(string filePath) => _inputFilePath = filePath;
-
-        public string Key => _inputFilePath;
-
-        public string Source => _code;
-
-        public string Extension => _extension;
-
-        public async Task GenerateAsync() {
-            if (File.Exists(_inputFilePath)) {
-                _extension = Path.GetExtension(_inputFilePath);
-                _code = await File.ReadAllTextAsync(_inputFilePath);
-            } else {
-                Log.Error.OnCaller($"File {_inputFilePath} not found");
-            }
-        }
-    }*/
-    #region Adf dfgdfff
-
-    #region B
-    public static partial class CodeUtils {
-
-        
-    }
-
-#endregion
-#endregion
 
 
 
@@ -120,7 +86,7 @@ namespace StaticSharp {
         }
 
 
-        /*public CodeBlock(string filePath, ProgrammingLanguage programmingLanguage = default,
+        public CodeBlock(string filePath, ProgrammingLanguage programmingLanguage = default,
             [CallerFilePath] string callerFilePath = "") {
             UserDefinedProgrammingLanguage = programmingLanguage;
             if (!File.Exists(filePath)) {
@@ -128,23 +94,17 @@ namespace StaticSharp {
                 Log.Error.OnCaller(error);
                 throw new FileNotFoundException(error);
             }
-        }*/
+        }
 
-        /*protected virtual ProgrammingLanguage ProgrammingLanguage {
+        protected virtual ProgrammingLanguage ProgrammingLanguage {
             get {
                 if (UserDefinedProgrammingLanguage != ProgrammingLanguage.Undefined) return UserDefinedProgrammingLanguage;
                 if (ProgrammingLanguageBasedOnExtension != ProgrammingLanguage.Undefined) return ProgrammingLanguageBasedOnExtension;
                 return ProgrammingLanguage.Undefined;
             }
-        }*/
+        }
 
-        /*private ProgrammingLanguage GetProgrammingLanguageByExtension(string extension)
-            => extension.TrimStart('.').ToLower() switch {
-                "cs" => ProgrammingLanguage.CSharp,
-                "xml" => ProgrammingLanguage.Xml,
-                "json" => ProgrammingLanguage.JavaScript,
-                _ => throw new ArgumentException("Please add extension here")
-            };*/
+
 
         //protected virtual string FinalSourceCode => _codeResource.Source;
 
@@ -258,11 +218,11 @@ namespace StaticSharp {
 
         public static string NormalizeCode(string code) {
 
-            /*var lines = Regex.Split(code, "\r\n|\r|\n");
+            var lines = Regex.Split(code, "\r\n|\r|\n");
 
 
             code = code.Replace("\r\n", "\n").Replace("\r", "\n");
-            code = code.Replace("\t", "    ");*/
+            code = code.Replace("\t", "    ");
 
             return code;
         }
@@ -295,7 +255,7 @@ namespace StaticSharp {
                 elementTag.Add(pre);
 
                 await base.ModifyHtmlAsync(context, elementTag);
-            }*/
+            }
 
 
 
@@ -349,12 +309,8 @@ namespace StaticSharp {
                 context.Includes.Require(new Style(AbsolutePath(nameof(CodeBlock) + ".scss")));
                 result.Add(new JSCall(AbsolutePath("Code.js")).Generate(context));
                 return result;
-            }*/
+            }
 
         }
-    /*public static class CodeStatic {
-        public static void Add<T>(this T collection, CodeBlock item) where T : IElementContainer {
-            collection.AddElement(item);
-        }
-    }*/
-}
+
+}*/

@@ -46,7 +46,7 @@ namespace StaticSharpDemo.Root.Components.CodeComponent {
 
 
         public override Blocks? Content => new() {
-            #region String
+            /*#region String
             $"Interpolated strings are not supported in {new CodeInline(nameof(CodeBlock))}",
             #endregion
             new ScrollLayout{
@@ -56,7 +56,7 @@ namespace StaticSharpDemo.Root.Components.CodeComponent {
                         Paddings = 10,
                         //BackgroundColor = Color.LightPink,//Custom Color type needed
                     }
-            },
+            },*/
 
             PagePreview(Node.Parent.ImageComponent),
 

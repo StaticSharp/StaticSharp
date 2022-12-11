@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace StaticSharp {
 
@@ -195,11 +196,16 @@ namespace StaticSharp {
             if (asset == null)
                 return Results.NotFound();
 
-            return new ResultAsync(async () => {                
-                var data = await asset.GetBytesAsync();
-                return Results.File(data, await asset.GetMediaTypeAsync(), null, true);
-            });
-            
+            var mediaType = asset.GetMediaType();
+
+            if (asset is IAssetAsyncData assetAsyncData) {
+                return new ResultAsync(async () => {
+                    var data = await assetAsyncData.GetDataAsync();
+                    return Results.File(data, mediaType, null, true);
+                });
+            } else {
+                return Results.File(asset.Data, mediaType, null, true);
+            }           
         }
     }
 }

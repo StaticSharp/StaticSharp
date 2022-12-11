@@ -46,15 +46,7 @@ public class Cache {
 
     static Dictionary<string, CacheItem> items = new();
 
-    /*private static Cache2? current;
-    public static Cache2 Current { 
-        get {
-            if (current == null) { 
-                current = new Cache2();
-            }
-            return current;
-        }
-    }*/
+
 
     private static CacheItem CreateOrGetItem(Genome genome) {
         if (!items.TryGetValue(genome.Key, out var item)) {

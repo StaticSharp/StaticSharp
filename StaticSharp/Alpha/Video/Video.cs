@@ -74,7 +74,7 @@ namespace StaticSharp {
             var youtubeVideoId = YoutubeExplode.Videos.VideoId.TryParse(Identifier);
             if (youtubeVideoId != null) {
 
-                var youtubeVideoManifest = await new YoutubeVideoManifestGenome(youtubeVideoId).CreateOrGetCached();
+                var youtubeVideoManifest = new YoutubeVideoManifestGenome(youtubeVideoId).CreateOrGetCached();
 
                 var item = youtubeVideoManifest.Items.MaxBy(x => x.Width)!;
 
@@ -85,7 +85,7 @@ namespace StaticSharp {
                 var sources = new List<object>();
                 foreach (var i in youtubeVideoManifest.Items) {
                     var iVideo = new YoutubeVideoGenome(i).CreateOrGetCached();
-                    var iUrl = context.PathFromHostToCurrentPage.To(await context.AddAssetAsync(iVideo)).ToString();
+                    var iUrl = context.PathFromHostToCurrentPage.To(context.AddAsset(iVideo)).ToString();
 
                     sources.Add(new {
                         size = new {
@@ -108,14 +108,14 @@ namespace StaticSharp {
 
 
 
-        public async Task GetMetaAsync(Dictionary<string, string> meta, Context context) {
+        public void GetMeta(Dictionary<string, string> meta, Context context) {
 
             var youtubeVideoId = YoutubeExplode.Videos.VideoId.TryParse(Identifier);
             if (youtubeVideoId != null) {
-                var youtubeVideoManifest = await new YoutubeVideoManifestGenome(youtubeVideoId).CreateOrGetCached();
+                var youtubeVideoManifest = new YoutubeVideoManifestGenome(youtubeVideoId).CreateOrGetCached();
                 var item = youtubeVideoManifest.Items.MaxBy(x => x.Width)!;
                 var video = new YoutubeVideoGenome(item).CreateOrGetCached();
-                var url = await context.AddAssetAsync(video);
+                var url = context.AddAsset(video);
 
                 meta["og:type"] = "video";
                 meta["og:video"] = (context.BaseUrl + url).ToString();

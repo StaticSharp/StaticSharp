@@ -81,15 +81,6 @@ namespace StaticSharpDemo.Root {
 
         public override Blocks? Content => new() {
 
-            /*{"video",
-                new Video("T4TEdzSLyi0"){
-                    Play = true,
-                    Mute = true,
-                    PreferPlatformPlayer = false,
-                    Controls = false,
-                    Loop =  true,                    
-                }
-            },*/
             #region header
             new Paragraph("StaticSharp"){ 
                 FontSize = 80,
@@ -100,37 +91,22 @@ namespace StaticSharpDemo.Root {
             },
             #endregion
 
-
             new ScrollLayout {
                 Radius = 8,
-                BackgroundColor = Color.FromGrayscale(0.95),
+                BackgroundColor = Color.FromGrayscale(0.8),
                 Margins = 0,
-
-                Content = new CodeBlock(new CodeRegionGenome(new FileGenome(ThisFileName()),"header")){
-                    
-                    //ClipByParent = true
-                }
-            },
-
-            new ScrollLayout {
-                Radius = 8,
-                BackgroundColor = Color.FromGrayscale(0.95),
-                Margins = 0,
-
+                Paddings = 0,
                 Content = new Paragraph(
-                    """
-                    new Paragraph("StaticSharp"){ 
-                        FontSize = 80,
-                        TextAlignmentHorizontal = TextAlignmentHorizontal.Center,
-                    },
-                    """){ 
+                        LoadFile(ThisFilePath()).GetCodeRegion("header").Highlight()
+                        //LoadFile(ThisFilePath()).GetCodeRegion("header").Highlight()
+                    ){
+                    PaddingsHorizontal = 20,
                     FontStyle = new FontStyle(FontWeight.Regular),
                     FontFamilies = new FontFamilyGenome[]{ 
                         new FontFamilyGenome("Roboto Mono")
                     }
                 }
             },
-
 
 
             new Column(){
@@ -154,7 +130,7 @@ namespace StaticSharpDemo.Root {
                                 new Space(0,2),
                             }
                         },
-                        Second = new Image(new FileGenome(MakeAbsolutePath("Copilot/SchemeDark.svg"))){
+                        Second = new Image("Copilot/SchemeDark.svg"){
                             Embed = Image.TEmbed.Image,
                         },
                         Children = { 
@@ -172,7 +148,7 @@ namespace StaticSharpDemo.Root {
             }.FillWidth().InheritHorizontalPaddings(),
 
             new Flipper(){
-                First = new Image(new FileGenome(MakeAbsolutePath("Copilot/Delivery.svg"))){
+                First = new Image("Copilot/Delivery.svg"){
                     Embed = Image.TEmbed.Image,
                     MarginLeft = 24,
                     MarginRight = 24,

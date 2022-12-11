@@ -1,7 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using StaticSharp.Gears;
+using System.Threading.Tasks;
 
 namespace StaticSharp {
-    public interface IMutableAsset {
+    public interface IMutableAsset: IAsset {
         bool GetValid();
         //public void DeleteCacheSubDirectory();
     }

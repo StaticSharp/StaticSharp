@@ -16,7 +16,7 @@ namespace StaticSharp {
             return value.ToString(CultureInfo.InvariantCulture);
         }
 
-        public static string ThisFileName([CallerFilePath] string callerFilePath = "") {
+        public static string ThisFilePath([CallerFilePath] string callerFilePath = "") {
             return callerFilePath;
         }
 

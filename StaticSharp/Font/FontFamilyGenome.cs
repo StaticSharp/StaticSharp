@@ -5,8 +5,8 @@ using System.IO;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
-    public record FontFamilyGenome(string Name) : Genome<Task<FontFamily>> {
-        public override async Task<FontFamily> Create() {
+    public record FontFamilyGenome(string Name) : Genome<FontFamily> {
+        public override FontFamily Create() {
             var fullCssUrl = GoogleFonts.MakeCssUrl(Name);
 
             var fullCssRequest = new HttpRequestGenome(
@@ -17,7 +17,7 @@ namespace StaticSharp {
 
             var result = new FontFamily(Name);
 
-            var fontInfos = GoogleFonts.ParseCss(await fullCssRequest.GetTextAsync());
+            var fontInfos = GoogleFonts.ParseCss(fullCssRequest.Text);
             foreach (var i in fontInfos) {
                 var italicSubset = result.Members[i.Italic ? 1 : 0];
                 var existing = italicSubset.Find(x => x.FontStyle.Weight == (FontWeight)i.Weight);

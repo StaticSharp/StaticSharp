@@ -59,26 +59,26 @@ namespace StaticSharp {
             base.AddRequiredInclues(includes);
             includes.Require(new Script(ThisFilePathWithNewExtension("js")));
         }*/
-        async Task<IAsset> GetSourceAsync() {
+        IAsset GetSource() {
             string[] webExtensions = { ".jpg", ".jpeg", ".png", ".svg" };
 
             var source = assetGenome.CreateOrGetCached();
-            if (!webExtensions.Contains(await source.GetFileExtensionAsync())) {
+            if (!webExtensions.Contains(source.FileExtension)) {
                 source = new JpegGenome(assetGenome).CreateOrGetCached();
             }
             return source;
         }
 
 
-        async Task<MagickImageInfo> GetImageInfo(IAsset source) {
-            return new MagickImageInfo(await source.GetBytesAsync());
+        MagickImageInfo GetImageInfo(IAsset source) {
+            return new MagickImageInfo(source.Data);
         }
 
         protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
 
 
-            var source = await GetSourceAsync();
-            var imageInfo = await GetImageInfo(source);
+            var source = GetSource();
+            var imageInfo = GetImageInfo(source);
             elementTag["data-width"] = imageInfo.Width;
             elementTag["data-height"] = imageInfo.Height;
 
@@ -86,10 +86,10 @@ namespace StaticSharp {
 
 
             if (Embed == TEmbed.Image) {
-                if (await source.GetMediaTypeAsync() == "image/svg+xml") {
-                    url = await source.GetDataUrlXmlAsync();
+                if (source.GetMediaType() == "image/svg+xml") {
+                    url = source.GetDataUrlXml();
                 } else {
-                    url = await source.GetDataUrlBase64Async();
+                    url = source.GetDataUrlBase64();
                 }
                 elementTag.Add(new Tag("img") {
                     ["src"] = url
@@ -97,7 +97,7 @@ namespace StaticSharp {
                 return;
             }
 
-            url = context.PathFromHostToCurrentPage.To(await context.AddAssetAsync(source)).ToString();
+            url = context.PathFromHostToCurrentPage.To(context.AddAsset(source)).ToString();
             if (Embed == TEmbed.None) {
                 elementTag.Add(new Tag("img") {
                     ["src"] = url
@@ -107,7 +107,7 @@ namespace StaticSharp {
 
 
             var thumbnail = new ThumbnailGenome(assetGenome).CreateOrGetCached();
-            var thumbnailUrlBase64 = await thumbnail.GetDataUrlBase64Async();
+            var thumbnailUrlBase64 = thumbnail.GetDataUrlBase64();
 
             var thumbnailSvgDefTag = Svg.InlineImage(thumbnailUrlBase64);
             var thumbnailId = context.SvgDefs.Add(thumbnailSvgDefTag);
@@ -132,7 +132,7 @@ namespace StaticSharp {
 
             var pixel = imageColor.GetPixels().First().ToColor().ToHexString();*/
 
-            var thumbnailImageInfo = await GetImageInfo(thumbnail);
+            var thumbnailImageInfo = GetImageInfo(thumbnail);
 
             elementTag.Add(new Tag("content") {
                 new Tag("svg"){
@@ -179,10 +179,10 @@ namespace StaticSharp {
 
         }
 
-        async Task IMainVisual.GetMetaAsync(Dictionary<string, string> meta, Context context) {
-            var source = await GetSourceAsync();
-            var imageInfo = await GetImageInfo(source);
-            var url = (context.BaseUrl + await context.AddAssetAsync(source)).ToString();
+        void IMainVisual.GetMeta(Dictionary<string, string> meta, Context context) {
+            var source = GetSource();
+            var imageInfo = GetImageInfo(source);
+            var url = (context.BaseUrl + context.AddAsset(source)).ToString();
             meta["og:image"] = url;
             meta["og:image:width"] = imageInfo.Width.ToString();
             meta["og:image:height"] = imageInfo.Height.ToString();

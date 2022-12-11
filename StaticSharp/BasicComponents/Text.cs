@@ -24,7 +24,7 @@ namespace StaticSharp {
             var chars = Value.ToPrintableChars();
             HashSet<string> families = new();
             foreach (var fontFamilyGenome in context.FontFamilies) {
-                var fontFamily = await fontFamilyGenome.CreateOrGetCached();
+                var fontFamily = fontFamilyGenome.CreateOrGetCached();
                 var font = fontFamily.FindFont(context.FontStyle);
                 var fontSubset = context.FontSubsets.GetOrAdd(font.Key, key => new FontSubset(font));
 

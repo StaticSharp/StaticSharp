@@ -3,11 +3,16 @@ using StaticSharp.Gears;
 using System;
 using System.IO;
 using System.Reflection;
-using System.Threading.Tasks;
 
 
 
 namespace StaticSharp {
+
+
+
+
+
+
     public record AssemblyResourceGenome(Assembly Assembly, string Path) : Genome<IAsset> {
         public override IAsset Create() {
             /*if (!LoadData<Data>(out var data)) {
@@ -19,41 +24,26 @@ namespace StaticSharp {
 
             var resourcePath = Assembly.GetName().Name + "." + Path;
             using var stream = Assembly.GetManifestResourceStream(resourcePath);
-            //throw
-            if (stream == null) { 
+
+            if (stream == null) {
                 throw new FileNotFoundException(resourcePath);
             }
 
 
             using (var memoryStream = new MemoryStream()) {
                 stream.CopyTo(memoryStream);
-                var result = new AssemblyResourceAsset(memoryStream.ToArray(), Path);
+                var data = memoryStream.ToArray();
+                var result = new BinaryAsset(
+                    data,
+                    System.IO.Path.GetExtension(Path) ?? ""
+                    );
 
                 return result;
             }
-
-
-
-           /* var extension = System.IO.Path.GetExtension(Path);
-
-
-            return Task.FromResult(new Asset(
-                () => {
-                    var resourcePath = Assembly.GetName().Name + "." + Path;
-                    using var stream = Assembly.GetManifestResourceStream(resourcePath);
-                    //throw
-
-                    using (var memoryStream = new MemoryStream()) {
-                        stream.CopyTo(memoryStream);
-                        return memoryStream.ToArray();
-                    }
-                },
-                extension,
-                MimeTypeMap.GetMimeType(extension)
-                ));*/
         }
+    }
 
-        public class AssemblyResourceAsset : AssetSync {
+ /*       public class AssemblyResourceAsset : AssetSync {
             public string Path { get; }
 
             byte[] data;
@@ -86,7 +76,7 @@ namespace StaticSharp {
         }
 
 
-    }
+    }*/
 
     namespace Gears {
 

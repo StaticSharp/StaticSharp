@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace StaticSharp {
+/*namespace StaticSharp {
 
     namespace Gears {
         public class AsyncAsset : IAsset {
@@ -33,5 +33,5 @@ namespace StaticSharp {
         }
     }
 
-}
+}*/
 

@@ -31,7 +31,7 @@ namespace StaticSharp {
 
 
     public interface IMainVisual {
-        Task GetMetaAsync(Dictionary<string,string> meta, Context context);
+        void GetMeta(Dictionary<string,string> meta, Context context);
     }
 
 
@@ -103,7 +103,7 @@ namespace StaticSharp {
             meta["og:type"] = "website";
 
             if (MainVisual is IMainVisual mainVisual) {
-                await mainVisual.GetMetaAsync(meta,context);
+                mainVisual.GetMeta(meta,context);
             }
             var result = new Tag() {
                 meta.Select(x=>Tag.Meta(x.Key,x.Value))
@@ -162,9 +162,9 @@ namespace StaticSharp {
 
 
 
-            head.Add(await context.GenerateScriptAsync());
-            head.Add(await context.GenerateStyleAsync());
-            head.Add(await context.GenerateFontsAsync());
+            head.Add(context.GenerateScript());
+            head.Add(context.GenerateStyle());
+            head.Add(context.GenerateFonts());
 
             return document.GetHtml();
         }

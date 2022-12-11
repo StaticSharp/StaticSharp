@@ -9,23 +9,38 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
+    namespace Resources {
+        public static partial class Static {
+
+            public static IAsset LoadHttp(string uri) {
+                var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, uri);
+                return LoadHttp(httpRequestMessage);
+            }
+            public static IAsset LoadHttp(HttpRequestMessage httpRequestMessage) {
+                return new HttpRequestGenome(httpRequestMessage).CreateOrGetCached();
+            }
+
+        }
+    
+    
+    }
+
+
 
     public record HttpRequestGenome(HttpRequestMessage HttpRequestMessage) : Genome<IAsset> {
         public HttpRequestGenome(string uri) : this(new Uri(uri)) { }
-        public HttpRequestGenome(Uri uri) : this(new HttpRequestMessage(HttpMethod.Get, uri)) {}
+        public HttpRequestGenome(Uri uri) : this(new HttpRequestMessage(HttpMethod.Get, uri)) { }
 
         class Data {
-            public string? CharSet;
-            public string MediaType = null!;
+            public string Extension = null!;
             public string ContentHash = null!;
         };
 
-        private async Task SaveDataAsync(HttpRequestAsset asset) {
+        private async Task SaveDataAsync(AssetAsyncData asset) {
             Data data = new();
-            data.CharSet = await asset.GetCharSetAsync();
+            data.Extension = asset.FileExtension;
             data.ContentHash = await asset.GetContentHashAsync();
-            data.MediaType = await asset.GetMediaTypeAsync();
-            var content = await asset.GetBytesAsync();
+            var content = await asset.GetDataAsync();
             CreateCacheSubDirectory();
             await FileUtils.WriteAllBytesAsync(ContentFilePath, content);
             StoreData(data);
@@ -39,24 +54,19 @@ namespace StaticSharp {
             var extension = Path.GetExtension(path);
 
             if (!LoadData(out data)) {
-                //var httpResponseMessageTask = HttpClientStatic.Instance.SendAsync(HttpRequestMessage);
-                //var successTask = httpResponseMessageTask.ContinueWith(x=>x.Result.IsSuccessStatusCode);
 
-                /*if (!httpResponseMessage.IsSuccessStatusCode) {
-                    throw new Exception($"Failed to get {HttpRequestMessage.RequestUri} with code {httpResponseMessage.StatusCode}");
-                    //FIXME:
-                    //appears as
-                    //One or more errors occurred. (Failed to get https://raw.githubusercontent.com/Templarian/MaterialDesign/master/svg/book-variant-multiple.svg with code NotFound)Failed to get https://raw.githubusercontent.com/Templarian/MaterialDesign/master/svg/book-variant-multiple.svg with code NotFound
-                }*/
+                var response = HttpClientStatic.Instance.Send(HttpRequestMessage);
+                var mediaType = response.Content.Headers.ContentType?.MediaType;
+                if (mediaType != null) {
+                    try {
+                        extension = MimeTypeMap.GetExtension(mediaType);
+                    }
+                    catch (Exception) { }
+                }
 
-                var result = new HttpRequestAsset(
-                    HttpRequestMessage
-                    /*extension,
-                    successTask,
-                    httpResponseMessageTask.ContinueWith(x => x.Result.Content.ReadAsByteArrayAsync()).ContinueWith(x => x.Result.Result),
-                    httpResponseMessageTask.ContinueWith(x => x.Result.Content.Headers.ContentType?.MediaType),
-                    httpResponseMessageTask.ContinueWith(x => x.Result.Content.Headers.ContentType?.CharSet),
-                    null*/
+                var result = new AssetAsyncData(
+                    response.Content.ReadAsByteArrayAsync(),
+                    extension ?? ".?"
                     );
 
                 _ = SaveDataAsync(result);
@@ -65,26 +75,24 @@ namespace StaticSharp {
 
             } else {
 
-                return new RestoredAsset(
-                    extension,
-                    data.MediaType,
-                    data.ContentHash,
-                    FileUtils.ReadAllBytes(ContentFilePath)
+                return new BinaryAsset(
+                    FileUtils.ReadAllBytes(ContentFilePath),
+                    data.Extension,
+                    data.ContentHash
                     );
             }
         }
+    }
 
-        public class HttpRequestAsset : IAsset {
 
-            /*string? extension;
-            Task<bool> successTask;
-            Task<byte[]> dataTask;
-            Task<string?> mediaTypeTask;
-            Task<string?> charSetTask;*/
+
+/*
+
+
+        public class HttpRequestAsset : IAssetDataAsync {
+
 
             string? contentHash = null;
-
-
             HttpRequestMessage httpRequestMessage;
             Task<HttpResponseMessage> httpResponseMessageTask;
 
@@ -93,14 +101,9 @@ namespace StaticSharp {
                 httpResponseMessageTask = HttpClientStatic.Instance.SendAsync(httpRequestMessage);
             }
 
-            /*public HttpRequestAsset(string? extension, Task<bool> successTask, Task<byte[]> dataTask, Task<string?> mediaTypeTask, Task<string?> charSetTask, string? contentHash) {
-                this.successTask = successTask;
-                this.extension = extension;
-                this.dataTask = dataTask;
-                this.mediaTypeTask = mediaTypeTask;
-                this.charSetTask = charSetTask;
-                this.contentHash = contentHash;
-            }*/
+
+
+
 
             public async Task<string?> GetCharSetAsync() {
                 return (await httpResponseMessageTask).Content.Headers.ContentType?.CharSet;
@@ -180,7 +183,7 @@ namespace StaticSharp {
 
 
     }
-
+*/
     //Instead of inheritance from CacheableHttpRequest, it is better to use aggregation
     namespace Gears {
 
