@@ -1,8 +1,10 @@
-﻿
+﻿using StaticSharp.Gears;
 using System;
 
 
-namespace StaticSharp {   
+
+namespace StaticSharp {
+    
 
 
     namespace Gears {
@@ -13,19 +15,18 @@ namespace StaticSharp {
                 public string ContentHash = null!;
             };
 
-            public override IAsset Create() {
-                FileAsset result;
-
-                if (LoadData<Data>(out var data) && data.LastWriteTime == FileAsset.GetLastWriteTime(Path)) {
-                    result = new FileAsset(Path, data.ContentHash);
+            protected override void Create(out IAsset value, out Func<bool>? verify) {
+                var lastWriteTime = FileAsset.GetLastWriteTime(Path);
+                var slot = Cache.GetSlot(Key);
+                if (slot.LoadData<Data>(out var data) && data.LastWriteTime == lastWriteTime) {
+                    value = new FileAsset(Path, data.ContentHash);
                 } else {
-                    result = new FileAsset(Path);
-                    data.ContentHash = result.ContentHash;
-                    data.LastWriteTime = result.LastWriteTime;
-                    CreateCacheSubDirectory();
-                    StoreData(data);
+                    value = new FileAsset(Path);
+                    data.ContentHash = value.ContentHash;
+                    data.LastWriteTime = FileAsset.GetLastWriteTime(Path);
+                    slot.StoreData(data);
                 }
-                return result;
+                verify = () => FileAsset.GetLastWriteTime(Path) == data.LastWriteTime;
             }
         }
     }

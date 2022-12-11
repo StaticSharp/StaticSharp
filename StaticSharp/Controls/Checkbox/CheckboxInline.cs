@@ -28,14 +28,14 @@ namespace StaticSharp {
             Children.Add(text);
         }
 
-        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
+        protected override void ModifyHtml(Context context, Tag elementTag) {
             elementTag.Add(
                 new Tag("input") {
                     ["type"] = "checkbox"
                 }
                 );
 
-            await base.ModifyHtmlAsync(context, elementTag);
+            base.ModifyHtml(context, elementTag);
             
 
 

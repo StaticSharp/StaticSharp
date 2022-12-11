@@ -68,13 +68,13 @@ namespace StaticSharp {
             Identifier = identifier;        
         }
 
-        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
+        protected override void ModifyHtml(Context context, Tag elementTag) {
             
 
             var youtubeVideoId = YoutubeExplode.Videos.VideoId.TryParse(Identifier);
             if (youtubeVideoId != null) {
 
-                var youtubeVideoManifest = new YoutubeVideoManifestGenome(youtubeVideoId).CreateOrGetCached();
+                var youtubeVideoManifest = new YoutubeVideoManifestGenome(youtubeVideoId).Get();
 
                 var item = youtubeVideoManifest.Items.MaxBy(x => x.Width)!;
 
@@ -84,7 +84,7 @@ namespace StaticSharp {
 
                 var sources = new List<object>();
                 foreach (var i in youtubeVideoManifest.Items) {
-                    var iVideo = new YoutubeVideoGenome(i).CreateOrGetCached();
+                    var iVideo = new YoutubeVideoGenome(i).Get();
                     var iUrl = context.PathFromHostToCurrentPage.To(context.AddAsset(iVideo)).ToString();
 
                     sources.Add(new {
@@ -103,7 +103,7 @@ namespace StaticSharp {
                 elementTag["data-sources"] = json;
             }
 
-            await base.ModifyHtmlAsync(context, elementTag);
+            base.ModifyHtml(context, elementTag);
         }
 
 
@@ -112,9 +112,9 @@ namespace StaticSharp {
 
             var youtubeVideoId = YoutubeExplode.Videos.VideoId.TryParse(Identifier);
             if (youtubeVideoId != null) {
-                var youtubeVideoManifest = new YoutubeVideoManifestGenome(youtubeVideoId).CreateOrGetCached();
+                var youtubeVideoManifest = new YoutubeVideoManifestGenome(youtubeVideoId).Get();
                 var item = youtubeVideoManifest.Items.MaxBy(x => x.Width)!;
-                var video = new YoutubeVideoGenome(item).CreateOrGetCached();
+                var video = new YoutubeVideoGenome(item).Get();
                 var url = context.AddAsset(video);
 
                 meta["og:type"] = "video";

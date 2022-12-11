@@ -86,10 +86,10 @@ namespace StaticSharp {
                 }
             }
 
-            public override async Task<Tag> GenerateHtmlAsync(Context context, Role? role) {
+            public override Tag GenerateHtml(Context context, Role? role) {
                 var url = GetUrl(context);
                 if (url == null) {
-                    return await base.GenerateHtmlAsync(context, role);
+                    return base.GenerateHtml(context, role);
                 } else {
                     return new Tag("a") {
                         ["href"] = url,
@@ -98,7 +98,7 @@ namespace StaticSharp {
                             ["display"] = "contents",
                         },
                         Children = {
-                            await base.GenerateHtmlAsync(context, role)
+                            base.GenerateHtml(context, role)
                         }
                     };
                 }
@@ -120,7 +120,7 @@ namespace StaticSharp {
                 return context;
             }
 
-            protected override Task ModifyHtmlAsync(Context context, Tag elementTag) {
+            protected override void ModifyHtml(Context context, Tag elementTag) {
                 //protected void ModifyTag(Tag tag) {
                 /*if (Url != null) {
                     tag.Name = "a";
@@ -147,7 +147,7 @@ namespace StaticSharp {
                     elementTag.Style["font-style"] = FontStyle.CssFontStyle;
                 }
 
-                return base.ModifyHtmlAsync(context, elementTag);
+                base.ModifyHtml(context, elementTag);
             }
 
         }

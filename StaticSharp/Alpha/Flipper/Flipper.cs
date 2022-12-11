@@ -32,14 +32,14 @@ namespace StaticSharp {
         public Flipper([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
             : base(callerLineNumber, callerFilePath) { }
 
-        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {  
+        protected override void ModifyHtml(Context context, Tag elementTag) {  
             elementTag.Add(                
-                await First.GenerateHtmlAsync(context,new Role(false,"First"))
+                First.GenerateHtml(context,new Role(false,"First"))
             );
             elementTag.Add(
-                await Second.GenerateHtmlAsync(context, new Role(false, "Second"))
+                Second.GenerateHtml(context, new Role(false, "Second"))
             );
-            await base.ModifyHtmlAsync(context, elementTag);
+            base.ModifyHtml(context, elementTag);
         }
     }
 }

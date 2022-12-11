@@ -19,12 +19,12 @@ namespace StaticSharp {
             Formatting = formatting;
         }        
 
-        public async Task<Tag> GenerateHtmlAsync(Context context, Role? role) {
+        public Tag GenerateHtml(Context context, Role? role) {
             
             var chars = Value.ToPrintableChars();
             HashSet<string> families = new();
             foreach (var fontFamilyGenome in context.FontFamilies) {
-                var fontFamily = fontFamilyGenome.CreateOrGetCached();
+                var fontFamily = fontFamilyGenome.Get();
                 var font = fontFamily.FindFont(context.FontStyle);
                 var fontSubset = context.FontSubsets.GetOrAdd(font.Key, key => new FontSubset(font));
 
@@ -71,8 +71,8 @@ namespace StaticSharp {
 
         }
 
-        public Task<string> GetPlaneTextAsync(Context context) {
-            return Task.FromResult(Value);
+        public string GetPlaneText(Context context) {
+            return Value;
         }
     }
 }

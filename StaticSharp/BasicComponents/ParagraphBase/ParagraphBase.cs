@@ -34,7 +34,7 @@ namespace StaticSharp {
     [Mix(typeof(ParagraphBindings<Js.Paragraph>))]
     public abstract partial class ParagraphBase : Block {
 
-        protected abstract Task<Inlines> GetInlinesAsync();
+        protected abstract Inlines GetInlines();
         protected ParagraphBase(ParagraphBase other,
                 int callerLineNumber = 0,
                 string callerFilePath = ""
@@ -42,17 +42,17 @@ namespace StaticSharp {
         public ParagraphBase([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
 
 
-        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
+        protected override void ModifyHtml(Context context, Tag elementTag) {
 
             var p = new Tag("p");
-            foreach (var i in await GetInlinesAsync()) {
-                var child = await i.Value.GenerateHtmlAsync(context, new Role(true, i.Key));
+            foreach (var i in GetInlines()) {
+                var child = i.Value.GenerateHtml(context, new Role(true, i.Key));
                 p.Add(child);
             }
             p.Add("\n");
             elementTag.Add(p);
 
-            await base.ModifyHtmlAsync(context, elementTag);
+            base.ModifyHtml(context, elementTag);
         }
 
     }

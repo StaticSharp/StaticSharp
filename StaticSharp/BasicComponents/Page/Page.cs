@@ -41,9 +41,8 @@ namespace StaticSharp {
     [RelatedStyle("../Normalization")]
 
     public abstract partial class Page : Block, IPageGenerator {
-        protected virtual Task Setup(Context context) {
+        protected virtual void Setup(Context context) {
             FontSize = 16;
-            return Task.CompletedTask;
         }
 
         public virtual string? SiteName => null;
@@ -78,7 +77,7 @@ namespace StaticSharp {
             
         }
 
-        private async Task<Tag> GenerateMetaTagsAsync(Context context) {
+        private Tag GenerateMetaTags(Context context) {
 
 
             var meta = new Dictionary<string, string>();
@@ -94,7 +93,7 @@ namespace StaticSharp {
             meta["twitter:url"] = url;
 
             if (DescriptionContent != null) {
-                string description = await DescriptionContent.GetPlaneTextAsync(context);
+                string description = DescriptionContent.GetPlaneText(context);
                 meta["description"] = description;
                 meta["og:description"] = description;
                 meta["twitter:description"] = description;
@@ -112,9 +111,9 @@ namespace StaticSharp {
             return result;
         }
 
-        public async Task<string> GeneratePageHtmlAsync(Context context) {
+        public string GeneratePageHtml(Context context) {
 
-            await Setup(context);
+            Setup(context);
             
 
             var head = new Tag("head"){
@@ -126,12 +125,12 @@ namespace StaticSharp {
                     new Tag("title"){
                         Title
                     },
-                    await GenerateMetaTagsAsync(context)
+                    GenerateMetaTags(context)
                     //<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
                 };
 
 
-            var body = await GenerateHtmlAsync(context,null);
+            var body = GenerateHtml(context,null);
             //body.Style["visibility"] = "hidden";
 
 
@@ -169,9 +168,9 @@ namespace StaticSharp {
             return document.GetHtml();
         }
 
-        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
-            elementTag.Add(await BodyContent.GenerateHtmlAsync(context));
-            await base.ModifyHtmlAsync(context, elementTag);
+        protected override void ModifyHtml(Context context, Tag elementTag) {
+            elementTag.Add(BodyContent.GenerateHtml(context));
+            base.ModifyHtml(context, elementTag);
         }
 
 

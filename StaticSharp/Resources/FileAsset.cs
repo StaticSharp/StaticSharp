@@ -13,10 +13,10 @@ namespace StaticSharp {
     namespace Gears {
 
 
-        public class FileAsset : IMutableAsset {
+        public class FileAsset : IAsset {
 
             public string Path { get; }
-            public DateTime LastWriteTime { get; set; }
+            //public DateTime LastWriteTime { get; set; }
 
             byte[]? data = null;
 
@@ -63,9 +63,9 @@ namespace StaticSharp {
                 }
             }
 
-            public bool GetValid() {
+            /*public bool GetValid() {
                 return LastWriteTime == GetLastWriteTime(Path);
-            }
+            }*/
 
         }
     }

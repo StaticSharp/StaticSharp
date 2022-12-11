@@ -37,8 +37,8 @@ namespace StaticSharp {
             return Task.FromResult <Tag?>(null);
         }*/
 
-        protected override async IAsyncEnumerable<KeyValuePair<string, string>> GetGeneratedBundingsAsync(Context context) {
-            var template = assetGenome.CreateOrGetCached().Text;
+        protected override IEnumerable<KeyValuePair<string, string>> GetGeneratedBundings(Context context) {
+            var template = assetGenome.Get().Text;
             yield return new("Html", $"()=>`{template}`");//
         }
     }

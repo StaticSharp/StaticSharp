@@ -1,4 +1,5 @@
 ﻿using StaticSharp.Gears;
+using System;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -7,10 +8,9 @@ using YoutubeExplode;
 namespace StaticSharp {
     public record YoutubeVideoGenome(YoutubeVideoManifestItem ManifestItem) : Genome<IAsset> {
 
-        private async Task SaveDataAsync(AssetAsyncData asset) {
+        private async Task SaveDataAsync(Cache.Slot slot, AssetAsyncData asset) {
             var content = await asset.GetDataAsync();
-            CreateCacheSubDirectory();
-            await FileUtils.WriteAllBytesAsync(ContentFilePath, content);
+            slot.StoreContent(content);
         }
 
 
@@ -23,22 +23,27 @@ namespace StaticSharp {
             }
         }
 
-        public override IAsset Create() {
+        protected override void Create(out IAsset value, out Func<bool>? verify) {
+            verify = null;
+
             var contentHash = Hash.CreateFromString(ManifestItem.Url).ToString();
             var extension = "." + ManifestItem.Container;
 
-            if (!File.Exists(ContentFilePath)) {
-                
+            var slot = Cache.GetSlot(Key);
+
+            if (slot.ContentExists()) {
+                value = new BinaryAsset(
+                    slot.LoadContent(),
+                    extension,
+                    contentHash
+                    );
+            } else { 
                 var result = new AssetAsyncData(DownloadAsync(ManifestItem), extension, contentHash);
-                _ = SaveDataAsync(result);
-                return result;
+                _ = SaveDataAsync(slot,result);
+                value = result;
             }
 
-            return new BinaryAsset(
-                File.ReadAllBytes(ContentFilePath),
-                extension,
-                contentHash
-                );
+            
 
         }
     }

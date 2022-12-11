@@ -62,9 +62,9 @@ namespace StaticSharp {
         IAsset GetSource() {
             string[] webExtensions = { ".jpg", ".jpeg", ".png", ".svg" };
 
-            var source = assetGenome.CreateOrGetCached();
+            var source = assetGenome.Get();
             if (!webExtensions.Contains(source.FileExtension)) {
-                source = new JpegGenome(assetGenome).CreateOrGetCached();
+                source = new JpegGenome(assetGenome).Get();
             }
             return source;
         }
@@ -74,7 +74,7 @@ namespace StaticSharp {
             return new MagickImageInfo(source.Data);
         }
 
-        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
+        protected override void ModifyHtml(Context context, Tag elementTag) {
 
 
             var source = GetSource();
@@ -106,7 +106,7 @@ namespace StaticSharp {
             }
 
 
-            var thumbnail = new ThumbnailGenome(assetGenome).CreateOrGetCached();
+            var thumbnail = new ThumbnailGenome(assetGenome).Get();
             var thumbnailUrlBase64 = thumbnail.GetDataUrlBase64();
 
             var thumbnailSvgDefTag = Svg.InlineImage(thumbnailUrlBase64);
@@ -175,7 +175,7 @@ namespace StaticSharp {
             }
             );
 
-            await base.ModifyHtmlAsync(context, elementTag);
+            base.ModifyHtml(context, elementTag);
 
         }
 

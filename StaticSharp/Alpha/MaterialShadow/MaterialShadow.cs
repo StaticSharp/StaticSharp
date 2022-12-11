@@ -30,8 +30,8 @@ namespace StaticSharp {
             : base(callerLineNumber, callerFilePath) { }
         public MaterialShadow(Hierarchical other, int callerLineNumber, string callerFilePath) : base(other, callerLineNumber, callerFilePath) {}
 
-        public Task<string> GetPlaneTextAsync(Context context) {
-            return Task.FromResult(string.Empty);
+        public string GetPlaneText(Context context) {
+            return "";
         }
     }
 }

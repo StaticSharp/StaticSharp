@@ -47,11 +47,11 @@ public class Generator<NodeType> where NodeType : ProtoNode<NodeType> {
         return new Context(NodeToPath.NodeToRelativeDirectory(node), assets, NodeToPath, BaseUrl, null);
     }
 
-    protected async Task GetnerateAndSave(Node node, Context context) {
+    protected void GetnerateAndSave(Node node, Context context) {
         var page = node.Representative;
         if (page == null) return;
         var s = Stopwatch.StartNew();
-        var html = await page.GeneratePageHtmlAsync(context);
+        var html = page.GeneratePageHtml(context);
         Console.WriteLine(s.ElapsedMilliseconds);
 
         var path = NodeToFilePath(node);
@@ -66,7 +66,7 @@ public class Generator<NodeType> where NodeType : ProtoNode<NodeType> {
         var assets = new Assets();
 
         foreach (var i in nodes) {
-            await GetnerateAndSave(i, CreateContext(i, assets));
+            GetnerateAndSave(i, CreateContext(i, assets));
         }
 
         //await Task.WhenAll(nodes.Select(node => GetnerateAndSave(node, CreateContext(node, assets))));

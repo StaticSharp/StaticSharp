@@ -16,7 +16,7 @@ namespace StaticSharp {
     //[Mix(typeof(ParagraphBindings<Js.Paragraph>))]
     public partial class Paragraph : ParagraphBase {
         public Inlines Inlines { get; } = new();
-        protected override Task<Inlines> GetInlinesAsync() => Task.FromResult(Inlines);
+        protected override Inlines GetInlines() => Inlines;
 
         public Paragraph(
             [CallerLineNumber] int callerLineNumber = 0,

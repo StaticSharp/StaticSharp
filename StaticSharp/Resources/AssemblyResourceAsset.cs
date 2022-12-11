@@ -14,7 +14,8 @@ namespace StaticSharp {
 
 
     public record AssemblyResourceGenome(Assembly Assembly, string Path) : Genome<IAsset> {
-        public override IAsset Create() {
+
+        protected override void Create(out IAsset value, out Func<bool> verify) {
             /*if (!LoadData<Data>(out var data)) {
                 data.ContentHash = Hash.CreateFromBytes(ReadAllBites()).ToString();
                 CreateCacheSubDirectory();
@@ -33,12 +34,12 @@ namespace StaticSharp {
             using (var memoryStream = new MemoryStream()) {
                 stream.CopyTo(memoryStream);
                 var data = memoryStream.ToArray();
-                var result = new BinaryAsset(
+                value = new BinaryAsset(
                     data,
                     System.IO.Path.GetExtension(Path) ?? ""
                     );
 
-                return result;
+                verify = () => true;
             }
         }
     }

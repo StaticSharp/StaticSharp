@@ -26,9 +26,9 @@ namespace StaticSharp {
     public abstract partial class PageSideMenus : Page {
 
         
-        protected override Task Setup(Context context) {
+        protected override void Setup(Context context) {
             SideBarsIconsSize = 48;
-            return base.Setup(context);
+            base.Setup(context);
         }
         public override string Title {
             get {

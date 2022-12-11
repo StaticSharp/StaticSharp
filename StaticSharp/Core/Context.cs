@@ -70,7 +70,7 @@ namespace StaticSharp {
         }
 
         public Html.Tag GenerateScript() {
-            var assets = Scripts.Select(x => x.Value.CreateOrGetCached());// await Task.WhenAll(Scripts.Select(x => x.Value.CreateOrGetCached()));
+            var assets = Scripts.Select(x => x.Value.Get());// await Task.WhenAll(Scripts.Select(x => x.Value.CreateOrGetCached()));
             var content = string.Join('\n', assets.Select(x=>x.Text));
             return new Html.Tag("script") {
                 new Html.PureHtmlNode(content)
@@ -84,7 +84,7 @@ namespace StaticSharp {
         }
 
         public Html.Tag GenerateStyle() {
-            var assets = Styles.Select(x => x.Value.CreateOrGetCached());// await Task.WhenAll(Styles.Select(x => x.Value.CreateOrGetCached()));
+            var assets = Styles.Select(x => x.Value.Get());// await Task.WhenAll(Styles.Select(x => x.Value.CreateOrGetCached()));
             var content = string.Join('\n', assets.Select(x => x.Text));
             return new Html.Tag("style") {
                 new Html.PureHtmlNode(content)

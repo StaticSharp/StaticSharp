@@ -1,12 +1,15 @@
+using ImageMagick;
 using StaticSharp.Gears;
-using System;
 
 namespace StaticSharp;
 
+
 public partial class Static {
 
-    public static IAsset GetCodeRegion(this IAsset asset, string RegionName, bool trim = true) {
-        var programmingLanguageName = asset.FileExtension[1..];
+    public static Genome<IAsset> GetCodeRegion(this Genome<IAsset> genome, string RegionName, bool trim = true) {
+        return new CodeRegionGenome(genome, RegionName, trim);
+
+        /*var programmingLanguageName = asset.FileExtension[1..];
         var language = ProgrammingLanguageProcessor.FindByName(programmingLanguageName);
         var content = asset.Text;
         content = language.GetRegion(content, RegionName);
@@ -21,6 +24,6 @@ public partial class Static {
         return new TextAsset(
             content,
             asset.FileExtension
-            );
+            );*/
     }
 }

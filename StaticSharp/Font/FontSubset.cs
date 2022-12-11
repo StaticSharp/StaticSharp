@@ -83,12 +83,12 @@ namespace StaticSharp {
             var text = string.Concat(sortedUsedChars);
 
             var subfontCssUrl = GoogleFonts.MakeCssUrl(font.FontFamily.Name, font.FontStyle, text);
-            var subFontCssRequest = new HttpRequestGenome(GoogleFonts.MakeWoff2Request(subfontCssUrl)).CreateOrGetCached();
+            var subFontCssRequest = new HttpRequestGenome(GoogleFonts.MakeWoff2Request(subfontCssUrl)).Get();
 
             var fontInfos = GoogleFonts.ParseCss(subFontCssRequest.Text);
             //TODO validation
             var fontInfo = fontInfos.First();
-            var subFontRequest = new HttpRequestGenome(fontInfo.Url).CreateOrGetCached();
+            var subFontRequest = new HttpRequestGenome(fontInfo.Url).Get();
 
             var content = subFontRequest.Data;
 

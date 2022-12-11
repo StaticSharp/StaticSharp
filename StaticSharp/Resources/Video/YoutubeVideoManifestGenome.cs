@@ -1,4 +1,5 @@
 ﻿using StaticSharp.Gears;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using YoutubeExplode;
@@ -7,7 +8,7 @@ namespace StaticSharp {
     public record YoutubeVideoManifestGenome(string VideoId) : Genome<YoutubeVideoManifestResource>{
 
 
-        private YoutubeVideoManifestResource CreateAndStore() {
+        private YoutubeVideoManifestResource CreateAndStore(Cache.Slot slot) {
 
             var validContainers = new string[] { "mp4" };
 
@@ -25,17 +26,18 @@ namespace StaticSharp {
 
                 result.Items.Add(item);
             }
-
-            CreateCacheSubDirectory();
-            StoreData(result);
+            slot.StoreData(result);
             return result;
         }
 
-        public override YoutubeVideoManifestResource Create() {            
-            if (!LoadData<YoutubeVideoManifestResource>(out var data)) {
-                return CreateAndStore();
+        protected override void Create(out YoutubeVideoManifestResource value, out Func<bool>? verify) {
+            verify = null;
+            var slot = Cache.GetSlot(Key);
+            if (slot.LoadData<YoutubeVideoManifestResource>(out var data)) {
+                value = data;
+            } else {
+                value = CreateAndStore(slot);
             }
-            return data;
         }
     }
 

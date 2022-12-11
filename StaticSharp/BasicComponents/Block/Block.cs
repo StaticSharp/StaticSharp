@@ -98,12 +98,12 @@ namespace StaticSharp {
         }
         public Block([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
         
-        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
+        protected override void ModifyHtml(Context context, Tag elementTag) {
             foreach (var c in Children) {
-                var childTag = await c.Value.GenerateHtmlAsync(context, new Role(true, c.Key));
+                var childTag = c.Value.GenerateHtml(context, new Role(true, c.Key));
                 elementTag.Add(childTag);
             }
-            await base.ModifyHtmlAsync(context, elementTag);
+            base.ModifyHtml(context, elementTag);
         }
     }
 

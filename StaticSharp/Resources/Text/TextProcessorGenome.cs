@@ -1,12 +1,9 @@
-﻿using ImageMagick;
-
-using System;
+﻿using System;
 
 
 namespace StaticSharp.Gears;
 
-
-public abstract record ImageProcessorGenome(Genome<IAsset> Source) : Genome<IAsset> {
+public abstract record TextProcessorGenome(Genome<IAsset> Source) : Genome<IAsset> {
     class Data {
         public string Extension = null!;
         public string ContentHash = null!;
@@ -18,21 +15,20 @@ public abstract record ImageProcessorGenome(Genome<IAsset> Source) : Genome<IAss
         Data data;
         var source = Source.Get();
         var slot = Cache.GetSlot(Key);
-        if (slot.LoadData(out data) && data.SourceHash == source.ContentHash ) {
+        if (slot.LoadData(out data) && data.SourceHash == source.ContentHash) {
             value = new BinaryAsset(
                 slot.LoadContent(),
                 data.Extension,
                 data.ContentHash
-                );                
+                );
         } else {
-                
-            var image = new MagickImage(source.Data);
-            image = Process(image);
+            var extension = source.FileExtension;
+            var text = Process(source.Text, ref extension);
 
-            var extension = "." + image.FormatInfo?.Format.ToString().ToLower() ?? "?";
+            
 
-            value = new BinaryAsset(
-                image.ToByteArray(),
+            value = new TextAsset(
+                text,
                 extension
                 );
 
@@ -44,8 +40,6 @@ public abstract record ImageProcessorGenome(Genome<IAsset> Source) : Genome<IAss
             var content = value.Data;
 
             slot.StoreContent(content).StoreData(data);
-
-            //SaveData(slot, source, value);
         }
 
         verify = () => {
@@ -54,7 +48,7 @@ public abstract record ImageProcessorGenome(Genome<IAsset> Source) : Genome<IAss
 
     }
 
-    protected abstract MagickImage Process(MagickImage image);
+    protected abstract string Process(string text, ref string extension);
 
 }
 

@@ -17,7 +17,7 @@ namespace StaticSharp {
                 return LoadHttp(httpRequestMessage);
             }
             public static IAsset LoadHttp(HttpRequestMessage httpRequestMessage) {
-                return new HttpRequestGenome(httpRequestMessage).CreateOrGetCached();
+                return new HttpRequestGenome(httpRequestMessage).Get();
             }
 
         }
@@ -36,24 +36,27 @@ namespace StaticSharp {
             public string ContentHash = null!;
         };
 
-        private async Task SaveDataAsync(AssetAsyncData asset) {
+        private async Task SaveDataAsync(Cache.Slot slot, AssetAsyncData asset) {
             Data data = new();
             data.Extension = asset.FileExtension;
             data.ContentHash = await asset.GetContentHashAsync();
             var content = await asset.GetDataAsync();
-            CreateCacheSubDirectory();
-            await FileUtils.WriteAllBytesAsync(ContentFilePath, content);
-            StoreData(data);
+
+            slot
+                .StoreContent(content)
+                .StoreData(data);
         }
 
-        public override IAsset Create() {
-            Data data;
 
+        protected override void Create(out IAsset value, out Func<bool>? verify) {
+            Data data;
 
             var path = HttpRequestMessage.RequestUri?.AbsolutePath;
             var extension = Path.GetExtension(path);
 
-            if (!LoadData(out data)) {
+            verify = null;
+            var slot = Cache.GetSlot(Key);
+            if (!slot.LoadData(out data)) {
 
                 var response = HttpClientStatic.Instance.Send(HttpRequestMessage);
                 var mediaType = response.Content.Headers.ContentType?.MediaType;
@@ -69,14 +72,12 @@ namespace StaticSharp {
                     extension ?? ".?"
                     );
 
-                _ = SaveDataAsync(result);
-
-                return result;
+                _ = SaveDataAsync(slot,result);
+                value = result;
 
             } else {
-
-                return new BinaryAsset(
-                    FileUtils.ReadAllBytes(ContentFilePath),
+                value = new BinaryAsset(
+                    slot.LoadContent(),
                     data.Extension,
                     data.ContentHash
                     );

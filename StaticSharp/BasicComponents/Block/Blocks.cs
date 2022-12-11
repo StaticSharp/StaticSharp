@@ -20,10 +20,10 @@ namespace StaticSharp {
             }            
         }
 
-        public virtual async Task<Tag> GenerateHtmlAsync(Context context) {
+        public virtual Tag GenerateHtml(Context context) {
             var result = new Tag();
             foreach (var i in this) {
-                var child = await i.Value.GenerateHtmlAsync(context, new Role(false, i.Key));
+                var child = i.Value.GenerateHtml(context, new Role(false, i.Key));
                 result.Add(child);
             }
             return result;

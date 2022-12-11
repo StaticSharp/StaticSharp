@@ -30,12 +30,6 @@ public class LambdaScriptifier {
     protected string Eval(Expression expression) {
         var lambda = Expression.Lambda(expression, ParametersExpressions);
 
-
-
-
-
-        /*try {*/
-
         if (expression is LambdaExpression lambdaExpression) {
             return new LambdaScriptifier(lambdaExpression).Eval();
         }
@@ -43,8 +37,6 @@ public class LambdaScriptifier {
         if (expression is ParameterExpression parameterExpression) {
             return ReplaceParameterName(parameterExpression.Name);
         }
-
-        Stopwatch stopwatch = Stopwatch.StartNew();
 
         var compiled = lambda.Compile();
 
@@ -57,6 +49,8 @@ public class LambdaScriptifier {
             return CSValueToJSValueConverter.ObjectToJsValue(value);
         }
 
+        /*var result = Stringify(expression);
+        return result;*/
     }
 
 
@@ -208,6 +202,11 @@ public class LambdaScriptifier {
                 };
                 return $"({Eval(binaryExpression.Left)}{Op}{Eval(binaryExpression.Right)})";
             }
+
+            /*case ConstantExpression constantExpression: {
+                return CSValueToJSValueConverter.ObjectToJsValue(constantExpression.Value);
+            }*/
+
 
             default:
             throw NotImplemented(expression);

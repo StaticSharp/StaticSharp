@@ -57,10 +57,9 @@ namespace StaticSharp {
         protected virtual Context ModifyContext(Context context) {
             return context;
         }
-        protected virtual Task ModifyHtmlAsync(Context context, Tag elementTag) {
-            return Task.CompletedTask;
+        protected virtual void ModifyHtml(Context context, Tag elementTag) {
         }
-        public virtual async Task<Tag> GenerateHtmlAsync(Context context, Role? role) {
+        public virtual Tag GenerateHtml(Context context, Role? role) {
 
             AddRequiredInclues(context);
 
@@ -74,9 +73,9 @@ namespace StaticSharp {
 
             AddSourceCodeNavigationData(tag, context);
 
-            tag.Add(await CreateConstructorScriptAsync(context));
+            tag.Add(CreateConstructorScript(context));
 
-            await ModifyHtmlAsync(context, tag);
+            ModifyHtml(context, tag);
 
             tag.Add(Pop());
 
