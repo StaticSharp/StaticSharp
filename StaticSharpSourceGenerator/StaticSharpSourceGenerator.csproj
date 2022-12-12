@@ -7,9 +7,7 @@
 	</PropertyGroup>
 
 	<Target Name="CopyPackage" AfterTargets="Pack">
-		<Move
-		  SourceFiles="$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg"
-		  DestinationFolder="$(SolutionDir)/NugetPackages"/>
+		<Move SourceFiles="$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg" DestinationFolder="$(SolutionDir)/NugetPackages" />
 	</Target>
 
 
@@ -37,8 +35,7 @@
 
 	<ItemGroup>
 		<!-- Package the generator in the analyzer directory of the nuget package -->
-		<!--None Include="$(OutputPath)\*"-->
-		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+		<None Include="$(OutputPath)\*" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
 	</ItemGroup>
 	
 	

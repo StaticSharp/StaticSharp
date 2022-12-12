@@ -5,9 +5,7 @@
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
 	<Target Name="CopyPackage" AfterTargets="Pack">
-		<Move
-		  SourceFiles="$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg"
-		  DestinationFolder="$(SolutionDir)/NugetPackages"/>
+		<Move SourceFiles="$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg" DestinationFolder="$(SolutionDir)/NugetPackages" />
 	</Target>
 
 	<PropertyGroup>
@@ -15,7 +13,7 @@
 
 		<IsRoslynComponent>true</IsRoslynComponent>
 		<IncludeBuildOutput>true</IncludeBuildOutput>
-		<!-- !!!! <IncludeBuildOutput>true</IncludeBuildOutput> - because it is referenced both as generator and as oridanary lib-->
+		<!--  !!!!<IncludeBuildOutput>true</IncludeBuildOutput> - because it is referenced both as generator and as oridanary lib-->
 	</PropertyGroup>
 
 	<PropertyGroup Condition="$(Executable)">
@@ -37,12 +35,11 @@
 
 	<ItemGroup>
 		<!-- Package the generator in the analyzer directory of the nuget package -->
-		<!--None Include="$(OutputPath)\*"-->
-		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+		<None Include="$(OutputPath)\*" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
 	</ItemGroup>
 		
 	<ItemGroup>
-		<PackageReference Include="Scopes" Version="0.0.16"  PrivateAssets="all" GeneratePathProperty="true"/>
+		<PackageReference Include="Scopes" Version="0.0.16" PrivateAssets="all" GeneratePathProperty="true" />
 		<None Include="$(PkgScopes)\lib\netstandard2.0\*.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
 	</ItemGroup>
 
