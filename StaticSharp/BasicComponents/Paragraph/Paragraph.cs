@@ -7,36 +7,16 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    public enum TextAlignmentHorizontal { 
-        Left,
-        Center,
-        Right,
-        Justify,
-        JustifyIncludingLastLine
-    }
+    
 
 
-    namespace Js {
-        public class Paragraph : Block {
-            public TextAlignmentHorizontal TextAlignmentHorizontal => NotEvaluatableValue<TextAlignmentHorizontal>();
-
-        }
-    }
-
-
-
-    namespace Gears {
-        public class ParagraphBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
-            public Binding<TextAlignmentHorizontal> TextAlignmentHorizontal { set { Apply(value); } }
-        }
-    }
 
     [RelatedStyle]
     [ConstructorJs]
-    [Mix(typeof(ParagraphBindings<Js.Paragraph>))]
-    public partial class Paragraph : Block {
+    //[Mix(typeof(ParagraphBindings<Js.Paragraph>))]
+    public partial class Paragraph : ParagraphBase {
         public Inlines Inlines { get; } = new();
-
+        protected override Inlines GetInlines() => Inlines;
 
         public Paragraph(
             [CallerLineNumber] int callerLineNumber = 0,
@@ -69,17 +49,6 @@ namespace StaticSharp {
         }
 
 
-        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {            
-
-            var p = new Tag("p");
-            foreach (var i in Inlines) {
-                var child = await i.Value.GenerateHtmlAsync(context, new Role(true,i.Key));
-                p.Add(child);
-            }
-            p.Add("\n");
-            elementTag.Add(p);
-
-            await base.ModifyHtmlAsync(context, elementTag);
-        }        
+               
     }
 }

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
     public interface IInline: IPlainTextProvider {
-        public Task<Tag> GenerateHtmlAsync(Context context, Role? role);
+        public Tag GenerateHtml(Context context, Role? role);
     }
 
 }

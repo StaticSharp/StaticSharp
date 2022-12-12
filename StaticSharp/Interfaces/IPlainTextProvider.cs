@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     public interface IPlainTextProvider {
-        Task<string> GetPlaneTextAsync(Context context);
+        string GetPlaneText(Context context);
     }
 
 

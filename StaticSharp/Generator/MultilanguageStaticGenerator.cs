@@ -23,7 +23,10 @@ public class MultilanguageStaticGenerator<LanguageEnum> : Generator<Multilanguag
 
         var assets = new Assets();
 
-        await Task.WhenAll(nodesMultilanguage.Select(node => GetnerateAndSave(node, CreateContext(node, assets))));
+        foreach (var node in nodesMultilanguage)
+            GetnerateAndSave(node, CreateContext(node, assets));
+
+       // await Task.WhenAll(nodesMultilanguage.Select(node =>));
 
         SaveSitemap(CreateSiteMap(root));
 

@@ -31,10 +31,10 @@ namespace StaticSharp {
         }
         public ScrollLayout([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
 
-        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {            
-            var content = await Content.GenerateHtmlAsync(context,new Role(false, "Content"));
+        protected override void ModifyHtml(Context context, Tag elementTag) {            
+            var content = Content.GenerateHtml(context,new Role(false, "Content"));
             elementTag.Add(content);
-            await base.ModifyHtmlAsync(context, elementTag);
+            base.ModifyHtml(context, elementTag);
         }
 
     }

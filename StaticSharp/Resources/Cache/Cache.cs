@@ -1,13 +1,35 @@
 ﻿
 
+using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Reflection.Metadata;
+using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace StaticSharp.Gears;
 
 
-public class CacheItem { 
-    public Genome Genome { get; set; }
+
+public interface ICacheItemConstructor {
+    CacheItem Create();
+}
+
+public class CacheItem {
+
+    //public string Key { get; init; }
+    public Func<bool>? Verify { get; init; }
+    public object Value { get; init; }
+
+    public CacheItem(object value, Func<bool>? verify) {
+
+        Verify = verify;
+        Value = value;
+    }
+
+    /*public Genome Genome { get; set; }
 
     private object? value;
 
@@ -35,84 +57,134 @@ public class CacheItem {
             }
             return dependentKeys;
         }
-    }
+    }*/
 
 }
 
 public class Cache {
 
-    public static string Directory { get; set; }
+    public static string RootDirectory { get; set; }
 
 
     static Dictionary<string, CacheItem> items = new();
 
-    /*private static Cache2? current;
-    public static Cache2 Current { 
-        get {
-            if (current == null) { 
-                current = new Cache2();
-            }
-            return current;
-        }
-    }*/
-
-    private static CacheItem CreateOrGetItem(Genome genome) {
-        if (!items.TryGetValue(genome.Key, out var item)) {
-            item = new CacheItem(genome);
-            items.Add(genome.Key, item);
-        }
-        return item;
-    }
-
-    public static T CreateOrGet<T>(Genome<T> genome) where T: class {
+    public static CacheItem GetOrCreate(string key, Func<CacheItem> constructor) {
         lock (items) {
-            var item = CreateOrGetItem(genome);
-
-            var sources = genome.Sources;
-            if (sources != null) {
-                foreach (var source in sources) {
-                    var sourceItem = CreateOrGetItem(source);
-                    sourceItem.DependentKeysNotNull.Add(genome.Key);
-                }
+            if (!items.TryGetValue(key, out var item)) {
+                item = constructor();
+                items.Add(key, item);
             }
-
-            return (T)item.ValueNotNull;
+            return item;
         }
     }
 
 
-    private static void CollectMutatedItems(CacheItem root, HashSet<string> keysToDelete) {
-        if (root.DependentKeys != null) {
-            foreach (var key in root.DependentKeys) {
-                keysToDelete.Add(key);
-                CacheItem? branch = items.GetValueOrDefault(key);
-                if (branch != null) {
-                    CollectMutatedItems(branch, keysToDelete);
-                }
-            }
-        }
-    }
 
     public static void TrimMutatedItems() {
         lock (items) {
-            var keysToDelete = new HashSet<string>();
-            foreach (var i in items) {
-                var cacheItem = i.Value;
-                if (cacheItem.Value != null) {
-                    if (cacheItem.Value is IMutableAsset mutableAsset) {
-                        if (!mutableAsset.GetValid()) {
+
+            int keysDeleted = 0;
+            do {
+                var keysToDelete = new HashSet<string>();
+                foreach (var i in items) {
+                    if (i.Value.Verify != null) {
+                        if (!i.Value.Verify()) {
                             keysToDelete.Add(i.Key);
-                            CollectMutatedItems(cacheItem, keysToDelete);
                         }
                     }
                 }
-            }
-            foreach (var key in keysToDelete) {
-                var item = items[key];
-                item.Genome.DeleteCacheSubDirectory();
-                items.Remove(key);
-            }
+                keysDeleted = keysToDelete.Count;
+                foreach (var key in keysToDelete) {
+                    var item = items[key];
+                    GetSlot(key).DeleteCacheSubDirectory();
+                    items.Remove(key);
+                }
+
+            } while (keysDeleted > 0);
         }    
+    }
+
+
+    public static Slot GetSlot(string key) { 
+        return new Slot(key);
+    }
+
+    public class Slot {
+
+        string key;
+        string? keyHash = null;
+        string KeyHash {
+            get {
+                if (keyHash == null)
+                    keyHash = Hash.CreateFromString(key).ToString();
+                return keyHash;
+            }        
+        }
+
+        public Slot(string key) {
+            this.key = key;
+        }
+
+        private static readonly JsonSerializerOptions JsonSerializerOptions = new() {
+            IncludeFields = true,
+        };
+        private static readonly string CachedDataJsonFileName = "data.json";
+        private string CachedDataJsonFilePath => Path.Combine(CacheSubDirectory, CachedDataJsonFileName);
+        private string CacheSubDirectory => Path.Combine(RootDirectory, KeyHash);
+        private string ContentFilePath => Path.Combine(CacheSubDirectory, "content");
+
+        public bool LoadData<T>(out T data) where T : new() {
+            if (!File.Exists(CachedDataJsonFilePath)) {
+                data = new();
+                return false;
+            }
+
+            var json = FileUtils.ReadAllText(CachedDataJsonFilePath);
+            var deserializationResult = JsonSerializer.Deserialize<T>(json, JsonSerializerOptions);
+            if (deserializationResult == null) {
+                data = new();
+                return false;
+            }
+            data = deserializationResult;
+            return true;
+        }
+
+        public bool ContentExists() {
+            return File.Exists(ContentFilePath);
+        }
+
+        public byte[] LoadContent() {
+            return FileUtils.ReadAllBytes(ContentFilePath);
+        }
+
+        public Slot StoreData<T>(T data) {
+            CreateCacheSubDirectory();
+            string json = JsonSerializer.Serialize(data, JsonSerializerOptions);
+            File.WriteAllText(CachedDataJsonFilePath, json);
+            return this;
+        }
+
+        public Slot StoreContent(byte[] data) {
+            CreateCacheSubDirectory();
+            FileUtils.WriteAllBytes(ContentFilePath, data);
+            return this;
+        }
+
+        private void CreateCacheSubDirectory() {
+            if (!Directory.Exists(CacheSubDirectory)) {
+                Directory.CreateDirectory(CacheSubDirectory);
+            }
+        }
+
+        public void DeleteCacheSubDirectory() {
+            if (!Directory.Exists(CacheSubDirectory))
+                return;
+            Directory.Delete(CacheSubDirectory, true);
+            while (Directory.Exists(CacheSubDirectory)) {
+                Thread.Sleep(100);
+            }
+        }
+
     }
 
 

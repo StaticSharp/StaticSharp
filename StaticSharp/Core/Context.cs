@@ -58,9 +58,9 @@ namespace StaticSharp {
         }
 
 
-        public async Task<FilePath> AddAssetAsync(IAsset asset) {
-            await Assets.AddAsync(asset);
-            return AssetsBaseUrl + await asset.GetTargetFilePathAsync();
+        public FilePath AddAsset(IAsset asset) {
+            Assets.Add(asset);
+            return AssetsBaseUrl + asset.GetTargetFilePath();
         }
 
         public void AddScript(Genome<IAsset> genome) {
@@ -69,10 +69,9 @@ namespace StaticSharp {
             Scripts.Add(new KeyValuePair<string, Genome<IAsset>>(genome.Key, genome));
         }
 
-        public async Task<Html.Tag> GenerateScriptAsync() {
-            var assets = Scripts.Select(x => x.Value.CreateOrGetCached());// await Task.WhenAll(Scripts.Select(x => x.Value.CreateOrGetCached()));
-            var strings = await Task.WhenAll(assets.Select(x => x.GetTextAsync()));
-            var content = string.Join('\n', strings);
+        public Html.Tag GenerateScript() {
+            var assets = Scripts.Select(x => x.Value.Get());// await Task.WhenAll(Scripts.Select(x => x.Value.CreateOrGetCached()));
+            var content = string.Join('\n', assets.Select(x=>x.Text));
             return new Html.Tag("script") {
                 new Html.PureHtmlNode(content)
             };
@@ -84,22 +83,21 @@ namespace StaticSharp {
             Styles.Add(new KeyValuePair<string, Genome<IAsset>>(genome.Key, genome));
         }
 
-        public async Task<Html.Tag> GenerateStyleAsync() {
-            var assets = Styles.Select(x => x.Value.CreateOrGetCached());// await Task.WhenAll(Styles.Select(x => x.Value.CreateOrGetCached()));
-            var strings = await Task.WhenAll(assets.Select(x => x.GetTextAsync()));
-            var content = string.Join('\n', strings);
+        public Html.Tag GenerateStyle() {
+            var assets = Styles.Select(x => x.Value.Get());// await Task.WhenAll(Styles.Select(x => x.Value.CreateOrGetCached()));
+            var content = string.Join('\n', assets.Select(x => x.Text));
             return new Html.Tag("style") {
                 new Html.PureHtmlNode(content)
             };
         }
 
-        public async Task<Html.Tag> GenerateFontsAsync() {
+        public Html.Tag GenerateFonts() {
             var fontStyle = new StringBuilder();
 
             var sortedFonts = FontSubsets.OrderBy(x => x.Key);
 
             foreach (var i in sortedFonts) {
-                fontStyle.AppendLine(await i.Value.GenerateIncludeAsync());
+                fontStyle.AppendLine(i.Value.GenerateInclude());
             }
             return new Html.Tag("style") {
                 new Html.PureHtmlNode(fontStyle.ToString())

@@ -22,6 +22,13 @@ namespace StaticSharp {
             }
         }
 
+        public void Add(IInline? value) {
+            if (value != null) {
+                Add(new KeyValuePair<string?, IInline>(null, value));
+            }
+        }
+
+
         /*public void Add(IInline? value) {
             Add(value);
         }*/
@@ -115,10 +122,10 @@ namespace StaticSharp {
 
 
 
-        public async Task<string> GetPlaneTextAsync(Context context) {
+        public string GetPlaneText(Context context) {
             var result = new StringBuilder();
             foreach (var i in this) {
-                result.Append(await i.Value.GetPlaneTextAsync(context));                
+                result.Append(i.Value.GetPlaneText(context));                
             }
             return result.ToString();
         }

@@ -3,58 +3,30 @@
 namespace StaticSharp {
 
     namespace Gears {
-
-
-        public class TextAsset : AssetSync {
+        public class TextAsset : IAsset {
 
             string extension;
-            string mediaType;
             string? contentHash;
             string text;
 
-            public TextAsset(string text, string extension, string mediaType, string? contentHash = null) {
+            public TextAsset(string text, string extension, string? contentHash = null) {
                 this.extension = extension;
                 this.text = text;
-                this.mediaType = mediaType;
                 this.contentHash = contentHash;
             }
 
-            public override string GetFileExtension() => extension;
-            public override string GetMediaType() => mediaType;
-            public override string GetContentHash() {
-                if (contentHash == null) {
-                    contentHash = Hash.CreateFromString(text).ToString();
+
+            public string FileExtension => extension;
+            public string ContentHash {
+                get {
+                    if (contentHash == null) {
+                        contentHash = Hash.CreateFromString(text).ToString();
+                    }
+                    return contentHash;
                 }
-                return contentHash;
             }
-            public override byte[] GetBytes() => Encoding.UTF8.GetBytes(text);
-            public override string GetText() => text;
-
-        }
-
-
-
-        public class RestoredAsset : AssetSync {
-
-            string extension;
-            string mediaType;
-            string contentHash;
-
-            byte[] data;
-
-            public RestoredAsset(string extension, string mediaType, string contentHash, byte[] data) {
-                this.extension = extension;
-                this.data = data;
-                this.mediaType = mediaType;
-                this.contentHash = contentHash;
-            }
-
-            public override string GetFileExtension() => extension;
-            public override string GetMediaType() => mediaType;
-            public override string GetContentHash() => contentHash;
-            public override byte[] GetBytes() => data;
-            public override string GetText() => Encoding.UTF8.GetString(data);
-
+            public byte[] Data => Encoding.UTF8.GetBytes(text);
+            public string Text => text;
         }
 
 

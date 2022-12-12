@@ -1,18 +1,19 @@
 ﻿using StaticSharp.Gears;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using YoutubeExplode;
 
 namespace StaticSharp {
-    public record YoutubeVideoManifestGenome(string VideoId) : Genome<Task<YoutubeVideoManifestResource>>{
+    public record YoutubeVideoManifestGenome(string VideoId) : Genome<YoutubeVideoManifestResource>{
 
 
-        private async Task<YoutubeVideoManifestResource> CreateAndStore() {
+        private YoutubeVideoManifestResource CreateAndStore(Cache.Slot slot) {
 
             var validContainers = new string[] { "mp4" };
 
             var youtubeClient = new YoutubeClient();
-            var streamManifest = await youtubeClient.Videos.Streams.GetManifestAsync(VideoId);
+            var streamManifest = youtubeClient.Videos.Streams.GetManifestAsync(VideoId).GetAwaiter().GetResult();
             var result = new YoutubeVideoManifestResource();
             foreach (var i in streamManifest.GetMuxedStreams().Where(x => validContainers.Contains(x.Container.Name))) {
                 var item = new YoutubeVideoManifestItem();
@@ -25,17 +26,18 @@ namespace StaticSharp {
 
                 result.Items.Add(item);
             }
-
-            CreateCacheSubDirectory();
-            StoreData(result);
+            slot.StoreData(result);
             return result;
         }
 
-        public override Task<YoutubeVideoManifestResource> Create() {            
-            if (!LoadData<YoutubeVideoManifestResource>(out var data)) {
-                return CreateAndStore();
+        protected override void Create(out YoutubeVideoManifestResource value, out Func<bool>? verify) {
+            verify = null;
+            var slot = Cache.GetSlot(Key);
+            if (slot.LoadData<YoutubeVideoManifestResource>(out var data)) {
+                value = data;
+            } else {
+                value = CreateAndStore(slot);
             }
-            return Task.FromResult(data);
         }
     }
 

@@ -212,7 +212,7 @@ function Row(element) {
 
         let builder = new RowBuilder(element);
 
-        for (let child of element.children) {
+        for (let child of element.Children) {
             builder.layout(child)
 
         }

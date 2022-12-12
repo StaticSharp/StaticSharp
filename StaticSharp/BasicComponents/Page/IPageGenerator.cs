@@ -3,8 +3,7 @@ using System.Threading.Tasks;
 
 namespace StaticSharp.Gears {
     public interface IPageGenerator {
-
-        public Task<string> GeneratePageHtmlAsync(Context context);
+        public string GeneratePageHtml(Context context);
 
     }
 }

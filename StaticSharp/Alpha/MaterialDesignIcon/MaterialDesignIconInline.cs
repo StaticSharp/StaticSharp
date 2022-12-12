@@ -37,7 +37,7 @@ namespace StaticSharp {
             Scale = other.Scale;
         }
 
-        protected override Task ModifyHtmlAsync(Context context, Tag elementTag) {
+        protected override void ModifyHtml(Context context, Tag elementTag) {
             
             var code = MaterialDesignIcon.GetSvgTag(Icon, out var width, out var height);
 
@@ -49,7 +49,7 @@ namespace StaticSharp {
 
             elementTag.Add(new PureHtmlNode(code));
 
-            return base.ModifyHtmlAsync(context, elementTag);
+            base.ModifyHtml(context, elementTag);
         }
 
 

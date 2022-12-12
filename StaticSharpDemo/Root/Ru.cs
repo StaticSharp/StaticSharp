@@ -10,7 +10,8 @@ namespace StaticSharpDemo.Root {
 
 
     [Representative]
-    public partial class Ru : Page {
+    public partial class Ru : LandingPage {
+        public override string Title => "StaticSharp";
 
         public override Inlines DescriptionContent => $"Статический генератор сайтов на максималках";
 
@@ -80,18 +81,33 @@ namespace StaticSharpDemo.Root {
 
         public override Blocks? Content => new() {
 
-            /*{"video",
-                new Video("T4TEdzSLyi0"){
-                    Play = true,
-                    Mute = true,
-                    PreferPlatformPlayer = false,
-                    Controls = false,
-                    Loop =  true,                    
-                }
-            },*/
-            $"{new CheckboxInline("checkbox")} ",
+            #region header
+            new Paragraph("StaticSharp"){ 
+                FontSize = 80,
+                TextAlignmentHorizontal = TextAlignmentHorizontal.Center,
+            },
+            new Paragraph(DescriptionContent) {
+                TextAlignmentHorizontal = TextAlignmentHorizontal.Center,
+            },
+            #endregion
 
-            $"{Node} {Node.Components} {Node.Components.WithLanguage(Language.En)}",
+            new ScrollLayout {
+                Radius = 8,
+                BackgroundColor = Color.FromGrayscale(0.8),
+                Margins = 0,
+                Paddings = 0,
+                Content = new Paragraph(
+                        LoadFile(ThisFilePath()).GetCodeRegion("header").Highlight()
+                        //LoadFile(ThisFilePath()).GetCodeRegion("header").Highlight()
+                    ){
+                    PaddingsHorizontal = 20,
+                    FontStyle = new FontStyle(FontWeight.Regular),
+                    FontFamilies = new FontFamilyGenome[]{ 
+                        new FontFamilyGenome("Roboto Mono")
+                    }
+                }
+            },
+
 
             new Column(){
                 BackgroundColor = Color.FromGrayscale(0.15),
@@ -114,7 +130,7 @@ namespace StaticSharpDemo.Root {
                                 new Space(0,2),
                             }
                         },
-                        Second = new Image(new FileGenome(MakeAbsolutePath("Copilot/SchemeDark.svg"))){
+                        Second = new Image("Copilot/SchemeDark.svg"){
                             Embed = Image.TEmbed.Image,
                         },
                         Children = { 
@@ -132,7 +148,7 @@ namespace StaticSharpDemo.Root {
             }.FillWidth().InheritHorizontalPaddings(),
 
             new Flipper(){
-                First = new Image(new FileGenome(MakeAbsolutePath("Copilot/Delivery.svg"))){
+                First = new Image("Copilot/Delivery.svg"){
                     Embed = Image.TEmbed.Image,
                     MarginLeft = 24,
                     MarginRight = 24,

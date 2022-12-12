@@ -44,16 +44,16 @@ namespace StaticSharp {
 
         public Slider([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
 
-        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
+        protected override void ModifyHtml(Context context, Tag elementTag) {
             var thumb = Thumb;
             if (thumb == null) {
                 thumb = DefaultThumbConstructor();
             }
 
             elementTag.Add(
-                await thumb.GenerateHtmlAsync(context, new Role(false,"Thumb"))
+                thumb.GenerateHtml(context, new Role(false,"Thumb"))
                 );
-            await base.ModifyHtmlAsync(context, elementTag);
+            base.ModifyHtml(context, elementTag);
         }
 
     }

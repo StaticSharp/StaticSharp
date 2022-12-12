@@ -20,19 +20,19 @@ namespace StaticSharp {
             Code = other.Code;
         }
 
-        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
+        protected override void ModifyHtml(Context context, Tag elementTag) {
             context.FontFamilies = context.CodeFontFamilies;
             
             if (context.FontFamilies != null) {
                 elementTag.Style["font-family"] = string.Join(',', context.FontFamilies.Select(x => x.Name));
             }
-            elementTag.Add(await new Text(Code,true, callerLineNumber, callerFilePath).GenerateHtmlAsync(context,null));
+            elementTag.Add(new Text(Code,true, callerLineNumber, callerFilePath).GenerateHtml(context,null));
 
-            await base.ModifyHtmlAsync(context, elementTag);
+            base.ModifyHtml(context, elementTag);
         }
 
-        public override async Task<string> GetPlaneTextAsync(Context context) {
-            return Code + await((IPlainTextProvider)Children).GetPlaneTextAsync(context);
+        public override string GetPlaneText(Context context) {
+            return Code + ((IPlainTextProvider)Children).GetPlaneText(context);
         }
     }
 }

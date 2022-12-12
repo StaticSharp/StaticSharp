@@ -3,13 +3,19 @@ using StaticSharp.Gears;
 using System;
 using System.IO;
 using System.Reflection;
-using System.Threading.Tasks;
 
 
 
 namespace StaticSharp {
+
+
+
+
+
+
     public record AssemblyResourceGenome(Assembly Assembly, string Path) : Genome<IAsset> {
-        public override IAsset Create() {
+
+        protected override void Create(out IAsset value, out Func<bool> verify) {
             /*if (!LoadData<Data>(out var data)) {
                 data.ContentHash = Hash.CreateFromBytes(ReadAllBites()).ToString();
                 CreateCacheSubDirectory();
@@ -19,37 +25,26 @@ namespace StaticSharp {
 
             var resourcePath = Assembly.GetName().Name + "." + Path;
             using var stream = Assembly.GetManifestResourceStream(resourcePath);
-            //throw
 
-            using (var memoryStream = new MemoryStream()) {
-                stream.CopyTo(memoryStream);
-                var result = new AssemblyResourceAsset(memoryStream.ToArray(), Path);
-
-                return result;
+            if (stream == null) {
+                throw new FileNotFoundException(resourcePath);
             }
 
 
+            using (var memoryStream = new MemoryStream()) {
+                stream.CopyTo(memoryStream);
+                var data = memoryStream.ToArray();
+                value = new BinaryAsset(
+                    data,
+                    System.IO.Path.GetExtension(Path) ?? ""
+                    );
 
-           /* var extension = System.IO.Path.GetExtension(Path);
-
-
-            return Task.FromResult(new Asset(
-                () => {
-                    var resourcePath = Assembly.GetName().Name + "." + Path;
-                    using var stream = Assembly.GetManifestResourceStream(resourcePath);
-                    //throw
-
-                    using (var memoryStream = new MemoryStream()) {
-                        stream.CopyTo(memoryStream);
-                        return memoryStream.ToArray();
-                    }
-                },
-                extension,
-                MimeTypeMap.GetMimeType(extension)
-                ));*/
+                verify = () => true;
+            }
         }
+    }
 
-        public class AssemblyResourceAsset : AssetSync {
+ /*       public class AssemblyResourceAsset : AssetSync {
             public string Path { get; }
 
             byte[] data;
@@ -82,7 +77,7 @@ namespace StaticSharp {
         }
 
 
-    }
+    }*/
 
     namespace Gears {
 

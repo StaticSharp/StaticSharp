@@ -8,7 +8,7 @@ html {
    
 }
 
-body.js {
+.js {
     //display: none;
     visibility: hidden;
     position: absolute;
@@ -31,10 +31,10 @@ body.js {
 
 
 
-body.js * {
+.js * {
     scrollbar-width: none;
 }
-body.js *::-webkit-scrollbar {
+.js *::-webkit-scrollbar {
     display: none;
 }
 
@@ -44,7 +44,7 @@ head {
 
 
 
-body.js * {
+.js * {
     tab-size: 4;
     touch-action: inherit;
     display: block;
@@ -74,52 +74,14 @@ body.js * {
     white-space: inherit;
 }
 
-body.js a * {
+.js a * {
     //text-decoration-line: underline;
 }
 
-    /*w::after {
-        color: black;
-        content: "\00a0";
-    }*/
-    /*p {
-        margin-left: -10px;
-        //display: flex;
-        //flex-wrap: wrap;
-        //gap: 1em;
-    }
-
-    span {
-        color: black;
-        //margin: 0 -1em 0 0;
-    }
-
-    span {
-        display: inline-block;
-        //flex-shrink: 1;
-        //word-wrap: break-word;
-    }
 
 
-
-    span::after {
-        flex-grow: 1;
-        display: inline-block;
-        //margin-right: -10px;
-        white-space: pre-line;
-        content: "\00a0";
-        flex-shrink: 5;
-    }*/
-
-    * {
-    //outline: 0.1px solid #f00 !important;
-}
-/*a:hover {
-        opacity: 0.8;
-    }
-
-    a:visited {
-        text-decoration-color: inherit;
+    /** {
+        outline: 0.1px solid #f00 !important;
     }*/
 
 

@@ -77,20 +77,20 @@ namespace StaticSharp {
             return chars;
         }
 
-        public async Task<string> GenerateIncludeAsync() {
+        public string GenerateInclude() {
 
             var sortedUsedChars = usedChars.OrderBy(c => c);
             var text = string.Concat(sortedUsedChars);
 
             var subfontCssUrl = GoogleFonts.MakeCssUrl(font.FontFamily.Name, font.FontStyle, text);
-            var subFontCssRequest = new HttpRequestGenome(GoogleFonts.MakeWoff2Request(subfontCssUrl)).CreateOrGetCached();
+            var subFontCssRequest = new HttpRequestGenome(GoogleFonts.MakeWoff2Request(subfontCssUrl)).Get();
 
-            var fontInfos = GoogleFonts.ParseCss(await subFontCssRequest.GetTextAsync());
+            var fontInfos = GoogleFonts.ParseCss(subFontCssRequest.Text);
             //TODO validation
             var fontInfo = fontInfos.First();
-            var subFontRequest = new HttpRequestGenome(fontInfo.Url).CreateOrGetCached();
+            var subFontRequest = new HttpRequestGenome(fontInfo.Url).Get();
 
-            var content = await subFontRequest.GetBytesAsync();
+            var content = subFontRequest.Data;
 
             var base64 = Convert.ToBase64String(content);
             var format = "woff2";
@@ -98,7 +98,7 @@ namespace StaticSharp {
 
             var stringBuilder = new StringBuilder();
             stringBuilder.Append("@font-face {");
-            stringBuilder.Append("font-family: ").Append(font.FontFamily.Name).Append(";");
+            stringBuilder.Append($"font-family: '{font.FontFamily.Name}';");
             stringBuilder.Append("font-weight: ").Append((int)font.FontStyle.Weight).Append(";");
             stringBuilder.Append("font-style: ").Append(fontStyle).Append(";");
             //stringBuilder.AppendLine($"src:local('{Arguments.Family} {Arguments.Weight}{italicSuffix}'),");

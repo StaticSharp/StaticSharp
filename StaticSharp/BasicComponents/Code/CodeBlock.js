@@ -1,8 +1,8 @@
 function CodeBlock(element) {
 
-    Block(element)
+    ParagraphBase(element)
 
-    element.Reactive = {
+    /*element.Reactive = {
         ContentWidth: undefined,
         ContentHeight: undefined,
     }
@@ -31,7 +31,7 @@ function CodeBlock(element) {
             window.getSelection().selectAllChildren(element);
             //alert('4 click!');
         }
-    }
+    }*/
 
 
 

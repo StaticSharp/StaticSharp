@@ -137,10 +137,10 @@ namespace StaticSharp {
 
 
 
-            protected async Task<Tag> CreateConstructorScriptAsync(Context context) {
+            protected Tag CreateConstructorScript(Context context) {
                 var jsConstructorsNames = FindJsConstructorsNames();
 
-                var propertiesInitializers = await GetGeneratedBundingsAsync(context).ToListAsync();
+                var propertiesInitializers = GetGeneratedBundings(context).ToList();
                 propertiesInitializers.AddRange(Properties);
 
                 var propertiesInitializersScript = string.Join(',', propertiesInitializers.Select(x => $"{x.Key}:{x.Value}"));
@@ -163,8 +163,8 @@ namespace StaticSharp {
             }
 
 
-            protected virtual IAsyncEnumerable<KeyValuePair<string, string>> GetGeneratedBundingsAsync(Context context) {
-                return AsyncEnumerable.Empty<KeyValuePair<string, string>>();
+            protected virtual IEnumerable<KeyValuePair<string, string>> GetGeneratedBundings(Context context) {
+                return Enumerable.Empty<KeyValuePair<string, string>>();
             }
 
 

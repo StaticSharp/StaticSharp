@@ -78,7 +78,7 @@ namespace StaticSharp.Gears {
             return tag;
         }
 
-        public async Task<string> GeneratePageHtmlAsync(Context context) {
+        public string GeneratePageHtml(Context context) {
             var head = new Tag("head"){
                 new Tag("meta"){
                     ["charset"] = "utf-8"

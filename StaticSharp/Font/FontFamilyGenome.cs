@@ -5,29 +5,31 @@ using System.IO;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
-    public record FontFamilyGenome(string Name) : Genome<Task<FontFamily>> {
-        public override async Task<FontFamily> Create() {
+    public record FontFamilyGenome(string Name) : Genome<FontFamily> {
+
+        protected override void Create(out FontFamily value, out Func<bool>? verify) {
+            verify = null;
+
             var fullCssUrl = GoogleFonts.MakeCssUrl(Name);
 
             var fullCssRequest = new HttpRequestGenome(
                 GoogleFonts.MakeWoff2Request(fullCssUrl)
                 ) {
 
-            }.CreateOrGetCached();
+            }.Get();
 
-            var result = new FontFamily(Name);
+            value = new FontFamily(Name);
 
-            var fontInfos = GoogleFonts.ParseCss(await fullCssRequest.GetTextAsync());
+            var fontInfos = GoogleFonts.ParseCss(fullCssRequest.Text);
             foreach (var i in fontInfos) {
-                var italicSubset = result.Members[i.Italic ? 1 : 0];
+                var italicSubset = value.Members[i.Italic ? 1 : 0];
                 var existing = italicSubset.Find(x => x.FontStyle.Weight == (FontWeight)i.Weight);
                 if (existing != null) {
                     existing.Segments.AddRange(i.Segments);
                 } else {
-                    italicSubset.Add(new Font(result, new FontStyle((FontWeight)i.Weight, i.Italic), i.Segments));
+                    italicSubset.Add(new Font(value, new FontStyle((FontWeight)i.Weight, i.Italic), i.Segments));
                 }
             }
-            return result;
         }
 
 

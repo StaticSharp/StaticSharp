@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
+/*
 namespace StaticSharp {
 
     public enum ProgrammingLanguage {
@@ -39,48 +39,14 @@ namespace StaticSharp {
         JavaScript
     }
 
-    /*public interface ICodeResource : IResource {
-    }
 
-    public class CodeResource : ICodeResource {
-        private readonly string _inputFilePath;
-        private string _code;
-        private string _extension;
-
-        public CodeResource(string filePath) => _inputFilePath = filePath;
-
-        public string Key => _inputFilePath;
-
-        public string Source => _code;
-
-        public string Extension => _extension;
-
-        public async Task GenerateAsync() {
-            if (File.Exists(_inputFilePath)) {
-                _extension = Path.GetExtension(_inputFilePath);
-                _code = await File.ReadAllTextAsync(_inputFilePath);
-            } else {
-                Log.Error.OnCaller($"File {_inputFilePath} not found");
-            }
-        }
-    }*/
-    #region Adf dfgdfff
-
-    #region B
-    public static partial class CodeUtils {
-
-        
-    }
-
-#endregion
-#endregion
 
 
 
     [RelatedStyle]
-    [RelatedStyle("Code")]
+    //[RelatedStyle("Code")]
     [ConstructorJs]
-    public class CodeBlock : Block {
+    public class CodeBlock : ParagraphBase {
         protected override string TagName => "code-block";
 
         public string? ProgrammingLanguage { get; init; } = null;
@@ -104,8 +70,23 @@ namespace StaticSharp {
             ProgrammingLanguage = programmingLanguage;
         }
 
+        protected override async Task<Inlines> GetInlinesAsync() {
+            var asset = assetGenome.CreateOrGetCached();
+            var code = await asset.GetTextAsync();
 
-        /*public CodeBlock(string filePath, ProgrammingLanguage programmingLanguage = default,
+            //var styleDictionary = CreateStyleDictionary();
+
+            var styleDictionary = StyleDictionary.DefaultLight;
+
+            var programmingLanguageName = ProgrammingLanguage ?? (await asset.GetFileExtensionAsync()).TrimStart('.');
+
+            var languageProcessor = ProgrammingLanguageProcessor.FindByName(programmingLanguageName);
+
+            return languageProcessor.Highlight(code, programmingLanguageName, false);
+        }
+
+
+        public CodeBlock(string filePath, ProgrammingLanguage programmingLanguage = default,
             [CallerFilePath] string callerFilePath = "") {
             UserDefinedProgrammingLanguage = programmingLanguage;
             if (!File.Exists(filePath)) {
@@ -113,23 +94,17 @@ namespace StaticSharp {
                 Log.Error.OnCaller(error);
                 throw new FileNotFoundException(error);
             }
-        }*/
+        }
 
-        /*protected virtual ProgrammingLanguage ProgrammingLanguage {
+        protected virtual ProgrammingLanguage ProgrammingLanguage {
             get {
                 if (UserDefinedProgrammingLanguage != ProgrammingLanguage.Undefined) return UserDefinedProgrammingLanguage;
                 if (ProgrammingLanguageBasedOnExtension != ProgrammingLanguage.Undefined) return ProgrammingLanguageBasedOnExtension;
                 return ProgrammingLanguage.Undefined;
             }
-        }*/
+        }
 
-        /*private ProgrammingLanguage GetProgrammingLanguageByExtension(string extension)
-            => extension.TrimStart('.').ToLower() switch {
-                "cs" => ProgrammingLanguage.CSharp,
-                "xml" => ProgrammingLanguage.Xml,
-                "json" => ProgrammingLanguage.JavaScript,
-                _ => throw new ArgumentException("Please add extension here")
-            };*/
+
 
         //protected virtual string FinalSourceCode => _codeResource.Source;
 
@@ -243,102 +218,99 @@ namespace StaticSharp {
 
         public static string NormalizeCode(string code) {
 
-            /*var lines = Regex.Split(code, "\r\n|\r|\n");
+            var lines = Regex.Split(code, "\r\n|\r|\n");
 
 
             code = code.Replace("\r\n", "\n").Replace("\r", "\n");
-            code = code.Replace("\t", "    ");*/
+            code = code.Replace("\t", "    ");
 
             return code;
         }
 
-
-
-        protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
-
-            var asset = assetGenome.CreateOrGetCached();
-            var code = await asset.GetTextAsync();
-
-            //var styleDictionary = CreateStyleDictionary();
-
-            var styleDictionary = StyleDictionary.DefaultLight;
-
-            var programmingLanguageName = ProgrammingLanguage ?? (await asset.GetFileExtensionAsync()).TrimStart('.');
-
-            var languageProcessor = ProgrammingLanguageProcessor.FindByName(programmingLanguageName);
-
-            var html = languageProcessor.Highlight(code, programmingLanguageName, false);
-
-            /*var formatter = new CodeFormatter(StyleDictionary.DefaultLight);
-
-            var programmingLanguage = Languages.FindById(ProgrammingLanguage);
-
-            var html = formatter.GetHtmlString(NormalizeCode(code), programmingLanguage);*/
-
-            elementTag.Add(html);
-
-
-            await base.ModifyHtmlAsync(context, elementTag);
+        protected override Context ModifyContext(Context context) {
+            FontFamilies = context.CodeFontFamilies;
+            return base.ModifyContext(context);
         }
 
 
 
-        /*public async Task<Tag> GenerateHtmlAsync(Context context) {
-            _codeResource ??= await context.Storage.AddOrGetAsync(_source, () => new CodeResource(_source));
-            //throw new NotImplementedException();
-            //var result = new Tag(null);
 
-            //if ((Source is GitHub.File) && !context.AForbidden) {
-            //    var hrefTargetUrl = (Source as GitHub.File).HtmlUri;
 
-            //    var lineSpan = LineSpan;
-            //    if (lineSpan.HasValue)
-            //        hrefTargetUrl += $"#L{lineSpan.Value.Start.Value + 1}-L{lineSpan.Value.End.Value + 1}";
+            /*protected override async Task ModifyHtmlAsync(Context context, Tag elementTag) {
 
-            //    result.Add(new Tag("a", new { Class = "GitHubLink", target = "_blank", href = hrefTargetUrl }));
-            //}
+                context.FontFamilies = context.CodeFontFamilies;
 
-            var programmingLanguage = ProgrammingLanguage;
-            var languageCssClass = GetLanguageName(programmingLanguage);
-            var code = FinalSourceCode;
+                if (context.FontFamilies != null) {
+                    elementTag.Style["font-family"] = string.Join(',', context.FontFamilies.Select(x => x.Name));
+                }
 
-            //https://github.com/WilliamABradley/ColorCode-Universal
+                var inlines = await GetInlinesAsync();
 
-            if (programmingLanguage == ProgrammingLanguage.Undefined) {
-                var tag = new Tag("div", new { Class = $"Code CodeBlock {languageCssClass}" }) {
-                    new Tag("pre") { code }
-                };
-                tag.Add(new JSCall(AbsolutePath("Code.js")).Generate(context));
-                return tag;
-                // return new Tag("div", new { Class = $"Code CodeBlock {languageCssClass}" }) {
-                //     new Tag("pre") {
-                //         code
-                //     }
-                // };
+
+                var pre = new Tag("p");
+                foreach (var i in inlines) {
+                    var child = await i.Value.GenerateHtmlAsync(context, new Role(true, i.Key));
+                    pre.Add(child);
+                }
+                elementTag.Add(pre);
+
+                await base.ModifyHtmlAsync(context, elementTag);
             }
 
-            var styleDictionary = CreateStyleDictionary();
-            var formatter = new HtmlClassFormatter(styleDictionary);
 
-            var html = formatter.GetHtmlString(code, LanguageToColorCode(programmingLanguage));
 
-            string prefix = "<div class=\"";
-            if (!html.StartsWith(prefix))
-                Log.Error.Here("Unexpected html");
+            /*public async Task<Tag> GenerateHtmlAsync(Context context) {
+                _codeResource ??= await context.Storage.AddOrGetAsync(_source, () => new CodeResource(_source));
+                //throw new NotImplementedException();
+                //var result = new Tag(null);
 
-            html = $"{prefix}Code CodeBlock {languageCssClass} {html[prefix.Length..]}";
-            var result = new Tag("div");
+                //if ((Source is GitHub.File) && !context.AForbidden) {
+                //    var hrefTargetUrl = (Source as GitHub.File).HtmlUri;
 
-            result.Add(new PureHtmlNode(html));
-            context.Includes.Require(new Style(AbsolutePath(nameof(CodeBlock) + ".scss")));
-            result.Add(new JSCall(AbsolutePath("Code.js")).Generate(context));
-            return result;
-        }*/
+                //    var lineSpan = LineSpan;
+                //    if (lineSpan.HasValue)
+                //        hrefTargetUrl += $"#L{lineSpan.Value.Start.Value + 1}-L{lineSpan.Value.End.Value + 1}";
 
-    }
-    /*public static class CodeStatic {
-        public static void Add<T>(this T collection, CodeBlock item) where T : IElementContainer {
-            collection.AddElement(item);
+                //    result.Add(new Tag("a", new { Class = "GitHubLink", target = "_blank", href = hrefTargetUrl }));
+                //}
+
+                var programmingLanguage = ProgrammingLanguage;
+                var languageCssClass = GetLanguageName(programmingLanguage);
+                var code = FinalSourceCode;
+
+                //https://github.com/WilliamABradley/ColorCode-Universal
+
+                if (programmingLanguage == ProgrammingLanguage.Undefined) {
+                    var tag = new Tag("div", new { Class = $"Code CodeBlock {languageCssClass}" }) {
+                        new Tag("pre") { code }
+                    };
+                    tag.Add(new JSCall(AbsolutePath("Code.js")).Generate(context));
+                    return tag;
+                    // return new Tag("div", new { Class = $"Code CodeBlock {languageCssClass}" }) {
+                    //     new Tag("pre") {
+                    //         code
+                    //     }
+                    // };
+                }
+
+                var styleDictionary = CreateStyleDictionary();
+                var formatter = new HtmlClassFormatter(styleDictionary);
+
+                var html = formatter.GetHtmlString(code, LanguageToColorCode(programmingLanguage));
+
+                string prefix = "<div class=\"";
+                if (!html.StartsWith(prefix))
+                    Log.Error.Here("Unexpected html");
+
+                html = $"{prefix}Code CodeBlock {languageCssClass} {html[prefix.Length..]}";
+                var result = new Tag("div");
+
+                result.Add(new PureHtmlNode(html));
+                context.Includes.Require(new Style(AbsolutePath(nameof(CodeBlock) + ".scss")));
+                result.Add(new JSCall(AbsolutePath("Code.js")).Generate(context));
+                return result;
+            }
+
         }
-    }*/
-}
+
+}*/
