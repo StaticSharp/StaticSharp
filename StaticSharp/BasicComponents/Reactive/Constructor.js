@@ -39,6 +39,9 @@ function Pop() {
     } else {
         delete currentParent
     }
+    if (typeof (element.AfterChildren) === "function")
+        element.AfterChildren()
+
 }
 
 

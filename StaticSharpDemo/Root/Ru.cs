@@ -98,15 +98,17 @@ namespace StaticSharpDemo.Root {
                 Paddings = 0,
                 Content = new Paragraph(
                         LoadFile(ThisFilePath()).GetCodeRegion("header").Highlight()
-                        //LoadFile(ThisFilePath()).GetCodeRegion("header").Highlight()
                     ){
                     PaddingsHorizontal = 20,
-                    FontStyle = new FontStyle(FontWeight.Regular),
+                    Weight = FontWeight.Regular,
                     FontFamilies = new FontFamilyGenome[]{ 
                         new FontFamilyGenome("Roboto Mono")
                     }
                 }
             },
+
+            $"{new CheckboxInline(){ Value = new(e=>Js.Storage.Restore("check",()=>e.ValueActual))}}",
+
 
 
             new Column(){

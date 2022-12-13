@@ -46,9 +46,9 @@ namespace StaticSharpDemo.Root.Components {
     [Representative]
     public partial class Ru : ComponentPage {
 
-        protected override Task Setup(Context context) {
+        protected override void Setup(Context context) {
             BackgroundColor = new Color("#f8edeb");
-            return base.Setup(context);
+            base.Setup(context);
         }
 
         public override Inlines DescriptionContent => $"Компоненты для создания страниц.";

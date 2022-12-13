@@ -17,19 +17,6 @@ namespace StaticSharp {
         CourierNew,
     }
 
-    /*public record FontGenome(
-            FontFamilyGenome FontFamilyGenome,
-            FontStyle FontStyle
-            ) : Genome<Task<Font>> {
-
-        public override async Task<Font> Create() {
-            var fontFamily = await FontFamilyGenome.CreateOrGetCached();
-            var fontFamilyMember = fontFamily.FindFont(FontStyle);
-            return new Font(FontFamilyGenome.Name, fontFamilyMember);
-        }
-    }*/
-
-
     namespace Gears {
         public static partial class FontUtils {
             
@@ -62,12 +49,9 @@ namespace StaticSharp {
 
         private Font font;
         private HashSet<char> usedChars = new();
-
-
         public FontSubset(Font font) {
             this.font = font;
         }
-
 
         public HashSet<char> AddChars(HashSet<char> chars) {
             var existingChars = font.GetExistingChars(chars);
@@ -82,34 +66,30 @@ namespace StaticSharp {
             var sortedUsedChars = usedChars.OrderBy(c => c);
             var text = string.Concat(sortedUsedChars);
 
-            var subfontCssUrl = GoogleFonts.MakeCssUrl(font.FontFamily.Name, font.FontStyle, text);
-            var subFontCssRequest = new HttpRequestGenome(GoogleFonts.MakeWoff2Request(subfontCssUrl)).Get();
+            var subfontCssUrl = GoogleFonts.MakeCssUrl(font.Family.Name, font.Weight, font.Italic, text);
+            var subFontCssRequest = new HttpRequestGenome(GoogleFonts.MakeWoff2Request(subfontCssUrl)).Result;
 
             var fontInfos = GoogleFonts.ParseCss(subFontCssRequest.Text);
             //TODO validation
             var fontInfo = fontInfos.First();
-            var subFontRequest = new HttpRequestGenome(fontInfo.Url).Get();
+            var subFontRequest = new HttpRequestGenome(fontInfo.Url).Result;
 
             var content = subFontRequest.Data;
 
             var base64 = Convert.ToBase64String(content);
             var format = "woff2";
-            var fontStyle = font.FontStyle.CssFontStyle;
 
             var stringBuilder = new StringBuilder();
             stringBuilder.Append("@font-face {");
-            stringBuilder.Append($"font-family: '{font.FontFamily.Name}';");
-            stringBuilder.Append("font-weight: ").Append((int)font.FontStyle.Weight).Append(";");
-            stringBuilder.Append("font-style: ").Append(fontStyle).Append(";");
+            stringBuilder.Append($"font-family: '{font.Family.Name}';");
+            stringBuilder.Append("font-weight: ").Append((int)font.Weight).Append(";");
+            stringBuilder.Append("font-style: ").Append(Font.ItalicToStyle(font.Italic)).Append(";");
             //stringBuilder.AppendLine($"src:local('{Arguments.Family} {Arguments.Weight}{italicSuffix}'),");
             stringBuilder.Append($"src: url(data:application/font-{format};charset=utf-8;base64,{base64}) format('{format}');");
             stringBuilder.Append("}");
 
             return stringBuilder.ToString();
         }
-
-
-
     }
 
 

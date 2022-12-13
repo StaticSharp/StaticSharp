@@ -43,7 +43,7 @@ namespace StaticSharp {
             //["Height"] = "() => Min(element.Root.SideBarsIconsSize,element.InternalHeight)",
             TextAlignmentHorizontal = TextAlignmentHorizontal.Center,
             MarginsVertical = 0,
-            FontStyle = new FontStyle(FontWeight.ExtraLight),
+            Weight = FontWeight.ExtraLight,
             FontSize = new(e => e.Root.As<Js.PageSideMenus>().SideBarsIconsSize),
         };
 
@@ -63,6 +63,7 @@ namespace StaticSharp {
             {"RightSideBarIcon" ,RightSideBarIcon},
             {"RightSideBar" ,RightSideBar},
             {"Content", new ScrollLayout {
+                //FontSize = new(e=>Js.Storage.Store("scroll",()=>e.FontSize)),
                 Content = new Column {
                     Children = {
                         { "TopBar", TopBar },

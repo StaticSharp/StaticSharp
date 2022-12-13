@@ -62,9 +62,9 @@ namespace StaticSharp {
         IAsset GetSource() {
             string[] webExtensions = { ".jpg", ".jpeg", ".png", ".svg" };
 
-            var source = assetGenome.Get();
-            if (!webExtensions.Contains(source.FileExtension)) {
-                source = new JpegGenome(assetGenome).Get();
+            var source = assetGenome.Result;
+            if (!webExtensions.Contains(source.Extension)) {
+                source = new JpegGenome(assetGenome).Result;
             }
             return source;
         }
@@ -106,7 +106,7 @@ namespace StaticSharp {
             }
 
 
-            var thumbnail = new ThumbnailGenome(assetGenome).Get();
+            var thumbnail = new ThumbnailGenome(assetGenome).Result;
             var thumbnailUrlBase64 = thumbnail.GetDataUrlBase64();
 
             var thumbnailSvgDefTag = Svg.InlineImage(thumbnailUrlBase64);

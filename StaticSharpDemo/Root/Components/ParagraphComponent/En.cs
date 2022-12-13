@@ -41,8 +41,9 @@
 
             H3("Code"),
 
-            $"text with {new CodeInline("code inline")}",
-            new Paragraph($"text with {new CodeInline("code inline")}"){ 
+
+            $"text with {Code("code inline")}",
+            new Paragraph($"text with {Code("code inline")}"){ 
                 ForegroundColor = Color.LightBlue,
                 BackgroundColor = Color.DarkBlue
             },

@@ -11,7 +11,9 @@ namespace StaticSharp.Alpha {
 
             return new Paragraph(text, callerLineNumber, callerFilePath) {
                 FontSize = fontSize,
-                FontStyle = new FontStyle(fontWeight),
+                
+                Weight = fontWeight,
+                //FontStyle = new FontStyle(fontWeight),
             };
         }
         public static Paragraph H1(

@@ -23,13 +23,13 @@ function ReactionBase(func) {
         _this.triggeringProperties.clear()
     }
 
-    _this.execute = function () {
+    _this.execute = function (object) {
         let oldReaction = Reaction.current
         Reaction.current = _this
         _this.unsubscribeFromTriggeringProperties()
 
         try {
-            let result = _this.func()
+            let result = _this.func(object)
             return result
         }
         finally {
@@ -248,7 +248,7 @@ function Property(value) {
                     var oldValue = _this.value
                     try {
                         _this.executionInProgress = true
-                        _this.value = _this.binding.execute()
+                        _this.value = _this.binding.execute(_this.object)
                         
                     } finally {
                         _this.executionInProgress = false

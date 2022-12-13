@@ -48,7 +48,11 @@ namespace StaticSharp {
 
         public FontFamilyGenome[] FontFamilies { get; set; } = null!;
         public FontFamilyGenome[] CodeFontFamilies { get; set; } = null!;
-        public FontStyle FontStyle { get; set; } = new();
+        //public FontStyle FontStyle { get; set; } = new();
+
+        public FontWeight FontWeight { get; set; } = FontWeight.Regular;
+        public bool ItalicFont { get; set; } = false;
+
 
         public Ref<int> nextIdNumber;
         public string GetUniqueId() {
@@ -70,7 +74,7 @@ namespace StaticSharp {
         }
 
         public Html.Tag GenerateScript() {
-            var assets = Scripts.Select(x => x.Value.Get());// await Task.WhenAll(Scripts.Select(x => x.Value.CreateOrGetCached()));
+            var assets = Scripts.Select(x => x.Value.Result);// await Task.WhenAll(Scripts.Select(x => x.Value.CreateOrGetCached()));
             var content = string.Join('\n', assets.Select(x=>x.Text));
             return new Html.Tag("script") {
                 new Html.PureHtmlNode(content)
@@ -84,7 +88,7 @@ namespace StaticSharp {
         }
 
         public Html.Tag GenerateStyle() {
-            var assets = Styles.Select(x => x.Value.Get());// await Task.WhenAll(Styles.Select(x => x.Value.CreateOrGetCached()));
+            var assets = Styles.Select(x => x.Value.Result);// await Task.WhenAll(Styles.Select(x => x.Value.CreateOrGetCached()));
             var content = string.Join('\n', assets.Select(x => x.Text));
             return new Html.Tag("style") {
                 new Html.PureHtmlNode(content)

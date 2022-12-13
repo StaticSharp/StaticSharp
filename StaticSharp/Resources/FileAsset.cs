@@ -30,7 +30,7 @@ namespace StaticSharp {
                 return File.GetLastWriteTimeUtc(path);
             }
 
-            public string FileExtension => System.IO.Path.GetExtension(Path);
+            public string Extension => System.IO.Path.GetExtension(Path);
 
             public string ContentHash {
                 get {
@@ -44,10 +44,11 @@ namespace StaticSharp {
             public byte[] Data {
                 get {
                     if (data == null) {
-                        using (var fileStream = new FileStream(Path, FileMode.Open, FileAccess.Read)) {
+                        data = FileUtils.ReadAllBytes(Path);
+                        /*using (var fileStream = new FileStream(Path, FileMode.Open, FileAccess.Read)) {
                             data = new byte[fileStream.Length];
                             fileStream.Read(data, 0, data.Length);
-                        }
+                        }*/
                     }
                     return data;
                 }

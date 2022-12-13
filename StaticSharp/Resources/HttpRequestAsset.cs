@@ -17,7 +17,7 @@ namespace StaticSharp {
                 return LoadHttp(httpRequestMessage);
             }
             public static IAsset LoadHttp(HttpRequestMessage httpRequestMessage) {
-                return new HttpRequestGenome(httpRequestMessage).Get();
+                return new HttpRequestGenome(httpRequestMessage).Result;
             }
 
         }
@@ -38,7 +38,7 @@ namespace StaticSharp {
 
         private async Task SaveDataAsync(Cache.Slot slot, AssetAsyncData asset) {
             Data data = new();
-            data.Extension = asset.FileExtension;
+            data.Extension = asset.Extension;
             data.ContentHash = await asset.GetContentHashAsync();
             var content = await asset.GetDataAsync();
 

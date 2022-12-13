@@ -38,6 +38,7 @@ namespace StaticSharp {
 
     [Mix(typeof(PageBindings<Js.Page>))]
     [ConstructorJs]
+    [RelatedScript("../../CrossplatformLibrary/Storage/Storage")]
     [RelatedStyle("../Normalization")]
 
     public abstract partial class Page : Block, IPageGenerator {
@@ -63,7 +64,8 @@ namespace StaticSharp {
             : base(callerLineNumber, callerFilePath) {
             CodeFontFamilies = new[] { new FontFamilyGenome("Roboto Mono") };
             FontFamilies = new[] { new FontFamilyGenome("Roboto") };
-            FontStyle = new FontStyle(FontWeight.Regular);
+            Weight = StaticSharp.FontWeight.Regular;
+
         }
 
         protected override void AddRequiredInclues(Context context) {

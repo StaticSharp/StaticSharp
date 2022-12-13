@@ -33,10 +33,10 @@ namespace StaticSharp.Gears {
             return $"https://fonts.googleapis.com/css2?family={FormatFontFamily(fontFamily)}:ital,wght@{weightParameter}";
         }
 
-        public static string MakeCssUrl(string fontFamily, FontStyle fontStyle, string text = "") {
+        public static string MakeCssUrl(string fontFamily, FontWeight weight, bool italic, string text = "") {
 
   
-            var result = $"{UrlPrefix}?family={FormatFontFamily(fontFamily)}:ital,wght@{(fontStyle.Italic ? 1 : 0)},{(int)fontStyle.Weight}";
+            var result = $"{UrlPrefix}?family={FormatFontFamily(fontFamily)}:ital,wght@{(italic ? 1 : 0)},{(int)weight}";
             if (!string.IsNullOrEmpty(text)) {
                 var escapedText = Uri.EscapeDataString(text);
 

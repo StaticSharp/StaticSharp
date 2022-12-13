@@ -65,8 +65,8 @@ function Block(element) {
         AbsoluteX: () => element.IsRoot ? 0 : Sum(element.Parent.AbsoluteX, element.Parent.ScrollXActual, element.X),
         AbsoluteY: () => element.IsRoot ? 0 : Sum(element.Parent.AbsoluteY, -element.Parent.ScrollYActual, element.Y),
 
-        Width: () => First(element.LayoutWidth, element.InternalWidth),
-        Height: () => First(element.LayoutHeight, element.InternalHeight),
+        Width: e => First(e.LayoutWidth, e.InternalWidth),
+        Height: e => First(e.LayoutHeight, e.InternalHeight),
 
         ClipByParent: false
         

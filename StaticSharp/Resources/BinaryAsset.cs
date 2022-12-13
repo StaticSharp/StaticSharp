@@ -15,7 +15,7 @@ namespace StaticSharp {
                 this.contentHash = contentHash;
             }
 
-            public string FileExtension => extension;
+            public string Extension => extension;
             public string ContentHash {
                 get {
                     if (contentHash == null) {

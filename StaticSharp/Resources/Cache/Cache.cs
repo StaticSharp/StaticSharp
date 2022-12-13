@@ -68,13 +68,17 @@ public class Cache {
 
     static Dictionary<string, CacheItem> items = new();
 
-    public static CacheItem GetOrCreate(string key, Func<CacheItem> constructor) {
+    public delegate void Constructor<T>(out T value, out Func<bool>? verify) where T : class;
+
+    public static T GetOrCreate<T>(string key, Constructor<T> constructor) where T : class {
         lock (items) {
             if (!items.TryGetValue(key, out var item)) {
-                item = constructor();
+                constructor(out var value, out var verify);
+                item = new CacheItem(value,verify);
                 items.Add(key, item);
+                return value;
             }
-            return item;
+            return (T)item.Value;
         }
     }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    [RelatedStyle]
+    /*[RelatedStyle]
     public partial class CodeInline : Inline {
         protected override string TagName => "code-inline";
 
@@ -34,5 +34,5 @@ namespace StaticSharp {
         public override string GetPlaneText(Context context) {
             return Code + ((IPlainTextProvider)Children).GetPlaneText(context);
         }
-    }
+    }*/
 }
