@@ -2,7 +2,7 @@
 
     [Representative]
     public partial class En : ComponentPage {
-        public override Inlines DescriptionContent => $"Paragraph is a Block of text and other Inlines";
+        public override Inlines Description => $"Paragraph is a Block of text and other Inlines";
         public override Blocks? Content => new (){
             "Single line paragraph",
 

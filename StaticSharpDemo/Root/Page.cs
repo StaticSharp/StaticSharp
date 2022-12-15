@@ -12,7 +12,7 @@ namespace StaticSharpDemo.Root {
             ContentWidth = 800;
             base.Setup(context);
         }
-
+        
         public override Block? LeftSideBarIcon => new MaterialDesignIconBlock(MaterialDesignIcons.IconName.Menu) { 
             BackgroundColor = new Color("#6d597a"),
             Paddings = 8,

@@ -65,7 +65,7 @@ namespace StaticSharpDemo {
 
             var generator = new MultilanguageStaticGenerator<Language>(
                 new DefaultMultilanguageNodeToPath<Language>(),
-                new AbsoluteUrl("http", "staticsharp.github.io"),
+                new AbsoluteUrl("https", "staticsharp.github.io"),
                 FilePath.FromOsPath(baseDirectory)
                 );
 

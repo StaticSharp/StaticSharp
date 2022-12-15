@@ -5,7 +5,7 @@ namespace StaticSharpDemo.Root.Components.MaterialDesignIconsComponent {
 
     [Representative]
     public partial class En : ComponentPage {
-        public override Inlines DescriptionContent => $"Material Design icon component. Has two implementations as Block and as Inline.";
+        public override Inlines Description => $"Material Design icon component. Has two implementations as Block and as Inline.";
         public override Blocks? Content => new() {
             H5(nameof(MaterialDesignIconBlock)),
 

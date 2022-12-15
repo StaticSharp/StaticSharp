@@ -41,17 +41,17 @@ namespace StaticSharp {
     [RelatedScript("../../CrossplatformLibrary/Storage/Storage")]
     [RelatedStyle("../Normalization")]
 
-    public abstract partial class Page : Block, IPageGenerator {
+    public abstract partial class Page : Block {
         protected virtual void Setup(Context context) {
             FontSize = 16;
         }
-
+        public virtual Genome<IAsset>? Favicon => null;
         public virtual string? SiteName => null;
         public abstract string PageLanguage { get; }
         public abstract string Title { get; }
         public abstract object? MainVisual { get; }
         
-        public abstract Inlines? DescriptionContent { get; }
+        public abstract Inlines? Description { get; }
         public abstract Node VirtualNode { get; }
 
         protected override string TagName => "body";
@@ -63,7 +63,7 @@ namespace StaticSharp {
         public Page([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
             : base(callerLineNumber, callerFilePath) {
             CodeFontFamilies = new[] { new FontFamilyGenome("Roboto Mono") };
-            FontFamilies = new[] { new FontFamilyGenome("Roboto") };
+            FontFamilies = new(){ new FontFamilyGenome("Roboto") };
             Weight = StaticSharp.FontWeight.Regular;
 
         }
@@ -94,8 +94,8 @@ namespace StaticSharp {
             meta["og:url"] = url;
             meta["twitter:url"] = url;
 
-            if (DescriptionContent != null) {
-                string description = DescriptionContent.GetPlaneText(context);
+            if (Description != null) {
+                string description = Description.GetPlaneText(context);
                 meta["description"] = description;
                 meta["og:description"] = description;
                 meta["twitter:description"] = description;
@@ -113,6 +113,20 @@ namespace StaticSharp {
             return result;
         }
 
+
+        public Tag? GenerateFavicon(Context context) {
+            //<link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+            if (Favicon == null)
+                return null;
+            var asset = Favicon.Result;
+            var url = context.AddAsset(asset);
+            return new Tag("link") {
+                ["rel"] = "icon",
+                ["type"] = asset.GetMediaType(),
+                ["href"] = url,
+            };
+        }
+
         public string GeneratePageHtml(Context context) {
 
             Setup(context);
@@ -127,7 +141,8 @@ namespace StaticSharp {
                     new Tag("title"){
                         Title
                     },
-                    GenerateMetaTags(context)
+                    GenerateMetaTags(context),
+                    GenerateFavicon(context)
                     //<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
                 };
 

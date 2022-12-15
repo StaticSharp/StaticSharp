@@ -51,7 +51,7 @@ namespace StaticSharpDemo.Root.Components {
             base.Setup(context);
         }
 
-        public override Inlines DescriptionContent => $"Компоненты для создания страниц.";
+        public override Inlines Description => $"Компоненты для создания страниц.";
 
         public override Blocks Content => new(){
 

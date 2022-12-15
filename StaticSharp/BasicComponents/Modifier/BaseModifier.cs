@@ -64,7 +64,19 @@ namespace StaticSharp {
             public bool OpenLinksInANewTab { get; set; }
             
             public FontFamilyGenome[]? CodeFontFamilies { get; set; } = null;
-            public FontFamilyGenome[]? FontFamilies { get; set; } = null;
+
+
+            private FontFamilies? fontFamilies = null;
+            public FontFamilies FontFamilies {
+                get {
+                    if (fontFamilies == null)
+                        fontFamilies = new();
+                    return fontFamilies;
+                }
+                set {
+                    fontFamilies = value;
+                }
+            }
 
 
 
@@ -78,8 +90,8 @@ namespace StaticSharp {
             //public string? Url = null;
             public string? Tooltip = null;
 
-            public float? LineHeight = null;//line-height
-            public float? LetterSpacing = null;//letter-spacing
+            public double? LineHeight = null;//line-height
+            public double? LetterSpacing = null;//letter-spacing
 
 
             protected BaseModifier(Hierarchical other, int callerLineNumber, string callerFilePath) : base(other, callerLineNumber, callerFilePath) {}
@@ -116,8 +128,8 @@ namespace StaticSharp {
 
 
             protected override Context ModifyContext(Context context) {
-                if (FontFamilies != null) {
-                    context.FontFamilies = FontFamilies;
+                if (fontFamilies != null) {
+                    context.FontFamilies = fontFamilies;
                 }
                 if (CodeFontFamilies != null) {
                     context.CodeFontFamilies = CodeFontFamilies;

@@ -7,13 +7,15 @@ namespace StaticSharp {
 
     namespace Js {
         public class MaterialDesignIcon {
-            //public bool Enabled => NotEvaluatableValue<bool>();
+            public Color StrokeColor => NotEvaluatableValue<Color>();
+            public double StrokeWidth => NotEvaluatableValue<double>();
 
         }
     }
     namespace Gears {
         public class MaterialDesignIconBindings<FinalJs> : Bindings<FinalJs> where FinalJs : new() {
-            //public Binding<bool> Enabled { set { Apply(value); } }
+            public Binding<Color> StrokeColor { set { Apply(value); } }
+            public Binding<double> StrokeWidth { set { Apply(value); } }
         }
     }
 

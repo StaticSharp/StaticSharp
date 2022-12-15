@@ -123,8 +123,9 @@ public class LambdaScriptifier {
             var isParams = parameters[i].GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0;
             if (isParams) {
                 if (arguments[i] is NewArrayExpression newArrayExpression) {
-                    foreach (var e in newArrayExpression.Expressions) {
-                        argumentsValues.Add(Eval(e));
+                    var paramsExpressions = newArrayExpression.Expressions;
+                    if (paramsExpressions.Count > 0) {
+                        argumentsValues.Add(string.Join(',', paramsExpressions.Select(Eval)) );
                     }
                 } else {
                     NotImplemented(arguments[i]);

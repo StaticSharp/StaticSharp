@@ -50,8 +50,7 @@ public class MultilanguageStaticGenerator<LanguageEnum> : Generator<Multilanguag
 
         var map = new StringBuilder()
             .AppendLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
-            .AppendLine("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" " +
-                "xmlns:xhtml=\"http://www.w3.org/1999/xhtml\">");
+            .AppendLine("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\">");
 
         foreach (var node in nodes) {
             if (node.Representative == null)

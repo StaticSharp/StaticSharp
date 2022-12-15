@@ -13,7 +13,7 @@
             Controls = false,
             PreferPlatformPlayer = false,
         };
-        public override Inlines DescriptionContent => $"StaticSharp VideoPlayer component.";
+        public override Inlines Description => $"StaticSharp VideoPlayer component.";
         public override Blocks? Content => new() {
 
             {"Video",

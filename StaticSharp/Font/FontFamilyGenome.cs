@@ -5,6 +5,15 @@ using System.IO;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
+
+    public class FontFamilies : List<FontFamilyGenome> {
+        public void Add(string name) { 
+            Add(new FontFamilyGenome(name));
+        }
+    }
+
+
+
     public record FontFamilyGenome(string Name) : Genome<FontFamily> {
 
         protected override void Create(out FontFamily value, out Func<bool>? verify) {

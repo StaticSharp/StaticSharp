@@ -38,8 +38,8 @@ namespace StaticSharp.Gears {
                     //result.Style["background-color"] = background.ToHtmlColor();
                 }
 
-                result.Weight = bold ? FontWeight.Bold : FontWeight.Regular;
-                result.Italic = italic;
+                result.Weight = bold ? FontWeight.Bold : null;
+                result.Italic = italic ? true : null;
 
                 return result;
             }

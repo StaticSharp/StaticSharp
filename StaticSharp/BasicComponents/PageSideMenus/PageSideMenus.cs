@@ -36,7 +36,10 @@ namespace StaticSharp {
                 return n[(n.LastIndexOf('.') + 1)..].Replace('_',' ');
             }
         }
-        public virtual Block? Description => (DescriptionContent != null) ? new Paragraph(DescriptionContent) : null;
+
+
+
+        //public override Inlines Description => (base.Description != null) ? new Paragraph(base.Description) : null;
 
         public virtual Block? TopBar => new Paragraph(Title) {
             Height = new(e=>Js.Math.Max(e.Root.As<Js.PageSideMenus>().SideBarsIconsSize, e.InternalHeight)),
@@ -68,7 +71,7 @@ namespace StaticSharp {
                     Children = {
                         { "TopBar", TopBar },
                         { "MainVisual", MainVisual },
-                        { "Description", Description },
+                        { "Description", (Description != null) ? new Paragraph(Description) : null },
                         new Block(){ 
                             Height = 1,
                             BackgroundColor = Color.Gray,

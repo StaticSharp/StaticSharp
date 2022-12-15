@@ -1,8 +1,13 @@
-﻿namespace StaticSharpDemo.Root {
+﻿using StaticSharp.Gears;
+
+namespace StaticSharpDemo.Root {
     public abstract partial class LandingPage: StaticSharp.Page {
+
+        public override Genome<IAsset>? Favicon => LoadFile("favicon.svg");
+
         public override string PageLanguage => Node.Language.ToString().ToLower();
 
-
+        
         public virtual Block Menu => new Row {
             BackgroundColor = Color.Black,
             Children = {
@@ -25,7 +30,7 @@
                 //FontSize = new(e =>Js.Math.First( Js.Storage.Restore("FontSize", () => 10)),
                 Content = new Column{
                     Width = new(e=>e.ParentBlock.Width),
-                    PaddingsHorizontal = new(e=>Js.Math.Max((e.ParentBlock.Width-ColumnWidth)/2,0)),
+                    PaddingsHorizontal = new(e=>Js.Math.Max(e.ParentBlock.Width-ColumnWidth , 0)/2),
                     Children = {
                         Menu,
                         Content

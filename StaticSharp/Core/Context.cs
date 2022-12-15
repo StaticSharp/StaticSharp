@@ -46,7 +46,7 @@ namespace StaticSharp {
 
         private List<KeyValuePair<string, Genome<IAsset>>> Scripts { get; } = new();
 
-        public FontFamilyGenome[] FontFamilies { get; set; } = null!;
+        public FontFamilies FontFamilies { get; set; } = null!;
         public FontFamilyGenome[] CodeFontFamilies { get; set; } = null!;
         //public FontStyle FontStyle { get; set; } = new();
 

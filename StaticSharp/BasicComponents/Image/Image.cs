@@ -14,21 +14,23 @@ namespace StaticSharp {
 
 
     namespace Js {
-        public class Image : Block {
-            public double Aspect => NotEvaluatableValue<double>();
+        public class Image : AspectBlock {
+            //public double Aspect => NotEvaluatableValue<double>();
         }
     }
 
 
     namespace Gears {
-        public class ImageBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
-            public Binding<double> Aspect { set { Apply(value); } }
+        public class ImageBindings<FinalJs> : AspectBlockBindings<FinalJs> where FinalJs : new() {
+            //public Binding<double> Aspect { set { Apply(value); } }
         }
     }
 
+
+
     [Mix(typeof(ImageBindings<Js.Image>))]
     [ConstructorJs]
-    public partial class Image : Block, IMainVisual {
+    public partial class Image : AspectBlock, IMainVisual {
 
         public enum TEmbed { 
             Image,
