@@ -34,7 +34,7 @@ namespace StaticSharp {
                 svgElement.Attribute("id")?.Remove();
 
                 try {
-                    var viewBox = svgElement.Attribute("viewBox").Value.Split(' ').Select(x => float.Parse(x)).ToArray();
+                    var viewBox = svgElement.Attribute("viewBox").Value.Split(' ').Select(float.Parse).ToArray();
                     width = viewBox[2];
                     height = viewBox[3];
                 }

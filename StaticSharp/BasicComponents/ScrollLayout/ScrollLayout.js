@@ -97,13 +97,13 @@ function ScrollLayout(element) {
         Height: () => element.ScrollBarThickness,        
     }
 
-    /*SetupPointerDrag(verticalThumb, (x, y) => {
+    SetupPointerDrag(verticalThumb, (x, y) => {
         scrollable.scrollTop += y / verticalThumb.ThumbPositionScale
     })
 
     SetupPointerDrag(horizontalThumb, (x, y) => {
         scrollable.scrollLeft += x / horizontalThumb.ThumbPositionScale
-    })*/
+    })
 
 
     let scrollable = document.createElement("scrollable")

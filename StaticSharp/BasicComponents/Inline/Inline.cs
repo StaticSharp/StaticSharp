@@ -81,6 +81,13 @@ namespace StaticSharp{
             int callerLineNumber = 0,
             string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
 
+        public Inline(
+            string text,
+            int callerLineNumber = 0,
+            string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
+            Children.Add(text);
+        }
+
 
         public virtual string GetPlaneText(Context context) => "";
 

@@ -21,13 +21,13 @@ namespace StaticSharp {
             int formattedCount){
         }
 
-        public void AppendLiteral(string value, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
+        public void AppendLiteral(string value, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
             Add(null, new Text(value, true, callerLineNumber, callerFilePath));
         }
         public void Add(
             string text,
-            [CallerFilePath] string callerFilePath = "",
-            [CallerLineNumber] int callerLineNumber = 0) {
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerFilePath] string callerFilePath = "") {
 
             Add(null, new Text(text, true, callerLineNumber, callerFilePath));
         }
@@ -67,11 +67,12 @@ namespace StaticSharp {
 
 
 
-        /*public void AppendFormatted<T>(T t) where T : struct {
-            //TODO: inplement
-            Console.WriteLine($"\tAppendFormatted called: {{{t}}} is of type {typeof(T)}");
-        }*/
-
+        public void AppendFormatted<T>(T t, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") where T : struct {
+            Add(t.ToString(), callerLineNumber, callerFilePath);
+        }
+        public void AppendFormatted(string t, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
+            Add(t, callerLineNumber, callerFilePath);
+        }
 
 
         //Link

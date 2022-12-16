@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -57,8 +58,12 @@ namespace StaticSharp {
             verify = null;
             var slot = Cache.GetSlot(Key);
             if (!slot.LoadData(out data)) {
-
+                var userAgent = HttpRequestMessage.Headers.UserAgent;
+                if (userAgent.Count == 0) {
+                    userAgent.Add(new ProductInfoHeaderValue(new ProductHeaderValue("StaticSharp")));
+                }
                 var response = HttpClientStatic.Instance.Send(HttpRequestMessage);
+
                 var mediaType = response.Content.Headers.ContentType?.MediaType;
                 if (mediaType != null) {
                     try {

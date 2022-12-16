@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -8,6 +9,27 @@ namespace StaticSharpDemo.Root {
 
 
     public static class Styles {
+
+        public static Paragraph SectionHeader(this string text, Color highlightColor, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") { 
+            var result = new Paragraph(callerLineNumber, callerFilePath);
+            var textFragments = new List<string>();
+            var startIndex = 0;
+            bool upperCase = true;
+            while (startIndex < text.Length) {
+                var fragment = string.Concat(text.Skip(startIndex).TakeWhile(x => (x == char.ToLower(x)) ^ upperCase));
+                if (fragment.Length > 0) {
+                    startIndex += fragment.Length;
+                    if (upperCase) {
+                        result.Inlines.Add(new Inline(fragment) { ForegroundColor = highlightColor });
+                    } else {
+                        result.Inlines.Add(fragment.ToUpper());
+                    }
+                }
+                upperCase = !upperCase;
+            }
+            return result.SectionHeader();
+        }
+
         public static Paragraph SectionHeader(this Paragraph x) {
             x.FontFamilies = new() { "Inter" };
             x.FontSize = 50;
@@ -21,6 +43,21 @@ namespace StaticSharpDemo.Root {
             x = x.SectionHeader();
             x.FontSize = 90;
             return x;
+        }
+
+        public static ScrollLayout MakeCodeBlock(this Inlines inlines) {
+            return new ScrollLayout {
+                Height = new(e => Js.Math.Min(e.InternalHeight, e.Root.Height * 0.8)),
+                Radius = 8,
+                BackgroundColor = Color.FromGrayscale(0.98),
+                Paddings = 20,
+                Content = new Paragraph(
+                        inlines
+                    ) {
+                    Weight = FontWeight.Regular,
+                    FontFamilies = { "Roboto Mono" }
+                },
+            };
         }
 
     }
@@ -131,8 +168,6 @@ namespace StaticSharpDemo.Root {
             }.FillWidth();
         }
 
-        
-
 
         public override Blocks? Content => new() {
 
@@ -163,9 +198,9 @@ namespace StaticSharpDemo.Root {
             }),
 
 
-            #region header
+            
 
-            new Paragraph("Static Sharp".ToUpper()).MainHeader(),
+            new Paragraph("STATIC SHARP").MainHeader(),
             Description,
 
             /*new Paragraph("StaticSharp"){ 
@@ -180,47 +215,74 @@ namespace StaticSharpDemo.Root {
                 FontSize = 24,
                 Weight = FontWeight.Light
             },*/
-            #endregion
+            
 
             Separator(),
 
-            new Paragraph("Code".ToUpper()).SectionHeader(),
-            "Let`s dive into code!",
+            #region codeExample
 
-            new ScrollLayout {
-                Radius = 8,
- 
+            "coDe".SectionHeader(Color.Red),
+
+            "Welcome to StaticSharp! We believe in getting right to the point, so here is the code from this very page.",
+
+
+            //This is code block:
+            LoadFile(ThisFilePath()).GetCodeRegion("codeExample").Highlight().MakeCodeBlock(),
+
+
+            /*new ScrollLayout {
+                Height = new(e=>Js.Math.Min(e.InternalHeight, e.Root.Height * 0.8)),
+                Radius = 8,                
                 BackgroundColor = Color.FromGrayscale(0.98),
                 Paddings = 20,
                 Content = new Paragraph(
-                        LoadFile(ThisFilePath()).GetCodeRegion("header").Highlight()
-                    ){
-                    
-                    
-                    Weight = FontWeight.Light,
+                        
+                    ){                    
+                    Weight = FontWeight.Regular,
                     FontFamilies = { "Roboto Mono" }
                 },
-            },
+            }, */           
 
-            
+            Separator(),
 
+            "COMPONENT-based\ncontent development".SectionHeader(Color.GreenYellow * 0.75),
 
-
-            LandingHeading("Components"),
-            $"""
-            StaticSharp component is a pair of files
-            {Code("ComponentName.cs")} and {Code("ComponentName.js")}.
-            Js and Cs objects inherited in a same way.
+            """
+            Component-based development is like a Lego set for your website! You get to use pre-made blocks (components) and snap them together, or even create your own custom bricks to build the site of your dreams.
+            Plus, it's super scalable and easy to update. Bye-bye, clunky websites - hello, sleek and modern web creations!
             """,
 
-            new Paragraph($"StaticSharp component is a pair of files {Code("ComponentName.cs")} and {Code("ComponentName.js")}. Js and Cs objects inherited in a same way."){
-                MarginsHorizontal = 20,
-                Width = new(e=>Js.Math.Min( e.LayoutWidth, 500) )
-            }
+            Separator(),
+            "copypasteable from\nSTACKOVERFLOW".SectionHeader(new Color("#F58025")),
+            """
+            Copy-pasteability is the superpower of code - it allows developers to reuse and share code like a boss, saving time and effort in the software development process.
+            No-code or low-code platforms might have their own superpowers, but when it comes to flexibility and customization, code-based approaches reign supreme.
+            So go forth, dear developer, and copy-paste to your heart's content!
+            """,
 
-            ,
+            Separator(),
+            "create your own SHORTCUTS".SectionHeader(Color.Red),
+            """
+            For example, on this page, there are colored words in the headings. You can write full formatting in each case
+            or you can create a function that highlights all capital letters with a given color and makes all lowercase letters capitalized.
+            """,
+            "\"create your own SHORTCUTS\".SectionHeader(Color.Red)".Highlight("cs").MakeCodeBlock(),
+            $"In this case it is an extension method for type {Code("string")}",
 
 
+            Separator(),
+            "bring it with NUGET".SectionHeader(new Color("#004880")),
+            "All of these shortcuts and components can be wrapped in NuGet packages, so that everyone (including you in the future) can add them to their new site with a few clicks.",
+
+            Separator(),
+            "TURING complete text writing".SectionHeader(new Color("#004880")),
+            $"""
+            Yo dawg, we put programming in the text-writing so you can code while you write.
+            Did you know that StaticSharp repo has {JObject.Parse(new HttpRequestGenome("https://api.github.com/repos/StaticSharp/StaticSharp").Result.Text).Value<int>("stargazers_count")} stars on {"https://github.com/StaticSharp/StaticSharp":github}
+            
+            """,
+
+            #endregion
 
             /*new Flipper{ 
                 First = new Image("Crafting.psd"),
