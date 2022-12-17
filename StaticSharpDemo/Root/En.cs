@@ -16,7 +16,7 @@ namespace StaticSharpDemo.Root {
             var startIndex = 0;
             bool upperCase = true;
             while (startIndex < text.Length) {
-                var fragment = string.Concat(text.Skip(startIndex).TakeWhile(x => (x == char.ToLower(x)) ^ upperCase));
+                var fragment = string.Concat(text.Skip(startIndex).TakeWhile(x => char.ToLower(x)==char.ToUpper(x) || (x == char.ToLower(x)) ^ upperCase));
                 if (fragment.Length > 0) {
                     startIndex += fragment.Length;
                     if (upperCase) {
@@ -164,7 +164,8 @@ namespace StaticSharpDemo.Root {
             return new Block {
                 MarginsVertical = 75,
                 Height = new(x => 1 / Js.Window.DevicePixelRatio),
-                BackgroundColor = new(e => e.ParentBlock.HierarchyForegroundColor)
+                BackgroundColor = new(e => e.ParentBlock.HierarchyForegroundColor),
+                Visibility = 0.5
             }.FillWidth();
         }
 
@@ -246,19 +247,46 @@ namespace StaticSharpDemo.Root {
             Separator(),
 
             "COMPONENT-based\ncontent development".SectionHeader(Color.GreenYellow * 0.75),
-
             """
             Component-based development is like a Lego set for your website! You get to use pre-made blocks (components) and snap them together, or even create your own custom bricks to build the site of your dreams.
             Plus, it's super scalable and easy to update. Bye-bye, clunky websites - hello, sleek and modern web creations!
             """,
 
+
+             
+
+
+
+
+
             Separator(),
-            "copypasteable from\nSTACKOVERFLOW".SectionHeader(new Color("#F58025")),
-            """
-            Copy-pasteability is the superpower of code - it allows developers to reuse and share code like a boss, saving time and effort in the software development process.
-            No-code or low-code platforms might have their own superpowers, but when it comes to flexibility and customization, code-based approaches reign supreme.
-            So go forth, dear developer, and copy-paste to your heart's content!
-            """,
+            
+            new Flipper() {
+                MarginLeft = new (e=>e.ParentBlock.PaddingLeft),
+                MarginRight = new (e=>e.ParentBlock.PaddingRight),
+                FlipWidth = 800,
+                First = new Column(){
+                    MarginLeft = 10,
+                    MarginRight = 10,
+
+                    Children = {
+                        new Space(),
+                        "copypasteable from\nSTACKOVERFLOW".SectionHeader(new Color("#F58025")),
+                        """
+                        Copy-pasteability is the superpower of code - it allows developers to reuse and share code like a boss, saving time and effort in the software development process.
+                        No-code or low-code platforms might have their own superpowers, but when it comes to flexibility and customization, code-based approaches reign supreme.
+                        So go forth, dear developer, and copy-paste to your heart's content!
+                        """,
+                        new Space(0,2),
+                    }
+                },
+                Second = new Image("CopyPasteable.psd"){
+                    Fit = Fit.Outside
+                    //Embed = Image.TEmbed.Image,
+                }
+            },
+
+
 
             Separator(),
             "create your own SHORTCUTS".SectionHeader(Color.Red),
@@ -271,18 +299,65 @@ namespace StaticSharpDemo.Root {
 
 
             Separator(),
-            "bring it with NUGET".SectionHeader(new Color("#004880")),
+            "bring it with NUGET".SectionHeader(new Color("#004880") * 1.7),
             "All of these shortcuts and components can be wrapped in NuGet packages, so that everyone (including you in the future) can add them to their new site with a few clicks.",
 
             Separator(),
-            "TURING complete text writing".SectionHeader(new Color("#004880")),
+            "TURING complete text writing".SectionHeader(Color.DeepPink),
             $"""
             Yo dawg, we put programming in the text-writing so you can code while you write.
-            Did you know that StaticSharp repo has {JObject.Parse(new HttpRequestGenome("https://api.github.com/repos/StaticSharp/StaticSharp").Result.Text).Value<int>("stargazers_count")} stars on {"https://github.com/StaticSharp/StaticSharp":github}
-            
+            By the way, did you know that at the time this page was generated on {DateTime.Now.Date.ToString("MMMM dd, yyyy")}, the StaticSharp repository had {JObject.Parse(new HttpRequestGenome("https://api.github.com/repos/StaticSharp/StaticSharp").Result.Text).Value<int>("stargazers_count")} stars on {"https://github.com/StaticSharp/StaticSharp":GitHub}?
+            """,
+            #endregion
+
+            Separator(),
+            "AUTOCOMPLETE for everything".SectionHeader(Color.Red),
+            $"""
+            C# is a strongly-typed language, so the IDE has access to information about the available types and their members in compile-time.
+            With the introduction of Source Generators in .NET 6, we can even provide IntelliSense for internal links.
+            Example: This link -> {Node.Components} is made by {Code("{Node.Components}")} using interpolated string syntax.
+            """,            
+            """
+            Modern IDEs are like supercharged text editors, making it a breeze to develop a website using the most powerful framework at your fingertips.
             """,
 
-            #endregion
+            Separator(),
+            "DEVELOPER mode".SectionHeader(Color.Blue),
+            """
+            Like any static site generator, StaticSharp has a web server mode that allows you to see the site in a browser while you work on it.
+            One feature we want to show of is the source code navigation directly from your browser. You can ctrl+click on an element in the browser and StaticSharp will highlight the corresponding line in Visual Studio.
+            """,
+
+            Separator(),
+            "HOT-RELOAD for everything".SectionHeader(Color.Orange),
+            """
+            Essentially, your content is part of the code that is executed to create an HTML file. To make changes reflected on the page, the code must be recompiled.
+            However, thanks to the hot-reload feature in .NET, such changes are applied instantly and do not require full recompilation.
+            """,
+            new Paragraph("""
+                In addition, StaticSharp in developer mode provides hot reloading of all resources used on the page.
+                All images, videos, JavaScript, text files, and code examples will be reloaded when they are modified.
+                """){ 
+                MarginTop = 20
+            },
+
+            /*new Block{
+                ["Height"] = "(e)=>e.Flipped ? Sum(e.First.Height, e.Second.Height) : Max(e.First.Height, e.Second.Height) ",
+                BackgroundColor = Color.Pink,
+                ["Flipped"] = "()=>element.Width<500",
+                
+                Children = {
+                    {"First",new Paragraph("Title"){ 
+                        Width = new(e=>Js.Math.Min(e.ParentBlock.Width * 0.5, 200))
+                    }},
+                    { "Second", new Paragraph(Description){
+                        ["X"] = "(e)=>e.Parent.Flipped ? 0 : e.Parent.First.Width",
+                        ["Y"] = "(e)=>e.Parent.Flipped ? e.Parent.First.Height : 0",
+                        ["Width"] = "(e)=>e.Parent.Flipped ? e.Parent.Width : e.Parent.Width - e.X",
+                        //Width = new(e=>e.ParentBlock.Width - e.X)
+                    } }                
+                }            
+            },*/
 
             /*new Flipper{ 
                 First = new Image("Crafting.psd"),
@@ -298,139 +373,7 @@ namespace StaticSharpDemo.Root {
 
 
 
-            LandingHeading("Copy-pasteable from stackoverflow"),
-            new Image("CopyPasteable.psd"){ 
-                Fit = Fit.Outside,
 
-                Height = new(e=>Js.Math.Min(e.InternalHeight, e.Root.Height * 0.25)),
-                /*Children = {
-                    new Column(){
-                        ForegroundColor = Color.FromGrayscale(0.75),
-                        
-                        Width = new(e=>e.ParentBlock.Width),
-                        Children = { 
-                            new Paragraph("Copy-pasteable\nfrom stackoverflow"){ 
-                                TextAlignmentHorizontal= TextAlignmentHorizontal.Center,
-                                FontSize = 80,
-                                Weight = FontWeight.ExtraBold
-                            },
-
-                        }
-                    }.Center()
-                }*/
-            },
-
-            LandingHeading("Bring components from Nuget"),
-            new Image("NugetLogo.svg"){ 
-                Embed = Image.TEmbed.Image,
-                Fit= Fit.Inside,
-                Height = new(e=>Js.Math.Min(e.InternalHeight, e.Root.Height * 0.25)),
-                BackgroundColor = new Color("#002440")                
-            }.FillWidth(),
-
-
-
-
-            LandingHeading("Minimized content"),
-            "Only used js and fonts included in final page",
-
-
-            new Column(){
-                BackgroundColor = Color.FromGrayscale(0.15),
-                Children = {
-                    $"Refer to {GithubUrl()} for more information, and join our {DiscordUrl()} to learn more about getting early access to Copilot.",
-                    new Flipper() {
-                        MarginLeft = new (e=>e.ParentBlock.PaddingLeft),
-                        MarginRight = new (e=>e.ParentBlock.PaddingRight),
-
-                        First = new Column(){
-                            MarginLeft = 10,
-                            MarginRight = 10,
-
-                            Children = {
-                                new Space(),
-                                H4("Antilatency Copilot.\nPositional solution for drones").Modify(x=>{
-                                    x.LineHeight = 1.3f;
-                                }),
-                                "Copilot is an Antilatency project. We use our accurate optical-inertial tracking system with Raspberry Pi to provide you with precise indoor navigation and outdoor landing for drones in different use cases.",
-                                new Space(0,2),
-                            }
-                        },
-                        Second = new Image("Copilot/SchemeDark.svg"){
-                            Embed = Image.TEmbed.Image,
-                        },
-                        Children = { 
-                            new MaterialDesignIconBlock(MaterialDesignIcons.IconName.Github){
-                                ExternalLink = "https://github.com/staticsharp",
-                                Width = 128,
-                                BackgroundColor = Color.White,
-                                Radius = new(e=>e.Width /2),
-                                Paddings = 12,
-                            }.Center()
-                        }
-                    }
-                }
-
-            }.FillWidth().InheritHorizontalPaddings(),
-
-            new Flipper(){
-                First = new Image("Copilot/Delivery.svg"){
-                    Embed = Image.TEmbed.Image,
-                    MarginLeft = 24,
-                    MarginRight = 24,
-                    MarginTop = 24,
-                    MarginBottom = 24,
-                },
-                Second = new Column(){
-                    MarginLeft = 10,
-                    MarginRight = 10,
-
-                    Children ={
-                        new Space(),                        
-                        //$"{new Checkbox():#id}",
-                        H5("Increased delivery efficiency"),
-                        "Autonomous landing at delivery points, automatic delivery scenarios in large warehouses and enterprises.",
-                        new Space(),
-                    }
-                }
-            }.FillWidth().InheritHorizontalPaddings(),
-
-            "This product is still under development, but you can get early access to Copilot, join discussions, and share your ideas in our community on Discord",
-
-
-            /*new Image(new FileGenome(AbsolutePath("TestPsdImage.psd"))),
-
-            new Template(new FileGenome(AbsolutePath("Reactive.template"))),
-
-            H1($"H1"),
-            "Abc",
-            "Abc",*/
-            
-
-            /*H1("H1"),*/
-            /*new Modifier {
-                FontSize = new((element) => element.Sibling<SliderJs>("Slider").Value + 2),
-                Children = { $"Modifier test" }
-            },*/
-
-            //CreateParagraphs(100),
-
-            {
-                "Slider",
-                new Slider {
-                    
-                    //MarginTop = e=>e.Value,
-                    Min = 10,
-                    Max = 200
-                }
-            },
-
-            /*$"A B C D {4}",
-            new Space(),
-
-            $"Bold: {new InlineModifier { FontStyle = new FontStyle { Weight = FontWeight.Bold }, Children = { "Text" } }}",
-            $"Если   понадобится компонент,которого нет среди стандартных.",
-            $"Можно создать компонент прям в проекте вашего сайта."*/
         };
 
         
