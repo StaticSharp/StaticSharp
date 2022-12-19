@@ -10,8 +10,6 @@ function MaterialDesignIcon(element) {
     })
 
     new Reaction(() => {
-        console.log("element.StrokeColor", element.StrokeColor)
-
         if (element.StrokeColor != undefined)
             element.children[0].style.stroke = element.StrokeColor
     })

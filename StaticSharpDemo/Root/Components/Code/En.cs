@@ -21,7 +21,7 @@ namespace StaticSharpDemo.Root.Components.CodeComponent {
                 MarginsHorizontal = 10,
                 MarginsVertical= 10,
                 Radius= 10,
-                FlipWidth = 500,
+                Flipped = new (e=>e.Width < 500),
                 InternalLink = node,
 
                 //Height = 200,

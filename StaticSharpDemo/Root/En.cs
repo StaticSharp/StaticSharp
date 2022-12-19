@@ -13,46 +13,8 @@ namespace StaticSharpDemo.Root {
     [Representative]
     public partial class En : LandingPage {
         public override string Title => "StaticSharp";
-
         public override Inlines Description => $"Component oriented static-site generator\nextendable with C#";
-
-        static string RandomString(int length, Random random) {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789     ";
-            return new string(Enumerable.Repeat(chars, length)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
-        }
-
-        Paragraph CreateParagraph(int numChars, Random random) {
-            return new Paragraph(RandomString(numChars, random));
-        }
-
-        IEnumerable<Paragraph> CreateParagraphs(int count) {
-            Random random = new Random(0);
-            return Enumerable.Range(0, count).Select(i => CreateParagraph(50, random));
-        }
-
-
-        public Inline GithubUrl(string text = "GitHub repository") {
-            return new Inline {
-                ExternalLink = "https://github.com/antilatency/Antilatency.Copilot",
-                OpenLinksInANewTab = true,
-                ForegroundColor = Color.FromIntRGB(172, 196, 53),
-                Children = {
-                    text
-                }
-            };
-        }
-
-        public Inline DiscordUrl(string text = "Discord server") {
-            return new Inline {
-                ExternalLink = "https://discord.gg/ZTqmfPsGEr",
-                OpenLinksInANewTab = true,
-                ForegroundColor = Color.FromIntRGB(139, 148, 245),
-                Children = {
-                    text
-                }
-            };
-        }
+        
 
 
         /*public override ScrollLayout ScrollLayout => base.ScrollLayout.Modify(x => {
@@ -208,29 +170,38 @@ namespace StaticSharpDemo.Root {
             Separator(),
             
             new Flipper() {
-                MarginLeft = new (e=>e.ParentBlock.PaddingLeft),
-                MarginRight = new (e=>e.ParentBlock.PaddingRight),
-                FlipWidth = 800,
+                Flipped = new (e=>e.Width < 800),
+                //MarginTop = new(e=>Js.Math.Max(e.First.MarginTop, e.Second.MarginTop)),
+
+
                 First = new Column(){
                     MarginLeft = 10,
                     MarginRight = 10,
-
+                    MarginTop = 60,
                     Children = {
-                        new Space(),
-                        "copypasteable from\nSTACKOVERFLOW".ToLandingSectionHeader(new Color("#F58025")),
+                        //new Space(),
+                        "copypasteable from\nSTACKOVERFLOW".ToLandingSectionHeader(new Color("#F58025"))
+                        /*.Modify(x=>{
+                            x.MarginTop = 0;
+                        })*/
+                        ,
                         """
                         Copy-pasteability is the superpower of code - it allows developers to reuse and share code like a boss, saving time and effort in the software development process.
                         No-code or low-code platforms might have their own superpowers, but when it comes to flexibility and customization, code-based approaches reign supreme.
                         So go forth, dear developer, and copy-paste to your heart's content!
                         """,
-                        new Space(0,2),
+                        //new Space(0,2),
                     }
                 },
-                Second = new Image("CopyPasteable.psd"){
-                    Fit = Fit.Outside
+                Second = new Image("StackoverflowKeyboard.svg"){
+                    X  = new(e=>e.Parent.As<Js.Flipper>().Flipped ? Js.Math.Max(0.5 * (e.ParentBlock.Width - e.Width), 0) : e.LayoutX),
+                    Width = new(e=>e.Parent.As<Js.Flipper>().Flipped ? Js.Math.Min(e.LayoutWidth, 500) : e.LayoutWidth),
+                    Margins = 50,
+                    Embed = Image.TEmbed.None,
+                    Fit = Fit.Inside
                     //Embed = Image.TEmbed.Image,
                 }
-            },
+            }.FillWidth().InheritHorizontalPaddings(),
 
 
 

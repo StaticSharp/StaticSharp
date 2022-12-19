@@ -75,7 +75,6 @@ Color.prototype.toString = function () {
 
 
 Color.Lerp = function (a, b, t) {
-    console.log(b)
     return a.Lerp(b,t)
 }
 
