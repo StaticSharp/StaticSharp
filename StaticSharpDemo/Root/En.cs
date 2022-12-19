@@ -5,64 +5,10 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
+
+
+
 namespace StaticSharpDemo.Root {
-
-
-    public static class Styles {
-
-        public static Paragraph SectionHeader(this string text, Color highlightColor, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") { 
-            var result = new Paragraph(callerLineNumber, callerFilePath);
-            var textFragments = new List<string>();
-            var startIndex = 0;
-            bool upperCase = true;
-            while (startIndex < text.Length) {
-                var fragment = string.Concat(text.Skip(startIndex).TakeWhile(x => char.ToLower(x)==char.ToUpper(x) || (x == char.ToLower(x)) ^ upperCase));
-                if (fragment.Length > 0) {
-                    startIndex += fragment.Length;
-                    if (upperCase) {
-                        result.Inlines.Add(new Inline(fragment) { ForegroundColor = highlightColor });
-                    } else {
-                        result.Inlines.Add(fragment.ToUpper());
-                    }
-                }
-                upperCase = !upperCase;
-            }
-            return result.SectionHeader();
-        }
-
-        public static Paragraph SectionHeader(this Paragraph x) {
-            x.FontFamilies = new() { "Inter" };
-            x.FontSize = 50;
-            x.Weight = FontWeight.ExtraLight;
-            x.LineHeight = 1.2;
-            x.MarginTop = 60;
-            return x;
-        }
-
-        public static Paragraph MainHeader(this Paragraph x) {
-            x = x.SectionHeader();
-            x.FontSize = 90;
-            return x;
-        }
-
-        public static ScrollLayout MakeCodeBlock(this Inlines inlines) {
-            return new ScrollLayout {
-                Height = new(e => Js.Math.Min(e.InternalHeight, e.Root.Height * 0.8)),
-                Radius = 8,
-                BackgroundColor = Color.FromGrayscale(0.98),
-                Paddings = 20,
-                Content = new Paragraph(
-                        inlines
-                    ) {
-                    Weight = FontWeight.Regular,
-                    FontFamilies = { "Roboto Mono" }
-                },
-            };
-        }
-
-    }
-
-
 
     [Representative]
     public partial class En : LandingPage {
@@ -201,7 +147,7 @@ namespace StaticSharpDemo.Root {
 
             
 
-            new Paragraph("STATIC SHARP").MainHeader(),
+            new Paragraph("STATIC SHARP").ToLandingMainHeader(),
             Description,
 
             /*new Paragraph("StaticSharp"){ 
@@ -222,13 +168,13 @@ namespace StaticSharpDemo.Root {
 
             #region codeExample
 
-            "coDe".SectionHeader(Color.Red),
+            "coDe".ToLandingSectionHeader(Color.Red),
 
             "Welcome to StaticSharp! We believe in getting right to the point, so here is the code from this very page.",
 
 
             //This is code block:
-            LoadFile(ThisFilePath()).GetCodeRegion("codeExample").Highlight().MakeCodeBlock(),
+            LoadFile(ThisFilePath()).GetCodeRegion("codeExample").Highlight().ToCodeBlock(),
 
 
             /*new ScrollLayout {
@@ -246,7 +192,7 @@ namespace StaticSharpDemo.Root {
 
             Separator(),
 
-            "COMPONENT-based\ncontent development".SectionHeader(Color.GreenYellow * 0.75),
+            "COMPONENT-based\ncontent development".ToLandingSectionHeader(Color.GreenYellow * 0.75),
             """
             Component-based development is like a Lego set for your website! You get to use pre-made blocks (components) and snap them together, or even create your own custom bricks to build the site of your dreams.
             Plus, it's super scalable and easy to update. Bye-bye, clunky websites - hello, sleek and modern web creations!
@@ -271,7 +217,7 @@ namespace StaticSharpDemo.Root {
 
                     Children = {
                         new Space(),
-                        "copypasteable from\nSTACKOVERFLOW".SectionHeader(new Color("#F58025")),
+                        "copypasteable from\nSTACKOVERFLOW".ToLandingSectionHeader(new Color("#F58025")),
                         """
                         Copy-pasteability is the superpower of code - it allows developers to reuse and share code like a boss, saving time and effort in the software development process.
                         No-code or low-code platforms might have their own superpowers, but when it comes to flexibility and customization, code-based approaches reign supreme.
@@ -289,21 +235,21 @@ namespace StaticSharpDemo.Root {
 
 
             Separator(),
-            "create your own SHORTCUTS".SectionHeader(Color.Red),
+            "create your own SHORTCUTS".ToLandingSectionHeader(Color.Red),
             """
             For example, on this page, there are colored words in the headings. You can write full formatting in each case
             or you can create a function that highlights all capital letters with a given color and makes all lowercase letters capitalized.
             """,
-            "\"create your own SHORTCUTS\".SectionHeader(Color.Red)".Highlight("cs").MakeCodeBlock(),
+            "\"create your own SHORTCUTS\".SectionHeader(Color.Red)".Highlight("cs").ToCodeBlock(),
             $"In this case it is an extension method for type {Code("string")}",
 
 
             Separator(),
-            "bring it with NUGET".SectionHeader(new Color("#004880") * 1.7),
+            "bring it with NUGET".ToLandingSectionHeader(new Color("#004880") * 1.7),
             "All of these shortcuts and components can be wrapped in NuGet packages, so that everyone (including you in the future) can add them to their new site with a few clicks.",
 
             Separator(),
-            "TURING complete text writing".SectionHeader(Color.DeepPink),
+            "TURING complete text writing".ToLandingSectionHeader(Color.DeepPink),
             $"""
             Yo dawg, we put programming in the text-writing so you can code while you write.
             By the way, did you know that at the time this page was generated on {DateTime.Now.Date.ToString("MMMM dd, yyyy")}, the StaticSharp repository had {JObject.Parse(new HttpRequestGenome("https://api.github.com/repos/StaticSharp/StaticSharp").Result.Text).Value<int>("stargazers_count")} stars on {"https://github.com/StaticSharp/StaticSharp":GitHub}?
@@ -311,7 +257,7 @@ namespace StaticSharpDemo.Root {
             #endregion
 
             Separator(),
-            "AUTOCOMPLETE for everything".SectionHeader(Color.Red),
+            "AUTOCOMPLETE for everything".ToLandingSectionHeader(Color.Red),
             $"""
             C# is a strongly-typed language, so the IDE has access to information about the available types and their members in compile-time.
             With the introduction of Source Generators in .NET 6, we can even provide IntelliSense for internal links.
@@ -322,14 +268,14 @@ namespace StaticSharpDemo.Root {
             """,
 
             Separator(),
-            "DEVELOPER mode".SectionHeader(Color.Blue),
+            "DEVELOPER mode".ToLandingSectionHeader(Color.Blue),
             """
             Like any static site generator, StaticSharp has a web server mode that allows you to see the site in a browser while you work on it.
             One feature we want to show of is the source code navigation directly from your browser. You can ctrl+click on an element in the browser and StaticSharp will highlight the corresponding line in Visual Studio.
             """,
 
             Separator(),
-            "HOT-RELOAD for everything".SectionHeader(Color.Orange),
+            "HOT-RELOAD for everything".ToLandingSectionHeader(Color.Orange),
             """
             Essentially, your content is part of the code that is executed to create an HTML file. To make changes reflected on the page, the code must be recompiled.
             However, thanks to the hot-reload feature in .NET, such changes are applied instantly and do not require full recompilation.

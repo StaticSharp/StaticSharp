@@ -5,5 +5,4 @@ global using static StaticSharp.Alpha.Static;
 
 global using Js = StaticSharp.Js;
 
-//global using Color = System.Drawing.Color;
-global using ColorTranslator = System.Drawing.ColorTranslator;
+//global using static StaticSharpDemo.Static;
