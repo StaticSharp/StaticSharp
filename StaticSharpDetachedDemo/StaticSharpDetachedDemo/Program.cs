@@ -31,7 +31,7 @@ namespace StaticSharpDetachedDemo
 
         public static async Task Server()
         {
-            Cache.Directory = Static.MakeAbsolutePath(".cache");
+            Cache.RootDirectory = Static.MakeAbsolutePath(".cache");
 
             await new StaticSharp.Server(
                 new DefaultMultilanguagePageFinder<Language>((language) => new αRoot(language)),
@@ -42,7 +42,7 @@ namespace StaticSharpDetachedDemo
 
         public static async Task Generator()
         {
-            Cache.Directory = Static.MakeAbsolutePath(".cache");
+            Cache.RootDirectory = Static.MakeAbsolutePath(".cache");
 
             var projectPath = ProjectDirectory.Path;
             var baseDirectory = Path.GetFullPath(Path.Combine(projectPath, "../GeneratedSite"));
