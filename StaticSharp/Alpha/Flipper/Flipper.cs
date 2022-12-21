@@ -13,6 +13,9 @@ namespace StaticSharp {
             public Block First => NotEvaluatableObject<Block>();
             public Block Second => NotEvaluatableObject<Block>();
             public bool Flipped => NotEvaluatableValue<bool>();
+
+            public bool RightToLeft => NotEvaluatableValue<bool>();
+            public bool BottomToTop => NotEvaluatableValue<bool>();
         }
     }
 
@@ -20,6 +23,8 @@ namespace StaticSharp {
     namespace Gears {
         public class FlipperBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
             public Binding<bool> Flipped { set { Apply(value); } }
+            public Binding<bool> RightToLeft { set { Apply(value); } }
+            public Binding<bool> BottomToTop { set { Apply(value); } }
         }
     }
 

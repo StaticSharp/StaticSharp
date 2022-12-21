@@ -27,12 +27,9 @@
                 }
             },
 
-            /*"Volume:",
-            {"VolumeSlider",
-                new Slider { Value = new(e=>e.Parent["Video"].As<Js.Video>().VolumeActual) }
-            },*/
 
-            {"VideoProperties",
+
+            /*{"VideoProperties",
                 $"""
                 {("Play", new CheckboxInline(){
                     Value = new(e=>e.Parent.Parent["Video"].As<Js.Video>().PlayActual),
@@ -78,7 +75,7 @@
                     }.Center()
                     
                 }
-            }.FillWidth(),
+            }.FillWidth(),*/
             
 
 

@@ -5,10 +5,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace StaticSharp {
-
-
 
     [InterpolatedStringHandler]
     public class Inlines : List<KeyValuePair<string?, IInline>> , IPlainTextProvider {
@@ -20,6 +19,8 @@ namespace StaticSharp {
             int literalLength,
             int formattedCount){
         }
+
+        public static implicit operator Inlines(string text) => new Inlines { text };
 
         public void AppendLiteral(string value, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
             Add(null, new Text(value, true, callerLineNumber, callerFilePath));
@@ -85,9 +86,9 @@ namespace StaticSharp {
             };
             AppendFormatted(link);
         }
-        public void AppendFormatted(string url, string format, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
+        public void AppendFormatted(Uri url, string format, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
             var link = new Inline(callerLineNumber, callerFilePath) {
-                ExternalLink = url,
+                ExternalLink = url.ToString(),
                 Children = {
                     format
                 }
@@ -104,6 +105,10 @@ namespace StaticSharp {
             }
             return result.ToString();
         }
+
+
+
+
     }
 
 }

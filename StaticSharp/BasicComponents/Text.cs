@@ -9,7 +9,7 @@ namespace StaticSharp {
 
     public class Text : CallerInfo, IInline {
 
-        public string Value { get; }
+        public string Value { get; set; }
         public bool Formatting { get; }
 
         public Text(string text, bool formatting = true, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")

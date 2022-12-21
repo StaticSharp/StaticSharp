@@ -13,7 +13,7 @@ namespace StaticSharpDemo.Root {
             base.Setup(context);
         }
         
-        public override Block? LeftSideBarIcon => new MaterialDesignIconBlock(MaterialDesignIcons.IconName.Menu) { 
+        public override Block? LeftSideBarIcon => new SvgIconBlock(Icons.MaterialDesignIcons.Menu) { 
             BackgroundColor = new Color("#6d597a"),
             Paddings = 8,
             Margins = 8
@@ -64,7 +64,7 @@ namespace StaticSharpDemo.Root {
             };
 
 
-        public override Block? RightSideBarIcon => new MaterialDesignIconBlock(MaterialDesignIcons.IconName.Translate) {
+        public override Block? RightSideBarIcon => new SvgIconBlock(Icons.MaterialDesignIcons.Translate) {
             BackgroundColor = new Color("#7a5924"),
             Paddings = 8,
             Margins = 8

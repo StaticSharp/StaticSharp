@@ -11,7 +11,7 @@ namespace StaticSharpDemo.Root {
         public virtual Block Menu => new Row {
             BackgroundColor = Color.Black,
             Children = {
-                new MaterialDesignIconBlock(MaterialDesignIcons.IconName.PoundBoxOutline) {
+                new SvgIconBlock(Icons.MaterialDesignIcons.PoundBoxOutline) {
                     Height = new(e=>e.Parent.Child<Js.Block>(2).Height)
                 },
                 new Space(),

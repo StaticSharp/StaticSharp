@@ -78,28 +78,50 @@ namespace StaticSharpDemo.Root {
         }
 
 
+        /*public static Inline Code(string text, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
+
+            return new Inline(callerLineNumber, callerFilePath) {
+                PaddingsHorizontal = 0.25,
+                PaddingBottom = 0.25,
+                PaddingTop = 0.1,
+                Radius = 4,
+                Weight = FontWeight.Regular,
+                ForegroundColor = Color.FromGrayscale(0.3),
+                BackgroundColor = Color.FromGrayscale(0.90),
+                FontFamilies = { new FontFamilyGenome("Roboto Mono") },
+                Children = {
+                    new Text(text, true, callerLineNumber, callerFilePath)
+                }
+            };
+        }*/
+
+
+
         public override Blocks? Content => new() {
 
 
             new Row{
-                ForegroundColor = Color.Transparent,
+                ForegroundColor = new Color(0.5,0.5,0.5,0.05),
                 Children = {
                     new Space(),
-                    new MaterialDesignIconBlock(MaterialDesignIcons.IconName.Github){
+                    new SvgIconBlock(Icons.SimpleIcons.GitHub){
                         ExternalLink = "https://www.github.com/staticsharp"
                     },
-                    new MaterialDesignIconBlock(MaterialDesignIcons.IconName.Facebook){
+                    new SvgIconBlock(Icons.SimpleIcons.Facebook){
                         ExternalLink = "https://www.facebook.com/staticsharp"
                     },
-                    new MaterialDesignIconBlock(MaterialDesignIcons.IconName.Twitter){
+                    new SvgIconBlock(Icons.SimpleIcons.Twitter){
+                        ExternalLink = "https://www.twitter.com/staticsharp"
+                    },
+                    new SvgIconBlock(Icons.SimpleIcons.Discord){
                         ExternalLink = "https://www.twitter.com/staticsharp"
                     },
                     new Space(),
                 }
             }.Modify(x=>{
-                foreach (var i in x.Children.Values.OfType<MaterialDesignIconBlock>()){
-                    i.Height = 48;
-                    i.Margins = 10;
+                foreach (var i in x.Children.Values.OfType<SvgIconBlock>()){
+                    i.Height = 36;
+                    i.Margins = 20;
                     i.StrokeColor = Color.Gray;
                     i.StrokeWidth = new(x=>1 / Js.Window.DevicePixelRatio);
                     
@@ -136,7 +158,7 @@ namespace StaticSharpDemo.Root {
 
 
             //This is code block:
-            LoadFile(ThisFilePath()).GetCodeRegion("codeExample").Highlight().ToCodeBlock(),
+            CodeBlock(LoadFile(ThisFilePath()).GetCodeRegion("codeExample").Highlight()),
 
 
             /*new ScrollLayout {
@@ -170,9 +192,9 @@ namespace StaticSharpDemo.Root {
             Separator(),
             
             new Flipper() {
-                Flipped = new (e=>e.Width < 800),
+                Flipped = new (e=>e.Width < 950),
                 //MarginTop = new(e=>Js.Math.Max(e.First.MarginTop, e.Second.MarginTop)),
-
+                BottomToTop = true,
 
                 First = new Column(){
                     MarginLeft = 10,
@@ -181,9 +203,9 @@ namespace StaticSharpDemo.Root {
                     Children = {
                         //new Space(),
                         "copypasteable from\nSTACKOVERFLOW".ToLandingSectionHeader(new Color("#F58025"))
-                        /*.Modify(x=>{
-                            x.MarginTop = 0;
-                        })*/
+                        .Modify(x=>{
+                            x.TextAlignmentHorizontal = new(e=>e.Parent.Parent.As<Js.Flipper>().Flipped? TextAlignmentHorizontal.Center: TextAlignmentHorizontal.Left) ;
+                        })
                         ,
                         """
                         Copy-pasteability is the superpower of code - it allows developers to reuse and share code like a boss, saving time and effort in the software development process.
@@ -195,7 +217,7 @@ namespace StaticSharpDemo.Root {
                 },
                 Second = new Image("StackoverflowKeyboard.svg"){
                     X  = new(e=>e.Parent.As<Js.Flipper>().Flipped ? Js.Math.Max(0.5 * (e.ParentBlock.Width - e.Width), 0) : e.LayoutX),
-                    Width = new(e=>e.Parent.As<Js.Flipper>().Flipped ? Js.Math.Min(e.LayoutWidth, 500) : e.LayoutWidth),
+                    Width = new(e=>e.Parent.As<Js.Flipper>().Flipped ? Js.Math.Min(e.LayoutWidth, 400) : e.LayoutWidth),
                     Margins = 50,
                     Embed = Image.TEmbed.None,
                     Fit = Fit.Inside
@@ -211,7 +233,7 @@ namespace StaticSharpDemo.Root {
             For example, on this page, there are colored words in the headings. You can write full formatting in each case
             or you can create a function that highlights all capital letters with a given color and makes all lowercase letters capitalized.
             """,
-            "\"create your own SHORTCUTS\".SectionHeader(Color.Red)".Highlight("cs").ToCodeBlock(),
+            CodeBlock("\"create your own SHORTCUTS\".SectionHeader(Color.Red)".Highlight("cs")),
             $"In this case it is an extension method for type {Code("string")}",
 
 
@@ -223,7 +245,7 @@ namespace StaticSharpDemo.Root {
             "TURING complete text writing".ToLandingSectionHeader(Color.DeepPink),
             $"""
             Yo dawg, we put programming in the text-writing so you can code while you write.
-            By the way, did you know that at the time this page was generated on {DateTime.Now.Date.ToString("MMMM dd, yyyy")}, the StaticSharp repository had {JObject.Parse(new HttpRequestGenome("https://api.github.com/repos/StaticSharp/StaticSharp").Result.Text).Value<int>("stargazers_count")} stars on {"https://github.com/StaticSharp/StaticSharp":GitHub}?
+            By the way, did you know that at the time this page was generated on {DateTime.Now.Date.ToString("MMMM dd, yyyy")}, the StaticSharp repository had {JObject.Parse(new HttpRequestGenome("https://api.github.com/repos/StaticSharp/StaticSharp").Result.Text).Value<int>("stargazers_count")} stars on {new Uri("https://github.com/StaticSharp/StaticSharp"):GitHub}?
             """,
             #endregion
 
@@ -240,10 +262,13 @@ namespace StaticSharpDemo.Root {
 
             Separator(),
             "DEVELOPER mode".ToLandingSectionHeader(Color.Blue),
-            """
-            Like any static site generator, StaticSharp has a web server mode that allows you to see the site in a browser while you work on it.
-            One feature we want to show of is the source code navigation directly from your browser. You can ctrl+click on an element in the browser and StaticSharp will highlight the corresponding line in Visual Studio.
-            """,
+            
+
+
+            new Inlines($"""
+            Like any static_site_generator, StaticSharp has a web_server_mode that_allows_you to_see the_site in_a_browser while you work on_it.
+            One feature we want to show_of is the source_code_navigation directly from your browser. You can {Code("ctrl+click")} on an element in the browser and StaticSharp will highlight the corresponding line in Visual Studio.
+            """).UnderscoreToNbsp(),
 
             Separator(),
             "HOT-RELOAD for everything".ToLandingSectionHeader(Color.Orange),

@@ -106,5 +106,10 @@ namespace StaticSharp{
             }
             base.ModifyHtml(context, elementTag);
         }
+
+        public override string ToString() {
+            throw new System.InvalidOperationException("Cast from Inline to String is forbidden.");
+        }
+
     }
 }
