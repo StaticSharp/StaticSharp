@@ -28,11 +28,11 @@ namespace StaticSharp.Gears {
             }
 
             if (value is double valueAsDouble) {
-                return valueAsDouble.ToInvariant();
+                return valueAsDouble.ToString();
             }
             
             if (value is float valueAsFloat) {
-                return valueAsFloat.ToInvariant();
+                return valueAsFloat.ToString();
             }
 
             return value.ToString() ?? "";

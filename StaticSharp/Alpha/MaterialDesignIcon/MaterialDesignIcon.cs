@@ -7,13 +7,15 @@ namespace StaticSharp {
 
     namespace Js {
         public class MaterialDesignIcon {
-            //public bool Enabled => NotEvaluatableValue<bool>();
+            public Color StrokeColor => NotEvaluatableValue<Color>();
+            public double StrokeWidth => NotEvaluatableValue<double>();
 
         }
     }
     namespace Gears {
         public class MaterialDesignIconBindings<FinalJs> : Bindings<FinalJs> where FinalJs : new() {
-            //public Binding<bool> Enabled { set { Apply(value); } }
+            public Binding<Color> StrokeColor { set { Apply(value); } }
+            public Binding<double> StrokeWidth { set { Apply(value); } }
         }
     }
 
@@ -32,7 +34,7 @@ namespace StaticSharp {
                 svgElement.Attribute("id")?.Remove();
 
                 try {
-                    var viewBox = svgElement.Attribute("viewBox").Value.Split(' ').Select(x => float.Parse(x)).ToArray();
+                    var viewBox = svgElement.Attribute("viewBox").Value.Split(' ').Select(float.Parse).ToArray();
                     width = viewBox[2];
                     height = viewBox[3];
                 }

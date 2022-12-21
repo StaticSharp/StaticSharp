@@ -2,7 +2,7 @@
 
     [Representative]
     public partial class En : ComponentPage {
-        public override Inlines DescriptionContent => $"Paragraph is a Block of text and other Inlines";
+        public override Inlines Description => $"Paragraph is a Block of text and other Inlines";
         public override Blocks? Content => new (){
             "Single line paragraph",
 
@@ -41,8 +41,9 @@
 
             H3("Code"),
 
-            $"text with {new CodeInline("code inline")}",
-            new Paragraph($"text with {new CodeInline("code inline")}"){ 
+
+            $"text with {Code("code inline")}",
+            new Paragraph($"text with {Code("code inline")}"){ 
                 ForegroundColor = Color.LightBlue,
                 BackgroundColor = Color.DarkBlue
             },

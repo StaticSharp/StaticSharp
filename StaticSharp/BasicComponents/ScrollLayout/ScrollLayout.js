@@ -33,6 +33,10 @@ function SetupPointerDrag(element, func) {
 
 
 
+
+
+
+
 function ScrollLayout(element) {
     Block(element)
 
@@ -58,15 +62,14 @@ function ScrollLayout(element) {
         ContentAreaHeight: () => element.Height - element.TopOffset - element.BottomOffset,
 
         ScrollX: undefined,
-        ScrollY: undefined,
+        ScrollY: undefined, //Storage.Store("scroll", () => element.ScrollYActual),
 
         ScrollXActual: 0,
         ScrollYActual: 0,
 
         ScrollBarThickness: 4,
         ScrollBarMargin: 2,
-
-        ShowScrollBars: !window.Touch
+        ShowScrollBars: () => !window.Touch
     }
 
     
@@ -108,7 +111,9 @@ function ScrollLayout(element) {
 
     scrollable.style.touchAction = "manipulation"
     scrollable.style.overflow = "auto"
-    //scrollable.style.outline = "0.1px solid #f00"
+
+
+    
     
     new Reaction(() => {
         scrollable.style.left = ToCssSize(element.LeftOffset)
@@ -116,7 +121,6 @@ function ScrollLayout(element) {
         scrollable.style.width = ToCssSize(element.ContentAreaWidth)
         scrollable.style.height = ToCssSize(element.ContentAreaHeight)
     })
-
 
 
     scrollable.Events.Scroll = () => {
@@ -133,15 +137,14 @@ function ScrollLayout(element) {
         element.Content.LayoutHeight = () => Max(element.Content.InternalHeight, element.ContentAreaHeight)
     })
 
+    new Reaction(() => {
+        window.requestAnimationFrame(() => {
+            scrollable.scrollTop = element.ScrollY
+            scrollable.scrollLeft = element.ScrollX
+        });
+    })
 
-   /*OnChanged(
-        () => element.Content,
-        (p, c) => {
-            if (c) {                
-                
-            }
-        }
-    )*/
+
 
 
 }

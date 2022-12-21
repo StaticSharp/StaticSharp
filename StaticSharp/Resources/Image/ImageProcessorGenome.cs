@@ -16,7 +16,7 @@ public abstract record ImageProcessorGenome(Genome<IAsset> Source) : Genome<IAss
     protected override void Create(out IAsset value, out Func<bool>? verify) {
 
         Data data;
-        var source = Source.Get();
+        var source = Source.Result;
         var slot = Cache.GetSlot(Key);
         if (slot.LoadData(out data) && data.SourceHash == source.ContentHash ) {
             value = new BinaryAsset(
@@ -38,7 +38,7 @@ public abstract record ImageProcessorGenome(Genome<IAsset> Source) : Genome<IAss
 
 
             data = new();
-            data.Extension = value.FileExtension;
+            data.Extension = value.Extension;
             data.SourceHash = source.ContentHash;
             data.ContentHash = value.ContentHash;
             var content = value.Data;
@@ -49,7 +49,7 @@ public abstract record ImageProcessorGenome(Genome<IAsset> Source) : Genome<IAss
         }
 
         verify = () => {
-            return data.SourceHash == Source.Get().ContentHash;
+            return data.SourceHash == Source.Result.ContentHash;
         };
 
     }

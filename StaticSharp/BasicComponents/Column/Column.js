@@ -41,10 +41,13 @@ function Column(element) {
     })
 
     new Reaction(() => {
-        let previousMargin
-        let freeSpaceUnits
+        let previousMargin = undefined
+        let freeSpaceUnits = 0
         let freeSpacePixels
-        let contentHeight
+        let contentHeight = 0
+
+        let isFirstBlock = true
+        let lastChild = undefined
 
         function addElement(child, assignDimensions) {
             if (child.isSpace) {
@@ -57,25 +60,35 @@ function Column(element) {
             }
 
             if (child.isBlock) {
-                /*if (!child.Height) {
-                    console.log("Column !child.Height", child)
-                    return false
 
-                }*/
+                lastChild = child
+
+                if (isFirstBlock) {
+                    let offset = CalcOffset(element, child, "Top")
+                    //console.log(element)
+                    //console.log(contentHeight, offset)
+                    contentHeight += offset
+                } else {
+                    let offset = Max(child.MarginTop, previousMargin)
+                    contentHeight += offset
+                }
+                isFirstBlock = false
 
                 //console.log("child.Height", Max(child.Height, 0), child)
 
+                /*let margin = (previousMargin == undefined)
+                    ? CalcOffset()
+                    : Max(child.MarginTop, previousMargin)
+                contentHeight += margin*/
 
-                let margin = Max(child.MarginTop, previousMargin)
-                previousMargin = child.MarginBottom || 0
 
-
-                contentHeight += margin
                 if (assignDimensions) {
+                    //console.log("child.LayoutY", contentHeight)
                     child.LayoutY = contentHeight
                 }
                 contentHeight += Max(child.Height, 0)
 
+                previousMargin = child.MarginBottom || 0
 
                 return true
             }
@@ -83,10 +96,7 @@ function Column(element) {
         }
 
 
-
-        previousMargin = element.PaddingTop || 0
-        freeSpaceUnits = 0
-        contentHeight = 0
+        
 
         for (let i of element.Children) {
             if (!addElement(i, false)) {
@@ -94,11 +104,11 @@ function Column(element) {
             }
         }
 
-        //console.log("ColumnAfter Reaction", element, element.LayoutChildren)
 
-        //Here "previousMargin" contains last-child.MarginBottom
-        contentHeight += Max(previousMargin, element.PaddingBottom)
-        //console.log("Vertical layout", element, contentHeight)
+        let bottomOffset = CalcOffset(element,lastChild,"Bottom")
+
+        contentHeight += bottomOffset// Max(previousMargin, element.PaddingBottom)
+
 
         previousMargin = element.PaddingTop || 0
         element.InternalHeight = contentHeight;
@@ -106,8 +116,8 @@ function Column(element) {
             return
 
         freeSpacePixels = element.Height - contentHeight;// Math.max( element.Height - contentHeight, 0)
-
-        if (freeSpacePixels < 0) {//overflow-y: overlay;
+        //console.log(element.Height, contentHeight, element)
+        /*if (freeSpacePixels < 0) {//overflow-y: overlay;
             element.style.overflowY = "auto"
             freeSpacePixels = 0
             if (!element.innerSizeHolder) {
@@ -123,10 +133,10 @@ function Column(element) {
                 element.removeChild(element.innerSizeHolder)
                 element.innerSizeHolder = undefined
             }
-        }
+        }*/
 
         //console.log("freeSpacePixels", freeSpacePixels)
-
+        isFirstBlock = true
         contentHeight = 0
 
         for (let i of element.Children) {

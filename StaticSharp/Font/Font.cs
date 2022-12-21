@@ -5,12 +5,13 @@ namespace StaticSharp {
 
     namespace Gears {
         public record Font(
-            FontFamily FontFamily,
-            FontStyle FontStyle,
+            FontFamily Family,
+            FontWeight Weight,
+            bool Italic,
             List<Segment> Segments
 
         ) : IKeyProvider {
-            public string Key => KeyUtils.Combine(GetType(),FontFamily.Name,FontStyle);
+            public string Key => KeyUtils.Combine(GetType(),Family.Name, Weight, Italic);
 
             public HashSet<char> GetExistingChars(HashSet<char> chars) {
                 var result = new HashSet<char>();
@@ -27,10 +28,9 @@ namespace StaticSharp {
                 }
                 return result;
             }
+
+            public static string ItalicToStyle(bool italic) => italic ? "italic" : "normal";
+
         }
-
-        //internal class FontFamilyConstants
-
     }
-
 }

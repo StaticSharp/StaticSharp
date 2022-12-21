@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection.Metadata;
 using System.Text.Json;
 using System.Threading;
@@ -68,13 +69,17 @@ public class Cache {
 
     static Dictionary<string, CacheItem> items = new();
 
-    public static CacheItem GetOrCreate(string key, Func<CacheItem> constructor) {
+    public delegate void Constructor<T>(out T value, out Func<bool>? verify) where T : class;
+
+    public static T GetOrCreate<T>(string key, Constructor<T> constructor) where T : class {
         lock (items) {
             if (!items.TryGetValue(key, out var item)) {
-                item = constructor();
+                constructor(out var value, out var verify);
+                item = new CacheItem(value,verify);
                 items.Add(key, item);
+                return value;
             }
-            return item;
+            return (T)item.Value;
         }
     }
 
@@ -86,7 +91,8 @@ public class Cache {
             int keysDeleted = 0;
             do {
                 var keysToDelete = new HashSet<string>();
-                foreach (var i in items) {
+                var itemsCopy = items.ToArray();//Fix for dotnet hotReload
+                foreach (var i in itemsCopy) {
                     if (i.Value.Verify != null) {
                         if (!i.Value.Verify()) {
                             keysToDelete.Add(i.Key);

@@ -124,20 +124,13 @@ namespace StaticSharp {
 
                         Cache.TrimMutatedItems();
 
-                        return new ResultAsync(async () => {
+                        var s = Stopwatch.StartNew();
+                        var context = CreateContext(page.VirtualNode, BaseUrlFromHttpRequest(httpContext.Request));
+                        var html = page.GeneratePageHtml(context);
+                        var hash = html.ToHashString();
+                        Console.WriteLine(s.ElapsedMilliseconds);
 
-                            //while (true) {
-
-                                //var s = Stopwatch.StartNew();
-                                var context = CreateContext(page.VirtualNode, BaseUrlFromHttpRequest(httpContext.Request));
-                                var html = await page.GeneratePageHtmlAsync(context);
-                                var hash = html.ToHashString();
-                                //Console.WriteLine(s.ElapsedMilliseconds);
-                            //}
-                            //return Results.Text("");
-
-                            return Results.Text(hash);
-                        });
+                        return Results.Text(hash);
                     }
                     
                 }
@@ -175,19 +168,17 @@ namespace StaticSharp {
 
             var context = CreateContext(page.VirtualNode, BaseUrlFromHttpRequest(httpContext.Request));
 
-            return new ResultAsync(async () => {
-                var html = await page.GeneratePageHtmlAsync(context);
+            var html = page.GeneratePageHtml(context);
 
-                var hash = html.ToHashString();
-                var tempPath = Path.Combine(Cache.Directory, hash + ".html");
-                if (!File.Exists(tempPath)) {
-                    File.WriteAllText(tempPath, html);
-                }
-                
+            var hash = html.ToHashString();
+            var tempPath = Path.Combine(Cache.RootDirectory, hash + ".html");
+            if (!File.Exists(tempPath)) {
+                File.WriteAllText(tempPath, html);
+            }                
 
-                html = html.Replace("t!dcsctAYNTSYMJaKLcdZPtZ#n@KPIjkK)ppteSZ4t%W)N*3RC8k645V4DUMW5G!", hash);
-                return new HtmlResult(html);
-            });
+            html = html.Replace("t!dcsctAYNTSYMJaKLcdZPtZ#n@KPIjkK)ppteSZ4t%W)N*3RC8k645V4DUMW5G!", hash);
+            return new HtmlResult(html);
+
         }
 
 

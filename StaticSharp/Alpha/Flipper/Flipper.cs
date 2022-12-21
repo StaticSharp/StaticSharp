@@ -10,14 +10,16 @@ namespace StaticSharp {
 
     namespace Js {
         public class Flipper : Block {
-            public double FlipWidth => NotEvaluatableValue<double>();
+            public Block First => NotEvaluatableObject<Block>();
+            public Block Second => NotEvaluatableObject<Block>();
+            public bool Flipped => NotEvaluatableValue<bool>();
         }
     }
 
 
     namespace Gears {
         public class FlipperBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
-            public Binding<double> FlipWidth { set { Apply(value); } }
+            public Binding<bool> Flipped { set { Apply(value); } }
         }
     }
 

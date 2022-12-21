@@ -9,39 +9,92 @@ using System.Reflection;
 namespace StaticSharp.Gears;
 
 public class LambdaScriptifier {
-    public LambdaExpression LambdaExpression { get; }
-    public ParameterExpression[] ParametersExpressions { get; }
-    public LambdaScriptifier(LambdaExpression expression) {
-        LambdaExpression = expression;
-        ParametersExpressions = expression.Parameters.ToArray();
+    public Expression Body { get; }
+
+    public record Parameter(ParameterExpression ParameterExpression, object Value) {}
+
+    public Parameter[] Parameters { get; }
+    public Parameter[]? InheritedParameters { get; } = null;
+
+    /*public ParameterExpression[] ParametersExpressions { get; }
+    public object[] ParametersValues { get; }*/
+
+    public LambdaScriptifier(LambdaExpression expression, object[] parametersValues) {
+        Body = expression.Body;
+        var parametersExpressions = expression.Parameters.ToArray();
+        Parameters = Enumerable.Range(0, parametersValues.Length).Select(i => new Parameter(parametersExpressions[i], parametersValues[i])).ToArray();
+
+        
+        //ParametersValues = parametersValues;
     }
+
+    public LambdaScriptifier(Expression body, Parameter[] parameters, Parameter[] inheritedParameters) {
+        Body = body;
+        Parameters = parameters;
+        InheritedParameters = inheritedParameters;
+    }
+
+
     /*protected virtual object GetParameterValue(string name) {
        return ObjectJs.NotEvaluatable<object>();
     }*/
     protected virtual string ReplaceParameterName(string name) => name;
-    private IEnumerable<string> ParametersNames => ParametersExpressions.Select(x => ReplaceParameterName(x.Name));
-    protected virtual object[] GetParametersValues() {
+    //private IEnumerable<string> ParametersNames => ParametersExpressions.Select(x => ReplaceParameterName(x.Name));
+    /*protected virtual object[] GetParametersValues() {
         return Enumerable.Range(0, ParametersExpressions.Length).Select(x => (object)null!).ToArray();
-    }
+    }*/
     public virtual string Eval() {
-        var result = $"({string.Join(',', ParametersNames)}) => {Eval(LambdaExpression.Body)}";
+        var result = $"({string.Join(',', Parameters.Select(x=>x.ParameterExpression.Name))}) => {Eval(Body)}";
+        //var result = $"({string.Join(',', ParametersNames)}) => {Eval(LambdaExpression.Body)}";
         return result;
     }
-    protected string Eval(Expression expression) {
-        var lambda = Expression.Lambda(expression, ParametersExpressions);
 
-        if (expression is LambdaExpression lambdaExpression) {
-            return new LambdaScriptifier(lambdaExpression).Eval();
-        }
+
+    private object CreateNotEvaluatableValue(Type type) {
+        return Activator.CreateInstance(type);
+    }
+
+    protected string Eval(Expression expression) {
+        
+
+        /*if (expression is LambdaExpression lambdaExpression) {
+            return new LambdaScriptifier(lambdaExpression, ParametersValues).Eval();
+        }*/
 
         if (expression is ParameterExpression parameterExpression) {
-            return ReplaceParameterName(parameterExpression.Name);
+            return parameterExpression.Name;// ReplaceParameterName(parameterExpression.Name);
         }
+
+        if (expression is UnaryExpression unaryExpression) {
+            
+            if (unaryExpression.NodeType == ExpressionType.Quote) {
+                var lambdaExpression = unaryExpression.Operand as LambdaExpression;
+
+                //var inheritedParameters = Parameters.ToList();
+                var parameters = lambdaExpression.Parameters.Select(x => new Parameter(x, CreateNotEvaluatableValue(x.Type)));
+
+                //currentParameters.AddRange(newParameters);
+                var script = new LambdaScriptifier(lambdaExpression.Body, parameters.ToArray(), Parameters).Eval();
+
+                return script;
+            }
+            if (unaryExpression.NodeType == ExpressionType.Convert) {
+                return Eval(unaryExpression.Operand);
+            }
+
+        }
+
+        var allParameters = Parameters.ToList();
+        if (InheritedParameters!=null)
+            allParameters.AddRange(InheritedParameters);
+
+        var lambda = Expression.Lambda(expression, allParameters.Select(x=>x.ParameterExpression));
+
 
         var compiled = lambda.Compile();
 
         Js.Static.NotEvaluatableFound = false;
-        var value = compiled.DynamicInvoke(GetParametersValues());
+        var value = compiled.DynamicInvoke(allParameters.Select(x => x.Value).ToArray());
         if (Js.Static.NotEvaluatableFound) {
             var result = Stringify(expression);
             return result;
@@ -70,8 +123,9 @@ public class LambdaScriptifier {
             var isParams = parameters[i].GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0;
             if (isParams) {
                 if (arguments[i] is NewArrayExpression newArrayExpression) {
-                    foreach (var e in newArrayExpression.Expressions) {
-                        argumentsValues.Add(Eval(e));
+                    var paramsExpressions = newArrayExpression.Expressions;
+                    if (paramsExpressions.Count > 0) {
+                        argumentsValues.Add(string.Join(',', paramsExpressions.Select(Eval)) );
                     }
                 } else {
                     NotImplemented(arguments[i]);
@@ -95,7 +149,9 @@ public class LambdaScriptifier {
                 return $"{Eval(expression.Object)}.{expression.Method.Name}({string.Join(',', argumentsValues)})";
             }
 
-            return $"{expression.Method.Name}({string.Join(',', argumentsValues)})";
+            //var classConverter = expression.Method.DeclaringType?.GetCustomAttribute<ConvertToJsAttribute>()?.Format;
+
+            return $"{expression.Method.DeclaringType.Name}.{expression.Method.Name}({string.Join(',', argumentsValues)})";
         }
 
 
@@ -135,19 +191,8 @@ public class LambdaScriptifier {
 
             case UnaryExpression unaryExpression: {
                 if (expression.NodeType == ExpressionType.Convert) {
-                    //TODO: implement smarter
-                    return Eval(unaryExpression.Operand);
-
-
-                    /*if (unaryExpression.Operand is ParameterExpression parameterExpression) {
-                        var resultType = expression.Type;
-                        if (parameterExpression.Type == typeof(NotEvaluatable<>).MakeGenericType(resultType)) {
-                            return parameterExpression.Name;
-                        }
-                    } else {
-                        return Eval(unaryExpression.Operand);
-
-                    }*/
+                    throw NotImplemented(unaryExpression);
+                    //return Eval(unaryExpression.Operand);
                 }
 
                 var Op = unaryExpression.NodeType switch {

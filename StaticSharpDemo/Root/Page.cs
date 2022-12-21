@@ -8,11 +8,11 @@ namespace StaticSharpDemo.Root {
     public abstract partial class Page : StaticSharp.PageSideMenus {
 
         public override string PageLanguage => Node.Language.ToString().ToLower();
-        protected override Task Setup(Context context) {
+        protected override void Setup(Context context) {
             ContentWidth = 800;
-            return base.Setup(context);
+            base.Setup(context);
         }
-
+        
         public override Block? LeftSideBarIcon => new MaterialDesignIconBlock(MaterialDesignIcons.IconName.Menu) { 
             BackgroundColor = new Color("#6d597a"),
             Paddings = 8,
@@ -84,7 +84,7 @@ namespace StaticSharpDemo.Root {
             ) {
             var paragraph = new Paragraph(text, callerLineNumber, callerFilePath) {
                 FontSize = 18,
-                FontStyle = new FontStyle(FontWeight.Bold)
+                Weight = FontWeight.Bold,
             };
             return paragraph;
         }

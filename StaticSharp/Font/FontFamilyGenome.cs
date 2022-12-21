@@ -5,6 +5,15 @@ using System.IO;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
+
+    public class FontFamilies : List<FontFamilyGenome> {
+        public void Add(string name) { 
+            Add(new FontFamilyGenome(name));
+        }
+    }
+
+
+
     public record FontFamilyGenome(string Name) : Genome<FontFamily> {
 
         protected override void Create(out FontFamily value, out Func<bool>? verify) {
@@ -12,22 +21,18 @@ namespace StaticSharp {
 
             var fullCssUrl = GoogleFonts.MakeCssUrl(Name);
 
-            var fullCssRequest = new HttpRequestGenome(
-                GoogleFonts.MakeWoff2Request(fullCssUrl)
-                ) {
-
-            }.Get();
+            var fullCssRequest = new HttpRequestGenome(GoogleFonts.MakeWoff2Request(fullCssUrl)).Result;
 
             value = new FontFamily(Name);
 
             var fontInfos = GoogleFonts.ParseCss(fullCssRequest.Text);
             foreach (var i in fontInfos) {
                 var italicSubset = value.Members[i.Italic ? 1 : 0];
-                var existing = italicSubset.Find(x => x.FontStyle.Weight == (FontWeight)i.Weight);
+                var existing = italicSubset.Find(x => x.Weight == (FontWeight)i.Weight);
                 if (existing != null) {
                     existing.Segments.AddRange(i.Segments);
                 } else {
-                    italicSubset.Add(new Font(value, new FontStyle((FontWeight)i.Weight, i.Italic), i.Segments));
+                    italicSubset.Add(new Font(value, (FontWeight)i.Weight, i.Italic, i.Segments));
                 }
             }
         }
@@ -68,16 +73,16 @@ namespace StaticSharp {
 
 
 
-            public Font FindFont(FontStyle fontStyle) {
+            public Font FindFont(FontWeight Weight,  bool Italic) {
 
-                var weights = Members[fontStyle.Italic ? 1 : 0];
-                var difWithPrevious = Math.Abs((int)fontStyle.Weight - (int)weights[0].FontStyle.Weight);
+                var weights = Members[Italic ? 1 : 0];
+                var difWithPrevious = Math.Abs((int)Weight - (int)weights[0].Weight);
 
                 var selectedIndex = weights.Count - 1;
 
                 for (int i = 1; i < weights.Count; i++) {
-                    var difWithCurent = Math.Abs((int)fontStyle.Weight - (int)weights[i].FontStyle.Weight);
-                    if ((int)weights[i].FontStyle.Weight >= (int)fontStyle.Weight) {
+                    var difWithCurent = Math.Abs((int)Weight - (int)weights[i].Weight);
+                    if ((int)weights[i].Weight >= (int)Weight) {
                         selectedIndex = (difWithPrevious < difWithCurent) ? i - 1 : i;
                         break;
                     }
@@ -123,13 +128,6 @@ namespace StaticSharp {
                 };*/
 
             }
-
-            
-
         }
-
-        //internal class FontFamilyConstants
-
     }
-
 }

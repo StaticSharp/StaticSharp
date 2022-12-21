@@ -15,7 +15,7 @@ namespace StaticSharpDemo {
 
         private static async Task Main(string[] args) {
 
-
+            ProgrammingLanguageProcessor.AddProgrammingLanguageProcessor(new CSharpLanguageProcessor());
 
             //var ls = new LambdaScriptifier(() => Color2.Black + Color2.White);
             //var code = ls.Eval();
@@ -48,7 +48,7 @@ namespace StaticSharpDemo {
         }
 
         public static async Task Server() {
-            Cache.Directory = MakeAbsolutePath(".cache");
+            Cache.RootDirectory = MakeAbsolutePath(".cache");
 
             await new StaticSharp.Server(
                 new DefaultMultilanguagePageFinder<Language>((language) => new αRoot(language)),
@@ -58,14 +58,14 @@ namespace StaticSharpDemo {
         }
 
         public static async Task Generator() {
-            Cache.Directory = MakeAbsolutePath(".cache");
+            Cache.RootDirectory = MakeAbsolutePath(".cache");
 
             var projectPath = ProjectDirectory.Path;
             var baseDirectory = Path.GetFullPath(Path.Combine(projectPath, "../../StaticSharp.github.io"));
 
             var generator = new MultilanguageStaticGenerator<Language>(
                 new DefaultMultilanguageNodeToPath<Language>(),
-                new AbsoluteUrl("http", "staticsharp.github.io"),
+                new AbsoluteUrl("https", "staticsharp.github.io"),
                 FilePath.FromOsPath(baseDirectory)
                 );
 

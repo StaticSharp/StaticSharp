@@ -17,6 +17,7 @@ namespace StaticSharp {
                 private T? Value;
                 private Expression<Func<FinalJs, T>>? Expression;
 
+
                 public Binding(Expression<Func<FinalJs, T>> expression) {
                     Expression = expression;
                 }
@@ -29,7 +30,7 @@ namespace StaticSharp {
                 }
                 public string CreateScriptExpression() {
                     if (Expression != null) {
-                        return new BindingScriptifier(Expression, new FinalJs()).Eval();
+                        return new LambdaScriptifier(Expression,new object[] { new FinalJs()}).Eval();
                     }
                     return CSValueToJSValueConverter.ObjectToJsValue(Value);
                 }

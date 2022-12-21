@@ -5,7 +5,7 @@
 
         
         public override string Title => "Как создать новый компонент";
-        public override Inlines DescriptionContent => $"Компоненты для создания страниц.";
+        public override Inlines Description => $"Компоненты для создания страниц.";
 
         public override Blocks Content => new() {
             $"сначала напишу все в кучу, а потом правильно распределю..",

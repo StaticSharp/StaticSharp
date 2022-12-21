@@ -12,7 +12,7 @@ namespace StaticSharp.Gears;
 
 
 public interface IAsset {
-    public string FileExtension { get; }
+    public string Extension { get; }
     public string ContentHash { get; }
 
     public byte[] Data { get; }
@@ -31,11 +31,11 @@ public interface IAssetAsyncData {
 public static class AssetExtension {
 
     public static FilePath GetTargetFilePath(this IAsset asset) {
-        return new(asset.ContentHash + asset.FileExtension);
+        return new(asset.ContentHash + asset.Extension);
     }
 
     public static string GetMediaType(this IAsset asset) {
-        var extension = asset.FileExtension;
+        var extension = asset.Extension;
         var mediaType = MimeTypeMap.GetMimeType(extension);
         return mediaType;
     }

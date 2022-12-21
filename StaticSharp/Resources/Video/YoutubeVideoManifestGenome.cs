@@ -33,9 +33,7 @@ namespace StaticSharp {
         protected override void Create(out YoutubeVideoManifestResource value, out Func<bool>? verify) {
             verify = null;
             var slot = Cache.GetSlot(Key);
-            if (slot.LoadData<YoutubeVideoManifestResource>(out var data)) {
-                value = data;
-            } else {
+            if (!slot.LoadData(out value)) {
                 value = CreateAndStore(slot);
             }
         }

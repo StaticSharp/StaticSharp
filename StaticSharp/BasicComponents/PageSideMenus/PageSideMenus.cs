@@ -36,14 +36,17 @@ namespace StaticSharp {
                 return n[(n.LastIndexOf('.') + 1)..].Replace('_',' ');
             }
         }
-        public virtual Block? Description => (DescriptionContent != null) ? new Paragraph(DescriptionContent) : null;
+
+
+
+        //public override Inlines Description => (base.Description != null) ? new Paragraph(base.Description) : null;
 
         public virtual Block? TopBar => new Paragraph(Title) {
             Height = new(e=>Js.Math.Max(e.Root.As<Js.PageSideMenus>().SideBarsIconsSize, e.InternalHeight)),
             //["Height"] = "() => Min(element.Root.SideBarsIconsSize,element.InternalHeight)",
             TextAlignmentHorizontal = TextAlignmentHorizontal.Center,
             MarginsVertical = 0,
-            FontStyle = new FontStyle(FontWeight.ExtraLight),
+            Weight = FontWeight.ExtraLight,
             FontSize = new(e => e.Root.As<Js.PageSideMenus>().SideBarsIconsSize),
         };
 
@@ -63,11 +66,12 @@ namespace StaticSharp {
             {"RightSideBarIcon" ,RightSideBarIcon},
             {"RightSideBar" ,RightSideBar},
             {"Content", new ScrollLayout {
+                //FontSize = new(e=>Js.Storage.Store("scroll",()=>e.FontSize)),
                 Content = new Column {
                     Children = {
                         { "TopBar", TopBar },
                         { "MainVisual", MainVisual },
-                        { "Description", Description },
+                        { "Description", (Description != null) ? new Paragraph(Description) : null },
                         new Block(){ 
                             Height = 1,
                             BackgroundColor = Color.Gray,

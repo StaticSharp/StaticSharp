@@ -14,21 +14,23 @@ namespace StaticSharp {
 
 
     namespace Js {
-        public class Image : Block {
-            public double Aspect => NotEvaluatableValue<double>();
+        public class Image : AspectBlock {
+            //public double Aspect => NotEvaluatableValue<double>();
         }
     }
 
 
     namespace Gears {
-        public class ImageBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
-            public Binding<double> Aspect { set { Apply(value); } }
+        public class ImageBindings<FinalJs> : AspectBlockBindings<FinalJs> where FinalJs : new() {
+            //public Binding<double> Aspect { set { Apply(value); } }
         }
     }
 
+
+
     [Mix(typeof(ImageBindings<Js.Image>))]
     [ConstructorJs]
-    public partial class Image : Block, IMainVisual {
+    public partial class Image : AspectBlock, IMainVisual {
 
         public enum TEmbed { 
             Image,
@@ -62,9 +64,9 @@ namespace StaticSharp {
         IAsset GetSource() {
             string[] webExtensions = { ".jpg", ".jpeg", ".png", ".svg" };
 
-            var source = assetGenome.Get();
-            if (!webExtensions.Contains(source.FileExtension)) {
-                source = new JpegGenome(assetGenome).Get();
+            var source = assetGenome.Result;
+            if (!webExtensions.Contains(source.Extension)) {
+                source = new JpegGenome(assetGenome).Result;
             }
             return source;
         }
@@ -106,7 +108,7 @@ namespace StaticSharp {
             }
 
 
-            var thumbnail = new ThumbnailGenome(assetGenome).Get();
+            var thumbnail = new ThumbnailGenome(assetGenome).Result;
             var thumbnailUrlBase64 = thumbnail.GetDataUrlBase64();
 
             var thumbnailSvgDefTag = Svg.InlineImage(thumbnailUrlBase64);

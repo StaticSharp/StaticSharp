@@ -38,7 +38,7 @@ namespace StaticSharp {
         }*/
 
         protected override IEnumerable<KeyValuePair<string, string>> GetGeneratedBundings(Context context) {
-            var template = assetGenome.Get().Text;
+            var template = assetGenome.Result.Text;
             yield return new("Html", $"()=>`{template}`");//
         }
     }

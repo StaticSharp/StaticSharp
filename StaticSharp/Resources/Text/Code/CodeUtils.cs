@@ -71,11 +71,13 @@ public partial class Static {
 
         foreach (var i in lines) {
             var numSpaces = i.TakeWhile(char.IsWhiteSpace).Count();
-            minSpaces = Math.Min(minSpaces, numSpaces);
+            if (numSpaces < i.Length) {
+                minSpaces = Math.Min(minSpaces, numSpaces);
+            }            
         }
 
         if (minSpaces > 0) {
-            return string.Join('\n', lines.Select(x => x[minSpaces..]));
+            return string.Join('\n', lines.Select(x => x.Length > minSpaces ?  x[minSpaces..] : "" ));
         } else {
             return string.Join('\n', lines);
         }      

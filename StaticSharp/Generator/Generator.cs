@@ -73,8 +73,8 @@ public class Generator<NodeType> where NodeType : ProtoNode<NodeType> {
         await assets.StoreAsync(BaseDirectory+"Assets");
     }
 
-    protected void SaveSitemap(string saveSitemap) {
-        File.WriteAllText((BaseDirectory + "sitemap.xml").OsPath, saveSitemap);
+    protected void SaveSitemap(string sitemap) {
+        File.WriteAllText((BaseDirectory + "sitemap.xml").OsPath, sitemap);
     }
 
 

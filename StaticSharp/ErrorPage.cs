@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace StaticSharp.Gears {
 
-    public class ErrorPage : IPageGenerator {
+    /*public class ErrorPage : Page {
         public Exception Exception { get; }
-        public string Title => "Internal server error";
+        public override string Title => "Internal server error";
 
         public ErrorPage(Exception exception) => Exception = exception;
 
@@ -35,13 +35,6 @@ namespace StaticSharp.Gears {
             var result = matches.Select(x => 
                 new CallStack(x.Groups[0]?.ToString(), x.Groups["file"]?.Value, x.Groups["line"]?.Value));
             var tag = new Tag("div") {
-                /*new Tag("script"){
-                    ["type"] = "text/javascript",
-                    Children = {
-                        "function findLine(file, line){fetch(`/api/v1/visual_studio/${file}/${line}`);" +
-                        "return false;}"
-                    }
-                }*/
             };
             var stackTraceArray = stackTrace.Split(Environment.NewLine);
             foreach (var stackPart in stackTraceArray) {
@@ -106,5 +99,5 @@ namespace StaticSharp.Gears {
             };
             return document.GetHtml();
         }
-    }
+    }*/
 }

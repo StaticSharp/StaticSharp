@@ -13,7 +13,7 @@ public abstract record TextProcessorGenome(Genome<IAsset> Source) : Genome<IAsse
     protected override void Create(out IAsset value, out Func<bool>? verify) {
 
         Data data;
-        var source = Source.Get();
+        var source = Source.Result;
         var slot = Cache.GetSlot(Key);
         if (slot.LoadData(out data) && data.SourceHash == source.ContentHash) {
             value = new BinaryAsset(
@@ -22,7 +22,7 @@ public abstract record TextProcessorGenome(Genome<IAsset> Source) : Genome<IAsse
                 data.ContentHash
                 );
         } else {
-            var extension = source.FileExtension;
+            var extension = source.Extension;
             var text = Process(source.Text, ref extension);
 
             
@@ -34,7 +34,7 @@ public abstract record TextProcessorGenome(Genome<IAsset> Source) : Genome<IAsse
 
 
             data = new();
-            data.Extension = value.FileExtension;
+            data.Extension = value.Extension;
             data.SourceHash = source.ContentHash;
             data.ContentHash = value.ContentHash;
             var content = value.Data;
@@ -43,7 +43,7 @@ public abstract record TextProcessorGenome(Genome<IAsset> Source) : Genome<IAsse
         }
 
         verify = () => {
-            return data.SourceHash == Source.Get().ContentHash;
+            return data.SourceHash == Source.Result.ContentHash;
         };
 
     }

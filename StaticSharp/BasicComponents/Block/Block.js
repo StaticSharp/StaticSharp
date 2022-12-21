@@ -24,6 +24,24 @@ function CalcOffset(container, child, sideName) {
     return Math.max(child[marginName] - container[marginName], 0)
 }
 
+function GetClipRect(clippingElement, contentX, contentY, contentWidth, contentHeight ) {
+    let left = -contentX
+    let top = -contentY
+    let right = -clippingElement.Width + contentWidth + contentX
+    let bottom = -clippingElement.Height + contentHeight + contentY
+    let offsets = `${top}px ${right}px ${bottom}px ${left}px`
+    let round = ""
+    if (
+        clippingElement.RadiusTopLeft != undefined
+        || clippingElement.RadiusTopRight != undefined
+        || clippingElement.RadiusBottomLeft != undefined
+        || clippingElement.RadiusBottomRight != undefined
+    ) {
+        round = ` round ${clippingElement.RadiusTopLeft || 0}px ${clippingElement.RadiusTopRight || 0}px ${clippingElement.RadiusBottomRight || 0}px ${clippingElement.RadiusBottomLeft || 0}px`
+    }
+    return `inset(${offsets}${round})`
+}
+
 
 function Block(element) {
     
@@ -65,8 +83,8 @@ function Block(element) {
         AbsoluteX: () => element.IsRoot ? 0 : Sum(element.Parent.AbsoluteX, element.Parent.ScrollXActual, element.X),
         AbsoluteY: () => element.IsRoot ? 0 : Sum(element.Parent.AbsoluteY, -element.Parent.ScrollYActual, element.Y),
 
-        Width: () => First(element.LayoutWidth, element.InternalWidth),
-        Height: () => First(element.LayoutHeight, element.InternalHeight),
+        Width: e => First(e.LayoutWidth, e.InternalWidth),
+        Height: e => First(e.LayoutHeight, e.InternalHeight),
 
         ClipByParent: false
         
@@ -88,7 +106,10 @@ function Block(element) {
 
         if (element.ClipByParent) {
 
-            let left = -element.X
+            element.style.clipPath = GetClipRect(element.Parent, element.X, element.Y, element.Width, element.Height)
+
+
+            /*let left = -element.X
             let top = -element.Y
             let right = -element.Parent.Width + element.Width - element.X
             let bottom = -element.Parent.Height + element.Height - element.Y
@@ -102,7 +123,7 @@ function Block(element) {
             ) {
                 round = ` round ${element.Parent.RadiusTopLeft || 0}px ${element.Parent.RadiusTopRight || 0}px ${element.Parent.RadiusBottomRight || 0}px ${element.Parent.RadiusBottomLeft || 0}px`
             }
-            element.style.clipPath = `inset(${offsets}${round})`
+            element.style.clipPath = `inset(${offsets}${round})`*/
         } else {
             element.style.clipPath = ""
         }

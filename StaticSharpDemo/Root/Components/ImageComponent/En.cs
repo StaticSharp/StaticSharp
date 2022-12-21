@@ -4,7 +4,7 @@ namespace StaticSharpDemo.Root.Components.ImageComponent {
 
     [Representative]
     public partial class En : ComponentPage {
-        public override Inlines DescriptionContent => $"StaticSharp Image component.";
+        public override Inlines Description => $"StaticSharp Image component.";
 
         public override Block? MainVisual => new Image("ImageExample1.jpg");
 

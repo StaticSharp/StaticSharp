@@ -1,4 +1,5 @@
-﻿using StaticSharp.Gears;
+﻿using ImageMagick;
+using StaticSharp.Gears;
 using StaticSharp.Html;
 using System;
 using System.Collections.Generic;
@@ -54,7 +55,7 @@ namespace StaticSharp {
 
         [Mix(typeof(BaseModifierBindings<Js.BaseModifier>))]
 
-        [RelatedScript("../../Color/Color")]
+        [RelatedScript("../../CrossplatformLibrary/Color/Color")]
         [ConstructorJs]
         public abstract partial class BaseModifier: Hierarchical {
 
@@ -63,14 +64,34 @@ namespace StaticSharp {
             public bool OpenLinksInANewTab { get; set; }
             
             public FontFamilyGenome[]? CodeFontFamilies { get; set; } = null;
-            public FontFamilyGenome[]? FontFamilies { get; set; } = null;
 
-            public FontStyle? FontStyle = null;
+
+            private FontFamilies? fontFamilies = null;
+            public FontFamilies FontFamilies {
+                get {
+                    if (fontFamilies == null)
+                        fontFamilies = new();
+                    return fontFamilies;
+                }
+                set {
+                    fontFamilies = value;
+                }
+            }
+
+
+
+            public FontWeight? Weight { get; set; } = null;
+            public bool? Italic { get; set; } = null;
+
+
+
+
+
             //public string? Url = null;
             public string? Tooltip = null;
 
-            public float? LineHeight = null;//line-height
-            public float? LetterSpacing = null;//letter-spacing
+            public double? LineHeight = null;//line-height
+            public double? LetterSpacing = null;//letter-spacing
 
 
             protected BaseModifier(Hierarchical other, int callerLineNumber, string callerFilePath) : base(other, callerLineNumber, callerFilePath) {}
@@ -107,16 +128,22 @@ namespace StaticSharp {
 
 
             protected override Context ModifyContext(Context context) {
-                if (FontFamilies != null) {
-                    context.FontFamilies = FontFamilies;
+                if (fontFamilies != null) {
+                    context.FontFamilies = fontFamilies;
                 }
                 if (CodeFontFamilies != null) {
                     context.CodeFontFamilies = CodeFontFamilies;
                 }
 
-                if (FontStyle != null) {
-                    context.FontStyle = FontStyle;
+                if (Weight != null) {
+                    context.FontWeight = Weight.Value;
                 }
+
+                if (Italic != null) {
+                    context.ItalicFont = Italic.Value;
+                }
+
+
                 return context;
             }
 
@@ -142,10 +169,15 @@ namespace StaticSharp {
                 if (FontFamilies != null) {
                     elementTag.Style["font-family"] = string.Join(',', FontFamilies.Select(x => x.Name));
                 }
-                if (FontStyle != null) {
-                    elementTag.Style["font-weight"] = (int)FontStyle.Weight;
-                    elementTag.Style["font-style"] = FontStyle.CssFontStyle;
+
+                if (Weight != null) {
+                    elementTag.Style["font-weight"] = (int)Weight.Value;
                 }
+
+                if (Italic != null) {
+                    elementTag.Style["font-style"] = Italic.Value ? "italic" : "normal";
+                }
+
 
                 base.ModifyHtml(context, elementTag);
             }

@@ -9,12 +9,17 @@ namespace StaticSharp {
 namespace StaticSharp {
     public static partial class Static {
 
-        public static string ToInvariant(this float value) {
+        static Static() {
+            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+        }
+
+        /*public static string ToInvariant(this float value) {
             return value.ToString(CultureInfo.InvariantCulture);
         }
         public static string ToInvariant(this double value) {
-            return value.ToString(CultureInfo.InvariantCulture);
-        }
+            return value.ToString(CultureInfo.CurrentCulture);
+        }*/
 
         public static string ThisFilePath([CallerFilePath] string callerFilePath = "") {
             return callerFilePath;

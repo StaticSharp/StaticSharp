@@ -130,6 +130,7 @@ function RowBuilder(element) {
 
     _this.layout = function (child) {
         let spaceLeft = First(Max(_this.margin, child.MarginLeft), 0)
+        
         let spaceRight = Max(endMargin, child.MarginRight)
         if (child.isBlock) {
 

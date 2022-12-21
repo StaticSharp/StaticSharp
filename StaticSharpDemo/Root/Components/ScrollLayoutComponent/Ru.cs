@@ -11,7 +11,7 @@ namespace StaticSharpDemo.Root.Components.ScrollLayoutComponent {
     [Representative]
     public partial class Ru: ComponentPage {
         public override string Title => "Scroll Layout";
-        public override Inlines DescriptionContent => $"Контейнер вертикальным и горизонтальным скроллбарами.";
+        public override Inlines Description => $"Контейнер вертикальным и горизонтальным скроллбарами.";
         public override Blocks? Content => new() { 
             new ScrollLayout(){ 
                 Height = 300,

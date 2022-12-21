@@ -7,7 +7,7 @@ namespace StaticSharpDemo.Root.Components.CodeComponent {
 
     [Representative]
     public partial class En : ComponentPage {
-        public override Inlines DescriptionContent => $"CodeBlock and CodeInline component.";
+        public override Inlines Description => $"CodeBlock and CodeInline component.";
         //public override Block? MainVisual => new Image("ImageExample1.jpg");
 
         Block PagePreview(Node node) {
@@ -21,7 +21,7 @@ namespace StaticSharpDemo.Root.Components.CodeComponent {
                 MarginsHorizontal = 10,
                 MarginsVertical= 10,
                 Radius= 10,
-                FlipWidth = 500,
+                Flipped = new (e=>e.Width < 500),
                 InternalLink = node,
 
                 //Height = 200,
@@ -31,7 +31,7 @@ namespace StaticSharpDemo.Root.Components.CodeComponent {
                 Second = new Column {
                     Children = {
                         H4(node.Representative.Title),
-                        new Paragraph(node.Representative?.DescriptionContent),
+                        new Paragraph(node.Representative?.Description),
                     }
                 },
                 Children= {

@@ -6,10 +6,10 @@ namespace StaticSharp {
 
 
     public static class Svg {
-        public static Tag BlurFilter(float StandardDeviationX, float StandardDeviationY) {
+        public static Tag BlurFilter(double StandardDeviationX, double StandardDeviationY) {
             var result = new Tag("filter"){
                 new Tag("feGaussianBlur"){
-                    ["stdDeviation"] = $"{StandardDeviationX.ToInvariant()} {StandardDeviationY.ToInvariant()}"
+                    ["stdDeviation"] = $"{StandardDeviationX} {StandardDeviationY}"
                 }
             };
             result.MakeIdFromContent();

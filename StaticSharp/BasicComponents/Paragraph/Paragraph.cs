@@ -34,7 +34,7 @@ namespace StaticSharp {
         public Paragraph(string text,
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
-            Inlines.AppendLiteral(text, callerFilePath, callerLineNumber);
+            Inlines.AppendLiteral(text, callerLineNumber, callerFilePath);
         }
 
         public Paragraph(Inlines inlines,

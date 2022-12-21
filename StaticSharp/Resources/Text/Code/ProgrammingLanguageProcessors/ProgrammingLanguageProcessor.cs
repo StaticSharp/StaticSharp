@@ -7,74 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
-namespace StaticSharp {
-
-
-
-
-
-    /*public record CodeRegionGenome(Genome<IAsset> Source, string RegionName) : Genome<IAsset> {
-
-        public override Genome[]? Sources => new Genome[] { Source };
-        IAsset CreateAsset(IAsset sourceAsset) {
-            var extension = sourceAsset.FileExtension;
-            var language = ProgrammingLanguageProcessor.FindByName(extension);
-            string content = sourceAsset.Text;
-            content = language.GetRegion(content, RegionName);            
-            return new TextAsset(
-                content,
-                extension,
-                sourceAsset.GetMediaType()
-                );
-
-        }
-
-        public override IAsset Create() {
-            var source = Source.CreateOrGetCached();
-
-            return new AsyncAsset(CreateAsset(source));
-        }
-    }*/
-
-    /*namespace Gears {
-        public class CodeRegionAsset : Cacheable<CodeRegionGenome>, Asset {
-
-            public class Data {
-                public DateTime LastWriteTime;
-                public string ContentHash = null!;
-            };
-
-            public string MediaType { get; private set; } = null!;
-            public string FileExtension { get; private set; } = null!;
-            public string ContentHash { get; private set; } = null!;
-            public string? CharSet { get; private set; } = null;
-            public string Content { get; private set; } = null!;
-
-            protected override async Task CreateAsync() {
-                var source = await Genome.Source.CreateOrGetCached();
-                MediaType = source.MediaType;
-                FileExtension = source.FileExtension;
-                CharSet = source.CharSet;
-
-
-                var language = ProgrammingLanguageProcessor.FindByName(FileExtension);
-                Content = source.ReadAllText();
-                Content = language.GetRegion(Content, Genome.RegionName);
-
-            }
-
-            public byte[] ReadAllBites() {
-                return Encoding.UTF8.GetBytes(Content);
-            }
-
-            public string ReadAllText() {
-                return Content;
-            }
-        }
-    }*/
-}
 
 
 namespace StaticSharp.Gears {
