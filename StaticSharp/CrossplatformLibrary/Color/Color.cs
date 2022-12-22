@@ -103,7 +103,7 @@ public partial struct Color {
         return new Color(a.R - b, a.G - b, a.B - b, a.A - b);
     }
 
-    [ConvertToJs("Color.NminusC({1},{0})")]
+    [ConvertToJs("Color.NminusC({0},{1})")]
     public static Color operator -(double a, Color b) {
         return new Color(a - b.R, a - b.G, a - b.B, a - b.A);
     }

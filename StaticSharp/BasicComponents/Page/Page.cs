@@ -186,7 +186,8 @@ namespace StaticSharp {
         }
 
         protected override void ModifyHtml(Context context, Tag elementTag) {
-            elementTag.Add(BodyContent.GenerateHtml(context));
+            BodyContent.GenerateHtml(elementTag, context);
+            //elementTag.Add(BodyContent.GenerateHtml(context));
             base.ModifyHtml(context, elementTag);
         }
 

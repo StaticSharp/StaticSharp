@@ -126,18 +126,18 @@ namespace StaticSharpDemo.Root {
 
 
                 }.Modify(x=>{
-                    foreach (var c in x.Values.OfType<Column>()){
+                    foreach (var c in x.OfType<Column>()){
 
                         c.MarginLeft = 10;
                         c.MarginRight = 10;
                         c.MarginTop = 20;
                         c.MarginBottom = 20;
 
-                        c.Children.Values.OfType<Block>().First().Modify(x=>{
+                        c.Children.OfType<Block>().First().Modify(x=>{
                             x.MarginTop = 0;
                         });
 
-                        c.Children.Values.OfType<Block>().Last().Modify(x=>{
+                        c.Children.OfType<Block>().Last().Modify(x=>{
                             x.MarginBottom = 0;
                         });
 

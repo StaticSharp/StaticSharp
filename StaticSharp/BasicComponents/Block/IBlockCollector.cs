@@ -6,7 +6,7 @@ namespace StaticSharp {
 
 
     namespace Gears {
-        public interface IBlockCollector : IVoidEnumerable {
+        public interface IBlockCollector {
             void Add(string? propertyName, IBlock? value);
         }
     }

@@ -37,7 +37,8 @@ namespace StaticSharp {
                 },
             };
         }
-
+        
+ 
         public static Inline Bold(Inlines inlines, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
             return new Inline(callerLineNumber, callerFilePath) {
                 Weight = FontWeight.Bold,

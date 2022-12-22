@@ -99,10 +99,7 @@ namespace StaticSharp {
         public Block([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
         
         protected override void ModifyHtml(Context context, Tag elementTag) {
-            foreach (var c in Children) {
-                var childTag = c.Value.GenerateHtml(context, new Role(true, c.Key));
-                elementTag.Add(childTag);
-            }
+            Children.GenerateHtml(elementTag, context);
             base.ModifyHtml(context, elementTag);
         }
     }

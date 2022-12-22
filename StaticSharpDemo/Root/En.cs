@@ -95,58 +95,21 @@ namespace StaticSharpDemo.Root {
             };
         }*/
 
-
+        
 
         public override Blocks? Content => new() {
 
 
-            new Row{
-                ForegroundColor = new Color(0.5,0.5,0.5,0.05),
-                Children = {
-                    new Space(),
-                    new SvgIconBlock(Icons.SimpleIcons.GitHub){
-                        ExternalLink = "https://www.github.com/staticsharp"
-                    },
-                    new SvgIconBlock(Icons.SimpleIcons.Facebook){
-                        ExternalLink = "https://www.facebook.com/staticsharp"
-                    },
-                    new SvgIconBlock(Icons.SimpleIcons.Twitter){
-                        ExternalLink = "https://www.twitter.com/staticsharp"
-                    },
-                    new SvgIconBlock(Icons.SimpleIcons.Discord){
-                        ExternalLink = "https://www.twitter.com/staticsharp"
-                    },
-                    new Space(),
-                }
-            }.Modify(x=>{
-                foreach (var i in x.Children.Values.OfType<SvgIconBlock>()){
-                    i.Height = 36;
-                    i.Margins = 20;
-                    i.StrokeColor = Color.Gray;
-                    i.StrokeWidth = new(x=>1 / Js.Window.DevicePixelRatio);
-                    
-                }
-            }),
+            /*new Image("https://raw.githubusercontent.com/StaticSharp/StaticSharpBrandAssets/main/LogoHorizontal.svg") {
+                    Embed = Image.TEmbed.Image,
+                    //wi = new(e=>e.Parent.Child<Js.Block>(2).Height - e.MarginTop - e.MarginBottom),
+                    Margins = 32,
 
+                },*/
 
-            
 
             new Paragraph("STATIC SHARP").ToLandingMainHeader(),
             Description,
-
-            /*new Paragraph("StaticSharp"){ 
-                FontSize = 80,
-                LineHeight = 1,
-                TextAlignmentHorizontal = TextAlignmentHorizontal.Center,
-                FontFamilies = { "Rajdhani" },
-                Weight = FontWeight.Thin
-            },
-            new Paragraph(Description) {
-                TextAlignmentHorizontal = TextAlignmentHorizontal.Center,
-                FontSize = 24,
-                Weight = FontWeight.Light
-            },*/
-            
 
             Separator(),
 
@@ -156,23 +119,7 @@ namespace StaticSharpDemo.Root {
 
             "Welcome to StaticSharp! We believe in getting right to the point, so here is the code from this very page.",
 
-
-            //This is code block:
             CodeBlock(LoadFile(ThisFilePath()).GetCodeRegion("codeExample").Highlight()),
-
-
-            /*new ScrollLayout {
-                Height = new(e=>Js.Math.Min(e.InternalHeight, e.Root.Height * 0.8)),
-                Radius = 8,                
-                BackgroundColor = Color.FromGrayscale(0.98),
-                Paddings = 20,
-                Content = new Paragraph(
-                        
-                    ){                    
-                    Weight = FontWeight.Regular,
-                    FontFamilies = { "Roboto Mono" }
-                },
-            }, */           
 
             Separator(),
 
@@ -182,18 +129,10 @@ namespace StaticSharpDemo.Root {
             Plus, it's super scalable and easy to update. Bye-bye, clunky websites - hello, sleek and modern web creations!
             """,
 
-
-             
-
-
-
-
-
             Separator(),
             
             new Flipper() {
                 Flipped = new (e=>e.Width < 950),
-                //MarginTop = new(e=>Js.Math.Max(e.First.MarginTop, e.Second.MarginTop)),
                 BottomToTop = true,
 
                 First = new Column(){
@@ -201,31 +140,23 @@ namespace StaticSharpDemo.Root {
                     MarginRight = 10,
                     MarginTop = 60,
                     Children = {
-                        //new Space(),
                         "copypasteable from\nSTACKOVERFLOW".ToLandingSectionHeader(new Color("#F58025"))
-                        .Modify(x=>{
-                            x.TextAlignmentHorizontal = new(e=>e.Parent.Parent.As<Js.Flipper>().Flipped? TextAlignmentHorizontal.Center: TextAlignmentHorizontal.Left) ;
-                        })
                         ,
                         """
                         Copy-pasteability is the superpower of code - it allows developers to reuse and share code like a boss, saving time and effort in the software development process.
                         No-code or low-code platforms might have their own superpowers, but when it comes to flexibility and customization, code-based approaches reign supreme.
                         So go forth, dear developer, and copy-paste to your heart's content!
                         """,
-                        //new Space(0,2),
                     }
                 },
                 Second = new Image("StackoverflowKeyboard.svg"){
                     X  = new(e=>e.Parent.As<Js.Flipper>().Flipped ? Js.Math.Max(0.5 * (e.ParentBlock.Width - e.Width), 0) : e.LayoutX),
                     Width = new(e=>e.Parent.As<Js.Flipper>().Flipped ? Js.Math.Min(e.LayoutWidth, 400) : e.LayoutWidth),
-                    Margins = 50,
-                    Embed = Image.TEmbed.None,
+                    Margins = 75,
+                    Embed = Image.TEmbed.Image,
                     Fit = Fit.Inside
-                    //Embed = Image.TEmbed.Image,
                 }
             }.FillWidth().InheritHorizontalPaddings(),
-
-
 
             Separator(),
             "create your own SHORTCUTS".ToLandingSectionHeader(Color.Red),
@@ -236,12 +167,13 @@ namespace StaticSharpDemo.Root {
             CodeBlock("\"create your own SHORTCUTS\".SectionHeader(Color.Red)".Highlight("cs")),
             $"In this case it is an extension method for type {Code("string")}",
 
-
             Separator(),
+
             "bring it with NUGET".ToLandingSectionHeader(new Color("#004880") * 1.7),
             "All of these shortcuts and components can be wrapped in NuGet packages, so that everyone (including you in the future) can add them to their new site with a few clicks.",
 
             Separator(),
+
             "TURING complete text writing".ToLandingSectionHeader(Color.DeepPink),
             $"""
             Yo dawg, we put programming in the text-writing so you can code while you write.
@@ -250,6 +182,7 @@ namespace StaticSharpDemo.Root {
             #endregion
 
             Separator(),
+
             "AUTOCOMPLETE for everything".ToLandingSectionHeader(Color.Red),
             $"""
             C# is a strongly-typed language, so the IDE has access to information about the available types and their members in compile-time.

@@ -20,7 +20,7 @@ namespace StaticSharpDemo.Root.Components.MaterialDesignIconsComponent {
                     new Space(),
                 }
             }.Modify(x=>{
-                foreach (var i in x.Children.Values.OfType<Block>()){
+                foreach (var i in x.Children.OfType<Block>()){
                     i.Paddings = 6;
                 }
             }),
