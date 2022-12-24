@@ -45,7 +45,7 @@ function RowBuilder(element) {
         let newLineHardY = 0
         let newLineSoftY = 0
         
-        let availableSpace = maxWidth - _this.currentX - Max(_this.margin, element.PaddingRight, 0)
+        let availableSpace = (maxWidth==undefined) ? 0 : maxWidth - _this.currentX - Max(_this.margin, element.PaddingRight, 0)
         let spaceUnits = 0
         for (let i = 0; i < _this.currentLine.length; i++) {
             let child = _this.currentLine[i]

@@ -2,7 +2,7 @@
 using System.Linq;
 
 namespace StaticSharpDemo.Root {
-    public abstract partial class LandingPage: StaticSharp.Page {
+    public abstract partial class LandingPage : StaticSharp.Page {
         public override string? SiteName => "StaticSharp";
         public override Genome<IAsset>? Favicon => LoadFile("https://raw.githubusercontent.com/StaticSharp/StaticSharpBrandAssets/main/FavIcon.svg");
 
@@ -11,7 +11,7 @@ namespace StaticSharpDemo.Root {
         public virtual Block LanguageMenu => new Row {
             Children = {
                 VirtualNode.GetAllParallelNodes().Select(
-                    x=>new Paragraph{ 
+                    x=>new Paragraph{
                         Inlines = {
                             new Inline(x.Language.ToString()){
                                 InternalLink = x
@@ -40,24 +40,20 @@ namespace StaticSharpDemo.Root {
 
 
         public virtual Block Menu => new Row {
-            BackgroundColor = Color.White,
             Children = {
                 new Image("https://raw.githubusercontent.com/StaticSharp/StaticSharpBrandAssets/main/LogoHorizontal.svg") {
                     Embed = Image.TEmbed.Image,
                     Height = 32,
                     MarginsVertical = 6,
                     MarginsHorizontal = 20,
-                    
+
                 },
-                new Space(),
-                SocialLinks.Modify(x=>{
-                    foreach (var i in x.OfType<SvgIconBlock>()){
-                        i.Margins = 10;
-                    }
-                }),
-                MenuItem(Node.Components),
-            },
-            
+                    SocialLinks.Modify(x=>{
+                        foreach (var i in x.OfType<SvgIconBlock>()){
+                            i.Paddings = 10;
+                        }
+                    })
+                }
         }.FillWidth().InheritHorizontalPaddings();
 
         public abstract Blocks? Content { get; }
@@ -65,7 +61,7 @@ namespace StaticSharpDemo.Root {
         public virtual double ColumnWidth => 1080;
 
         protected override Blocks BodyContent => new Blocks {
-            new ScrollLayout { 
+            new ScrollLayout {
                 ScrollY = new(e=>Js.Storage.Restore("MainScroll", () => e.ScrollYActual)),
                 //FontSize = new(e =>Js.Math.First( Js.Storage.Restore("FontSize", () => 10)),
                 Content = new Column{
@@ -74,9 +70,9 @@ namespace StaticSharpDemo.Root {
                     Children = {
                         Menu,
                         Content
-                    }                
-                }.CenterHorizontally()           
-            }.FillWidth().FillHeight()           
+                    }
+                }.CenterHorizontally()
+            }.FillWidth().FillHeight()
         };
     }
 }
