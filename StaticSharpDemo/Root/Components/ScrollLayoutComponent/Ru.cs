@@ -15,7 +15,7 @@ namespace StaticSharpDemo.Root.Components.ScrollLayoutComponent {
         public override Blocks? Content => new() { 
             new ScrollLayout(){ 
                 Height = 300,
-                Content = new MaterialDesignIconBlock(MaterialDesignIcons.IconName.Carrot){
+                Content = new SvgIconBlock(Icons.MaterialDesignIcons.Carrot){
                     Width = 1024,
                     BackgroundColor = Color.MediumPurple,
                 }                
@@ -26,7 +26,7 @@ namespace StaticSharpDemo.Root.Components.ScrollLayoutComponent {
                 Height = 200,
                 Paddings = 20,
                 BackgroundColor = Color.Pink,
-                Content = new MaterialDesignIconBlock(MaterialDesignIcons.IconName.Carrot){
+                Content = new SvgIconBlock(Icons.MaterialDesignIcons.Carrot){
                     Width = 1024,
                     BackgroundColor = Color.MediumPurple,
                 }
@@ -39,7 +39,7 @@ namespace StaticSharpDemo.Root.Components.ScrollLayoutComponent {
                 Paddings = 10,
                 Height = 200,
                 Children = { 
-                    new MaterialDesignIconBlock(MaterialDesignIcons.IconName.VectorDifferenceAb){ 
+                    new SvgIconBlock(Icons.MaterialDesignIcons.VectorDifferenceAb){ 
                         Paddings = 20
                     }
                 },

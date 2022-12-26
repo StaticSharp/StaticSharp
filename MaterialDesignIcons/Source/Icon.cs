@@ -1,24 +1,28 @@
 ﻿using System.Reflection;
 
-namespace MaterialDesignIcons;
-
-public static partial class Icon {
+namespace Icons;
+public class Icon {
 
     static Assembly Assembly = typeof(Icon).Assembly;
-    static string GetResourcePathFromName(string name) {
-        var resourcePath = Assembly.GetName().Name + ".svg." + name + ".svg";
+    public float Width { get; init; }
+    public float Height { get; init; }
+    public string Path { get; init; }
+
+    public Icon(string path, float width, float height) {
+        Width = width;
+        Height = height;
+        Path = path;
+    }
+    string GetResourcePathFromName() {
+        Assembly assembly = GetType().Assembly;
+        var resourcePath = assembly.GetName().Name + ".svg." + Path + ".svg";
         return resourcePath;
     }
-
-    public static string GetSvg(IconName iconName) {
-        var name = iconName.ToString();
-        return GetSvg(name);
-    }
-    public static string GetSvg(string iconName) {
-        var resourcePath = GetResourcePathFromName(iconName);
+    public string GetSvg() {
+        var resourcePath = GetResourcePathFromName();
         using var stream = Assembly.GetManifestResourceStream(resourcePath);
         if (stream == null)
-            throw new InvalidOperationException($"Invalid icon name {iconName}");
+            throw new InvalidOperationException($"Invalid icon name {Path}");
 
         using var streamReader = new StreamReader(stream, System.Text.Encoding.UTF8, true);
 
@@ -26,7 +30,4 @@ public static partial class Icon {
         return text;
     }
 
-    /*public static async Task Main(string[] args) {        
-        var result = GetSvg(IconName.Github);
-    }*/
 }

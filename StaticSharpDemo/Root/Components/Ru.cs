@@ -55,6 +55,8 @@ namespace StaticSharpDemo.Root.Components {
 
         public override Blocks Content => new(){
 
+            
+
             Enumerable.Range(1,20).Select(x=>new Paragraph(x.ToString()){
                 BackgroundColor = new(e=>Js.Window.Touch ? Color.Pink: Color.Black),
             }),
@@ -62,9 +64,9 @@ namespace StaticSharpDemo.Root.Components {
 
             new Paragraph($"Paragraph {Node.ParagraphComponent}") {
                 BackgroundColor = new(e=>e.Root.Width < 800 ? Color.Pink: Color.Black),
-            }
+            },
 
-
+            
 
 
             /*new Row{

@@ -39,20 +39,7 @@ namespace StaticSharpDemo {
             return x;
         }
 
-        public static ScrollLayout ToCodeBlock(this Inlines inlines) {
-            return new ScrollLayout {
-                Height = new(e => Js.Math.Min(e.InternalHeight, e.Root.Height * 0.8)),
-                Radius = 8,
-                BackgroundColor = Color.FromGrayscale(0.98),
-                Paddings = 20,
-                Content = new Paragraph(
-                        inlines
-                    ) {
-                    Weight = FontWeight.Regular,
-                    FontFamilies = { "Roboto Mono" }
-                },
-            };
-        }
+        
 
         public static Inline GithubUrl(string text = "GitHub repository") {
             return new Inline {

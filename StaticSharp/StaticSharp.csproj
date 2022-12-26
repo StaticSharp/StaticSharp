@@ -72,7 +72,7 @@
 
 		<PackageReference Include="envdte" Version="17.3.32804.24" />
 		<PackageReference Include="MimeTypeMapOfficial" Version="1.0.17" />
-		<ProjectReference Include="..\MaterialDesignIcons\Source\MaterialDesignIcons.csproj" />
+		<ProjectReference Include="..\MaterialDesignIcons\Source\SvgIcons.csproj" />
 	</ItemGroup>
 
 	

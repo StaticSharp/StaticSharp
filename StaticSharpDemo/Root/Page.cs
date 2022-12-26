@@ -13,7 +13,7 @@ namespace StaticSharpDemo.Root {
             base.Setup(context);
         }
         
-        public override Block? LeftSideBarIcon => new MaterialDesignIconBlock(MaterialDesignIcons.IconName.Menu) { 
+        public override Block? LeftSideBarIcon => new SvgIconBlock(Icons.MaterialDesignIcons.Menu) { 
             BackgroundColor = new Color("#6d597a"),
             Paddings = 8,
             Margins = 8
@@ -64,7 +64,7 @@ namespace StaticSharpDemo.Root {
             };
 
 
-        public override Block? RightSideBarIcon => new MaterialDesignIconBlock(MaterialDesignIcons.IconName.Translate) {
+        public override Block? RightSideBarIcon => new SvgIconBlock(Icons.MaterialDesignIcons.Translate) {
             BackgroundColor = new Color("#7a5924"),
             Paddings = 8,
             Margins = 8
@@ -126,18 +126,18 @@ namespace StaticSharpDemo.Root {
 
 
                 }.Modify(x=>{
-                    foreach (var c in x.Values.OfType<Column>()){
+                    foreach (var c in x.OfType<Column>()){
 
                         c.MarginLeft = 10;
                         c.MarginRight = 10;
                         c.MarginTop = 20;
                         c.MarginBottom = 20;
 
-                        c.Children.Values.OfType<Block>().First().Modify(x=>{
+                        c.Children.OfType<Block>().First().Modify(x=>{
                             x.MarginTop = 0;
                         });
 
-                        c.Children.Values.OfType<Block>().Last().Modify(x=>{
+                        c.Children.OfType<Block>().Last().Modify(x=>{
                             x.MarginBottom = 0;
                         });
 

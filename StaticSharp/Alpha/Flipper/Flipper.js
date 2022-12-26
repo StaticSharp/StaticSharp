@@ -6,8 +6,8 @@ function Flipper(element) {
     element.Reactive = {
         Flipped: () => element.Width < 640,
 
-        HorizontalSpace: 12,
-        VerticalSpace: 12,
+        HorizontalSpace: 0,
+        VerticalSpace: 0,
 
         RightToLeft: false,
         BottomToTop: false,
@@ -41,73 +41,83 @@ function Flipper(element) {
 
 
     new Reaction(() => {
+        let first = element.LayoutFirst
+        let second = element.LayoutSecond
 
         if (element.Flipped)   {
+            
 
-            element.LayoutFirst.LayoutHeight = undefined
-            element.LayoutSecond.LayoutHeight = undefined
+            first.LayoutHeight = undefined
+            second.LayoutHeight = undefined
 
-            let orderedChildren = [element.LayoutFirst, element.LayoutSecond]
-            let margin = First(element.PaddingTop, 0)
 
-            let y = 0
-            for (let i of orderedChildren) {
-                i.LayoutHeight = undefined
-            }
+            let left1 = CalcOffset(element, first, "Left")
+            let left2 = CalcOffset(element, second, "Left")
 
-            for (let i of orderedChildren) {
-                let spaceLeft = Max(element.PaddingLeft, i.MarginLeft, 0)
-                let spaceRight = Max(element.PaddingRight, i.MarginRight, 0)
-                let spaceTop = Max(margin, i.MarginTop, 0)
+            let right1 = CalcOffset(element, first, "Right")
+            let right2 = CalcOffset(element, second, "Right")
 
-                i.LayoutX = spaceLeft
-                i.LayoutWidth = element.Width - spaceLeft - spaceRight
-                i.LayoutY = y + spaceTop
+            let top = CalcOffset(element, first, "Top")
+            let bottom = CalcOffset(element, second, "Bottom")
 
-                y += Sum(spaceTop, i.InternalHeight)
-                margin = Max(i.MarginButtom, element.VerticalSpace, 0)
+            let spaceMid = Max(
+                first.MarginBottom,
+                second.MarginTop,
+                element.VerticalSpace
+            )
 
-            }
+            let y = top
+            first.LayoutY = y
+            y += first.Height
+            y += spaceMid
+            second.LayoutY = y
+            y += second.Height
+            y += bottom
+            element.InternalHeight = y
 
-            element.InternalHeight = y + margin
+
+            first.LayoutX = left1
+            first.LayoutWidth = element.Width - left1 - right1
+            second.LayoutX = left2
+            second.LayoutWidth = element.Width - left2 - right2
+
 
         } else {
 
-            let left = CalcOffset(element, element.LayoutFirst, "Left")
-            let right = CalcOffset(element, element.LayoutSecond, "Right")
+            let left = CalcOffset(element, first, "Left")
+            let right = CalcOffset(element, second, "Right")
 
-            let top1 = CalcOffset(element, element.LayoutFirst, "Top")
-            let top2 = CalcOffset(element, element.LayoutSecond, "Top")
+            let top1 = CalcOffset(element, first, "Top")
+            let top2 = CalcOffset(element, second, "Top")
 
-            let bottom1 = CalcOffset(element, element.LayoutFirst, "Bottom")
-            let bottom2 = CalcOffset(element, element.LayoutSecond, "Bottom")
+            let bottom1 = CalcOffset(element, first, "Bottom")
+            let bottom2 = CalcOffset(element, second, "Bottom")
 
-            //let spaceLeft = Max(element.PaddingLeft, element.First.MarginLeft,0)
-            //let spaceRight = Max(element.PaddingRight, element.Second.MarginRight,0)
+
             let spaceMid = Max(
-                element.LayoutFirst.MarginRight,
-                element.LayoutSecond.MarginLeft,
+                first.MarginRight,
+                second.MarginLeft,
                 element.HorizontalSpace
             )
 
-            element.LayoutFirst.LayoutX = left
-            element.LayoutFirst.LayoutWidth = (element.Width - spaceMid) * 0.5 - left
+            first.LayoutX = left
+            first.LayoutWidth = (element.Width - spaceMid) * 0.5 - left
 
-            element.LayoutSecond.LayoutX = (element.Width + spaceMid) * 0.5 
-            element.LayoutSecond.LayoutWidth = (element.Width - spaceMid) * 0.5 - right
+            second.LayoutX = (element.Width + spaceMid) * 0.5 
+            second.LayoutWidth = (element.Width - spaceMid) * 0.5 - right
 
-            element.LayoutFirst.LayoutY = top1
-            element.LayoutSecond.LayoutY = top2
+            first.LayoutY = top1
+            second.LayoutY = top2
 
             let height = Max(
-                element.LayoutFirst.InternalHeight + top1 + bottom1,
-                element.LayoutSecond.InternalHeight + top2 + bottom2,
+                first.InternalHeight + top1 + bottom1,
+                second.InternalHeight + top2 + bottom2,
             )
 
             element.InternalHeight = height
 
-            element.LayoutFirst.LayoutHeight = element.Height - top1 - bottom1
-            element.LayoutSecond.LayoutHeight = element.Height - top2 - bottom2
+            first.LayoutHeight = element.Height - top1 - bottom1
+            second.LayoutHeight = element.Height - top2 - bottom2
 
         }
     })
