@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MixinGenerator", "MixinGene
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpSyntaxTreeInspector", "CSharpSyntaxTreeInspector\CSharpSyntaxTreeInspector.csproj", "{91AC75FE-60C6-488A-A06C-5BAC0117DC71}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SvgIcons", "MaterialDesignIcons\Source\SvgIcons.csproj", "{FCD37527-C054-4445-B107-66AE31F11FBC}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{38214E29-BA5F-4EF3-B3EF-1F87D710A369}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -56,10 +54,6 @@ Global
 		{91AC75FE-60C6-488A-A06C-5BAC0117DC71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91AC75FE-60C6-488A-A06C-5BAC0117DC71}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91AC75FE-60C6-488A-A06C-5BAC0117DC71}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FCD37527-C054-4445-B107-66AE31F11FBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FCD37527-C054-4445-B107-66AE31F11FBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FCD37527-C054-4445-B107-66AE31F11FBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FCD37527-C054-4445-B107-66AE31F11FBC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{225CAF6E-37DC-4739-AC66-B3FB70074148}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{225CAF6E-37DC-4739-AC66-B3FB70074148}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{225CAF6E-37DC-4739-AC66-B3FB70074148}.Release|Any CPU.ActiveCfg = Release|Any CPU

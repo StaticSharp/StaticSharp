@@ -24,16 +24,16 @@ namespace StaticSharpDemo.Root {
 
 
         public Blocks SocialLinks => new() {
-            new SvgIconBlock(Icons.SimpleIcons.GitHub){
+            new SvgIconBlock(SvgIcons.SimpleIcons.GitHub){
                 ExternalLink = "https://www.github.com/staticsharp"
             },
-            new SvgIconBlock(Icons.SimpleIcons.Facebook){
+            new SvgIconBlock(SvgIcons.SimpleIcons.Facebook){
                 ExternalLink = "https://www.facebook.com/staticsharp"
             },
-            new SvgIconBlock(Icons.SimpleIcons.Twitter){
+            new SvgIconBlock(SvgIcons.SimpleIcons.Twitter){
                 ExternalLink = "https://www.twitter.com/staticsharp"
             },
-            new SvgIconBlock(Icons.SimpleIcons.Discord){
+            new SvgIconBlock(SvgIcons.SimpleIcons.Discord){
                 ExternalLink = "https://www.twitter.com/staticsharp"
             },
         };

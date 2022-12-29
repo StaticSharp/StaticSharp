@@ -60,13 +60,13 @@
 		<PackageReference Include="NUglify" Version="1.20.2" />-->
 		<PackageReference Include="Octokit" Version="2.0.1" />
 		<PackageReference Include="Scopes" Version="0.0.16" />
+		<PackageReference Include="SvgIcons" Version="0.1.3" />
 		
 		<PackageReference Include="YoutubeExplode" Version="6.2.5" />
 
 
 		<PackageReference Include="envdte" Version="17.3.32804.24" />
 		<PackageReference Include="MimeTypeMapOfficial" Version="1.0.17" />
-		<ProjectReference Include="..\MaterialDesignIcons\Source\SvgIcons.csproj" />
 	</ItemGroup>
 
 	

@@ -25,9 +25,9 @@ namespace StaticSharp {
     [ConstructorJs]
     public partial class SvgIconInline : Inline {
 
-        Icons.Icon icon;
+        SvgIcons.Icon icon;
         public double Scale { get; set; } = 1;
-        public SvgIconInline(Icons.Icon icon, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerLineNumber, callerFilePath) {
+        public SvgIconInline(SvgIcons.Icon icon, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerLineNumber, callerFilePath) {
             this.icon = icon;
         }
 
