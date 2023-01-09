@@ -24,6 +24,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StaticSharpSourceGenerator"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StaticSharpSever", "StaticSharpServer\StaticSharpSever.csproj", "{52770B08-6216-4929-8241-5D35F2185B8A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoslynSourceGeneratorDebugger", "RoslynSourceGeneratorDebugger\RoslynSourceGeneratorDebugger.csproj", "{62EF29F0-F80C-483A-A70E-2E2E5BB01D69}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,10 @@ Global
 		{52770B08-6216-4929-8241-5D35F2185B8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52770B08-6216-4929-8241-5D35F2185B8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52770B08-6216-4929-8241-5D35F2185B8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62EF29F0-F80C-483A-A70E-2E2E5BB01D69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62EF29F0-F80C-483A-A70E-2E2E5BB01D69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62EF29F0-F80C-483A-A70E-2E2E5BB01D69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62EF29F0-F80C-483A-A70E-2E2E5BB01D69}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
