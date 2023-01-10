@@ -4,7 +4,7 @@
 		<!--<ImplicitUsings>enable</ImplicitUsings>-->
 		<Nullable>enable</Nullable>
 
-		<LangVersion>preview</LangVersion>
+		<LangVersion>11.0</LangVersion>
 		
 		
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -82,11 +82,11 @@
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 	  <WarningsAsErrors>$(WarningsAsErrors);NU1605</WarningsAsErrors>
-	  <LangVersion>preview</LangVersion>
+	  <LangVersion>11.0</LangVersion>
 	  <DebugType>portable</DebugType>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <LangVersion>preview</LangVersion>
+	  <LangVersion>11.0</LangVersion>
 	  <DebugType>portable</DebugType>
 	</PropertyGroup>
 
@@ -101,10 +101,4 @@
 	<ItemGroup Condition="$(UseDebugGeneratorOutput)">
 		<ProjectReference Include="..\MixinGenerator\MixinGenerator.csproj" />
 	</ItemGroup>
-
-
-
-	
-	
-
 </Project>
