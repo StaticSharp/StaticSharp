@@ -12,8 +12,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="$(Executable)">
-		<TargetFramework>net6.0</TargetFramework>
-		<LangVersion>7.3</LangVersion>
+		<TargetFramework>net7</TargetFramework>
+		<LangVersion>11.0</LangVersion>
 		<OutputType>Exe</OutputType>
 		<DefineConstants>SOURCE_GENERATOR_EXECUTABLE_MODE</DefineConstants>
 	</PropertyGroup>
