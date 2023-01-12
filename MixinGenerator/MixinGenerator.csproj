@@ -65,6 +65,7 @@
 	<ItemGroup Condition="$(Executable)">
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.4.0" />
 		<ProjectReference Include="..\RoslynSourceGeneratorDebuggable\RoslynSourceGeneratorDebuggable.csproj" />
+		<ProjectReference Include="..\RoslynSourceGeneratorsUtils\RoslynSourceGeneratorsUtils.csproj" />
 	</ItemGroup>
 
 </Project>

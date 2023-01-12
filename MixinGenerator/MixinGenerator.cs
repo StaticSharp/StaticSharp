@@ -43,7 +43,11 @@ namespace MixinGenerator {
 
 #if SOURCE_GENERATOR_EXECUTABLE_MODE
         public static async Task Main(string[] args) {
-            await Exo.RoslynSourceGeneratorDebuggable.Launcher.Main();        
+            //await Exo.RoslynSourceGeneratorDebuggable.Launcher.Main();        
+
+            var targetProjectPath = Path.GetFullPath(Environment.GetEnvironmentVariable("ProjectPath"));
+            var outputPath = Path.Combine(Path.GetDirectoryName(targetProjectPath), $".generated/{typeof(MixinGenerator).FullName}_helper");
+            await RoslynSourceGeneratorsUtils.RoslynSourceGeneratorHelper.GenerateAndSaveFilesForProject(new MixinGenerator(), targetProjectPath, outputPath);
         }
 #endif
 
