@@ -12,11 +12,11 @@ namespace StaticSharpDemo.Root.Components.MaterialDesignIconsComponent {
             new Row{ 
                 Children = { 
                     new Space(),
-                    new SvgIconBlock(Icons.MaterialDesignIcons.Github),
-                    new SvgIconBlock(Icons.MaterialDesignIcons.Facebook),
-                    new SvgIconBlock(Icons.MaterialDesignIcons.Twitter),
-                    new SvgIconBlock(Icons.MaterialDesignIcons.Youtube),
-                    new SvgIconBlock(Icons.MaterialDesignIcons.Vimeo),
+                    new SvgIconBlock(SvgIcons.MaterialDesignIcons.Github),
+                    new SvgIconBlock(SvgIcons.MaterialDesignIcons.Facebook),
+                    new SvgIconBlock(SvgIcons.MaterialDesignIcons.Twitter),
+                    new SvgIconBlock(SvgIcons.MaterialDesignIcons.Youtube),
+                    new SvgIconBlock(SvgIcons.MaterialDesignIcons.Vimeo),
                     new Space(),
                 }
             }.Modify(x=>{
@@ -26,11 +26,11 @@ namespace StaticSharpDemo.Root.Components.MaterialDesignIconsComponent {
             }),
 
             H5(nameof(SvgIconInline)),
-            $"This -> {new SvgIconInline(Icons.MaterialDesignIcons.Github)} is as SVG icon",
-            $"Scale = 2 {new SvgIconInline(Icons.MaterialDesignIcons.Github){
+            $"This -> {new SvgIconInline(SvgIcons.MaterialDesignIcons.Github)} is as SVG icon",
+            $"Scale = 2 {new SvgIconInline(SvgIcons.MaterialDesignIcons.Github){
                 ForegroundColor = Color.Red,
                 Scale = 2 }}",
-            $"BaselineOffset = 0 {new SvgIconInline(Icons.MaterialDesignIcons.Github){ BaselineOffset = 0 }}"
+            $"BaselineOffset = 0 {new SvgIconInline(SvgIcons.MaterialDesignIcons.Github){ BaselineOffset = 0 }}"
             
 
         };
