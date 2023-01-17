@@ -3,8 +3,7 @@
 		<TargetFramework>net7</TargetFramework>
 		<!--<ImplicitUsings>enable</ImplicitUsings>-->
 		<Nullable>enable</Nullable>
-
-		<LangVersion>preview</LangVersion>
+		<!--LangVersion>preview</LangVersion-->
 		
 		
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -82,11 +81,11 @@
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 	  <WarningsAsErrors>$(WarningsAsErrors);NU1605</WarningsAsErrors>
-	  <LangVersion>preview</LangVersion>
+		<!--LangVersion>preview</LangVersion-->
 	  <DebugType>portable</DebugType>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <LangVersion>preview</LangVersion>
+		<!--LangVersion>preview</LangVersion-->
 	  <DebugType>portable</DebugType>
 	</PropertyGroup>
 
@@ -94,17 +93,17 @@
 		<Compile Include=".generated\**" />
 	</ItemGroup>
 
-	<ItemGroup Condition="!$(UseDebugGeneratorOutput)">
-		<ProjectReference Include="..\MixinGenerator\MixinGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+    <ItemGroup Condition="!$(UseDebugGeneratorOutput)">
+		<!--ProjectReference Include="..\MixinGenerator\MixinGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" /-->
+		<PackageReference Include="StaticSharp.MixinSourceGenerator" Version="0.1.0" />
 	</ItemGroup>
 
 	<ItemGroup Condition="$(UseDebugGeneratorOutput)">
-		<ProjectReference Include="..\MixinGenerator\MixinGenerator.csproj" />
+		<!--ProjectReference Include="..\MixinGenerator\MixinGenerator.csproj" /-->
+		<PackageReference Include="StaticSharp.MixinSourceGenerator" Version="0.1.0" />
 	</ItemGroup>
-
-
-
-	
-	
+    <ItemGroup>
+		<PackageReference Include="StaticSharp.MixinSourceGenerator.Attributes" Version="0.1.0" />
+    </ItemGroup>	
 
 </Project>
