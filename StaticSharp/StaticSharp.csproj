@@ -40,6 +40,7 @@
 
 
 	<ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.4.0" />
 		<PackageReference Include="ColorCode.HTML" Version="2.0.13" />
 
 
@@ -93,17 +94,12 @@
 		<Compile Include=".generated\**" />
 	</ItemGroup>
 
-    <ItemGroup Condition="!$(UseDebugGeneratorOutput)">
-		<!--ProjectReference Include="..\MixinGenerator\MixinGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" /-->
-		<PackageReference Include="StaticSharp.MixinSourceGenerator" Version="0.1.0" />
+  <ItemGroup Condition="!$(UseDebugGeneratorOutput)">
+		<PackageReference Include="StaticSharp.MixinSourceGenerator" Version="0.1.1" />
 	</ItemGroup>
 
-	<ItemGroup Condition="$(UseDebugGeneratorOutput)">
-		<!--ProjectReference Include="..\MixinGenerator\MixinGenerator.csproj" /-->
-		<PackageReference Include="StaticSharp.MixinSourceGenerator" Version="0.1.0" />
-	</ItemGroup>
-    <ItemGroup>
+  <ItemGroup>
 		<PackageReference Include="StaticSharp.MixinSourceGenerator.Attributes" Version="0.1.0" />
-    </ItemGroup>	
+  </ItemGroup>	
 
 </Project>

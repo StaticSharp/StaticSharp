@@ -43,16 +43,12 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="!$(UseDebugGeneratorOutput)">
-
-    <!--ProjectReference Include="..\MixinGenerator\MixinGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" /-->
-		<PackageReference Include="StaticSharp.MixinSourceGenerator" Version="0.1.0" />
-
-    <!--ProjectReference Include="..\StaticSharpSourceGenerator\StaticSharpSourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" /-->
+		<PackageReference Include="StaticSharp.MixinSourceGenerator" Version="0.1.1" />
     <PackageReference Include="StaticSharp.StaticSharpSourceGenerator" Version="0.1.0" />
 	</ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="StaticSharp.MixinSourceGenerator" Version="0.1.0" />
+        <PackageReference Include="StaticSharp.MixinSourceGenerator.Attributes" Version="0.1.0" />
     </ItemGroup>
 
     <ItemGroup>
