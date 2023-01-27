@@ -27,9 +27,10 @@
 
 	</ItemGroup>-->
 
-	<ItemGroup>
-    <ProjectReference Include="..\StaticSharpServer\StaticSharpSever.csproj" />
-		<ProjectReference Include="..\StaticSharp\StaticSharp.csproj" />
+  <ItemGroup>
+    <!--ProjectReference Include="..\StaticSharpServer\StaticSharpSever.csproj" /-->
+      <ProjectReference Include="..\StaticSharp\StaticSharp.csproj" />
+          <!--PackageReference Include="StaticSharp.Core" Version="0.1.0" /-->
 	</ItemGroup>
 
 

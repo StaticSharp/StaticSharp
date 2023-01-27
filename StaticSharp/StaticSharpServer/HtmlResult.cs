@@ -1,5 +1,8 @@
-﻿using System.Net.Mime;
+﻿using Microsoft.AspNetCore.Http;
+using System;
+using System.Net.Mime;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace StaticSharp.Gears {
 

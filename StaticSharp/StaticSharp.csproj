@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net7</TargetFramework>
-		<!--<ImplicitUsings>enable</ImplicitUsings>-->
+    <ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<!--LangVersion>preview</LangVersion-->
 		
@@ -13,10 +13,27 @@
 		<WarningsAsErrors>CS0108</WarningsAsErrors><!--use the new keyword-->
 	</PropertyGroup>
 
+    <PropertyGroup>
+        <PackageId>StaticSharp.Core</PackageId>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <!-- TODO: Do we really need sourcelink for generator?-->
+        <DebugType>embedded</DebugType>
+        <PackageVersion>0.1.0</PackageVersion>
+    </PropertyGroup>
 
-	
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
 
 
+    <ItemGroup>
+        <None Include="..\README.md" Pack="true" PackagePath="\"/>
+        <None Include="..\LICENSE" Pack="true" PackagePath="\"/>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+    </ItemGroup>
 
 	<ItemGroup>
 	  <Compile Remove="Components\**" />
@@ -95,11 +112,15 @@
 	</ItemGroup>
 
   <ItemGroup Condition="!$(UseDebugGeneratorOutput)">
-		<PackageReference Include="StaticSharp.MixinSourceGenerator" Version="0.1.1" />
+		<PackageReference Include="StaticSharp.MixinSourceGenerator" Version="0.1.1" PrivateAssets="All" />
 	</ItemGroup>
 
   <ItemGroup>
 		<PackageReference Include="StaticSharp.MixinSourceGenerator.Attributes" Version="0.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="StaticSharpServer\" />
   </ItemGroup>	
 
 </Project>
