@@ -1,0 +1,45 @@
+name: publish to nuget
+on:
+  push:
+    branches:
+      - main # Default release branch
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    name: Update NuGet package
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v1
+
+      - name: Setup .NET Core @ Latest
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+
+      - name: Version
+        run: |
+          export package_version="0.1.$((${{github.run_number}}))"
+          echo "Package Version = $package_version"
+          echo "package_version=$package_version" >> $GITHUB_ENV
+
+      
+      - name: Pack StaticSharp.Core
+        run: |
+          dotnet pack ./StaticSharp/StaticSharp.csproj \
+          -c Release \
+          -p:PackageVersion=${{env.package_version}} \
+          -o _out \
+          -p:ContinuousIntegrationBuild=true \
+          -p:PublishRepositoryUrl=true \
+          -p:EmbedUntrackedSources=true \
+          -p:DebugType=embedded
+       
+      - name: Publish StaticSharp.Core
+        run: |
+          dotnet nuget push \
+          ./_out/StaticSharp.Core.${{env.package_version}}.nupkg \
+          -k ${{secrets.NUGET_KEY}} \
+          -s https://api.nuget.org/v3/index.json
+        
