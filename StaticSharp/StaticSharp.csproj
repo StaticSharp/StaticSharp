@@ -51,6 +51,7 @@
 
 	<ItemGroup>
 		<EmbeddedResource Include="**\*.js" />
+    <EmbeddedResource Include="**\*.css" />
 	</ItemGroup>
 
 
