@@ -22,6 +22,7 @@
         <!-- TODO: Do we really need sourcelink for generator?-->
         <DebugType>embedded</DebugType>
         <PackageVersion>0.1.0</PackageVersion>
+        <PackageIcon>images\icon.png</PackageIcon>
     </PropertyGroup>
 
     <ItemGroup>
@@ -33,6 +34,7 @@
         <None Include="..\README.md" Pack="true" PackagePath="\"/>
         <None Include="..\LICENSE" Pack="true" PackagePath="\"/>
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+        <None Include=".\icon.png" Pack="true" Visible="false" PackagePath="images\icon.png" />
     </ItemGroup>
 
 	<ItemGroup>
