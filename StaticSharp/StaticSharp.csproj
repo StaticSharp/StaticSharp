@@ -34,7 +34,7 @@
         <None Include="..\README.md" Pack="true" PackagePath="\"/>
         <None Include="..\LICENSE" Pack="true" PackagePath="\"/>
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-        <None Include=".\icon.png" Pack="true" Visible="false" PackagePath="images\icon.png" />
+        <None Include=".\Core.png" Pack="true" Visible="false" PackagePath="images\icon.png" />
     </ItemGroup>
 
 	<ItemGroup>
