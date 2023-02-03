@@ -69,7 +69,7 @@ namespace StaticSharpDemo.Root {
         }
 
         public static Block Separator() {
-            return new Block {
+            return new Block {                
                 MarginsVertical = 75,
                 Height = new(x => 1 / Js.Window.DevicePixelRatio),
                 BackgroundColor = new(e => e.ParentBlock.HierarchyForegroundColor),
@@ -107,6 +107,32 @@ namespace StaticSharpDemo.Root {
 
                 },*/
 
+            new MenuResponsive {
+                ["Vasia"] = "e=>e.Width",
+                Children = {
+
+                    /*MenuItem(Node.Components).Modify(x=>{
+                        //x.MarginsHorizontal = 50;
+                    }),*/
+                    MenuItem(Node.Components.ParagraphComponent),
+
+                    "First",
+                    "Second"
+
+
+                    /*new Block{ 
+                        Width = new(e=>e.Hover ? 40 : 20),
+                        Height = 20,
+                        BackgroundColor = Color.Violet
+                    },
+                    new Block{
+                        Width = 20,
+                        Height = 20,
+                        BackgroundColor = Color.Green
+                    }*/
+                }
+
+            },
 
             new Paragraph("STATIC SHARP").ToLandingMainHeader(),
             Description,
