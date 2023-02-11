@@ -73,11 +73,19 @@ Color.prototype.toString = function () {
 }
 
 
-
+/**
+ * @param {Color} a
+ * @param {Color} b
+ * @param {number} t
+ */
 Color.Lerp = function (a, b, t) {
     return a.Lerp(b,t)
 }
 
+/**
+ * @param {Color} targetColor
+ * @param {number} amount
+ */
 Color.prototype.Lerp = function (targetColor, amount) {
     var bk = (1 - amount);
     var a = First(this.a * bk + targetColor.a * amount, this.a, targetColor.a);
