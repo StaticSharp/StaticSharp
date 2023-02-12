@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace StaticSharp {
     namespace Gears {
 
-        public class Bindings<FinalJs> where FinalJs : new() {
+        public class Bindings<FinalJs> {
             public class Binding<T> : IVoidEnumerable {
 
                 private T? Value;
@@ -30,9 +30,11 @@ namespace StaticSharp {
                 }
                 public string CreateScriptExpression() {
                     if (Expression != null) {
-                        return new LambdaScriptifier(Expression,new object[] { new FinalJs()}).Eval();
+                        return Javascriptifier.ExpressionScriptifier.EvalLambdaExpression(Expression).ToString();
+                        //return new LambdaScriptifier(Expression,new object[] { new FinalJs()}).Eval();
                     }
-                    return CSValueToJSValueConverter.ObjectToJsValue(Value);
+                    return Javascriptifier.ValueStringifier.Stringify(Value);
+                    //return CSValueToJSValueConverter.ObjectToJsValue(Value);
                 }
             }
 
@@ -60,7 +62,7 @@ namespace StaticSharp {
 
 
         [RelatedScript("ReactiveUtils")]
-        [RelatedScript("Math")]
+        [RelatedScript("../../CrossplatformLibrary/Math/Math")]
         [RelatedScript("Constants")]
         [RelatedScript("Constructor")]
         [RelatedScript("Bindings")]

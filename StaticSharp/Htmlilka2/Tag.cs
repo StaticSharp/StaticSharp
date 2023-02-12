@@ -172,7 +172,7 @@ namespace StaticSharp.Html {
                 foreach (var item in style) {
                     string? stringValue;
                     if (item.Value is Color color) {
-                        stringValue = color.ToJsValue();// ColorTranslator.ToHtml(color);
+                        stringValue = color.ToJavascriptString();// ColorTranslator.ToHtml(color);
                     } else {
                         stringValue = item.Value.ToString();
                     }

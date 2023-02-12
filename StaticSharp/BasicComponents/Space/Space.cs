@@ -10,16 +10,16 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     namespace Js {
-        public class Space : Hierarchical {
-            public double Before => NotEvaluatableValue<double>();
-            public double Between => NotEvaluatableValue<double>();
-            public double After => NotEvaluatableValue<double>();
+        public interface Space : Hierarchical {
+            public double Before  { get; }
+            public double Between  { get; }
+            public double After  { get; }
         }
     }
 
 
     namespace Gears {
-        public class SpaceBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {
+        public class SpaceBindings<FinalJs> : HierarchicalBindings<FinalJs> {
             public Binding<double> Before { set { Apply(value); } }
             public Binding<double> Between { set { Apply(value); } }
             public Binding<double> After { set { Apply(value); } }

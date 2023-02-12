@@ -5,9 +5,8 @@ using System.Runtime.CompilerServices;
 namespace StaticSharp {
 
     namespace Js {
-        [Mix(typeof(SvgIcon))]
-        [Mix(typeof(Block))]
-        public partial class SvgIconBlock {
+
+        public interface SvgIconBlock: Block, SvgIcon {
         }
     }
 

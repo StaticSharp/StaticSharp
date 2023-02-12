@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     namespace Js {
-        public class Page : BaseModifier {
-            public double Width => NotEvaluatableValue<double>();
-            public double Height => NotEvaluatableValue<double>();
-            public double FontSize => NotEvaluatableValue<double>();
+        public interface Page : BaseModifier {
+            public double Width  { get; }
+            public double Height  { get; }
+            public double FontSize  { get; }
 
         }
     }
 
     namespace Gears {
-        public class PageBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
+        public class PageBindings<FinalJs> : BlockBindings<FinalJs> {
             //public Binding<double> FontSize { set { Apply(value); } }
 
         }

@@ -4,13 +4,13 @@ using StaticSharp.Html;
 namespace StaticSharp{
 
     namespace Js {
-        public class Inline : Hierarchical {
+        public interface Inline : Hierarchical {
 
         }
     }
 
     namespace Gears {
-        public class InlineBindings<FinalJs> : BaseModifierBindings<FinalJs> where FinalJs : new() {
+        public class InlineBindings<FinalJs> : BaseModifierBindings<FinalJs> {
         
         }
     }

@@ -1,14 +1,15 @@
+using Javascriptifier;
 using StaticSharp.Gears;
 using System;
 
 namespace StaticSharp;
 
-public partial struct Color : IConvertableToJsValue , IKeyProvider {
+public partial struct Color : Javascriptifier.IStringifiable, IKeyProvider {
     
 
-    public string Key => KeyUtils.Combine<Color>(ToJsValue());
+    public string Key => KeyUtils.Combine<Color>(ToJavascriptString());
 
-    public string ToJsValue() {
+    public string ToJavascriptString() {
 
         if (double.IsNaN(A))
             return $"new Color({R},{G},{B})";
@@ -75,17 +76,17 @@ public partial struct Color {
         return double.NaN;
     }
 
-    [ConvertToJs("Color.CplusC({0},{1})")]
+    [JavascriptMethodFormat("CplusC({0},{1})")]
     public static Color operator + (Color a, Color b) {
         return new Color(a.R + b.R, a.G + b.G, a.B + b.B, firstNotNaN(a.A+b.A, a.A, b.A));
     }
 
-    [ConvertToJs("Color.CplusN({0},{1})")]
+    [JavascriptMethodFormat("CplusN({0},{1})")]
     public static Color operator + (Color a, double b) {
         return new Color(a.R + b, a.G + b, a.B + b, a.A + b);
     }
 
-    [ConvertToJs("Color.CplusN({1},{0})")]
+    [JavascriptMethodFormat("CplusN({1},{0})")]
     public static Color operator + (double a, Color b) {
         return new Color(a + b.R, a + b.G, a + b.B, a + b.A);
     }
@@ -93,34 +94,34 @@ public partial struct Color {
 
 
 
-    [ConvertToJs("Color.CminusC({0},{1})")]
+    [JavascriptMethodFormat("CminusC({0},{1})")]
     public static Color operator -(Color a, Color b) {
         return new Color(a.R - b.R, a.G - b.G, a.B - b.B, firstNotNaN(a.A - b.A, a.A, b.A));
     }
 
-    [ConvertToJs("Color.CminusN({0},{1})")]
+    [JavascriptMethodFormat("CminusN({0},{1})")]
     public static Color operator -(Color a, double b) {
         return new Color(a.R - b, a.G - b, a.B - b, a.A - b);
     }
 
-    [ConvertToJs("Color.NminusC({0},{1})")]
+    [JavascriptMethodFormat("NminusC({0},{1})")]
     public static Color operator -(double a, Color b) {
         return new Color(a - b.R, a - b.G, a - b.B, a - b.A);
     }
 
 
 
-    [ConvertToJs("Color.CmulC({0},{1})")]
+    [JavascriptMethodFormat("CmulC({0},{1})")]
     public static Color operator *(Color a, Color b) {
         return new Color(a.R * b.R, a.G * b.G, a.B * b.B, firstNotNaN(a.A * b.A, a.A, b.A));
     }
 
-    [ConvertToJs("Color.CmulN({0},{1})")]
+    [JavascriptMethodFormat("CmulN({0},{1})")]
     public static Color operator *(Color a, double b) {
         return new Color(a.R * b, a.G * b, a.B * b, a.A * b);
     }
 
-    [ConvertToJs("Color.CmulN({1},{0})")]
+    [JavascriptMethodFormat("CmulN({1},{0})")]
     public static Color operator *(double a, Color b) {
         return new Color(a * b.R, a * b.G, a * b.B, a * b.A);
     }

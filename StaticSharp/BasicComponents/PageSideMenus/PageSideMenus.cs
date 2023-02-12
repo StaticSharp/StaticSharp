@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     namespace Js {
-        public class PageSideMenus : Page {
-            public double ContentWidth => NotEvaluatableValue<double>();
-            public bool BarsCollapsed => NotEvaluatableValue<bool>();
-            public double SideBarsIconsSize => NotEvaluatableValue<double>();
+        public interface PageSideMenus : Page {
+            public double ContentWidth  { get; }
+            public bool BarsCollapsed { get; }
+            public double SideBarsIconsSize  { get; }
 
         }
     }
 
     namespace Gears {
-        public class PageSideMenusBindings<FinalJs> : PageBindings<FinalJs> where FinalJs : new() {
+        public class PageSideMenusBindings<FinalJs> : PageBindings<FinalJs> {
             public Binding<double> ContentWidth { set { Apply(value); } }
             public Binding<double> SideBarsIconsSize { set { Apply(value); } }
         }
@@ -42,12 +42,12 @@ namespace StaticSharp {
         //public override Inlines Description => (base.Description != null) ? new Paragraph(base.Description) : null;
 
         public virtual Block? TopBar => new Paragraph(Title) {
-            Height = new(e=>Js.Math.Max(e.Root.As<Js.PageSideMenus>().SideBarsIconsSize, e.InternalHeight)),
+            Height = new(e=>Js.Math.Max(((Js.PageSideMenus)e.Root).SideBarsIconsSize, e.InternalHeight)),
             //["Height"] = "() => Min(element.Root.SideBarsIconsSize,element.InternalHeight)",
             TextAlignmentHorizontal = TextAlignmentHorizontal.Center,
             MarginsVertical = 0,
             Weight = FontWeight.ExtraLight,
-            FontSize = new(e => e.Root.As<Js.PageSideMenus>().SideBarsIconsSize),
+            FontSize = new(e => ((Js.PageSideMenus)e.Root).SideBarsIconsSize),
         };
 
         public override Block? MainVisual => null;

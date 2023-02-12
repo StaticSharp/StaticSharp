@@ -12,43 +12,48 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     namespace Js {
-        public class Block : BaseModifier {
-            public double X => NotEvaluatableValue<double>();
-            public double Y => NotEvaluatableValue<double>();
-            public double Width => NotEvaluatableValue<double>();
-            public double Height => NotEvaluatableValue<double>();
-            public double InternalWidth => NotEvaluatableValue<double>();
-            public double InternalHeight => NotEvaluatableValue<double>();
+        public interface Block : BaseModifier {
+            public new Block Parent { get; }
+            public double X { get; }
+            public double Y { get; }
+            public double Width { get; }
+            public double Height { get; }
+            public double InternalWidth { get; }
+            public double InternalHeight { get; }
 
 
-            public double LayoutX => NotEvaluatableValue<double>();
-            public double LayoutY => NotEvaluatableValue<double>();
-            public double LayoutWidth => NotEvaluatableValue<double>();
-            public double LayoutHeight => NotEvaluatableValue<double>();
+            public double LayoutX { get; }
+            public double LayoutY  { get; }
+            public double LayoutWidth  { get; }
+            public double LayoutHeight  { get; }
 
-            public double MarginLeft => NotEvaluatableValue<double>();
-            public double MarginRight => NotEvaluatableValue<double>();
-            public double MarginTop => NotEvaluatableValue<double>();
-            public double MarginBottom => NotEvaluatableValue<double>();
+            public double MarginLeft  { get; }
+            public double MarginRight  { get; }
+            public double MarginTop  { get; }
+            public double MarginBottom  { get; }
 
-            public double PaddingLeft => NotEvaluatableValue<double>();
-            public double PaddingRight => NotEvaluatableValue<double>();
-            public double PaddingTop => NotEvaluatableValue<double>();
-            public double PaddingBottom => NotEvaluatableValue<double>();
+            public double PaddingLeft  { get; }
+            public double PaddingRight  { get; }
+            public double PaddingTop  { get; }
+            public double PaddingBottom  { get; }
 
-            public double FontSize => NotEvaluatableValue<double>();
-            public int Depth => NotEvaluatableValue<int>();
+            public double FontSize  { get; }
+            public int Depth { get; }
 
-            public bool ClipByParent => NotEvaluatableValue<bool>();
+            public bool ClipByParent { get; }
 
-            
+
+            public Block FirstChild { get; }
+
+            public Block NextSibling { get; }
+
         }
     }
 
 
 
     namespace Gears {
-        public class BlockBindings<FinalJs> : BaseModifierBindings<FinalJs> where FinalJs : new() {
+        public class BlockBindings<FinalJs> : BaseModifierBindings<FinalJs> {
             public Binding<double> X { set { Apply(value); } }
             public Binding<double> Y { set { Apply(value); } }
             public Binding<double> Width { set { Apply(value); } }
@@ -107,11 +112,11 @@ namespace StaticSharp {
     public static partial class Static {
 
         public static T CenterHorizontally<T>(this T _this) where T : Block {
-            _this.X = new(e => 0.5 * (e.ParentBlock.Width - e.Width));
+            _this.X = new(e => 0.5 * (e.Parent.Width - e.Width));
             return _this;
         }
         public static T CenterVertically<T>(this T _this) where T : Block {
-            _this.Y = new(e => 0.5 * (e.ParentBlock.Height - e.Height));
+            _this.Y = new(e => 0.5 * (e.Parent.Height - e.Height));
             return _this;
         }
         public static T Center<T>(this T _this) where T : Block {
@@ -120,19 +125,19 @@ namespace StaticSharp {
 
         public static T FillWidth<T>(this T _this) where T : Block {
             _this.X = new(e => Js.Math.First(e.MarginLeft,0));
-            _this.Width = new(e => Js.Math.Sum(e.ParentBlock.Width, -e.MarginLeft, -e.MarginRight) );
+            _this.Width = new(e => Js.Math.Sum(e.Parent.Width, -e.MarginLeft, -e.MarginRight) );
             return _this;
         }
 
         public static T FillHeight<T>(this T _this) where T : Block {
             _this.Y = new(e => Js.Math.First(e.MarginTop, 0));
-            _this.Height = new(e => Js.Math.Sum(e.ParentBlock.Height, -e.MarginTop, -e.MarginLeft));
+            _this.Height = new(e => Js.Math.Sum(e.Parent.Height, -e.MarginTop, -e.MarginLeft));
             return _this;
         }
 
         public static T InheritHorizontalPaddings<T>(this T _this) where T : Block {
-            _this.PaddingLeft = new(e => e.ParentBlock.PaddingLeft);
-            _this.PaddingRight = new(e => e.ParentBlock.PaddingRight);
+            _this.PaddingLeft = new(e => e.Parent.PaddingLeft);
+            _this.PaddingRight = new(e => e.Parent.PaddingRight);
             return _this;
         }
 

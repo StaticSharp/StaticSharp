@@ -15,30 +15,30 @@ namespace StaticSharp {
 
 
     namespace Js {
-        public class Video : Block {
-            public double Aspect => NotEvaluatableValue<double>();
-            public bool Play => NotEvaluatableValue<bool>();
-            public bool PlayActual => NotEvaluatableValue<bool>();
+        public interface Video : Block {
+            public double Aspect  { get; }
+            public bool Play { get; }
+            public bool PlayActual { get; }
 
-            public double Position => NotEvaluatableValue<double>();
-            public double PositionActual => NotEvaluatableValue<double>();
+            public double Position  { get; }
+            public double PositionActual  { get; }
 
-            public bool Mute => NotEvaluatableValue<bool>();
-            public bool MuteActual => NotEvaluatableValue<bool>();
+            public bool Mute { get; }
+            public bool MuteActual { get; }
 
-            public double Volume => NotEvaluatableValue<double>();
-            public double VolumeActual => NotEvaluatableValue<double>();
+            public double Volume  { get; }
+            public double VolumeActual  { get; }
 
 
-            public bool PreferPlatformPlayer => NotEvaluatableValue<bool>();
-            public bool Controls => NotEvaluatableValue<bool>();
-            public bool Loop => NotEvaluatableValue<bool>();
+            public bool PreferPlatformPlayer { get; }
+            public bool Controls { get; }
+            public bool Loop { get; }
         }
     }
 
 
     namespace Gears {
-        public class VideoBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
+        public class VideoBindings<FinalJs> : BlockBindings<FinalJs> {
             public Binding<bool> Play { set { Apply(value); } }
             public Binding<double> Position { set { Apply(value); } }
             public Binding<bool> Mute { set { Apply(value); } }

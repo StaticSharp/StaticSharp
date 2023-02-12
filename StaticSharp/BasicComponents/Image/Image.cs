@@ -14,14 +14,14 @@ namespace StaticSharp {
 
 
     namespace Js {
-        public class Image : AspectBlock {
-            //public double Aspect => NotEvaluatableValue<double>();
+        public interface Image : AspectBlock {
+            //public double Aspect  { get; }
         }
     }
 
 
     namespace Gears {
-        public class ImageBindings<FinalJs> : AspectBlockBindings<FinalJs> where FinalJs : new() {
+        public class ImageBindings<FinalJs> : AspectBlockBindings<FinalJs> {
             //public Binding<double> Aspect { set { Apply(value); } }
         }
     }

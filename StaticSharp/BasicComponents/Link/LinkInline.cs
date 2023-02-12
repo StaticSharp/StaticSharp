@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    namespace Js {
+    /*namespace Js {
         [Mix(typeof(Link))]
         [Mix(typeof(Inline))]
         public partial class LinkInline {
         }
-    }
+    }*/
 
 
     /*[Mix(typeof(LinkBindings<Js.LinkInline>))]

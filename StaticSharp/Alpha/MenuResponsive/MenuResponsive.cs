@@ -9,19 +9,19 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     namespace Js {
-        public class MenuResponsive : Block {
+        public interface MenuResponsive : Block {
             /*public Block First => NotEvaluatableObject<Block>();
             public Block Second => NotEvaluatableObject<Block>();
-            public bool Flipped => NotEvaluatableValue<bool>();
+            public bool Flipped { get; }
 
-            public bool RightToLeft => NotEvaluatableValue<bool>();
-            public bool BottomToTop => NotEvaluatableValue<bool>();*/
+            public bool RightToLeft { get; }
+            public bool BottomToTop { get; }*/
         }
     }
 
 
     namespace Gears {
-        public class MenuResponsiveBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
+        public class MenuResponsiveBindings<FinalJs> : BlockBindings<FinalJs>  {
             public Binding<bool> Flipped { set { Apply(value); } }
             public Binding<bool> RightToLeft { set { Apply(value); } }
             public Binding<bool> BottomToTop { set { Apply(value); } }

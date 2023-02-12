@@ -10,17 +10,17 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     namespace Js {
-        public class Slider : Block {
-            public double Min => NotEvaluatableValue<double>();
-            public double Max => NotEvaluatableValue<double>();
-            public double Step => NotEvaluatableValue<double>();
-            public double Value => NotEvaluatableValue<double>();
-            public double ValueActual => NotEvaluatableValue<double>();
+        public interface Slider : Block {
+            public double Min  { get; }
+            public double Max  { get; }
+            public double Step  { get; }
+            public double Value  { get; }
+            public double ValueActual  { get; }
         }
     }
 
     namespace Gears {
-        public class SliderBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
+        public class SliderBindings<FinalJs> : BlockBindings<FinalJs> {
             public Binding<double> Min { set { Apply(value); } }
             public Binding<double> Max { set { Apply(value); } }
             public Binding<double> Step { set { Apply(value); } }

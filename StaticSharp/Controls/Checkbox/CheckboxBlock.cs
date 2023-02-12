@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     namespace Js {
-        [Mix(typeof(Checkbox))]
-        [Mix(typeof(Block))]
-        public partial class CheckboxBlock {
+        public interface CheckboxBlock: Checkbox, Block {
         }
     }
 

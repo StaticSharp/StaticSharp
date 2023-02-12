@@ -16,7 +16,7 @@ namespace StaticSharp {
                 PaddingTop = 0.1,
                 PaddingBottom = 0.25,
                 Radius = 3,
-                BackgroundColor = new(e => Color.Lerp(e.ParentBlock.HierarchyBackgroundColor, e.ParentBlock.HierarchyForegroundColor, codeBackgroundIntensity)),
+                BackgroundColor = new(e => Color.Lerp(e.Parent.HierarchyBackgroundColor, e.Parent.HierarchyForegroundColor, codeBackgroundIntensity)),
                 Weight = FontWeight.Regular,
                 FontFamilies = { codeFontFamily },
                 Children = {
@@ -29,7 +29,7 @@ namespace StaticSharp {
             return new ScrollLayout(callerLineNumber, callerFilePath) {
                 Height = new(e => Js.Math.Min(e.InternalHeight, e.Root.Height * 0.8)),
                 Radius = 8,
-                BackgroundColor = new(e => Color.Lerp(e.ParentBlock.HierarchyBackgroundColor, e.ParentBlock.HierarchyForegroundColor, codeBackgroundIntensity)),
+                BackgroundColor = new(e => Color.Lerp(e.Parent.HierarchyBackgroundColor, e.Parent.HierarchyForegroundColor, codeBackgroundIntensity)),
                 Paddings = 12,
                 Content = new Paragraph(
                         inlines, callerLineNumber, callerFilePath

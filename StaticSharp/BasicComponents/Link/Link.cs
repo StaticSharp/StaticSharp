@@ -7,12 +7,12 @@ namespace StaticSharp {
     namespace Js {
         public class Link {
             //public string HRef => NotEvaluatableValue<string>();
-            public bool NewTab => NotEvaluatableValue<bool>();
+            public bool NewTab { get; }
         }
     }
 
     namespace Gears {
-        public class LinkBindings<FinalJs> : Bindings<FinalJs> where FinalJs : new() {
+        public class LinkBindings<FinalJs> : Bindings<FinalJs> {
             //public Binding<string> HRef { set { Apply(value); } }
             public Binding<bool> NewTab { set { Apply(value); } }
         }

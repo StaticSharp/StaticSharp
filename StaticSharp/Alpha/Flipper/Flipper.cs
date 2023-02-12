@@ -9,19 +9,19 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     namespace Js {
-        public class Flipper : Block {
-            public Block First => NotEvaluatableObject<Block>();
-            public Block Second => NotEvaluatableObject<Block>();
-            public bool Flipped => NotEvaluatableValue<bool>();
+        public interface Flipper : Block {
+            public Block First { get; }
+            public Block Second { get; }
+            public bool Flipped { get; }
 
-            public bool RightToLeft => NotEvaluatableValue<bool>();
-            public bool BottomToTop => NotEvaluatableValue<bool>();
+            public bool RightToLeft { get; }
+            public bool BottomToTop { get; }
         }
     }
 
 
     namespace Gears {
-        public class FlipperBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
+        public class FlipperBindings<FinalJs> : BlockBindings<FinalJs> {
             public Binding<bool> Flipped { set { Apply(value); } }
             public Binding<bool> RightToLeft { set { Apply(value); } }
             public Binding<bool> BottomToTop { set { Apply(value); } }

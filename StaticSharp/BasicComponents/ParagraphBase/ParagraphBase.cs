@@ -16,14 +16,14 @@ namespace StaticSharp {
 
 
     namespace Js {
-        public class Paragraph : Block {
-            public TextAlignmentHorizontal TextAlignmentHorizontal => NotEvaluatableValue<TextAlignmentHorizontal>();
+        public interface Paragraph : Block {
+            public TextAlignmentHorizontal TextAlignmentHorizontal { get; }
 
         }
     }
 
     namespace Gears {
-        public class ParagraphBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
+        public class ParagraphBindings<FinalJs> : BlockBindings<FinalJs> {
             public Binding<TextAlignmentHorizontal> TextAlignmentHorizontal { set { Apply(value); } }
         }
     }

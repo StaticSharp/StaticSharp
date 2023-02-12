@@ -15,12 +15,12 @@ namespace StaticSharp {
 
 
 
-    namespace Js {
+    /*namespace Js {
         [Mix(typeof(Js.Link))]
         [Mix(typeof(Block))]
         public partial class LinkBlock {
         }
-    }
+    }*/
 
     /*[Mix(typeof(LinkBindings<Js.LinkBlock>))]
     [Mix(typeof(BlockBindings<Js.LinkBlock>))]

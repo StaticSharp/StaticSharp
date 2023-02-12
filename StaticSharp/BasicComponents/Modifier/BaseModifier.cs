@@ -11,31 +11,31 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     namespace Js {
-        public class BaseModifier : Hierarchical {
+        public interface BaseModifier : Hierarchical {
 
-            public Color BackgroundColor => NotEvaluatableValue<Color>();
-            public Color HierarchyBackgroundColor => NotEvaluatableValue<Color>();
-            public Color ForegroundColor => NotEvaluatableValue<Color>();
-            public Color HierarchyForegroundColor => NotEvaluatableValue<Color>();
+            public new BaseModifier Parent { get; }
+            public Color BackgroundColor { get; }
+            public Color HierarchyBackgroundColor { get; }
+            public Color ForegroundColor { get; }
+            public Color HierarchyForegroundColor { get; }
 
 
+            public bool Hover { get; }
+            public bool Selectable { get; }
 
-            public bool Hover => NotEvaluatableValue<bool>();
-            public bool Selectable => NotEvaluatableValue<bool>();
+            public double Visibility { get; }
 
-            public double Visibility => NotEvaluatableValue<double>();
-
-            public double Radius => NotEvaluatableValue<double>();
-            public double RadiusTopLeft => NotEvaluatableValue<double>();
-            public double RadiusTopRight => NotEvaluatableValue<double>();
-            public double RadiusBottomLeft => NotEvaluatableValue<double>();
-            public double RadiusBottomRight => NotEvaluatableValue<double>();
+            public double Radius { get; }
+            public double RadiusTopLeft { get; }
+            public double RadiusTopRight { get; }
+            public double RadiusBottomLeft { get; }
+            public double RadiusBottomRight { get; }
 
         }
     }
 
     namespace Gears {
-        public class BaseModifierBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {
+        public class BaseModifierBindings<FinalJs> : HierarchicalBindings<FinalJs> {
             public Binding<Color> BackgroundColor { set { Apply(value); } }
             public Binding<Color> ForegroundColor { set { Apply(value); } }
             public Binding<Color> TextDecorationColor { set { Apply(value); } }

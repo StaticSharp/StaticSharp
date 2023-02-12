@@ -9,17 +9,17 @@ namespace StaticSharp {
 
 
     namespace Js {
-        public class ScrollLayout : Block {
-            public Block Content => NotEvaluatableObject<Block>();
-            public double ScrollX => NotEvaluatableValue<double>();
-            public double ScrollY => NotEvaluatableValue<double>();
-            public double ScrollXActual => NotEvaluatableValue<double>();
-            public double ScrollYActual => NotEvaluatableValue<double>();
+        public interface ScrollLayout : Block {
+            public Block Content { get; }
+            public double ScrollX  { get; }
+            public double ScrollY  { get; }
+            public double ScrollXActual  { get; }
+            public double ScrollYActual  { get; }
         }
     }
 
     namespace Gears {
-        public class ScrollLayoutBindings<FinalJs> : BlockBindings<FinalJs> where FinalJs : new() {
+        public class ScrollLayoutBindings<FinalJs> : BlockBindings<FinalJs> {
             public Binding<double> ScrollX { set { Apply(value); } }
             public Binding<double> ScrollY { set { Apply(value); } }
         }

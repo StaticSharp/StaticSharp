@@ -6,15 +6,13 @@ using System.Runtime.CompilerServices;
 namespace StaticSharp {
 
     namespace Js {
-        [Mix(typeof(SvgIcon))]
-        [Mix(typeof(Block))]
-        public partial class SvgIconInline: SvgIcon {
-            public double BaselineOffset => NotEvaluatableValue<double>(); 
+        public interface SvgIconInline: Block, SvgIcon {
+            public double BaselineOffset  { get; } 
         }
     }
 
     namespace Gears {
-        public class SvgIconInlineBindings<FinalJs> : SvgIconBindings<FinalJs> where FinalJs : new() {
+        public class SvgIconInlineBindings<FinalJs> : SvgIconBindings<FinalJs> {
             public Binding<double> BaselineOffset { set { Apply(value); } }
         }
     }

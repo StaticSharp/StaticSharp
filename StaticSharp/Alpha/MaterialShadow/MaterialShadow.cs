@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     namespace Js {
-        public class MaterialShadow : Block {
-            public double Elevation => NotEvaluatableValue<double>();
+        public interface MaterialShadow : Block {
+            public double Elevation  { get; }
         }
     }
 
 
     namespace Gears {
-        public class MaterialShadowBindings<FinalJs> : HierarchicalBindings<FinalJs> where FinalJs : new() {
+        public class MaterialShadowBindings<FinalJs> : HierarchicalBindings<FinalJs>  {
             public Binding<double> Elevation { set { Apply(value); } }
         }
     }

@@ -1,4 +1,5 @@
-﻿using StaticSharp.Gears;
+﻿using StaticSharp;
+using StaticSharp.Gears;
 using StaticSharp.Html;
 using System;
 using System.Collections.Generic;
@@ -6,38 +7,45 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
+
     namespace Js {
-        public class Hierarchical : Object {
-            public string Id => NotEvaluatableString();
+        public interface Object {
+            public Object this[string name] { get; }
+        }
 
-            public Page Root => NotEvaluatableObject<Page>();
-            public Hierarchical Parent => NotEvaluatableObject<Hierarchical>();
-            public Block ParentBlock => NotEvaluatableObject<Block>();
+    }
 
-            //public T GetParent<T>() where T : new() => NotEvaluatableObject<T>();
+    namespace Js {
+        public interface Hierarchical : Object {
+            public string Id { get; }
 
-            public Hierarchical Sibling(string id) => NotEvaluatableObject<Hierarchical>();
-            public T Sibling<T>(string id) where T :  new() => NotEvaluatableObject<T>();
+            public Page Root { get; }
+            public Hierarchical Parent { get; }
+            //public Block ParentBlock { get; }
 
 
-            
+            /*public Hierarchical Sibling(string id) => NotEvaluatableObject<Hierarchical>();
+            public T Sibling<T>(string id) where T : new() => NotEvaluatableObject<T>();
+
+
+
 
 
 
 
             public T Child<T>(int id) where T : new() => NotEvaluatableObject<T>();
             public Hierarchical Child(string id) => NotEvaluatableObject<Hierarchical>();
-            public T Child<T>(string id) where T :  new() => NotEvaluatableObject<T>();
+            public T Child<T>(string id) where T : new() => NotEvaluatableObject<T>();*/
 
         }
 
-        
+
 
     }
 
 
     namespace Gears {
-        public class HierarchicalBindings<FinalJs> : Bindings<FinalJs> where FinalJs : new() {
+        public class HierarchicalBindings<FinalJs> : Bindings<FinalJs> {
 
         }
     }
@@ -46,11 +54,11 @@ namespace StaticSharp {
 
     [ConstructorJs]
     public abstract class Hierarchical : Reactive {
-        protected virtual string TagName => CaseUtils.CamelToKebab(GetType().Name);        
-        
+        protected virtual string TagName => CaseUtils.CamelToKebab(GetType().Name);
+
         protected Hierarchical(Hierarchical other,
             int callerLineNumber,
-            string callerFilePath) : base(other, callerLineNumber, callerFilePath) {            
+            string callerFilePath) : base(other, callerLineNumber, callerFilePath) {
         }
         public Hierarchical(int callerLineNumber, string callerFilePath) : base(callerLineNumber, callerFilePath) { }
 
