@@ -70,7 +70,7 @@ namespace StaticSharpDemo.Root.Components.CodeComponent {
                     BackgroundColor= Color.White,
                     Children= {
                         new MaterialShadow {
-                            Elevation = new(e=>e.ParentBlock.Hover? 0.5*x : x)
+                            Elevation = new(e=>e.Parent.Hover? 0.5*x : x)
                         }
                     }
                 };

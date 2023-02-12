@@ -72,7 +72,7 @@ namespace StaticSharpDemo.Root {
             return new Block {                
                 MarginsVertical = 75,
                 Height = new(x => 1 / Js.Window.DevicePixelRatio),
-                BackgroundColor = new(e => e.ParentBlock.HierarchyForegroundColor),
+                BackgroundColor = new(e => e.Parent.HierarchyForegroundColor),
                 Visibility = 0.5
             }.FillWidth();
         }
@@ -176,8 +176,8 @@ namespace StaticSharpDemo.Root {
                     }
                 },
                 Second = new Image("StackoverflowKeyboard.svg"){
-                    X  = new(e=>e.Parent.As<Js.Flipper>().Flipped ? Js.Math.Max(0.5 * (e.ParentBlock.Width - e.Width), 0) : e.LayoutX),
-                    Width = new(e=>e.Parent.As<Js.Flipper>().Flipped ? Js.Math.Min(e.LayoutWidth, 400) : e.LayoutWidth),
+                    X  = new(e=>((Js.Flipper)e.Parent).Flipped ? Js.Math.Max(0.5 * (e.Parent.Width - e.Width), 0) : e.LayoutX),
+                    Width = new(e=>((Js.Flipper)e.Parent).Flipped ? Js.Math.Min(e.LayoutWidth, 400) : e.LayoutWidth),
                     Margins = 75,
                     Embed = Image.TEmbed.Image,
                     Fit = Fit.Inside

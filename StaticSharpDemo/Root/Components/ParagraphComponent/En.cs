@@ -98,8 +98,8 @@
                 PaddingRight = new(e=>Js.Math.Max(e.ParentBlock.PaddingRight, 20)),
                 Resize to see difference with previous
                 """){
-                PaddingLeft = new(e=>Js.Math.Max(e.ParentBlock.PaddingLeft, 10)),
-                PaddingRight = new(e=>Js.Math.Max(e.ParentBlock.PaddingRight, 10)),
+                PaddingLeft = new(e=>Js.Math.Max(e.Parent.PaddingLeft, 10)),
+                PaddingRight = new(e=>Js.Math.Max(e.Parent.PaddingRight, 10)),
                 BackgroundColor = Color.BlueViolet,
             }.FillWidth()
 

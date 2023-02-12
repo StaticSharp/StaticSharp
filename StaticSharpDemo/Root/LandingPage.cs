@@ -65,8 +65,8 @@ namespace StaticSharpDemo.Root {
                 ScrollY = new(e=>Js.Storage.Restore("MainScroll", () => e.ScrollYActual)),
                 //FontSize = new(e =>Js.Math.First( Js.Storage.Restore("FontSize", () => 10)),
                 Content = new Column{
-                    Width = new(e=>e.ParentBlock.Width),
-                    PaddingsHorizontal = new(e=>Js.Math.Max(e.ParentBlock.Width-ColumnWidth , 0)/2),
+                    Width = new(e=>e.Parent.Width),
+                    PaddingsHorizontal = new(e=>Js.Math.Max(e.Parent.Width-ColumnWidth , 0)/2),
                     Children = {
                         Menu,
                         Content
