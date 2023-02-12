@@ -1,5 +1,6 @@
 ﻿
 
+using NUglify;
 using StaticSharp.Gears;
 
 using StaticSharp.Tree;
@@ -76,6 +77,12 @@ namespace StaticSharp {
         public Html.Tag GenerateScript() {
             var assets = Scripts.Select(x => x.Value.Result);// await Task.WhenAll(Scripts.Select(x => x.Value.CreateOrGetCached()));
             var content = string.Join('\n', assets.Select(x=>x.Text));
+
+            //if (!DeveloperMode) {
+                var uglifyResult = Uglify.Js(content);
+                content = uglifyResult.Code;
+            //}
+
             return new Html.Tag("script") {
                 new Html.PureHtmlNode(content)
             };
@@ -90,6 +97,12 @@ namespace StaticSharp {
         public Html.Tag GenerateStyle() {
             var assets = Styles.Select(x => x.Value.Result);// await Task.WhenAll(Styles.Select(x => x.Value.CreateOrGetCached()));
             var content = string.Join('\n', assets.Select(x => x.Text));
+
+            //if (!DeveloperMode) {
+                var uglifyResult = Uglify.Css(content);
+                content = uglifyResult.Code;
+            //}
+
             return new Html.Tag("style") {
                 new Html.PureHtmlNode(content)
             };
