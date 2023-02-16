@@ -326,7 +326,8 @@ function Video(element) {
         element.appendChild(player)
         element.Positioner = player
 
-        player.src = sources[1].url
+        console.log(sources);
+        player.src = sources[/*1*/0].url
         player.muted = true
 
         player.setAttribute("playsinline", "true")

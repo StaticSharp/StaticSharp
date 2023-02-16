@@ -126,6 +126,10 @@
 
   <ItemGroup>
     <Folder Include="StaticSharpServer\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StaticSharp.VideoUtils\StaticSharp.VideoUtils.csproj" />
   </ItemGroup>	
 
 </Project>

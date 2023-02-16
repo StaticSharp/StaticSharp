@@ -20,7 +20,7 @@
                 new Video("T4TEdzSLyi0"){
                     Play = new (e=>((Js.Checkbox)e.Parent["VideoProperties"]["Play"]).ValueActual),
                     Mute = new (e=>((Js.Checkbox)e.Parent["VideoProperties"]["Mute"]).ValueActual),
-                    PreferPlatformPlayer = new (e=>((Js.Checkbox)e.Parent["VideoProperties"]["PreferPlatformPlayer"]).ValueActual),
+                    PreferPlatformPlayer = false,// new (e=>((Js.Checkbox)e.Parent["VideoProperties"]["PreferPlatformPlayer"]).ValueActual),
                     Controls = new (e=>((Js.Checkbox)e.Parent["VideoProperties"]["Controls"]).ValueActual),
                     Loop = new (e=>((Js.Checkbox)e.Parent["VideoProperties"]["Loop"]).ValueActual),
                     Volume = new (e=>((Js.Slider)e.Parent["VolumeSlider"]).ValueActual),

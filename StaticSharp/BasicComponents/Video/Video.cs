@@ -1,5 +1,6 @@
 ﻿using StaticSharp.Gears;
 using StaticSharp.Html;
+using StaticSharp.VideoUtils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -69,22 +70,47 @@ namespace StaticSharp {
         }
 
         protected override void ModifyHtml(Context context, Tag elementTag) {
-            
 
             var youtubeVideoId = YoutubeExplode.Videos.VideoId.TryParse(Identifier);
             if (youtubeVideoId != null) {
-
+#if false
                 var youtubeVideoManifest = new YoutubeVideoManifestGenome(youtubeVideoId).Result;
 
                 var item = youtubeVideoManifest.Items.MaxBy(x => x.Width)!;
+#else
+                //var videoDownloader = new VideoDownloader();
+                //var items = videoDownloader.GetVideoFormats($"https://www.youtube.com/watch?v={Identifier}").Result;
+
+                var items = new List<VideoFormat> {
+                    new VideoFormat
+                    {
+                        FormatCode = 18,
+                        VideoPageUrl = $"https://www.youtube.com/watch?v={Identifier}",
+                        Width = 640,
+                        Height = 360,
+                        Extension = "mp4",
+                        HasAudio = true,
+                        HasVideo= true
+                    }
+                };
+            var item = items.Where(_ => _.HasVideo && _.HasVideo).MaxBy(_ => _.Width);
+
+#endif
+
 
                 elementTag["data-youtube-id"] = youtubeVideoId;
                 elementTag["data-width"] = item.Width;
                 elementTag["data-height"] = item.Height;
 
                 var sources = new List<object>();
+
+#if false
                 foreach (var i in youtubeVideoManifest.Items) {
                     var iVideo = new YoutubeVideoGenome(i).Result;
+#else
+                foreach (var i in items) {
+                    var iVideo = new YoutubeDlVideoGenome(item.VideoPageUrl, item.FormatCode, item.Extension).Result;
+#endif
                     var iUrl = context.PathFromHostToCurrentPage.To(context.AddAsset(iVideo)).ToString();
 
                     sources.Add(new {
