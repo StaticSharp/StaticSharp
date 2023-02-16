@@ -106,15 +106,11 @@ namespace StaticSharp {
         public Block([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
 
 
-        protected void BeginChildren(Tag elementTag) {
-            elementTag.Add(CreateScript_SetCurrentSocket("FirstChild"));
-        }
-
         protected override void ModifyHtml(Context context, Tag elementTag) {
             
             var children = Children.ToArray();
             if (children.Length > 0) {
-                BeginChildren(elementTag);
+                elementTag.Add(CreateScript_SetCurrentSocket("FirstChild"));
                 elementTag.Add(Children.GenerateHtml(context));
             }
 

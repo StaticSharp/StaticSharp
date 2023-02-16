@@ -22,9 +22,9 @@ namespace StaticSharp {
 
     namespace Gears {
         public class MenuResponsiveBindings<FinalJs> : BlockBindings<FinalJs>  {
-            public Binding<bool> Flipped { set { Apply(value); } }
+            /*public Binding<bool> Flipped { set { Apply(value); } }
             public Binding<bool> RightToLeft { set { Apply(value); } }
-            public Binding<bool> BottomToTop { set { Apply(value); } }
+            public Binding<bool> BottomToTop { set { Apply(value); } }*/
         }
     }
 

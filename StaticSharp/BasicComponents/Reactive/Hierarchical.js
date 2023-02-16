@@ -60,8 +60,6 @@ function Hierarchical(element) {
 
         Parent: undefined,
 
-        //Place: undefined,
-
         /*AppendChildSocket: e => {
             if (!e.FirstChild) {
                 return element.Reactive.FirstChild
@@ -111,7 +109,7 @@ function Hierarchical(element) {
             for (let i of tergetChildren) {
                 element.appendChild(i)
             }
-            currentChildren = [...element.children]
+            //currentChildren = [...element.children]
             //console.log("after:", currentChildren, tergetChildren)
         }
         
