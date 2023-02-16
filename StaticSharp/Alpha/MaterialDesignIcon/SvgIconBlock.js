@@ -21,8 +21,14 @@ function SvgIconBlock(element) {
     }
 
 
+    element.HtmlNodesOrdered = new Enumerable(function* () {
+        yield element.content
+        yield* element.Children
+    })
+
+
     new Reaction(() => {
-        let content = element.children[0]
+        let content = element.content
         let w = element.Width - element.HorizontalPaddingSum
         let h = element.Height - element.VerticalPaddingSum
         if (w <= 0 || h <= 0) {

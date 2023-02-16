@@ -98,11 +98,13 @@ function PageSideMenus(element) {
 
         SideBarOpen: 0, //-1 left , 1 right
 
-        //LeftSideBar: () => element.LeftSideBar,
-        //LeftSideBarIcon: () => element.LeftSideBarIcon,
+        Content: undefined,
 
-        //RightSideBar: () => element.RightSideBar,
-        //RightSideBarIcon: () => element.RightSideBarIcon,
+        LeftSideBar: undefined,
+        LeftSideBarIcon: undefined,
+
+        RightSideBar: undefined,
+        RightSideBarIcon: undefined,
 
         TopBar: () => element.Content.Content.TopBar,
 

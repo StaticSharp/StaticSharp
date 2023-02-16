@@ -13,28 +13,25 @@ namespace StaticSharp {
 
     public class Blocks : IBlockCollector, IEnumerable<IBlock> {
 
-        private List<KeyValuePair<string?, IBlock>>? items;
+        private List<IBlock>? items;
         public Blocks() { }
         public Blocks(Blocks other){
             items = other.items;
         }
-
-        //public IEnumerable<KeyValuePair<string?, IBlock>> Items => items ?? Enumerable.Empty<KeyValuePair<string?, IBlock>>();
-
-
-        public void Add(string? propertyName, IBlock? value) {
+        public void Add(IBlock? value) {
             if (value != null) {
                 if (items == null)
                     items = new();
-                items.Add(new KeyValuePair<string?, IBlock>(propertyName, value));
+                items.Add(value);
             }            
         }
 
-        public virtual void GenerateHtml(Tag parent, Context context) {
+        public virtual IEnumerable<Tag> GenerateHtml(Context context) {
             if (items != null) {
                 foreach (var i in items) {
-                    var child = i.Value.GenerateHtml(context, new Role(true, i.Key));
-                    parent.Add(child);
+                    var child = i.GenerateHtml(context);
+                    yield return child;
+                    //parent.Add(child);
                 }
             }
         }
@@ -49,7 +46,7 @@ namespace StaticSharp {
 
         IEnumerator<IBlock> IEnumerable<IBlock>.GetEnumerator() {
             if (items != null)
-                return items.Select(x => x.Value).GetEnumerator();
+                return items.GetEnumerator();
             return Enumerable.Empty<IBlock>().GetEnumerator();
         }
 

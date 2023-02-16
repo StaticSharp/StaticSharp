@@ -7,7 +7,7 @@ namespace StaticSharp {
 
     namespace Gears {
         public interface IBlockCollector {
-            void Add(string? propertyName, IBlock? value);
+            void Add(IBlock? value);
         }
     }
 
@@ -15,29 +15,29 @@ namespace StaticSharp {
     public static class BlockCollectorStatic {
 
 
-        public static void Add<T>(this T collector, IEnumerable<KeyValuePair<string?, IBlock>>? values) where T : IBlockCollector {
+        /*public static void Add<T>(this T collector, IEnumerable<KeyValuePair<string?, IBlock>>? values) where T : IBlockCollector {
             if (values == null)
                 return;
             foreach (var i in values)
                 collector.Add(i.Key, i.Value);
-        }        
+        }*/        
 
         public static void Add<T>(this T collector, IEnumerable<IBlock?>? values) where T : IBlockCollector {
             if (values == null)
                 return;
             foreach (var i in values) {
-                collector.Add(null, i);
+                collector.Add(i);
             }
         }
 
         #region Block
         public static void Add<T>(this T collector, IBlock? value) where T : IBlockCollector {
-            collector.Add(null, value);
+            collector.Add(value);
         }
 
-        public static void Add<T>(this T collector, string name, IBlock? value) where T : IBlockCollector {
+        /*public static void Add<T>(this T collector, string name, IBlock? value) where T : IBlockCollector {
             collector.Add(name, value);         
-        }
+        }*/
 
         #endregion
 
@@ -51,7 +51,7 @@ namespace StaticSharp {
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0) where T : IBlockCollector { 
 
-            collector.Add(null, new Paragraph(inlines, callerLineNumber, callerFilePath));
+            collector.Add(new Paragraph(inlines, callerLineNumber, callerFilePath));
         }
 
         /*public static void Add<T>(
@@ -63,7 +63,7 @@ namespace StaticSharp {
 
             collector.Add(modifier, new Paragraph(inlines, callerLineNumber, callerFilePath));
         }*/
-        public static void Add<T>(
+        /*public static void Add<T>(
             this T collector,
             string name,
             Inlines inlines,
@@ -71,7 +71,7 @@ namespace StaticSharp {
             [CallerLineNumber] int callerLineNumber = 0) where T : IBlockCollector {
 
             collector.Add(name, new Paragraph(inlines, callerLineNumber, callerFilePath));
-        }
+        }*/
 
         #endregion
 
@@ -90,7 +90,7 @@ namespace StaticSharp {
             Inline inline,
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0) where T : IBlockCollector {
-            collector.Add(null, new Paragraph(inline, callerLineNumber, callerFilePath));
+            collector.Add(new Paragraph(inline, callerLineNumber, callerFilePath));
         }
 
 

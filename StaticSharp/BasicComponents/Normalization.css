@@ -9,7 +9,6 @@ html {
 }
 
 .js {
-    //display: none;
     visibility: hidden;
     position: absolute;
     overflow: hidden;
@@ -50,9 +49,7 @@ head {
     display: block;
     overflow-x: visible;
     overflow-y: visible;
-    //z-index: inherit;
     position: absolute;
-    //position: inherit;
     margin: 0;
     visibility: inherit;
     margin-block-start: 0;
@@ -67,22 +64,9 @@ head {
     text-align: inherit;
     box-sizing: border-box;
     word-break: keep-all;
-    //cursor: inherit;
-    //word-wrap: break-word;
-    //overflow: clip;
-    //overflow: hidden;
     white-space: inherit;
 }
 
-.js a * {
-    //text-decoration-line: underline;
-}
-
-
-
-    /** {
-        outline: 0.1px solid #f00 !important;
-    }*/
 
 
 

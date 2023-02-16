@@ -94,8 +94,8 @@
             }.FillWidth().InheritHorizontalPaddings(),
 
             new Paragraph("""
-                PaddingLeft = new(e=>Js.Math.Max(e.ParentBlock.PaddingLeft, 20)),
-                PaddingRight = new(e=>Js.Math.Max(e.ParentBlock.PaddingRight, 20)),
+                PaddingLeft = new(e=>Js.Math.Max(e.Parent.PaddingLeft, 20)),
+                PaddingRight = new(e=>Js.Math.Max(e.Parent.PaddingRight, 20)),
                 Resize to see difference with previous
                 """){
                 PaddingLeft = new(e=>Js.Math.Max(e.Parent.PaddingLeft, 10)),

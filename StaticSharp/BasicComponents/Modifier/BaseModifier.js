@@ -37,7 +37,16 @@ function BaseModifier(element) {
             else
                 return undefined
         },
-        HierarchyForegroundColor: () => element.ForegroundColor || element.Parent.HierarchyForegroundColor,
+        HierarchyForegroundColor: () => {
+            let result = element.ForegroundColor
+            if (result) return result
+            let parent = element.Parent
+            if (parent) {
+                result = parent.HierarchyForegroundColor
+                if (result) return result
+            }
+            return new Color(0)
+        },
 
         TextDecorationColor: () => {
             if (element.ForegroundColor != undefined)

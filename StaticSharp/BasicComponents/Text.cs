@@ -19,7 +19,7 @@ namespace StaticSharp {
             Formatting = formatting;
         }        
 
-        public Tag GenerateHtml(Context context, Role? role) {
+        public Tag GenerateHtml(Context context) {
             
             var chars = Value.ToPrintableChars();
             HashSet<string> families = new();

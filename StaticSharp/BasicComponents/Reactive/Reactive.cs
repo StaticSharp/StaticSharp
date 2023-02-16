@@ -54,7 +54,7 @@ namespace StaticSharp {
                     if (i != null) {
                         aggregator.Properties[i] = binding.CreateScriptExpression();
                     }
-                }                
+                }
             }
         }
 
@@ -71,11 +71,10 @@ namespace StaticSharp {
         public abstract class Reactive : CallerInfo {
             public Dictionary<string, string> Properties { get; } = new();
 
-
             public string this[string propertyName] {
-                get {
+                /*get {
                     return Properties[propertyName];
-                }
+                }*/
 
                 set {
                     Properties[propertyName] = value;
@@ -85,12 +84,12 @@ namespace StaticSharp {
 
             protected Reactive(Reactive other,
                 int callerLineNumber = 0,
-                string callerFilePath = "") : base(callerLineNumber, callerFilePath) {                
+                string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
                 Properties = new(other.Properties);
             }
 
             protected Reactive(int callerLineNumber, string callerFilePath) : base(callerLineNumber, callerFilePath) {
-                
+
             }
 
             //public abstract Task<Tag> GenerateHtmlAsync(Context context);
@@ -101,7 +100,7 @@ namespace StaticSharp {
                     var attributes = i.GetCustomAttributes<ConstructorJsAttribute>(false);
                     if (attributes.Any()) {
 
-                        return attributes.Select(x=> string.IsNullOrEmpty(x.ClassName)? i.Name: x.ClassName).ToArray();
+                        return attributes.Select(x => string.IsNullOrEmpty(x.ClassName) ? i.Name : x.ClassName).ToArray();
                     }
                 }
                 throw new Exception($"{nameof(ConstructorJsAttribute)} not found for {GetType().FullName}");
@@ -160,12 +159,32 @@ namespace StaticSharp {
                 };
             }
 
-            protected Tag Pop() {
+
+
+
+            protected Tag CreateScript(string code) {
                 return new Tag("script") {
-                    new PureHtmlNode("Pop()")
+                    new PureHtmlNode(code)
                 };
             }
 
+            protected Tag CreateScript_SetCurrentSocket(string name) {
+                return new Tag("script") {
+                    new PureHtmlNode($"SetCurrentSocket(\"{name}\")")
+                };
+            }
+
+            protected Tag CreateScript_AssignToParentProperty(string name) {
+                return new Tag("script") {
+                    new PureHtmlNode($"AssignToParentProperty(\"{name}\")")
+                };
+            }
+
+            protected Tag CreateScript_AssignPreviousTagToParentProperty(string name) {
+                return new Tag("script") {
+                    new PureHtmlNode($"AssignPreviousTagToParentProperty(\"{name}\")")
+                };
+            }
 
             protected virtual IEnumerable<KeyValuePair<string, string>> GetGeneratedBundings(Context context) {
                 return Enumerable.Empty<KeyValuePair<string, string>>();
@@ -174,5 +193,5 @@ namespace StaticSharp {
 
         }
     }
-    
+
 }

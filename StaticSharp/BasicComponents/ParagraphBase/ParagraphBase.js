@@ -2,6 +2,7 @@ function Paragraph(element) {
 
     Block(element)
 
+    CreateSocket(element, "FirstInline", element)
 
     element.Reactive = {
         Selectable: true,
@@ -25,7 +26,14 @@ function Paragraph(element) {
         MarginTop: () => (element.BackgroundColor != undefined) ? 0 : 8,
         MarginBottom: () => (element.BackgroundColor != undefined) ? 0 : 8,
 
+        
     }
+
+    element.HtmlNodesOrdered = new Enumerable(function* () {
+        yield element.inlineContainer
+        yield* element.Children
+    })
+
 
 
     new Reaction(() => {

@@ -69,12 +69,15 @@ function ScrollLayout(element) {
 
         ScrollBarThickness: 4,
         ScrollBarMargin: 2,
-        ShowScrollBars: () => !window.Touch
+        ShowScrollBars: () => !window.Touch,
+
+        //Content: undefined,
     }
+    CreateSocket(element, "Content", element)
+    CreateSocket(element, "VerticalThumb", element).setValue(Create(element, Thumb))
+    CreateSocket(element, "HorizontalThumb", element).setValue(Create(element, Thumb))
 
-    
-
-    let verticalThumb = Create(element, Thumb)
+    let verticalThumb = element.VerticalThumb
     verticalThumb.Reactive = {
         ThumbTravel: () => element.Height - 2 * element.ScrollBarMargin,
         ThumbPositionScale: () => verticalThumb.ThumbTravel / element.Content.InternalHeight,
@@ -86,7 +89,7 @@ function ScrollLayout(element) {
     }
     
 
-    let horizontalThumb = Create(element, Thumb)
+    let horizontalThumb = element.HorizontalThumb
     horizontalThumb.Reactive = {
         ThumbTravel: () => element.Width - 2 * element.ScrollBarMargin,
         ThumbPositionScale: () => horizontalThumb.ThumbTravel / element.Content.Width,
@@ -97,54 +100,69 @@ function ScrollLayout(element) {
         Height: () => element.ScrollBarThickness,        
     }
 
+
+    element.HtmlNodesOrdered = new Enumerable(function* () {
+        yield verticalThumb
+        yield horizontalThumb
+        yield element.scrollable
+        yield* element.Children
+    })
+
+
     SetupPointerDrag(verticalThumb, (x, y) => {
-        scrollable.scrollTop += y / verticalThumb.ThumbPositionScale
+        element.scrollable.scrollTop += y / verticalThumb.ThumbPositionScale
     })
 
     SetupPointerDrag(horizontalThumb, (x, y) => {
-        scrollable.scrollLeft += x / horizontalThumb.ThumbPositionScale
+        element.scrollable.scrollLeft += x / horizontalThumb.ThumbPositionScale
     })
 
 
-    let scrollable = document.createElement("scrollable")
-    element.appendChild(scrollable)
+    //let scrollable = document.createElement("scrollable")
+    //element.appendChild(scrollable)
 
-    scrollable.style.touchAction = "manipulation"
-    scrollable.style.overflow = "auto"
+    
 
 
     
     
     new Reaction(() => {
-        scrollable.style.left = ToCssSize(element.LeftOffset)
-        scrollable.style.top = ToCssSize(element.TopOffset)
-        scrollable.style.width = ToCssSize(element.ContentAreaWidth)
-        scrollable.style.height = ToCssSize(element.ContentAreaHeight)
+        element.scrollable.style.left = ToCssSize(element.LeftOffset)
+        element.scrollable.style.top = ToCssSize(element.TopOffset)
+        element.scrollable.style.width = ToCssSize(element.ContentAreaWidth)
+        element.scrollable.style.height = ToCssSize(element.ContentAreaHeight)
     })
 
 
-    scrollable.Events.Scroll = () => {
-        let d = Reaction.beginDeferred()
-        element.ScrollXActual = scrollable.scrollLeft
-        element.ScrollYActual = scrollable.scrollTop
-        d.end()
-    }
+    
 
 
     new Reaction(() => {
-        scrollable.appendChild(element.Content)
-        element.Content.LayoutWidth = () => Max(element.Content.InternalWidth, element.ContentAreaWidth)
-        element.Content.LayoutHeight = () => Max(element.Content.InternalHeight, element.ContentAreaHeight)
+        //scrollable.appendChild(element.Content)
+        
     })
 
     new Reaction(() => {
         window.requestAnimationFrame(() => {
-            scrollable.scrollTop = element.ScrollY
-            scrollable.scrollLeft = element.ScrollX
+            element.scrollable.scrollTop = element.ScrollY
+            element.scrollable.scrollLeft = element.ScrollX
         });
     })
 
+    element.AfterChildren = function () {
+        element.scrollable.style.touchAction = "manipulation"
+        element.scrollable.style.overflow = "auto"
 
+        element.scrollable.Events.Scroll = () => {
+            let d = Reaction.beginDeferred()
+            element.ScrollXActual = element.scrollable.scrollLeft
+            element.ScrollYActual = element.scrollable.scrollTop
+            d.end()
+        }
+
+        element.Content.LayoutWidth = () => Max(element.Content.InternalWidth, element.ContentAreaWidth)
+        element.Content.LayoutHeight = () => Max(element.Content.InternalHeight, element.ContentAreaHeight)
+    }
 
 
 }

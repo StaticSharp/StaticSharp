@@ -1,5 +1,6 @@
 ﻿using StaticSharp.Gears;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -10,11 +11,24 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace StaticSharp {
 
     [InterpolatedStringHandler]
-    public class Inlines : List<KeyValuePair<string?, IInline>> , IPlainTextProvider {
-        public Inlines() : base() { }
-        public Inlines(Inlines other) : base(other) { }
+    public class Inlines : IPlainTextProvider, IEnumerable<IInline> {
 
-        public IEnumerable<IInline> Values => this.Select(x => x.Value);
+
+        private List<IInline>? items;
+        public Inlines() { }
+        public Inlines(Inlines other) {
+            items = other.items;
+        }
+        public void Add(IInline? value) {
+            if (value != null) {
+                if (items == null)
+                    items = new();
+                items.Add(value);
+            }
+        }
+
+
+
         public Inlines(
             int literalLength,
             int formattedCount){
@@ -23,44 +37,30 @@ namespace StaticSharp {
         public static implicit operator Inlines(string text) => new Inlines { text };
 
         public void AppendLiteral(string value, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
-            Add(null, new Text(value, true, callerLineNumber, callerFilePath));
+            Add(new Text(value, true, callerLineNumber, callerFilePath));
         }
         public void Add(
             string text,
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerFilePath] string callerFilePath = "") {
 
-            Add(null, new Text(text, true, callerLineNumber, callerFilePath));
+            Add(new Text(text, true, callerLineNumber, callerFilePath));
         }
 
 
         public void AppendFormatted(IInline value) {
-            Add(null, value);
-        }
-        public void Add(IInline? value) {
-            if (value != null) {
-                Add(new KeyValuePair<string?, IInline>(null, value));
-            }
+            Add(value);
         }
 
 
-
-
-        public void AppendFormatted(ValueTuple<string, IInline> value) {
+        /*public void AppendFormatted(ValueTuple<string, IInline> value) {
             Add(value.Item1, value.Item2);
-        }
-        public void Add(string? propertyName, IInline? value) {
-            if (value != null) {
-                Add(new KeyValuePair<string?, IInline>(propertyName, value));
-            }
-        }
-
-
+        }*/
 
 
         public void AppendFormatted(Inlines values) {
             foreach (var value in values)
-                Add(value.Key, value.Value);            
+                Add(value);            
         }
         public void Add(Inlines? value) {
             if (value != null) AppendFormatted(value);
@@ -101,12 +101,22 @@ namespace StaticSharp {
         public string GetPlaneText(Context context) {
             var result = new StringBuilder();
             foreach (var i in this) {
-                result.Append(i.Value.GetPlaneText(context));                
+                result.Append(i.GetPlaneText(context));                
             }
             return result.ToString();
         }
 
 
+
+        IEnumerator<IInline> IEnumerable<IInline>.GetEnumerator() {
+            if (items != null)
+                return items.GetEnumerator();
+            return Enumerable.Empty<IInline>().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() {
+            return (this as IEnumerable<IInline>).GetEnumerator();
+        }
 
 
     }

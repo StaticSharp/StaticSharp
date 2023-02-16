@@ -44,12 +44,17 @@ namespace StaticSharp {
 
         protected override void ModifyHtml(Context context, Tag elementTag) {
 
-            var p = new Tag("p");
+
+
+            var p = new Tag("p") {
+                CreateScript_AssignToParentProperty("inlineContainer")
+            };
             foreach (var i in GetInlines()) {
-                var child = i.Value.GenerateHtml(context, new Role(true, i.Key));
+                var child = i.GenerateHtml(context);
                 p.Add(child);
             }
             p.Add("\n");
+            elementTag.Add(CreateScript_SetCurrentSocket("FirstInline"));
             elementTag.Add(p);
 
             base.ModifyHtml(context, elementTag);

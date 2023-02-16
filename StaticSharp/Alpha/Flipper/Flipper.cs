@@ -39,12 +39,15 @@ namespace StaticSharp {
         public Flipper([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
             : base(callerLineNumber, callerFilePath) { }
 
-        protected override void ModifyHtml(Context context, Tag elementTag) {  
+        protected override void ModifyHtml(Context context, Tag elementTag) {
+            elementTag.Add(CreateScript_SetCurrentSocket("First"));
             elementTag.Add(                
-                First.GenerateHtml(context,new Role(false,"First"))
+                First.GenerateHtml(context)
             );
+
+            elementTag.Add(CreateScript_SetCurrentSocket("Second"));
             elementTag.Add(
-                Second.GenerateHtml(context, new Role(false, "Second"))
+                Second.GenerateHtml(context)
             );
             base.ModifyHtml(context, elementTag);
         }

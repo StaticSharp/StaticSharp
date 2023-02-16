@@ -13,8 +13,6 @@ namespace StaticSharp.Alpha {
             }
             text ??= node.Representative.Title;
 
-
-
             return new Paragraph(text,callerLineNumber, callerFilePath) {
                 InternalLink = node,
                 Margins = 0,

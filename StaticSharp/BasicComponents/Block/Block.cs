@@ -13,7 +13,7 @@ namespace StaticSharp {
 
     namespace Js {
         public interface Block : BaseModifier {
-            public new Block Parent { get; }
+            
             public double X { get; }
             public double Y { get; }
             public double Width { get; }
@@ -43,9 +43,11 @@ namespace StaticSharp {
             public bool ClipByParent { get; }
 
 
-            public Block FirstChild { get; }
 
-            public Block NextSibling { get; }
+            public new Block Parent { get; }
+            public new Block FirstChild { get; }
+            public new Block NextSibling { get; }
+            public new Enumerable<Block> Children { get; }
 
         }
     }
@@ -102,9 +104,20 @@ namespace StaticSharp {
             Children = new(other.Children);
         }
         public Block([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
-        
+
+
+        protected void BeginChildren(Tag elementTag) {
+            elementTag.Add(CreateScript_SetCurrentSocket("FirstChild"));
+        }
+
         protected override void ModifyHtml(Context context, Tag elementTag) {
-            Children.GenerateHtml(elementTag, context);
+            
+            var children = Children.ToArray();
+            if (children.Length > 0) {
+                BeginChildren(elementTag);
+                elementTag.Add(Children.GenerateHtml(context));
+            }
+
             base.ModifyHtml(context, elementTag);
         }
     }
@@ -141,19 +154,6 @@ namespace StaticSharp {
             return _this;
         }
 
-        /*public static T ParentHorizontalMarginsToPaddings<T>(this T _this) where T : Block {
-            _this.X = new(e => -e.ParentBlock.MarginLeft);
-            _this.Width = new(e => e.ParentBlock.Width + e.ParentBlock.MarginLeft + e.ParentBlock.MarginRight);
-            _this.PaddingLeft = new(e => e.ParentBlock.MarginLeft);
-            _this.PaddingRight = new(e => e.ParentBlock.MarginRight);
-            return _this;
-        }
-
-        public static T ParentHorizontalMarginsToWidth<T>(this T _this) where T : Block {
-            _this.X = new(e => -e.ParentBlock.MarginLeft);
-            _this.Width = new(e => e.ParentBlock.Width + e.ParentBlock.MarginLeft + e.ParentBlock.MarginRight);
-            return _this;
-        }*/
 
 
     }

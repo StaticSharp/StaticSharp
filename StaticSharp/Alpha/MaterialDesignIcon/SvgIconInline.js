@@ -20,7 +20,7 @@ function SvgIconInline(element) {
     //element.style.backgroundColor = "burlywood"
 
     new Reaction(() => {
-        let content = element.children[0]
+        let content = element.content
         content.style.position = "relative"
         let baselineOffset = element.BaselineOffset
 

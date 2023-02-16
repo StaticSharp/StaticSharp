@@ -87,23 +87,31 @@ namespace StaticSharp {
             string url;
 
 
+
+            void AddSimpleImage() {
+                elementTag.Add(new Tag("content") {
+                    CreateScript_AssignToParentProperty("content"),
+                    new Tag("img") {
+                        ["width"] = "100%",
+                        ["height"] = "100%",
+                        ["src"] = url,
+                    }
+                });
+            }
+
             if (Embed == TEmbed.Image) {
                 if (source.GetMediaType() == "image/svg+xml") {
                     url = source.GetDataUrlXml();
                 } else {
                     url = source.GetDataUrlBase64();
                 }
-                elementTag.Add(new Tag("img") {
-                    ["src"] = url
-                });
+                AddSimpleImage();
                 return;
             }
 
             url = context.PathFromHostToCurrentPage.To(context.AddAsset(source)).ToString();
             if (Embed == TEmbed.None) {
-                elementTag.Add(new Tag("img") {
-                    ["src"] = url
-                });
+                AddSimpleImage();
                 return;
             }
 
@@ -137,6 +145,7 @@ namespace StaticSharp {
             var thumbnailImageInfo = GetImageInfo(thumbnail);
 
             elementTag.Add(new Tag("content") {
+                CreateScript_AssignToParentProperty("content"),
                 new Tag("svg"){
                     Id = "thumbnail",
                     ["width"] = "100%",

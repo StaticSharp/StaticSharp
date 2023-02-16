@@ -5,40 +5,59 @@ function _deleteScript() {
     return parent
 }
 
-var currentParent = undefined
+
+var currentSocket = undefined
+var parentStack = []
+function getCurrentParent() {
+    if (parentStack.length>0)
+        return parentStack[parentStack.length - 1]
+    return undefined
+}
+
+function SetCurrentSocket(propertyName) {
+    var element = _deleteScript()
+    var parent = getCurrentParent()
+    currentSocket = parent.Reactive[propertyName]
+}
+
+function AssignToParentProperty(propertyName) {
+    var element = _deleteScript()
+    let parent = getCurrentParent()
+    parent[propertyName] = element
+}
+
+function AssignPreviousTagToParentProperty(propertyName) {
+    var element = _deleteScript()
+    let lastChild = element.lastChild 
+    let parent = getCurrentParent()
+    parent[propertyName] = lastChild
+}
+
 
 function Constructor() {
     var element = _deleteScript()
-    element.Parent = currentParent
-    currentParent = element
+    //element.Parent = parent
+    
     
     for (let i of arguments) {
         i(element)
     }
+    if (currentSocket) {
+        currentSocket.setValue(element)
+    }
 
-    /*if (element.parentElement) {
-        if (element.parentElement.tagName == "OVERLAY") {
-            let overlay = element.parentElement
-            let parent = overlay.parentElement
-            //parent.removeChild(overlay)
-            //document.body.appendChild(element)
-            element.Parent = parent
-            parent.Overlay = element
-        } else {
-            element.Parent = element.parentElement
-        }
-    }*/
+    currentSocket = element.Reactive.FirstChild
+    parentStack.push(element)
 
     return element;
 }
 
 function Pop() {
     let element = _deleteScript()
-    if (element.Parent) {
-        currentParent = element.Parent
-    } else {
-        delete currentParent
-    }
+
+    currentSocket = element.Reactive.NextSibling
+    parentStack.pop()
+
     if (typeof (element.AfterChildren) === "function")
         element.AfterChildren()
 
@@ -51,6 +70,58 @@ function CamelToKebab(value) {
         (substring, offset) => (offset ? "-" : "") + substring.toLowerCase()
     )
 }
+
+/**
+ * @param {Hierarchical} element
+ * @param {Hierarchical | function():Hierarchical} parentExpression
+ * @param {string} name
+ * */
+function CreateSocket(element,name,parentExpression) {
+
+    let property = new Property()
+    property.attach(element, name)
+
+    let previousValue = undefined
+
+    property.onAssign = function () {
+        //console.log("onAssign", property.getValue())
+        let newValue = property.getValue()
+
+        
+
+        
+
+        if (previousValue == newValue)
+            return
+
+        let d = Reaction.beginDeferred()
+
+        if (previousValue) {
+            //console.log("deleting previous")
+            //previousValue.place.setValue(undefined)
+            previousValue.place = undefined
+            previousValue.Parent = undefined
+        }
+        if (newValue != undefined) {
+            if (newValue.place) {
+                newValue.place.setValue(undefined)
+            }
+            newValue.place = property
+            
+            newValue.Parent = parentExpression
+
+            //console.log("parentExpression", parentExpression, currentValue.Parent)
+        }
+        previousValue = newValue
+
+        d.end()
+
+    }
+
+    return property
+}
+
+
 
 
 function Create(parent, ...constructors) {

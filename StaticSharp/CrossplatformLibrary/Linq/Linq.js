@@ -111,10 +111,12 @@ Enumerable.prototype.Last = function(func, notFound = () => {throw new Error("Ou
         func = () => true;
     }
     let array = [...this]
-    for (let i = array.length-1; i>=0; i--){
-        if (func(array[i])) {
-            return array[i];
-        } 
+    if (array.length > 0) {
+        for (let i = array.length - 1; i >= 0; i--) {
+            if (func(array[i])) {
+                return array[i];
+            }
+        }
     }
 }
 

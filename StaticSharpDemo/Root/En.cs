@@ -1,21 +1,43 @@
 ﻿using Newtonsoft.Json.Linq;
+using StaticSharp.Gears;
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 
 
-
-
 namespace StaticSharpDemo.Root {
+
+
+    /*
+    public partial class En : LandingPage {
+
+        public interface JavascriptRepresentation : StaticSharp.Js.Page {
+            public new StaticSharp.Js.Block Controls { get; }
+        }
+
+        public class Property<T> {
+            private readonly Expression<Func<JavascriptRepresentation, T>> expression;
+            public Property(Expression<Func<JavascriptRepresentation, T>> expression) {
+                this.expression = expression;
+            }
+        }
+
+        [Javascriptifier.JavascriptOnlyMember]
+        private JavascriptRepresentation Root => throw new Javascriptifier.JavascriptOnlyException();
+
+    }*/
+
 
     [Representative]
     public partial class En : LandingPage {
         public override string Title => "StaticSharp";
         public override Inlines Description => $"Component oriented static-site generator\nextendable with C#";
-        
 
+        
 
         /*public override ScrollLayout ScrollLayout => base.ScrollLayout.Modify(x => {
             x.Children.Add(
@@ -108,33 +130,31 @@ namespace StaticSharpDemo.Root {
                 },*/
 
             new MenuResponsive {
-                ["Vasia"] = "e=>e.Width",
+
+                Logo = new Image("https://raw.githubusercontent.com/StaticSharp/StaticSharpBrandAssets/main/LogoHorizontal.svg") {
+                    Embed = Image.TEmbed.Image,
+                    Height = 32,
+                    //MarginsVertical = 6,
+                    MarginsHorizontal = 20,
+
+                },
+
                 Children = {
 
-                    /*MenuItem(Node.Components).Modify(x=>{
-                        //x.MarginsHorizontal = 50;
-                    }),*/
                     MenuItem(Node.Components.ParagraphComponent),
+                    MenuItem(Node.Components.ImageComponent),
+                    MenuItem(Node.Components.VideoPlayer),
 
-                    "First",
-                    "Second"
-
-
-                    /*new Block{ 
-                        Width = new(e=>e.Hover ? 40 : 20),
-                        Height = 20,
-                        BackgroundColor = Color.Violet
-                    },
-                    new Block{
-                        Width = 20,
-                        Height = 20,
-                        BackgroundColor = Color.Green
-                    }*/
                 }
 
             },
 
-            new Paragraph("STATIC SHARP").ToLandingMainHeader(),
+            new Paragraph($"STATIC_SHARP".UnderscoreToNbsp())
+            .Modify(x=>{//x.LineHeight*e.FontSize+10
+                x.TextAlignmentHorizontal = new (e=>e.Height>(109) ? TextAlignmentHorizontal.Center : TextAlignmentHorizontal.Left);
+            }).ToLandingMainHeader(),
+
+
             Description,
 
             Separator(),
@@ -249,13 +269,13 @@ namespace StaticSharpDemo.Root {
                 
                 Children = {
                     {"First",new Paragraph("Title"){ 
-                        Width = new(e=>Js.Math.Min(e.ParentBlock.Width * 0.5, 200))
+                        Width = new(e=>Js.Math.Min(e.Parent.Width * 0.5, 200))
                     }},
                     { "Second", new Paragraph(Description){
                         ["X"] = "(e)=>e.Parent.Flipped ? 0 : e.Parent.First.Width",
                         ["Y"] = "(e)=>e.Parent.Flipped ? e.Parent.First.Height : 0",
                         ["Width"] = "(e)=>e.Parent.Flipped ? e.Parent.Width : e.Parent.Width - e.X",
-                        //Width = new(e=>e.ParentBlock.Width - e.X)
+                        //Width = new(e=>e.Parent.Width - e.X)
                     } }                
                 }            
             },*/

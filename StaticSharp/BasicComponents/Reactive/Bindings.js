@@ -156,11 +156,11 @@ Binding.prototype.constructor = Binding;
 
 
 
-function Property(value) {
+function Property() {
 
     let _this = this
     _this.name = ""
-    _this.parent = null
+    _this.object = null
 
     _this.dependentReactions = new Set()
     _this.binding = undefined
@@ -277,17 +277,10 @@ function Property(value) {
                     }
 
                 } catch (e) {
-
-
-                    
-
                     console.error(e)
                 }                
             }
         }
-
-
-
         return _this.value
     }
 
@@ -304,6 +297,7 @@ function Property(value) {
             _this.binding.dirty = false
         }
     }*/
+    _this.onAssign = undefined
 
     _this.setValue = function(value) {
         //console.log("setValue " + value + " " + _this.onChanged.size)
@@ -339,11 +333,18 @@ function Property(value) {
 
         var d = Reaction.beginDeferred()
         _this.makeDependentReactionsDirty()
+
+        if (_this.onAssign) {
+            _this.onAssign()
+        }
+
         d.end()
     }
 
 
-
+     /**
+     * @param { string } name
+     */
     _this.attach = function(object, name) {
         //let property = this
         _this.name = name
@@ -358,9 +359,10 @@ function Property(value) {
             }
         }
         Object.defineProperty(object, name, accessorDescriptor);
+        object["__" + name] = _this
         return _this
     }    
-    _this.setValue(value)
+    //_this.setValue(value)
 }
 
 
@@ -397,8 +399,11 @@ Object.defineProperty(Object.prototype, "Reactive", {
                         const propertyField = target["__" + name]
                         propertyField.setValue(value)
                     } else {
-                        //console.log("creating new property", name)
-                        target["__" + name] = new Property(value).attach(target,name)
+                        let property = new Property()
+                        property.setValue(value)
+                        property.attach(target, name)
+                        //console.log("creating new property", name, target)
+                        
                     }
                 }
             }
@@ -421,7 +426,11 @@ Object.defineProperty(Object.prototype, "Reactive", {
     }
 });
 
-
+/**
+ * @template T
+ * @param {function():T} getter
+ * @param {function(T,T) : void} action
+*/
 function OnChanged(getter, action) {
     let previous = undefined
     return new Reaction(() => {
@@ -451,7 +460,7 @@ function OnTruthify(predicate, action) {
         previous = current
     })
 }
-
+/*
 function PropertyTest() {
 
     console.group("PropertyTest")
@@ -498,15 +507,6 @@ function PropertyTest() {
     //console.assert(root.E == root.B*4)
 
     root.Reactive.B = () => root.A * 3
-    //console.assert(root.B == 30)
-    //console.assert(root.E == root.A * 3 * 4)
-
-    /*root.Reactive.B = 10
-    console.assert(root.E == 40)
-
-    root.Reactive.B = () => root.A * 3
-    console.assert(root.E == 10 * 3 * 4)*/
-
 
     new Reaction(() => {
         root.Field = root.C
@@ -534,4 +534,4 @@ function PropertyTest() {
 
 
     console.groupEnd()
-}
+}*/

@@ -101,7 +101,7 @@ namespace StaticSharp{
             }
 
             foreach (var c in Children) {
-                var childTag = c.Value.GenerateHtml(context, new Role(true, c.Key));
+                var childTag = c.GenerateHtml(context);
                 elementTag.Add(childTag);
             }
             base.ModifyHtml(context, elementTag);

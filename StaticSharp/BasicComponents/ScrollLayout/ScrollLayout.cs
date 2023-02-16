@@ -35,9 +35,18 @@ namespace StaticSharp {
         }
         public ScrollLayout([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
 
-        protected override void ModifyHtml(Context context, Tag elementTag) {            
-            var content = Content.GenerateHtml(context,new Role(false, "Content"));
-            elementTag.Add(content);
+        
+
+
+        protected override void ModifyHtml(Context context, Tag elementTag) {
+
+            elementTag.Add(new Tag("scrollable") {
+                CreateScript_AssignToParentProperty("scrollable"),
+                
+                CreateScript_SetCurrentSocket("Content"),
+                Content.GenerateHtml(context)
+            });
+
             base.ModifyHtml(context, elementTag);
         }
 

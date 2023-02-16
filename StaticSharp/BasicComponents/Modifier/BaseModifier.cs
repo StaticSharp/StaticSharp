@@ -107,10 +107,10 @@ namespace StaticSharp {
                 }
             }
 
-            public override Tag GenerateHtml(Context context, Role? role) {
+            public override Tag GenerateHtml(Context context) {
                 var url = GetUrl(context);
                 if (url == null) {
-                    return base.GenerateHtml(context, role);
+                    return base.GenerateHtml(context);
                 } else {
                     return new Tag("a") {
                         ["href"] = url,
@@ -119,7 +119,7 @@ namespace StaticSharp {
                             ["display"] = "contents",
                         },
                         Children = {
-                            base.GenerateHtml(context, role)
+                            base.GenerateHtml(context)
                         }
                     };
                 }
@@ -166,8 +166,8 @@ namespace StaticSharp {
                     elementTag.Style["letter-spacing"] = LetterSpacing+"em";
                 }
 
-                if (FontFamilies != null) {
-                    elementTag.Style["font-family"] = string.Join(',', FontFamilies.Select(x => x.Name));
+                if (fontFamilies != null) {
+                    elementTag.Style["font-family"] = string.Join(',', fontFamilies.Select(x => x.Name));
                 }
 
                 if (Weight != null) {

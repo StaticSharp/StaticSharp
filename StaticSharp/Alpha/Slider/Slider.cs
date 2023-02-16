@@ -51,7 +51,7 @@ namespace StaticSharp {
             }
 
             elementTag.Add(
-                thumb.GenerateHtml(context, new Role(false,"Thumb"))
+                thumb.GenerateHtml(context)
                 );
             base.ModifyHtml(context, elementTag);
         }

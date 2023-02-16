@@ -16,11 +16,38 @@ function GetParentElementByPredicate(firstParentToCompare, predicate) {
 }
 
 
+function SocketProperty(value) {
+    let _this = this
+    Property.call(_this, value)
+}
 
+
+function CreateSocketProperty(element,name) {
+    let property = new Property()
+    property.attach(element, name)
+
+
+
+}
+
+
+/**
+ *  @typedef Hierarchical
+ *  @property {Hierarchical} Root
+ *  @property {Hierarchical} Parent
+ *  @property {Hierarchical} FirstChild
+ *  @property {Hierarchical} NextSibling
+ *  @property {Enumerable<Hierarchical>} Children
+*/
+
+/**
+ *  @param {Hierarchical} element
+ */
 function Hierarchical(element) {
     element.isHierarchical = true
 
-    
+    CreateSocket(element, "FirstChild", element)
+    CreateSocket(element, "NextSibling", () => element.Parent)
 
     element.Reactive = {
 
@@ -30,50 +57,132 @@ function Hierarchical(element) {
         NestingDepth: () => (element.IsRoot || element.overlaySign==1) ? 0 : (element.Parent.NestingDepth + 1),
 
         Root: () => element.Parent.Root,
-        /*Parent: undefined() => {
 
-            let v = GetParentElementByPredicate(element.parentElement, x => x.isHierarchical)
+        Parent: undefined,
 
-            return v
-        },*/
-        ParentBlock: () => GetParentElementByPredicate(element.Parent, x => x.isBlock),
-        FirstChild: undefined,
-        LastChild: undefined,
-        NextSibling: undefined,
-    }
+        //Place: undefined,
 
-    if (element.Parent) {
-        if (element.dataset.property) {
-            element.Parent[element.dataset.property] = element
-
-        }
-        if (element.dataset.child!=undefined) {
-            
-            if (!element.Parent.FirstChild) {
-                element.Parent.FirstChild = element
-                element.Parent.LastChild = element
+        /*AppendChildSocket: e => {
+            if (!e.FirstChild) {
+                return element.Reactive.FirstChild
             } else {
-                element.Parent.LastChild.NextSibling = element
-                element.Parent.LastChild = element
+                return element.Children.Last().Reactive.NextSibling
             }
-        }
-        
+        }*/
     }
 
     
 
-
-
-    element.Children = {}
-    element.Children[Symbol.iterator] = function* () {
+    element.Children = new Enumerable(function* () {
         var i = element.FirstChild
         while (i != undefined) {
             yield i
             i = i.NextSibling
         }
-    };
+    })
 
-    element.Sibling = function (id) {
+    element.HtmlNodesOrdered = new Enumerable(function* () {
+        yield* element.Children
+    })
+
+
+
+
+    GetHtmlNode = function (node) {
+        let parentNode = node.parentNode
+        let parentTag = parentNode.tagName
+        if (parentTag == "A") {
+            return parentNode
+        }
+        return node
+    }
+
+    new Reaction(() => {
+        let currentChildren =[...element.children]
+        let tergetChildren = [...element.HtmlNodesOrdered.Select(x => GetHtmlNode(x))]
+
+        let equal = currentChildren.length === tergetChildren.length && currentChildren.every(function (value, index) { return value === tergetChildren[index] })
+
+        if (!equal) {
+            console.log(currentChildren, tergetChildren, element)
+            for (let i of currentChildren) {
+                i.remove()
+            }
+            for (let i of tergetChildren) {
+                element.appendChild(i)
+            }
+            currentChildren = [...element.children]
+            //console.log("after:", currentChildren, tergetChildren)
+        }
+        
+    })
+
+
+
+    /*element.ConnectChild = function (socketProperty, child) {
+        element.Place = socketProperty
+        element.Place.setValue(child)
+        child.Parent = element
+    }
+
+
+    element.AssignElementToProperty = function (child, propertyName) {
+
+        if (!Property.exists(element, propertyName)) {
+            console.error(`No property ${propertyName} in ${element} `)
+        }
+
+        element.ConnectChild(element.Reactive[propertyName], child)
+    }
+
+
+    element.AppendChild = function (child) {       
+        element.ConnectChild(element.AppendChildSocket, child)
+    }*/
+
+    //console.log("currentParent", currentParent)
+
+
+
+
+
+    /*OnChanged(
+        () => element.FirstChild,
+        (p, c) => {
+            if (p) {
+                p.Parent = undefined
+                p.remove()
+            }
+            if (c) {
+                c.Parent = element
+                //let node = c.GetHtmlNode()
+                //element.insertAdjacentElement('afterbegin', node)
+            }
+            //console.log("element.NextSibling", element.Parent.Children.Last())
+        }
+    )
+
+    OnChanged(
+        () => element.NextSibling,
+        (p, c) => {
+            if (p) p.Parent = undefined
+            if (c) c.Parent = () => element.Parent
+            //console.log("element.NextSibling", element.Parent.Children.Last())
+        }
+    )*/
+
+
+
+    
+
+    
+
+
+
+    
+    //element.Children[Symbol.iterator] = ;
+
+    /*element.Sibling = function (id) {
         return element.Parent.Child(id)        
     }
 
@@ -95,7 +204,7 @@ function Hierarchical(element) {
         }
         //console.warn(`element ${element.tagName} do not have child "${id}"`)
         return i
-    }
+    }*/
 
 
     

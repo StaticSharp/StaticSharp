@@ -2,8 +2,10 @@ function Flipper(element) {
     Block(element)
     element.isFlipper = true
 
-
+    CreateSocket(element, "First", element)
+    CreateSocket(element, "Second", element)
     element.Reactive = {
+
         Flipped: () => element.Width < 640,
 
         HorizontalSpace: 0,
@@ -38,7 +40,11 @@ function Flipper(element) {
 
     }
 
-
+    element.HtmlNodesOrdered = new Enumerable(function* () {
+        yield element.First
+        yield element.Second
+        yield* element.Children
+    })
 
     new Reaction(() => {
         let first = element.LayoutFirst

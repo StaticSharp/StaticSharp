@@ -45,7 +45,7 @@ namespace StaticSharp {
         public Paragraph(Inline inline,
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
-            Inlines = new() { { null, inline } };
+            Inlines = new() { inline };
         }
 
 

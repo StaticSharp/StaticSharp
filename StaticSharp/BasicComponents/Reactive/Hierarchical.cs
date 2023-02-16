@@ -1,6 +1,7 @@
 ﻿using StaticSharp;
 using StaticSharp.Gears;
 using StaticSharp.Html;
+using StaticSharp.Js;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,27 +16,30 @@ namespace StaticSharp {
 
     }
 
+
+    [Javascriptifier.JavascriptClass("")]
+    public static class HierarchicalStatic {
+
+        [Javascriptifier.JavascriptMethodFormat("{0}.First(x=>x.Name=={1})")]
+        public static T ByName<T>(this Enumerable<T> enumerable, string name) where T : Js.Hierarchical {
+            throw new Javascriptifier.JavascriptOnlyException();
+        }
+    }
+
+
     namespace Js {
+
+        
+
+
         public interface Hierarchical : Object {
-            public string Id { get; }
+            public string Name { get; }
 
             public Page Root { get; }
             public Hierarchical Parent { get; }
-            //public Block ParentBlock { get; }
-
-
-            /*public Hierarchical Sibling(string id) => NotEvaluatableObject<Hierarchical>();
-            public T Sibling<T>(string id) where T : new() => NotEvaluatableObject<T>();
-
-
-
-
-
-
-
-            public T Child<T>(int id) where T : new() => NotEvaluatableObject<T>();
-            public Hierarchical Child(string id) => NotEvaluatableObject<Hierarchical>();
-            public T Child<T>(string id) where T : new() => NotEvaluatableObject<T>();*/
+            public Hierarchical FirstChild { get; }
+            public Hierarchical NextSibling { get; }
+            public Js.Enumerable<Hierarchical> Children { get; }
 
         }
 
@@ -46,7 +50,7 @@ namespace StaticSharp {
 
     namespace Gears {
         public class HierarchicalBindings<FinalJs> : Bindings<FinalJs> {
-
+            public Binding<string> Name { set { Apply(value); } }
         }
     }
 
@@ -67,7 +71,7 @@ namespace StaticSharp {
         }
         protected virtual void ModifyHtml(Context context, Tag elementTag) {
         }
-        public virtual Tag GenerateHtml(Context context, Role? role) {
+        public virtual Tag GenerateHtml(Context context) {
 
             AddRequiredInclues(context);
 
@@ -75,7 +79,6 @@ namespace StaticSharp {
 
             var tag = new Tag(TagName) { };
 
-            role?.SetAttributes(tag);
 
             //ModifyTag(tag);
 
@@ -85,7 +88,7 @@ namespace StaticSharp {
 
             ModifyHtml(context, tag);
 
-            tag.Add(Pop());
+            tag.Add(CreateScript("Pop()"));
 
             return tag;
         }

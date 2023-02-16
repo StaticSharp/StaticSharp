@@ -59,7 +59,9 @@ namespace StaticSharp {
         public virtual Block? RightSideBar => null;
 
 
-        protected override Blocks BodyContent => new Blocks {
+        public override Blocks Children => new Blocks();
+
+        /*protected override Blocks  => new Blocks {
             {"LeftSideBarIcon"  ,LeftSideBarIcon},
             {"LeftSideBar" ,LeftSideBar},
 
@@ -70,8 +72,8 @@ namespace StaticSharp {
                 Content = new Column {
                     Children = {
                         { "TopBar", TopBar },
-                        { "MainVisual", MainVisual },
-                        { "Description", (Description != null) ? new Paragraph(Description) : null },
+                        MainVisual ,
+                        (Description != null) ? new Paragraph(Description) : null ,
                         new Block(){ 
                             Height = 1,
                             BackgroundColor = Color.Gray,
@@ -79,13 +81,12 @@ namespace StaticSharp {
                         },
                         Content,
                         new Space(),
-                        { "Footer", Footer }
+                        Footer
                     }
                 }
             }
             }
-        };       
-
+        }*/
 
     }
 

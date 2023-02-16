@@ -28,7 +28,7 @@ namespace StaticSharp {
             elementTag["data-width"] = icon.Width;
             elementTag["data-height"] = icon.Height;
             elementTag.Add(new PureHtmlNode(code));
-
+            elementTag.Add(CreateScript_AssignPreviousTagToParentProperty("content"));
             base.ModifyHtml(context, elementTag);
 
         }

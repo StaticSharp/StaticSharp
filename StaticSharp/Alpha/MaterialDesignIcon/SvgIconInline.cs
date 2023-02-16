@@ -44,6 +44,7 @@ namespace StaticSharp {
             }
 
             elementTag.Add(new PureHtmlNode(code));
+            elementTag.Add(CreateScript_AssignPreviousTagToParentProperty("content"));
 
             base.ModifyHtml(context, elementTag);
         }

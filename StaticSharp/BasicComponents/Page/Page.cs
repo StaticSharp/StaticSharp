@@ -57,7 +57,7 @@ namespace StaticSharp {
         protected override string TagName => "body";
 
 
-        protected abstract Blocks BodyContent { get; }
+        public override abstract Blocks Children { get; }
 
 
         public Page([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
@@ -147,7 +147,7 @@ namespace StaticSharp {
                 };
 
 
-            var body = GenerateHtml(context,null);
+            var body = GenerateHtml(context);
             //body.Style["visibility"] = "hidden";
 
 
@@ -163,21 +163,6 @@ namespace StaticSharp {
                 
             };
 
-            body.Add(
-                new Tag("svg") {
-                    Style = {
-                        ["display"] = "none"
-                    },
-                    Children = {
-                        new Tag("defs"){
-                            context.SvgDefs.GetOrderedItems()
-                        }
-                    }
-                }
-                );
-
-
-
             head.Add(context.GenerateScript());
             head.Add(context.GenerateStyle());
             head.Add(context.GenerateFonts());
@@ -186,7 +171,31 @@ namespace StaticSharp {
         }
 
         protected override void ModifyHtml(Context context, Tag elementTag) {
-            BodyContent.GenerateHtml(elementTag, context);
+            var svgDefsTags = context.SvgDefs.GetOrderedItems().ToArray();
+            if (svgDefsTags.Length > 0) {
+                elementTag.Add(
+                    new Tag("svg") {
+                        Style = {
+                        ["display"] = "none"
+                        },
+                        Children = {
+                        new Tag("defs"){
+                            context.SvgDefs.GetOrderedItems()
+                        }
+                        }
+                    });
+                elementTag.Add(CreateScript_AssignPreviousTagToParentProperty("svgDefs"));
+            }
+
+            /*var children = Children.ToArray();
+            if (children.Length > 0) {
+                BeginChildren(elementTag);
+                elementTag.Add(Children.GenerateHtml(context));
+            }
+
+
+            elementTag.Add(BodyContent.GenerateHtml(context));*/
+
             //elementTag.Add(BodyContent.GenerateHtml(context));
             base.ModifyHtml(context, elementTag);
         }
