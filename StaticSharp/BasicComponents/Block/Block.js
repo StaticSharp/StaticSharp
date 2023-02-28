@@ -62,20 +62,28 @@ function Block(element) {
         LayoutWidth: undefined,
         LayoutHeight: undefined,
 
-        
+        PreferredWidth: e => e.InternalWidth,
+        PreferredHeight: e => e.InternalHeight,
+        Grow: 0,
+        Shrink: 0,
+
+        MinWidth: 0,
+        MinHeight: 0,
+        MaxWidth: Infinity,
+        MaxHeight: Infinity,
 
         InternalWidth: undefined,
         InternalHeight: undefined,
 
 
-        X: () => First(element.LayoutX,0),
-        Y: () => First(element.LayoutY,0),
+        X: e => First(e.LayoutX,0),
+        Y: e => First(e.LayoutY,0),
 
         AbsoluteX: () => element.IsRoot ? 0 : Sum(element.Parent.AbsoluteX, element.Parent.ScrollXActual, element.X),
         AbsoluteY: () => element.IsRoot ? 0 : Sum(element.Parent.AbsoluteY, -element.Parent.ScrollYActual, element.Y),
 
-        Width: e => First(e.LayoutWidth, e.InternalWidth),
-        Height: e => First(e.LayoutHeight, e.InternalHeight),
+        Width: e => First(e.LayoutWidth, e.PreferredWidth),
+        Height: e => First(e.LayoutHeight, e.PreferredHeight),
 
         ClipByParent: false
         
@@ -88,6 +96,9 @@ function Block(element) {
     YToStyle(element);
     WidthToStyle(element)
     HeightToStyle(element)
+
+
+
 
     //element.style.clipPath = "path('M 0 200 L 0,75 A 5,5 0,0,1 150,75 L 200 200 z')"
 

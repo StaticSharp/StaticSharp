@@ -18,14 +18,26 @@ namespace StaticSharp {
             public double Y { get; }
             public double Width { get; }
             public double Height { get; }
-            public double InternalWidth { get; }
-            public double InternalHeight { get; }
-
-
+            
             public double LayoutX { get; }
             public double LayoutY  { get; }
             public double LayoutWidth  { get; }
             public double LayoutHeight  { get; }
+
+
+            public double PreferredWidth { get; }
+            public double PreferredHeight { get; }
+            public double Grow { get; }
+            public double Shrink { get; }
+
+            public double MinWidth { get; }
+            public double MinHeight { get; }
+            public double MaxWidth { get; }
+            public double MaxHeight { get; }
+
+            public double InternalWidth { get; }
+            public double InternalHeight { get; }
+
 
             public double MarginLeft  { get; }
             public double MarginRight  { get; }
@@ -61,6 +73,17 @@ namespace StaticSharp {
             public Binding<double> Width { set { Apply(value); } }
             public Binding<double> Height { set { Apply(value); } }
 
+
+            public Binding<double> PreferredWidth { set { Apply(value); } }
+            public Binding<double> PreferredHeight { set { Apply(value); } }
+
+            public Binding<double> Grow { set { Apply(value); } }
+            public Binding<double> Shrink { set { Apply(value); } }
+
+            public Binding<double> MinWidth { set { Apply(value); } }
+            public Binding<double> MinHeight { set { Apply(value); } }
+            public Binding<double> MaxWidth { set { Apply(value); } }
+            public Binding<double> MaxHeight { set { Apply(value); } }
 
 
             public Binding<double> MarginLeft { set { Apply(value); } }

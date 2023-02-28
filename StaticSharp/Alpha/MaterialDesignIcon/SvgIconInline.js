@@ -9,25 +9,38 @@ function SvgIconInline(element) {
     let width = Number(element.dataset.width)
     let height = Number(element.dataset.height)
 
-    let scale = Number(element.dataset.scale | 1)
+    let scale = Number(element.dataset.scale || 1)
 
     element.style.display = "inline-block"
     element.style.verticalAlign = "baseline"
 
-    element.style.width = `calc(1em * ${scale * height/width})`//width + "px"
-    element.style.height = scale+"em"
+    element.style.width = `${scale * height / width}em`//width + "px"
+    element.style.height = "1em"
+
     element.style.overflow = "visible"
     //element.style.backgroundColor = "burlywood"
 
+
+    element.HtmlNodesOrdered = new Enumerable(function* () {
+        yield element.content
+        yield* element.Children
+    })
+
+    element.AfterChildren = () => {
+        let content = element.content
+        content.style.display = "block"
+        content.style.position = "relative"
+        content.style.height = scale + "em"
+
+        
+    }
+
+
     new Reaction(() => {
         let content = element.content
-        content.style.position = "relative"
         let baselineOffset = element.BaselineOffset
 
-        if (baselineOffset!=0)
-            content.style.top = 100 * baselineOffset + "%"
-        else
-            content.style.top = ""
+        content.style.top = `${1 - (1-baselineOffset)*scale}em`
     })
 
 
