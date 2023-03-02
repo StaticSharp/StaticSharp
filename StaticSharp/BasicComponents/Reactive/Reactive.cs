@@ -64,6 +64,7 @@ namespace StaticSharp {
         [RelatedScript("ReactiveUtils")]
         [RelatedScript("../../CrossplatformLibrary/Math/Math")]
         [RelatedScript("../../CrossplatformLibrary/Linq/Linq")]
+        [RelatedScript("DomLinkedList")]
         [RelatedScript("Constants")]
         [RelatedScript("Constructor")]
         [RelatedScript("Bindings")]
@@ -171,6 +172,13 @@ namespace StaticSharp {
             protected Tag CreateScript_SetCurrentSocket(string name) {
                 return new Tag("script") {
                     new PureHtmlNode($"SetCurrentSocket(\"{name}\")")
+                };
+            }
+
+            protected Tag CreateScript_SetCurrentCollectionSocket(string name)
+            {
+                return new Tag("script") {
+                    new PureHtmlNode($"SetCurrentCollectionSocket(\"{name}\")")
                 };
             }
 

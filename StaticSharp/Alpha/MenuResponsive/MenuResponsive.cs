@@ -39,13 +39,13 @@ namespace StaticSharp {
 
         public Block Button { get; set; } = new SvgIconBlock(SvgIcons.MaterialDesignIcons.Menu);
         public Block Dropdown { get; set; } = new Column() {
-            X = new(e=>e.Parent.Width - e.Width),
+            //X = new(e=>e.Parent.Width - e.Width), // TODO: What is correct? Moved to js + margins added
             BackgroundColor = Color.FromGrayscale(0.9),
             Paddings = 5,
             Radius = 5
         };
 
-        
+        public virtual Blocks MenuItems { get; } = new();
 
         public MenuResponsive([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
             : base(callerLineNumber, callerFilePath) { }
@@ -56,6 +56,17 @@ namespace StaticSharp {
             if (logo != null) {
                 elementTag.Add(CreateScript_SetCurrentSocket("Logo"));
                 elementTag.Add(logo.GenerateHtml(context));
+            }
+
+
+            if (MenuItems != null)
+            {
+                var menuItems = MenuItems.ToArray();
+                elementTag.Add(CreateScript_SetCurrentCollectionSocket("MenuItems"));
+                foreach(var menuItem in menuItems)
+                {
+                    elementTag.Add(menuItem.GenerateHtml(context));
+                }
             }
 
             elementTag.Add(CreateScript_SetCurrentSocket("Button"));

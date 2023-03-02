@@ -139,14 +139,13 @@ namespace StaticSharpDemo.Root {
 
                 },
 
-                Children = {
-
+                MenuItems = {
                     MenuItem(Node.Components.ParagraphComponent),
                     MenuItem(Node.Components.ImageComponent),
                     MenuItem(Node.Components.VideoPlayer),
-
+                    MenuItem(Node.Components.ParagraphComponent),
+                    MenuItem(Node.Customization.HowToCreateNewComponent)
                 }
-
             },
 
             new Paragraph($"STATIC_SHARP".UnderscoreToNbsp())
