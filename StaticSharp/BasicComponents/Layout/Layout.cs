@@ -43,7 +43,7 @@ namespace StaticSharp {
         }
     }
 
-
+    [RelatedScript("../FrontendUtils/LayoutUtils")]
     [Mix(typeof(LayoutBindings<Js.Layout>))]
     [ConstructorJs]
     public partial class Layout : Block {

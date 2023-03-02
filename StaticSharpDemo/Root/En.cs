@@ -156,7 +156,7 @@ namespace StaticSharpDemo.Root {
                 },*/
 
             new MenuResponsive {
-
+                Depth = 1,
                 Logo = new Image("https://raw.githubusercontent.com/StaticSharp/StaticSharpBrandAssets/main/LogoHorizontal.svg") {
                     Embed = Image.TEmbed.Image,
                     Height = 32,
@@ -164,7 +164,10 @@ namespace StaticSharpDemo.Root {
                     MarginsHorizontal = 20,
 
                 },
-
+                Dropdown = new Layout{ 
+                    Vertical = true,
+                    BackgroundColor = Color.LightGray,
+                },
                 MenuItems = {
                     MenuItem(Node.Components.ParagraphComponent),
                     MenuItem(Node.Components.ImageComponent),
