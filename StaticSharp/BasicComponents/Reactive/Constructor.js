@@ -20,6 +20,12 @@ function SetCurrentSocket(propertyName) {
     currentSocket = parent.Reactive[propertyName]
 }
 
+function SetCurrentCollectionSocket(propertyName) {
+    var element = _deleteScript()
+    var parent = getCurrentParent()
+    currentSocket = parent.Reactive[propertyName + "_FirstChild"]
+}
+
 function AssignToParentProperty(propertyName) {
     var element = _deleteScript()
     let parent = getCurrentParent()
@@ -87,10 +93,6 @@ function CreateSocket(element,name,parentExpression) {
         //console.log("onAssign", property.getValue())
         let newValue = property.getValue()
 
-        
-
-        
-
         if (previousValue == newValue)
             return
 
@@ -120,6 +122,27 @@ function CreateSocket(element,name,parentExpression) {
 
     return property
 }
+
+
+function CreateCollectionSocket(element, name, parentExpression) {
+    let firstChildPropertyName = name + "_FirstChild"
+
+    // TODO: unify Children with other colletions
+    if (name == "Children") {
+        firstChildPropertyName = "FirstChild"
+    }
+    
+    let firstChildProperty = CreateSocket(element, firstChildPropertyName, parentExpression)
+
+    var value = new DomLinkedList(firstChildProperty)
+
+    Object.defineProperty(element, name, {
+        get: function () {
+            return value
+        }
+    });
+}
+
 
 
 

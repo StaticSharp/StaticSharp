@@ -15,6 +15,52 @@ function CalcOffset(container, child, sideName) {
     return Math.max(child[marginName] - container[marginName], 0)
 }
 
+
+/**
+* Calculates offsets for an array of elements so that they are placed in sequence with minimal gap possible 
+* (respecting margins and paddings)
+* @param {Element} container - Container DOM element
+* @param {Array[Element]} children - Array of children DOM elements
+* @param {string} sideName - "Left", "Right", "Top", "Bottom" - side of container to start from
+* @returns Array of offsets: X - if direction is "Left" or "Right", Y - otherwise
+*/
+function CalcSequentialOffsets(container, children, sideName) {
+    let result = [];
+    let oppositeSideName = {
+        "Left": "Right",
+        "Right": "Left",
+        "Top": "Bottom",
+        "Bottom": "Top"
+    }[sideName];
+
+    let marginName = "Margin" + sideName
+    let oppositeMarginName = "Margin" + oppositeSideName
+    let sizeName = {
+        "Left": "Width",
+        "Right": "Width",
+        "Top": "Height",
+        "Bottom": "Height"
+    }[sideName]
+
+    if (sideName == "Right" || sideName == "Bottom") {
+        throw new Error("sideName = \"Right\" || sideName == \"Bottom\" - not supported");
+    }
+    
+    let offset = CalcOffset(container, children[0], sideName)
+    result[0] = offset;
+    let previousOppositeMargin = First(children[0][oppositeMarginName], 0)
+    offset += children[0][sizeName]
+
+    for (let i = 1; i < children.length; i++) {
+        let margin = Max(previousOppositeMargin, children[i][marginName], 0)
+        result[i] = offset + margin
+        offset += children[i][sizeName] + margin
+        previousOppositeMargin = First(children[i][oppositeMarginName], 0)
+    }
+
+    return result;
+}
+
 function GetClipRect(clippingElement, contentX, contentY, contentWidth, contentHeight ) {
     let left = -contentX
     let top = -contentY

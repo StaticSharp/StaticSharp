@@ -46,7 +46,8 @@ function CreateSocketProperty(element,name) {
 function Hierarchical(element) {
     element.isHierarchical = true
 
-    CreateSocket(element, "FirstChild", element)
+    //CreateSocket(element, "FirstChild", element)
+    CreateCollectionSocket(element, "Children", element) // !
     CreateSocket(element, "NextSibling", () => element.Parent)
 
     element.Reactive = {
@@ -71,13 +72,13 @@ function Hierarchical(element) {
 
     
 
-    element.Children = new Enumerable(function* () {
-        var i = element.FirstChild
-        while (i != undefined) {
-            yield i
-            i = i.NextSibling
-        }
-    })
+    //element.Children = new Enumerable(function* () {
+    //    var i = element.FirstChild
+    //    while (i != undefined) {
+    //        yield i
+    //        i = i.NextSibling
+    //    }
+    //})
 
     element.HtmlNodesOrdered = new Enumerable(function* () {
         yield* element.Children
