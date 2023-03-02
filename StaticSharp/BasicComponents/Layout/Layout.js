@@ -8,16 +8,16 @@
  */
 function LayoutItem(element,layoutBlock) {
 
-    /**@type {LayoutBlock}*/
-    this.layoutBlock = layoutBlock
-
+    
+    /**@type {LayoutBlock}*/ this.layoutBlock = layoutBlock
+    /**@type {Block}*/ this.element = element
     
     /**@type {number}*/ this.primaryMargin = element["Margin" + layoutBlock.primarySide] || 0
     /**@type {number}*/ this.primaryMarginOpposite = element["Margin" + layoutBlock.primarySideOpposite] || 0
     /**@type {number}*/ this.secondaryMargin = element["Margin" + layoutBlock.secondarySide] || 0
     /**@type {number}*/ this.secondaryMarginOpposite = element["Margin" + layoutBlock.secondarySideOpposite] || 0
 
-    /**@type {Block}*/ this.element = element
+    
 
     /**@type {number}*/ this.primarySize = element["Preferred" + layoutBlock.primaryDimension] || 0
     /**@type {number}*/ this.secondarySize = element["Preferred" + layoutBlock.secondaryDimension] || 0
@@ -49,12 +49,6 @@ function LayoutItem(element,layoutBlock) {
 }
 
 LayoutItem.prototype.Write = function () {    
-
-    /*for (let item of line.items) {
-        item.secondaryPosition = line.secondaryPosition
-    }*/
-
-
     this.element["Layout" + this.layoutBlock.primaryCoordinate] = this.primaryPosition
     this.element["Layout" + this.layoutBlock.primaryDimension] = this.primarySize
 
@@ -133,9 +127,8 @@ LayoutLine.prototype.AddChild = function (layoutItem, gap, sizeLimit = undefined
     return true
 }
 
-
-LayoutLine.prototype.GetLineSize = function () {
-    
+/**@returns {number}*/
+LayoutLine.prototype.GetLineSize = function () {    
 
     let lineSize = Math.max(
         this.marginStop + this.layoutBlock.primaryBodyStopOpposite,
@@ -150,52 +143,46 @@ LayoutLine.prototype.GetLineSize = function () {
  * @param {number} grow
  * */
 LayoutLine.prototype.AlignPrimary = function (containerSize, gapGrow, gravity = 0) {
-
     let lineSize = this.GetLineSize()
     let minLineSize = lineSize - this.shrinkPixels
-    
-    console.log("lineSize", containerSize, lineSize)
     
     if (lineSize > containerSize) {//Shrink
         let units = 0
         for (let i of this.items) {
             units += i.shrink
         }
+        if (units == 0)
+            return
+        
         let pixelsPerUnit = (lineSize - containerSize) / units
 
-        
         let offset = 0
         for (let i of this.items) {
-            let delta = i.shrink * pixelsPerUnit
-            
+            let delta = i.shrink * pixelsPerUnit            
             i.primaryPosition -= offset
-
             i.primarySize -= delta
             offset += delta
-            //secondaryLineSize = Math.max(secondaryLineSize, i.secondarySize)
         }
-
-        
-
         return
     }
-
     
     if (lineSize < containerSize) {//Grow
         let maxLineSize = lineSize + this.growPixels
-        
-        
-        
 
         let activeItems = this.items.filter(x => x.growPixels > 0)
 
         let units = (this.items.length - 1) * gapGrow
 
         let targetSize = 0
-        if (units > 0)
+        if (units > 0) {//gaps can grow
             targetSize = containerSize
-        else
+            
+        }
+        else {
+
             targetSize = Math.min(containerSize, maxLineSize)
+            //console.log("targetSize", targetSize, activeItems)
+        }
 
         for (let i of activeItems) {
             units += i.grow
@@ -236,71 +223,54 @@ LayoutLine.prototype.AlignPrimary = function (containerSize, gapGrow, gravity = 
             }
         }
         
-        let gapExtraPixels = extraPixels / (this.items.length - 1)
+        let gapExtraPixels = (this.items.length>1) ? extraPixels / (this.items.length - 1) : 0
         let freeSpace = containerSize - targetSize
-        let offset = freeSpace * (0.5 + 0.5 * gravity) - gapExtraPixels
-        
-        
+        let offset = freeSpace * (0.5 + 0.5 * gravity) - gapExtraPixels        
 
         for (let i of this.items) {
             offset += gapExtraPixels
             i.primaryPosition += offset
             i.primarySize += i.extraPixels
             offset += i.extraPixels || 0
-        }
-        
-        
-        
+        }        
         return
-    }
-    
-    
-
-    
+    }    
 }
-
 
 /**
  * @param {number} gravity
- * @param {number} grow
+ * @param {boolean} grow
  * */
-LayoutLine.prototype.AlignSecondary = function (gravity = 0, grow = 0) {
-    
+LayoutLine.prototype.AlignSecondary = function (gravity, grow) {    
     this.secondaryMargin = 0
     this.secondaryMarginStop = 0 
     this.secondaryBodyStop = 0
-
 
     let secondaryLineSize = 0
     for (let i of this.items) {
         secondaryLineSize = Math.max(secondaryLineSize, i.secondarySize)
     }
 
-
-    for (let i of this.items) {
-        let dif = secondaryLineSize - i.secondarySize
-        i.secondarySize = i.secondarySize + grow * dif
-
-        dif = secondaryLineSize - i.secondarySize
-        i.secondaryPosition = (0.5 + 0.5 * gravity) * dif        
+    if (grow) {
+        for (let i of this.items) {
+            i.secondarySize = secondaryLineSize
+        }
+        //todo: (optimization) simplified secondary secondaryMargin/secondaryMarginStop/secondaryBodyStop calc
+    } else {
+        for (let i of this.items) {
+            let dif = secondaryLineSize - i.secondarySize
+            i.secondaryPosition = (0.5 + 0.5 * gravity) * dif 
+        }
     }
 
-
     for (let i of this.items) {
-
         this.secondaryMargin = Math.max(this.secondaryMargin, i.secondaryMargin - i.secondaryPosition)
-
         let bottom = i.secondaryPosition + i.secondarySize
-
         this.secondaryMarginStop = Math.max(this.secondaryMarginStop, bottom)
         let secondaryBodyStop = bottom + i.secondaryMarginOpposite
         this.secondaryBodyStop = Math.max(this.secondaryBodyStop, secondaryBodyStop)
-
-        //console.log("i.secondaryMarginOpposite", i.secondaryMarginOpposite)
     }
-    //console.log("AlignSecondary",this.secondaryBodyStop, this.secondaryMarginStop)
 }
-
 
 /**
  * @constructor
@@ -392,11 +362,9 @@ function LayoutBlock(vertical, container) {
     this.lines = []
 }
 
-
 /**
  * @returns {LayoutLine}
  */
-
 LayoutBlock.prototype.AddLine = function(){
     let result = new LayoutLine(this)
     this.lines.push(result)
@@ -412,29 +380,57 @@ LayoutBlock.prototype.ReadChildren = function (children) {
 
 /**
  * @param {number} secondaryGap
- * @param {number} size
- * @param {number} secondaryGapGrow
- * @param {number} secondaryGrow
  */
 LayoutBlock.prototype.AlignLines = function (
-    secondaryGap,
-    size = undefined,
-    secondaryGapGrow = undefined,
-    secondaryGrow = undefined) {
+    secondaryGap
+    ) {
 
     for (let i = 0; i < this.lines.length; i++){
         let line = this.lines[i]
-        line.secondaryPosition = Math.max(this.secondaryBodyStop, this.secondaryMarginStop + line.secondaryMargin)
-        if (i > 0)
-            line.secondaryPosition += secondaryGap
         
+        if (i > 0)
+            line.secondaryPosition = Math.max(
+                this.secondaryBodyStop,
+                this.secondaryMarginStop + Math.max(secondaryGap,line.secondaryMargin))
+        else
+            line.secondaryPosition = Math.max(this.secondaryBodyStop, this.secondaryMarginStop + line.secondaryMargin)
+
+
         this.secondaryBodyStop = line.secondaryPosition + line.secondaryBodyStop
         this.secondaryMarginStop = line.secondaryPosition + line.secondaryMarginStop
     }
-
-
-
 }
+
+/**
+ * @param {number} extraPixels
+ * @param {number} secondaryGapGrow
+ */
+LayoutBlock.prototype.GrowLines = function (
+    extraPixels,
+    secondaryGapGrow) {
+
+    let numLines = this.lines.length
+
+    let numGaps = numLines - 1
+    let totalGrowUnits = numLines + numGaps * secondaryGapGrow
+
+    let lineExtraPixels = extraPixels / totalGrowUnits
+    let gapExtraPixels = lineExtraPixels * secondaryGapGrow
+
+    let offset = -gapExtraPixels
+    for (let line of this.lines) {
+
+        offset += gapExtraPixels
+        line.secondaryPosition += offset
+        let secondaryLineSize = line.secondaryMarginStop + lineExtraPixels
+        offset += lineExtraPixels
+
+        for (let i of line.items) {
+            i.secondarySize = secondaryLineSize
+        }
+    }
+}
+
 
 LayoutBlock.prototype.GetSecondarySize = function () {
     let size = Math.max(
@@ -459,21 +455,24 @@ function Layout(element) {
 
 
     element.Reactive = {
+        Vertical: false,
         PrimaryGap: 0,
         PrimaryGapGrow: 0,
         PrimaryGravity: -1,
-        SecondaryGap: 10,
-        SecondaryGapGrow: 1,
-        SecondaryGrow: 1
-    }
 
-    
+        IntralinearGravity: -1,
+        SecondaryGap: 0,
+        SecondaryGapGrow: 0,
+        FillSecondary: true,
+
+        Multiline: false
+
+    }
 
 
     new Reaction(() => {
 
-        
-        let layoutBlock = new LayoutBlock(false, element)
+        let layoutBlock = new LayoutBlock(element.Vertical, element)
 
         let children = layoutBlock.ReadChildren(element.Children)
         
@@ -486,160 +485,56 @@ function Layout(element) {
         let lineSize = line.GetLineSize()        
         element["Internal" + layoutBlock.primaryDimension] = lineSize
 
-        layoutBlock.lines = []
-        line = undefined
-
         let sizeLimit = element[layoutBlock.primaryDimension]
 
-        for (let i of children) {
-            if (!line || !line.AddChild(i, primaryGap, sizeLimit)) {
-                line = layoutBlock.AddLine()
-                line.AddChild(i, primaryGap)
+        if (lineSize > sizeLimit) {
+            layoutBlock.lines = []
+            line = undefined
+            
+            for (let i of children) {
+                if (!line || !line.AddChild(i, primaryGap, sizeLimit)) {
+                    line = layoutBlock.AddLine()
+                    line.AddChild(i, primaryGap)
+                }
             }
+            element.Multiline = true
+        } else {
+            element.Multiline = false
         }
 
         for (let i of layoutBlock.lines) {
-            i.AlignSecondary()
+            i.AlignSecondary(element.IntralinearGravity, element.FillSecondary)
         }
-        layoutBlock.AlignLines(element.SecondaryGap, element.SecondaryGapGrow, element.SecondaryGrow)
 
+        layoutBlock.AlignLines(element.SecondaryGap)
+
+        let dependOnSecondarySize = element.FillSecondary || element.SecondaryGapGrow > 0
+
+        let finalSecondatySizePrevious = 0
+        if (dependOnSecondarySize) {
+            //Read secondaryDimension
+            finalSecondatySizePrevious = element[layoutBlock.secondaryDimension]
+        }
+
+        let secondarySize = layoutBlock.GetSecondarySize()
+        element["Internal" + layoutBlock.secondaryDimension] = secondarySize
+
+        if (dependOnSecondarySize) {
+            //Read secondaryDimension            
+            let finalSecondatySize = element[layoutBlock.secondaryDimension]
+            if (finalSecondatySizePrevious != finalSecondatySize)
+                return
+            let extraPixels = finalSecondatySize - secondarySize
+            //if (extraPixels > 0) {
+            layoutBlock.GrowLines(extraPixels, element.SecondaryGapGrow)
+            //}
+        }
+        
         for (let i of layoutBlock.lines) {
             i.AlignPrimary(sizeLimit, element.PrimaryGapGrow, element.PrimaryGravity)
         }
 
         layoutBlock.WriteChildren(children)
-
-        element["Internal" + layoutBlock.secondaryDimension] = layoutBlock.GetSecondarySize()
-
-        //console.log("layoutBlock.lines", layoutBlock.lines)
-            
-
-
-            /*for (let i of children) {
-                let lineWithExtraElement = lineLayout.AddChild(i)
-                if (lineWithExtraElement.numChildren > 1) {
-                    if (lineWithExtraElement.GetContainerSize() >= maxContainerSize) {
-                        break;
-                    }
-                }
-                lineLayout = lineWithExtraElement
-            }
-
-            let numChildrenInLine = lineLayout.numChildren
-            let childrenInLine = children.splice(0, numChildrenInLine)
-            //console.log("childrenInLine", childrenInLine.length)
-
-            lineLayout = primaryLayoutState.Clone()
-
-            lineLayout.LayoutSequenceGrow(childrenInLine)
-
-            secondaryLayoutState.LayoutParallel(childrenInLine)
-            console.log(secondaryLayoutState)
-
-            if (children.length == 0)
-                break*/
-        
-
-
-        
-
-
-
-
-        /*let result = {
-        ...this
-    }*/
-        /*let primarySide = Sides[element.Side]
-        let primaryLayoutDirection = new LayoutDirection(primarySide)
-        let primaryLayoutState = new LayoutState(primaryLayoutDirection,element)
-
-        let secondarySide = Sides.Top
-        let secondaryLayoutDirection = new LayoutDirection(secondarySide)
-        let secondaryLayoutState = new LayoutState(secondaryLayoutDirection, element)
-
-        console.log("secondaryLayoutDirection", secondaryLayoutDirection)
-
-        let children = element.Children.ToArray()
-
-        let internalLayout = primaryLayoutState
-        for (let i of children) {
-            internalLayout = internalLayout.AddChild(i)
-        }
-
-        element[primaryLayoutDirection.internalDimensionName] = internalLayout.GetContainerSize()
-
-
-        let maxContainerSize = element[primaryLayoutDirection.dimensionName]
-        while (true) {
-            let lineLayout = primaryLayoutState
-            for (let i of children) {
-                let lineWithExtraElement = lineLayout.AddChild(i)
-                if (lineWithExtraElement.numChildren > 1) {
-                    if (lineWithExtraElement.GetContainerSize() >= maxContainerSize) {
-                        break;
-                    }
-                }
-                lineLayout = lineWithExtraElement
-            }
-
-            let numChildrenInLine = lineLayout.numChildren
-            let childrenInLine = children.splice(0, numChildrenInLine)
-            //console.log("childrenInLine", childrenInLine.length)
-
-            lineLayout = primaryLayoutState.Clone()
-
-            lineLayout.LayoutSequenceGrow(childrenInLine)
-
-            secondaryLayoutState.LayoutParallel(childrenInLine)
-            console.log(secondaryLayoutState)
-
-            if (children.length == 0)
-                break
-        }*/
-
-
-        /*primaryLayoutDirection.layoutDimensionName
-        let mainDimensionName = mainSide.GetDimensionName()
-        let mainCoordinateName = mainSide.GetCoordinateName()
-
-        
-        let mainLayout = new LayoutHelper(mainSide, element)
-        let descriptions = mainLayout.Read(children)
-
-        let internalLayout = Object.create(mainLayout)
-
-        
-
-        internalLayout.AddChildren(descriptions, Infinity)
-
-        element["Internal" + mainDimensionName] = internalLayout.GetContainerSize()
-
-
-        let maxSize = element[mainDimensionName]
-        while (true) {
-            let lineLayout = Object.create(mainLayout)
-            let numChildrenInLine = lineLayout.AddChildren(descriptions, maxSize)
-            console.log("numChildrenInLine", numChildrenInLine)
-            let childrenInLine = descriptions.shift(numChildrenInLine)
-
-
-
-            console.log(descriptions,numChildrenInLine,childrenInLine)
-            if (descriptions.length == 0)
-                break
-        }*/
-        
-
-        /*for (let i of element.Children) {
-            let position = helper.AddChild(i)
-            i["Layout" + helper.startSide.GetCoordinateName()] = position
-        }
-
-        let size = helper.GetContainerSize()*/
-
-
-        
-
 
     })
 

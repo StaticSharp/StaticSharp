@@ -44,7 +44,7 @@ function ScrollLayout(element) {
 
 
     element.Reactive = {
-        InternalWidth: () => Sum(element.Content.InternalWidth, element.MarginLeft, element.MarginRight),
+        InternalWidth: () => Sum(element.Content.InternalWidth, element.LeftOffset, element.RightOffset),
         InternalHeight: () => Sum(element.Content.InternalHeight, element.TopOffset, element.BottomOffset),
         //Content: () => element.Child("Content"),
 

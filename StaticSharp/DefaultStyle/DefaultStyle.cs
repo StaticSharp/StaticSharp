@@ -1,3 +1,4 @@
+using EnvDTE;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
@@ -25,9 +26,9 @@ namespace StaticSharp {
             };
         }
 
-        public static ScrollLayout CodeBlock(Inlines inlines, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
+        public static ScrollLayout CodeBlockScrollable(Inlines inlines, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
             return new ScrollLayout(callerLineNumber, callerFilePath) {
-                Height = new(e => Js.Math.Min(e.InternalHeight, e.Root.Height * 0.8)),
+                PreferredHeight = new(e => Js.Math.Min(e.InternalHeight, e.Root.Height * 0.8)),
                 Radius = 8,
                 BackgroundColor = new(e => Color.Lerp(e.Parent.HierarchyBackgroundColor, e.Parent.HierarchyForegroundColor, codeBackgroundIntensity)),
                 Paddings = 12,
@@ -40,8 +41,22 @@ namespace StaticSharp {
                 },
             };
         }
-        
- 
+        public static Paragraph CodeBlock(Inlines inlines, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
+            /*PreferredHeight = new(e => Js.Math.Min(e.InternalHeight, e.Root.Height * 0.8)),
+                Radius = 8,
+                BackgroundColor = new(e => Color.Lerp(e.Parent.HierarchyBackgroundColor, e.Parent.HierarchyForegroundColor, codeBackgroundIntensity)),
+                Paddings = 12,*/
+            
+            return new Paragraph(inlines, callerLineNumber, callerFilePath) {
+                Radius = 8,
+                BackgroundColor = new(e => Color.Lerp(e.Parent.HierarchyBackgroundColor, e.Parent.HierarchyForegroundColor, codeBackgroundIntensity)),
+                Paddings = 12,
+                FontSize = CodeBlockFontSize,
+                Weight = FontWeight.Regular,
+                FontFamilies = { codeFontFamily }
+            };
+        }
+
         public static Inline Bold(Inlines inlines, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
             return new Inline(callerLineNumber, callerFilePath) {
                 Weight = FontWeight.Bold,

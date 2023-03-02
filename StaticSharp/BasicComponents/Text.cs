@@ -45,7 +45,7 @@ namespace StaticSharp {
             }
 
             Dictionary<char, Action<Tag>> specialCharacters = new Dictionary<char, Action<Tag>>() {
-                ['\n'] = x =>  x.Add(new Tag("br")),
+                //['\n'] = x =>  x.Add(new Tag("br")),
             };
 
             var result = new Tag();

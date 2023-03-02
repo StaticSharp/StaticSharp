@@ -16,6 +16,9 @@ namespace StaticSharp {
 
             [JavascriptOnlyMember]
             public static double Max(params double[] value) => throw new JavascriptOnlyException();
+            
+            [JavascriptOnlyMember]
+            public static double Clamp(double value, double min, double max ) => throw new JavascriptOnlyException();
         }
 
     }

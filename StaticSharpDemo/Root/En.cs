@@ -117,7 +117,33 @@ namespace StaticSharpDemo.Root {
             };
         }*/
 
-        
+        Block[] TestBlocks = new Block[] {
+            new Block{
+                BackgroundColor = Color.Gray,
+                PreferredWidth = 16,
+                PreferredHeight = 16,
+                Grow = 1,
+                MaxWidth = 128
+
+            },
+            new Block{
+                MarginTop = 10,
+                BackgroundColor = Color.Red,
+                PreferredWidth = 32,
+                PreferredHeight = 32,
+                Grow = 1,
+                MaxWidth = 256
+            },
+            new Block{
+                //MarginsHorizontal = -0.01,
+                BackgroundColor = Color.Pink,
+                PreferredWidth = 64,
+                PreferredHeight = 64,
+                Grow = 1
+            }
+        };
+
+        Random Random= new Random(0);
 
         public override Blocks? Content => new() {
 
@@ -149,10 +175,27 @@ namespace StaticSharpDemo.Root {
 
             },
 
+
+            new Layout{
+                //Vertical = true,
+                FillSecondary = true,
+                PrimaryGap = 10,
+
+                SecondaryGap= 20,
+                SecondaryGapGrow = 1,
+                //PreferredHeight = 400,
+                IntralinearGravity = -1,
+                Children = {
+                    Enumerable.Range(0,12).Select(x=>TestBlocks[x%TestBlocks.Length])
+                }
+            },
+
+
+
+
+
             new Paragraph($"STATIC_SHARP".UnderscoreToNbsp())
-            .Modify(x=>{//x.LineHeight*e.FontSize+10
-                x.TextAlignmentHorizontal = new (e=>e.Height>(109) ? TextAlignmentHorizontal.Center : TextAlignmentHorizontal.Left);
-            }).ToLandingMainHeader(),
+            .ToLandingMainHeader(),
 
 
             Description,
@@ -165,7 +208,10 @@ namespace StaticSharpDemo.Root {
 
             "Welcome to StaticSharp! We believe in getting right to the point, so here is the code from this very page.",
 
-            CodeBlock(LoadFile(ThisFilePath()).GetCodeRegion("codeExample").Highlight()),
+            CodeBlockScrollable(LoadFile(ThisFilePath()).GetCodeRegion("codeExample").Highlight())
+            .Modify(x=>{
+                x.Width = new(e=>Js.Math.Min(e.InternalWidth, e.Parent.Width));
+            }).CenterHorizontally(),
 
             Separator(),
 
@@ -176,7 +222,7 @@ namespace StaticSharpDemo.Root {
             """,
 
             Separator(),
-            
+
             new Flipper() {
                 Flipped = new (e=>e.Width < 950),
                 BottomToTop = true,
@@ -223,7 +269,10 @@ namespace StaticSharpDemo.Root {
             "TURING complete text writing".ToLandingSectionHeader(Color.DeepPink),
             $"""
             Yo dawg, we put programming in the text-writing so you can code while you write.
-            By the way, did you know that at the time this page was generated on {DateTime.Now.Date.ToString("MMMM dd, yyyy")}, the StaticSharp repository had {JObject.Parse(new HttpRequestGenome("https://api.github.com/repos/StaticSharp/StaticSharp").Result.Text).Value<int>("stargazers_count")} stars on {new Uri("https://github.com/StaticSharp/StaticSharp"):GitHub}?
+            By the way, did you know that at the time this page was generated on {DateTime.Now.Date.ToString("MMMM dd, yyyy")}, the StaticSharp repository had {
+                JObject.Parse(new HttpRequestGenome("https://api.github.com/repos/StaticSharp/StaticSharp").Result.Text).Value<int>("stargazers_count")
+                } stars on {
+                new Uri("https://github.com/StaticSharp/StaticSharp"):GitHub}?
             """,
             #endregion
 
@@ -261,6 +310,32 @@ namespace StaticSharpDemo.Root {
                 """){ 
                 MarginTop = 20
             },
+
+            Separator(),
+
+            "any QUESTIONS?".ToLandingSectionHeader(new Color("1a6ed8")),
+
+            new Layout{
+                MarginsVertical = 10,
+                PrimaryGap= 10,
+                SecondaryGap= 10,
+                Children = {
+                    new Blocks{
+                        FacebookMessengerButton("staticsharp"),
+                        TelegramButton("petr_sevostianov"),
+                        DiscordButton("KYF5uneE2V"),
+                    }.Modify(x=>{
+                        foreach (var item in x.OfType<Block>()) {
+                            //item.Margins = 10;
+                            item.Grow = 1;
+                            item.PreferredWidth = new(e=>Js.Math.Min(e.InternalWidth,e.Parent.Width-e.MarginLeft-e.MarginRight));
+                            //item.Shrink= 1;
+                        }
+                    }),
+                }
+            }.InheritHorizontalPaddings().FillWidth()
+            
+
 
             /*new Block{
                 ["Height"] = "(e)=>e.Flipped ? Sum(e.First.Height, e.Second.Height) : Max(e.First.Height, e.Second.Height) ",
