@@ -15,7 +15,7 @@ function GetParentElementByPredicate(firstParentToCompare, predicate) {
     return undefined
 }
 
-
+/*
 function SocketProperty(value) {
     let _this = this
     Property.call(_this, value)
@@ -28,7 +28,7 @@ function CreateSocketProperty(element,name) {
 
 
 
-}
+}*/
 
 
 /**

@@ -155,7 +155,7 @@ namespace StaticSharpDemo.Root {
 
                 },*/
 
-            new MenuResponsive {
+            /*new MenuResponsive {
                 Depth = 1,
                 Logo = new Image("https://raw.githubusercontent.com/StaticSharp/StaticSharpBrandAssets/main/LogoHorizontal.svg") {
                     Embed = Image.TEmbed.Image,
@@ -164,7 +164,7 @@ namespace StaticSharpDemo.Root {
                     MarginsHorizontal = 20,
 
                 },
-                Dropdown = new Layout{ 
+                Dropdown = new Layout{
                     Vertical = true,
                     BackgroundColor = Color.LightGray,
                 },
@@ -175,7 +175,7 @@ namespace StaticSharpDemo.Root {
                     MenuItem(Node.Components.ParagraphComponent),
                     MenuItem(Node.Customization.HowToCreateNewComponent)
                 }
-            },
+            },*/
 
 
             new Layout{
@@ -201,6 +201,39 @@ namespace StaticSharpDemo.Root {
 
 
             Description,
+
+
+
+            new Paragraph("Text\n\n\n\nText"){
+                BackgroundColor = new(e=>Js.Window.Touch?Color.Blue:Color.Red) ,
+                MarginsHorizontal= 20,
+                PaddingsHorizontal = 0,
+
+                //TextAlignmentHorizontal = TextAlignmentHorizontal.Center,
+                Children = { 
+                    new Block(){ 
+                        BackgroundColor = new(e=>e.Parent.BackgroundColor),
+                        Depth = -1,
+                        X = new(e=>-e.Parent.X),
+                        Width = new(e=>e.Parent.Parent.Width),
+                        Height = new(e=>e.Parent.Height),
+                    }
+                }
+            },
+
+
+            new Block{
+                PreferredHeight = new(e=>e.FirstChild.InternalHeight),
+                BackgroundColor = Color.LightGray,
+                Children = {
+                    new Paragraph("Text\n\n\n\nText"){ 
+                        //PaddingLeft = new(e=>e.Parent.Parent.PaddingLeft),
+                        X = new(e=>-e.Parent.X),
+                        BackgroundColor = Color.Pink,
+                        Width = new(e=>e.Parent.Parent.Width)
+                    }
+                }
+            },
 
             Separator(),
 
