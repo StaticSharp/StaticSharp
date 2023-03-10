@@ -103,7 +103,6 @@ function Hierarchical(element) {
         let equal = currentChildren.length === tergetChildren.length && currentChildren.every(function (value, index) { return value === tergetChildren[index] })
 
         if (!equal) {
-            console.log(currentChildren, tergetChildren, element)
             for (let i of currentChildren) {
                 i.remove()
             }

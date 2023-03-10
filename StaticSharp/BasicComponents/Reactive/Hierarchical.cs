@@ -57,6 +57,7 @@ namespace StaticSharp {
 
 
     [ConstructorJs]
+    [RelatedScript("DomLinkedList")]
     public abstract class Hierarchical : Reactive {
         protected virtual string TagName => CaseUtils.CamelToKebab(GetType().Name);
 

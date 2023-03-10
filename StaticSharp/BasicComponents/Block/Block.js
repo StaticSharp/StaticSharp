@@ -24,42 +24,42 @@ function CalcOffset(container, child, sideName) {
 * @param {string} sideName - "Left", "Right", "Top", "Bottom" - side of container to start from
 * @returns Array of offsets: X - if direction is "Left" or "Right", Y - otherwise
 */
-function CalcSequentialOffsets(container, children, sideName) {
-    let result = [];
-    let oppositeSideName = {
-        "Left": "Right",
-        "Right": "Left",
-        "Top": "Bottom",
-        "Bottom": "Top"
-    }[sideName];
+//function CalcSequentialOffsets(container, children, sideName) {
+//    let result = [];
+//    let oppositeSideName = {
+//        "Left": "Right",
+//        "Right": "Left",
+//        "Top": "Bottom",
+//        "Bottom": "Top"
+//    }[sideName];
 
-    let marginName = "Margin" + sideName
-    let oppositeMarginName = "Margin" + oppositeSideName
-    let sizeName = {
-        "Left": "Width",
-        "Right": "Width",
-        "Top": "Height",
-        "Bottom": "Height"
-    }[sideName]
+//    let marginName = "Margin" + sideName
+//    let oppositeMarginName = "Margin" + oppositeSideName
+//    let sizeName = {
+//        "Left": "Width",
+//        "Right": "Width",
+//        "Top": "Height",
+//        "Bottom": "Height"
+//    }[sideName]
 
-    if (sideName == "Right" || sideName == "Bottom") {
-        throw new Error("sideName = \"Right\" || sideName == \"Bottom\" - not supported");
-    }
+//    if (sideName == "Right" || sideName == "Bottom") {
+//        throw new Error("sideName = \"Right\" || sideName == \"Bottom\" - not supported");
+//    }
     
-    let offset = CalcOffset(container, children[0], sideName)
-    result[0] = offset;
-    let previousOppositeMargin = First(children[0][oppositeMarginName], 0)
-    offset += children[0][sizeName]
+//    let offset = CalcOffset(container, children[0], sideName)
+//    result[0] = offset;
+//    let previousOppositeMargin = First(children[0][oppositeMarginName], 0)
+//    offset += children[0][sizeName]
 
-    for (let i = 1; i < children.length; i++) {
-        let margin = Max(previousOppositeMargin, children[i][marginName], 0)
-        result[i] = offset + margin
-        offset += children[i][sizeName] + margin
-        previousOppositeMargin = First(children[i][oppositeMarginName], 0)
-    }
+//    for (let i = 1; i < children.length; i++) {
+//        let margin = Max(previousOppositeMargin, children[i][marginName], 0)
+//        result[i] = offset + margin
+//        offset += children[i][sizeName] + margin
+//        previousOppositeMargin = First(children[i][oppositeMarginName], 0)
+//    }
 
-    return result;
-}
+//    return result;
+//}
 
 function GetClipRect(clippingElement, contentX, contentY, contentWidth, contentHeight ) {
     let left = -contentX

@@ -64,8 +64,6 @@ DomLinkedList.prototype.RemoveRange = function (startIndex, count) {
         throw new Error(`Range to remove is out of collection range. "startIndex" : ${startIndex}, "count" : ${count}`)
     }
 
-    console.log("startIndex, count = ", startIndex, count)
-
     //let firstItemToRemove = currentItem
     let firstItemToRemoveProperty = currentItemProperty
     let itemsToRemove = [currentItemProperty.getValue()]
@@ -110,8 +108,5 @@ DomLinkedList.prototype.Insert = function (index, item) {
 
 DomLinkedList.prototype.RemoveAt = function (index) {
     var result = this.RemoveRange(index, 1)
-
-    console.log("RemoveAt() index, result", index, result);
-
     return result[0]
 }

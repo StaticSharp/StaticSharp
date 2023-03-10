@@ -63,10 +63,10 @@ function Layout(element) {
 
         let dependOnSecondarySize = element.FillSecondary || element.SecondaryGapGrow > 0
 
-        let finalSecondatySizePrevious = 0
+        let finalSecondarySizePrevious = 0
         if (dependOnSecondarySize) {
             //Read secondaryDimension
-            finalSecondatySizePrevious = element[layoutBlock.secondaryDimension]
+            finalSecondarySizePrevious = element[layoutBlock.secondaryDimension]
         }
 
         let secondarySize = layoutBlock.GetSecondarySize()
@@ -74,10 +74,10 @@ function Layout(element) {
 
         if (dependOnSecondarySize) {
             //Read secondaryDimension            
-            let finalSecondatySize = element[layoutBlock.secondaryDimension]
-            if (finalSecondatySizePrevious != finalSecondatySize)
+            let finalSecondarySize = element[layoutBlock.secondaryDimension]
+            if (finalSecondarySizePrevious != finalSecondarySize)
                 return
-            let extraPixels = finalSecondatySize - secondarySize
+            let extraPixels = finalSecondarySize - secondarySize
             //if (extraPixels > 0) {
             layoutBlock.GrowLines(extraPixels, element.SecondaryGapGrow)
             //}

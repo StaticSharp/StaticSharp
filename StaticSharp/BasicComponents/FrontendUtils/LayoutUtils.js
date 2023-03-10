@@ -46,11 +46,14 @@ function LayoutItem(element, layoutBlock) {
     /**@type {LayoutLine}*/ this.line = undefined
 }
 
-LayoutItem.prototype.Write = function () {
-    this.element["Layout" + this.layoutBlock.primaryCoordinate] = this.primaryPosition
+LayoutItem.prototype.Write = function (xOffset = 0, yOffset = 0) {
+    let primaryOffset = this.layoutBlock.vertical ? yOffset : xOffset
+    let secondaryOffset = this.layoutBlock.vertical ? xOffset : yOffset
+
+    this.element["Layout" + this.layoutBlock.primaryCoordinate] = this.primaryPosition + primaryOffset
     this.element["Layout" + this.layoutBlock.primaryDimension] = this.primarySize
 
-    this.element["Layout" + this.layoutBlock.secondaryCoordinate] = this.line.secondaryPosition + this.secondaryPosition
+    this.element["Layout" + this.layoutBlock.secondaryCoordinate] = this.line.secondaryPosition + this.secondaryPosition + secondaryOffset
     this.element["Layout" + this.layoutBlock.secondaryDimension] = this.secondarySize
 }
 
@@ -270,12 +273,46 @@ LayoutLine.prototype.AlignSecondary = function (gravity, grow) {
     }
 }
 
+
+function LayoutRegion(offsetX, offsetY, marginLeft, marginRight, marginTop, marginBottom,
+    paddingLeft = 0, paddingRight = 0, paddingTop = 0, paddingBottom = 0)
+{ 
+    this.MarginLeft = marginLeft
+    this.MarginRight = marginRight
+    this.MarginTop = marginTop
+    this.MarginBottom = marginBottom
+    this.PaddingLeft = paddingLeft
+    this.PaddingRight = paddingRight
+    this.PaddingTop = paddingTop
+    this.PaddingBottom = paddingBottom
+    this.OffsetX = offsetX
+    this.OffsetY = offsetY
+}
+
 /**
  * @constructor
  * @param {boolean} vertical
- * @param {Block} container
+ * @param {Block | LayoutRegion} container
  */
 function LayoutBlock(vertical, container) {
+    if (!(container instanceof LayoutRegion)) {
+        var container = new LayoutRegion(0, 0,
+            container.MarginLeft,
+            container.MarginRight,
+            container.MarginTop,
+            container.MarginBottom,
+            container.PaddingLeft,
+            container.PaddingRight,
+            container.PaddingTop,
+            container.PaddingBottom
+        )
+    }
+
+    this.offsetX = container.OffsetX
+    this.offsetY = container.OffsetY
+
+    /**@type {boolean}*/
+    this.vertical = vertical
 
     /**@type {"Top" | "Left"}*/
     this.primarySide = vertical ? "Top" : "Left"
@@ -443,6 +480,6 @@ LayoutBlock.prototype.GetSecondarySize = function () {
  */
 LayoutBlock.prototype.WriteChildren = function (children) {
     for (let i of children) {
-        i.Write()
+        i.Write(this.offsetX, this.offsetY)
     }
 }

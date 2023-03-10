@@ -64,7 +64,6 @@ namespace StaticSharp {
         [RelatedScript("ReactiveUtils")]
         [RelatedScript("../../CrossplatformLibrary/Math/Math")]
         [RelatedScript("../../CrossplatformLibrary/Linq/Linq")]
-        [RelatedScript("DomLinkedList")]
         [RelatedScript("Constants")]
         [RelatedScript("Constructor")]
         [RelatedScript("Bindings")]
