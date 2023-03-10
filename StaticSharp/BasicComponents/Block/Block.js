@@ -131,8 +131,9 @@ function Block(element) {
         Width: e => First(e.LayoutWidth, e.PreferredWidth),
         Height: e => First(e.LayoutHeight, e.PreferredHeight),
 
-        ClipByParent: false
-        
+        ClipByParent: false,
+
+        Layer: new Layer(element)
     }
 
     DepthToStyle(element)

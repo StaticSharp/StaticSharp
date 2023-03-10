@@ -103,6 +103,7 @@ function CreateSocket(element,name,parentExpression) {
             //previousValue.place.setValue(undefined)
             previousValue.place = undefined
             previousValue.Parent = undefined
+            previousValue.Layer.clear()
         }
         if (newValue != undefined) {
             if (newValue.place) {

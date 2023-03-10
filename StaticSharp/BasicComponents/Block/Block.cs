@@ -115,6 +115,7 @@ namespace StaticSharp {
 
     [Mix(typeof(BlockBindings<Js.Block>))]
     [ConstructorJs]
+    [RelatedScript("../Reactive/Layer")]
     public partial class Block : BaseModifier, IBlock {
         //public virtual List<Modifier> Modifiers { get; } = new();
         public virtual Blocks Children { get; } = new();

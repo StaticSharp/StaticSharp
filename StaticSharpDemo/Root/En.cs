@@ -155,7 +155,7 @@ namespace StaticSharpDemo.Root {
 
                 },*/
 
-            /*new MenuResponsive {
+            new MenuResponsive {
                 Depth = 1,
                 Logo = new Image("https://raw.githubusercontent.com/StaticSharp/StaticSharpBrandAssets/main/LogoHorizontal.svg") {
                     Embed = Image.TEmbed.Image,
@@ -175,7 +175,7 @@ namespace StaticSharpDemo.Root {
                     MenuItem(Node.Components.ParagraphComponent),
                     MenuItem(Node.Customization.HowToCreateNewComponent)
                 }
-            },*/
+            },
 
 
             new Layout{
