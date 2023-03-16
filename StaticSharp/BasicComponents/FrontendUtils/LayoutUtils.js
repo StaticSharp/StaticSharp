@@ -28,11 +28,11 @@ function LayoutItem(element, layoutBlock) {
     /**@type {number}*/ //this.secondaryMaxSize = element["Max" + layoutBlock.secondaryDimension] || 0
 
     /**@type {number}*/
-    this.shrink = element.Shrink || 0
+    this.shrink = /*element.Shrink*/ layoutBlock.itemShrink || 0
     if (this.shrink < 0) this.shrink = 0
     let minimalSize = this.shrink == 0 ? this.primarySize : this.primaryMinSize
 
-    this.grow = element.Grow || 0
+    this.grow = /*element.Grow*/ layoutBlock.itemGrow || 0
     if (this.grow < 0) this.grow = 0
     let maximalSize = this.grow == 0 ? this.primarySize : this.primaryMaxSize
 
@@ -283,7 +283,7 @@ LayoutLine.prototype.AlignSecondary = function (gravity, grow) {
 
 
 function LayoutRegion(offsetX, offsetY, marginLeft, marginRight, marginTop, marginBottom,
-    paddingLeft = 0, paddingRight = 0, paddingTop = 0, paddingBottom = 0)
+    paddingLeft = 0, paddingRight = 0, paddingTop = 0, paddingBottom = 0, itemGrow = 0, itemShrink = 0)
 { 
     this.MarginLeft = marginLeft
     this.MarginRight = marginRight
@@ -295,6 +295,8 @@ function LayoutRegion(offsetX, offsetY, marginLeft, marginRight, marginTop, marg
     this.PaddingBottom = paddingBottom
     this.OffsetX = offsetX
     this.OffsetY = offsetY
+    this.ItemGrow = itemGrow
+    this.ItemShrink = itemShrink
 }
 
 /**
@@ -312,12 +314,23 @@ function LayoutBlock(vertical, container) {
             container.PaddingLeft,
             container.PaddingRight,
             container.PaddingTop,
-            container.PaddingBottom
+            container.PaddingBottom,
+            container.ItemGrow,
+            container.ItemShrink
         )
     }
 
+    /**@type {number}*/
     this.offsetX = container.OffsetX
+    /**@type {number}*/
     this.offsetY = container.OffsetY
+
+    /**@type {number}*/
+    this.itemGrow = container.ItemGrow
+    /**@type {number}*/
+    this.itemShrink = container.ItemShrink
+
+    console.log("container.ItemGrow", container, this.itemGrow)
 
     /**@type {boolean}*/
     this.vertical = vertical

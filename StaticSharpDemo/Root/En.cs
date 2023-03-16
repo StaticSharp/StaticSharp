@@ -187,6 +187,8 @@ namespace StaticSharpDemo.Root {
             new Layout{
                 //Vertical = true,
                 FillSecondary = true,
+                
+                ItemGrow = 1,
                 PrimaryGap = 10,
 
                 SecondaryGap= 20,
@@ -358,6 +360,7 @@ namespace StaticSharpDemo.Root {
             "any QUESTIONS?".ToLandingSectionHeader(new Color("1a6ed8")),
 
             new Layout{
+                ItemGrow = 1,
                 MarginsVertical = 10,
                 PrimaryGap= 10,
                 SecondaryGap= 10,

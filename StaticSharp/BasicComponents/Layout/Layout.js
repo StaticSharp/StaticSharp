@@ -9,6 +9,10 @@ function Layout(element) {
 
     element.Reactive = {
         Vertical: false,
+
+        ItemGrow: 0, 
+        ItemShrink: 0,
+
         PrimaryGap: 0,
         PrimaryGapGrow: 0,
         PrimaryGravity: -1,

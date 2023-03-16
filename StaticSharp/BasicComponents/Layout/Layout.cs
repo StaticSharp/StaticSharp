@@ -19,6 +19,8 @@ namespace StaticSharp {
     namespace Js {
         public interface Layout : Block {
             public bool Vertical { get; }
+            public double ItemGrow { get; }
+            public double ItemShrink { get; }
             public double PrimaryGap { get; }
             public double PrimaryGapGrow { get; }
             public double PrimaryGravity { get; }
@@ -33,6 +35,9 @@ namespace StaticSharp {
     namespace Gears {
         public class LayoutBindings<FinalJs> : BlockBindings<FinalJs> {
             public Binding<bool> Vertical { set { Apply(value); } }
+
+            public Binding<double> ItemGrow { set { Apply(value); } }
+            public Binding<double> ItemShrink { set { Apply(value); } }
             public Binding<double> PrimaryGap { set { Apply(value); } }
             public Binding<double> PrimaryGapGrow { set { Apply(value); } }
             public Binding<double> PrimaryGravity { set { Apply(value); } }
