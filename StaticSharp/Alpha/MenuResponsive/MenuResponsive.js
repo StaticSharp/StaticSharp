@@ -68,17 +68,17 @@ function MenuResponsive(element) {
 
         // Button
         let rightOffset = CalcOffset(element, element.Button, "Right")
-        element.Button.LayoutX = element.Width - element.Button.Width - rightOffset // TODO: element.Width -> element.PreferredWidth?
+        element.Button./*LayoutX*/Layer.X = element.Width - element.Button.Layer.Width - rightOffset // TODO: element.Width -> element.PreferredWidth?
         let topOffset = CalcOffset(element, element.Button, "Top")
-        element.Button.LayoutY = topOffset
+        //element.Button.LayoutY = topOffset
+        element.Button.Layer.Y = topOffset
 
         // Dropdown area
         rightOffset = CalcOffset(element, element.Dropdown, "Right")
-        element.Dropdown.LayoutX = element.Width - element.Dropdown.Width - rightOffset
+        element.Dropdown./*LayoutX*/Layer.X = element.Width - element.Dropdown.Layer.Width - rightOffset
 
-        element.Dropdown.LayoutY = element.Button.Y + element.Button.Height +
-            Max(First(element.Button.MarginBottom, 0), First(element.Dropdown.MarginTop, 0))
-
+        element.Dropdown./*LayoutY*/Layer.Y = element.Button.Layer.Y + element.Button.Layer.Height +
+            Max(First(element.Button.Layer.MarginBottom, 0), First(element.Dropdown.Layer.MarginTop, 0))
         // Children
         //let children = [...element.MenuItems]
         //let dropdownChildren = [...element.Dropdown.Children]
@@ -91,7 +91,7 @@ function MenuResponsive(element) {
 
         ///
         let widthForChildrenBodies = element.Button.X - firstChildOffset - element.Logo.MarginRight || 0 - element.Button.MarginLeft
-
+        
         var layoutBlock = new LayoutBlock(false,
             new LayoutRegion(
                 element.Logo.X + element.Logo.Width + (element.Logo.RightMargin || 0),
@@ -103,13 +103,13 @@ function MenuResponsive(element) {
         let mainMenuItemsLayout = layoutBlock.ReadChildren(element.MenuItems)
         let dropdownMenuItemsLayout = layoutBlock.ReadChildren(element.Dropdown.Children)
         let allMenuItemsLayout = mainMenuItemsLayout.concat(dropdownMenuItemsLayout)
-
+        
         let line = layoutBlock.AddLine()
         let i = 0;
         while (i < allMenuItemsLayout.length && line.AddChild(allMenuItemsLayout[i], 0, widthForChildrenBodies)) {
             i++
         }
-
+        
         if (i < mainMenuItemsLayout.length) { // need to move some items TO dropdown
             var itemsToTransfer = element.MenuItems.RemoveRange(i, mainMenuItemsLayout.length - i)
             element.Dropdown.Children.InsertRange(0, itemsToTransfer)
@@ -124,7 +124,6 @@ function MenuResponsive(element) {
         line.AlignPrimary(widthForChildrenBodies, 0, -1)
          // TODO: offset should be a property of layoutBlock if it is based on region, not element
         layoutBlock.WriteChildren(line.items)
-        
 
         //let moveToDropdownOccured = false
         

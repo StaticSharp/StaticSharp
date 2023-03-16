@@ -17,8 +17,10 @@ function LayoutItem(element, layoutBlock) {
 
 
 
-    /**@type {number}*/ this.primarySize = element["Preferred" + layoutBlock.primaryDimension] || 0
-    /**@type {number}*/ this.secondarySize = element["Preferred" + layoutBlock.secondaryDimension] || 0
+    ///**@type {number}*/ this.primarySize = element["Preferred" + layoutBlock.primaryDimension] || 0
+    ///**@type {number}*/ this.secondarySize = element["Preferred" + layoutBlock.secondaryDimension] || 0
+    /**@type {number}*/ this.primarySize = element.Layer[layoutBlock.primaryDimension] || 0
+    /**@type {number}*/ this.secondarySize = element.Layer[layoutBlock.secondaryDimension] || 0
 
     /**@type {number}*/ this.primaryMinSize = element["Min" + layoutBlock.primaryDimension] || 0
     /**@type {number}*/ //this.secondaryMinSize = element["Min" + layoutBlock.secondaryDimension] || 0
@@ -50,11 +52,17 @@ LayoutItem.prototype.Write = function (xOffset = 0, yOffset = 0) {
     let primaryOffset = this.layoutBlock.vertical ? yOffset : xOffset
     let secondaryOffset = this.layoutBlock.vertical ? xOffset : yOffset
 
-    this.element["Layout" + this.layoutBlock.primaryCoordinate] = this.primaryPosition + primaryOffset
-    this.element["Layout" + this.layoutBlock.primaryDimension] = this.primarySize
+    //this.element["Layout" + this.layoutBlock.primaryCoordinate] = this.primaryPosition + primaryOffset
+    //this.element["Layout" + this.layoutBlock.primaryDimension] = this.primarySize
 
-    this.element["Layout" + this.layoutBlock.secondaryCoordinate] = this.line.secondaryPosition + this.secondaryPosition + secondaryOffset
-    this.element["Layout" + this.layoutBlock.secondaryDimension] = this.secondarySize
+    //this.element["Layout" + this.layoutBlock.secondaryCoordinate] = this.line.secondaryPosition + this.secondaryPosition + secondaryOffset
+    //this.element["Layout" + this.layoutBlock.secondaryDimension] = this.secondarySize
+
+    this.element.Layer[this.layoutBlock.primaryCoordinate] = this.primaryPosition + primaryOffset
+    this.element.Layer[this.layoutBlock.primaryDimension] = this.primarySize
+
+    this.element.Layer[this.layoutBlock.secondaryCoordinate] = this.line.secondaryPosition + this.secondaryPosition + secondaryOffset
+    this.element.Layer[this.layoutBlock.secondaryDimension] = this.secondarySize
 }
 
 
@@ -231,7 +239,7 @@ LayoutLine.prototype.AlignPrimary = function (containerSize, gapGrow, gravity = 
         for (let i of this.items) {
             offset += gapExtraPixels
             i.primaryPosition += offset
-            i.primarySize += i.extraPixels
+            i.primarySize += (i.extraPixels || 0)
             offset += i.extraPixels || 0
         }
         return
@@ -430,7 +438,6 @@ LayoutBlock.prototype.AlignLines = function (
         else
             line.secondaryPosition = Math.max(this.secondaryBodyStop, this.secondaryMarginStop + line.secondaryMargin)
 
-
         this.secondaryBodyStop = line.secondaryPosition + line.secondaryBodyStop
         this.secondaryMarginStop = line.secondaryPosition + line.secondaryMarginStop
     }
@@ -443,7 +450,6 @@ LayoutBlock.prototype.AlignLines = function (
 LayoutBlock.prototype.GrowLines = function (
     extraPixels,
     secondaryGapGrow) {
-
     let numLines = this.lines.length
 
     let numGaps = numLines - 1
@@ -454,7 +460,6 @@ LayoutBlock.prototype.GrowLines = function (
 
     let offset = -gapExtraPixels
     for (let line of this.lines) {
-
         offset += gapExtraPixels
         line.secondaryPosition += offset
         let secondaryLineSize = line.secondaryMarginStop + lineExtraPixels

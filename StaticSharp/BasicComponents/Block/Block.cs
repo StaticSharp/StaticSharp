@@ -18,17 +18,17 @@ namespace StaticSharp {
             public double Y { get; }
             public double Width { get; }
             public double Height { get; }
-            
-            public double LayoutX { get; }
-            public double LayoutY  { get; }
-            public double LayoutWidth  { get; }
-            public double LayoutHeight  { get; }
+
+            //public double LayoutX { get; }
+            //public double LayoutY  { get; }
+            //public double LayoutWidth  { get; }
+            //public double LayoutHeight  { get; }
 
 
-            public double PreferredWidth { get; }
-            public double PreferredHeight { get; }
-            public double Grow { get; }
-            public double Shrink { get; }
+            //public double PreferredWidth { get; }
+            //public double PreferredHeight { get; }
+            //public double Grow { get; }
+            //public double Shrink { get; }
 
             public double MinWidth { get; }
             public double MinHeight { get; }
@@ -61,6 +61,7 @@ namespace StaticSharp {
             public new Block NextSibling { get; }
             public new Enumerable<Block> Children { get; }
 
+            public Block Layer { get; } // TODO:
         }
     }
 
@@ -74,11 +75,11 @@ namespace StaticSharp {
             public Binding<double> Height { set { Apply(value); } }
 
 
-            public Binding<double> PreferredWidth { set { Apply(value); } }
-            public Binding<double> PreferredHeight { set { Apply(value); } }
+            //public Binding<double> PreferredWidth { set { Apply(value); } }
+            //public Binding<double> PreferredHeight { set { Apply(value); } }
 
-            public Binding<double> Grow { set { Apply(value); } }
-            public Binding<double> Shrink { set { Apply(value); } }
+            //public Binding<double> Grow { set { Apply(value); } }
+            //public Binding<double> Shrink { set { Apply(value); } }
 
             public Binding<double> MinWidth { set { Apply(value); } }
             public Binding<double> MinHeight { set { Apply(value); } }

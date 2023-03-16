@@ -120,26 +120,32 @@ namespace StaticSharpDemo.Root {
         Block[] TestBlocks = new Block[] {
             new Block{
                 BackgroundColor = Color.Gray,
-                PreferredWidth = 16,
-                PreferredHeight = 16,
-                Grow = 1,
+                Width = 16,
+                Height = 16,
+                //PreferredWidth = 16,
+                //PreferredHeight = 16,
+                //Grow = 1,
                 MaxWidth = 128
 
             },
             new Block{
                 MarginTop = 10,
                 BackgroundColor = Color.Red,
-                PreferredWidth = 32,
-                PreferredHeight = 32,
-                Grow = 1,
+                Width = 32,
+                Height = 32,
+                //PreferredWidth = 32,
+                //PreferredHeight = 32,
+                //Grow = 1,
                 MaxWidth = 256
             },
             new Block{
                 //MarginsHorizontal = -0.01,
                 BackgroundColor = Color.Pink,
-                PreferredWidth = 64,
-                PreferredHeight = 64,
-                Grow = 1
+                Width = 64,
+                Height = 64,
+                //PreferredWidth = 64,
+                //PreferredHeight = 64,
+                //Grow = 1
             }
         };
 
@@ -210,8 +216,8 @@ namespace StaticSharpDemo.Root {
                 PaddingsHorizontal = 0,
 
                 //TextAlignmentHorizontal = TextAlignmentHorizontal.Center,
-                Children = { 
-                    new Block(){ 
+                Children = {
+                    new Block(){
                         BackgroundColor = new(e=>e.Parent.BackgroundColor),
                         Depth = -1,
                         X = new(e=>-e.Parent.X),
@@ -223,7 +229,8 @@ namespace StaticSharpDemo.Root {
 
 
             new Block{
-                PreferredHeight = new(e=>e.FirstChild.InternalHeight),
+                //PreferredHeight = new(e=>e.FirstChild.InternalHeight),
+                Height = new(e=>e.FirstChild.Layer.Height),
                 BackgroundColor = Color.LightGray,
                 Children = {
                     new Paragraph("Text\n\n\n\nText"){ 
@@ -277,8 +284,8 @@ namespace StaticSharpDemo.Root {
                     }
                 },
                 Second = new Image("StackoverflowKeyboard.svg"){
-                    X  = new(e=>((Js.Flipper)e.Parent).Flipped ? Js.Math.Max(0.5 * (e.Parent.Width - e.Width), 0) : e.LayoutX),
-                    Width = new(e=>((Js.Flipper)e.Parent).Flipped ? Js.Math.Min(e.LayoutWidth, 400) : e.LayoutWidth),
+                    X  = new(e=>((Js.Flipper)e.Parent).Flipped ? Js.Math.Max(0.5 * (e.Parent.Width - e.Width), 0) : /*e.LayoutX*/e.X),
+                    Width = new(e=>((Js.Flipper)e.Parent).Flipped ? Js.Math.Min(e./*LayoutWidth*/Width, 400) : e./*LayoutWidth*/Width),
                     Margins = 75,
                     Embed = Image.TEmbed.Image,
                     Fit = Fit.Inside
@@ -318,14 +325,14 @@ namespace StaticSharpDemo.Root {
             C# is a strongly-typed language, so the IDE has access to information about the available types and their members in compile-time.
             With the introduction of Source Generators in .NET 6, we can even provide IntelliSense for internal links.
             Example: This link -> {Node.Components} is made by {Code("{Node.Components}")} using interpolated string syntax.
-            """,            
+            """,
             """
             Modern IDEs are like supercharged text editors, making it a breeze to develop a website using the most powerful framework at your fingertips.
             """,
 
             Separator(),
             "DEVELOPER mode".ToLandingSectionHeader(Color.Blue),
-            
+			
 
 
             new Inlines($"""
@@ -342,7 +349,7 @@ namespace StaticSharpDemo.Root {
             new Paragraph("""
                 In addition, StaticSharp in developer mode provides hot reloading of all resources used on the page.
                 All images, videos, JavaScript, text files, and code examples will be reloaded when they are modified.
-                """){ 
+                """){
                 MarginTop = 20
             },
 
@@ -358,12 +365,14 @@ namespace StaticSharpDemo.Root {
                     new Blocks{
                         FacebookMessengerButton("staticsharp"),
                         TelegramButton("petr_sevostianov"),
-                        DiscordButton("KYF5uneE2V"),
+                        DiscordButton("KYF5uneE2V")
                     }.Modify(x=>{
                         foreach (var item in x.OfType<Block>()) {
                             //item.Margins = 10;
-                            item.Grow = 1;
-                            item.PreferredWidth = new(e=>Js.Math.Min(e.InternalWidth,e.Parent.Width-e.MarginLeft-e.MarginRight));
+                            
+                            //item.Grow = 1;
+                            //item.PreferredWidth = new(e=>Js.Math.Min(e.InternalWidth,e.Parent.Width-e.MarginLeft-e.MarginRight));
+                            item.Width = new(e=>Js.Math.Min(e.InternalWidth, e.Layer.Width, e.Parent.Width-e.MarginLeft-e.MarginRight));
                             //item.Shrink= 1;
                         }
                     }),

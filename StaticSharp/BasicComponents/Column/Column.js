@@ -4,7 +4,6 @@ function Column(element) {
     element.Reactive = {
 
         InternalWidth: () => {
-
             let internalWidth = Sum(element.PaddingLeft,element.PaddingRight)
             for (let child of element.Children) {
                 let left = CalcOffset(element, child, "Left")
@@ -13,7 +12,7 @@ function Column(element) {
                 //let spaceLeft = Max(element.PaddingLeft, child.MarginLeft, 0)
                 //let spaceRight = Max(element.PaddingRight, child.MarginRight, 0)
 
-                let internalWidthByCurrentChild = Sum(child.InternalWidth, left + right)
+                let internalWidthByCurrentChild = Sum(/*child.InternalWidth*/child.Layer.Width, left + right)
 
                 internalWidth = Max(internalWidth, internalWidthByCurrentChild)
             }
@@ -30,12 +29,13 @@ function Column(element) {
         for (let child of element.Children) {
             if (child.isBlock) {
 
-                child.LayoutX = CalcOffset(element, child, "Left")               
+                child./*LayoutX*/Layer.X = CalcOffset(element, child, "Left")               
 
                 let left = CalcOffset(element, child, "Left")
                 let right = CalcOffset(element, child, "Right")
 
-                child.LayoutWidth = element.Width - left - right                
+                //child.LayoutWidth = element.Width - left - right                
+                child.Layer.Width = element.Width - left - right                
             }
         }
     })
@@ -84,7 +84,8 @@ function Column(element) {
 
                 if (assignDimensions) {
                     //console.log("child.LayoutY", contentHeight)
-                    child.LayoutY = contentHeight
+                    //child.LayoutY = contentHeight
+                    child.Layer.Y = contentHeight
                 }
                 contentHeight += Max(child.Height, 0)
 

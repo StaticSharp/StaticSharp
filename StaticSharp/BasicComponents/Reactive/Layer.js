@@ -1,41 +1,72 @@
-﻿function Layer(element) {
-    this.originalProperties = new Map()
+﻿function CreateLayer(element) {
 
-    new Proxy(this,
+    let originalProperties = new Map()
+
+    let result = new Proxy(element,
         {
             get(target, prop, receiver) {
-                if (this.originalProperties.has(prop)) {
-                    return this.originalProperties.get(prop)
+                if (prop == "originalProperties") { // TODO: think of better implementation
+                    return originalProperties
                 }
 
-                return element[prop]
+                if (originalProperties.has(prop)) {
+
+                    return originalProperties.get(prop).getValue()
+                }
+
+                return target[prop]
             },
 
-            set(obj, prop, value) {
-                if (!element.hasOwnPropery(prop)) {
+            set(target, prop, value, receiver) {
+                if (!target.hasOwnProperty(prop)) {
                     throw new Error(`Element does not have property "${prop}"`);
                 }
 
-                if (!this.originalProperties.has(prop)) {
-                    let currentProperty = element["__" + prop]
-                    let propertyValueOrBinding = currentProperty.binding ? currentProperty.binding.func : currentProperty.value
-                    let backupProperty = new Property()
-                    backupProperty.setValue(propertyValueOrBinding)
-                    this.originalProperties.set(prop, backupProperty)
+                if (value == undefined) // if override value = undefined, then remove override, use original value
+                {
+                    if (originalProperties.has(prop)) {
+                        let backupProperty = originalProperties.get(prop)
+                        let currentProperty = target["__" + prop]
+                        let propertyValueOrBinding = backupProperty.binding ? backupProperty.binding.func : backupProperty.value
+                        currentProperty.setValue(propertyValueOrBinding)
+                        originalProperties.delete(prop)
+                    }
+
+                    return true;
                 }
 
-                element[prop] = value
+                if (!originalProperties.has(prop)) {
+                    let currentProperty = target["__" + prop]
+                    let propertyValueOrBinding = currentProperty.binding ? currentProperty.binding.func : currentProperty.value
+                    let backupProperty = new Property()
+                    backupProperty.name = currentProperty.name // TODO: ???
+                    backupProperty.object = currentProperty.object // TODO: needed to execute binding
+                    backupProperty.setValue(propertyValueOrBinding)
+                    originalProperties.set(prop, backupProperty)
+                }
+
+                target[prop] = value
                 return true;
             }
         }
     );
+
+    return result
+    //element.Layer = result
 }
 
-Layer.prototype.clear = function () {
+
+function ClearLayer(element) {
+    if (!element.Layer || !element.Layer.originalProperties) {
+        // Layer could be set to element itself and has not originalProperties
+        return
+    }
+
     let d = Reaction.beginDeferred()
-    this.originalProperties.forEach(function (value, key, map) {
-        this.element[key] = value
+    element.Layer.originalProperties.forEach(function (backupProperty, key, map) {
+        let propertyValueOrBinding = backupProperty.binding ? backupProperty.binding.func : backupProperty.value
+        element[key] = propertyValueOrBinding
     })
-    this.originalProperties.clear()
+    element.Layer.originalProperties.clear()
     d.end()
 }

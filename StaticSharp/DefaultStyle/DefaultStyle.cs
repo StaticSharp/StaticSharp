@@ -28,7 +28,8 @@ namespace StaticSharp {
 
         public static ScrollLayout CodeBlockScrollable(Inlines inlines, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
             return new ScrollLayout(callerLineNumber, callerFilePath) {
-                PreferredHeight = new(e => Js.Math.Min(e.InternalHeight, e.Root.Height * 0.8)),
+                //PreferredHeight = new(e => Js.Math.Min(e.InternalHeight, e.Root.Height * 0.8)),
+                Height = new(e => Js.Math.Min(e.InternalHeight, e.Root.Height * 0.8)),
                 Radius = 8,
                 BackgroundColor = new(e => Color.Lerp(e.Parent.HierarchyBackgroundColor, e.Parent.HierarchyForegroundColor, codeBackgroundIntensity)),
                 Paddings = 12,

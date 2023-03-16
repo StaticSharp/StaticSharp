@@ -17,7 +17,7 @@ function DomLinkedList(firstChildProperty) {
         })
 }
 
-Object.setPrototypeOf(DomLinkedList.prototype, Enumerable.prototype);
+Object.setPrototypeOf(DomLinkedList.prototype, Enumerable.prototype)
 
 DomLinkedList.prototype.InsertRange = function (startIndex, itemsArray) {
     if (startIndex < 0) {

@@ -103,15 +103,15 @@ function Block(element) {
         MarginRight: undefined,
         MarginBottom: undefined,
 
-        LayoutX: undefined,
-        LayoutY: undefined,
-        LayoutWidth: undefined,
-        LayoutHeight: undefined,
+        //LayoutX: undefined,
+        //LayoutY: undefined,
+        //LayoutWidth: undefined,
+        //LayoutHeight: undefined,
 
-        PreferredWidth: e => e.InternalWidth,
-        PreferredHeight: e => e.InternalHeight,
-        Grow: 0,
-        Shrink: 0,
+        //PreferredWidth: e => e.InternalWidth,
+        //PreferredHeight: e => e.InternalHeight,
+        //Grow: 0,
+        //Shrink: 0,
 
         MinWidth: 0,
         MinHeight: 0,
@@ -122,18 +122,16 @@ function Block(element) {
         InternalHeight: undefined,
 
 
-        X: e => First(e.LayoutX,0),
-        Y: e => First(e.LayoutY,0),
+        X: 0, //e => First(e.LayoutX,0),
+        Y: 0, //e => First(e.LayoutY,0),
 
         AbsoluteX: () => element.IsRoot ? 0 : Sum(element.Parent.AbsoluteX, element.Parent.ScrollXActual, element.X),
         AbsoluteY: () => element.IsRoot ? 0 : Sum(element.Parent.AbsoluteY, -element.Parent.ScrollYActual, element.Y),
 
-        Width: e => First(e.LayoutWidth, e.PreferredWidth),
-        Height: e => First(e.LayoutHeight, e.PreferredHeight),
+        Width: e => e.InternalWidth, // e => First(e.LayoutWidth, e.PreferredWidth),
+        Height: e => e.InternalHeight, // e => First(e.LayoutHeight, e.PreferredHeight),
 
-        ClipByParent: false,
-
-        Layer: new Layer(element)
+        ClipByParent: false
     }
 
     DepthToStyle(element)

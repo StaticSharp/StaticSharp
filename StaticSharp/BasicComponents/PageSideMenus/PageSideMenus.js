@@ -250,9 +250,9 @@ function PageSideMenus(element) {
     new Reaction(() => {
         if (element.TopBar) {
             if ((element.RightSideBar || element.LeftSideBar) && element.BarsCollapsed) {
-                element.TopBar.Height = () => Max(element.TopBar.InternalHeight, element.SideBarsIconsSize)
+                element.TopBar.Height = () => Max(element.TopBar.Layer.Height/*InternalHeight*/, element.SideBarsIconsSize)
             } else {
-                element.TopBar.Height = () => First(element.TopBar.InternalHeight, element.SideBarsIconsSize)
+                element.TopBar.Height = () => First(element.TopBar.Layer.Height/*InternalHeight*/, element.SideBarsIconsSize)
             }
         }
     })
@@ -406,15 +406,19 @@ function PageSideMenus(element) {
 
         if (element.Content) {
             //element.Content.Height = element.WindowHeight
-            element.Content.LayoutWidth = width// - 2 * contentSpace
+            //element.Content.LayoutWidth = width// - 2 * contentSpace
+            element.Content.Layer.Width = width// - 2 * contentSpace
 
 
             element.Content.Content.PaddingLeft = contentSpace
             element.Content.Content.PaddingRight = contentSpace
-            element.Content.Content.Width = width
+            //element.Content.Content.Width = width
+            element.Content.Content.Layer.Width = width
 
-            element.Content.LayoutX = LeftBarSize
-            element.Content.LayoutHeight = element.Height//(element.Content.InternalHeight, element.Height)
+            //element.Content.LayoutX = LeftBarSize
+            element.Content.Layer.X = LeftBarSize
+            //element.Content.LayoutHeight = element.Height//(element.Content.InternalHeight, element.Height)
+            element.Content.Layer.Height = element.Height//(element.Content.InternalHeight, element.Height)
         }
     })
 

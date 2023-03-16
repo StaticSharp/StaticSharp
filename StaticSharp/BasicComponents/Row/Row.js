@@ -78,9 +78,9 @@ function RowBuilder(element) {
                 var y = Max(yA, yB)
 
                 x += spaceLeft
-                child.LayoutX = x
+                child./*LayoutX*/Layer.X = x
                 x += child.Width
-                child.LayoutY = y
+                child./*LayoutY*/Layer.Y = y
                 margin = child.MarginRight
 
                 var hardBottom = y + child.Height
@@ -133,23 +133,25 @@ function RowBuilder(element) {
         
         let spaceRight = Max(endMargin, child.MarginRight)
         if (child.isBlock) {
-
-            if ((_this.currentX + spaceLeft + child.InternalWidth + spaceRight) > maxWidth) {
+            
+			if ((_this.currentX + spaceLeft + /*child.InternalWidth*/child.Layer.Width + spaceRight) > maxWidth) {
                 if (_this.currentLine.length > 0) {
                     _this.finalizeCurrentLine()
                     spaceLeft = First(Max(_this.margin, child.MarginLeft), 0)
                 }
 
-                if ((spaceLeft + child.InternalWidth + spaceRight) > maxWidth) {
-                    child.LayoutWidth = maxWidth - spaceLeft - spaceRight
+                if ((spaceLeft + /*child.InternalWidth*/child.Layer.Width + spaceRight) > maxWidth) {
+                    //child.LayoutWidth = maxWidth - spaceLeft - spaceRight
+                    child.Layer.Width = maxWidth - spaceLeft - spaceRight
                 } else {
-                    child.LayoutWidth = undefined
+                    //child.LayoutWidth = undefined
+                    child.Layer.Width = undefined
                 }
             } else {
-                child.LayoutWidth = undefined
+                //child.LayoutWidth = undefined
+                child.Layer.Width = undefined
             }
             _this.currentX += Sum(spaceLeft, child.Width)
-            //console.log("_this.currentX", _this.currentX)
             _this.margin = child.MarginRight
 
             //_this.currentLine.push(child)
@@ -223,8 +225,6 @@ function Row(element) {
         var hB = builder.currentLineSoftY
 
         element.InternalHeight = Max(hA, hB)
-
-
     })
 
 }

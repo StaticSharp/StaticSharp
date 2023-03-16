@@ -28,7 +28,7 @@ function Layout(element) {
         let layoutBlock = new LayoutBlock(element.Vertical, element)
 
         let children = layoutBlock.ReadChildren(element.Children)
-        
+
         let primaryGap = element.PrimaryGap
 
         let line = layoutBlock.AddLine()

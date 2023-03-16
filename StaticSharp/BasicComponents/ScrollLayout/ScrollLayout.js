@@ -44,8 +44,11 @@ function ScrollLayout(element) {
 
 
     element.Reactive = {
-        InternalWidth: () => Sum(element.Content.InternalWidth, element.LeftOffset, element.RightOffset),
-        InternalHeight: () => Sum(element.Content.InternalHeight, element.TopOffset, element.BottomOffset),
+        //InternalWidth: () => Sum(element.Content.InternalWidth, element.LeftOffset, element.RightOffset),
+        InternalWidth: () => Sum(element.Content.Layer.Index/*InternalWidth*/, element.LeftOffset, element.RightOffset),
+        // InternalHeight: 
+        InternalHeight: () => Sum(element.Content.Layer.Height/*InternalHeight*/, element.TopOffset, element.BottomOffset),
+
         //Content: () => element.Child("Content"),
 
         /*MarginLeft: () => (element.PaddingLeft!=undefined) ? 0 : element.Content.MarginLeft,
@@ -80,8 +83,8 @@ function ScrollLayout(element) {
     let verticalThumb = element.VerticalThumb
     verticalThumb.Reactive = {
         ThumbTravel: () => element.Height - 2 * element.ScrollBarMargin,
-        ThumbPositionScale: () => verticalThumb.ThumbTravel / element.Content.InternalHeight,
-        ThumbSizeScale: () => element.ContentAreaHeight / element.Content.InternalHeight, 
+        ThumbPositionScale: () => verticalThumb.ThumbTravel / element.Content./*InternalHeight*/Layer.Height,
+        ThumbSizeScale: () => element.ContentAreaHeight / element.Content./*InternalHeight*/Layer.Height, 
         X: () => element.Width - verticalThumb.Width - element.ScrollBarMargin,
         Y: () => element.ScrollBarMargin + element.ScrollYActual * verticalThumb.ThumbPositionScale,
         Width: () => element.ScrollBarThickness,        
@@ -160,8 +163,10 @@ function ScrollLayout(element) {
             d.end()
         }
 
-        element.Content.LayoutWidth = () => Max(element.Content.InternalWidth, element.ContentAreaWidth)
-        element.Content.LayoutHeight = () => Max(element.Content.InternalHeight, element.ContentAreaHeight)
+        //element.Content.LayoutWidth = () => Max(element.Content.InternalWidth, element.ContentAreaWidth)
+        //element.Content.LayoutHeight = () => Max(element.Content.InternalHeight, element.ContentAreaHeight)
+        element.Content.Layer.Width = () => Max(element.Content.Layer.Width, element.ContentAreaWidth)
+        element.Content.Layer.Height = () => Max(element.Content.Layer.Height, element.ContentAreaHeight)
     }
 
 

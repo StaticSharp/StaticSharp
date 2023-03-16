@@ -7,8 +7,8 @@ function Template(element) {
     element.Reactive = {
         ContentWidth: undefined,
         ContentHeight: undefined,
-        Width: () => element.LayoutWidth || element.ContentWidth || 0,
-        Height: () => element.LayoutHeight || element.ContentHeight || 0,
+        Width: () => /*element.LayoutWidth || element.ContentWidth*/ element.Width || 0,
+        Height: () => /*element.LayoutHeight || element.ContentHeight*/  element.Width || 0,
 
     }
 
