@@ -330,8 +330,6 @@ function LayoutBlock(vertical, container) {
     /**@type {number}*/
     this.itemShrink = container.ItemShrink
 
-    console.log("container.ItemGrow", container, this.itemGrow)
-
     /**@type {boolean}*/
     this.vertical = vertical
 
