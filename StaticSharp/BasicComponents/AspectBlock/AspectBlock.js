@@ -6,8 +6,8 @@ function AspectBlock(element) {
     element.Reactive = {
 
         Aspect: element.dataset.width / element.dataset.height,
-        InternalWidth: () => First(element.Height * element.Aspect, element.dataset.width),
-        InternalHeight: () => First(element.Width / element.Aspect, element.dataset.height),
+        /*InternalWidth*/ Width: () => First(element.Height * element.Aspect, element.dataset.width),
+        /*InternalHeight*/ Height: () => First(element.Width / element.Aspect, element.dataset.height),
 
         Fit: "Inside",
         GravityVertical: 0,

@@ -10,6 +10,9 @@ function Paragraph(element) {
 
         InternalHeight: undefined,
 
+        Width: e => e.InternalWidth,
+        Height: e => e.InternalHeight,
+
         MaxContentWidth: undefined,
         MinContentWidth: undefined,
 

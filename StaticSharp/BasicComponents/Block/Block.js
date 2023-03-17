@@ -113,13 +113,13 @@ function Block(element) {
         //Grow: 0,
         //Shrink: 0,
 
-        MinWidth: 0,
-        MinHeight: 0,
-        MaxWidth: Infinity,
-        MaxHeight: Infinity,
+        //MinWidth: 0,
+        //MinHeight: 0,
+        //MaxWidth: Infinity,
+        //MaxHeight: Infinity,
 
-        InternalWidth: undefined,
-        InternalHeight: undefined,
+        //InternalWidth: undefined,
+        //InternalHeight: undefined,
 
 
         X: 0, //e => First(e.LayoutX,0),
@@ -128,8 +128,8 @@ function Block(element) {
         AbsoluteX: () => element.IsRoot ? 0 : Sum(element.Parent.AbsoluteX, element.Parent.ScrollXActual, element.X),
         AbsoluteY: () => element.IsRoot ? 0 : Sum(element.Parent.AbsoluteY, -element.Parent.ScrollYActual, element.Y),
 
-        Width: e => e.InternalWidth, // e => First(e.LayoutWidth, e.PreferredWidth),
-        Height: e => e.InternalHeight, // e => First(e.LayoutHeight, e.PreferredHeight),
+        Width: undefined, //e => e.InternalWidth, // e => First(e.LayoutWidth, e.PreferredWidth),
+        Height: undefined, //e => e.InternalHeight, // e => First(e.LayoutHeight, e.PreferredHeight),
 
         ClipByParent: false
     }

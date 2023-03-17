@@ -15,6 +15,9 @@ namespace StaticSharp {
             public double ScrollY  { get; }
             public double ScrollXActual  { get; }
             public double ScrollYActual  { get; }
+            
+            public double InternalWidth { get; }
+            public double InternalHeight { get; }
         }
     }
 

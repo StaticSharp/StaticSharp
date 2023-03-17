@@ -79,11 +79,11 @@ function RowBuilder(element) {
 
                 x += spaceLeft
                 child./*LayoutX*/Layer.X = x
-                x += child.Width
+                x += child.Layer.Width
                 child./*LayoutY*/Layer.Y = y
                 margin = child.MarginRight
 
-                var hardBottom = y + child.Height
+                var hardBottom = y + child.Layer.Height
 
                 newLineHardY = Max(newLineHardY, hardBottom)
                 newLineSoftY = Max(newLineSoftY, Sum(hardBottom, child.MarginBottom))
@@ -133,8 +133,7 @@ function RowBuilder(element) {
         
         let spaceRight = Max(endMargin, child.MarginRight)
         if (child.isBlock) {
-            
-			if ((_this.currentX + spaceLeft + /*child.InternalWidth*/child.Layer.Width + spaceRight) > maxWidth) {
+            if ((_this.currentX + spaceLeft + /*child.InternalWidth*/child.Layer.Width + spaceRight) > maxWidth) {
                 if (_this.currentLine.length > 0) {
                     _this.finalizeCurrentLine()
                     spaceLeft = First(Max(_this.margin, child.MarginLeft), 0)
@@ -151,7 +150,7 @@ function RowBuilder(element) {
                 //child.LayoutWidth = undefined
                 child.Layer.Width = undefined
             }
-            _this.currentX += Sum(spaceLeft, child.Width)
+            _this.currentX += Sum(spaceLeft, child.Layer.Width)
             _this.margin = child.MarginRight
 
             //_this.currentLine.push(child)
@@ -187,6 +186,11 @@ function Row(element) {
             measurer.finish();
             return measurer.currentX
         },
+
+        InternalHeight: undefined,
+
+        Height: e => e.InternalHeight,
+        Width: e => e.InternalWidth,
 
         //Width: () => element.InternalWidth,
 

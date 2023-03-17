@@ -13,12 +13,19 @@ function MenuResponsive(element) {
         InternalHeight: () => {
             let result = undefined
             for (let child of element.MenuItems) {
-                result = Max(result, child.Height)
+                result = Max(result, child.Layer.Height)
             }
+
+            result = Max(result, element.Logo.Layer.Height)
+            result = Max(result, element.Button.Layer.Height)
+
             if (result == undefined)
                 result = 64
             return result
         },
+
+        //Width: e => e.InternalWidth,
+        Height: e => e.InternalHeight,
 
         DropdownExpanded : true
 
@@ -100,8 +107,8 @@ function MenuResponsive(element) {
                 element.Button.MarginLeft || 0,
                 element.MarginTop || 0,
                 element.MarginBottom || 0))
-        let mainMenuItemsLayout = layoutBlock.ReadChildren(element.MenuItems)
-        let dropdownMenuItemsLayout = layoutBlock.ReadChildren(element.Dropdown.Children)
+        let mainMenuItemsLayout = layoutBlock.ReadChildren(element.MenuItems.Select(e => e.Layer))
+        let dropdownMenuItemsLayout = layoutBlock.ReadChildren(element.Dropdown.Children.Select(e => e.Layer))
         let allMenuItemsLayout = mainMenuItemsLayout.concat(dropdownMenuItemsLayout)
         
         let line = layoutBlock.AddLine()

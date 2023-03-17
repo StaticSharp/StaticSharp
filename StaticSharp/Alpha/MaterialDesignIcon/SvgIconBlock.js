@@ -18,6 +18,9 @@ function SvgIconBlock(element) {
 
         InternalWidth: () => First((element.Height - element.VerticalPaddingSum) * element.Aspect + element.HorizontalPaddingSum, Sum(width, element.HorizontalPaddingSum)),
         InternalHeight: () => First((element.Width - element.HorizontalPaddingSum) / element.Aspect + element.VerticalPaddingSum, Sum(height, element.VerticalPaddingSum)),
+
+        Width: e => e.InternalWidth,
+        Height: e => e.InternalHeight
     }
 
 

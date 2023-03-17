@@ -30,13 +30,12 @@ namespace StaticSharp {
             //public double Grow { get; }
             //public double Shrink { get; }
 
-            public double MinWidth { get; }
-            public double MinHeight { get; }
-            public double MaxWidth { get; }
-            public double MaxHeight { get; }
+            //public double MinHeight { get; }
+            //public double MaxWidth { get; }
+            //public double MaxHeight { get; }
 
-            public double InternalWidth { get; }
-            public double InternalHeight { get; }
+            //public double InternalWidth { get; }
+            //public double InternalHeight { get; }
 
 
             public double MarginLeft  { get; }
@@ -81,10 +80,10 @@ namespace StaticSharp {
             //public Binding<double> Grow { set { Apply(value); } }
             //public Binding<double> Shrink { set { Apply(value); } }
 
-            public Binding<double> MinWidth { set { Apply(value); } }
-            public Binding<double> MinHeight { set { Apply(value); } }
-            public Binding<double> MaxWidth { set { Apply(value); } }
-            public Binding<double> MaxHeight { set { Apply(value); } }
+            //public Binding<double> MinWidth { set { Apply(value); } }
+            //public Binding<double> MinHeight { set { Apply(value); } }
+            //public Binding<double> MaxWidth { set { Apply(value); } }
+            //public Binding<double> MaxHeight { set { Apply(value); } }
 
 
             public Binding<double> MarginLeft { set { Apply(value); } }

@@ -29,6 +29,9 @@ namespace StaticSharp {
             public double SecondaryGapGrow { get; }
             public bool FillSecondary { get; }
             public bool Multiline { get; }
+
+            public double InternalWidth { get; }
+            public double InternalHieght { get; }
         }
     }
 

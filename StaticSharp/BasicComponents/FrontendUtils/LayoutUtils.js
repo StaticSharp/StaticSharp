@@ -19,12 +19,12 @@ function LayoutItem(element, layoutBlock) {
 
     ///**@type {number}*/ this.primarySize = element["Preferred" + layoutBlock.primaryDimension] || 0
     ///**@type {number}*/ this.secondarySize = element["Preferred" + layoutBlock.secondaryDimension] || 0
-    /**@type {number}*/ this.primarySize = element.Layer[layoutBlock.primaryDimension] || 0
-    /**@type {number}*/ this.secondarySize = element.Layer[layoutBlock.secondaryDimension] || 0
+    /**@type {number}*/ this.primarySize = element[layoutBlock.primaryDimension] || 0
+    /**@type {number}*/ this.secondarySize = element[layoutBlock.secondaryDimension] || 0
 
-    /**@type {number}*/ this.primaryMinSize = element["Min" + layoutBlock.primaryDimension] || 0
+    /**@type {number}*/ this.primaryMinSize = /*element["Min" + layoutBlock.primaryDimension] ||*/ 0
     /**@type {number}*/ //this.secondaryMinSize = element["Min" + layoutBlock.secondaryDimension] || 0
-    /**@type {number}*/ this.primaryMaxSize = element["Max" + layoutBlock.primaryDimension] || 0
+    /**@type {number}*/ this.primaryMaxSize = Infinity //element["Max" + layoutBlock.primaryDimension] || 0
     /**@type {number}*/ //this.secondaryMaxSize = element["Max" + layoutBlock.secondaryDimension] || 0
 
     /**@type {number}*/
@@ -40,7 +40,6 @@ function LayoutItem(element, layoutBlock) {
     this.shrinkPixels = this.primarySize - minimalSize
     /**@type {number}*/
     this.growPixels = maximalSize - this.primarySize
-
 
     /**@type {number}*/ this.primaryPosition = 0
     /**@type {number}*/ this.secondaryPosition = 0
@@ -58,11 +57,11 @@ LayoutItem.prototype.Write = function (xOffset = 0, yOffset = 0) {
     //this.element["Layout" + this.layoutBlock.secondaryCoordinate] = this.line.secondaryPosition + this.secondaryPosition + secondaryOffset
     //this.element["Layout" + this.layoutBlock.secondaryDimension] = this.secondarySize
 
-    this.element.Layer[this.layoutBlock.primaryCoordinate] = this.primaryPosition + primaryOffset
-    this.element.Layer[this.layoutBlock.primaryDimension] = this.primarySize
+    this.element[this.layoutBlock.primaryCoordinate] = this.primaryPosition + primaryOffset
+    this.element[this.layoutBlock.primaryDimension] = this.primarySize
 
-    this.element.Layer[this.layoutBlock.secondaryCoordinate] = this.line.secondaryPosition + this.secondaryPosition + secondaryOffset
-    this.element.Layer[this.layoutBlock.secondaryDimension] = this.secondarySize
+    this.element[this.layoutBlock.secondaryCoordinate] = this.line.secondaryPosition + this.secondaryPosition + secondaryOffset
+    this.element[this.layoutBlock.secondaryDimension] = this.secondarySize
 }
 
 
@@ -124,7 +123,7 @@ LayoutLine.prototype.AddChild = function (layoutItem, gap, sizeLimit = undefined
             marginStop + this.layoutBlock.primaryBodyStopOpposite,
             bodyStop + this.layoutBlock.primaryMarginStopOpposite
         )
-        //console.log("lineSize", lineSize, "this.shrinkPixels", this.shrinkPixels)
+
         if ((lineSize - this.shrinkPixels) > sizeLimit)
             return false
     }
@@ -185,12 +184,10 @@ LayoutLine.prototype.AlignPrimary = function (containerSize, gapGrow, gravity = 
         let targetSize = 0
         if (units > 0) {//gaps can grow
             targetSize = containerSize
-
         }
         else {
 
             targetSize = Math.min(containerSize, maxLineSize)
-            //console.log("targetSize", targetSize, activeItems)
         }
 
         for (let i of activeItems) {

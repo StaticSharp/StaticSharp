@@ -20,8 +20,10 @@ function Column(element) {
             return internalWidth
         },
 
-        //InternalHeight: undefined,
-        //Height: () => element.InternalHeight,
+        InternalHeight: undefined,
+
+        Width: e => e.InternalWidth,
+        Height: e => e.InternalHeight
     }
 
 
@@ -87,7 +89,7 @@ function Column(element) {
                     //child.LayoutY = contentHeight
                     child.Layer.Y = contentHeight
                 }
-                contentHeight += Max(child.Height, 0)
+                contentHeight += Max(child.Layer.Height, 0)
 
                 previousMargin = child.MarginBottom || 0
 

@@ -22,16 +22,20 @@ function Layout(element) {
         SecondaryGapGrow: 0,
         FillSecondary: true,
 
-        Multiline: false
+        Multiline: false,
 
+        InternalWidth: undefined,
+        InternalHeight: undefined,
+
+        Width: e => e.InternalWidth,
+        Height: e => e.InternalHeight
     }
-
 
     new Reaction(() => {
 
         let layoutBlock = new LayoutBlock(element.Vertical, element)
 
-        let children = layoutBlock.ReadChildren(element.Children)
+        let children = layoutBlock.ReadChildren(element.Children.Select(e => e.Layer))
 
         let primaryGap = element.PrimaryGap
 
@@ -39,7 +43,8 @@ function Layout(element) {
         for (let i of children) {
             line.AddChild(i, primaryGap)
         }
-        let lineSize = line.GetLineSize()        
+        let lineSize = line.GetLineSize()
+
         element["Internal" + layoutBlock.primaryDimension] = lineSize
 
         let sizeLimit = element[layoutBlock.primaryDimension]
@@ -47,7 +52,7 @@ function Layout(element) {
         if (lineSize > sizeLimit) {
             layoutBlock.lines = []
             line = undefined
-            
+
             for (let i of children) {
                 if (!line || !line.AddChild(i, primaryGap, sizeLimit)) {
                     line = layoutBlock.AddLine()

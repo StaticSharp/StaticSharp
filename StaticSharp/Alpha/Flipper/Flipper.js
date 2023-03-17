@@ -38,6 +38,11 @@ function Flipper(element) {
                 return Max(element.LayoutFirst.MarginBottom, element.LayoutSecond.MarginBottom)
         },
 
+        //InternalWidth: undefined,
+        InternalHeight: undefined,
+
+        //Width: e => e.InternalWidth,
+        Height: e => e.InternalHeight,
     }
 
     element.HtmlNodesOrdered = new Enumerable(function* () {
