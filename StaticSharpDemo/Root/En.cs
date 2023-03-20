@@ -125,7 +125,7 @@ namespace StaticSharpDemo.Root {
                 //PreferredWidth = 16,
                 //PreferredHeight = 16,
                 //Grow = 1,
-                MaxWidth = 128
+                //MaxWidth = 128
 
             },
             new Block{
@@ -136,7 +136,7 @@ namespace StaticSharpDemo.Root {
                 //PreferredWidth = 32,
                 //PreferredHeight = 32,
                 //Grow = 1,
-                MaxWidth = 256
+                //MaxWidth = 256
             },
             new Block{
                 //MarginsHorizontal = -0.01,
@@ -183,11 +183,12 @@ namespace StaticSharpDemo.Root {
                 }
             },
 
-
             new Layout{
                 //Vertical = true,
-                FillSecondary = true,
+                BackgroundColor = Color.LightBlue,
                 
+                FillSecondary = true,
+
                 ItemGrow = 1,
                 PrimaryGap = 10,
 
@@ -334,7 +335,7 @@ namespace StaticSharpDemo.Root {
 
             Separator(),
             "DEVELOPER mode".ToLandingSectionHeader(Color.Blue),
-			
+
 
 
             new Inlines($"""
@@ -375,7 +376,8 @@ namespace StaticSharpDemo.Root {
                             
                             //item.Grow = 1;
                             //item.PreferredWidth = new(e=>Js.Math.Min(e.InternalWidth,e.Parent.Width-e.MarginLeft-e.MarginRight));
-                            item.Width = new(e=>Js.Math.Min(e.InternalWidth, e.Layer.Width, e.Parent.Width-e.MarginLeft-e.MarginRight));
+                            // TODO: !!! this is impossible conceptually, since Block does not set its InternalWidth
+                            item.Width = new(e=> e.Parent.Width-e.MarginLeft-e.MarginRight);
                             //item.Shrink= 1;
                         }
                     }),
