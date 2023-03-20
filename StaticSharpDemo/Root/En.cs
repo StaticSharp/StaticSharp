@@ -117,37 +117,7 @@ namespace StaticSharpDemo.Root {
             };
         }*/
 
-        Block[] TestBlocks = new Block[] {
-            new Block{
-                BackgroundColor = Color.Gray,
-                Width = 16,
-                Height = 16,
-                //PreferredWidth = 16,
-                //PreferredHeight = 16,
-                //Grow = 1,
-                MaxWidth = 128
 
-            },
-            new Block{
-                MarginTop = 10,
-                BackgroundColor = Color.Red,
-                Width = 32,
-                Height = 32,
-                //PreferredWidth = 32,
-                //PreferredHeight = 32,
-                //Grow = 1,
-                MaxWidth = 256
-            },
-            new Block{
-                //MarginsHorizontal = -0.01,
-                BackgroundColor = Color.Pink,
-                Width = 64,
-                Height = 64,
-                //PreferredWidth = 64,
-                //PreferredHeight = 64,
-                //Grow = 1
-            }
-        };
 
         Random Random= new Random(0);
 
@@ -184,21 +154,7 @@ namespace StaticSharpDemo.Root {
             },
 
 
-            new Layout{
-                //Vertical = true,
-                FillSecondary = true,
-                
-                ItemGrow = 1,
-                PrimaryGap = 10,
 
-                SecondaryGap= 20,
-                SecondaryGapGrow = 1,
-                //PreferredHeight = 400,
-                IntralinearGravity = -1,
-                Children = {
-                    Enumerable.Range(0,12).Select(x=>TestBlocks[x%TestBlocks.Length])
-                }
-            },
 
 
 
@@ -369,16 +325,7 @@ namespace StaticSharpDemo.Root {
                         FacebookMessengerButton("staticsharp"),
                         TelegramButton("petr_sevostianov"),
                         DiscordButton("KYF5uneE2V")
-                    }.Modify(x=>{
-                        foreach (var item in x.OfType<Block>()) {
-                            //item.Margins = 10;
-                            
-                            //item.Grow = 1;
-                            //item.PreferredWidth = new(e=>Js.Math.Min(e.InternalWidth,e.Parent.Width-e.MarginLeft-e.MarginRight));
-                            item.Width = new(e=>Js.Math.Min(e.InternalWidth, e.Layer.Width, e.Parent.Width-e.MarginLeft-e.MarginRight));
-                            //item.Shrink= 1;
-                        }
-                    }),
+                    },
                 }
             }.InheritHorizontalPaddings().FillWidth()
             
