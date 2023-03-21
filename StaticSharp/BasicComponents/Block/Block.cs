@@ -156,9 +156,18 @@ namespace StaticSharp {
             return _this.CenterHorizontally().CenterVertically();
         }
 
-        public static T FillWidth<T>(this T _this) where T : Block {
-            _this.X = new(e => Js.Math.First(e.MarginLeft,0));
-            _this.Width = new(e => Js.Math.Sum(e.Parent.Width, -e.MarginLeft, -e.MarginRight) );
+        //public static Block FillWidth(this Block _this) {
+        //    return new Overrider(_this)
+        //    {
+        //        OverrideX = new(e => Js.Math.First(e.MarginLeft, 0) - Js.Math.First(e.Parent.PaddingLeft, 0)),
+        //        OverrideWidth = new(e => e.Parent.Width)
+        //    };
+        //}
+
+        public static T FillWidth<T>(this T _this) where T : Block
+        {
+            _this.X = new(e => Js.Math.First(e.MarginLeft, 0));
+            _this.Width = new(e => Js.Math.Sum(e.Parent.Width, -e.MarginLeft, -e.MarginRight));
             return _this;
         }
 
@@ -168,11 +177,19 @@ namespace StaticSharp {
             return _this;
         }
 
-        public static T InheritHorizontalPaddings<T>(this T _this) where T : Block {
-            _this.PaddingLeft = new(e => e.Parent.PaddingLeft);
-            _this.PaddingRight = new(e => e.Parent.PaddingRight);
-            return _this;
+        public static Block InheritHorizontalPaddings(this Block _this) {
+            return new Overrider(_this)
+            {
+                OverridePaddingLeft = new(e => e.Parent.PaddingLeft),
+                OverridePaddingRight = new(e => e.Parent.PaddingLeft),
+            };
         }
+        
+        //public static T InheritHorizontalPaddings<T>(this T _this) where T : Block {
+        //    _this.PaddingLeft = new(e => e.Parent.PaddingLeft);
+        //    _this.PaddingRight = new(e => e.Parent.PaddingRight);
+        //    return _this;
+        //}
 
 
 

@@ -151,6 +151,8 @@ namespace StaticSharpDemo.Root {
 
         Random Random= new Random(0);
 
+        Paragraph SomeParagraph = new Paragraph("Some Paragraph");
+
         public override Blocks? Content => new() {
 
 
@@ -177,11 +179,22 @@ namespace StaticSharpDemo.Root {
                 MenuItems = {
                     MenuItem(Node.Components.ParagraphComponent),
                     MenuItem(Node.Components.ImageComponent),
-                    MenuItem(Node.Components.VideoPlayer),
+                    new Overrider(
+                        MenuItem(Node.Components.VideoPlayer)
+                    )
+                    {
+                        OverrideBackgroundColor = Color.Blue
+                    },
                     MenuItem(Node.Components.ParagraphComponent),
                     MenuItem(Node.Customization.HowToCreateNewComponent)
                 }
             },
+
+            new Overrider(new Paragraph("Some Paragraph")
+            {
+                BackgroundColor = Color.Yellow
+            }),
+            
 
             new Layout{
                 //Vertical = true,
@@ -198,6 +211,10 @@ namespace StaticSharpDemo.Root {
                 IntralinearGravity = -1,
                 Children = {
                     Enumerable.Range(0,12).Select(x=>TestBlocks[x%TestBlocks.Length])
+                    .Append(new Overrider(TestBlocks[0])
+                    {
+                        OverrideBackgroundColor = Color.Blue
+                    })
                 }
             },
 
@@ -246,6 +263,12 @@ namespace StaticSharpDemo.Root {
             },
 
             Separator(),
+            //new Overrider(Separator())
+            //{
+            //    OverrideX = new (e => -e.X),
+            //    OverrideWidth = new(e => e.Parent.Width),
+            //},
+
 
             #region codeExample
 

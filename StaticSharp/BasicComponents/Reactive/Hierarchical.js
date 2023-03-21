@@ -89,6 +89,9 @@ function Hierarchical(element) {
 
     GetHtmlNode = function (node) {
         let parentNode = node.parentNode
+        if (parentNode == undefined) {
+            return node
+        }
         let parentTag = parentNode.tagName
         if (parentTag == "A") {
             return parentNode
@@ -103,6 +106,9 @@ function Hierarchical(element) {
         let equal = currentChildren.length === tergetChildren.length && currentChildren.every(function (value, index) { return value === tergetChildren[index] })
 
         if (!equal) {
+            console.log("currentChildren", currentChildren)
+            console.log("tergetChildren", tergetChildren)
+
             for (let i of currentChildren) {
                 i.remove()
             }

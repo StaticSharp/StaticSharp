@@ -130,6 +130,7 @@ function MenuResponsive(element) {
         //layoutBlock.GrowLines()
         line.AlignPrimary(widthForChildrenBodies, 0, -1)
          // TODO: offset should be a property of layoutBlock if it is based on region, not element
+        
         layoutBlock.WriteChildren(line.items)
 
         //let moveToDropdownOccured = false

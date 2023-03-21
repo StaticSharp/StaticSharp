@@ -54,6 +54,10 @@
     <EmbeddedResource Include="**\*.css" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Remove="BasicComponents\Overrider\Overrider.js" />
+	</ItemGroup>
+
 
 	
 
