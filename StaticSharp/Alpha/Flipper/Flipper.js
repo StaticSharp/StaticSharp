@@ -8,7 +8,7 @@ function Flipper(element) {
 
         Flipped: () => element.Width < 640,
 
-        HorizontalSpace: 0,
+        HorizontalSpace: 0,//TODO: Replace With Gap
         VerticalSpace: 0,
 
         RightToLeft: false,
@@ -38,10 +38,56 @@ function Flipper(element) {
                 return Max(element.LayoutFirst.MarginBottom, element.LayoutSecond.MarginBottom)
         },
 
-        //InternalWidth: undefined,
-        InternalHeight: undefined,
+        MarginLeft: () => {
+            if (element.PaddingLeft != undefined)
+                return undefined
+            if (!element.Flipped)
+                return element.LayoutFirst.MarginLeft
+            else
+                return Max(element.LayoutFirst.MarginLeft, element.LayoutSecond.MarginLeft)
+        },
+        MarginRight: () => {
+            if (element.PaddingRight != undefined)
+                return undefined
+            if (!element.Flipped)
+                return element.LayoutSecond.MarginRight
+            else
+                return Max(element.LayoutFirst.MarginRight, element.LayoutSecond.MarginRight)
+        },
 
-        //Width: e => e.InternalWidth,
+        InternalWidth: e => {
+            let first = e.LayoutFirst
+            let second = e.LayoutSecond
+
+            //let names = new LayoutPrpertiesNames(false)
+            let region = LinearLayoutRegion.formContainer(e,false)
+            if (e.Flipped) {
+                region.border[0].ShiftMaxOf([first, second])
+            } else {
+                region.border[0].Shift(first)
+                region.border[0].Shift(second)
+            }
+            let result = region.GetSize()
+            return result
+        },
+
+        InternalHeight: e => {
+            let first = e.LayoutFirst
+            let second = e.LayoutSecond
+
+            //let names = new LayoutPrpertiesNames(false)
+            let region = LinearLayoutRegion.formContainer(e, true)
+            if (e.Flipped) {
+                region.border[0].Shift(first)
+                region.border[0].Shift(second)                
+            } else {
+                region.border[0].ShiftMaxOf([first, second])
+            }
+            let result = region.GetSize()
+            return result
+        },
+
+        Width: e => e.InternalWidth,
         Height: e => e.InternalHeight,
     }
 
@@ -52,6 +98,7 @@ function Flipper(element) {
     })
 
     new Reaction(() => {
+        
         let first = element.LayoutFirst
         let second = element.LayoutSecond
 
@@ -60,56 +107,57 @@ function Flipper(element) {
 
             //first.LayoutHeight = undefined
             //second.LayoutHeight = undefined
-            first.Layer.Height = undefined
-            second.Layer.Height = undefined
+            //first.Layer.Height = undefined
+            //second.Layer.Height = undefined
 
 
-            let left1 = CalcOffset(element, first, "Left")
-            let left2 = CalcOffset(element, second, "Left")
+            let left1 = CalcOffset(element, first.Layer, "Left")
+            let left2 = CalcOffset(element, second.Layer, "Left")
 
-            let right1 = CalcOffset(element, first, "Right")
-            let right2 = CalcOffset(element, second, "Right")
+            let right1 = CalcOffset(element, first.Layer, "Right")
+            let right2 = CalcOffset(element, second.Layer, "Right")
 
-            let top = CalcOffset(element, first, "Top")
-            let bottom = CalcOffset(element, second, "Bottom")
+            let top = CalcOffset(element, first.Layer, "Top")
+            let bottom = CalcOffset(element, second.Layer, "Bottom")
 
             let spaceMid = Max(
-                first.MarginBottom,
-                second.MarginTop,
+                first.Layer.MarginBottom,
+                second.Layer.MarginTop,
                 element.VerticalSpace
             )
 
             let y = top
             //first.LayoutY = y
             first.Layer.Y = y
-            y += first.Height
+            y += first.Layer.Height
             y += spaceMid
             //second.LayoutY = y
             second.Layer.Y = y
-            y += second.Height
+            y += second.Layer.Height
             y += bottom
-            element.InternalHeight = y
 
 
             //first.LayoutX = left1
             first.Layer.X = left1
             //first.LayoutWidth = element.Width - left1 - right1
             first.Layer.Width = element.Width - left1 - right1
+            first.Layer.Height = first.Layer.Height
+
             //second.LayoutX = left2
             second.Layer.X = left2
             //second.LayoutWidth = element.Width - left2 - right2
             second.Layer.Width = element.Width - left2 - right2
-
+            second.Layer.Height = second.Layer.Height
         } else {
 
-            let left = CalcOffset(element, first, "Left")
-            let right = CalcOffset(element, second, "Right")
+            let left = CalcOffset(element, first.Layer, "Left")
+            let right = CalcOffset(element, second.Layer, "Right")
 
-            let top1 = CalcOffset(element, first, "Top")
-            let top2 = CalcOffset(element, second, "Top")
+            let top1 = CalcOffset(element, first.Layer, "Top")
+            let top2 = CalcOffset(element, second.Layer, "Top")
 
-            let bottom1 = CalcOffset(element, first, "Bottom")
-            let bottom2 = CalcOffset(element, second, "Bottom")
+            let bottom1 = CalcOffset(element, first.Layer, "Bottom")
+            let bottom2 = CalcOffset(element, second.Layer, "Bottom")
 
 
             let spaceMid = Max(
@@ -138,7 +186,6 @@ function Flipper(element) {
                 second.Layer.Height/*InternalHeight*/ + top2 + bottom2,
             )
 
-            element.InternalHeight = height
 
             first.Layer.Height/*LayoutHeight*/ = element.Height - top1 - bottom1
             second.Layer.Height/*LayoutHeight*/ = element.Height - top2 - bottom2

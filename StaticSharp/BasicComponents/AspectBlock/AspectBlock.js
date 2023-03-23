@@ -1,13 +1,16 @@
 function AspectBlock(element) {
     Block(element)
 
-    let nativeAspect = element.dataset.width / element.dataset.height
+    let nativeWidth = Number(element.dataset.width)
+    let nativeHeight = Number(element.dataset.height)
+
+    let nativeAspect = nativeWidth / nativeHeight
 
     element.Reactive = {
 
-        Aspect: element.dataset.width / element.dataset.height,
-        /*InternalWidth*/ Width: () => First(element.Height * element.Aspect, element.dataset.width),
-        /*InternalHeight*/ Height: () => First(element.Width / element.Aspect, element.dataset.height),
+        Aspect: nativeAspect,
+        /*InternalWidth*/ Width: () => First(element.Height * element.Aspect, nativeWidth),
+        /*InternalHeight*/ Height: () => First(element.Width / element.Aspect, nativeHeight),
 
         Fit: "Inside",
         GravityVertical: 0,
@@ -32,6 +35,8 @@ function AspectBlock(element) {
             let y = 0
             let contentWidth = element.Width
             let contentHeight = element.Height
+
+            
 
             let sign = (element.Fit == "Inside") ? 1 : -1
 

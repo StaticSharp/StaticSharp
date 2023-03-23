@@ -12,7 +12,7 @@ namespace StaticSharp {
     namespace Gears {
 
         public class Bindings<FinalJs> {
-            public class Binding<T> : IVoidEnumerable {
+            public struct Binding<T> : IVoidEnumerable {
 
                 private T? Value;
                 private Expression<Func<FinalJs, T>>? Expression;
@@ -52,7 +52,10 @@ namespace StaticSharp {
 
                 foreach (var i in memberNames) {
                     if (i != null) {
-                        aggregator.Properties[i] = binding.CreateScriptExpression();
+                        /*if (binding == null)
+                            aggregator.Properties[i] = Js.Constants.Undefined;
+                        else*/
+                            aggregator.Properties[i] = binding.CreateScriptExpression();
                     }
                 }
             }

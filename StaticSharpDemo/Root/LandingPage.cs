@@ -66,8 +66,8 @@ namespace StaticSharpDemo.Root {
             new ScrollLayout {
                 ScrollY = new(e=>Js.Storage.Restore("MainScroll", () => e.ScrollYActual)),
                 //FontSize = new(e =>Js.Math.First( Js.Storage.Restore("FontSize", () => 10)),
-                Content = new Layout{
-                    Vertical = true,
+                Content = new Column{
+                    //Vertical = true,
                     //FillSecondary = true,
                     Width = new(e=>e.Parent.Width),
                     PaddingsHorizontal = new(e=>Js.Math.Max(e.Parent.Width-ColumnWidth , 0)/2),
