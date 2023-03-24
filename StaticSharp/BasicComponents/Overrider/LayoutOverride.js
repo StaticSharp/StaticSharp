@@ -5,11 +5,16 @@
     CreateSocket(element, "Target", element)
 
     element.Reactive = {
-        //InternalWidth: undefined, //() => element.Target.Layer.Width,
-        //InternalHeight: undefined, //() => element.Target.Layer.Height,
-        // Untite?
-        Width: () => element.Target.Layer.Width,  //e => e.InternalWidth,
-        Height: () => element.Target.Layer.Height,  //e => e.InternalHeight,
+        Width: () => element.Target.Layer.Width, 
+        Height: () => element.Target.Layer.Height, 
+
+        // margins cannot be overriden, but must be translated outside
+        MarginTop: () => element.Target.Layer.MarginTop,
+        MarginBottom: () => element.Target.Layer.MarginBottom,
+        MarginLeft: () => element.Target.Layer.MarginLeft,
+        MarginRight: () => element.Target.Layer.MarginRight,
+
+        Target: undefined,
 
         OverrideX: undefined,
         OverrideY: undefined,
@@ -19,26 +24,13 @@
         OverridePaddingLeft: undefined,
         OverridePaddingRight: undefined,
         OverridePaddingTop: undefined,
-        OverridePaddingBottom: undefined,
-
-        // margins cannot be overriden, but must be translated outside
-        MarginTop: () => element.Target.Layer.MarginTop,
-        MarginBottom: () => element.Target.Layer.MarginBottom,
-        MarginLeft: () => element.Target.Layer.MarginLeft,
-        MarginRight: () => element.Target.Layer.MarginRight,
-
-        Target: undefined,
+        OverridePaddingBottom: undefined
     }
 
     element.HtmlNodesOrdered = new Enumerable(function* () {
         yield element.Target,
         yield* element.Children
     })
-
-    //new Reaction(() => { // TODO: somewhy direct binding does not work
-    //    element.InternalWidth = element.Target.Layer.Width
-    //    element.InternalHeight = element.Target.Layer.Height
-    //})
 
     // Doesn't work for X,Y and Margins
     function translatePropertyValue(propertyName, overridePropertyName) {

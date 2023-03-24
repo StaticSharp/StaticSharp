@@ -60,8 +60,8 @@ function Flipper(element) {
 
             //first.LayoutHeight = undefined
             //second.LayoutHeight = undefined
-            first.Layer.Height = undefined
-            second.Layer.Height = undefined
+            //first.Layer.Height = undefined
+            //second.Layer.Height = undefined
 
 
             let left1 = CalcOffset(element, first, "Left")
