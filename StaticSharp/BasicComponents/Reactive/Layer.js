@@ -64,63 +64,6 @@
                 target[propertyName] = value
                 //backupProperty.setValue(value)
                 return true
-
-
-
-
-                if (!target.hasOwnProperty(prop)) {
-                    throw new Error(`Element does not have property "${prop}"`)
-                }
-
-                /*if (value == undefined) // if override value = undefined, then remove override, use original value
-                {
-                    if (originalProperties.has(prop)) {
-                        let backupProperty = originalProperties.get(prop)
-                        let currentProperty = target["__" + prop]
-                        let propertyValueOrBinding = backupProperty.binding ? backupProperty.binding.func : backupProperty.value
-                        currentProperty.setValue(propertyValueOrBinding)
-                        originalProperties.delete(prop)
-                    }
-
-                    return true
-                }*/
-
-                if (!originalProperties.has(prop)) {
-                    let currentProperty = target["__" + prop]
-                    let currentPropertyHasBinding = currentProperty.binding != undefined
-
-                    
-                    let propertyValueOrBinding = currentPropertyHasBinding ? currentProperty.binding.func : currentProperty.value
-                    let backupProperty = new Property()
-                    backupProperty.name = "Backup_"+currentProperty.name // TODO: ???
-                    backupProperty.object = currentProperty.object // TODO: needed to execute binding
-                    backupProperty.setValue(propertyValueOrBinding)
-
-                    //Copy subscriptions
-                    if (currentPropertyHasBinding) {
-                        
-                        for (let p of currentProperty.binding.triggeringProperties) {
-                            
-                            backupProperty.binding.addTriggeringProperty(p)
-
-                            //console.log(p, [...backupProperty.binding.triggeringProperties])
-                        }
-                    }
-
-                    //backupProperty.getValue() //To establish subscriptions
-
-                    originalProperties.set(prop, backupProperty)
-
-                    if (Reaction.current) {
-                        if (Reaction.current.unsubscribeFromTriggeringProperty(currentProperty)) {
-                            //console.log("addTriggeringProperty", backupProperty)
-                            Reaction.current.addTriggeringProperty(backupProperty)
-                        }                        
-                    }
-                }
-
-                target[prop] = value
-                return true
             }
         }
     )

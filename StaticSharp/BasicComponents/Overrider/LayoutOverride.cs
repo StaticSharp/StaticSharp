@@ -17,7 +17,13 @@ namespace StaticSharp
     {
         public interface LayoutOverride : Block
         {
-            public Block Target { get; }
+            public Block Content { get; }
+
+            public double? OverrideX { get; }
+            public double? OverrideY { get; }
+
+            public double? OverrideWidth { get; }
+            public double? OverrideHeight { get; }
         }
     }
 
@@ -26,16 +32,11 @@ namespace StaticSharp
     {
         public class LayoutOverrideBindings<FinalJs> : BlockBindings<FinalJs>
         {
-            public Binding<double> OverrideX { set { Apply(value); } }
-            public Binding<double> OverrideY { set { Apply(value); } }
+            public Binding<double?> OverrideX { set { Apply(value); } }
+            public Binding<double?> OverrideY { set { Apply(value); } }
 
-            public Binding<double> OverrideWidth { set { Apply(value); } }
-            public Binding<double> OverrideHeight { set { Apply(value); } }
-
-            public Binding<double> OverridePaddingLeft { set { Apply(value); } }
-            public Binding<double> OverridePaddingRight { set { Apply(value); } }
-            public Binding<double> OverridePaddingTop { set { Apply(value); } }
-            public Binding<double> OverridePaddingBottom { set { Apply(value); } }
+            public Binding<double?> OverrideWidth { set { Apply(value); } }
+            public Binding<double?> OverrideHeight { set { Apply(value); } }
         }
     }
 
@@ -44,17 +45,15 @@ namespace StaticSharp
     [ConstructorJs]
     public partial class LayoutOverride: Block, IBlock
     {
-        public Block Target { get; set; }
+        public required Block Content { get; set; }
 
-        public LayoutOverride(Block target, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
-            : base(callerLineNumber, callerFilePath) {
-            Target = target;
-        }
+        public LayoutOverride([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
+            : base(callerLineNumber, callerFilePath) { }
 
         protected override void ModifyHtml(Context context, Tag elementTag)
         {
-            elementTag.Add(CreateScript_SetCurrentSocket(nameof(Target)));
-            elementTag.Add(Target.GenerateHtml(context));
+            elementTag.Add(CreateScript_SetCurrentSocket(nameof(Content)));
+            elementTag.Add(Content.GenerateHtml(context));
             base.ModifyHtml(context, elementTag);
         }
     }
