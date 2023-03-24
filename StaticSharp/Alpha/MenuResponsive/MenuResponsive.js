@@ -10,22 +10,77 @@ function MenuResponsive(element) {
 
     element.Reactive = {
 
-        InternalHeight: () => {
-            let result = undefined
-            for (let child of element.MenuItems) {
-                result = Max(result, child.Layer.Height)
+        //InternalHeight: () => {
+        //    let result = undefined
+        //    for (let child of element.MenuItems) {
+        //        result = Max(result, child.Layer.Height)
+        //    }
+
+        //    result = Max(result, element.Logo.Layer.Height)
+        //    result = Max(result, element.Button.Layer.Height)
+
+        //    if (result == undefined)
+        //        result = 64
+        //    return result
+        //},
+
+        Width: e => e.InternalWidth,
+        Height: e => e.InternalHeight,
+
+        InternalHeight: e => {
+            var verticalNames = new LayoutPropertiesNames(true)
+
+            let result = Sum(e["Padding" + verticalNames.side[0]], e["Padding" + verticalNames.side[1]])
+
+            let mainMenuItems = e.MenuItems.ToArray()
+            let dropdownMenuItems = e.Dropdown.Children.ToArray()
+            let allItemsToLayout = mainMenuItems.concat(dropdownMenuItems).concat([ e.Logo, e.Button ])
+
+            for (let item of dropdownMenuItems) {
+                item.Parent = e
             }
 
-            result = Max(result, element.Logo.Layer.Height)
-            result = Max(result, element.Button.Layer.Height)
+            for (let child of allItemsToLayout) {
+                let firstOffset = CalcOffset(e, child, verticalNames.side[0])
+                let lastOffset = CalcOffset(e, child, verticalNames.side[1])
 
-            if (result == undefined)
-                result = 64
+                let current = Sum(child.Layer[verticalNames.dimension], firstOffset + lastOffset)  // TODO: why Layer?
+
+                result = Max(result, current)
+            }
+
+            for (let item of dropdownMenuItems) {
+                item.Parent = e.Dropdown
+            }
+            console.log("InternalHeight", result)
             return result
         },
 
-        //Width: e => e.InternalWidth,
-        Height: e => e.InternalHeight,
+        InternalWidth: e => {
+            let region = LinearLayoutRegion.formContainer(e, false)
+            let gap = 0 // TODO: add property?
+
+            let mainMenuItems = e.MenuItems.ToArray()
+            let dropdownMenuItems = e.Dropdown.Children.ToArray()
+            let allItemsToLayout = mainMenuItems.concat(dropdownMenuItems).concat([e.Logo, e.Button])
+
+            for (let item of dropdownMenuItems) {
+                item.Parent = e
+            }
+
+            for (const [i, child] of allItemsToLayout.entries()) {
+                if (i > 0) {
+                    region.border[0].ShiftByPixels(gap)
+                }
+                region.border[0].Shift(child)
+            }
+
+            for (let item of dropdownMenuItems) {
+                item.Parent = e.Dropdown
+            }
+            
+            return region.GetSize()
+        },
 
         DropdownExpanded : true
 
@@ -40,34 +95,6 @@ function MenuResponsive(element) {
 
         yield* element.Children
     })
-
-
-    //element.Events.Click = () => {
-    //    console.log("element Click")
-    //}
-
-    //element.AfterChildren = () => {
-    //    console.log("AfterChildren");
-    //    element.Dropdown.Events.Click = () => {
-    //        console.log("Dropdown Click")
-    //        event.stopPropagation()
-    //        if (element.FirstChild) {
-    //            element.Children.Last().NextSibling = element.Dropdown.Children.Last()
-    //        } else {
-    //            element.FirstChild = element.Dropdown.Children.Last()
-    //        }
-    //    }
-
-    //    element.Dropdown.Visibility = e => e.FirstChild ? 1 : 0
-
-    //}
-
-
-    //new Reaction(() => {
-    //    for (let menuItem of element.MenuItems) {
-    //        menuItem.LayoutWidth = undefined
-    //    }
-    //})
 
     // Children placing
     new Reaction(() => {

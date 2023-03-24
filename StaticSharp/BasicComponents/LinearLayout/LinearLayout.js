@@ -3,7 +3,7 @@
  * @constructor
  * @param {boolean} vertical
 */
-function LayoutPrpertiesNames(vertical) {
+function LayoutPropertiesNames(vertical) {
 
     /**@type {Array<string>}*/
     this.side = [
@@ -73,7 +73,7 @@ LayoutBorder.prototype.ShiftByPixels = function (pixels) {
 
 
 function LinearLayoutRegion(vertical) {
-    let names = new LayoutPrpertiesNames(vertical)
+    let names = new LayoutPropertiesNames(vertical)
     this.vertical = vertical
     this.border = [
         new LayoutBorder(0, names),
@@ -92,7 +92,7 @@ LinearLayoutRegion.prototype.GetSize = function () {
 LinearLayoutRegion.formContainer = function (container, vertical) {
     let result = new LinearLayoutRegion(vertical)
 
-    let names = new LayoutPrpertiesNames(vertical)
+    let names = new LayoutPropertiesNames(vertical)
 
     /**@type {Array<number>}*/
     let padding = [
@@ -140,7 +140,7 @@ function LinearLayout(element) {
         },
 
         InternalSecondarySize: e => {
-            var names = new LayoutPrpertiesNames(!element.Vertical)
+            var names = new LayoutPropertiesNames(!element.Vertical)
 
             let result = Sum(e["Padding" + names.side[0]], e["Padding" + names.side[1]], 0)
 
@@ -185,7 +185,7 @@ function LinearLayout(element) {
     })*/
 
     new Reaction(() => {
-        var names = new LayoutPrpertiesNames(!element.Vertical)
+        var names = new LayoutPropertiesNames(!element.Vertical)
 
         var internalSize = element.SecondarySize
 
@@ -223,7 +223,7 @@ function LinearLayout(element) {
     new Reaction(() => {
 
         let children = element.OrderedChildren
-        var names = new LayoutPrpertiesNames(element.Vertical)
+        var names = new LayoutPropertiesNames(element.Vertical)
         let region = LinearLayoutRegion.formContainer(element, element.Vertical)
         let gap = element.Gap
         if (element.InternalPrimarySize > element.PrimarySize) {//Shrink
