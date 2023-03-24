@@ -60,8 +60,15 @@ namespace StaticSharp {
             public new Block NextSibling { get; }
             public new Enumerable<Block> Children { get; }
 
-            public Block Layer { get; } // TODO:
+            //public Block Layer { get; } // TODO:
         }
+    }
+
+    [Javascriptifier.JavascriptClass("")]
+    public static class JsLayerExtension
+    {
+        [Javascriptifier.JavascriptMethodFormat("{0}.Layer")]
+        public static T GetLayer<T>(this T _this) where T : Js.Block => default;
     }
 
 
@@ -143,7 +150,6 @@ namespace StaticSharp {
     }
 
     public static partial class Static {
-
         public static T CenterHorizontally<T>(this T _this) where T : Block {
             _this.X = new(e => 0.5 * (e.Parent.Width - e.Width));
             return _this;
@@ -157,14 +163,14 @@ namespace StaticSharp {
         }
 
         public static T FillWidth<T>(this T _this) where T : Block {
-            _this.X = new(e => Js.Math.First(e.MarginLeft,0));
-            _this.Width = new(e => Js.Math.Sum(e.Parent.Width, -e.MarginLeft, -e.MarginRight) );
+            _this.X = new(e => Js.Math.First(e.MarginLeft, 0));
+            _this.Width = new(e => Js.Math.Sum(e.Parent.Width, -e.MarginLeft, -e.MarginRight));
             return _this;
         }
 
         public static T FillHeight<T>(this T _this) where T : Block {
             _this.Y = new(e => Js.Math.First(e.MarginTop, 0));
-            _this.Height = new(e => Js.Math.Sum(e.Parent.Height, -e.MarginTop, -e.MarginLeft));
+            _this.Height = new(e => Js.Math.Sum(e.Parent.Height, -e.MarginTop, -e.MarginBottom));
             return _this;
         }
 
@@ -174,8 +180,13 @@ namespace StaticSharp {
             return _this;
         }
 
-
-
+        // TODO: convert to "Wrap()"
+        //public static Block Override(this Block _this, Action<LayoutOverride> overrideAction)
+        //{
+        //    var overrider = _this as LayoutOverride ?? new LayoutOverride(_this);
+        //    overrideAction(overrider);
+        //    return overrider;
+        //}
     }
 
 

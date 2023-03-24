@@ -20,11 +20,18 @@ namespace StaticSharp.Alpha {
                 PaddingsHorizontal = 20,
 
                 Children = {
-                    new Block {
-                        BackgroundColor = new(e=>e.Parent.HierarchyForegroundColor),
-                        Visibility = new(e=>e.Parent.Hover ? 0.10 : 0),
-                        Depth = -1
-                    }.FillHeight().FillWidth()
+                    new LayoutOverride{
+                        Content = new Block {
+                            BackgroundColor = new(e=>e.Parent.HierarchyForegroundColor),
+                            Visibility = new(e=>e.Parent.Parent.Hover ? 0.10 : 0),
+                            Depth = -1
+                        },
+
+                        OverrideX = new(e => Js.Math.First(e.MarginLeft, 0)),
+                        OverrideY = new(e => Js.Math.First(e.MarginTop, 0)),
+                        OverrideWidth = new(e => Js.Math.Sum(e.Parent.Width, -e.Content.GetLayer().MarginLeft, -e.Content.GetLayer().MarginRight)),
+                        OverrideHeight = new(e => Js.Math.Sum(e.Parent.Height, -e.Content.GetLayer().MarginTop, -e.Content.GetLayer().MarginBottom))
+                    }
                 }
             };
         }

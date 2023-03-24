@@ -89,6 +89,9 @@ function Hierarchical(element) {
 
     GetHtmlNode = function (node) {
         let parentNode = node.parentNode
+        if (parentNode == undefined) {
+            return node
+        }
         let parentTag = parentNode.tagName
         if (parentTag == "A") {
             return parentNode

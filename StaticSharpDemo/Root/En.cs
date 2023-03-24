@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using StaticSharp.Gears;
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -96,12 +95,18 @@ namespace StaticSharpDemo.Root {
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerFilePath] string callerFilePath = ""
             ) {
-            return new Block(callerLineNumber, callerFilePath) {                
-                MarginsVertical = 75,
-                Height = new(x => 1 / Js.Window.DevicePixelRatio),
-                BackgroundColor = new(e => e.Parent.HierarchyForegroundColor),
-                Visibility = 0.5
-            }.FillWidth();
+                return new LayoutOverride
+                    {
+                        Content = new Block(callerLineNumber, callerFilePath)
+                            {
+                                MarginsVertical = 75,
+                                Height = new(x => 1 / Js.Window.DevicePixelRatio),
+                                BackgroundColor = new(e => e.Parent.HierarchyForegroundColor),
+                                Visibility = 0.5
+                            },
+                        OverrideX = new(e => Js.Math.First(e.MarginLeft, 0)),
+                        OverrideWidth = new(e => Js.Math.Sum(e.Parent.Width, -e.Content.GetLayer().MarginLeft, -e.Content.GetLayer().MarginRight))
+                };
         }
 
 
@@ -168,13 +173,6 @@ namespace StaticSharpDemo.Root {
                     MenuItem(Node.Customization.HowToCreateNewComponent)
                 }
             },
-
-
-
-
-
-
-
 
             new Paragraph($"STATIC_SHARP".UnderscoreToNbsp())
             .ToLandingMainHeader(),
@@ -279,7 +277,7 @@ namespace StaticSharpDemo.Root {
 
             Separator(),
             "DEVELOPER mode".ToLandingSectionHeader(Color.Blue),
-			
+
 
 
             new Inlines($"""
