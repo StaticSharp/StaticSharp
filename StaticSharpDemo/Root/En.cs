@@ -245,7 +245,7 @@ namespace StaticSharpDemo.Root {
             For example, on this page, there are colored words in the headings. You can write full formatting in each case
             or you can create a function that highlights all capital letters with a given color and makes all lowercase letters capitalized.
             """,
-            CodeBlock("\"create your own SHORTCUTS\".SectionHeader(Color.Red)".Highlight("cs")),
+            CodeBlock("\"create your own SHORTCUTS\".ToLandingSectionHeader(Color.Red)".Highlight("cs")),
             $"In this case it is an extension method for type {Code("string")}",
 
             Separator(),

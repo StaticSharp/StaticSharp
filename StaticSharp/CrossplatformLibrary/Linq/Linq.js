@@ -83,7 +83,7 @@ Enumerable.prototype.Select = function(func) {
  * @param {function(): T} [notFound]
  * @return {T}
  */
-Enumerable.prototype.First = function(func, notFound = () => {throw new Error("Out of range")}) {
+Enumerable.prototype.First = function (func = undefined, notFound = () => {throw new Error("Out of range")}) {
     if (func === undefined) {
         func = () => true;
     }

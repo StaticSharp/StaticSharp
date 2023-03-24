@@ -9,7 +9,7 @@ public interface Enumerable {
 }
 
 public interface Enumerable<T> : Enumerable {
-    T First(Expression<Func<T, bool>> func);
+    T? First(Expression<Func<T, bool>>? func = null);
 }
 
 
