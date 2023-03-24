@@ -62,7 +62,7 @@ namespace StaticSharpDemo.Root {
 
         public virtual double ColumnWidth => 1080;
 
-        public override Blocks Children => new Blocks {
+        public override Blocks Children => new Blocks { // for top level element Width must be set/overriden (e.g. FillWidth), otherwise - recursive binding
             new ScrollLayout {
                 ScrollY = new(e=>Js.Storage.Restore("MainScroll", () => e.ScrollYActual)),
                 //FontSize = new(e =>Js.Math.First( Js.Storage.Restore("FontSize", () => 10)),
@@ -75,7 +75,7 @@ namespace StaticSharpDemo.Root {
                         Menu,
                         Content
                     }
-                }.CenterHorizontally()
+                }//.CenterHorizontally() 
             }.FillWidth().FillHeight()
         };
     }

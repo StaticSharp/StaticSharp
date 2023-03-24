@@ -22,19 +22,6 @@
                     throw new Error(`Element does not have property "${prop}"`);
                 }
 
-                if (value == undefined) // if override value = undefined, then remove override, use original value
-                {
-                    if (originalProperties.has(prop)) {
-                        let backupProperty = originalProperties.get(prop)
-                        let currentProperty = target["__" + prop]
-                        let propertyValueOrBinding = backupProperty.binding ? backupProperty.binding.func : backupProperty.value
-                        currentProperty.setValue(propertyValueOrBinding)
-                        originalProperties.delete(prop)
-                    }
-
-                    return true;
-                }
-
                 if (!originalProperties.has(prop)) {
                     let currentProperty = target["__" + prop]
                     let propertyValueOrBinding = currentProperty.binding ? currentProperty.binding.func : currentProperty.value

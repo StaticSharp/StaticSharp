@@ -22,7 +22,7 @@ namespace StaticSharp.Alpha {
                 Children = {
                     new Block {
                         BackgroundColor = new(e=>e.Parent.HierarchyForegroundColor),
-                        Visibility = new(e=>e.Parent.Hover ? 0.10 : 0),
+                        Visibility = new(e=>e.Parent.Parent.Hover ? 0.10 : 0),
                         Depth = -1
                     }.FillHeight().FillWidth()
                 }

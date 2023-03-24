@@ -143,56 +143,92 @@ namespace StaticSharp {
     }
 
     public static partial class Static {
-
-        public static T CenterHorizontally<T>(this T _this) where T : Block {
-            _this.X = new(e => 0.5 * (e.Parent.Width - e.Width));
-            return _this;
+        public static Block CenterHorizontally(this Block _this)
+        {
+            var overrider = _this as LayoutOverride ?? new LayoutOverride(_this);
+            overrider.OverrideX = new(e => 0.5 * (e.Parent.Width - e.Target.Width)); // not e.Target.Layer.Width!
+            return overrider;
         }
-        public static T CenterVertically<T>(this T _this) where T : Block {
-            _this.Y = new(e => 0.5 * (e.Parent.Height - e.Height));
-            return _this;
+        public static Block CenterVertically(this Block _this)
+        {
+            var overrider = _this as LayoutOverride ?? new LayoutOverride(_this);
+            overrider.OverrideY = new(e => 0.5 * (e.Parent.Height - e.Target.Height)); // not e.Target.Layer.Width!
+            return overrider;
         }
-        public static T Center<T>(this T _this) where T : Block {
+        public static Block Center(this Block _this)
+        {
             return _this.CenterHorizontally().CenterVertically();
         }
 
-        //public static Block FillWidth(this Block _this) {
-        //    return new Overrider(_this)
-        //    {
-        //        OverrideX = new(e => Js.Math.First(e.MarginLeft, 0) - Js.Math.First(e.Parent.PaddingLeft, 0)),
-        //        OverrideWidth = new(e => e.Parent.Width)
-        //    };
+
+        //public static T CenterHorizontally<T>(this T _this) where T : Block
+        //{
+        //    _this.X = new(e => 0.5 * (e.Parent.Width - e.Width));
+        //    return _this;
+        //}
+        //public static T CenterVertically<T>(this T _this) where T : Block
+        //{
+        //    _this.Y = new(e => 0.5 * (e.Parent.Height - e.Height));
+        //    return _this;
+        //}
+        //public static T Center<T>(this T _this) where T : Block
+        //{
+        //    return _this.CenterHorizontally().CenterVertically();
         //}
 
-        public static T FillWidth<T>(this T _this) where T : Block
+        public static Block FillWidth(this Block _this)
         {
-            _this.X = new(e => Js.Math.First(e.MarginLeft, 0));
-            _this.Width = new(e => Js.Math.Sum(e.Parent.Width, -e.MarginLeft, -e.MarginRight));
+            var overrider = _this as LayoutOverride ?? new LayoutOverride(_this);
+            overrider.OverrideX = new(e => Js.Math.First(e.MarginLeft, 0));
+            overrider.OverrideWidth = new(e => Js.Math.Sum(e.Parent.Width, -e.Target.Layer.MarginLeft, -e.Target.Layer.MarginRight));
+            return overrider;
+        }
+
+        //public static T FillWidth<T>(this T _this) where T : Block
+        //{
+        //    _this.X = new(e => Js.Math.First(e.MarginLeft, 0));
+        //    _this.Width = new(e => Js.Math.Sum(e.Parent.Width, -e.MarginLeft, -e.MarginRight));
+        //    return _this;
+        //}
+
+        public static Block FillHeight(this Block _this)
+        {
+            var overrider = _this as LayoutOverride ?? new LayoutOverride(_this);
+            overrider.OverrideY = new(e => Js.Math.First(e.MarginTop, 0));
+            overrider.OverrideHeight = new(e => Js.Math.Sum(e.Parent.Height, -e.Target.Layer.MarginTop, -e.Target.Layer.MarginBottom));
+            return overrider;
+        }
+
+        //public static T FillHeight<T>(this T _this) where T : Block
+        //{
+        //    _this.Y = new(e => Js.Math.First(e.MarginTop, 0));
+        //    _this.Height = new(e => Js.Math.Sum(e.Parent.Height, -e.MarginTop, -e.MarginBottom));
+        //    return _this;
+        //}
+
+
+        public static Block InheritHorizontalPaddings(this Block _this)
+        {
+            var overrider = _this as LayoutOverride ?? new LayoutOverride(_this);
+            overrider.OverridePaddingLeft = new(e => e.Parent.PaddingLeft);
+            overrider.OverridePaddingRight = new(e => e.Parent.PaddingLeft);
             return _this;
         }
 
-        public static T FillHeight<T>(this T _this) where T : Block {
-            _this.Y = new(e => Js.Math.First(e.MarginTop, 0));
-            _this.Height = new(e => Js.Math.Sum(e.Parent.Height, -e.MarginTop, -e.MarginLeft));
-            return _this;
-        }
-
-        public static Block InheritHorizontalPaddings(this Block _this) {
-            return new Overrider(_this)
-            {
-                OverridePaddingLeft = new(e => e.Parent.PaddingLeft),
-                OverridePaddingRight = new(e => e.Parent.PaddingLeft),
-            };
-        }
-        
-        //public static T InheritHorizontalPaddings<T>(this T _this) where T : Block {
+        //public static T InheritHorizontalPaddings<T>(this T _this) where T : Block
+        //{
         //    _this.PaddingLeft = new(e => e.Parent.PaddingLeft);
         //    _this.PaddingRight = new(e => e.Parent.PaddingRight);
         //    return _this;
         //}
 
 
-
+        public static Block Override(this Block _this, Action<LayoutOverride> overrideAction)
+        {
+            var overrider = _this as LayoutOverride ?? new LayoutOverride(_this);
+            overrideAction(overrider);
+            return overrider;
+        }
     }
 
 

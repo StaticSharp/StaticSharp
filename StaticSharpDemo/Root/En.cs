@@ -151,8 +151,6 @@ namespace StaticSharpDemo.Root {
 
         Random Random= new Random(0);
 
-        Paragraph SomeParagraph = new Paragraph("Some Paragraph");
-
         public override Blocks? Content => new() {
 
 
@@ -179,29 +177,17 @@ namespace StaticSharpDemo.Root {
                 MenuItems = {
                     MenuItem(Node.Components.ParagraphComponent),
                     MenuItem(Node.Components.ImageComponent),
-                    new Overrider(
-                        MenuItem(Node.Components.VideoPlayer)
-                    )
-                    {
-                        OverrideBackgroundColor = Color.Blue
-                    },
+                    MenuItem(Node.Components.VideoPlayer),
                     MenuItem(Node.Components.ParagraphComponent),
                     MenuItem(Node.Customization.HowToCreateNewComponent)
                 }
             },
 
-            new Overrider(new Paragraph("Some Paragraph")
-            {
-                BackgroundColor = Color.Yellow
-            }),
-            
-
             new Layout{
                 //Vertical = true,
                 BackgroundColor = Color.LightBlue,
-                
-                FillSecondary = true,
 
+                FillSecondary = true,
                 ItemGrow = 1,
                 PrimaryGap = 10,
 
@@ -211,16 +197,13 @@ namespace StaticSharpDemo.Root {
                 IntralinearGravity = -1,
                 Children = {
                     Enumerable.Range(0,12).Select(x=>TestBlocks[x%TestBlocks.Length])
-                    .Append(new Overrider(TestBlocks[0])
-                    {
-                        OverrideBackgroundColor = Color.Blue
-                    })
                 }
             },
 
-
-
-
+            CodeBlockScrollable(LoadFile(ThisFilePath()).GetCodeRegion("codeExample").Highlight())
+                .Modify( x=> x.Height = 400)
+                .Override(o => o.OverrideWidth = 400)
+                .CenterHorizontally(),
 
             new Paragraph($"STATIC_SHARP".UnderscoreToNbsp())
             .ToLandingMainHeader(),
@@ -263,12 +246,6 @@ namespace StaticSharpDemo.Root {
             },
 
             Separator(),
-            //new Overrider(Separator())
-            //{
-            //    OverrideX = new (e => -e.X),
-            //    OverrideWidth = new(e => e.Parent.Width),
-            //},
-
 
             #region codeExample
 
@@ -277,9 +254,10 @@ namespace StaticSharpDemo.Root {
             "Welcome to StaticSharp! We believe in getting right to the point, so here is the code from this very page.",
 
             CodeBlockScrollable(LoadFile(ThisFilePath()).GetCodeRegion("codeExample").Highlight())
-            .Modify(x=>{
-                x.Width = new(e=>Js.Math.Min(e.InternalWidth, e.Parent.Width));
-            }).CenterHorizontally(),
+                .Modify( x=>
+                {
+                    x.Width = new(e=>Js.Math.Min(e.InternalWidth, e.Parent.Width));
+                }),
 
             Separator(),
 
