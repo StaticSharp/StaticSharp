@@ -78,8 +78,8 @@ namespace StaticSharpDemo.Root {
         public static Paragraph LandingHeading(string text,
             //float fontSize,
             //FontWeight fontWeight,
-            [CallerFilePath] string callerFilePath = "",
-            [CallerLineNumber] int callerLineNumber = 0) {
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerFilePath] string callerFilePath = "") {
 
             return new Paragraph(text, callerLineNumber, callerFilePath) {
                 //ForegroundColor = Color.FromGrayscale(0.4),
@@ -92,8 +92,11 @@ namespace StaticSharpDemo.Root {
             };
         }
 
-        public static Block Separator() {
-            return new Block {                
+        public static Block Separator(
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerFilePath] string callerFilePath = ""
+            ) {
+            return new Block(callerLineNumber, callerFilePath) {                
                 MarginsVertical = 75,
                 Height = new(x => 1 / Js.Window.DevicePixelRatio),
                 BackgroundColor = new(e => e.Parent.HierarchyForegroundColor),
@@ -176,62 +179,7 @@ namespace StaticSharpDemo.Root {
             new Paragraph($"STATIC_SHARP".UnderscoreToNbsp())
             .ToLandingMainHeader(),
 
-
             Description,
-
-            /*new LinearLayout{ 
-                Vertical = false,
-                ItemGrow = 0,
-                MarginTop = 8,
-                Children = { 
-                    new Block{ 
-                        Margins = 1,
-                        BackgroundColor = Color.Red,
-                        Width= 32,
-                        Height= 32,
-                    },
-                    new Block{
-                        Margins = 1,
-                        MarginTop = 4,
-                        BackgroundColor = Color.Green,
-                        Width= 64,
-                        Height= 64,
-                    }
-                }
-            },*/
-
-            new Paragraph("Text\n\n\n\nText"){
-                BackgroundColor = new(e=>Js.Window.Touch?Color.Blue:Color.Red) ,
-                MarginsHorizontal= 20,
-                PaddingsHorizontal = 0,
-
-                //TextAlignmentHorizontal = TextAlignmentHorizontal.Center,
-                Children = {
-                    new Block(){
-                        BackgroundColor = new(e=>e.Parent.BackgroundColor),
-                        Depth = -1,
-                        X = new(e=>-e.Parent.X),
-                        Width = new(e=>e.Parent.Parent.Width),
-                        Height = new(e=>e.Parent.Height),
-                    }
-                }
-            },
-
-
-            new Block{
-                //PreferredHeight = new(e=>e.FirstChild.InternalHeight),
-                
-                Height = new(e=>e.FirstChild.Layer.Height),
-                BackgroundColor = Color.LightGray,
-                Children = {
-                    new Paragraph("Text\n\n\n\nText"){ 
-                        //PaddingLeft = new(e=>e.Parent.Parent.PaddingLeft),
-                        X = new(e=>-e.Parent.X),
-                        BackgroundColor = Color.Pink,
-                        Width = new(e=>e.Parent.Parent.Width)
-                    }
-                }
-            },
 
             Separator(),
 
@@ -288,35 +236,6 @@ namespace StaticSharpDemo.Root {
                         Embed = Image.TEmbed.Image,
                         Fit = Fit.Inside
                     }
-                }
-            },
-            Separator(),
-            new Flipper() {
-                Flipped = new (e=>e.Width < 950),
-                BottomToTop = true,
-                MarginLeft = new(e=>e.Parent.PaddingLeft),
-                MarginRight = new(e=>e.Parent.PaddingRight),
-                First = new LinearLayout(){
-                    MarginLeft = 10,
-                    MarginRight = 10,
-                    MarginTop = 60,
-                    Children = {
-                        "copypasteable from\nSTACKOVERFLOW".ToLandingSectionHeader(new Color("#F58025"))
-                        ,
-                        """
-                        Copy-pasteability is the superpower of code - it allows developers to reuse and share code like a boss, saving time and effort in the software development process.
-                        No-code or low-code platforms might have their own superpowers, but when it comes to flexibility and customization, code-based approaches reign supreme.
-                        So go forth, dear developer, and copy-paste to your heart's content!
-                        """,
-                    }
-                },
-                Second = new Image("StackoverflowKeyboard.svg"){
-                    Height = 400,
-                    //X  = new(e=>((Js.Flipper)e.Parent).Flipped ? Js.Math.Max(0.5 * (e.Parent.Width - e.Width), 0) : /*e.LayoutX*/e.X),
-                    //Width = new(e=>((Js.Flipper)e.Parent).Flipped ? Js.Math.Min(e./*LayoutWidth*/Width, 400) : e./*LayoutWidth*/Width),
-                    MarginsHorizontal = 75,
-                    Embed = Image.TEmbed.Image,
-                    Fit = Fit.Inside
                 }
             },
 
@@ -400,7 +319,7 @@ namespace StaticSharpDemo.Root {
                 }
             },
             
-            Separator(),
+
 
 
             /*new Block{

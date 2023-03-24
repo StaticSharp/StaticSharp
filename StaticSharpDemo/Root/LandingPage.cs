@@ -38,7 +38,23 @@ namespace StaticSharpDemo.Root {
             },
         };
 
-
+        public virtual Block Footer => new LinearLayout {
+            FontSize = 14,
+            PaddingsHorizontal = new(e => Js.Math.Max(e.Parent.Width - ColumnWidth, 0) / 2),
+            BackgroundColor = Color.FromGrayscale(0.9),
+            Children = { 
+                /*new LinearLayout {
+                    Vertical = false,
+                    
+                    Children = { 
+                        "A",
+                        "B",
+                        "C"
+                    }
+                },*/
+                $"This website is created using {Node.Root}"
+            }
+        };
 
 
         public virtual Block Menu => new Row {
@@ -64,19 +80,31 @@ namespace StaticSharpDemo.Root {
 
         public override Blocks Children => new Blocks {
             new ScrollLayout {
+                Width = new(e=>e.Parent.Width),
+                Height = new(e=>e.Parent.Height),
                 ScrollY = new(e=>Js.Storage.Restore("MainScroll", () => e.ScrollYActual)),
                 //FontSize = new(e =>Js.Math.First( Js.Storage.Restore("FontSize", () => 10)),
-                Content = new Column{
-                    //Vertical = true,
-                    //FillSecondary = true,
+                
+                Content = new LinearLayout{
                     Width = new(e=>e.Parent.Width),
-                    PaddingsHorizontal = new(e=>Js.Math.Max(e.Parent.Width-ColumnWidth , 0)/2),
+
+                    ItemGrow = 0,
+                    GapGrow = 1,
+                    Gap = 50,
                     Children = {
-                        Menu,
-                        Content
+                        new LinearLayout{
+                            PaddingsHorizontal = new(e=>Js.Math.Max(e.Parent.Width-ColumnWidth , 0)/2),
+                            Children = {
+                                Menu,
+                                Content,
+                            }
+                        }.FillWidth(),
+
+                        Footer,
                     }
-                }.CenterHorizontally()
-            }.FillWidth().FillHeight()
+                }
+
+            }
         };
     }
 }

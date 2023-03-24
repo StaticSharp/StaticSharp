@@ -128,6 +128,7 @@ function LinearLayout(element) {
         Gap: 0,
         GapGrow: 0,
 
+        PrimaryGravity: undefined,
         SecondaryGravity: undefined,
         Reverse: false,
 
@@ -186,9 +187,9 @@ function LinearLayout(element) {
     new Reaction(() => {
         var names = new LayoutPrpertiesNames(!element.Vertical)
 
-        if (element.SecondaryGravity == undefined) {
-            var internalSize = element.SecondarySize
+        var internalSize = element.SecondarySize
 
+        if (element.SecondaryGravity == undefined) {
             for (let child of element.OrderedChildren) {
                 let firstOffset = CalcOffset(element, child, names.side[0])
                 let lastOffset = CalcOffset(element, child, names.side[1])
@@ -197,35 +198,29 @@ function LinearLayout(element) {
                 child.Layer[names.dimension] = internalSize - firstOffset - lastOffset                
             }
         } else {
+            for (let child of element.OrderedChildren) {
+                let firstOffset = CalcOffset(element, child, names.side[0])
+                let lastOffset = CalcOffset(element, child, names.side[1])
 
+                let childSize = child.Layer[names.dimension]
+                let availableSize = internalSize - firstOffset - lastOffset
+                let extraPixels = availableSize - childSize
+
+                if (extraPixels > 0) {
+                    firstOffset += (0.5 * element.SecondaryGravity + 0.5) * extraPixels
+                } else {
+                    childSize = availableSize
+                }
+
+                child.Layer[names.cordinate] = firstOffset
+                child.Layer[names.dimension] = childSize
+            }
         }        
     })
-
-
-    /*var re = new Reaction(() => {
-        var names = new LayoutPrpertiesNames(element.Vertical)
-        let children = element.Children.ToArray()
-
-        for (const [i, child] of children.entries()) {
-
-
-            let size = child.Layer[names.dimension] || 0
-            //console.log("size", size)
-            child.Layer[names.cordinate] = 256*i
-            child.Layer[names.dimension] = size
-        }
-
-        //let tp = re.triggeringProperties
-        //console.log("triggeringProperties", [...tp])
-
-    })*/
-
-    
+   
 
 
     new Reaction(() => {
-        //return
-        //console.log("Reaction align primary")
 
         let children = element.OrderedChildren
         var names = new LayoutPrpertiesNames(element.Vertical)
@@ -246,32 +241,41 @@ function LinearLayout(element) {
             }
         } else {
 
+            let itemGrow = 0
+            let gapGrow = 0
+            let extraPixels = element.PrimarySize - element.InternalPrimarySize
+            let growUnits = 0
+            let pixelPerUnit = 0
 
-            if (element.InternalPrimarySize <= element.PrimarySize) {
-                let itemGrow = element.ItemGrow
-                let gapGrow = element.GapGrow
-                let extraPixels = element.PrimarySize - element.InternalPrimarySize
-                let growUnits = itemGrow * children.length + gapGrow * (children.length - 1)
-                let pixelPerUnit = (growUnits != 0) ? extraPixels / growUnits : 0
-
-                for (const [i, child] of children.entries()) {
-                    if (i > 0)
-                        region.border[0].ShiftByPixels(gap + gapGrow * pixelPerUnit)
-
-                    let size = child.Layer[names.dimension] || 0
-                    
-                    size = size + itemGrow * pixelPerUnit
-                    
-                    let position = region.border[0].Shift(child, size)
-
-                    child.Layer[names.cordinate] = position
-                    child.Layer[names.dimension] = size
-
-
-                    //console.log("size", size, child.Layer.originalProperties.get(names.dimension))
-
-                }
+            if (element.PrimaryGravity == undefined) {
+                itemGrow = element.ItemGrow
+                gapGrow = element.GapGrow
+                growUnits = itemGrow * children.length + gapGrow * (children.length - 1)
+                pixelPerUnit = (growUnits != 0) ? extraPixels / growUnits : 0
+            } else {
+                let offset = (0.5 * element.PrimaryGravity + 0.5) * extraPixels
+                region.border[0].ShiftByPixels(offset)
             }
+
+
+            for (const [i, child] of children.entries()) {
+                if (i > 0)
+                    region.border[0].ShiftByPixels(gap + gapGrow * pixelPerUnit)
+
+                let size = child.Layer[names.dimension] || 0
+                    
+                size = size + itemGrow * pixelPerUnit
+                    
+                let position = region.border[0].Shift(child, size)
+
+                child.Layer[names.cordinate] = position
+                child.Layer[names.dimension] = size
+
+
+                //console.log("size", size, child.Layer.originalProperties.get(names.dimension))
+
+            }
+            
         }
     })
 
