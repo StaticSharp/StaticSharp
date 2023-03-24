@@ -60,8 +60,15 @@ namespace StaticSharp {
             public new Block NextSibling { get; }
             public new Enumerable<Block> Children { get; }
 
-            public Block Layer { get; } // TODO:
+            //public Block Layer { get; } // TODO:
         }
+    }
+
+    [Javascriptifier.JavascriptClass("")]
+    public static class JsLayerExtension
+    {
+        [Javascriptifier.JavascriptMethodFormat("{0}.Layer")]
+        public static T Layer<T>(this T _this) where T : Js.Block => default;
     }
 
 
@@ -180,7 +187,7 @@ namespace StaticSharp {
         {
             var overrider = _this as LayoutOverride ?? new LayoutOverride(_this);
             overrider.OverrideX = new(e => Js.Math.First(e.MarginLeft, 0));
-            overrider.OverrideWidth = new(e => Js.Math.Sum(e.Parent.Width, -e.Target.Layer.MarginLeft, -e.Target.Layer.MarginRight));
+            overrider.OverrideWidth = new(e => Js.Math.Sum(e.Parent.Width, -e.Target.Layer().MarginLeft, -e.Target.Layer().MarginRight));
             return overrider;
         }
 
@@ -195,7 +202,7 @@ namespace StaticSharp {
         {
             var overrider = _this as LayoutOverride ?? new LayoutOverride(_this);
             overrider.OverrideY = new(e => Js.Math.First(e.MarginTop, 0));
-            overrider.OverrideHeight = new(e => Js.Math.Sum(e.Parent.Height, -e.Target.Layer.MarginTop, -e.Target.Layer.MarginBottom));
+            overrider.OverrideHeight = new(e => Js.Math.Sum(e.Parent.Height, -e.Target.Layer().MarginTop, -e.Target.Layer().MarginBottom));
             return overrider;
         }
 

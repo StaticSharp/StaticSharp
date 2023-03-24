@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using StaticSharp.Gears;
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -183,6 +182,47 @@ namespace StaticSharpDemo.Root {
                 }
             },
 
+            new Layout
+            {
+                Width = 300,
+                Height = 300,
+
+                Children =
+                {
+                    new Flipper
+                    {
+                        First = new Block
+                        { 
+                            Width = 100,
+                            Height = 100,
+                            BackgroundColor = Color.Green
+                        },
+                        Second = new Block
+                        {
+                            Width = 100,
+                            Height = 100,
+                            BackgroundColor = Color.Yellow
+                        }
+                    },
+                    new Flipper
+                    {
+                        First = new Block
+                        {
+                            Width = 100,
+                            Height = 100,
+                            BackgroundColor = Color.Blue
+                        },
+                        Second = new Block
+                        {
+                            Width = 100,
+                            Height = 100,
+                            BackgroundColor = Color.Red
+                        }
+                    }
+                }
+            }
+            .Modify(e => e.Vertical = new(x => !((Js.Flipper)x.FirstChild).Layer().Flipped)),
+
             new Layout{
                 //Vertical = true,
                 BackgroundColor = Color.LightBlue,
@@ -233,7 +273,7 @@ namespace StaticSharpDemo.Root {
 
             new Block{
                 //PreferredHeight = new(e=>e.FirstChild.InternalHeight),
-                Height = new(e=>e.FirstChild.Layer.Height),
+                Height = new(e=>e.FirstChild.Layer().Height),
                 BackgroundColor = Color.LightGray,
                 Children = {
                     new Paragraph("Text\n\n\n\nText"){ 

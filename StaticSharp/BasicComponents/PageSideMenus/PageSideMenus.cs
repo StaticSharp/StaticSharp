@@ -42,7 +42,7 @@ namespace StaticSharp {
         //public override Inlines Description => (base.Description != null) ? new Paragraph(base.Description) : null;
 
         public virtual Block? TopBar => new Paragraph(Title) {
-            Height = new(e=>Js.Math.Max(((Js.PageSideMenus)e.Root).SideBarsIconsSize, e.Layer.Height /*InternalHeight*/)),
+            Height = new(e=>Js.Math.Max(((Js.PageSideMenus)e.Root).SideBarsIconsSize, e.Layer().Height /*InternalHeight*/)),
             //["Height"] = "() => Min(element.Root.SideBarsIconsSize,element.InternalHeight)",
             TextAlignmentHorizontal = TextAlignmentHorizontal.Center,
             MarginsVertical = 0,
