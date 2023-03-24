@@ -188,10 +188,9 @@ namespace StaticSharpDemo.Root {
             "Welcome to StaticSharp! We believe in getting right to the point, so here is the code from this very page.",
 
             CodeBlockScrollable(LoadFile(ThisFilePath()).GetCodeRegion("codeExample").Highlight())
-                .Modify( x=>
-                {
-                    x.Width = new(e=>Js.Math.Min(e.InternalWidth, e.Parent.Width));
-                }),
+            .Modify(x=>{
+                x.Width = new(e=>Js.Math.Min(e.InternalWidth, e.Parent.Width));
+            }).CenterHorizontally(),
 
             Separator(),
 
