@@ -2,9 +2,14 @@
 
 namespace StaticSharp {
     namespace Js {
+
+        public static class Constants {
+            public static readonly string Undefined = "undefined";
+        }
+
+
         [JavascriptClass("")]
         public static class Math {
-
             [JavascriptOnlyMember]
             public static double First(params double[] value) => throw new JavascriptOnlyException();
 

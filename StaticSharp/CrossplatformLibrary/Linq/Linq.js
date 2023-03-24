@@ -240,6 +240,19 @@ Enumerable.prototype.OrderBy = function(
     return this.Order(compareFunc)
 }
 
+/**
+ * @return {Enumerable<T>}
+ */
+Enumerable.prototype.Reverse = function () {
+    let array = [...this]
+    let generator = function* () {
+        for (let i = array.length - 1; i >= 0; i--) {
+            yield array[i]
+        }
+    };
+    return new Enumerable(generator);
+}
+
 
 /**
  * @param {number} count

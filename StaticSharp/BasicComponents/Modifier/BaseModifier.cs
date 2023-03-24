@@ -21,7 +21,7 @@ namespace StaticSharp {
 
 
             public bool Hover { get; }
-            public bool Selectable { get; }
+            public bool? Selectable { get; }
 
             public double Visibility { get; }
 
@@ -40,7 +40,7 @@ namespace StaticSharp {
             public Binding<Color> ForegroundColor { set { Apply(value); } }
             public Binding<Color> TextDecorationColor { set { Apply(value); } }
 
-            public Binding<bool> Selectable { set { Apply(value); } }
+            public Binding<bool?> Selectable { set { Apply(value); } }
             public Binding<double> Visibility { set { Apply(value); } }            
             public Binding<double> Radius { set { Apply(value); } }
             public Binding<double> RadiusTopLeft { set { Apply(value); } }

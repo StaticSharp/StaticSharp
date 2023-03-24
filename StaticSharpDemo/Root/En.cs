@@ -2,10 +2,12 @@
 using StaticSharp.Gears;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace StaticSharpDemo.Root {
@@ -75,8 +77,8 @@ namespace StaticSharpDemo.Root {
         public static Paragraph LandingHeading(string text,
             //float fontSize,
             //FontWeight fontWeight,
-            [CallerFilePath] string callerFilePath = "",
-            [CallerLineNumber] int callerLineNumber = 0) {
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerFilePath] string callerFilePath = "") {
 
             return new Paragraph(text, callerLineNumber, callerFilePath) {
                 //ForegroundColor = Color.FromGrayscale(0.4),
@@ -89,8 +91,11 @@ namespace StaticSharpDemo.Root {
             };
         }
 
-        public static Block Separator() {
-            return new Block {                
+        public static Block Separator(
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerFilePath] string callerFilePath = ""
+            ) {
+            return new Block(callerLineNumber, callerFilePath) {                
                 MarginsVertical = 75,
                 Height = new(x => 1 / Js.Window.DevicePixelRatio),
                 BackgroundColor = new(e => e.Parent.HierarchyForegroundColor),
@@ -116,39 +121,20 @@ namespace StaticSharpDemo.Root {
             };
         }*/
 
-        Block[] TestBlocks = new Block[] {
-            new Block{
-                BackgroundColor = Color.Gray,
-                Width = 16,
-                Height = 16,
-                //PreferredWidth = 16,
-                //PreferredHeight = 16,
-                //Grow = 1,
-                //MaxWidth = 128
 
-            },
-            new Block{
-                MarginTop = 10,
-                BackgroundColor = Color.Red,
-                Width = 32,
-                Height = 32,
-                //PreferredWidth = 32,
-                //PreferredHeight = 32,
-                //Grow = 1,
-                //MaxWidth = 256
-            },
-            new Block{
-                //MarginsHorizontal = -0.01,
-                BackgroundColor = Color.Pink,
-                Width = 64,
-                Height = 64,
-                //PreferredWidth = 64,
-                //PreferredHeight = 64,
-                //Grow = 1
-            }
-        };
 
         Random Random= new Random(0);
+
+
+        private class Switch<T> : IVoidEnumerable {
+
+            public Expression<Func<T>> this[Expression<Func<bool>> selector] {
+                set {  }
+            }
+
+            public static implicit operator T (Switch<T> x) => throw new Exception();
+        }
+
 
         public override Blocks? Content => new() {
 
@@ -182,108 +168,10 @@ namespace StaticSharpDemo.Root {
                 }
             },
 
-            new Layout
-            {
-                Width = 300,
-                Height = 300,
-
-                Children =
-                {
-                    new Flipper
-                    {
-                        First = new Block
-                        { 
-                            Width = 100,
-                            Height = 100,
-                            BackgroundColor = Color.Green
-                        },
-                        Second = new Block
-                        {
-                            Width = 100,
-                            Height = 100,
-                            BackgroundColor = Color.Yellow
-                        }
-                    },
-                    new Flipper
-                    {
-                        First = new Block
-                        {
-                            Width = 100,
-                            Height = 100,
-                            BackgroundColor = Color.Blue
-                        },
-                        Second = new Block
-                        {
-                            Width = 100,
-                            Height = 100,
-                            BackgroundColor = Color.Red
-                        }
-                    }
-                }
-            }
-            .Modify(e => e.Vertical = new(x => !((Js.Flipper)x.FirstChild).Layer().Flipped)),
-
-            new Layout{
-                //Vertical = true,
-                BackgroundColor = Color.LightBlue,
-
-                FillSecondary = true,
-                ItemGrow = 1,
-                PrimaryGap = 10,
-
-                SecondaryGap= 20,
-                SecondaryGapGrow = 1,
-                //PreferredHeight = 400,
-                IntralinearGravity = -1,
-                Children = {
-                    Enumerable.Range(0,12).Select(x=>TestBlocks[x%TestBlocks.Length])
-                }
-            },
-
-            CodeBlockScrollable(LoadFile(ThisFilePath()).GetCodeRegion("codeExample").Highlight())
-                .Modify( x=> x.Height = 400)
-                .Override(o => o.OverrideWidth = 400)
-                .CenterHorizontally(),
-
             new Paragraph($"STATIC_SHARP".UnderscoreToNbsp())
             .ToLandingMainHeader(),
 
-
             Description,
-
-
-
-            new Paragraph("Text\n\n\n\nText"){
-                BackgroundColor = new(e=>Js.Window.Touch?Color.Blue:Color.Red) ,
-                MarginsHorizontal= 20,
-                PaddingsHorizontal = 0,
-
-                //TextAlignmentHorizontal = TextAlignmentHorizontal.Center,
-                Children = {
-                    new Block(){
-                        BackgroundColor = new(e=>e.Parent.BackgroundColor),
-                        Depth = -1,
-                        X = new(e=>-e.Parent.X),
-                        Width = new(e=>e.Parent.Parent.Width),
-                        Height = new(e=>e.Parent.Height),
-                    }
-                }
-            },
-
-
-            new Block{
-                //PreferredHeight = new(e=>e.FirstChild.InternalHeight),
-                Height = new(e=>e.FirstChild.Layer().Height),
-                BackgroundColor = Color.LightGray,
-                Children = {
-                    new Paragraph("Text\n\n\n\nText"){ 
-                        //PaddingLeft = new(e=>e.Parent.Parent.PaddingLeft),
-                        X = new(e=>-e.Parent.X),
-                        BackgroundColor = Color.Pink,
-                        Width = new(e=>e.Parent.Parent.Width)
-                    }
-                }
-            },
 
             Separator(),
 
@@ -309,32 +197,40 @@ namespace StaticSharpDemo.Root {
 
             Separator(),
 
-            new Flipper() {
-                Flipped = new (e=>e.Width < 950),
-                BottomToTop = true,
 
-                First = new Column(){
-                    MarginLeft = 10,
-                    MarginRight = 10,
-                    MarginTop = 60,
-                    Children = {
-                        "copypasteable from\nSTACKOVERFLOW".ToLandingSectionHeader(new Color("#F58025"))
-                        ,
-                        """
-                        Copy-pasteability is the superpower of code - it allows developers to reuse and share code like a boss, saving time and effort in the software development process.
-                        No-code or low-code platforms might have their own superpowers, but when it comes to flexibility and customization, code-based approaches reign supreme.
-                        So go forth, dear developer, and copy-paste to your heart's content!
-                        """,
+            new LinearLayout(){
+                Vertical = new(e=>e.Width<950),
+                Reverse = new(e=>e.Vertical),
+                MarginLeft = new(e=>e.Parent.PaddingLeft),
+                MarginRight = new(e=>e.Parent.PaddingRight),
+                MarginsVertical = 75,
+                PrimaryGravity = null,
+                Children = {
+                    new LinearLayout(){
+                        ItemGrow = 0,
+                        Width = new(e=>e.Parent.Width * 0.1),
+                        MarginLeft = 10,
+                        MarginRight = 10,
+                        MarginTop = 60,
+                        Children = {
+                            "copypasteable from\nSTACKOVERFLOW".ToLandingSectionHeader(new Color("#F58025"))
+                            ,
+                            """
+                            Copy-pasteability is the superpower of code - it allows developers to reuse and share code like a boss, saving time and effort in the software development process.
+                            No-code or low-code platforms might have their own superpowers, but when it comes to flexibility and customization, code-based approaches reign supreme.
+                            So go forth, dear developer, and copy-paste to your heart's content!
+                            """,
+                        }
+                    },
+                    new Image("StackoverflowKeyboard.svg"){
+                        Width = new(e=>e.Parent.Width * 0.1),
+                        Height = 400,
+                        Margins = 75,
+                        Embed = Image.TEmbed.Image,
+                        Fit = Fit.Inside
                     }
-                },
-                Second = new Image("StackoverflowKeyboard.svg"){
-                    X  = new(e=>((Js.Flipper)e.Parent).Flipped ? Js.Math.Max(0.5 * (e.Parent.Width - e.Width), 0) : /*e.LayoutX*/e.X),
-                    Width = new(e=>((Js.Flipper)e.Parent).Flipped ? Js.Math.Min(e./*LayoutWidth*/Width, 400) : e./*LayoutWidth*/Width),
-                    Margins = 75,
-                    Embed = Image.TEmbed.Image,
-                    Fit = Fit.Inside
                 }
-            }.FillWidth().InheritHorizontalPaddings(),
+            },
 
             Separator(),
             "create your own SHORTCUTS".ToLandingSectionHeader(Color.Red),
@@ -401,30 +297,22 @@ namespace StaticSharpDemo.Root {
 
             "any QUESTIONS?".ToLandingSectionHeader(new Color("1a6ed8")),
 
-            new Layout{
-                ItemGrow = 1,
-                MarginsVertical = 10,
-                PrimaryGap= 10,
-                SecondaryGap= 10,
+
+            new LinearLayout {
+                Margins = 4,
+                Vertical = new (e => e.Width < 480),
+                ItemGrow = 1,                
+                Gap = 4,
                 Children = {
                     new Blocks{
                         FacebookMessengerButton("staticsharp"),
                         TelegramButton("petr_sevostianov"),
                         DiscordButton("KYF5uneE2V")
-                    }.Modify(x=>{
-                        foreach (var item in x.OfType<Block>()) {
-                            //item.Margins = 10;
-                            
-                            //item.Grow = 1;
-                            //item.PreferredWidth = new(e=>Js.Math.Min(e.InternalWidth,e.Parent.Width-e.MarginLeft-e.MarginRight));
-                            // TODO: !!! this is impossible conceptually, since Block does not set its InternalWidth
-                            item.Width = new(e=> e.Parent.Width-e.MarginLeft-e.MarginRight);
-                            //item.Shrink= 1;
-                        }
-                    }),
+                    },
                 }
-            }.InheritHorizontalPaddings().FillWidth()
+            },
             
+
 
 
             /*new Block{

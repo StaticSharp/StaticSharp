@@ -14,6 +14,14 @@ function ReactionBase(func) {
         property.dependentReactions.add(_this)
     }
 
+    _this.unsubscribeFromTriggeringProperty = function (property) {
+        if (property.dependentReactions.delete(_this)) {
+            _this.triggeringProperties.delete(property)
+            return true
+        }
+        return false        
+    }
+
     _this.unsubscribeFromTriggeringProperties = function () {
         if (_this.triggeringProperties.size == 0) return
 
