@@ -1,11 +1,5 @@
 ﻿using StaticSharp.Gears;
-using StaticSharp.Html;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StaticSharp {
 
@@ -30,7 +24,7 @@ namespace StaticSharp {
             : base(callerLineNumber, callerFilePath) { }
         public MaterialShadow(Hierarchical other, int callerLineNumber, string callerFilePath) : base(other, callerLineNumber, callerFilePath) {}
 
-        public string GetPlaneText(Context context) {
+        public string GetPlainText(Context context) {
             return "";
         }
     }

@@ -37,21 +37,10 @@
         <None Include=".\Core.png" Pack="true" Visible="false" PackagePath="images\icon.png" />
     </ItemGroup>
 
-	<ItemGroup>
-	  <Compile Remove="Components\**" />
-	  <Compile Remove="ContainersAndBlocks\**" />
-
-	  <EmbeddedResource Remove="Components\**" />
-	  <EmbeddedResource Remove="ContainersAndBlocks\**" />
-
-	  <None Include="Components\**" />
-	  <None Include="ContainersAndBlocks\**" />
-
-	</ItemGroup>
 
 	<ItemGroup>
 		<EmbeddedResource Include="**\*.js" />
-    <EmbeddedResource Include="**\*.css" />
+		<EmbeddedResource Include="**\*.css" />
 	</ItemGroup>
 
 	

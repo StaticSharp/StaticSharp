@@ -11,8 +11,8 @@ namespace StaticSharp {
         public class YoutubeVideoManifestItem : IStreamInfo, IKeyProvider {
             public string Key => KeyUtils.Combine<YoutubeVideoManifestItem>(Url);
 
-            public string Url;
-            public string Container;
+            public string Url = null!;
+            public string Container = null!;
             public long Size;
             public long Bitrate;
 

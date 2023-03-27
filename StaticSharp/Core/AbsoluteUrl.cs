@@ -1,6 +1,4 @@
-﻿//using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
-using System.Linq;
+﻿
 
 namespace StaticSharp {
 
@@ -33,17 +31,11 @@ namespace StaticSharp {
             var result = new AbsoluteUrl(a.Scheme, a.Host, a.Path + b);
             return result;
         }
-
-
         public AbsoluteUrl To(params string[] path) {
             return To(path.AsEnumerable());
         }
         public AbsoluteUrl To(IEnumerable<string> path) {
             return new AbsoluteUrl(Scheme,Host,Path.To(path));
         }
-
-        
-
-
     }
 }

@@ -3,7 +3,4 @@
         string CallerFilePath { get; }
         int CallerLineNumber { get; }
     }
-
-
-
 }

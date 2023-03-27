@@ -31,7 +31,7 @@ namespace StaticSharp {
     [Scripts.LayoutUtils]
     [Mix(typeof(MenuResponsiveBindings<Js.MenuResponsive>))]
     [ConstructorJs]
-    public partial class MenuResponsive : Block, IBlock {
+    public partial class MenuResponsive : Block {
 
         /*public required Block First { get; init; }
         public required Block Second { get; init; }*/

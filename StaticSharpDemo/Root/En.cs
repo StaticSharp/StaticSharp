@@ -1,18 +1,12 @@
 ﻿using Newtonsoft.Json.Linq;
-using StaticSharp.Gears;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 
 
 namespace StaticSharpDemo.Root {
 
     [Representative]
-    public partial class En : Page {
+    partial class En : Page {
         public override string Title => "StaticSharp";
         public override Inlines Description => $"Component oriented static-site generator\nextendable with C#";
 

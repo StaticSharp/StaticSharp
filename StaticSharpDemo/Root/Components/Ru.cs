@@ -59,8 +59,8 @@ namespace StaticSharpDemo.Root.Components {
                 InternalLink = x,
                 BackgroundColor = new(e=>e.Hover ? Color.FromGrayscale(0.95) : Color.White),
                 Children = {
-                    H4(x.Representative.Title),
-                    x.Representative.Description
+                    H4(x.Representative?.Title),
+                    x.Representative?.Description
                 }
             }),
         };

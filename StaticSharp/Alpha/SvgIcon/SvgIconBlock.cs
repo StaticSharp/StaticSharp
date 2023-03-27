@@ -17,7 +17,9 @@ namespace StaticSharp {
     public partial class SvgIconBlock : Block {
 
         SvgIcons.Icon icon;
-        protected SvgIconBlock(SvgIconBlock other, int callerLineNumber, string callerFilePath) : base(other, callerLineNumber, callerFilePath) { }
+        protected SvgIconBlock(SvgIconBlock other, int callerLineNumber, string callerFilePath) : base(other, callerLineNumber, callerFilePath) {
+            icon = other.icon;
+        }
         public SvgIconBlock(SvgIcons.Icon icon, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
             this.icon = icon;
         }

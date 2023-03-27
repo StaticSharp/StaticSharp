@@ -1,11 +1,8 @@
-﻿using NUglify;
-using StaticSharp.Gears;
+﻿using StaticSharp.Gears;
 using StaticSharp.Html;
 using StaticSharp.Tree;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
+
 
 namespace StaticSharp {
 
@@ -74,7 +71,7 @@ namespace StaticSharp {
             base.AddRequiredInclues(context);
 
             if (context.DeveloperMode) {
-                var genome = RelatedFileAttribute.GetGenome(typeof(Page), "../Watch.js");
+                var genome = new Scripts.DeveloperModeAttribute().GetGenome();
                 context.AddScript(genome);
             }
             
@@ -96,7 +93,7 @@ namespace StaticSharp {
             meta["twitter:url"] = url;
 
             if (Description != null) {
-                string description = Description.GetPlaneText(context);
+                string description = Description.GetPlainText(context);
                 meta["description"] = description;
                 meta["og:description"] = description;
                 meta["twitter:description"] = description;

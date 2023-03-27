@@ -9,12 +9,7 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
 
-    namespace Js {
-        public interface Object {
-            public Object this[string name] { get; }
-        }
-
-    }
+    
 
 
     [Javascriptifier.JavascriptClass("")]
