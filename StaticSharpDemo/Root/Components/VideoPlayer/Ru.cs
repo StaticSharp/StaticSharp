@@ -4,7 +4,7 @@ namespace StaticSharpDemo.Root.Components.VideoPlayer {
 
 
     [Representative]
-    public partial class Ru : ComponentPage {
+    public partial class Ru : Page {
 
 
 

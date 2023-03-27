@@ -1,7 +1,7 @@
 ﻿namespace StaticSharpDemo.Root.Components.ParagraphComponent {
 
     [Representative]
-    public partial class En : ComponentPage {
+    public partial class En : Page {
         public override Inlines Description => $"Paragraph is a Block of text and other Inlines";
         public override Blocks? Content => new (){
             "Single line paragraph",

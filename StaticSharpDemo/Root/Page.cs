@@ -1,159 +1,125 @@
 ﻿using StaticSharp.Gears;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 
 namespace StaticSharpDemo.Root {
-
-    public abstract partial class Page : StaticSharp.PageSideMenus {
+    public abstract partial class Page : StaticSharp.Page {
+        public override string? SiteName => "StaticSharp";
+        public override Genome<IAsset>? Favicon => LoadFile("https://raw.githubusercontent.com/StaticSharp/StaticSharpBrandAssets/main/FavIcon.svg");
 
         public override string PageLanguage => Node.Language.ToString().ToLower();
-        protected override void Setup(Context context) {
-            ContentWidth = 800;
-            base.Setup(context);
+
+        public override object? MainVisual => null;
+        public override string Title {
+            get {
+                var result = GetType().Namespace;
+                result = result[(result.LastIndexOf('.') + 1)..];
+                result = StaticSharp.Gears.CaseUtils.CamelCaseRegex.Replace(result, match => {
+                    if (match.Index == 0) return match.Value;
+                    return " " + match.Value;
+                });
+
+                return result;
+            }
         }
-        
-        public override Block? LeftSideBarIcon => new SvgIconBlock(SvgIcons.MaterialDesignIcons.Menu) { 
-            BackgroundColor = new Color("#6d597a"),
-            Paddings = 8,
-            Margins = 8
+
+
+        public virtual Block LanguageMenu => new Row {
+            Children = {
+                VirtualNode.GetAllParallelNodes().Select(
+                    x=>new Paragraph{
+                        Inlines = {
+                            new Inline(x.Language.ToString()){
+                                InternalLink = x
+                            }
+                        }
+                    }
+                )
+            }
         };
 
 
+        public Blocks SocialLinks => new() {
+            new SvgIconBlock(SvgIcons.SimpleIcons.GitHub){
+                ExternalLink = "https://www.github.com/staticsharp"
+            },
+            new SvgIconBlock(SvgIcons.SimpleIcons.Facebook){
+                ExternalLink = "https://www.facebook.com/staticsharp"
+            },
+            new SvgIconBlock(SvgIcons.SimpleIcons.Twitter){
+                ExternalLink = "https://www.twitter.com/staticsharp"
+            },
+            new SvgIconBlock(SvgIcons.SimpleIcons.Discord){
+                ExternalLink = "https://www.twitter.com/staticsharp"
+            },
+        };
 
-        public override Block LeftSideBar =>
-            new ScrollLayout {
-                Content = new Column() {
-                    BackgroundColor = new Color("#6d597a"),
-                    Children = {
-                        "Menu Item 1",
-                        "Menu item 2",
-                        "Menu item 2",
-                        "Menu item 2",
-                        "Menu item 2",
-                        "Menu item 2",
-                        "Menu item 2",
-                        "Menu item 2",
-                        "Menu item 2",
-                        "Menu item 2",
-                        "Menu item 2",
-                        "Menu item 2",
-                        "Menu item 2",
-                        "Menu item 2",
-                        "Menu item 2",
-                        "Menu item 2",
-                        "Menu item 2",
-                        "Menu item 2",
-                        "Menu item 2",
-                        "Menu item 2",
-                        "Menu item 2",
-                        "Menu item 2",
-                        "Menu item 2",
-                        "Menu item 2",
-
-                        new Space(){
-                            Between = 1
-                        },
-
-                        new Paragraph("Social links"){
-                            //["Width"] = "() => element.LayoutWidth",
-                        }
+        public virtual Block Footer => new LinearLayout {
+            FontSize = 14,
+            PaddingsHorizontal = new(e => Js.Math.Max(e.Parent.Width - ColumnWidth, 0) / 2),
+            BackgroundColor = Color.FromGrayscale(0.9),
+            Children = { 
+                /*new LinearLayout {
+                    Vertical = false,
+                    
+                    Children = { 
+                        "A",
+                        "B",
+                        "C"
                     }
+                },*/
+                $"This website is created using {Node.Root}"
+            }
+        };
+
+
+        public virtual Block Menu => new Row {
+            Children = {
+                new Image("https://raw.githubusercontent.com/StaticSharp/StaticSharpBrandAssets/main/LogoHorizontal.svg") {
+                    Embed = Image.TEmbed.Image,
+                    Height = 32,
+                    MarginsVertical = 6,
+                    MarginsHorizontal = 20,
+
+                },
+                    SocialLinks.Modify(x=>{
+                        foreach (var i in x.OfType<SvgIconBlock>()){
+                            i.Paddings = 10;
+                        }
+                    })
                 }
-                
-            };
-
-
-        public override Block? RightSideBarIcon => new SvgIconBlock(SvgIcons.MaterialDesignIcons.Translate) {
-            BackgroundColor = new Color("#7a5924"),
-            Paddings = 8,
-            Margins = 8
-        };
-        public override Block RightSideBar => new Column() {
-            BackgroundColor = new Color("#7a5924"),
-            Children = {
-                VirtualNode.GetAllParallelNodes().Select(x=>MenuItem(x,x.Language.ToString())),
-            }
-        };
-
-
-
-        public static Paragraph FooterTitle(string text,
-            [CallerFilePath] string callerFilePath = "",
-            [CallerLineNumber] int callerLineNumber = 0
-            ) {
-            var paragraph = new Paragraph(text, callerLineNumber, callerFilePath) {
-                FontSize = 18,
-                Weight = FontWeight.Bold,
-            };
-            return paragraph;
-        }
-
-        public override Block? Footer => new Row {
-
-            BackgroundColor = new Color("#355070"),
-
-            PaddingTop = 20,
-            PaddingBottom = 20,
-
-            Children = {
-                new Blocks(){
-                    new Space(float.Epsilon,1,float.Epsilon),
-                    new Column{
-                        Children = {
-                            FooterTitle("Links"),
-                            "тут будут ссылки"
-                        }
-                    },
-                    new Space(float.Epsilon,1,float.Epsilon),
-                    new Column{
-                        Children = {
-                            FooterTitle("Column 2"),
-                            "тут будут еще ссылки"
-                        }
-
-                    },
-                    new Space(float.Epsilon,1,float.Epsilon),
-                    new Column{
-                        Children = {
-                            FooterTitle("Column 3"),
-                            "и тут будут ссылки",
-                            "line 2",
-                            "line 3"
-                        }
-                    },
-                    new Space(float.Epsilon,1,float.Epsilon),
-
-
-                }.Modify(x=>{
-                    foreach (var c in x.OfType<Column>()){
-
-                        c.MarginLeft = 10;
-                        c.MarginRight = 10;
-                        c.MarginTop = 20;
-                        c.MarginBottom = 20;
-
-                        c.Children.OfType<Block>().First().Modify(x=>{
-                            x.MarginTop = 0;
-                        });
-
-                        c.Children.OfType<Block>().Last().Modify(x=>{
-                            x.MarginBottom = 0;
-                        });
-
-                        /*foreach (var b in c.Children.Values.OfType<Block>()){
-                            b.Bindings.MarginLeft = e=>0;
-                            b.Bindings.MarginRight = e=>0;
-                        }*/
-                    }
-                })
-
-            }
         }.FillWidth().InheritHorizontalPaddings();
 
+        public abstract Blocks? Content { get; }
 
+        public virtual double ColumnWidth => 1080;
 
+        public override Blocks Children => new Blocks { // for top level element Width must be set/overriden (e.g. FillWidth), otherwise - recursive binding
+            new ScrollLayout {
+                Width = new(e=>e.Parent.Width),
+                Height = new(e=>e.Parent.Height),
+                ScrollY = new(e=>Js.Storage.Restore("MainScroll", () => e.ScrollYActual)),
+                //FontSize = new(e =>Js.Math.First( Js.Storage.Restore("FontSize", () => 10)),
+                
+                Content = new LinearLayout{
+                    Width = new(e=>e.Parent.Width),
 
+                    ItemGrow = 0,
+                    GapGrow = 1,
+                    Gap = 50,
+                    Children = {
+                        new LinearLayout{
+                            PaddingsHorizontal = new(e=>Js.Math.Max(e.Parent.Width-ColumnWidth , 0)/2),
+                            Children = {
+                                Menu,
+                                Content,
+                            }
+                        }.FillWidth(),
+
+                        Footer,
+                    }
+                }
+
+            }
+        };
     }
-
 }

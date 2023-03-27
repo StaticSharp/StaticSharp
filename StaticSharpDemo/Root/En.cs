@@ -7,54 +7,14 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace StaticSharpDemo.Root {
 
-
-    /*
-    public partial class En : LandingPage {
-
-        public interface JavascriptRepresentation : StaticSharp.Js.Page {
-            public new StaticSharp.Js.Block Controls { get; }
-        }
-
-        public class Property<T> {
-            private readonly Expression<Func<JavascriptRepresentation, T>> expression;
-            public Property(Expression<Func<JavascriptRepresentation, T>> expression) {
-                this.expression = expression;
-            }
-        }
-
-        [Javascriptifier.JavascriptOnlyMember]
-        private JavascriptRepresentation Root => throw new Javascriptifier.JavascriptOnlyException();
-
-    }*/
-
-
     [Representative]
-    public partial class En : LandingPage {
+    public partial class En : Page {
         public override string Title => "StaticSharp";
         public override Inlines Description => $"Component oriented static-site generator\nextendable with C#";
-
-        
-
-        /*public override ScrollLayout ScrollLayout => base.ScrollLayout.Modify(x => {
-            x.Children.Add(
-                new MaterialDesignIconBlock(MaterialDesignIcons.IconName.LanguageCsharp) {
-                    Depth = 3,
-                    BackgroundColor = Color.White,
-                    Height = 80,
-                    Radius = new(e => e.Height * 0.5),
-                    Paddings = 20,
-                    Children = {
-                    new LinkBlock("https://en.wikipedia.org/wiki/C_Sharp_(programming_language)").FillHeight().FillWidth()
-                }
-
-                }.Center()
-                );
-        });*/
 
         protected override void Setup(Context context) {
             base.Setup(context);
@@ -62,7 +22,6 @@ namespace StaticSharpDemo.Root {
             FontFamilies = new() { "Inter" };
             Weight = FontWeight.Light;
         }
-
 
         public override Block? MainVisual => new Video("T4TEdzSLyi0") {
             Play = true,
@@ -185,6 +144,9 @@ namespace StaticSharpDemo.Root {
 
             "coDe".ToLandingSectionHeader(Color.Red),
 
+            /*$"This is {new Inline("Red text"){ ForegroundColor = Color.Red}}",
+            $"Here is {Bold("bold")} text. This is {Node.Root.ContactUs:internal link}. And an icon : {new SvgIconInline(SvgIcons.SimpleIcons.GitHub)}",
+            $"This is compile time error {new Block{ BackgroundColor = Color.Red}}",*/
             "Welcome to StaticSharp! We believe in getting right to the point, so here is the code from this very page.",
 
             CodeBlockScrollable(LoadFile(ThisFilePath()).GetCodeRegion("codeExample").Highlight())
@@ -201,7 +163,7 @@ namespace StaticSharpDemo.Root {
             """,
 
             Separator(),
-
+            Node.Components.ImageComponent.Representative.Description,
 
             new LinearLayout(){
                 Vertical = new(e=>e.Width<950),

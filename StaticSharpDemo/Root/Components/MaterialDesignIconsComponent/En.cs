@@ -4,7 +4,7 @@ using System.Linq;
 namespace StaticSharpDemo.Root.Components.MaterialDesignIconsComponent {
 
     [Representative]
-    public partial class En : ComponentPage {
+    public partial class En : Page {
         public override Inlines Description => $"Material Design icon component. Has two implementations as Block and as Inline.";
         public override Blocks? Content => new() {
             H5(nameof(SvgIconBlock)),

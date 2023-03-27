@@ -7,49 +7,10 @@ namespace StaticSharpDemo.Root.Components {
 
 
 
-
-    public abstract partial class ComponentPage : Page {
-
-
-        public override string Title {
-            get {
-                var result = GetType().Namespace;
-                result = result[(result.LastIndexOf('.') + 1)..];
-
-                var suffix = "Component";
-                if (result.EndsWith(suffix)) {
-                    result = result.Remove(result.Length - suffix.Length);
-                }
-
-                result = StaticSharp.Gears.CaseUtils.CamelCaseRegex.Replace(result, match => {
-                    if (match.Index == 0) return match.Value;
-                    return " "+match.Value;                   
-                    });                
-
-                return result;
-            }
-        }
-
-
-        public override Block LeftSideBar => new ScrollLayout {
-            Content = new Column(){
-                BackgroundColor = Color.FromGrayscale(0.25),
-                Children = {
-                    Node.Children.Select(x=>MenuItem(x))
-                }
-            }            
-        };
-    }
-
-
-
     [Representative]
-    public partial class Ru : ComponentPage {
-
-        protected override void Setup(Context context) {
-            BackgroundColor = new Color("#f8edeb");
-            base.Setup(context);
-        }
+    public partial class Ru : Page {
+ 
+        public override object? MainVisual => null;
 
         public override Inlines Description => $"Компоненты для создания страниц.";
 

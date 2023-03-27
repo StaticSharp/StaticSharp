@@ -6,7 +6,7 @@ using System.Linq;
 namespace StaticSharpDemo.Root.Components.CodeComponent {
 
     [Representative]
-    public partial class En : ComponentPage {
+    public partial class En : Page {
         public override Inlines Description => $"CodeBlock and CodeInline component.";
         //public override Block? MainVisual => new Image("ImageExample1.jpg");
 
