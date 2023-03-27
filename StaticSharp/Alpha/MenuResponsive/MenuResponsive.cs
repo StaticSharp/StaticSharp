@@ -1,23 +1,31 @@
 ﻿using StaticSharp.Gears;
 using StaticSharp.Html;
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 
 namespace StaticSharp {
 
     namespace Js {
         public interface MenuResponsive : Block {
-            public double? SecondaryGravity { get; }
+            public double SecondaryGravity { get; }
+            public bool HideButton { get; }
+            public bool DropdownExpanded { get; }
+            
+
+            public Enumerable<Block> MenuItems { get; }
+            public Block? Logo { get; }
+            public Block Button { get; }
+            public Block Dropdown { get; }
         }
     }
 
 
     namespace Gears {
         public class MenuResponsiveBindings<FinalJs> : BlockBindings<FinalJs>  {
-            public Binding<double?> SecondaryGravity { set { Apply(value); } }
+            public Binding<double> SecondaryGravity { set { Apply(value); } }
+
+            public Binding<bool> DropdownExpanded { set { Apply(value); } }
+
+            public Binding<bool> HideButton { set { Apply(value); } }
         }
     }
 
@@ -25,15 +33,27 @@ namespace StaticSharp {
     [Mix(typeof(MenuResponsiveBindings<Js.MenuResponsive>))]
     [ConstructorJs]
     public partial class MenuResponsive : Block, IBlock {
+
+        protected static Color DefaultBackgroundColor => Color.FromGrayscale(0.9);
+
+
         public Block? Logo { get; set; } = null;
 
-        public Block Button { get; set; } = new SvgIconBlock(SvgIcons.MaterialDesignIcons.Menu);
+        public Block Button { get; set; } = new SvgIconBlock(SvgIcons.MaterialDesignIcons.Menu)
+        {
+            Visibility = new(e => ((Js.MenuResponsive)e.Parent).Dropdown.Children.Any(null) || !((Js.MenuResponsive)e.Parent).HideButton ? 1 : 0),
+            BackgroundColor = new(e => ((Js.MenuResponsive)e.Parent).DropdownExpanded ? DefaultBackgroundColor : Color.White),
+            // TODO: Cursor = new(e => ((Js.MenuResponsive)e.Parent).Dropdown.Children.Any(null) ? Cursor.Pointer : Cursor.Default),
+        };
 
         public Block Dropdown { get; set; } = new LinearLayout() {
             Vertical = true,
-            BackgroundColor = Color.FromGrayscale(0.9),
+            BackgroundColor = DefaultBackgroundColor,
             Paddings = 5,
-            Radius = 5
+            RadiusTopLeft= 5,
+            RadiusBottomLeft= 5,
+            RadiusBottomRight = 5,
+            Visibility = new(e => ((Js.MenuResponsive)e.Parent).DropdownExpanded ? 1 : 0),
         };
 
         public virtual Blocks MenuItems { get; } = new();

@@ -10,6 +10,9 @@ public interface Enumerable {
 
 public interface Enumerable<T> : Enumerable {
     T First(Expression<Func<T, bool>> func);
+
+    bool Any(Expression<Func<T, bool>> func);
 }
+
 
 
