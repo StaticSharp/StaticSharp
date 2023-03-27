@@ -87,5 +87,10 @@ function ClearLayer(element) {
         element[key] = propertyValueOrBinding
     })
     element.Layer.backupProperties.clear()
+
+    if (element.NextSibling != undefined) {
+        ClearLayer(element.NextSibling)
+    }
+
     d.end()
 }
