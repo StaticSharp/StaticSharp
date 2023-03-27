@@ -29,9 +29,9 @@ namespace StaticSharp {
 
     namespace Js {
 
+
+
         
-
-
         public interface Hierarchical : Object {
             public string Name { get; }
 
@@ -55,10 +55,10 @@ namespace StaticSharp {
     }
 
 
-
+    [Scripts.Layer]
     [ConstructorJs]
     [RelatedScript("DomLinkedList")]
-    public abstract class Hierarchical : Reactive {
+    public abstract class Hierarchical : Gears.Object {
         protected virtual string TagName => CaseUtils.CamelToKebab(GetType().Name);
 
         protected Hierarchical(Hierarchical other,

@@ -1,6 +1,16 @@
 ﻿using Javascriptifier;
 
 namespace StaticSharp {
+
+    namespace Scripts {
+        public class MathAttribute : ScriptReferenceAttribute {
+            public MathAttribute() : base(GetScriptFilePath()) { }
+        }
+    }
+
+
+
+
     namespace Js {
 
         public static class Constants {

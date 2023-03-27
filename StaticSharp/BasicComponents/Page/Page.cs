@@ -1,4 +1,5 @@
-﻿using StaticSharp.Gears;
+﻿using NUglify;
+using StaticSharp.Gears;
 using StaticSharp.Html;
 using StaticSharp.Tree;
 using System.Collections.Generic;
@@ -38,7 +39,7 @@ namespace StaticSharp {
 
     [Mix(typeof(PageBindings<Js.Page>))]
     [ConstructorJs]
-    [RelatedScript("../../CrossplatformLibrary/Storage/Storage")]
+    [Scripts.Storage]
     [RelatedStyle("../Normalization")]
 
     public abstract partial class Page : Block {
@@ -119,7 +120,8 @@ namespace StaticSharp {
             if (Favicon == null)
                 return null;
             var asset = Favicon.Result;
-            var url = context.AddAsset(asset);
+
+            var url = context.PathFromHostToCurrentPage.To(context.AddAsset(asset));
             return new Tag("link") {
                 ["rel"] = "icon",
                 ["type"] = asset.GetMediaType(),

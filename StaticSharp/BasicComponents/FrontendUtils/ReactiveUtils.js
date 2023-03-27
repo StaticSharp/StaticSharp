@@ -36,23 +36,3 @@ function HeightToStyle(element) {
     })
 }
 
-
-
-function Try(func, defaultValue, exceptions) {
-    //console.log("try", func, defaultValue, exceptions)
-    try {
-        return func()
-    } catch (e) {
-        console.warn(e)
-        if (exceptions == undefined) {
-            return defaultValue
-        } else {
-            for (let i of exceptions) {
-                if (e instanceof i) {
-                    return defaultValue
-                }
-            }
-            throw e
-        }
-    }
-}

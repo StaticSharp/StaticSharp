@@ -9,15 +9,14 @@ namespace StaticSharpDemo.Root.Components.MaterialDesignIconsComponent {
         public override Blocks? Content => new() {
             H5(nameof(SvgIconBlock)),
 
-            new Row{ 
-                Children = { 
-                    new Space(),
+            new LinearLayout{
+                Vertical = false,
+                Children = {
                     new SvgIconBlock(SvgIcons.MaterialDesignIcons.Github),
                     new SvgIconBlock(SvgIcons.MaterialDesignIcons.Facebook),
                     new SvgIconBlock(SvgIcons.MaterialDesignIcons.Twitter),
                     new SvgIconBlock(SvgIcons.MaterialDesignIcons.Youtube),
                     new SvgIconBlock(SvgIcons.MaterialDesignIcons.Vimeo),
-                    new Space(),
                 }
             }.Modify(x=>{
                 foreach (var i in x.Children.OfType<Block>()){

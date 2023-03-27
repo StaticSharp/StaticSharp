@@ -8,6 +8,14 @@ namespace StaticSharpDemo.Root {
 
         public override string PageLanguage => Node.Language.ToString().ToLower();
 
+        protected override void Setup(Context context) {
+            base.Setup(context);
+            FontSize = 18;
+            FontFamilies = new() { "Inter" };
+            Weight = FontWeight.Light;
+        }
+
+
         public override object? MainVisual => null;
         public override string Title {
             get {
@@ -23,18 +31,20 @@ namespace StaticSharpDemo.Root {
         }
 
 
-        public virtual Block LanguageMenu => new Row {
-            Children = {
-                VirtualNode.GetAllParallelNodes().Select(
-                    x=>new Paragraph{
-                        Inlines = {
-                            new Inline(x.Language.ToString()){
-                                InternalLink = x
-                            }
+
+
+
+
+        public virtual Blocks LanguageMenuItems => new Blocks {
+            VirtualNode.GetAllParallelNodes().Select(
+                x=>new Paragraph{
+                    Inlines = {
+                        new Inline(x.Language.ToString()){
+                            InternalLink = x
                         }
                     }
-                )
-            }
+                }
+            )            
         };
 
 
@@ -72,22 +82,26 @@ namespace StaticSharpDemo.Root {
         };
 
 
-        public virtual Block Menu => new Row {
-            Children = {
-                new Image("https://raw.githubusercontent.com/StaticSharp/StaticSharpBrandAssets/main/LogoHorizontal.svg") {
-                    Embed = Image.TEmbed.Image,
-                    Height = 32,
-                    MarginsVertical = 6,
-                    MarginsHorizontal = 20,
+        public virtual Block Menu => new MenuResponsive {
+            Depth = 1,
+            Logo = new Image("https://raw.githubusercontent.com/StaticSharp/StaticSharpBrandAssets/main/LogoHorizontal.svg") {
+                Embed = Image.TEmbed.Image,
+                Height = 32,
+                //MarginsVertical = 6,
+                MarginsHorizontal = 20,
+                InternalLink = VirtualNode.Root,
 
+            },
+            MenuItems = {
+                    MenuItem(Node.Components),
+                    MenuItem(Node.Components.ImageComponent),
+                    MenuItem(Node.Components.VideoPlayer),
+                    MenuItem(Node.Components.ParagraphComponent),
+                    MenuItem(Node.Customization.HowToCreateNewComponent)
                 },
-                    SocialLinks.Modify(x=>{
-                        foreach (var i in x.OfType<SvgIconBlock>()){
-                            i.Paddings = 10;
-                        }
-                    })
-                }
-        }.FillWidth().InheritHorizontalPaddings();
+
+            Margins = 20
+        };
 
         public abstract Blocks? Content { get; }
 
@@ -97,7 +111,7 @@ namespace StaticSharpDemo.Root {
             new ScrollLayout {
                 Width = new(e=>e.Parent.Width),
                 Height = new(e=>e.Parent.Height),
-                ScrollY = new(e=>Js.Storage.Restore("MainScroll", () => e.ScrollYActual)),
+                ScrollY = new(e=>Js.Storage.Restore("MainScroll_"+string.Join("-",VirtualNode.Path), () => e.ScrollYActual)),
                 //FontSize = new(e =>Js.Math.First( Js.Storage.Restore("FontSize", () => 10)),
                 
                 Content = new LinearLayout{

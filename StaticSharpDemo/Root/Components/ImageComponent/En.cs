@@ -5,13 +5,13 @@ using System;
 namespace StaticSharpDemo.Root.Components.ImageComponent {
 
 
-    public abstract partial class Common : Page {
+    abstract partial class Common : Page {
         public Image ImageExample => new Image("ImageExample1.psd");
     }
 
 
     [Representative]
-    public partial class En : Common {
+    partial class En : Common {
         public override Inlines Description => $"StaticSharp Image component.";
 
         public override Block? MainVisual => new Image("ImageExample1.jpg");

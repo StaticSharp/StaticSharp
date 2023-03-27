@@ -16,12 +16,7 @@ namespace StaticSharpDemo.Root {
         public override string Title => "StaticSharp";
         public override Inlines Description => $"Component oriented static-site generator\nextendable with C#";
 
-        protected override void Setup(Context context) {
-            base.Setup(context);
-            FontSize = 18;
-            FontFamilies = new() { "Inter" };
-            Weight = FontWeight.Light;
-        }
+        
 
         public override Block? MainVisual => new Video("T4TEdzSLyi0") {
             Play = true,
@@ -91,45 +86,10 @@ namespace StaticSharpDemo.Root {
         Random Random= new Random(0);
 
 
-        private class Switch<T> : IVoidEnumerable {
-
-            public Expression<Func<T>> this[Expression<Func<bool>> selector] {
-                set {  }
-            }
-
-            public static implicit operator T (Switch<T> x) => throw new Exception();
-        }
-
-
         public override Blocks? Content => new() {
 
 
-            /*new Image("https://raw.githubusercontent.com/StaticSharp/StaticSharpBrandAssets/main/LogoHorizontal.svg") {
-                    Embed = Image.TEmbed.Image,
-                    //wi = new(e=>e.Parent.Child<Js.Block>(2).Height - e.MarginTop - e.MarginBottom),
-                    Margins = 32,
-
-                },*/
-
-            new MenuResponsive {
-                Depth = 1,
-                Logo = new Image("https://raw.githubusercontent.com/StaticSharp/StaticSharpBrandAssets/main/LogoHorizontal.svg") {
-                    Embed = Image.TEmbed.Image,
-                    Height = 32,
-                    //MarginsVertical = 6,
-                    MarginsHorizontal = 20,
-
-                },
-                MenuItems = {
-                    MenuItem(Node.Components.ParagraphComponent),
-                    MenuItem(Node.Components.ImageComponent),
-                    MenuItem(Node.Components.VideoPlayer),
-                    MenuItem(Node.Components.ParagraphComponent),
-                    MenuItem(Node.Customization.HowToCreateNewComponent)
-                },
-
-                Margins = 20
-            },
+            
 
             new Paragraph($"STATIC_SHARP".UnderscoreToNbsp())
             .ToLandingMainHeader(),
@@ -161,7 +121,6 @@ namespace StaticSharpDemo.Root {
             """,
 
             Separator(),
-            Node.Components.ImageComponent.Representative.Description,
 
             new LinearLayout(){
                 Vertical = new(e=>e.Width<950),

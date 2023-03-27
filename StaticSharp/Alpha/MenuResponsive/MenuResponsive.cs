@@ -28,7 +28,7 @@ namespace StaticSharp {
         }
     }
 
-    [RelatedScript("../../BasicComponents/LinearLayout/LinearLayout")]
+    [Scripts.LayoutUtils]
     [Mix(typeof(MenuResponsiveBindings<Js.MenuResponsive>))]
     [ConstructorJs]
     public partial class MenuResponsive : Block, IBlock {

@@ -51,7 +51,7 @@ function Color() {
         _this.g = args[1]
         _this.b = args[2]
 
-        if (args.length == 4) {
+        if (args[3] != undefined) {
             if ((typeof args[3]) != 'number') {
                 console.warn("Color: Invalid arguments types", args)
                 return;

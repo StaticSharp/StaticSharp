@@ -64,12 +64,7 @@ namespace StaticSharp {
         }
     }
 
-    [Javascriptifier.JavascriptClass("")]
-    public static class JsLayerExtension
-    {
-        [Javascriptifier.JavascriptMethodFormat("{0}.Layer")]
-        public static T GetLayer<T>(this T _this) where T : Js.Block => default;
-    }
+
 
 
 
@@ -122,7 +117,7 @@ namespace StaticSharp {
 
     [Mix(typeof(BlockBindings<Js.Block>))]
     [ConstructorJs]
-    [RelatedScript("../Reactive/Layer")]
+    
     public partial class Block : BaseModifier, IBlock {
         //public virtual List<Modifier> Modifiers { get; } = new();
         public virtual Blocks Children { get; } = new();

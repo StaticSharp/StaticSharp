@@ -4,74 +4,29 @@ using StaticSharp.Html;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
+
+
+    namespace Js {
+        public interface Object {
+            public Object this[string name] { get; }
+        }
+    }
+
+
     namespace Gears {
 
-        public class Bindings<FinalJs> {
-            public struct Binding<T> : IVoidEnumerable {
+        [Scripts.ReactiveUtils]
+        [Scripts.Math]
+        [Scripts.Linq]
 
-                private T? Value;
-                private Expression<Func<FinalJs, T>>? Expression;
-
-
-                public Binding(Expression<Func<FinalJs, T>> expression) {
-                    Expression = expression;
-                }
-                public Binding(T value) {
-                    Value = value;
-                }
-
-                public static implicit operator Binding<T>(T value) {
-                    return new Binding<T>(value);
-                }
-                public string CreateScriptExpression() {
-                    if (Expression != null) {
-                        return Javascriptifier.ExpressionScriptifier.EvalLambdaExpression(Expression).ToString();
-                        //return new LambdaScriptifier(Expression,new object[] { new FinalJs()}).Eval();
-                    }
-                    return Javascriptifier.ValueStringifier.Stringify(Value);
-                    //return CSValueToJSValueConverter.ObjectToJsValue(Value);
-                }
-            }
-
-            protected void Apply<T>(Binding<T> binding,
-                [System.Runtime.CompilerServices.CallerMemberName] string? memberName = null,
-                string? memberName1 = null,
-                string? memberName2 = null,
-                string? memberName3 = null) {
-
-                var memberNames = new string?[] { memberName, memberName1, memberName2, memberName3 };
-
-                var aggregator = (Aggregator.Current as Reactive);
-                if (aggregator == null)
-                    throw new InvalidOperationException($"{nameof(Bindings<FinalJs>)} must be aggregated into {nameof(Reactive)} only");
-
-                foreach (var i in memberNames) {
-                    if (i != null) {
-                        /*if (binding == null)
-                            aggregator.Properties[i] = Js.Constants.Undefined;
-                        else*/
-                            aggregator.Properties[i] = binding.CreateScriptExpression();
-                    }
-                }
-            }
-        }
-
-
-
-
-        [RelatedScript("ReactiveUtils")]
-        [RelatedScript("../../CrossplatformLibrary/Math/Math")]
-        [RelatedScript("../../CrossplatformLibrary/Linq/Linq")]
-        [RelatedScript("Constants")]
         [RelatedScript("Constructor")]
         [RelatedScript("Bindings")]
         [RelatedScript("Events")]
-        public abstract class Reactive : CallerInfo {
+        public abstract class Object : CallerInfo {
             public Dictionary<string, string> Properties { get; } = new();
 
             public string this[string propertyName] {
@@ -85,13 +40,13 @@ namespace StaticSharp {
             }
 
 
-            protected Reactive(Reactive other,
+            protected Object(Object other,
                 int callerLineNumber = 0,
                 string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
                 Properties = new(other.Properties);
             }
 
-            protected Reactive(int callerLineNumber, string callerFilePath) : base(callerLineNumber, callerFilePath) {
+            protected Object(int callerLineNumber, string callerFilePath) : base(callerLineNumber, callerFilePath) {
 
             }
 
@@ -113,18 +68,22 @@ namespace StaticSharp {
                 var type = GetType();
                 while (type != null) {
                     yield return type;
-                    if (type == typeof(Reactive))
+                    if (type == typeof(Object))
                         yield break;
                     type = type.BaseType;
                 }
             }
 
             private void AddRequiredIncluesForType(Type type, Context context) {
-                if (type != typeof(Reactive)) {
+                if (type != typeof(Object)) {
                     var baseType = type.BaseType;
                     if (baseType != null) {
                         AddRequiredIncluesForType(baseType, context);
                     }
+                }
+
+                foreach (var i in type.GetCustomAttributes<Scripts.ScriptReferenceAttribute>(false)) {
+                    context.AddScript(i.GetGenome());
                 }
 
                 foreach (var i in type.GetCustomAttributes<RelatedScriptAttribute>(false)) {

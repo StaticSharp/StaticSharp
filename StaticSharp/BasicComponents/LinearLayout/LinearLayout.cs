@@ -45,7 +45,8 @@ namespace StaticSharp {
         }
     }
 
-    [RelatedScript("../FrontendUtils/LayoutUtils")]
+    [Scripts.LayoutUtils]
+    //[RelatedScript("../FrontendUtils/LayoutUtils")]
     [Mix(typeof(LinearLayoutBindings<Js.LinearLayout>))]
     [ConstructorJs]
     public partial class LinearLayout : Block {
