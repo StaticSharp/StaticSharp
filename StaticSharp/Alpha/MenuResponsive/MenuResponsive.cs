@@ -10,21 +10,14 @@ namespace StaticSharp {
 
     namespace Js {
         public interface MenuResponsive : Block {
-            /*public Block First => NotEvaluatableObject<Block>();
-            public Block Second => NotEvaluatableObject<Block>();
-            public bool Flipped { get; }
-
-            public bool RightToLeft { get; }
-            public bool BottomToTop { get; }*/
+            public double? SecondaryGravity { get; }
         }
     }
 
 
     namespace Gears {
         public class MenuResponsiveBindings<FinalJs> : BlockBindings<FinalJs>  {
-            /*public Binding<bool> Flipped { set { Apply(value); } }
-            public Binding<bool> RightToLeft { set { Apply(value); } }
-            public Binding<bool> BottomToTop { set { Apply(value); } }*/
+            public Binding<double?> SecondaryGravity { set { Apply(value); } }
         }
     }
 
@@ -32,14 +25,11 @@ namespace StaticSharp {
     [Mix(typeof(MenuResponsiveBindings<Js.MenuResponsive>))]
     [ConstructorJs]
     public partial class MenuResponsive : Block, IBlock {
-
-        /*public required Block First { get; init; }
-        public required Block Second { get; init; }*/
         public Block? Logo { get; set; } = null;
 
         public Block Button { get; set; } = new SvgIconBlock(SvgIcons.MaterialDesignIcons.Menu);
+
         public Block Dropdown { get; set; } = new LinearLayout() {
-            //X = new(e=>e.Parent.Width - e.Width), // TODO: What is correct? Moved to js + margins added
             Vertical = true,
             BackgroundColor = Color.FromGrayscale(0.9),
             Paddings = 5,
