@@ -161,17 +161,15 @@ namespace StaticSharpDemo.Root {
                     MarginsHorizontal = 20,
 
                 },
-                Dropdown = new Layout{
-                    Vertical = true,
-                    BackgroundColor = Color.LightGray,
-                },
                 MenuItems = {
                     MenuItem(Node.Components.ParagraphComponent),
                     MenuItem(Node.Components.ImageComponent),
                     MenuItem(Node.Components.VideoPlayer),
                     MenuItem(Node.Components.ParagraphComponent),
                     MenuItem(Node.Customization.HowToCreateNewComponent)
-                }
+                },
+
+                Margins = 20
             },
 
             new Paragraph($"STATIC_SHARP".UnderscoreToNbsp())

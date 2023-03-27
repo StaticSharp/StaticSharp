@@ -38,8 +38,9 @@ namespace StaticSharp {
         public Block? Logo { get; set; } = null;
 
         public Block Button { get; set; } = new SvgIconBlock(SvgIcons.MaterialDesignIcons.Menu);
-        public Block Dropdown { get; set; } = new Column() {
+        public Block Dropdown { get; set; } = new LinearLayout() {
             //X = new(e=>e.Parent.Width - e.Width), // TODO: What is correct? Moved to js + margins added
+            Vertical = true,
             BackgroundColor = Color.FromGrayscale(0.9),
             Paddings = 5,
             Radius = 5
