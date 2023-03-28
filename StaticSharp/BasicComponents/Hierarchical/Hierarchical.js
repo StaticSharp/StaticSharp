@@ -65,7 +65,7 @@ function Hierarchical(element) {
 
 
     element.HtmlNodesOrdered = new Enumerable(function* () {
-        yield* element.UnmanagedChildren
+        yield* element.ExistingUnmanagedChildren
     })
 
 

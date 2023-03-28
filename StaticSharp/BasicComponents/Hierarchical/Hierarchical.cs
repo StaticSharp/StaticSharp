@@ -30,7 +30,7 @@ namespace StaticSharp {
         
         public interface Hierarchical : Object {
             public string Name { get; }
-
+            public bool Exists { get; }
             public Page Root { get; }
             public Hierarchical Parent { get; }
             //public Hierarchical FirstChild { get; }
@@ -44,6 +44,7 @@ namespace StaticSharp {
     namespace Gears {
         public class HierarchicalBindings<FinalJs> : Bindings<FinalJs> {
             public Binding<string> Name { set { Apply(value); } }
+            public Binding<bool> Exists { set { Apply(value); } }
         }
     }
 

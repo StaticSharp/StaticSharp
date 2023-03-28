@@ -141,11 +141,14 @@ function CreateCollectionSocket(element, name, parentExpression) {
 
     var value = new DomLinkedList(firstChildProperty)
 
-    Object.defineProperty(element, name, {
+    element[name] = value
+    element["Existing"+name] = value.Where(x=>x.Exists)
+
+    /*Object.defineProperty(element, name, {
         get: function () {
             return value
         }
-    });
+    });*/
 }
 
 

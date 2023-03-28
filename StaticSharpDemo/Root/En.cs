@@ -83,10 +83,7 @@ namespace StaticSharpDemo.Root {
         public override Blocks? Content => new() {
 
 
-            
-
-            new Paragraph($"STATIC_SHARP".UnderscoreToNbsp())
-            .ToLandingMainHeader(),
+            new Paragraph($"STATIC_SHARP".UnderscoreToNbsp()).ToLandingMainHeader(),
 
             Description,
 

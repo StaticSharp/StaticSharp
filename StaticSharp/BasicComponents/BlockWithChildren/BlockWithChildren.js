@@ -2,9 +2,12 @@ function BlockWithChildren(element) {
     Block(element)
     CreateCollectionSocket(element, "Children", element)
 
-    //let baseHtmlNodesOrdered
+
+
+    let baseHtmlNodesOrdered = element.HtmlNodesOrdered
+
     element.HtmlNodesOrdered = new Enumerable(function* () {
-        yield* element.Children
-        yield* element.UnmanagedChildren
+        yield* baseHtmlNodesOrdered
+        yield* element.ExistingChildren
     })
 }
