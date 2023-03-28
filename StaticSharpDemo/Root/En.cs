@@ -1,68 +1,16 @@
 ﻿using Newtonsoft.Json.Linq;
-using StaticSharp.Gears;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace StaticSharpDemo.Root {
 
-
-    /*
-    public partial class En : LandingPage {
-
-        public interface JavascriptRepresentation : StaticSharp.Js.Page {
-            public new StaticSharp.Js.Block Controls { get; }
-        }
-
-        public class Property<T> {
-            private readonly Expression<Func<JavascriptRepresentation, T>> expression;
-            public Property(Expression<Func<JavascriptRepresentation, T>> expression) {
-                this.expression = expression;
-            }
-        }
-
-        [Javascriptifier.JavascriptOnlyMember]
-        private JavascriptRepresentation Root => throw new Javascriptifier.JavascriptOnlyException();
-
-    }*/
-
-
     [Representative]
-    public partial class En : LandingPage {
+    partial class En : Page {
         public override string Title => "StaticSharp";
         public override Inlines Description => $"Component oriented static-site generator\nextendable with C#";
 
         
-
-        /*public override ScrollLayout ScrollLayout => base.ScrollLayout.Modify(x => {
-            x.Children.Add(
-                new MaterialDesignIconBlock(MaterialDesignIcons.IconName.LanguageCsharp) {
-                    Depth = 3,
-                    BackgroundColor = Color.White,
-                    Height = 80,
-                    Radius = new(e => e.Height * 0.5),
-                    Paddings = 20,
-                    Children = {
-                    new LinkBlock("https://en.wikipedia.org/wiki/C_Sharp_(programming_language)").FillHeight().FillWidth()
-                }
-
-                }.Center()
-                );
-        });*/
-
-        protected override void Setup(Context context) {
-            base.Setup(context);
-            FontSize = 18;
-            FontFamilies = new() { "Inter" };
-            Weight = FontWeight.Light;
-        }
-
 
         public override Block? MainVisual => new Video("T4TEdzSLyi0") {
             Play = true,
@@ -132,48 +80,7 @@ namespace StaticSharpDemo.Root {
         Random Random= new Random(0);
 
 
-        private class Switch<T> : IVoidEnumerable {
-
-            public Expression<Func<T>> this[Expression<Func<bool>> selector] {
-                set {  }
-            }
-
-            public static implicit operator T (Switch<T> x) => throw new Exception();
-        }
-
-
         public override Blocks? Content => new() {
-
-
-            /*new Image("https://raw.githubusercontent.com/StaticSharp/StaticSharpBrandAssets/main/LogoHorizontal.svg") {
-                    Embed = Image.TEmbed.Image,
-                    //wi = new(e=>e.Parent.Child<Js.Block>(2).Height - e.MarginTop - e.MarginBottom),
-                    Margins = 32,
-
-                },*/
-
-            new MenuResponsive {
-                Depth = 1,
-                SecondaryGravity = 0,
-                HideButton = true,
-                Logo = new Image("https://raw.githubusercontent.com/StaticSharp/StaticSharpBrandAssets/main/LogoHorizontal.svg") {
-                    Embed = Image.TEmbed.Image,
-                    Height = 32,
-                    //MarginsVertical = 6,
-                    MarginsHorizontal = 20,
-
-                },
-                MenuItems = {
-                    MenuItem(Node.Components.ParagraphComponent),
-                    MenuItem(Node.Components.ImageComponent),
-                    MenuItem(Node.Components.VideoPlayer),
-                    MenuItem(Node.Components.ParagraphComponent),
-                    MenuItem(Node.Customization.HowToCreateNewComponent)
-                },
-
-                Margins = 20
-            },
-
             new Paragraph($"STATIC_SHARP".UnderscoreToNbsp())
             .ToLandingMainHeader(),
 
@@ -185,6 +92,9 @@ namespace StaticSharpDemo.Root {
 
             "coDe".ToLandingSectionHeader(Color.Red),
 
+            /*$"This is {new Inline("Red text"){ ForegroundColor = Color.Red}}",
+            $"Here is {Bold("bold")} text. This is {Node.Root.ContactUs:internal link}. And an icon : {new SvgIconInline(SvgIcons.SimpleIcons.GitHub)}",
+            $"This is compile time error {new Block{ BackgroundColor = Color.Red}}",*/
             "Welcome to StaticSharp! We believe in getting right to the point, so here is the code from this very page.",
 
             CodeBlockScrollable(LoadFile(ThisFilePath()).GetCodeRegion("codeExample").Highlight())
@@ -201,7 +111,6 @@ namespace StaticSharpDemo.Root {
             """,
 
             Separator(),
-
 
             new LinearLayout(){
                 Vertical = new(e=>e.Width<950),
@@ -243,7 +152,7 @@ namespace StaticSharpDemo.Root {
             For example, on this page, there are colored words in the headings. You can write full formatting in each case
             or you can create a function that highlights all capital letters with a given color and makes all lowercase letters capitalized.
             """,
-            CodeBlock("\"create your own SHORTCUTS\".SectionHeader(Color.Red)".Highlight("cs")),
+            CodeBlock("\"create your own SHORTCUTS\".ToLandingSectionHeader(Color.Red)".Highlight("cs")),
             $"In this case it is an extension method for type {Code("string")}",
 
             Separator(),

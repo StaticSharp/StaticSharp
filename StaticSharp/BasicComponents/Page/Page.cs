@@ -1,10 +1,8 @@
 ﻿using StaticSharp.Gears;
 using StaticSharp.Html;
 using StaticSharp.Tree;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
+
 
 namespace StaticSharp {
 
@@ -38,7 +36,7 @@ namespace StaticSharp {
 
     [Mix(typeof(PageBindings<Js.Page>))]
     [ConstructorJs]
-    [RelatedScript("../../CrossplatformLibrary/Storage/Storage")]
+    [Scripts.Storage]
     [RelatedStyle("../Normalization")]
 
     public abstract partial class Page : Block {
@@ -73,7 +71,7 @@ namespace StaticSharp {
             base.AddRequiredInclues(context);
 
             if (context.DeveloperMode) {
-                var genome = RelatedFileAttribute.GetGenome(typeof(Page), "../Watch.js");
+                var genome = new Scripts.DeveloperModeAttribute().GetGenome();
                 context.AddScript(genome);
             }
             
@@ -95,7 +93,7 @@ namespace StaticSharp {
             meta["twitter:url"] = url;
 
             if (Description != null) {
-                string description = Description.GetPlaneText(context);
+                string description = Description.GetPlainText(context);
                 meta["description"] = description;
                 meta["og:description"] = description;
                 meta["twitter:description"] = description;
@@ -119,7 +117,8 @@ namespace StaticSharp {
             if (Favicon == null)
                 return null;
             var asset = Favicon.Result;
-            var url = context.AddAsset(asset);
+
+            var url = context.PathFromHostToCurrentPage.To(context.AddAsset(asset));
             return new Tag("link") {
                 ["rel"] = "icon",
                 ["type"] = asset.GetMediaType(),

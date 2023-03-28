@@ -37,18 +37,6 @@ namespace StaticSharp.Gears {
         }
 
 
-        public static async Task<string> ReadAllTextAsync(string path, CancellationToken cancellationToken = default) {
-            while (true) {
-                try {
-                    return await File.ReadAllTextAsync(path, cancellationToken);
-                }
-                catch (IOException) {
-                    await Task.Yield();
-                }
-            }
-        }
-
-
         public static byte[] ReadAllBytes(string path) {
             while (true) {
                 try {
@@ -56,17 +44,6 @@ namespace StaticSharp.Gears {
                 }
                 catch (IOException) {
                     Thread.Yield();
-                }
-            }
-        }
-
-        public static async Task<byte[]> ReadAllBytesAsync(string path, CancellationToken cancellationToken = default) {
-            while (true) {
-                try {
-                    return await File.ReadAllBytesAsync(path, cancellationToken);
-                }
-                catch (IOException) {
-                    await Task.Yield();
                 }
             }
         }
@@ -82,21 +59,6 @@ namespace StaticSharp.Gears {
                 }
             }
         }
-
-        public static async Task WriteAllBytesAsync(string path, byte[] bytes, CancellationToken cancellationToken = default) {
-            while (true) {
-                try {
-                    await File.WriteAllBytesAsync(path, bytes, cancellationToken);
-                    return;
-                }
-                catch (IOException e) {
-
-                    await Task.Yield();
-                }
-            }
-        }
-
-
 
     }
 }

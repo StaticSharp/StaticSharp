@@ -14,6 +14,13 @@ namespace StaticSharp {
 
     }
 
+    namespace Scripts {
+        public class StorageAttribute : ScriptReferenceAttribute {
+            public StorageAttribute() : base(GetScriptFilePath()) {}
+        }
+    }
+
+
 
 }
 

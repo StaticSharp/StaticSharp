@@ -71,7 +71,7 @@ namespace StaticSharp {
 
         }
 
-        public string GetPlaneText(Context context) {
+        public string GetPlainText(Context context) {
             return Value;
         }
     }

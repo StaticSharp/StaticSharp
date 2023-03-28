@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace StaticSharp.Gears {
 
+
     [AttributeUsage(AttributeTargets.Class,
         AllowMultiple = true,
         Inherited = false)]

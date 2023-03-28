@@ -56,7 +56,7 @@ namespace StaticSharp {
 
     [Mix(typeof(VideoBindings<Js.Video>))]
     [ConstructorJs]
-    public sealed partial class Video : Block, IBlock , IMainVisual {
+    public sealed partial class Video : Block, IMainVisual {
 
         protected override string TagName => "player";
 

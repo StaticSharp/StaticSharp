@@ -89,7 +89,7 @@ namespace StaticSharp{
         }
 
 
-        public virtual string GetPlaneText(Context context) => "";
+        public virtual string GetPlainText(Context context) => "";
 
         protected override void ModifyHtml(Context context, Tag elementTag) {
             if (MarginLeft != null || MarginRight != null || MarginTop != null || MarginBottom != null) {

@@ -9,7 +9,7 @@ namespace StaticSharpDemo.Root.Components.ScrollLayoutComponent {
 
 
     [Representative]
-    public partial class Ru: ComponentPage {
+    public partial class Ru: Page {
         public override string Title => "Scroll Layout";
         public override Inlines Description => $"Контейнер вертикальным и горизонтальным скроллбарами.";
         public override Blocks? Content => new() { 

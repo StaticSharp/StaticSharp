@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace StaticSharp.Gears {
     public class CodeFormatter : CodeColorizerBase {
-        public CodeFormatter(StyleDictionary Style = null, ILanguageParser languageParser = null) : base(Style, languageParser) {
+        public CodeFormatter(StyleDictionary? Style = null, ILanguageParser? languageParser = null) : base(Style, languageParser) {
         }
 
         public Inlines GetInlines(string sourceCode, ILanguage language) {

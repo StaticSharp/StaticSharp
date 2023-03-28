@@ -1,14 +1,10 @@
-﻿using StaticSharp.Gears;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
 using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using StaticSharp.Core;
 
-namespace StaticSharp {
+namespace StaticSharp
+{
 
     [InterpolatedStringHandler]
     public class Inlines : IPlainTextProvider, IEnumerable<IInline> {
@@ -98,10 +94,10 @@ namespace StaticSharp {
 
 
 
-        public string GetPlaneText(Context context) {
+        public string GetPlainText(Context context) {
             var result = new StringBuilder();
             foreach (var i in this) {
-                result.Append(i.GetPlaneText(context));                
+                result.Append(i.GetPlainText(context));                
             }
             return result.ToString();
         }

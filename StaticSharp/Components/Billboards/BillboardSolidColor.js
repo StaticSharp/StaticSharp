@@ -1,8 +1,0 @@
-
-
-function BillboardSolidColor(element) {
-
-    
-
-
-}

@@ -43,7 +43,7 @@ namespace StaticSharp
 
     [Mix(typeof(LayoutOverrideBindings<Js.LayoutOverride>))]
     [ConstructorJs]
-    public partial class LayoutOverride: Block, IBlock
+    public partial class LayoutOverride: Block
     {
         public required Block Content { get; set; }
 

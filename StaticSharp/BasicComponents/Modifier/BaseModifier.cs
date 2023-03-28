@@ -54,8 +54,7 @@ namespace StaticSharp {
     namespace Gears {
 
         [Mix(typeof(BaseModifierBindings<Js.BaseModifier>))]
-
-        [RelatedScript("../../CrossplatformLibrary/Color/Color")]
+        [Scripts.Color]
         [ConstructorJs]
         public abstract partial class BaseModifier: Hierarchical {
 

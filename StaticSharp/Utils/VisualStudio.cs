@@ -58,14 +58,25 @@ public class VisualStudio {
     }
 
 
+    static class Windows {
+        [DllImport("user32.dll")]
+        public static extern bool SetForegroundWindow(nint hWnd);
+
+    }
+
+
     public static bool Open(string filePath, int line) {
         try {
             var dte = Marshal2.GetActiveObject("VisualStudio.DTE") as DTE;
+            if (dte == null)
+                return false;
+            var hwnd = dte.MainWindow.HWnd;
+            Windows.SetForegroundWindow(hwnd);
             dte.ExecuteCommand("File.OpenFile", filePath);
-            //dte.ExecuteCommand("Edit.GoTo", line.ToString());
+            dte.ExecuteCommand("Edit.GoTo", line.ToString());
 
             var selection = dte.ActiveDocument.Selection as EnvDTE.TextSelection;
-            selection.GotoLine(line, true);
+            selection?.GotoLine(line, true);
 
             /*if (!selection.ActivePoint.AtStartOfLine)
                 selection.StartOfLine();
