@@ -23,7 +23,7 @@ function SvgIconInline(element) {
 
     element.HtmlNodesOrdered = new Enumerable(function* () {
         yield element.content
-        yield* element.Children
+        yield* element.UnmanagedChildren
     })
 
     element.AfterChildren = () => {

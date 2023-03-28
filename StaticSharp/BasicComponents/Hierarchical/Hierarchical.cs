@@ -1,4 +1,5 @@
-﻿using StaticSharp;
+﻿using AngleSharp.Dom;
+using StaticSharp;
 using StaticSharp.Gears;
 using StaticSharp.Html;
 using StaticSharp.Js;
@@ -32,14 +33,11 @@ namespace StaticSharp {
 
             public Page Root { get; }
             public Hierarchical Parent { get; }
-            public Hierarchical FirstChild { get; }
+            //public Hierarchical FirstChild { get; }
             public Hierarchical NextSibling { get; }
-            public Js.Enumerable<Hierarchical> Children { get; }
-
+            public Js.Enumerable<Hierarchical> Siblings { get; }
+            public Js.Enumerable<Hierarchical> UnmanagedChildren { get; }
         }
-
-
-
     }
 
 

@@ -34,7 +34,7 @@ function Paragraph(element) {
 
     element.HtmlNodesOrdered = new Enumerable(function* () {
         yield element.inlineContainer
-        yield* element.Children
+        yield* element.UnmanagedChildren
     })
 
 

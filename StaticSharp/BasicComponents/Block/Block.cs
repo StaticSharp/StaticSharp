@@ -19,25 +19,6 @@ namespace StaticSharp {
             public double Width { get; }
             public double Height { get; }
 
-            //public double LayoutX { get; }
-            //public double LayoutY  { get; }
-            //public double LayoutWidth  { get; }
-            //public double LayoutHeight  { get; }
-
-
-            //public double PreferredWidth { get; }
-            //public double PreferredHeight { get; }
-            //public double Grow { get; }
-            //public double Shrink { get; }
-
-            //public double MinHeight { get; }
-            //public double MaxWidth { get; }
-            //public double MaxHeight { get; }
-
-            //public double InternalWidth { get; }
-            //public double InternalHeight { get; }
-
-
             public double MarginLeft  { get; }
             public double MarginRight  { get; }
             public double MarginTop  { get; }
@@ -53,14 +34,10 @@ namespace StaticSharp {
 
             public bool ClipByParent { get; }
 
-
-
             public new Block Parent { get; }
-            public new Block FirstChild { get; }
             public new Block NextSibling { get; }
-            public new Enumerable<Block> Children { get; }
-
-            //public Block Layer { get; } // TODO:
+            public new Js.Enumerable<Block> Siblings { get; }
+            public new Js.Enumerable<Block> UnmanagedChildren { get; }
         }
     }
 
@@ -110,6 +87,8 @@ namespace StaticSharp {
             public Binding<int> Depth { set { Apply(value); } }
             public Binding<bool> ClipByParent { set { Apply(value); } }
 
+            
+
         }
 
     }
@@ -120,24 +99,24 @@ namespace StaticSharp {
     
     public partial class Block : BaseModifier, IBlock {
         //public virtual List<Modifier> Modifiers { get; } = new();
-        public virtual Blocks Children { get; } = new();
+        public virtual Blocks UnmanagedChildren { get; } = new();
         //public Block? Overlay;
 
         protected Block(Block other,
             int callerLineNumber = 0,
             string callerFilePath = ""
             ) : base(other, callerLineNumber, callerFilePath) {
-            Children = new(other.Children);
+            UnmanagedChildren = new(other.UnmanagedChildren);
         }
         public Block([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
 
 
         protected override void ModifyHtml(Context context, Tag elementTag) {
             
-            var children = Children.ToArray();
-            if (children.Length > 0) {
-                elementTag.Add(CreateScript_SetCurrentSocket("FirstChild"));
-                elementTag.Add(Children.GenerateHtml(context));
+            var array = UnmanagedChildren.ToArray();
+            if (array.Length > 0) {
+                elementTag.Add(CreateScript_SetCurrentSocket("UnmanagedChildrenFirst"));
+                elementTag.Add(UnmanagedChildren.GenerateHtml(context));
             }
 
             base.ModifyHtml(context, elementTag);

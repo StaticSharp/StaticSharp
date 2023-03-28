@@ -1,5 +1,5 @@
 function MenuResponsive(element) {
-    Block(element)
+    BlockWithChildren(element)
     element.isMenuResponsive = true
 
     CreateSocket(element, "Logo", element)
@@ -89,14 +89,16 @@ function MenuResponsive(element) {
 
     }
 
+
+    let baseHtmlNodesOrdered = element.HtmlNodesOrdered
+
     element.HtmlNodesOrdered = new Enumerable(function* () {
         if (element.Logo)
             yield element.Logo
         yield element.Button
-        yield* element.MenuItems
         yield element.Dropdown
 
-        yield* element.Children
+        yield* baseHtmlNodesOrdered
     })
 
 
@@ -106,7 +108,7 @@ function MenuResponsive(element) {
         let region = LinearLayoutRegion.formContainer(element, false)
         let gap = 0 // TODO: add property?
 
-        let mainMenuItems = element.MenuItems.ToArray()
+        let mainMenuItems = element.Children.ToArray()
         let dropdownMenuItems = element.Dropdown.Children.ToArray()
         let allMenuItems = mainMenuItems.concat(dropdownMenuItems)
 
@@ -150,11 +152,11 @@ function MenuResponsive(element) {
         //}
 
         if (menuItemsPositions.length < mainMenuItems.length) { // need to move some items TO dropdown
-            let itemsToTransfer = element.MenuItems.RemoveRange(menuItemsPositions.length, mainMenuItems.length - menuItemsPositions.length)
+            let itemsToTransfer = element.Children.RemoveRange(menuItemsPositions.length, mainMenuItems.length - menuItemsPositions.length)
             element.Dropdown.Children.InsertRange(0, itemsToTransfer)
         } else if (menuItemsPositions.length > mainMenuItems.length) { // need to move some items FROM dropdown
             let itemsToTransfer = element.Dropdown.Children.RemoveRange(0, menuItemsPositions.length - mainMenuItems.length)
-            element.MenuItems.InsertRange(mainMenuItems.length, itemsToTransfer)
+            element.Children.InsertRange(mainMenuItems.length, itemsToTransfer)
         }
 
 
@@ -164,7 +166,7 @@ function MenuResponsive(element) {
         let buttonPosition = element.Width - element.Button.Layer.Width - buttonOppositeOffset
         element.Button.Layer.X = buttonPosition
 
-        for (const [i, menuItem] of [...element.MenuItems].entries()) {
+        for (const [i, menuItem] of [...element.Children].entries()) {
             menuItem.Layer.X = menuItemsPositions[i]
         }
 

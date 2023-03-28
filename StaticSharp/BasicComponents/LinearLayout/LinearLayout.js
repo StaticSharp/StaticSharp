@@ -4,7 +4,10 @@
 
 
 function LinearLayout(element) {
-    Block(element)
+    BlockWithChildren(element)
+
+    
+
 
     element.Reactive = {
 
@@ -65,6 +68,10 @@ function LinearLayout(element) {
         SecondarySize : e => e.Vertical ? e.Width : e.Height,
 
     }
+
+
+    
+
 
     /*new Reaction(() => {
         console.log(element.ItemGrow)

@@ -23,7 +23,7 @@ namespace StaticSharpDemo.Root.Components.VideoPlayer {
 
             new Video("T4TEdzSLyi0"){
                 Name = "Video",
-                Play = new (e=>((Js.Checkbox)e.Parent.Children.ByName("VideoProperties").Children.ByName("VideoProperties")).ValueActual),
+                //Play = new (e=>((Js.Checkbox)e.Parent.UnmanagedChildren.ByName("VideoProperties").Children.ByName("VideoProperties")).ValueActual),
                 /*Mute = new (e=>((Js.Checkbox)e.Parent["VideoProperties"]["Mute"]).ValueActual),
                 PreferPlatformPlayer = new (e=>((Js.Checkbox)e.Parent["VideoProperties"]["PreferPlatformPlayer"]).ValueActual),
                 Controls = new (e=>((Js.Checkbox)e.Parent["VideoProperties"]["Controls"]).ValueActual),

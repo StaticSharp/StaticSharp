@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     namespace Js {
-        public interface MenuResponsive : Block {
+        public interface MenuResponsive : BlockWithChildren {
             /*public Block First => NotEvaluatableObject<Block>();
             public Block Second => NotEvaluatableObject<Block>();
             public bool Flipped { get; }
@@ -21,7 +21,7 @@ namespace StaticSharp {
 
 
     namespace Gears {
-        public class MenuResponsiveBindings<FinalJs> : BlockBindings<FinalJs>  {
+        public class MenuResponsiveBindings<FinalJs> : BlockWithChildrenBindings<FinalJs>  {
             /*public Binding<bool> Flipped { set { Apply(value); } }
             public Binding<bool> RightToLeft { set { Apply(value); } }
             public Binding<bool> BottomToTop { set { Apply(value); } }*/
@@ -31,10 +31,8 @@ namespace StaticSharp {
     [Scripts.LayoutUtils]
     [Mix(typeof(MenuResponsiveBindings<Js.MenuResponsive>))]
     [ConstructorJs]
-    public partial class MenuResponsive : Block {
+    public partial class MenuResponsive : BlockWithChildren {
 
-        /*public required Block First { get; init; }
-        public required Block Second { get; init; }*/
         public Block? Logo { get; set; } = null;
 
         public Block Button { get; set; } = new SvgIconBlock(SvgIcons.MaterialDesignIcons.Menu);
@@ -45,8 +43,6 @@ namespace StaticSharp {
             Paddings = 5,
             Radius = 5
         };
-
-        public virtual Blocks MenuItems { get; } = new();
 
         public MenuResponsive([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
             : base(callerLineNumber, callerFilePath) { }
@@ -59,25 +55,13 @@ namespace StaticSharp {
                 elementTag.Add(logo.GenerateHtml(context));
             }
 
-
-            if (MenuItems != null)
-            {
-                var menuItems = MenuItems.ToArray();
-                elementTag.Add(CreateScript_SetCurrentCollectionSocket("MenuItems"));
-                foreach(var menuItem in menuItems)
-                {
-                    elementTag.Add(menuItem.GenerateHtml(context));
-                }
-            }
-
             elementTag.Add(CreateScript_SetCurrentSocket("Button"));
             elementTag.Add(Button.GenerateHtml(context));
 
             elementTag.Add(CreateScript_SetCurrentSocket("Dropdown"));
             elementTag.Add(Dropdown.GenerateHtml(context));
 
-            
-
+       
 
 
             base.ModifyHtml(context, elementTag);

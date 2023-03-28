@@ -59,7 +59,7 @@ namespace StaticSharp {
         public virtual Block? RightSideBar => null;
 
 
-        public override Blocks Children => new Blocks();
+        public override Blocks UnmanagedChildren => new Blocks();
 
         /*protected override Blocks  => new Blocks {
             {"LeftSideBarIcon"  ,LeftSideBarIcon},
