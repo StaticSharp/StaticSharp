@@ -43,11 +43,8 @@ DomLinkedList.prototype.InsertRange = function (startIndex, itemsArray) {
     currentItemProperty.setValue(itemsArray[0])
     itemsArray[itemsArray.length - 1].NextSibling = nextItem
     for (let [i, item] of itemsArray.entries()) {
-        item.Parent = this.firstChildProperty.object
-
         if (i < itemsArray.length - 1) {
             item.NextSibling = itemsArray[i + 1]
-
         }
     }
 
@@ -88,9 +85,6 @@ DomLinkedList.prototype.RemoveRange = function (startIndex, count) {
     let d = Reaction.beginDeferred()
     firstItemToRemoveProperty.setValue(lastItemToRemove.NextSibling)
     lastItemToRemove.NextSibling = undefined
-    for (item of itemsToRemove) {
-        item.Parent = undefined
-    }
 
     d.end()
     return itemsToRemove

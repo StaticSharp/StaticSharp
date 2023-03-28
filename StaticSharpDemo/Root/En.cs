@@ -155,7 +155,7 @@ namespace StaticSharpDemo.Root {
             new MenuResponsive {
                 Depth = 1,
                 SecondaryGravity = 0,
-                HideButton = false,
+                HideButton = true,
                 Logo = new Image("https://raw.githubusercontent.com/StaticSharp/StaticSharpBrandAssets/main/LogoHorizontal.svg") {
                     Embed = Image.TEmbed.Image,
                     Height = 32,

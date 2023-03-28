@@ -88,9 +88,14 @@ function ClearLayer(element) {
     })
     element.Layer.backupProperties.clear()
 
-    if (element.NextSibling != undefined) {
-        ClearLayer(element.NextSibling)
-    }
-
     d.end()
+}
+
+// TODO: finalize layer internface
+function CreateOrClearLayer(element) {
+    if (element.Layer != undefined) {
+        ClearLayer(element)
+    } else {
+        element.Layer = CreateLayer(element)  // TODO:
+    }
 }

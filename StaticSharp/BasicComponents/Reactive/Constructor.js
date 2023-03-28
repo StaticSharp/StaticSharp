@@ -103,12 +103,16 @@ function CreateSocket(element,name,parentExpression) {
             //previousValue.place.setValue(undefined)
             previousValue.place = undefined
             previousValue.Parent = undefined
+            CreateOrClearLayer(previousValue)
 
-            if (!previousValue.Layer) {
-                previousValue.Layer = CreateLayer(previousValue)  // TODO:
+            // if reparenting element is a part of element linked list, 
+            // than subsequent elements of list are also effectively reparented
+            let nextSibling = previousValue.NextSibling
+            while (nextSibling) {
+                nextSibling.Parent = undefined
+                CreateOrClearLayer(nextSibling)
+                nextSibling = nextSibling.NextSibling
             }
-            
-            ClearLayer(previousValue)
         }
         if (newValue != undefined) {
             if (newValue.place) {
@@ -116,13 +120,16 @@ function CreateSocket(element,name,parentExpression) {
             }
             newValue.place = property
             newValue.Parent = parentExpression
-
-            if (!newValue.Layer) {
-                newValue.Layer = CreateLayer(newValue)  // TODO:
+            CreateOrClearLayer(newValue)
+            
+            // if reparenting element is a part of element linked list, 
+            // than subsequent elements of list are also effectively reparented
+            let nextSibling = newValue.NextSibling
+            while (nextSibling) {
+                nextSibling.Parent = parentExpression
+                CreateOrClearLayer(nextSibling)
+                nextSibling = nextSibling.NextSibling
             }
-
-            ClearLayer(newValue)
-            //console.log("parentExpression", parentExpression, currentValue.Parent)
         }
         previousValue = newValue
 
