@@ -10,7 +10,8 @@ function MenuResponsive(element) {
 
     element.Reactive = {
 
-        SecondaryGravity: 1,
+        PrimaryGravity: 1,
+        SecondaryGravity: 0,
 
         HideButton: true,
         DropdownExpanded: false,
@@ -115,8 +116,8 @@ function MenuResponsive(element) {
         //}
 
         let menuItemsPositions = []
+        let extraPixels = 0
 
-        console.log("element.HideButton = ", element.HideButton)
         // 1 - layout without button
         if (element.HideButton) {
             // TODO: think of extracting private method
@@ -126,17 +127,19 @@ function MenuResponsive(element) {
                 element.Logo.Layer.X = region.border[0].Shift(element.Logo)
             }
 
+            extraPixels = element.Width - region.GetSize()
             for (const [i, item] of allMenuItems.entries()) {
                 if (i > 0) {
                     region.border[0].ShiftByPixels(gap)
                 }
 
+                
                 let position = region.border[0].Shift(item)
-
                 if (region.GetSize() > element.Width) {
                     break
                 }
 
+                extraPixels = element.Width - region.GetSize()
                 menuItemsPositions[i] = position
             }
         }
@@ -156,17 +159,18 @@ function MenuResponsive(element) {
                 element.Logo.Layer.X = region.border[0].Shift(element.Logo)
             }
 
+            extraPixels = element.Width - region.GetSize()
             for (const [i, item] of allMenuItems.entries()) {
                 if (i > 0) {
                     region.border[0].ShiftByPixels(gap)
                 }
 
                 let position = region.border[0].Shift(item)
-
                 if (region.GetSize() > element.Width) {
                     break
                 }
 
+                extraPixels = element.Width - region.GetSize()
                 menuItemsPositions[i] = position
             }
 
@@ -187,9 +191,9 @@ function MenuResponsive(element) {
             element.MenuItems.InsertRange(mainMenuItems.length, itemsToTransfer)
         }
 
-
+        let primaryGravityShift = extraPixels * (0.5 * element.PrimaryGravity + 0.5)
         for (const [i, menuItem] of [...element.MenuItems].entries()) {
-            menuItem.Layer.X = menuItemsPositions[i]
+            menuItem.Layer.X = menuItemsPositions[i] + primaryGravityShift
         }
 
         if (!element.Dropdown.Children.Any()) {

@@ -6,6 +6,7 @@ namespace StaticSharp {
 
     namespace Js {
         public interface MenuResponsive : Block {
+            public double PrimaryGravity { get; }
             public double SecondaryGravity { get; }
             public bool HideButton { get; }
             public bool DropdownExpanded { get; }
@@ -21,6 +22,8 @@ namespace StaticSharp {
 
     namespace Gears {
         public class MenuResponsiveBindings<FinalJs> : BlockBindings<FinalJs>  {
+            public Binding<double> PrimaryGravity { set { Apply(value); } }
+
             public Binding<double> SecondaryGravity { set { Apply(value); } }
 
             public Binding<bool> DropdownExpanded { set { Apply(value); } }

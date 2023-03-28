@@ -84,7 +84,9 @@ namespace StaticSharpDemo.Root {
 
         public virtual Block Menu => new MenuResponsive {
             Depth = 1,
-            SecondaryGravity = 0,
+            //HideButton = false,
+            //PrimaryGravity = -1,
+            //SecondaryGravity = -1,
             Logo = new Image("https://raw.githubusercontent.com/StaticSharp/StaticSharpBrandAssets/main/LogoHorizontal.svg") {
                 Embed = Image.TEmbed.Image,
                 Height = 32,
