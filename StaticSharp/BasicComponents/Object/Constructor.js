@@ -20,12 +20,6 @@ function SetCurrentSocket(propertyName) {
     currentSocket = parent.Reactive[propertyName]
 }
 
-function SetCurrentCollectionSocket(propertyName) {
-    var element = _deleteScript()
-    var parent = getCurrentParent()
-    currentSocket = parent.Reactive[propertyName + "_FirstChild"]
-}
-
 function AssignToParentProperty(propertyName) {
     var element = _deleteScript()
     let parent = getCurrentParent()

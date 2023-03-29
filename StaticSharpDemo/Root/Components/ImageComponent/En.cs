@@ -1,6 +1,7 @@
 ﻿
 
 using System;
+using System.Linq;
 
 namespace StaticSharpDemo.Root.Components.ImageComponent {
 
@@ -29,8 +30,10 @@ namespace StaticSharpDemo.Root.Components.ImageComponent {
 
             H2("Psd format support"),
             $"Psd convertion is supported using {new Uri("https://github.com/dlemstra/Magick.NET"):Magick.NET} library.",
-            new Image("ImageExample1.psd")
-            
+            new Image("ImageExample1.psd"){ 
+                Embed = Image.TEmbed.Thumbnail
+            },
+
 
 
         };
