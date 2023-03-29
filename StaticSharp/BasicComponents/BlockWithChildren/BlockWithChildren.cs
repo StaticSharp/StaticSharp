@@ -12,6 +12,8 @@ namespace StaticSharp {
 
             public bool RightToLeft { get; }
             public bool BottomToTop { get; }*/
+
+           public Enumerable<Block> Children { get; }
         }
     }
 

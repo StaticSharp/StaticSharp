@@ -1,30 +1,30 @@
-﻿using StaticSharp.Gears;
+﻿using AngleSharp.Dom;
+using StaticSharp.Gears;
 using StaticSharp.Html;
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 
 namespace StaticSharp {
 
     namespace Js {
         public interface MenuResponsive : BlockWithChildren {
-            /*public Block First => NotEvaluatableObject<Block>();
-            public Block Second => NotEvaluatableObject<Block>();
-            public bool Flipped { get; }
-
-            public bool RightToLeft { get; }
-            public bool BottomToTop { get; }*/
+            public double PrimaryGravity { get; }
+            public double SecondaryGravity { get; }
+            public bool DropdownExpanded { get; }
+            
+            public Block? Logo { get; }
+            public Block Button { get; }
+            public BlockWithChildren Dropdown { get; }
         }
     }
 
 
     namespace Gears {
         public class MenuResponsiveBindings<FinalJs> : BlockWithChildrenBindings<FinalJs>  {
-            /*public Binding<bool> Flipped { set { Apply(value); } }
-            public Binding<bool> RightToLeft { set { Apply(value); } }
-            public Binding<bool> BottomToTop { set { Apply(value); } }*/
+            public Binding<double> PrimaryGravity { set { Apply(value); } }
+
+            public Binding<double> SecondaryGravity { set { Apply(value); } }
+
+            public Binding<bool> DropdownExpanded { set { Apply(value); } }
         }
     }
 
@@ -33,15 +33,26 @@ namespace StaticSharp {
     [ConstructorJs]
     public partial class MenuResponsive : BlockWithChildren {
 
+        protected static Color DefaultBackgroundColor => Color.FromGrayscale(0.9);
+
+
         public Block? Logo { get; set; } = null;
 
-        public Block Button { get; set; } = new SvgIconBlock(SvgIcons.MaterialDesignIcons.Menu);
-        public Block Dropdown { get; set; } = new LinearLayout() {
-            //X = new(e=>e.Parent.Width - e.Width), // TODO: What is correct? Moved to js + margins added
+        public Block Button { get; set; } = new SvgIconBlock(SvgIcons.MaterialDesignIcons.Menu)
+        {
+            Visibility = new(e => ((Js.MenuResponsive)e.Parent).Dropdown.Children.Any(null) ? 1 : 0),
+            BackgroundColor = new(e => ((Js.MenuResponsive)e.Parent).DropdownExpanded ? DefaultBackgroundColor : Color.White),
+        };
+
+        public BlockWithChildren Dropdown { get; set; } = new LinearLayout() {
+            Depth = 1, // TODO: ???
             Vertical = true,
-            BackgroundColor = Color.FromGrayscale(0.9),
+            BackgroundColor = DefaultBackgroundColor,
             Paddings = 5,
-            Radius = 5
+            RadiusTopLeft= 5,
+            RadiusBottomLeft= 5,
+            RadiusBottomRight = 5,
+            Visibility = new(e => ((Js.MenuResponsive)e.Parent).DropdownExpanded ? 1 : 0)
         };
 
         public MenuResponsive([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
@@ -60,9 +71,6 @@ namespace StaticSharp {
 
             elementTag.Add(CreateScript_SetCurrentSocket("Dropdown"));
             elementTag.Add(Dropdown.GenerateHtml(context));
-
-       
-
 
             base.ModifyHtml(context, elementTag);
         }

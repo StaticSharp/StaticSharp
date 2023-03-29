@@ -87,5 +87,15 @@ function ClearLayer(element) {
         element[key] = propertyValueOrBinding
     })
     element.Layer.backupProperties.clear()
+
     d.end()
+}
+
+// TODO: finalize layer internface
+function CreateOrClearLayer(element) {
+    if (element.Layer != undefined) {
+        ClearLayer(element)
+    } else {
+        element.Layer = CreateLayer(element)  // TODO:
+    }
 }

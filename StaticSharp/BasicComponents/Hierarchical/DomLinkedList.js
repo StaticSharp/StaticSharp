@@ -42,8 +42,10 @@ DomLinkedList.prototype.InsertRange = function (startIndex, itemsArray) {
     let d = Reaction.beginDeferred()
     currentItemProperty.setValue(itemsArray[0])
     itemsArray[itemsArray.length - 1].NextSibling = nextItem
-    for (item of itemsArray) {
-        item.Parent = this.firstChildProperty.object
+    for (let [i, item] of itemsArray.entries()) {
+        if (i < itemsArray.length - 1) {
+            item.NextSibling = itemsArray[i + 1]
+        }
     }
 
     d.end()
@@ -55,49 +57,36 @@ DomLinkedList.prototype.RemoveRange = function (startIndex, count) {
         throw new Error(`Range to remove is out of collection range. "startIndex" : ${startIndex}, "count" : ${count}`)
     }
 
-    //let currentItem = element[firstChildPropertyName]
     let currentItemProperty = this.firstChildProperty
-    let currentIndex = 0
 
-    //if (currentItem == undefined) {
-    if (!currentItemProperty.getValue()) {
-        throw new Error(`Range to remove is out of collection range. "startIndex" : ${startIndex}, "count" : ${count}`)
-    }
-
-    //let firstItemToRemove = currentItem
     let firstItemToRemoveProperty = currentItemProperty
-    let itemsToRemove = [currentItemProperty.getValue()]
-    while (currentIndex < startIndex + count - 1) {
-        currentIndex++
-        //currentItem = currentItem.NextSibling
-        currentItemProperty = currentItemProperty.getValue().__NextSibling
-        //if (currentItem == undefined) {
+    let lastItemToRemove = undefined
+    let itemsToRemove = []
+    for (let i = 0; i < startIndex + count; i++) {
         if (!currentItemProperty.getValue()) {
             throw new Error(`Range to remove is out of collection range. "startIndex" : ${startIndex}, "count" : ${count}`)
         }
 
-        if (currentIndex == startIndex) {
-            //firstItemToRemove = currentItem
+        if (i == startIndex) {
             firstItemToRemoveProperty = currentItemProperty
-            itemsToRemove = [currentItemProperty.getValue()]
         }
 
-        if (currentIndex >= startIndex) {
-            //itemsToRemove.push(currentItem)
+        if (i >= startIndex) {
             itemsToRemove.push(currentItemProperty.getValue())
         }
+
+        if (i == startIndex + count - 1) {
+            lastItemToRemove = currentItemProperty.getValue()
+        }
+
+        currentItemProperty = currentItemProperty.getValue().__NextSibling
     }
 
     let d = Reaction.beginDeferred()
-    let lastItemToRemove = currentItemProperty.getValue()
     firstItemToRemoveProperty.setValue(lastItemToRemove.NextSibling)
     lastItemToRemove.NextSibling = undefined
-    for (item of itemsToRemove) {
-        item.Parent = undefined
-    }
 
     d.end()
-
     return itemsToRemove
 }
 
