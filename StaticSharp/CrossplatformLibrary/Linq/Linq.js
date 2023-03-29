@@ -29,7 +29,7 @@ Enumerable.prototype.ToArray = function() {
  * @return {Enumerable<number>}
  */
 Enumerable.Range = function(start, count) {
-    return new Enumerable(function*() {
+    return new Enumerable(function* () {
         for (let i = start; i < start + count; i++)
             yield i
     })
@@ -38,7 +38,7 @@ Enumerable.Range = function(start, count) {
 /**
  * @return {Enumerable<*>}
  */
-Enumerable.FromArguments = function() {
+Enumerable.FromArguments = function () {
     return new Enumerable(arguments)
 }
 
@@ -48,7 +48,7 @@ Enumerable.FromArguments = function() {
  * @param {function(T): boolean} func
  * @return {Enumerable<T>}
  */
-Enumerable.prototype.Where = function(func) {
+Enumerable.prototype.Where = function (func) {
     let _this = this;
     let generator = function*() {
         for (let i of _this) {
@@ -66,7 +66,7 @@ Enumerable.prototype.Where = function(func) {
  * @param {function(T): R} func
  * @return {Enumerable<R>}
  */
-Enumerable.prototype.Select = function(func) {
+Enumerable.prototype.Select = function (func) {
     let _this = this;
     let generator = function*() {
         for (let i of _this) {
@@ -83,10 +83,7 @@ Enumerable.prototype.Select = function(func) {
  * @param {function(): T} [notFound]
  * @return {T}
  */
-Enumerable.prototype.First = function (func = undefined, notFound = () => {throw new Error("Out of range")}) {
-    if (func === undefined) {
-        func = () => true;
-    }
+Enumerable.prototype.First = function (func = func = () => true, notFound = () => {throw new Error("Out of range")}) {
     let _this = this;
     let enumerator = _this[Symbol.iterator]();
 
@@ -106,10 +103,7 @@ Enumerable.prototype.First = function (func = undefined, notFound = () => {throw
  * @param {function(): T} [notFound]
  * @return {T}
  */
-Enumerable.prototype.Last = function(func, notFound = () => {throw new Error("Out of range")}) {
-    if (func === undefined) {
-        func = () => true;
-    }
+Enumerable.prototype.Last = function (func = func = () => true, notFound = () => { throw new Error("Out of range") }) {
     let array = [...this]
     if (array.length > 0) {
         for (let i = array.length - 1; i >= 0; i--) {
@@ -125,7 +119,7 @@ Enumerable.prototype.Last = function(func, notFound = () => {throw new Error("Ou
  * @param {function(T): boolean} [func]
  * @return {number}
  */
-Enumerable.prototype.Count = function(func) {
+Enumerable.prototype.Count = function (func) {
     let array = [...this]
     if (func === undefined) {
         return array.length
@@ -144,8 +138,7 @@ Enumerable.prototype.Count = function(func) {
  * @param {function(T): boolean} [func]
  * @return {boolean}
  */
-Enumerable.prototype.Any = function(func) {
-
+Enumerable.prototype.Any = function (func = () => true) {
     let _this = this;
     let enumerator = _this[Symbol.iterator]();
 
@@ -168,9 +161,9 @@ Enumerable.prototype.Any = function(func) {
 
 
 /**
- * @param {function(T,T): T} func
- * @param {T} [initialValue]
- * @return {T}
+ * @param {function(R,T): TResult} func
+ * @param {R} [initialValue]
+ * @return {R}
  */
 Enumerable.prototype.Aggregate = function(func, initialValue) {
     let array = [...this]
@@ -194,20 +187,20 @@ Enumerable.prototype.Aggregate = function(func, initialValue) {
  * @return {T}
  */
 Enumerable.prototype.Max = function() {
-    return this.Aggregate((a,b)=>a>b?a:b)
+    return this.Aggregate((a, b) => a > b ? a : b)
 }
 
 /**
  * @return {T}
  */
 Enumerable.prototype.Min = function() {
-    return this.Aggregate((a,b)=>a<b?a:b)
+    return this.Aggregate((a, b) => a < b ? a : b)
 }
 
 /**
  * @return {T}
  */
-Enumerable.prototype.Sum = function() {
+Enumerable.prototype.Sum = function () {
     return this.Aggregate((a,b)=>a+b)
 }
 
@@ -216,7 +209,7 @@ Enumerable.prototype.Sum = function() {
  * @param {function(T,T): number} [compareFunc]
  * @return {Enumerable<T>}
  */
-Enumerable.prototype.Order = function(compareFunc = (a,b)=>a==b?0:(a<b?-1:1)) {
+Enumerable.prototype.Order = function (compareFunc = (a, b) => a == b ? 0 : (a < b ? -1 : 1)) {
     let array = [...this]
     array.sort(compareFunc)
     return new Enumerable(array)
@@ -258,7 +251,7 @@ Enumerable.prototype.Reverse = function () {
  * @param {number} count
  * @return {Enumerable<T>}
  */
-Enumerable.prototype.Skip = function(count) {
+Enumerable.prototype.Skip = function (count) {
     let _this = this;
     let generator = function*() {
         for (let i of _this) {
@@ -276,7 +269,7 @@ Enumerable.prototype.Skip = function(count) {
  * @param {number} count
  * @return {Enumerable<T>}
  */
-Enumerable.prototype.Take = function(count) {
+Enumerable.prototype.Take = function (count) {
     let _this = this;
     let generator = function*() {
         for (let i of _this) {
