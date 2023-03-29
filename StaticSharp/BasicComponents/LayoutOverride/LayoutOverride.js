@@ -1,6 +1,6 @@
 ﻿function LayoutOverride(element) {
     Block(element)
-    element.isOverrider = true
+    element.isLayoutOverride = true
 
     CreateSocket(element, "Content", element)
 
