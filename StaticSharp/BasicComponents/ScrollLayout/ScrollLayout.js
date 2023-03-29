@@ -111,7 +111,7 @@ function ScrollLayout(element) {
         yield verticalThumb
         yield horizontalThumb
         yield element.scrollable
-        yield* element.Children
+        yield* element.UnmanagedChildren
     })
 
 

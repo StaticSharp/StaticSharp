@@ -55,7 +55,7 @@ namespace StaticSharp {
         protected override string TagName => "body";
 
 
-        public override abstract Blocks Children { get; }
+        public override abstract Blocks UnmanagedChildren { get; }
 
 
         public Page([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")

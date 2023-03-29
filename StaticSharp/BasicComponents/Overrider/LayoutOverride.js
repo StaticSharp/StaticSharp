@@ -23,8 +23,8 @@
     }
 
     element.HtmlNodesOrdered = new Enumerable(function* () {
-        yield element.Content,
-        yield* element.Children
+        yield element.Content
+        yield* element.UnmanagedChildren
     })
 
     new Reaction(() => {

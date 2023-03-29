@@ -38,7 +38,7 @@ namespace StaticSharpDemo.Root.Components.ScrollLayoutComponent {
                 BackgroundColor = Color.LightGray,
                 Paddings = 10,
                 Height = 200,
-                Children = { 
+                UnmanagedChildren = { 
                     new SvgIconBlock(SvgIcons.MaterialDesignIcons.VectorDifferenceAb){ 
                         Paddings = 20
                     }
@@ -50,7 +50,7 @@ namespace StaticSharpDemo.Root.Components.ScrollLayoutComponent {
                     Morbi neque sem, laoreet sollicitudin dui sed, fermentum euismod purus. Morbi nec malesuada mi. Cras placerat malesuada finibus. Nunc facilisis vulputate tellus eu condimentum. Mauris interdum malesuada quam eget ultrices. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Maecenas in maximus nunc. Donec neque eros, bibendum ut convallis at, mattis ac risus. Praesent consectetur, orci convallis euismod ullamcorper, est purus ultricies sapien, pharetra lobortis tortor erat ac purus. Nam molestie, nisl et iaculis commodo, ex ante tempor ipsum, vel fringilla dolor orci nec elit. Nullam et sapien vel lacus egestas mattis. Vestibulum cursus posuere mi et porta. Duis sed nibh ultricies, elementum sapien quis, ornare enim. Fusce laoreet metus non semper vehicula.
                     Interdum et malesuada fames ac ante ipsum primis in faucibus. Nam enim leo, feugiat sed ante non, ornare fringilla magna. Nullam maximus dignissim quam, eget vulputate risus imperdiet nec. Pellentesque vitae porttitor sapien. Etiam elementum malesuada purus in malesuada. Mauris lobortis, ipsum porttitor ornare iaculis, turpis augue rhoncus dui, at imperdiet turpis justo rutrum dui. Proin ac aliquet elit, ac lobortis sapien. In a tristique ante, at commodo magna. Nullam vel blandit mauris, vitae tempor arcu. Maecenas metus nulla, mollis finibus tristique pulvinar, pulvinar et felis. Sed dui orci, ornare vel iaculis ac, molestie ut dolor.
                     """){ 
-                    MarginLeft = new(e=>e.Parent.FirstChild.Width)
+                    MarginLeft = new(e=>e.Parent.UnmanagedChildren.First().Width)
                 }
             },
 

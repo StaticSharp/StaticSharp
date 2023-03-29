@@ -136,11 +136,8 @@ namespace StaticSharp {
                 };
             }
 
-            protected Tag CreateScript_SetCurrentCollectionSocket(string name)
-            {
-                return new Tag("script") {
-                    new PureHtmlNode($"SetCurrentCollectionSocket(\"{name}\")")
-                };
+            protected Tag CreateScript_SetCurrentCollectionSocket(string name) {
+                return CreateScript_SetCurrentSocket(name + "First");
             }
 
             protected Tag CreateScript_AssignToParentProperty(string name) {

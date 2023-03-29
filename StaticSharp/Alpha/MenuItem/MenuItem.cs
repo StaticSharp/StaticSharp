@@ -16,7 +16,7 @@ namespace StaticSharp.Alpha {
                 PaddingsVertical = 10,
                 PaddingsHorizontal = 20,
 
-                Children = {
+                UnmanagedChildren = {
                     new Block {
                             BackgroundColor = new(e=>e.Parent.HierarchyForegroundColor),
                             Visibility = new(e=>e.Parent.Hover ? 0.10 : 0),

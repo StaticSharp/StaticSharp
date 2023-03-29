@@ -95,7 +95,7 @@ namespace StaticSharpDemo.Root {
                 InternalLink = VirtualNode.Root,
 
             },
-            MenuItems = {
+            Children = {
                     MenuItem(Node.Components),
                     MenuItem(Node.Components.ImageComponent),
                     MenuItem(Node.Components.VideoPlayer),
@@ -110,7 +110,7 @@ namespace StaticSharpDemo.Root {
 
         public virtual double ColumnWidth => 1080;
 
-        public override Blocks Children => new Blocks { // for top level element Width must be set/overriden (e.g. FillWidth), otherwise - recursive binding
+        public override Blocks UnmanagedChildren => new Blocks { // for top level element Width must be set/overriden (e.g. FillWidth), otherwise - recursive binding
             new ScrollLayout {
                 Width = new(e=>e.Parent.Width),
                 Height = new(e=>e.Parent.Height),

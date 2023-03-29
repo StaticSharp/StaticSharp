@@ -74,7 +74,7 @@ function Page(element) {
     element.HtmlNodesOrdered = new Enumerable(function* () {
         if (element.svgDefs)
             yield element.svgDefs
-        yield* element.Children        
+        yield* element.UnmanagedChildren
     })
 
 

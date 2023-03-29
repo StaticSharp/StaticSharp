@@ -4,7 +4,10 @@
 
 
 function LinearLayout(element) {
-    Block(element)
+    BlockWithChildren(element)
+
+    
+
 
     element.Reactive = {
 
@@ -20,9 +23,9 @@ function LinearLayout(element) {
 
         OrderedChildren: e => {
             if (e.Reverse)
-                return e.Children.Reverse().ToArray()
+                return e.ExistingChildren.Reverse().ToArray()
             else
-                return e.Children.ToArray()
+                return e.ExistingChildren.ToArray()
         },
 
         InternalSecondarySize: e => {
@@ -65,6 +68,10 @@ function LinearLayout(element) {
         SecondarySize : e => e.Vertical ? e.Width : e.Height,
 
     }
+
+
+    
+
 
     /*new Reaction(() => {
         console.log(element.ItemGrow)

@@ -1,4 +1,5 @@
-﻿using StaticSharp;
+﻿using AngleSharp.Dom;
+using StaticSharp;
 using StaticSharp.Gears;
 using StaticSharp.Html;
 using StaticSharp.Js;
@@ -29,23 +30,21 @@ namespace StaticSharp {
         
         public interface Hierarchical : Object {
             public string Name { get; }
-
+            public bool Exists { get; }
             public Page Root { get; }
             public Hierarchical Parent { get; }
-            public Hierarchical FirstChild { get; }
+            //public Hierarchical FirstChild { get; }
             public Hierarchical NextSibling { get; }
-            public Js.Enumerable<Hierarchical> Children { get; }
-
+            public Js.Enumerable<Hierarchical> Siblings { get; }
+            public Js.Enumerable<Hierarchical> UnmanagedChildren { get; }
         }
-
-
-
     }
 
 
     namespace Gears {
         public class HierarchicalBindings<FinalJs> : Bindings<FinalJs> {
             public Binding<string> Name { set { Apply(value); } }
+            public Binding<bool> Exists { set { Apply(value); } }
         }
     }
 

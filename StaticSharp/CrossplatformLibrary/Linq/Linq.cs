@@ -19,7 +19,8 @@ namespace StaticSharp {
         }
 
         public interface Enumerable<T> : Enumerable {
-            T? First(Expression<Func<T, bool>>? func = null);
+            T? First(Expression<Func<T, bool>>? func);
+            T? First();
 
             bool Any(Expression<Func<T, bool>> func);            
         }

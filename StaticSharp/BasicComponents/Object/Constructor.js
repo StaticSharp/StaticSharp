@@ -142,22 +142,20 @@ function CreateSocket(element,name,parentExpression) {
 
 
 function CreateCollectionSocket(element, name, parentExpression) {
-    let firstChildPropertyName = name + "_FirstChild"
-
-    // TODO: unify Children with other colletions
-    if (name == "Children") {
-        firstChildPropertyName = "FirstChild"
-    }
+    let firstChildPropertyName = name + "First"
     
     let firstChildProperty = CreateSocket(element, firstChildPropertyName, parentExpression)
 
     var value = new DomLinkedList(firstChildProperty)
 
-    Object.defineProperty(element, name, {
+    element[name] = value
+    element["Existing"+name] = value.Where(x=>x.Exists)
+
+    /*Object.defineProperty(element, name, {
         get: function () {
             return value
         }
-    });
+    });*/
 }
 
 

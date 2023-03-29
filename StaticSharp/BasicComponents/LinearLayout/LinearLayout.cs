@@ -1,4 +1,5 @@
 using StaticSharp.Gears;
+using StaticSharp.Html;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 
@@ -49,10 +50,17 @@ namespace StaticSharp {
     //[RelatedScript("../FrontendUtils/LayoutUtils")]
     [Mix(typeof(LinearLayoutBindings<Js.LinearLayout>))]
     [ConstructorJs]
-    public partial class LinearLayout : Block {
+    public partial class LinearLayout : BlockWithChildren {
+
+        
+
         public LinearLayout(LinearLayout other, int callerLineNumber, string callerFilePath)
             : base(other, callerLineNumber, callerFilePath) {
         }
         public LinearLayout([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
+
+        
+
+
     }
 }

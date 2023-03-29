@@ -1,5 +1,5 @@
 function MenuResponsive(element) {
-    Block(element)
+    BlockWithChildren(element)
     element.isMenuResponsive = true
 
     CreateSocket(element, "Logo", element)
@@ -24,7 +24,7 @@ function MenuResponsive(element) {
 
             let result = Sum(e["Padding" + verticalNames.side[0]], e["Padding" + verticalNames.side[1]])
 
-            let mainMenuItems = e.MenuItems.ToArray()
+            let mainMenuItems = e.Children.ToArray()
             let dropdownMenuItems = e.Dropdown.Children.ToArray()
             let allItemsToLayout = mainMenuItems.concat(dropdownMenuItems)
             if (!element.HideButton) {
@@ -59,7 +59,7 @@ function MenuResponsive(element) {
             let region = LinearLayoutRegion.formContainer(e, false)
             let gap = 0 // TODO: add property?
 
-            let mainMenuItems = e.MenuItems.ToArray()
+            let mainMenuItems = e.Children.ToArray()
             let dropdownMenuItems = e.Dropdown.Children.ToArray()
             let allMenuItems = mainMenuItems.concat(dropdownMenuItems)
 
@@ -93,21 +93,30 @@ function MenuResponsive(element) {
 
     }
 
-    element.HtmlNodesOrdered = new Enumerable(function* () {
-        if (element.Logo)
-            yield element.Logo
-        yield element.Button
-        yield* element.MenuItems
-        yield element.Dropdown
 
-        yield* element.Children
+    let baseHtmlNodesOrdered = element.HtmlNodesOrdered
+
+    element.HtmlNodesOrdered = new Enumerable(function* () {
+        let logo = element.Logo
+        if (logo && logo.Exists)
+            yield logo
+
+        let button = element.Button
+        if (button.Exists)
+            yield button
+
+        let dropdown = element.Dropdown
+        if (dropdown.Exists)
+            yield dropdown
+
+        yield* baseHtmlNodesOrdered
     })
 
 
     new Reaction(() => {    
         let gap = 0 // TODO: add property?
 
-        let mainMenuItems = element.MenuItems.ToArray()
+        let mainMenuItems = element.Children.ToArray()
         let dropdownMenuItems = element.Dropdown.Children.ToArray()
         let allMenuItems = mainMenuItems.concat(dropdownMenuItems)
 
@@ -185,15 +194,15 @@ function MenuResponsive(element) {
         //}
 
         if (menuItemsPositions.length < mainMenuItems.length) { // need to move some items TO dropdown
-            let itemsToTransfer = element.MenuItems.RemoveRange(menuItemsPositions.length, mainMenuItems.length - menuItemsPositions.length)
+            let itemsToTransfer = element.Children.RemoveRange(menuItemsPositions.length, mainMenuItems.length - menuItemsPositions.length)
             element.Dropdown.Children.InsertRange(0, itemsToTransfer)
         } else if (menuItemsPositions.length > mainMenuItems.length) { // need to move some items FROM dropdown
             let itemsToTransfer = element.Dropdown.Children.RemoveRange(0, menuItemsPositions.length - mainMenuItems.length)
-            element.MenuItems.InsertRange(mainMenuItems.length, itemsToTransfer)
+            element.Children.InsertRange(mainMenuItems.length, itemsToTransfer)
         }
 
         let primaryGravityShift = extraPixels * (0.5 * element.PrimaryGravity + 0.5)
-        for (const [i, menuItem] of [...element.MenuItems].entries()) {
+        for (const [i, menuItem] of [...element.Children].entries()) {
             menuItem.Layer.X = menuItemsPositions[i] + primaryGravityShift
         }
 
@@ -224,7 +233,7 @@ function MenuResponsive(element) {
         element.Button.Layer.Y = buttonY
         element.Dropdown.Layer.Y = buttonY + element.Button.Layer.Height
 
-        for (let menuItem of [...element.MenuItems]) {
+        for (let menuItem of [...element.Children]) {
             menuItem.Layer.Y = getYForChild(menuItem)
         }
         

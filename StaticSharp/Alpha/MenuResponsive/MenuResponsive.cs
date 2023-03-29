@@ -5,23 +5,21 @@ using System.Runtime.CompilerServices;
 namespace StaticSharp {
 
     namespace Js {
-        public interface MenuResponsive : Block {
+        public interface MenuResponsive : BlockWithChildren {
             public double PrimaryGravity { get; }
             public double SecondaryGravity { get; }
             public bool HideButton { get; }
             public bool DropdownExpanded { get; }
             
-
-            public Enumerable<Block> MenuItems { get; }
             public Block? Logo { get; }
             public Block Button { get; }
-            public Block Dropdown { get; }
+            public BlockWithChildren Dropdown { get; }
         }
     }
 
 
     namespace Gears {
-        public class MenuResponsiveBindings<FinalJs> : BlockBindings<FinalJs>  {
+        public class MenuResponsiveBindings<FinalJs> : BlockWithChildrenBindings<FinalJs>  {
             public Binding<double> PrimaryGravity { set { Apply(value); } }
 
             public Binding<double> SecondaryGravity { set { Apply(value); } }
@@ -35,7 +33,7 @@ namespace StaticSharp {
     [Scripts.LayoutUtils]
     [Mix(typeof(MenuResponsiveBindings<Js.MenuResponsive>))]
     [ConstructorJs]
-    public partial class MenuResponsive : Block {
+    public partial class MenuResponsive : BlockWithChildren {
 
         protected static Color DefaultBackgroundColor => Color.FromGrayscale(0.9);
 
@@ -49,7 +47,7 @@ namespace StaticSharp {
             // TODO: Cursor = new(e => ((Js.MenuResponsive)e.Parent).Dropdown.Children.Any(null) ? Cursor.Pointer : Cursor.Default),
         };
 
-        public Block Dropdown { get; set; } = new LinearLayout() {
+        public BlockWithChildren Dropdown { get; set; } = new LinearLayout() {
             Vertical = true,
             BackgroundColor = DefaultBackgroundColor,
             Paddings = 5,
@@ -58,8 +56,6 @@ namespace StaticSharp {
             RadiusBottomRight = 5,
             Visibility = new(e => ((Js.MenuResponsive)e.Parent).DropdownExpanded ? 1 : 0),
         };
-
-        public virtual Blocks MenuItems { get; } = new();
 
         public MenuResponsive([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
             : base(callerLineNumber, callerFilePath) { }
@@ -72,25 +68,13 @@ namespace StaticSharp {
                 elementTag.Add(logo.GenerateHtml(context));
             }
 
-
-            if (MenuItems != null)
-            {
-                var menuItems = MenuItems.ToArray();
-                elementTag.Add(CreateScript_SetCurrentCollectionSocket("MenuItems"));
-                foreach(var menuItem in menuItems)
-                {
-                    elementTag.Add(menuItem.GenerateHtml(context));
-                }
-            }
-
             elementTag.Add(CreateScript_SetCurrentSocket("Button"));
             elementTag.Add(Button.GenerateHtml(context));
 
             elementTag.Add(CreateScript_SetCurrentSocket("Dropdown"));
             elementTag.Add(Dropdown.GenerateHtml(context));
 
-            
-
+       
 
 
             base.ModifyHtml(context, elementTag);
