@@ -57,7 +57,7 @@ function Reaction(func) {
     ReactionBase.call(_this, func)
     
     _this.makeDirty = function () {
-        if (_this.dirtImmune)
+        if (_this.dirtImmune) // TODO: never ==true?
             return;
         Reaction.deferred.add(_this)
     }
@@ -173,6 +173,7 @@ function Property() {
     _this.dependentReactions = new Set()
     _this.binding = undefined
 
+    // TODO: never called?
     _this.makeDirty = function () {
         _this.binding.makeDirty()
     }

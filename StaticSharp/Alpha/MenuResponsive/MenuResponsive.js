@@ -35,9 +35,9 @@ function MenuResponsive(element) {
                 allItemsToLayout.push(e.Logo)
             }
 
-            for (let item of dropdownMenuItems) {
-                item.Parent = e
-            }
+            //for (let item of dropdownMenuItems) {
+            //    item.Parent = e
+            //}
 
             for (let child of allItemsToLayout) {
                 let firstOffset = CalcOffset(e, child, verticalNames.side[0])
@@ -48,9 +48,9 @@ function MenuResponsive(element) {
                 result = Max(result, current)
             }
 
-            for (let item of dropdownMenuItems) {
-                item.Parent = e.Dropdown
-            }
+            //for (let item of dropdownMenuItems) {
+            //    item.Parent = e.Dropdown
+            //}
             
             return result
         },
@@ -63,9 +63,9 @@ function MenuResponsive(element) {
             let dropdownMenuItems = e.Dropdown.Children.ToArray()
             let allMenuItems = mainMenuItems.concat(dropdownMenuItems)
 
-            for (let item of dropdownMenuItems) {
-                item.Parent = e
-            }
+            //for (let item of dropdownMenuItems) {
+            //    item.Parent = e
+            //}
 
             if (e.Logo) {
                 region.border[0].Shift(e.Logo)
@@ -82,9 +82,9 @@ function MenuResponsive(element) {
                 region.border[0].Shift(child)
             }
 
-            for (let item of dropdownMenuItems) {
-                item.Parent = e.Dropdown
-            }
+            //for (let item of dropdownMenuItems) {
+            //    item.Parent = e.Dropdown
+            //}
             
             return region.GetSize()
         },
@@ -119,6 +119,7 @@ function MenuResponsive(element) {
         let extraPixels = 0
 
         // 1 - layout without button
+
         if (element.HideButton) {
             // TODO: think of extracting private method
             let region = LinearLayoutRegion.formContainer(element, false)
