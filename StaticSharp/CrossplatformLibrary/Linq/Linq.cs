@@ -22,7 +22,7 @@ namespace StaticSharp {
             T? First(Expression<Func<T, bool>>? func);
             T? First();
 
-            bool Any(Expression<Func<T, bool>> func);            
+            bool Any(Expression<Func<T, bool>> func);
         }
     }
 

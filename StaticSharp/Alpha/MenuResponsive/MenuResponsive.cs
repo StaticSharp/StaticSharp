@@ -1,4 +1,5 @@
-﻿using StaticSharp.Gears;
+﻿using AngleSharp.Dom;
+using StaticSharp.Gears;
 using StaticSharp.Html;
 using System.Runtime.CompilerServices;
 
@@ -8,7 +9,6 @@ namespace StaticSharp {
         public interface MenuResponsive : BlockWithChildren {
             public double PrimaryGravity { get; }
             public double SecondaryGravity { get; }
-            public bool HideButton { get; }
             public bool DropdownExpanded { get; }
             
             public Block? Logo { get; }
@@ -25,8 +25,6 @@ namespace StaticSharp {
             public Binding<double> SecondaryGravity { set { Apply(value); } }
 
             public Binding<bool> DropdownExpanded { set { Apply(value); } }
-
-            public Binding<bool> HideButton { set { Apply(value); } }
         }
     }
 
@@ -42,19 +40,19 @@ namespace StaticSharp {
 
         public Block Button { get; set; } = new SvgIconBlock(SvgIcons.MaterialDesignIcons.Menu)
         {
-            Visibility = new(e => ((Js.MenuResponsive)e.Parent).Dropdown.Children.Any(null) || !((Js.MenuResponsive)e.Parent).HideButton ? 1 : 0),
+            Visibility = new(e => ((Js.MenuResponsive)e.Parent).Dropdown.Children.Any(null) ? 1 : 0),
             BackgroundColor = new(e => ((Js.MenuResponsive)e.Parent).DropdownExpanded ? DefaultBackgroundColor : Color.White),
-            // TODO: Cursor = new(e => ((Js.MenuResponsive)e.Parent).Dropdown.Children.Any(null) ? Cursor.Pointer : Cursor.Default),
         };
 
         public BlockWithChildren Dropdown { get; set; } = new LinearLayout() {
+            Depth = 1, // TODO: ???
             Vertical = true,
             BackgroundColor = DefaultBackgroundColor,
             Paddings = 5,
             RadiusTopLeft= 5,
             RadiusBottomLeft= 5,
             RadiusBottomRight = 5,
-            Visibility = new(e => ((Js.MenuResponsive)e.Parent).DropdownExpanded ? 1 : 0),
+            Visibility = new(e => ((Js.MenuResponsive)e.Parent).DropdownExpanded ? 1 : 0)
         };
 
         public MenuResponsive([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
@@ -73,9 +71,6 @@ namespace StaticSharp {
 
             elementTag.Add(CreateScript_SetCurrentSocket("Dropdown"));
             elementTag.Add(Dropdown.GenerateHtml(context));
-
-       
-
 
             base.ModifyHtml(context, elementTag);
         }

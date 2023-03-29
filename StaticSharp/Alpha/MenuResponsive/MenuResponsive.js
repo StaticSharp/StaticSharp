@@ -6,14 +6,11 @@ function MenuResponsive(element) {
     CreateSocket(element, "Button", element)
     CreateSocket(element, "Dropdown", element)
 
-    CreateCollectionSocket(element, "MenuItems", element)
-
     element.Reactive = {
 
         PrimaryGravity: 1,
         SecondaryGravity: 0,
 
-        HideButton: true,
         DropdownExpanded: false,
 
         Width: e => e.InternalWidth,
@@ -27,9 +24,6 @@ function MenuResponsive(element) {
             let mainMenuItems = e.Children.ToArray()
             let dropdownMenuItems = e.Dropdown.Children.ToArray()
             let allItemsToLayout = mainMenuItems.concat(dropdownMenuItems)
-            if (!element.HideButton) {
-                allItemsToLayout.push(e.Button)
-            }
 
             if (e.Logo) {
                 allItemsToLayout.push(e.Logo)
@@ -57,10 +51,9 @@ function MenuResponsive(element) {
 
         InternalWidth: e => {
             let region = LinearLayoutRegion.formContainer(e, false)
-            let gap = 0 // TODO: add property?
 
-            let mainMenuItems = e.Children.ToArray()
-            let dropdownMenuItems = e.Dropdown.Children.ToArray()
+            let mainMenuItems = [...e.Children]
+            let dropdownMenuItems = [...e.Dropdown.Children]
             let allMenuItems = mainMenuItems.concat(dropdownMenuItems)
 
             //for (let item of dropdownMenuItems) {
@@ -70,15 +63,8 @@ function MenuResponsive(element) {
             if (e.Logo) {
                 region.border[0].Shift(e.Logo)
             }
-            
-            if (!element.HideButton) {
-                region.border[1].Shift(e.Button)
-            }
 
-            for (const [i, child] of allMenuItems.entries()) {
-                if (i > 0) {
-                    region.border[0].ShiftByPixels(gap)
-                }
+            for (let child of allMenuItems) {
                 region.border[0].Shift(child)
             }
 
@@ -88,9 +74,6 @@ function MenuResponsive(element) {
             
             return region.GetSize()
         },
-
-        
-
     }
 
 
@@ -113,81 +96,53 @@ function MenuResponsive(element) {
     })
 
 
-    new Reaction(() => {    
-        let gap = 0 // TODO: add property?
+    let layoutHorizontallyHelper = function (allMenuItems, doLayoutButton) {
+        let menuItemsPositions = []
 
-        let mainMenuItems = element.Children.ToArray()
-        let dropdownMenuItems = element.Dropdown.Children.ToArray()
+        let region = LinearLayoutRegion.formContainer(element, false)
+
+        if (doLayoutButton) {
+            let buttonOppositeOffset = region.border[1].Shift(element.Button)
+            let buttonPosition = element.Width - element.Button.Layer.Width - buttonOppositeOffset
+            element.Button.Layer.X = buttonPosition
+            element.Dropdown.Layer.X = buttonPosition + element.Button.Layer.Width - element.Dropdown.Layer.Width // TODO: maybe move to CSharp?
+        }
+
+        if (element.Logo) {
+            element.Logo.Layer.X = region.border[0].Shift(element.Logo)
+        }
+
+        let extraPixels = element.Width - region.GetSize()
+        for (const [i, item] of allMenuItems.entries()) {
+
+            let position = region.border[0].Shift(item)
+            if (region.GetSize() > element.Width) {
+                break
+            }
+
+            extraPixels = element.Width - region.GetSize()
+            menuItemsPositions[i] = position
+        }
+
+        return { menuItemsPositions, extraPixels }
+    }
+
+
+    // Horizontal placement and reparenting
+    new Reaction(() => {    
+        let mainMenuItems = [...element.Children]
+        let dropdownMenuItems = [...element.Dropdown.Children]
         let allMenuItems = mainMenuItems.concat(dropdownMenuItems)
 
         //for (let item of dropdownMenuItems) {
         //    item.Parent = element
         //}
 
-        let menuItemsPositions = []
-        let extraPixels = 0
+        let { menuItemsPositions, extraPixels } = layoutHorizontallyHelper(allMenuItems, false)
 
-        // 1 - layout without button
-
-        if (element.HideButton) {
-            // TODO: think of extracting private method
-            let region = LinearLayoutRegion.formContainer(element, false)
-
-            if (element.Logo) {
-                element.Logo.Layer.X = region.border[0].Shift(element.Logo)
-            }
-
-            extraPixels = element.Width - region.GetSize()
-            for (const [i, item] of allMenuItems.entries()) {
-                if (i > 0) {
-                    region.border[0].ShiftByPixels(gap)
-                }
-
-                
-                let position = region.border[0].Shift(item)
-                if (region.GetSize() > element.Width) {
-                    break
-                }
-
-                extraPixels = element.Width - region.GetSize()
-                menuItemsPositions[i] = position
-            }
+        if (menuItemsPositions.length < allMenuItems.length) {
+            ({ menuItemsPositions, extraPixels } = layoutHorizontallyHelper(allMenuItems, true))
         }
-
-        // 2 - layout with button
-
-        if (!element.HideButton || menuItemsPositions.length < allMenuItems.length) {
-            menuItemsPositions = []
-
-            let region = LinearLayoutRegion.formContainer(element, false)
-            let buttonOppositeOffset = region.border[1].Shift(element.Button)
-            let buttonPosition = element.Width - element.Button.Layer.Width - buttonOppositeOffset
-            element.Button.Layer.X = buttonPosition
-
-            // TODO: think of extracting private method
-            if (element.Logo) {
-                element.Logo.Layer.X = region.border[0].Shift(element.Logo)
-            }
-
-            extraPixels = element.Width - region.GetSize()
-            for (const [i, item] of allMenuItems.entries()) {
-                if (i > 0) {
-                    region.border[0].ShiftByPixels(gap)
-                }
-
-                let position = region.border[0].Shift(item)
-                if (region.GetSize() > element.Width) {
-                    break
-                }
-
-                extraPixels = element.Width - region.GetSize()
-                menuItemsPositions[i] = position
-            }
-
-            element.Dropdown.Layer.X = buttonPosition + element.Button.Layer.Width - element.Dropdown.Layer.Width
-        }
-
-
 
         //for (let item of dropdownMenuItems) {
         //    item.Parent = element.Dropdown
@@ -202,8 +157,8 @@ function MenuResponsive(element) {
         }
 
         let primaryGravityShift = extraPixels * (0.5 * element.PrimaryGravity + 0.5)
-        for (const [i, menuItem] of [...element.Children].entries()) {
-            menuItem.Layer.X = menuItemsPositions[i] + primaryGravityShift
+        for (const [i, menuItemPosition] of menuItemsPositions.entries()) {
+            allMenuItems[i].Layer.X = menuItemPosition + primaryGravityShift
         }
 
         if (!element.Dropdown.Children.Any()) {
@@ -212,7 +167,7 @@ function MenuResponsive(element) {
     })
 
 
-    function getYForChild(childElement) {
+    let getYForChild = function (childElement) {
         let region = LinearLayoutRegion.formContainer(element, true)
         let offsetGravityUp = region.border[0].Shift(childElement)
 
