@@ -45,6 +45,8 @@ namespace StaticSharp {
 
             TResult Aggregate<TResult>(Expression<Func<TResult, T, TResult>> func, TResult? initialValue);
 
+            T Aggregate(Expression<Func<T, T, T>> func);
+
             T Max();
 
             T Min();
