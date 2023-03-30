@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace StaticSharp {
 
-    namespace Js {
+    /*namespace Js {
         public interface MaterialShadow : Block {
             public double Elevation  { get; }
         }
@@ -27,5 +27,5 @@ namespace StaticSharp {
         public string GetPlainText(Context context) {
             return "";
         }
-    }
+    }*/
 }

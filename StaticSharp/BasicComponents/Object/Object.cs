@@ -1,5 +1,6 @@
 ﻿
 
+using Scopes;
 using StaticSharp.Html;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,37 @@ namespace StaticSharp {
 
 
     namespace Gears {
+
+
+        public class ScriptfullTag: Tag { 
+            
+        
+        }
+
+        public class Element2 { 
+            public Scopes.Group? InitializationScript { get; init; }
+            public Tag Tag { get; init; }            
+
+            public Element2(Tag tag, Group? initializationScript = null) {
+                InitializationScript = initializationScript;
+                Tag = tag;
+            }
+
+            public static Element2 Create(string className, string id, string? tagName = null) {
+                if (tagName == null)
+                    tagName = CaseUtils.CamelToKebab(className);
+                return new Element2(new Tag(tagName, id), new Group());
+            }
+
+            public static Element2 CreateScriptless(string tagName, string id) {
+                return new Element2(new Tag(tagName, id));
+            }
+
+
+        }
+
+
+
 
         [Scripts.ReactiveUtils]
         [Scripts.Math]
@@ -102,13 +134,10 @@ namespace StaticSharp {
 
 
 
-            protected Tag CreateConstructorScript(Context context) {
+            protected Tag CreateConstructorScript() {
                 var jsConstructorsNames = FindJsConstructorsNames();
 
-                var propertiesInitializers = GetGeneratedBundings(context).ToList();
-                propertiesInitializers.AddRange(Properties);
-
-                var propertiesInitializersScript = string.Join(',', propertiesInitializers.Select(x => $"{x.Key}:{x.Value}"));
+                var propertiesInitializersScript = string.Join(',', Properties.Select(x => $"{x.Key}:{x.Value}"));
 
                 string script = $"{{let element = Constructor({string.Join(',', jsConstructorsNames)});";
                 if (!string.IsNullOrEmpty(propertiesInitializersScript)) {
@@ -151,12 +180,6 @@ namespace StaticSharp {
                     new PureHtmlNode($"AssignPreviousTagToParentProperty(\"{name}\")")
                 };
             }
-
-            protected virtual IEnumerable<KeyValuePair<string, string>> GetGeneratedBundings(Context context) {
-                return Enumerable.Empty<KeyValuePair<string, string>>();
-            }
-
-
         }
     }
 

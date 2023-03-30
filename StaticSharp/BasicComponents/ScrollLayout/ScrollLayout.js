@@ -40,7 +40,10 @@ function SetupPointerDrag(element, func) {
 function ScrollLayout(element) {
     Block(element)
 
-    
+
+    let scrollable = document.createElement("scrollable")
+    scrollable.style.touchAction = "manipulation"
+    scrollable.style.overflow = "auto"
 
 
     element.Reactive = {
@@ -110,22 +113,24 @@ function ScrollLayout(element) {
     element.HtmlNodesOrdered = new Enumerable(function* () {
         yield verticalThumb
         yield horizontalThumb
-        yield element.scrollable
+        yield scrollable
         yield* element.UnmanagedChildren
     })
 
+    new Reaction(() => {
+        SyncChildren(scrollable, [element.Content])
+    })
 
     SetupPointerDrag(verticalThumb, (x, y) => {
-        element.scrollable.scrollTop += y / verticalThumb.ThumbPositionScale
+        scrollable.scrollTop += y / verticalThumb.ThumbPositionScale
     })
 
     SetupPointerDrag(horizontalThumb, (x, y) => {
-        element.scrollable.scrollLeft += x / horizontalThumb.ThumbPositionScale
+        scrollable.scrollLeft += x / horizontalThumb.ThumbPositionScale
     })
 
 
-    //let scrollable = document.createElement("scrollable")
-    //element.appendChild(scrollable)
+    
 
     
 
@@ -133,36 +138,29 @@ function ScrollLayout(element) {
     
     
     new Reaction(() => {
-        element.scrollable.style.left = ToCssSize(element.LeftOffset)
-        element.scrollable.style.top = ToCssSize(element.TopOffset)
-        element.scrollable.style.width = ToCssSize(element.ContentAreaWidth)
-        element.scrollable.style.height = ToCssSize(element.ContentAreaHeight)
+        scrollable.style.left = ToCssSize(element.LeftOffset)
+        scrollable.style.top = ToCssSize(element.TopOffset)
+        scrollable.style.width = ToCssSize(element.ContentAreaWidth)
+        scrollable.style.height = ToCssSize(element.ContentAreaHeight)
     })
 
 
-    
-
-
-    new Reaction(() => {
-        //scrollable.appendChild(element.Content)
-        
-    })
 
     new Reaction(() => {
         window.requestAnimationFrame(() => {
-            element.scrollable.scrollTop = element.ScrollY
-            element.scrollable.scrollLeft = element.ScrollX
+            scrollable.scrollTop = element.ScrollY
+            scrollable.scrollLeft = element.ScrollX
         });
     })
 
     element.AfterChildren = function () {
-        element.scrollable.style.touchAction = "manipulation"
-        element.scrollable.style.overflow = "auto"
+        scrollable.style.touchAction = "manipulation"
+        scrollable.style.overflow = "auto"
 
-        element.scrollable.Events.Scroll = () => {
+        scrollable.Events.Scroll = () => {
             let d = Reaction.beginDeferred()
-            element.ScrollXActual = element.scrollable.scrollLeft
-            element.ScrollYActual = element.scrollable.scrollTop
+            element.ScrollXActual = scrollable.scrollLeft
+            element.ScrollYActual = scrollable.scrollTop
             d.end()
         }
 

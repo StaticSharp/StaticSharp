@@ -1,4 +1,6 @@
-﻿namespace StaticSharpDemo.Root.Components.ParagraphComponent {
+﻿using System.Linq;
+
+namespace StaticSharpDemo.Root.Components.ParagraphComponent {
 
     [Representative]
     public partial class En : Page {
@@ -101,7 +103,11 @@
                 PaddingLeft = new(e=>Js.Math.Max(e.Parent.PaddingLeft, 10)),
                 PaddingRight = new(e=>Js.Math.Max(e.Parent.PaddingRight, 10)),
                 BackgroundColor = Color.BlueViolet,
-            }.FillWidth()
+            }.FillWidth(),
+
+            Enumerable.Range(0,1000).Select(x=>
+                new Paragraph($"Paragraph #{x}"){ }
+            ),
 
         };
     }

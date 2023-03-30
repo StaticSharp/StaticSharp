@@ -20,16 +20,6 @@ html {
     margin: 0;
 }
 
-
-
-:not(.js) material-design-icon-block>svg {
-    width: 24px
-}
-
-
-
-
-
 .js * {
     scrollbar-width: none;
 }

@@ -1,13 +1,7 @@
-﻿using Scopes;
-using Scopes.C;
-using StaticSharp.Gears;
+﻿using StaticSharp.Gears;
 using StaticSharp.Html;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
+
 
 namespace StaticSharp {
 
@@ -97,8 +91,9 @@ namespace StaticSharp {
     [Mix(typeof(BlockBindings<Js.Block>))]
     [ConstructorJs]
     
-    public partial class Block : BaseModifier, IBlock {
+    public partial class Block : BaseModifier {
         //public virtual List<Modifier> Modifiers { get; } = new();
+        [Socket]
         public virtual Blocks UnmanagedChildren { get; } = new();
         //public Block? Overlay;
 

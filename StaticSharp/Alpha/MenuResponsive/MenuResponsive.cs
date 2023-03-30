@@ -35,15 +35,17 @@ namespace StaticSharp {
 
         protected static Color DefaultBackgroundColor => Color.FromGrayscale(0.9);
 
-
+        [Socket]
         public Block? Logo { get; set; } = null;
 
+        [Socket]
         public Block Button { get; set; } = new SvgIconBlock(SvgIcons.MaterialDesignIcons.Menu)
         {
             Visibility = new(e => ((Js.MenuResponsive)e.Parent).Dropdown.Children.Any(null) ? 1 : 0),
             BackgroundColor = new(e => ((Js.MenuResponsive)e.Parent).DropdownExpanded ? DefaultBackgroundColor : Color.White),
         };
 
+        [Socket]
         public BlockWithChildren Dropdown { get; set; } = new LinearLayout() {
             Depth = 1, // TODO: ???
             Vertical = true,

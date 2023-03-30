@@ -5,6 +5,7 @@ using StaticSharp.Html;
 using StaticSharp.Js;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace StaticSharp {
@@ -48,6 +49,13 @@ namespace StaticSharp {
         }
     }
 
+    namespace Gears {
+        public class SocketAttribute : Attribute { 
+        }
+    
+    }
+
+
 
     [Scripts.Layer]
     [ConstructorJs]
@@ -66,7 +74,28 @@ namespace StaticSharp {
         }
         protected virtual void ModifyHtml(Context context, Tag elementTag) {
         }
+
+
+
+
+
+
+
+
         public virtual Tag GenerateHtml(Context context) {
+
+            /*var type = GetType();
+            var properties = type.GetProperties(BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Instance);
+
+            var sockets = properties.Where(x=>x.GetCustomAttribute<SocketAttribute>()!=null).ToArray();
+
+            var singleSockets = sockets.Where(x => x.PropertyType.IsAssignableTo(typeof(Hierarchical)));                
+
+            var listSockets = sockets.Where(x => x.PropertyType.IsAssignableTo(typeof(Blocks)));
+
+            if (listSockets.Count() != 0) {
+                Console.WriteLine("Sockets");
+            }*/
 
             AddRequiredInclues(context);
 
@@ -79,7 +108,7 @@ namespace StaticSharp {
 
             AddSourceCodeNavigationData(tag, context);
 
-            tag.Add(CreateConstructorScript(context));
+            tag.Add(CreateConstructorScript());
 
             ModifyHtml(context, tag);
 

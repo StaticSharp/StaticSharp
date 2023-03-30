@@ -17,6 +17,14 @@ namespace StaticSharpDemo.Root.Components.VideoPlayer {
         };
         public override Inlines Description => $"StaticSharp VideoPlayer component.";
 
+        public override Blocks UnmanagedChildren => new() { 
+            new Block(){ 
+                Width = 200,
+                Height = 200,
+                BackgroundColor= Color.BlueViolet,
+            }
+        };
+
 
 
         public override Blocks? Content => new() {
