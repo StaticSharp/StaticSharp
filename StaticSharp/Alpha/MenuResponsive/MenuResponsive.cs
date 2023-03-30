@@ -41,7 +41,7 @@ namespace StaticSharp {
         [Socket]
         public Block Button { get; set; } = new SvgIconBlock(SvgIcons.MaterialDesignIcons.Menu)
         {
-            Visibility = new(e => ((Js.MenuResponsive)e.Parent).Dropdown.Children.Any(null) ? 1 : 0),
+            Visibility = new(e => ((Js.MenuResponsive)e.Parent).Dropdown.Children.Any() ? 1 : 0),
             BackgroundColor = new(e => ((Js.MenuResponsive)e.Parent).DropdownExpanded ? DefaultBackgroundColor : Color.White),
         };
 
