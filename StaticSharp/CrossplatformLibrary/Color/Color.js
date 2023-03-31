@@ -80,14 +80,14 @@ Color.CplusC = function (a, b) {
 
 /**
  * @param {Color} a
- * @param {Number} b
+ * @param {number} b
  */
 Color.CplusN = function (a, b) {
     return new Color(a.r + b, a.g + b, a.b + b, a.a + b);
 }
 
 /**
- * @param {Number} a
+ * @param {number} a
  * @param {Color} b
  */
 Color.NplusC = function (a, b) {
@@ -104,14 +104,14 @@ Color.CminusC = function (a, b) {
 
 /**
  * @param {Color} a
- * @param {Number} b
+ * @param {number} b
  */
 Color.CminusN = function (a, b) {
     return new Color(a.r - b, a.g - b, a.b - b, a.a - b);
 }
 
 /**
- * @param {Number} a
+ * @param {number} a
  * @param {Color} b
  */
 Color.NminusC = function (a, b) {
@@ -128,14 +128,14 @@ Color.CmulC = function (a, b) {
 
 /**
  * @param {Color} a
- * @param {Number} b
+ * @param {number} b
  */
 Color.CmulN = function (a, b) {
     return new Color(a.r * b, a.g * b, a.b * b, a.a * b);
 }
 
 /**
- * @param {Number} a
+ * @param {number} a
  * @param {Color} b
  */
 Color.NmulC = function (a, b) {
@@ -143,14 +143,14 @@ Color.NmulC = function (a, b) {
 }
 
 /**
- * @param {Number} value
+ * @param {number} value
  */
 Color.FromGrayscale = function (value) {
     return new Color(value, value, value);
 }
 
 /**
- * @param {Number} rgb
+ * @param {number} rgb
  */
 Color.FromIntRGB = function (rgb) {
     return new Color(
@@ -161,19 +161,19 @@ Color.FromIntRGB = function (rgb) {
 }
 
 /**
- * @param {Number} r
- * @param {Number} g
- * @param {Number} b
+ * @param {number} r
+ * @param {number} g
+ * @param {number} b
  */
 Color.FromIntChannelsRGB = function(r, g, b) {
     return new Color(r / 255, g / 255, b / 255);
 }
 
 /**
- * @param {Number} r
- * @param {Number} g
- * @param {Number} b
- * @param {Number} a
+ * @param {number} r
+ * @param {number} g
+ * @param {number} b
+ * @param {number} a
  */
 Color.FromIntChannelsRGBA = function (r, g, b, a) {
     return new Color(r/255, g/255, b/255, a/255);
@@ -182,7 +182,7 @@ Color.FromIntChannelsRGBA = function (r, g, b, a) {
 /**
  * @param {Color} a
  * @param {Color} b
- * @param {Number} t
+ * @param {number} t
  */
 Color.Lerp = function (a, b, t) {
     return a.Lerp(b,t)
@@ -190,7 +190,7 @@ Color.Lerp = function (a, b, t) {
 
 /**
  * @param {Color} targetColor
- * @param {Number} amount
+ * @param {number} amount
  */
 Color.prototype.Lerp = function (targetColor, amount) {
     var bk = (1 - amount);
@@ -202,7 +202,7 @@ Color.prototype.Lerp = function (targetColor, amount) {
 }
 
 /**
- * @param {Number} contrast
+ * @param {number} contrast
  */
 Color.prototype.ContrastColor = function (contrast = 1) {
     console.log("ContrastColor", contrast)

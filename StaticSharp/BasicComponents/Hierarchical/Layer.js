@@ -1,4 +1,9 @@
-﻿function CreateLayer(element) {
+﻿/**
+ * Creates Layer for DOM element - a removable proxy to override elemetn's properties
+ * @param {Element} element
+ * @return {Proxy}
+ */
+function CreateLayer(element) {
 
     let backupProperties = new Map()
 
@@ -74,7 +79,10 @@
     //element.Layer = result
 }
 
-
+/**
+ * Removes all properties overrides from layer
+ * @param {Element} element
+ */
 function ClearLayer(element) {
     if (!element.Layer || !element.Layer.backupProperties) {
         // Layer could be set to element itself and has not originalProperties
@@ -92,6 +100,11 @@ function ClearLayer(element) {
 }
 
 // TODO: finalize layer internface
+
+/**
+ * Clears element's layer if it exists or attach new clean layer to an element if layer doesn't exsit
+ * @param {Element} element
+ */
 function CreateOrClearLayer(element) {
     if (element.Layer != undefined) {
         ClearLayer(element)
