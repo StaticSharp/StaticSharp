@@ -33,7 +33,7 @@ function BaseModifier(element) {
 
         ForegroundColor: () => { 
             if (element.BackgroundColor != undefined)
-                return element.BackgroundColor.contrastColor()
+                return element.BackgroundColor.ContrastColor()
             else
                 return undefined
         },

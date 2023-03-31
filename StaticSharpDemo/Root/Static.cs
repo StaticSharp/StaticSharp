@@ -45,7 +45,7 @@ namespace StaticSharpDemo {
             return new Inline {
                 ExternalLink = "https://github.com/StaticSharp/StaticSharp",
                 OpenLinksInANewTab = true,
-                ForegroundColor = Color.FromIntRGB(172, 196, 53),
+                ForegroundColor = Color.FromIntChannelsRGB(172, 196, 53),
                 Children = {
                     text
                 }

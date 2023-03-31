@@ -1,6 +1,9 @@
+using EnvDTE80;
+using ImageMagick;
 using Javascriptifier;
 using StaticSharp.Gears;
 using System;
+using System.Diagnostics.Contracts;
 
 namespace StaticSharp {
 
@@ -70,13 +73,21 @@ namespace StaticSharp {
             }
         }
 
-
         public Color(double r, double g, double b, double a = double.NaN) {
             R = r;
             G = g;
             B = b;
             A = a;
         }
+
+        public Color(uint argb) 
+        {
+            A = ((argb >> 24) & 0xff) / 255d;
+            R = ((argb >> 16) & 0xff) / 255d;
+            G = ((argb >> 8) & 0xff) / 255d;
+            B = (argb & 0xff) / 255d;
+        }
+
 
         private static double firstNotNaN(params double[] values) {
             foreach (var i in values)
@@ -99,8 +110,6 @@ namespace StaticSharp {
         public static Color operator +(double a, Color b) {
             return new Color(a + b.R, a + b.G, a + b.B, a + b.A);
         }
-
-
 
 
         [JavascriptMethodFormat("CminusC({0},{1})")]
@@ -158,6 +167,7 @@ namespace StaticSharp {
             return new Color(value, value, value);
         }
 
+
         public static Color FromIntRGB(uint rgb) {
             return new Color(
                 ((rgb >> 16) & 0xff) / 255d,
@@ -166,22 +176,17 @@ namespace StaticSharp {
                 double.NaN
             );
         }
-        public static Color FromIntARGB(uint argb) {
-            return new Color(
-                ((argb >> 16) & 0xff) / 255d,
-                ((argb >> 8) & 0xff) / 255d,
-                (argb & 0xff) / 255d,
-                ((argb >> 24) & 0xff) / 255d
-            );
-        }
-        public static Color FromIntRGB(uint r, uint g, uint b) {
+
+        public static Color FromIntChannelsRGB(uint r, uint g, uint b)
+        {
             return new Color(
                 r / 255d,
                 g / 255d,
                 b / 255d
             );
         }
-        public static Color FromIntARGB(uint a, uint r, uint g, uint b) {
+        public static Color FromIntChannelsRGBA(uint r, uint g, uint b, uint a)
+        {
             return new Color(
                 r / 255d,
                 g / 255d,
@@ -195,12 +200,29 @@ namespace StaticSharp {
             return a + (b - a) * t;
         }
 
+        public Color Lerp(Color targetColor, double amount)
+        {
+            return Color.Lerp(this, targetColor, amount);
+        }
+
+        public Color ContrastColor(double contrast = 1)
+        {
+            var grayscale = (0.2125 * this.R) + (0.7154 * this.G) + (0.0721 * this.B);
+            var blackOrWhite = (grayscale > 0.5) ? new Color(0, 0, 0, 1) : new Color(1, 1, 1, 1);
+            return this.Lerp(blackOrWhite, contrast);
+        }
+
+        public Color ContrastColor()
+        {
+            return ContrastColor(1);
+        }
+
     }
 
 
     public partial struct Color {
 
-        public static Color Transparent => FromIntARGB(0x00FFFFFF);
+        public static Color Transparent => new Color(0x00FFFFFF);
         public static Color AliceBlue => FromIntRGB(0xF0F8FF);
         public static Color AntiqueWhite => FromIntRGB(0xFAEBD7);
         public static Color Aqua => FromIntRGB(0x00FFFF);
