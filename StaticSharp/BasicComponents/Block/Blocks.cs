@@ -8,14 +8,14 @@ namespace StaticSharp {
 
 
 
-    public class Blocks : IBlockCollector, IEnumerable<IBlock> {
+    public class Blocks : IBlockCollector, IEnumerable<Block> {
 
-        private List<IBlock>? items;
+        private List<Block>? items;
         public Blocks() { }
         public Blocks(Blocks other){
             items = other.items;
         }
-        public void Add(IBlock? value) {
+        public void Add(Block? value) {
             if (value != null) {
                 if (items == null)
                     items = new();
@@ -41,14 +41,14 @@ namespace StaticSharp {
 
 
 
-        IEnumerator<IBlock> IEnumerable<IBlock>.GetEnumerator() {
+        IEnumerator<Block> IEnumerable<Block>.GetEnumerator() {
             if (items != null)
                 return items.GetEnumerator();
-            return Enumerable.Empty<IBlock>().GetEnumerator();
+            return Enumerable.Empty<Block>().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator() {
-            return (this as IEnumerable<IBlock>).GetEnumerator();
+            return (this as IEnumerable<Block>).GetEnumerator();
         }
     }
 

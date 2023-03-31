@@ -170,6 +170,11 @@ namespace StaticSharp {
         }
 
         protected override void ModifyHtml(Context context, Tag elementTag) {
+
+
+
+            base.ModifyHtml(context, elementTag);
+
             var svgDefsTags = context.SvgDefs.GetOrderedItems().ToArray();
             if (svgDefsTags.Length > 0) {
                 elementTag.Add(
@@ -196,7 +201,7 @@ namespace StaticSharp {
             elementTag.Add(BodyContent.GenerateHtml(context));*/
 
             //elementTag.Add(BodyContent.GenerateHtml(context));
-            base.ModifyHtml(context, elementTag);
+            
         }
 
 

@@ -37,10 +37,10 @@ namespace StaticSharp {
             return Task.FromResult <Tag?>(null);
         }*/
 
-        protected override IEnumerable<KeyValuePair<string, string>> GetGeneratedBundings(Context context) {
+        /*protected override IEnumerable<KeyValuePair<string, string>> GetGeneratedBundings(Context context) {
             var template = assetGenome.Result.Text;
             yield return new("Html", $"()=>`{template}`");//
-        }
+        }*/
     }
     
 

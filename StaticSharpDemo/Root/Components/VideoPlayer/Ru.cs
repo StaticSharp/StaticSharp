@@ -17,13 +17,34 @@ namespace StaticSharpDemo.Root.Components.VideoPlayer {
         };
         public override Inlines Description => $"StaticSharp VideoPlayer component.";
 
+        public override Blocks UnmanagedChildren => new() { 
+            new Block(){ 
+                Width = 200,
+                Height = 200,
+                BackgroundColor= Color.BlueViolet,
+            }
+        };
+
 
 
         public override Blocks? Content => new() {
 
             new Video("T4TEdzSLyi0"){
+
+                /*Modifiers = {
+                    new Shadow{
+                        Distance = new(e=>e.Parent.Width)
+                    },
+                    new Shadow{
+                        Distance = 8
+                    },
+                    new Cursor(Cursor.Type.Pointer)
+                },*/
+
                 Name = "Video",
-                //Play = new (e=>((Js.Checkbox)e.Parent.UnmanagedChildren.ByName("VideoProperties").Children.ByName("VideoProperties")).ValueActual),
+                //Width = new(e=>e.Siblings.Max(x=>x.Width)),
+
+                //Play = new (e=>((Js.Checkbox)e.Siblings.ByName("VideoProperties").Children.ByName("VideoProperties")).ValueActual),
                 /*Mute = new (e=>((Js.Checkbox)e.Parent["VideoProperties"]["Mute"]).ValueActual),
                 PreferPlatformPlayer = new (e=>((Js.Checkbox)e.Parent["VideoProperties"]["PreferPlatformPlayer"]).ValueActual),
                 Controls = new (e=>((Js.Checkbox)e.Parent["VideoProperties"]["Controls"]).ValueActual),

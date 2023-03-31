@@ -30,6 +30,8 @@ namespace StaticSharp {
     [Mix(typeof(BlockWithChildrenBindings<Js.BlockWithChildren>))]
     [ConstructorJs]
     public partial class BlockWithChildren : Block {
+
+        [Socket]
         public virtual Blocks Children { get; } = new();
 
         public BlockWithChildren(BlockWithChildren other, int callerLineNumber, string callerFilePath)

@@ -31,6 +31,25 @@ function CreateSocketProperty(element,name) {
 }*/
 
 
+function SyncChildren(element, targetChildren) {
+    let currentChildren = [...element.children]
+
+    let equal = currentChildren.length === targetChildren.length && currentChildren.every(function (value, index) { return value === targetChildren[index] })
+
+    if (!equal) {
+        //console.log(element, currentChildren, targetChildren)
+        for (let i of currentChildren) {
+            i.remove()
+        }
+        for (let i of targetChildren) {
+            element.appendChild(i)
+        }
+    }
+
+}
+
+
+
 /**
  *  @typedef Hierarchical
  *  @property {Hierarchical} Root
@@ -84,20 +103,10 @@ function Hierarchical(element) {
     }
 
     new Reaction(() => {
-        let currentChildren =[...element.children]
+        //let currentChildren =[...element.children]
         let tergetChildren = [...element.HtmlNodesOrdered.Select(x => GetHtmlNode(x))]
 
-        let equal = currentChildren.length === tergetChildren.length && currentChildren.every(function (value, index) { return value === tergetChildren[index] })
-
-        if (!equal) {
-            for (let i of currentChildren) {
-                i.remove()
-            }
-            for (let i of tergetChildren) {
-                element.appendChild(i)
-            }
-        }
-        
+        SyncChildren(element, tergetChildren)        
     })
 
 

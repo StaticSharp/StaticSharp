@@ -17,6 +17,8 @@ function Page(element) {
     }
 
 
+
+
     let animationFrame = 0
     window.Reactive = {
         Root: element,
@@ -33,6 +35,9 @@ function Page(element) {
         DevicePixelRatio: window.devicePixelRatio,
         Touch: false,
     }
+
+
+
 
     let touchMedia = window.matchMedia("(pointer: coarse)")
     window.Touch = touchMedia.matches
@@ -70,6 +75,10 @@ function Page(element) {
         HierarchyForegroundColor: () => element.ForegroundColor,
 
     }
+
+    
+
+
 
     element.HtmlNodesOrdered = new Enumerable(function* () {
         if (element.svgDefs)
@@ -113,24 +122,100 @@ function Page(element) {
 
     //document.body.style.display = "none"
 
+
+    function CreateIntersectionObserver(elements,func) {
+        const observer = new IntersectionObserver((entries) => {
+            func(entries);
+            /*for (const entry of entries) {
+                //const bounds = entry.boundingClientRect;
+                console.log(entry);
+            }*/
+            observer.disconnect();
+        })
+        for (const i of elements) {
+            observer.observe(i);
+        }
+    }
+
+    //let u = undefined
+    /*let f = () => u
+
+    let u = 8
+
+    console.log(f())
+    console.log(window.u)*/
+
+    function MeasureInlineContainers(doneFunc) {
+        const elements = document.querySelectorAll(".inline-container");
+        if (elements.length == 0) {
+            doneFunc()
+            return
+        }
+        for (const i of elements) {
+            i.style.fontSize = Paragraph.testFontSize + "px";
+            i.style.width = "min-content"
+        }
+        CreateIntersectionObserver(elements, entries => {
+            //console.log(entries)
+            for (const entry of entries) {
+                const bounds = entry.boundingClientRect;
+                entry.target.minWidth = bounds.width
+                entry.target.maxHeight = bounds.height
+            }
+
+            for (const i of elements) {
+                i.style.width = "max-content"
+            }
+            CreateIntersectionObserver(elements, entries => {
+                for (const entry of entries) {
+                    const bounds = entry.boundingClientRect;
+                    entry.target.maxWidth = bounds.width
+                    entry.target.minHeight = bounds.height
+                }
+                for (const i of elements) {
+                    i.style.width = ""
+                    i.style.fontSize = ""
+                }
+
+                doneFunc()
+            })
+        })
+    }
+
+
     let loadEventsToWait = 2
     function onLoadEvent() {
         loadEventsToWait--
         if (loadEventsToWait == 0) {
             //document.body.style.display = "block"
             //document.body.style.visibility = "hidden"
-            console.log("-------------Reactions------------", performance.now());
-            loadingDeffered.end()
-            console.log("-------------Reactions-done-------", performance.now());
+
+            MeasureInlineContainers(() => {
+                console.log("-------------Reactions------------", performance.now());
+                loadingDeffered.end()
+                console.log("-------------Reactions-done-------", performance.now());
+                document.body.style.visibility = "visible"
+                //document.body.style.opacity = 1
+
+                if (location.hash !== "") {
+                    location.href = location.hash
+                }
+
+            })
+
+
+            
+
+
+            /*if (observer)
+                element.BackgroundColor = new Color(1, 0, 0, 1)*/
+
+
+            
             
 
             
-            document.body.style.visibility = "visible"
-            //document.body.style.opacity = 1
-
-            if (location.hash !== "") {
-                location.href = location.hash
-            }
+            
         }
     }
 

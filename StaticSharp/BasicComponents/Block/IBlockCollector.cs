@@ -7,7 +7,7 @@ namespace StaticSharp {
 
     namespace Gears {
         public interface IBlockCollector {
-            void Add(IBlock? value);
+            void Add(Block? value);
         }
     }
 
@@ -16,7 +16,7 @@ namespace StaticSharp {
 
   
 
-        public static void Add<T>(this T collector, IEnumerable<IBlock?>? values) where T : IBlockCollector {
+        public static void Add<T>(this T collector, IEnumerable<Block?>? values) where T : IBlockCollector {
             if (values == null)
                 return;
             foreach (var i in values) {
@@ -25,7 +25,7 @@ namespace StaticSharp {
         }
 
         #region Block
-        public static void Add<T>(this T collector, IBlock? value) where T : IBlockCollector {
+        public static void Add<T>(this T collector, Block? value) where T : IBlockCollector {
             collector.Add(value);
         }
 

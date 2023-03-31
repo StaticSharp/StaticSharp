@@ -65,9 +65,11 @@ namespace StaticSharp {
         }
 
         protected override void ModifyHtml(Context context, Tag elementTag) {
-            var p = new Tag("p") {
+            var p = new Tag("p") {                
                 CreateScript_AssignToParentProperty("inlineContainer")
             };
+            p["class"] = "inline-container";
+
             foreach (var i in Inlines) {
                 var child = i.GenerateHtml(context);
                 p.Add(child);

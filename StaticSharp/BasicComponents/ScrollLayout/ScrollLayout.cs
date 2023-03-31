@@ -43,12 +43,9 @@ namespace StaticSharp {
 
         protected override void ModifyHtml(Context context, Tag elementTag) {
 
-            elementTag.Add(new Tag("scrollable") {
-                CreateScript_AssignToParentProperty("scrollable"),
-                
-                CreateScript_SetCurrentSocket("Content"),
-                Content.GenerateHtml(context)
-            });
+            elementTag.Add(CreateScript_SetCurrentSocket("Content"));
+            elementTag.Add(Content.GenerateHtml(context));
+
 
             base.ModifyHtml(context, elementTag);
         }

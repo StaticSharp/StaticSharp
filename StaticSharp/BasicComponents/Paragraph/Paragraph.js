@@ -39,31 +39,33 @@ function Paragraph(element) {
 
 
 
-    new Reaction(() => {
 
-        const testFontSize = 128;
+    element.AfterChildren = () => {
+
 
         let content = element.children[0]
 
-        content.classList.add("inline-container")
+        //content.classList.add("inline-container")
 
         //content.style.position = "initial"
-        content.style.fontSize = testFontSize + "px";
+        /*content.style.fontSize = testFontSize + "px";
         content.style.width = "min-content"
         var minWidthRect = content.getBoundingClientRect()
         content.style.width = "max-content"
-        var maxWidthRect = content.getBoundingClientRect()
-
-        content.style.fontSize = ""
-        content.style.width = ""
+        var maxWidthRect = content.getBoundingClientRect()*/
 
 
-        element.MaxContentWidth = () => element.HierarchyFontSize / testFontSize * maxWidthRect.width
-        element.MinContentWidth = () => element.HierarchyFontSize / testFontSize * minWidthRect.width
-        element.MaxContentHeight = () => element.HierarchyFontSize / testFontSize * minWidthRect.height
-        element.MinContentHeight = () => element.HierarchyFontSize / testFontSize * maxWidthRect.height
 
-    })
+        //content.style.fontSize = ""
+        //content.style.width = ""
+
+
+        element.MaxContentWidth = () =>  element.HierarchyFontSize / Paragraph.testFontSize * content.maxWidth
+        element.MinContentWidth = () =>  element.HierarchyFontSize / Paragraph.testFontSize * content.minWidth
+        element.MaxContentHeight = () => element.HierarchyFontSize / Paragraph.testFontSize * content.maxHeight
+        element.MinContentHeight = () => element.HierarchyFontSize / Paragraph.testFontSize * content.minHeight
+    }
+
 
     new Reaction(() => {
         let content = element.children[0]
@@ -117,17 +119,21 @@ function Paragraph(element) {
         }
 
         let maxContentWidthWithPaddings = Sum(element.MaxContentWidth, element.PaddingLeft, element.PaddingRight)
-        if (Math.abs(element.Width - maxContentWidthWithPaddings) < 0.001) {
+        let extraPixels = element.Width - maxContentWidthWithPaddings
+
+        if (extraPixels > -0.001) {
 
             element.InternalHeight = Sum(element.MinContentHeight, element.PaddingTop, element.PaddingBottom)
-            content.style.width = "max-content"
 
+            if (extraPixels > 0.001) {
+                content.style.width = ToCssSize(Sum(element.Width, -element.PaddingLeft, -element.PaddingRight))
+            } else {
+                content.style.width = "max-content"
+            }
             return
         }
-
-
-        content.style.width = ToCssSize(Sum(element.Width, -element.PaddingLeft, -element.PaddingRight))
-
+        
+        //console.log("Reflow", minContentWidthWithPaddings, maxContentWidthWithPaddings, element.Width)
         var rect = content.getBoundingClientRect()
         element.InternalHeight = Sum(rect.height, element.PaddingTop, element.PaddingBottom)
 
@@ -135,3 +141,5 @@ function Paragraph(element) {
 
     HeightToStyle(element)
 }
+
+Paragraph.testFontSize = 128

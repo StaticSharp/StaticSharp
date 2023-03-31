@@ -46,7 +46,7 @@ function getUniqueID() {
 
 
 function Video(element) {
-    Block(element)
+    AspectBlock(element)
     element.isVideo = true
 
     let youtubeId = element.dataset.youtubeId
@@ -59,9 +59,9 @@ function Video(element) {
     element.Reactive = {
         Selectable: false,
 
-        Aspect: element.dataset.width / element.dataset.height,
-        InternalWidth: () => First(element.Height * element.Aspect, element.dataset.width),
-        InternalHeight: () => First(element.Width / element.Aspect, element.dataset.height),
+        //Aspect: element.dataset.width / element.dataset.height,
+        //InternalWidth: () => First(element.Height * element.Aspect, element.dataset.width),
+        //InternalHeight: () => First(element.Width / element.Aspect, element.dataset.height),
 
         PreferPlatformPlayer: true,
 

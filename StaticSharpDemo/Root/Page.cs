@@ -122,7 +122,7 @@ namespace StaticSharpDemo.Root {
 
                     ItemGrow = 0,
                     GapGrow = 1,
-                    Gap = 50,
+                    Gap = 0,
                     Children = {
                         new LinearLayout{
                             PaddingsHorizontal = new(e=>Js.Math.Max(e.Parent.Width-ColumnWidth , 0)/2),
