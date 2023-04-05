@@ -1,5 +1,8 @@
-﻿using StaticSharp.Gears;
+﻿using NUglify.Html;
+using Scopes;
+using StaticSharp.Gears;
 using StaticSharp.Html;
+using SvgIcons;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,8 +18,7 @@ namespace StaticSharp {
 
 
     namespace Js {
-        public interface Video : Block {
-            public double Aspect  { get; }
+        public interface Video : AspectBlock {
             public bool Play { get; }
             public bool PlayActual { get; }
 
@@ -38,7 +40,7 @@ namespace StaticSharp {
 
 
     namespace Gears {
-        public class VideoBindings<FinalJs> : BlockBindings<FinalJs> {
+        public class VideoBindings<FinalJs> : AspectBlockBindings<FinalJs> {
             public Binding<bool> Play { set { Apply(value); } }
             public Binding<double> Position { set { Apply(value); } }
             public Binding<bool> Mute { set { Apply(value); } }
@@ -56,7 +58,7 @@ namespace StaticSharp {
 
     [Mix(typeof(VideoBindings<Js.Video>))]
     [ConstructorJs]
-    public sealed partial class Video : Block, IMainVisual {
+    public sealed partial class Video : AspectBlock, IMainVisual {
 
         protected override string TagName => "player";
 
@@ -68,8 +70,9 @@ namespace StaticSharp {
             Identifier = identifier;        
         }
 
-        protected override void ModifyHtml(Context context, Tag elementTag) {
-            
+
+        public override void ModifyTagAndScript(Context context, Tag tag, Group script) {
+            base.ModifyTagAndScript(context, tag, script);
 
             var youtubeVideoId = YoutubeExplode.Videos.VideoId.TryParse(Identifier);
             if (youtubeVideoId != null) {
@@ -78,9 +81,17 @@ namespace StaticSharp {
 
                 var item = youtubeVideoManifest.Items.MaxBy(x => x.Width)!;
 
-                elementTag["data-youtube-id"] = youtubeVideoId;
-                elementTag["data-width"] = item.Width;
-                elementTag["data-height"] = item.Height;
+                tag["data-youtube-id"] = youtubeVideoId;
+                //tag["data-width"] = item.Width;
+                //tag["data-height"] = item.Height;
+
+                var contentId = context.CreateId();
+
+                SetNativeSize(script, tag.Id, item.Width, item.Height);
+                script.Add($"{tag.Id}.content = {TagToJsValue(contentId)}");
+
+                tag.Add(new Tag("content", contentId));
+
 
                 var sources = new List<object>();
                 foreach (var i in youtubeVideoManifest.Items) {
@@ -97,14 +108,17 @@ namespace StaticSharp {
                 }
 
                 string json = JsonSerializer.Serialize(sources, new JsonSerializerOptions() {
-                    IncludeFields = true                    
-                }).Replace('"','\'');
+                    IncludeFields = true
+                }).Replace('"', '\'');
 
-                elementTag["data-sources"] = json;
+                tag["data-sources"] = json;
             }
 
-            base.ModifyHtml(context, elementTag);
         }
+
+
+
+
 
 
 

@@ -1,12 +1,14 @@
-﻿using StaticSharp.Gears;
+﻿using Scopes;
+using StaticSharp.Gears;
 using StaticSharp.Html;
 using System.Runtime.CompilerServices;
+using System.Xml;
 
 namespace StaticSharp {
 
     namespace Js {
 
-        public interface SvgIconBlock: Block, SvgIcon {
+        public interface SvgIconBlock: AspectBlock, SvgIcon {
         }
     }
 
@@ -14,7 +16,7 @@ namespace StaticSharp {
     [Mix(typeof(BlockBindings<Js.SvgIconBlock>))]
     [ConstructorJs("SvgIcon")]
     [ConstructorJs]
-    public partial class SvgIconBlock : Block {
+    public partial class SvgIconBlock : AspectBlock {
 
         SvgIcons.Icon icon;
         protected SvgIconBlock(SvgIconBlock other, int callerLineNumber, string callerFilePath) : base(other, callerLineNumber, callerFilePath) {
@@ -23,17 +25,23 @@ namespace StaticSharp {
         public SvgIconBlock(SvgIcons.Icon icon, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
             this.icon = icon;
         }
-        protected override void ModifyHtml(Context context, Tag elementTag) {
+
+        public override void ModifyTagAndScript(Context context, Tag tag, Group script) {
+            base.ModifyTagAndScript(context, tag, script);
+
+            var contentId = context.CreateId();
 
             var code = icon.GetSvg();
+            XmlDocument xml = new XmlDocument();
+            xml.LoadXml(code);
+            xml.DocumentElement.SetAttribute("id", contentId);
+            code = xml.OuterXml;
+            tag.Add(new PureHtmlNode(code));
 
-            elementTag["data-width"] = icon.Width;
-            elementTag["data-height"] = icon.Height;
-            elementTag.Add(new PureHtmlNode(code));
-            elementTag.Add(CreateScript_AssignPreviousTagToParentProperty("content"));
-            base.ModifyHtml(context, elementTag);
-
+            SetNativeSize(script, tag.Id, icon.Width, icon.Height);
+            script.Add($"{tag.Id}.content = {TagToJsValue(contentId)}");
         }
+
     }
 
 

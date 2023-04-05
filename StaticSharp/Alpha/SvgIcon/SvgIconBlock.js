@@ -1,26 +1,26 @@
 
 
 function SvgIconBlock(element) {
-    Block(element)
+    AspectBlock(element)
     SvgIcon(element)
 
 
-    let width = Number(element.dataset.width)
-    let height = Number(element.dataset.height)
+    //let width = Number(element.dataset.width)
+    //let height = Number(element.dataset.height)
 
 
     element.Reactive = {
 
-        Aspect: width / height,
+        //Aspect: width / height,
 
-        VerticalPaddingSum: () => Sum(element.PaddingTop, element.PaddingBottom, 0),
+        /*VerticalPaddingSum: () => Sum(element.PaddingTop, element.PaddingBottom, 0),
         HorizontalPaddingSum: () => Sum(element.PaddingLeft, element.PaddingRight, 0),
 
         InternalWidth: () => First((element.Height - element.VerticalPaddingSum) * element.Aspect + element.HorizontalPaddingSum, Sum(width, element.HorizontalPaddingSum)),
         InternalHeight: () => First((element.Width - element.HorizontalPaddingSum) / element.Aspect + element.VerticalPaddingSum, Sum(height, element.VerticalPaddingSum)),
 
         Width: e => e.InternalWidth,
-        Height: e => e.InternalHeight
+        Height: e => e.InternalHeight*/
     }
 
 
@@ -30,7 +30,7 @@ function SvgIconBlock(element) {
     })
 
 
-    new Reaction(() => {
+    /*new Reaction(() => {
         let content = element.content
         let w = element.Width - element.HorizontalPaddingSum
         let h = element.Height - element.VerticalPaddingSum
@@ -45,7 +45,7 @@ function SvgIconBlock(element) {
             content.style.width = ToCssSize(w)
             content.style.height = ToCssSize(h)
         }
-    })
+    })*/
 
     
 

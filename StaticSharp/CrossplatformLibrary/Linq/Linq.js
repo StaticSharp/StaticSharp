@@ -17,6 +17,14 @@ function Enumerable(source) {
 }
 
 /**
+ * @return {Enumerable<*>}
+ */
+Enumerable.Empty = function () {
+    return new Enumerable(function* () { })
+}
+
+
+/**
  * @return {Array<T>}
  */
 Enumerable.prototype.ToArray = function() {
@@ -83,7 +91,7 @@ Enumerable.prototype.Select = function (func) {
  * @param {function(): T} [notFound]
  * @return {T}
  */
-Enumerable.prototype.First = function (func = func = () => true, notFound = () => {throw new Error("Out of range")}) {
+Enumerable.prototype.First = function (func = () => true, notFound = () => {throw new Error("Out of range")}) {
     let _this = this;
     let enumerator = _this[Symbol.iterator]();
 
@@ -103,7 +111,7 @@ Enumerable.prototype.First = function (func = func = () => true, notFound = () =
  * @param {function(): T} [notFound]
  * @return {T}
  */
-Enumerable.prototype.Last = function (func = func = () => true, notFound = () => { throw new Error("Out of range") }) {
+Enumerable.prototype.Last = function (func = () => true, notFound = () => { throw new Error("Out of range") }) {
     let array = [...this]
     if (array.length > 0) {
         for (let i = array.length - 1; i >= 0; i--) {

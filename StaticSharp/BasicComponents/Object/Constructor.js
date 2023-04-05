@@ -81,53 +81,62 @@ function CreateSocket(element,name,parentExpression) {
     let property = new Property()
     property.attach(element, name)
 
-    let previousValue = undefined
+    //let previousValue = undefined
 
-    property.onAssign = function () {
-        //console.log("onAssign", property.getValue())
-        let newValue = property.getValue()
+    property.onAssign = function (previousValue, newValue) {
+        //console.log("onAssign", previousValue, newValue)
+
+
+        //let newValue = property.getValue()
 
         if (previousValue == newValue)
             return
 
-        let d = Reaction.beginDeferred()
+
 
         if (previousValue) {
             //console.log("deleting previous")
             //previousValue.place.setValue(undefined)
             previousValue.place = undefined
             previousValue.Parent = undefined
-            CreateOrClearLayer(previousValue)
+            previousValue.Layer()
 
             // if reparenting element is a part of element linked list, 
             // than subsequent elements of list are also effectively reparented
-            let nextSibling = previousValue.NextSibling
+            /*let nextSibling = previousValue.NextSibling
             while (nextSibling) {
                 nextSibling.Parent = undefined
                 CreateOrClearLayer(nextSibling)
                 nextSibling = nextSibling.NextSibling
-            }
+            }*/
         }
-        if (newValue != undefined) {
+        if (newValue) {
+            
+
             if (newValue.place) {
                 newValue.place.setValue(undefined)
             }
             newValue.place = property
+            //if (parentExpression != undefined) {
             newValue.Parent = parentExpression
-            CreateOrClearLayer(newValue)
+            newValue.Layer()
+                //CreateLayer(newValue)
+            //}
             
-            // if reparenting element is a part of element linked list, 
+            // if reparenting element is a part of element linked list,
             // than subsequent elements of list are also effectively reparented
-            let nextSibling = newValue.NextSibling
-            while (nextSibling) {
-                nextSibling.Parent = parentExpression
-                CreateOrClearLayer(nextSibling)
-                nextSibling = nextSibling.NextSibling
-            }
-        }
-        previousValue = newValue
 
-        d.end()
+            //if (parentExpression != undefined) {
+                /*let nextSibling = newValue.NextSibling
+                while (nextSibling) {
+                    nextSibling.Parent = parentExpression
+                    CreateOrClearLayer(nextSibling)                    
+                    nextSibling = nextSibling.NextSibling
+                }*/
+            //}
+        }
+        //previousValue = newValue
+
 
     }
 

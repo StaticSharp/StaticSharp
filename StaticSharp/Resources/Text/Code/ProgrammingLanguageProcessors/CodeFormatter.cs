@@ -16,7 +16,7 @@ namespace StaticSharp.Gears {
 
             var result = new Inlines();
 
-            Inline CreateInlineForScope(Scope scope) {
+            InlineGroup CreateInlineForScope(Scope scope) {
                 string foreground = string.Empty;
                 string background = string.Empty;
                 bool italic = false;
@@ -27,7 +27,7 @@ namespace StaticSharp.Gears {
                     italic = style.Italic;
                     bold = style.Bold;
                 }
-                var result = new Inline();
+                var result = new InlineGroup();
 
                 if (!string.IsNullOrEmpty(foreground)) {
                     result.ForegroundColor = new Color(foreground);

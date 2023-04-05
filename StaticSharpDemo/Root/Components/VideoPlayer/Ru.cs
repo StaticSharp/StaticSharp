@@ -1,5 +1,7 @@
 ﻿
 
+using System.Linq;
+
 namespace StaticSharpDemo.Root.Components.VideoPlayer {
 
 
@@ -17,20 +19,85 @@ namespace StaticSharpDemo.Root.Components.VideoPlayer {
         };
         public override Inlines Description => $"StaticSharp VideoPlayer component.";
 
-        public override Blocks UnmanagedChildren => new() { 
-            new Block(){ 
-                Width = 200,
-                Height = 200,
-                BackgroundColor= Color.BlueViolet,
+        /*public override Blocks UnmanagedChildren => new(){
+
+            new InlineGroup($"Text {new SvgIconInline(SvgIcons.MaterialDesignIcons.Svg){
+                BaselineOffset= 0.14,
+                InternalLink = Node.Root,
+                Scale = 1.2,
+                BackgroundColor= Color.Pink,
+                ForegroundColor= Color.Black,
+            }}\n2"){ 
+                BackgroundColor = Color.Red,
             }
-        };
+
+
+            Enumerable.Range(0,10).Select(x=>
+                new Block{
+                    X = new (e=> 10*(x % 50) + e.Parent.Width * 0.1),
+                    Y = 100*(x / 50),
+                    Width = 10+x,
+                    Height = 10+x,
+                    BackgroundColor = Color.FromGrayscale(x%4*0.2)
+                }
+                //new Paragraph($"Paragraph #{x}"){ }
+            )
+
+
+            new ScrollLayout{ 
+                Height = 350,
+
+                Child = new LinearLayout{
+                    Children = {
+                        new Block(){
+                            InternalLink = Node.Root,
+                            Width = 200,
+                            Height = 200,
+                            BackgroundColor = Color.PaleVioletRed,
+                            UnmanagedChildren = { 
+                                new Image("https://lh3.googleusercontent.com/a/AGNmyxYN2cUQ-CcEkw1ShKBSjVnNTDcp4Bjk1d0nssLp=s96-c"){
+                                    Width = 50,
+                                    Height= 50,
+                                    BackgroundColor = Color.Orange,
+                                }
+                            }
+                        },
+                        "Hello",
+
+                        new Block(){
+                            X = 300,
+                            Width = 200,
+                            Height = 200,
+                            BackgroundColor= Color.Violet,
+                        }
+                    }
+                }
+            }
+
+            
+        };*/
 
 
 
         public override Blocks? Content => new() {
 
-            new Video("T4TEdzSLyi0"){
+            new LayoutOverride {
+                Child = new Video("T4TEdzSLyi0"){
+                    BackgroundColor= Color.Black,
+                    GravityHorizontal = 0,
+                },
 
+                OverrideWidth = new(e=>e.Parent.Width ),
+                Height = new(e=>Js.Math.Min( 0.9 * e.Root.Height, e.Parent.Width / ((Js.Video)e.Child).Aspect) ),
+                OverrideX = new(e=>0),
+                
+            },
+
+            new Video("T4TEdzSLyi0"){
+                //Height = new(e=>e.Root.Height*0.8),
+                //GravityVertical = -1,
+                //Fit = Fit.Outside,
+                //PreferPlatformPlayer= false,
                 /*Modifiers = {
                     new Shadow{
                         Distance = new(e=>e.Parent.Width)

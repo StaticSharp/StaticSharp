@@ -33,14 +33,14 @@ namespace StaticSharp
         public static implicit operator Inlines(string text) => new Inlines { text };
 
         public void AppendLiteral(string value, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
-            Add(new Text(value, true, callerLineNumber, callerFilePath));
+            Add(new Text(value, callerLineNumber, callerFilePath));
         }
         public void Add(
             string text,
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerFilePath] string callerFilePath = "") {
 
-            Add(new Text(text, true, callerLineNumber, callerFilePath));
+            Add(new Text(text, callerLineNumber, callerFilePath));
         }
 
 
@@ -74,7 +74,7 @@ namespace StaticSharp
 
         //Link
         public void AppendFormatted(Tree.Node node, string? format = null, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
-            var link = new Inline(callerLineNumber, callerFilePath) {
+            var link = new InlineGroup(callerLineNumber, callerFilePath) {
                 InternalLink = node,
                 Children = {
                     (format != null)?format: (node.Representative?.Title ?? "")
@@ -83,7 +83,7 @@ namespace StaticSharp
             AppendFormatted(link);
         }
         public void AppendFormatted(Uri url, string format, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
-            var link = new Inline(callerLineNumber, callerFilePath) {
+            var link = new InlineGroup(callerLineNumber, callerFilePath) {
                 ExternalLink = url.ToString(),
                 Children = {
                     format

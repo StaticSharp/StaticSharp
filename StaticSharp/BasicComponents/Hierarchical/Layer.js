@@ -1,5 +1,5 @@
 ﻿function CreateLayer(element) {
-
+    //console.log("CreateLayer")
     let backupProperties = new Map()
 
     /*let originalPropertiesView = new Proxy
@@ -36,19 +36,31 @@
         return backupProperty
     }
 
+    let data = function(){        
+        /*if (!element.Layer || !element.Layer.backupProperties) {
+            // Layer could be set to element itself and has not originalProperties
+            return
+        }*/
 
-    let result = new Proxy(element,
+        let d = Reaction.beginDeferred()
+        backupProperties.forEach(function (backupProperty, key, map) {
+            let propertyValueOrBinding = backupProperty.binding ? backupProperty.binding.func : backupProperty.value
+            element[key] = propertyValueOrBinding
+        })
+        backupProperties.clear()
+        d.end()
+    }
+    data.element = element
+
+    let result = new Proxy(data,
         {
-            //originalPropertiesView: originalPropertiesView,
-            //originalProperties: originalProperties,
 
-
-            get(target, propertyName, receiver) {
-                if (propertyName == "backupProperties") { // TODO: think of better implementation
+            get(data, propertyName, receiver) {
+                /*if (propertyName == "backupProperties") { // TODO: think of better implementation
                     return backupProperties
-                }
+                }*/
 
-                var backupProperty = getBackupProperty(target, propertyName)
+                var backupProperty = getBackupProperty(data.element, propertyName)
                 
                 let value = backupProperty.getValue()
                 //console.log(value,backupProperty)
@@ -56,22 +68,19 @@
                 return value
             },
 
-            set(target, propertyName, value, receiver) {
+            set(data, propertyName, value, receiver) {
 
 
-                var backupProperty = getBackupProperty(target, propertyName)
+                var backupProperty = getBackupProperty(data.element, propertyName)
 
-                target[propertyName] = value
+                data.element[propertyName] = value
                 //backupProperty.setValue(value)
                 return true
-            }
+            },
         }
     )
 
-    
-    
-    return result
-    //element.Layer = result
+    element.Layer = result
 }
 
 
@@ -92,10 +101,10 @@ function ClearLayer(element) {
 }
 
 // TODO: finalize layer internface
-function CreateOrClearLayer(element) {
+/*function CreateOrClearLayer(element) {
     if (element.Layer != undefined) {
         ClearLayer(element)
     } else {
         element.Layer = CreateLayer(element)  // TODO:
     }
-}
+}*/

@@ -1,5 +1,5 @@
 function ToCssSize(value) {
-    return (value!=undefined) ? value.toFixed(50) + "px" : ""
+    return (value!=undefined) ? value.toFixed(4) + "px" : ""
 }
 
 function ToCssValue(value) {

@@ -45,30 +45,28 @@ function ScrollLayout(element) {
     scrollable.style.touchAction = "manipulation"
     scrollable.style.overflow = "auto"
 
+    scrollable.Events.Scroll = () => {
+        let d = Reaction.beginDeferred()
+        element.ScrollXActual = scrollable.scrollLeft
+        element.ScrollYActual = scrollable.scrollTop
+        d.end()
+    }
+
 
     element.Reactive = {
-        //InternalWidth: () => Sum(element.Content.InternalWidth, element.LeftOffset, element.RightOffset),
-        InternalWidth: () => Sum(element.Content.Layer.Width/*InternalWidth*/, element.LeftOffset, element.RightOffset),
-        // InternalHeight: 
-        InternalHeight: () => Sum(element.Content.Layer.Height/*InternalHeight*/, element.TopOffset, element.BottomOffset),
+        InternalWidth: () => Sum(element.Child.Layer.Width, element.LeftOffset, element.RightOffset),
+        InternalHeight: () => Sum(element.Child.Layer.Height, element.TopOffset, element.BottomOffset),
 
         Width: e => e.InternalWidth,
-        Height: e => e.InternalWidth,
+        Height: e => e.InternalHeight,
 
-        //Content: () => element.Child("Content"),
+        LeftOffset: () => CalcOffset(element, element.Child, "Left"),
+        RightOffset: () => CalcOffset(element, element.Child, "Right"),
+        TopOffset: () => CalcOffset(element, element.Child, "Top"),
+        BottomOffset: () => CalcOffset(element, element.Child, "Bottom"),
 
-        /*MarginLeft: () => (element.PaddingLeft!=undefined) ? 0 : element.Content.MarginLeft,
-        MarginTop: () => (element.PaddingTop != undefined) ? 0 : element.Content.MarginTop,
-        MarginRight: () => (element.PaddingRight != undefined) ? 0 : element.Content.MarginRight,
-        MarginBottom: () => (element.PaddingBottom != undefined) ? 0 : element.Content.MarginBottom,*/
-
-        LeftOffset: () => CalcOffset(element, element.Content, "Left"),
-        RightOffset: () => CalcOffset(element, element.Content, "Right"),
-        TopOffset: () => CalcOffset(element, element.Content, "Top"),
-        BottomOffset: () => CalcOffset(element, element.Content, "Bottom"),
-
-        ContentAreaWidth: () => element.Width - element.LeftOffset - element.RightOffset,
-        ContentAreaHeight: () => element.Height - element.TopOffset - element.BottomOffset,
+        ChildAreaWidth: () => element.Width - element.LeftOffset - element.RightOffset,
+        ChildAreaHeight: () => element.Height - element.TopOffset - element.BottomOffset,
 
         ScrollX: undefined,
         ScrollY: undefined, //Storage.Store("scroll", () => element.ScrollYActual),
@@ -80,17 +78,16 @@ function ScrollLayout(element) {
         ScrollBarMargin: 2,
         ShowScrollBars: () => !window.Touch,
 
-        //Content: undefined,
     }
-    CreateSocket(element, "Content", element)
+    CreateSocket(element, "Child", element)
     CreateSocket(element, "VerticalThumb", element).setValue(Create(element, Thumb))
     CreateSocket(element, "HorizontalThumb", element).setValue(Create(element, Thumb))
 
     let verticalThumb = element.VerticalThumb
     verticalThumb.Reactive = {
         ThumbTravel: () => element.Height - 2 * element.ScrollBarMargin,
-        ThumbPositionScale: () => verticalThumb.ThumbTravel / element.Content./*InternalHeight*/Layer.Height,
-        ThumbSizeScale: () => element.ContentAreaHeight / element.Content./*InternalHeight*/Layer.Height, 
+        ThumbPositionScale: () => verticalThumb.ThumbTravel / element.Child./*InternalHeight*/Layer.Height,
+        ThumbSizeScale: () => element.ChildAreaHeight / element.Child./*InternalHeight*/Layer.Height, 
         X: () => element.Width - verticalThumb.Width - element.ScrollBarMargin,
         Y: () => element.ScrollBarMargin + element.ScrollYActual * verticalThumb.ThumbPositionScale,
         Width: () => element.ScrollBarThickness,        
@@ -101,8 +98,8 @@ function ScrollLayout(element) {
     let horizontalThumb = element.HorizontalThumb
     horizontalThumb.Reactive = {
         ThumbTravel: () => element.Width - 2 * element.ScrollBarMargin,
-        ThumbPositionScale: () => horizontalThumb.ThumbTravel / element.Content.Width,
-        ThumbSizeScale: () => element.ContentAreaWidth / element.Content.Width,        
+        ThumbPositionScale: () => horizontalThumb.ThumbTravel / element.Child.Width,
+        ThumbSizeScale: () => element.ChildAreaWidth / element.Child.Width,        
         X: () => element.ScrollBarMargin + element.ScrollXActual * horizontalThumb.ThumbPositionScale,
         Y: () => element.Height - horizontalThumb.Height - element.ScrollBarMargin,
         Width: () => horizontalThumb.ThumbTravel * horizontalThumb.ThumbSizeScale,
@@ -118,7 +115,7 @@ function ScrollLayout(element) {
     })
 
     new Reaction(() => {
-        SyncChildren(scrollable, [element.Content])
+        SyncChildren(scrollable, [element.Child])
     })
 
     SetupPointerDrag(verticalThumb, (x, y) => {
@@ -133,15 +130,18 @@ function ScrollLayout(element) {
     
 
     
-
+    new Reaction(() => {
+        element.Child.Layer.Width = Max(element.Child.Layer.Width, element.ChildAreaWidth)
+        element.Child.Layer.Height = Max(element.Child.Layer.Height, element.ChildAreaHeight)
+    })
 
     
     
     new Reaction(() => {
         scrollable.style.left = ToCssSize(element.LeftOffset)
         scrollable.style.top = ToCssSize(element.TopOffset)
-        scrollable.style.width = ToCssSize(element.ContentAreaWidth)
-        scrollable.style.height = ToCssSize(element.ContentAreaHeight)
+        scrollable.style.width = ToCssSize(element.ChildAreaWidth)
+        scrollable.style.height = ToCssSize(element.ChildAreaHeight)
     })
 
 
@@ -153,22 +153,7 @@ function ScrollLayout(element) {
         });
     })
 
-    element.AfterChildren = function () {
-        scrollable.style.touchAction = "manipulation"
-        scrollable.style.overflow = "auto"
 
-        scrollable.Events.Scroll = () => {
-            let d = Reaction.beginDeferred()
-            element.ScrollXActual = scrollable.scrollLeft
-            element.ScrollYActual = scrollable.scrollTop
-            d.end()
-        }
-
-        //element.Content.LayoutWidth = () => Max(element.Content.InternalWidth, element.ContentAreaWidth)
-        //element.Content.LayoutHeight = () => Max(element.Content.InternalHeight, element.ContentAreaHeight)
-        element.Content.Layer.Width = () => Max(element.Content.Layer.Width, element.ContentAreaWidth)
-        element.Content.Layer.Height = () => Max(element.Content.Layer.Height, element.ContentAreaHeight)
-    }
 
 
 }

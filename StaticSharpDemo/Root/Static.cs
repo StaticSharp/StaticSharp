@@ -14,7 +14,7 @@ namespace StaticSharpDemo {
                 if (fragment.Length > 0) {
                     startIndex += fragment.Length;
                     if (upperCase) {
-                        result.Inlines.Add(new Inline(fragment) { ForegroundColor = highlightColor });
+                        result.Inlines.Add(new InlineGroup(fragment) { ForegroundColor = highlightColor });
                     } else {
                         result.Inlines.Add(fragment.ToUpper());
                     }
@@ -41,8 +41,8 @@ namespace StaticSharpDemo {
 
         
 
-        public static Inline GithubUrl(string text = "GitHub repository") {
-            return new Inline {
+        public static InlineGroup GithubUrl(string text = "GitHub repository") {
+            return new InlineGroup {
                 ExternalLink = "https://github.com/StaticSharp/StaticSharp",
                 OpenLinksInANewTab = true,
                 ForegroundColor = Color.FromIntRGB(172, 196, 53),

@@ -1,4 +1,5 @@
 using ImageMagick;
+using Scopes;
 using StaticSharp.Gears;
 using StaticSharp.Html;
 using System.Runtime.CompilerServices;
@@ -70,21 +71,29 @@ namespace StaticSharp {
             return new MagickImageInfo(source.Data);
         }
 
-        protected override void ModifyHtml(Context context, Tag elementTag) {
 
+        public override void ModifyTagAndScript(Context context, Tag tag, Group script) {
+            base.ModifyTagAndScript(context, tag, script);
 
+            var contentId = context.CreateId();
+            
             var source = GetSource();
             var imageInfo = GetImageInfo(source);
-            elementTag["data-width"] = imageInfo.Width;
-            elementTag["data-height"] = imageInfo.Height;
+
+            SetNativeSize(script, tag.Id, imageInfo.Width, imageInfo.Height);
+
+            script.Add($"{tag.Id}.content = {TagToJsValue(contentId)}");
+
+
+            //tag["data-width"] = imageInfo.Width;
+            //tag["data-height"] = imageInfo.Height;
 
             string url;
 
 
 
             void AddSimpleImage() {
-                elementTag.Add(new Tag("content") {
-                    CreateScript_AssignToParentProperty("content"),
+                tag.Add(new Tag("content", contentId) {
                     new Tag("img") {
                         ["width"] = "100%",
                         ["height"] = "100%",
@@ -128,18 +137,10 @@ namespace StaticSharp {
                 //TreeDepth = 0
             };
 
-
-            /*var imageColor = new MagickImage(thumbnail.ReadAllBites());
-            imageColor.Quantize(quantizeSettings);
-
-            var colors = imageColor.UniqueColors();
-
-            var pixel = imageColor.GetPixels().First().ToColor().ToHexString();*/
-
             var thumbnailImageInfo = GetImageInfo(thumbnail);
 
-            elementTag.Add(new Tag("content") {
-                CreateScript_AssignToParentProperty("content"),
+            tag.Add(new Tag("content", contentId) {
+
                 new Tag("svg"){
                     Id = "thumbnail",
                     ["width"] = "100%",
@@ -180,9 +181,8 @@ namespace StaticSharp {
             }
             );
 
-            base.ModifyHtml(context, elementTag);
-
         }
+
 
         void IMainVisual.GetMeta(Dictionary<string, string> meta, Context context) {
             var source = GetSource();

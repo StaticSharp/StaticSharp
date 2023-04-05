@@ -3,17 +3,14 @@
     white-space: break-spaces;
 }
 
-.inline-container * {
-    
-    position: static;
-    display: inline;
-}
+    .inline-container * {
+        position: static;
+        display: inline;
+        vertical-align: baseline;
+    }
 
-.inline-container a * {
-    text-decoration-line: underline;
-}
+    .inline-container a {
+        text-decoration-line: underline;
+    }
 
-/*body.js paragraph>p * {
-    
-}*/
 

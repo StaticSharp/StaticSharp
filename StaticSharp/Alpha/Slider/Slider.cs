@@ -44,7 +44,7 @@ namespace StaticSharp {
 
         public Slider([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
 
-        protected override void ModifyHtml(Context context, Tag elementTag) {
+        /*protected override void ModifyHtml(Context context, Tag elementTag) {
             var thumb = Thumb;
             if (thumb == null) {
                 thumb = DefaultThumbConstructor();
@@ -54,7 +54,7 @@ namespace StaticSharp {
                 thumb.GenerateHtml(context)
                 );
             base.ModifyHtml(context, elementTag);
-        }
+        }*/
 
     }
 

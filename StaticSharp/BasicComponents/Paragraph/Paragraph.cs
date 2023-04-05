@@ -64,7 +64,36 @@ namespace StaticSharp {
             Inlines = new() { inline };
         }
 
-        protected override void ModifyHtml(Context context, Tag elementTag) {
+        public override void ModifyTagAndScript(Context context, Tag tag, Scopes.Group script) {
+            base.ModifyTagAndScript(context, tag, script);
+            var inlineContainerId = context.CreateId();
+
+            var inlineContainer = new Tag("p", inlineContainerId) {
+                ["class"] = "inline-container"
+            };
+
+            foreach (var i in Inlines) {
+                var child = i.Generate(context);
+                inlineContainer.Add(child.Tag);
+                if (child.Script != null) {
+                    script.Add(child.Script);
+                    script.Add($"{child.Tag.Id}.Parent = {tag.Id}");
+                }                
+            }
+            inlineContainer.Add("\n");
+
+            tag.Add(inlineContainer);
+
+            script.Add($"{tag.Id}.inlineContainer = {TagToJsValue(inlineContainer)}");
+
+            //elementTag.Add(CreateScript_SetCurrentSocket("FirstInline"));
+            //elementTag.Add(inlineContainer);
+
+            //base.ModifyHtml(context, elementTag);
+        }
+
+
+        /*protected override void ModifyHtml(Context context, Tag elementTag) {
             var p = new Tag("p") {                
                 CreateScript_AssignToParentProperty("inlineContainer")
             };
@@ -79,7 +108,7 @@ namespace StaticSharp {
             elementTag.Add(p);
 
             base.ModifyHtml(context, elementTag);
-        }
+        }*/
 
     }
 }

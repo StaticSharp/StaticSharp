@@ -1,7 +1,8 @@
-﻿using StaticSharp.Gears;
+﻿using Scopes;
+using StaticSharp.Gears;
 using StaticSharp.Html;
 
-namespace StaticSharp{
+namespace StaticSharp {
 
     namespace Js {
         public interface Inline : Hierarchical {
@@ -15,9 +16,9 @@ namespace StaticSharp{
         }
     }
 
-    [ConstructorJs]
-    public partial class Inline : BaseModifier, IInline {
 
+    [ConstructorJs]
+    public abstract partial class Inline : BaseModifier, IInline {
         public double? MarginLeft { get; set; }
         public double? MarginRight { get; set; }
         public double? MarginTop { get; set; }
@@ -31,14 +32,14 @@ namespace StaticSharp{
         }
         public double MarginsVertical {
             set {
-                MarginTop= value;
+                MarginTop = value;
                 MarginBottom = value;
             }
         }
         public double Margins {
             set {
                 MarginsHorizontal = value;
-                MarginsVertical= value;
+                MarginsVertical = value;
             }
         }
 
@@ -67,48 +68,30 @@ namespace StaticSharp{
             }
         }
 
-
-
-        public Inlines Children { get; init; } = new();
-
         protected Inline(Inline other,
             int callerLineNumber = 0,
             string callerFilePath = ""
             ) : base(other, callerLineNumber, callerFilePath) {
-            Children = new(other.Children);
         }
+
         public Inline(
             int callerLineNumber = 0,
             string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
 
-        public Inline(
-            string text,
-            int callerLineNumber = 0,
-            string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
-            Children.Add(text);
-        }
-
 
         public virtual string GetPlainText(Context context) => "";
 
-        protected override void ModifyHtml(Context context, Tag elementTag) {
-            if (MarginLeft != null || MarginRight != null || MarginTop != null || MarginBottom != null) {
-                elementTag.Style["margin"] = $"{MarginTop ?? 0}em {MarginRight ?? 0}em {MarginBottom ?? 0}em {MarginLeft ?? 0}em";
-            }
+        public override void ModifyTagAndScript(Context context, Tag tag, Group script) {
+            base.ModifyTagAndScript(context, tag, script);
             
+            if (MarginLeft != null || MarginRight != null || MarginTop != null || MarginBottom != null) {
+                tag.Style["margin"] = $"{MarginTop ?? 0}em {MarginRight ?? 0}em {MarginBottom ?? 0}em {MarginLeft ?? 0}em";
+            }
+
             if (PaddingLeft != null || PaddingRight != null || PaddingTop != null || PaddingBottom != null) {
-                elementTag.Style["padding"] = $"{PaddingTop ?? 0}em {PaddingRight ?? 0}em {PaddingBottom ?? 0}em {PaddingLeft ?? 0}em";
-            }
+                tag.Style["padding"] = $"{PaddingTop ?? 0}em {PaddingRight ?? 0}em {PaddingBottom ?? 0}em {PaddingLeft ?? 0}em";
+            }           
 
-            foreach (var c in Children) {
-                var childTag = c.GenerateHtml(context);
-                elementTag.Add(childTag);
-            }
-            base.ModifyHtml(context, elementTag);
-        }
-
-        public override string ToString() {
-            throw new System.InvalidOperationException("Cast from Inline to String is forbidden.");
         }
 
     }

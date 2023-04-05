@@ -87,7 +87,8 @@ Reaction.beginDeferred = function () {
             end: function () {
 
                 let maxIterations = 64;
-                 
+                //TODO: нужно проверять рекурсии иначе: нужно пересчитывать сколько раз выполняется одна и та же реакция.
+                //текущая реализация увидит рекурсию там где ее нет. Например если действительно собрана очень длинная цепочка реакций a->b->c->...
                 while (Reaction.deferred.size > 0 & maxIterations > 0) {
                     //console.log("Reaction.deferred.end", Reaction.deferred.size)
                     let d = Array.from(Reaction.deferred)
@@ -171,6 +172,7 @@ function Property() {
     _this.object = null
 
     _this.dependentReactions = new Set()
+    //window.debug = (window.debug || 0) + 1
     _this.binding = undefined
 
     // TODO: never called?
@@ -192,6 +194,12 @@ function Property() {
         },50)
 
          *******************************************/
+        
+
+        if (_this.dependentReactions.size == 0) {            
+            return
+        }            
+
         var d = Reaction.beginDeferred() 
         _this.dependentReactions.forEach(x => x.makeDirty())
         d.end()
@@ -229,11 +237,16 @@ function Property() {
         }
     }*/
     _this.executionInProgress = false
-    
+
+    _this.replaceValue = function (func) {
+        let previousReactionCurrent = Reaction.current
+        Reaction.current = undefined
+        let newValue = func(this.getValue())
+        this.setValue(newValue)
+        Reaction.current = previousReactionCurrent
+    }
+
     _this.getValue = function() {
-        //console.log("getValue")
-        
-        //console.log("getValue", _this.name, _this.binding?.dirty)
 
         if (Reaction.current) {
             Reaction.current.addTriggeringProperty(_this)
@@ -249,8 +262,6 @@ function Property() {
                     }
                     _this.reactionsWhoReceivedOldValue.add(Reaction.current)                    
 
-                    //console.log("getValue", _this.name, "executionInProgress")
-
                     return _this.value
                 }
                 try {
@@ -263,26 +274,15 @@ function Property() {
                         _this.executionInProgress = false
 
                         _this.binding.dirty = false
-                        //console.log("execute finished ", _this.object, _this.name, oldValue, "->", _this.value)
-
 
                         if (_this.reactionsWhoReceivedOldValue) {
-
                             if (_this.value !== oldValue) {
-
-                                //var reactionsToPrint = Array.from(_this.reactionsWhoReceivedOldValue).map(x => x.func.name)
-                                //console.log("ReactionsWhoReceivedOldValue", reactionsToPrint)
-
                                 let d = Reaction.beginDeferred()
                                 _this.reactionsWhoReceivedOldValue.forEach(x => x.makeDirty())
                                 d.end()
                             }
-
-                            _this.reactionsWhoReceivedOldValue = undefined                            
-
-                        }
-                        
-                            
+                            _this.reactionsWhoReceivedOldValue = undefined
+                        }                            
                     }
 
                 } catch (e) {
@@ -334,6 +334,12 @@ function Property() {
                 _this.binding = undefined
             }
 
+            if (_this.onAssign) {
+                var d = Reaction.beginDeferred()
+                _this.onAssign(_this.value, value)
+                d.end()
+            }
+
             if (_this.value === value)
                 return
 
@@ -342,11 +348,6 @@ function Property() {
 
         var d = Reaction.beginDeferred()
         _this.makeDependentReactionsDirty()
-
-        if (_this.onAssign) {
-            _this.onAssign()
-        }
-
         d.end()
     }
 
@@ -424,7 +425,7 @@ Object.defineProperty(Object.prototype, "Reactive", {
 
         let d = Reaction.beginDeferred()
         //отложенное выполнение реакций не нужно при создании свойств
-        //тут оно используется т.к. следующий код можнт не только создать свойство
+        //тут оно используется т.к. следующий код может не только создать свойство
         //но и присвоить значение существующему свойству
         if (obj instanceof Object) {
             for (const [key, value] of Object.entries(obj)) {

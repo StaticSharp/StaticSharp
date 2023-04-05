@@ -21,9 +21,9 @@ namespace StaticSharp {
         public string ToJavascriptString() {
 
             if (double.IsNaN(A))
-                return $"new Color({R},{G},{B})";
+                return $"new Color({R:0.###},{G:0.###},{B:0.###})";
             else
-                return $"new Color({R},{G},{B},{A})";
+                return $"new Color({R:0.###},{G:0.###},{B:0.###},{A:0.###})";
         }
     }
 

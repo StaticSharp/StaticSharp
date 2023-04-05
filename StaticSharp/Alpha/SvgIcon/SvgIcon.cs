@@ -1,6 +1,10 @@
 using StaticSharp.Gears;
+using StaticSharp.Html;
+using StaticSharp.Js;
+using SvgIcons;
 using System;
 using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace StaticSharp {
@@ -17,6 +21,8 @@ namespace StaticSharp {
             public Binding<Color> StrokeColor { set { Apply(value); } }
             public Binding<double> StrokeWidth { set { Apply(value); } }
         }
+
+
     }
 
 

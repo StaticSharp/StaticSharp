@@ -2,19 +2,19 @@
     Block(element)
     element.isLayoutOverride = true
 
-    CreateSocket(element, "Content", element)
+    CreateSocket(element, "Child", element)
 
     element.Reactive = {
-        Width: () => element.Content.Layer.Width, 
-        Height: () => element.Content.Layer.Height, 
+        Width: () => element.Child.Layer.Width, 
+        Height: () => element.Child.Layer.Height, 
 
         // margins cannot be overriden, but must be translated outside
-        MarginTop: () => element.Content.Layer.MarginTop,
-        MarginBottom: () => element.Content.Layer.MarginBottom,
-        MarginLeft: () => element.Content.Layer.MarginLeft,
-        MarginRight: () => element.Content.Layer.MarginRight,
+        MarginTop: () => element.Child.Layer.MarginTop,
+        MarginBottom: () => element.Child.Layer.MarginBottom,
+        MarginLeft: () => element.Child.Layer.MarginLeft,
+        MarginRight: () => element.Child.Layer.MarginRight,
 
-        Content: undefined,
+        Child: undefined,
 
         OverrideX: undefined,
         OverrideY: undefined,
@@ -23,15 +23,15 @@
     }
 
     element.HtmlNodesOrdered = new Enumerable(function* () {
-        yield element.Content
+        yield element.Child
         yield* element.UnmanagedChildren
     })
 
     new Reaction(() => {
-        element.Content.Layer.X = element.OverrideX != undefined ? element.OverrideX - element.X : 0
-        element.Content.Layer.Y = element.OverrideY != undefined ? element.OverrideY - element.Y : 0
+        element.Child.Layer.X = element.OverrideX != undefined ? element.OverrideX - element.X : 0
+        element.Child.Layer.Y = element.OverrideY != undefined ? element.OverrideY - element.Y : 0
 
-        element.Content.Layer.Width = element.OverrideWidth || element.Width
-        element.Content.Layer.Height = element.OverrideHeight || element.Height
+        element.Child.Layer.Width = element.OverrideWidth || element.Width
+        element.Child.Layer.Height = element.OverrideHeight || element.Height
     })
 }

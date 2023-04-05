@@ -37,6 +37,7 @@ namespace StaticSharp {
     [Mix(typeof(PageBindings<Js.Page>))]
     [ConstructorJs]
     [Scripts.Storage]
+    [RelatedScript("Initialization")]
     [RelatedStyle("../Normalization")]
 
     public abstract partial class Page : Block {
@@ -146,8 +147,8 @@ namespace StaticSharp {
                 };
 
 
-            var body = GenerateHtml(context);
-            //body.Style["visibility"] = "hidden";
+            var bodyTagAndScript = Generate(context);
+            
 
 
             var document = new Tag(null) {
@@ -156,53 +157,54 @@ namespace StaticSharp {
                     ["lang"] = PageLanguage,
                     Children ={
                         head,
-                        body
+                        bodyTagAndScript.Tag
                     }
                 }
                 
             };
 
+            var initializationScript =
+                new Scopes.C.Scope("function Initialize()"){
+                    bodyTagAndScript.Script
+                };
+
+
             head.Add(context.GenerateScript());
             head.Add(context.GenerateStyle());
             head.Add(context.GenerateFonts());
 
+            head.Add(new Tag("script") {
+                new PureHtmlNode(initializationScript.ToString())
+            });
+
             return document.GetHtml();
         }
 
-        protected override void ModifyHtml(Context context, Tag elementTag) {
 
-
-
-            base.ModifyHtml(context, elementTag);
-
+        public override void ModifyTagAndScript(Context context, Tag tag, Scopes.Group script) {
+            base.ModifyTagAndScript(context, tag, script);
+            
+            
             var svgDefsTags = context.SvgDefs.GetOrderedItems().ToArray();
             if (svgDefsTags.Length > 0) {
-                elementTag.Add(
-                    new Tag("svg") {
-                        Style = {
+
+                var svgDefs = new Tag("svg", context.CreateId()) {
+                    Style = {
                         ["display"] = "none"
                         },
-                        Children = {
+                    Children = {
                         new Tag("defs"){
-                            context.SvgDefs.GetOrderedItems()
+                            svgDefsTags
                         }
                         }
-                    });
-                elementTag.Add(CreateScript_AssignPreviousTagToParentProperty("svgDefs"));
+                };
+
+                tag.Add(svgDefs);
+                script.Add($"{tag.Id}.svgDefs = {svgDefs.Id}");
             }
-
-            /*var children = Children.ToArray();
-            if (children.Length > 0) {
-                BeginChildren(elementTag);
-                elementTag.Add(Children.GenerateHtml(context));
-            }
-
-
-            elementTag.Add(BodyContent.GenerateHtml(context));*/
-
-            //elementTag.Add(BodyContent.GenerateHtml(context));
-            
         }
+
+
 
 
     }

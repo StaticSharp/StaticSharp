@@ -15,9 +15,8 @@ namespace StaticSharp
 
     namespace Js
     {
-        public interface LayoutOverride : Block
-        {
-            public Block Content { get; }
+        public interface LayoutOverride : Block {
+            public Block Child { get; }
 
             public double? OverrideX { get; }
             public double? OverrideY { get; }
@@ -28,10 +27,8 @@ namespace StaticSharp
     }
 
 
-    namespace Gears
-    {
-        public class LayoutOverrideBindings<FinalJs> : BlockBindings<FinalJs>
-        {
+    namespace Gears {
+        public class LayoutOverrideBindings<FinalJs> : BlockBindings<FinalJs> {
             public Binding<double?> OverrideX { set { Apply(value); } }
             public Binding<double?> OverrideY { set { Apply(value); } }
 
@@ -43,18 +40,12 @@ namespace StaticSharp
 
     [Mix(typeof(LayoutOverrideBindings<Js.LayoutOverride>))]
     [ConstructorJs]
-    public partial class LayoutOverride: Block
-    {
-        public required Block Content { get; set; }
+    public partial class LayoutOverride: Block {
+        [Socket]
+        public required Block Child { get; set; }
 
         public LayoutOverride([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
             : base(callerLineNumber, callerFilePath) { }
 
-        protected override void ModifyHtml(Context context, Tag elementTag)
-        {
-            elementTag.Add(CreateScript_SetCurrentSocket(nameof(Content)));
-            elementTag.Add(Content.GenerateHtml(context));
-            base.ModifyHtml(context, elementTag);
-        }
     }
 }

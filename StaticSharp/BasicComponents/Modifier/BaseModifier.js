@@ -2,7 +2,8 @@
 function BaseModifier(element) {
     Hierarchical(element)
 
-    if (element.parentElement.tagName == "A") {
+    //TODO: fix file protocol
+    /*if (element.parentElement.tagName == "A") {
         if (window.location.protocol == "file:") {
             let a = element.parentElement
             let href = a.getAttribute("href")
@@ -11,7 +12,7 @@ function BaseModifier(element) {
                 a.setAttribute("href", href + ".html")
             }
         }        
-    }
+    }*/
     
 
 
@@ -33,7 +34,7 @@ function BaseModifier(element) {
 
         ForegroundColor: () => { 
             if (element.BackgroundColor != undefined)
-                return element.BackgroundColor.contrastColor()
+                return element.BackgroundColor.ContrastColor()
             else
                 return undefined
         },

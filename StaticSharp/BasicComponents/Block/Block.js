@@ -125,8 +125,22 @@ function Block(element) {
         X: 0, //e => First(e.LayoutX,0),
         Y: 0, //e => First(e.LayoutY,0),
 
-        AbsoluteX: () => element.IsRoot ? 0 : Sum(element.Parent.AbsoluteX, element.Parent.ScrollXActual, element.X),
-        AbsoluteY: () => element.IsRoot ? 0 : Sum(element.Parent.AbsoluteY, -element.Parent.ScrollYActual, element.Y),
+        AbsoluteX: () => {
+            let parent = element.Parent
+            if (parent) {
+                return Sum(element.Parent.AbsoluteX, element.Parent.ScrollXActual, element.X)
+            } else {
+                return 0
+            }
+        },
+        AbsoluteY: () => {
+            let parent = element.Parent
+            if (parent) {
+                return Sum(element.Parent.AbsoluteY, -element.Parent.ScrollYActual, element.Y)
+            } else {
+                return 0
+            }
+        },
 
         Width: undefined, //e => e.InternalWidth, // e => First(e.LayoutWidth, e.PreferredWidth),
         Height: undefined, //e => e.InternalHeight, // e => First(e.LayoutHeight, e.PreferredHeight),
@@ -144,33 +158,10 @@ function Block(element) {
 
 
 
-
-    //element.style.clipPath = "path('M 0 200 L 0,75 A 5,5 0,0,1 150,75 L 200 200 z')"
-
     new Reaction(() => {
-        if (element.Parent == undefined)
-            return
 
-        if (element.ClipByParent) {
-
+        if (element.ClipByParent && element.Parent) {
             element.style.clipPath = GetClipRect(element.Parent, element.X, element.Y, element.Width, element.Height)
-
-
-            /*let left = -element.X
-            let top = -element.Y
-            let right = -element.Parent.Width + element.Width - element.X
-            let bottom = -element.Parent.Height + element.Height - element.Y
-            let offsets = `${top}px ${right}px ${bottom}px ${left}px`
-            let round = ""
-            if (
-                element.Parent.RadiusTopLeft != undefined
-                || element.Parent.RadiusTopRight != undefined
-                || element.Parent.RadiusBottomLeft != undefined
-                || element.Parent.RadiusBottomRight != undefined
-            ) {
-                round = ` round ${element.Parent.RadiusTopLeft || 0}px ${element.Parent.RadiusTopRight || 0}px ${element.Parent.RadiusBottomRight || 0}px ${element.Parent.RadiusBottomLeft || 0}px`
-            }
-            element.style.clipPath = `inset(${offsets}${round})`*/
         } else {
             element.style.clipPath = ""
         }
@@ -188,7 +179,16 @@ function Block(element) {
     element.Events.MouseEnter = () => element.Hover = true
     element.Events.MouseLeave = () => element.Hover = false
 
+    element.HtmlNodesOrdered = new Enumerable(function* () {
+        yield* element.ExistingUnmanagedChildren
+    })
 
+    new Reaction(() => {
+        //let currentChildren =[...element.children]
+        let tergetChildren = [...element.HtmlNodesOrdered]
+
+        SyncChildren(element, tergetChildren)
+    })
     
 
 

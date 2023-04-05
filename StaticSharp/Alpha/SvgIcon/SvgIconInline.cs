@@ -1,29 +1,36 @@
-﻿using StaticSharp.Gears;
+﻿using AngleSharp.Dom;
+using ColorCode.Compilation.Languages;
+using NUglify.Html;
+using Scopes;
+using StaticSharp.Gears;
 using StaticSharp.Html;
 using System.Runtime.CompilerServices;
-
+using System.Xml;
 
 namespace StaticSharp {
 
     namespace Js {
         public interface SvgIconInline: Block, SvgIcon {
-            public double BaselineOffset  { get; } 
+            //public double BaselineOffset  { get; } 
         }
     }
 
     namespace Gears {
         public class SvgIconInlineBindings<FinalJs> : SvgIconBindings<FinalJs> {
-            public Binding<double> BaselineOffset { set { Apply(value); } }
+            //public Binding<double> BaselineOffset { set { Apply(value); } }
         }
     }
 
     [Mix(typeof(SvgIconInlineBindings<Js.SvgIconInline>))]
     [Mix(typeof(InlineBindings<Js.SvgIconInline>))]
-    [ConstructorJs("SvgIcon")]
+    [RelatedScript("SvgIcon")]
     [ConstructorJs]
     public partial class SvgIconInline : Inline {
 
         SvgIcons.Icon icon;
+
+        public double BaselineOffset { get; set; } = 0.14;
+
         public double Scale { get; set; } = 1;
         public SvgIconInline(SvgIcons.Icon icon, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) : base(callerLineNumber, callerFilePath) {
             this.icon = icon;
@@ -34,19 +41,47 @@ namespace StaticSharp {
             Scale = other.Scale;
         }
 
-        protected override void ModifyHtml(Context context, Tag elementTag) {
+
+        public override void ModifyTagAndScript(Context context, Tag tag, Group script) {
+            base.ModifyTagAndScript(context, tag, script);
+
+            tag.Style["display"] = "inline-block";
+
+            tag.Style["width"] = $"{Scale * icon.Height / icon.Width}em";
+            tag.Style["height"] = $"1em";
+            tag.Style["transform"] = $"scale(1,{Scale}) translate(0, {BaselineOffset*100}%)";
+            tag.Style["transform-origin"] = "bottom";
 
             var code = icon.GetSvg();
-            elementTag["data-width"] = icon.Width;
-            elementTag["data-height"] = icon.Height;
-            if (Scale != 1) {
-                elementTag["data-scale"] = Scale;
+            XmlDocument xml = new XmlDocument();
+            xml.LoadXml(code);
+
+            //scale(0.5) translate(-100%, -100%)
+
+            var content = new Tag(xml.DocumentElement.Name);
+            XmlAttributeCollection attributes = xml.DocumentElement.Attributes;
+            foreach (XmlAttribute a in attributes) {
+                content.Attributes.Add(a.Name, a.Value);
             }
+            content.Add(new PureHtmlNode(xml.InnerXml));
+            content.Style["display"] = "block";
+            content.Style["position"] = "relative";
+            content.Style["transform"] = $"scale(1, {1/ Scale})";
+            content.Style["transform-origin"] = "top";
 
-            elementTag.Add(new PureHtmlNode(code));
-            elementTag.Add(CreateScript_AssignPreviousTagToParentProperty("content"));
 
-            base.ModifyHtml(context, elementTag);
+            tag.Add(content);
+
+
+
+
+
+            /*script.Add($"{tag.Id}.width = {icon.Width}");
+            script.Add($"{tag.Id}.height = {icon.Height}");
+            script.Add($"{tag.Id}.scale = {Scale}");*/
+
+
+
         }
 
 

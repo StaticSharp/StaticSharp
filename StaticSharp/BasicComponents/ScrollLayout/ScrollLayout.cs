@@ -10,7 +10,7 @@ namespace StaticSharp {
 
     namespace Js {
         public interface ScrollLayout : Block {
-            public Block Content { get; }
+            public Block Child { get; }
             public double ScrollX  { get; }
             public double ScrollY  { get; }
             public double ScrollXActual  { get; }
@@ -31,24 +31,35 @@ namespace StaticSharp {
     [Mix(typeof(ScrollLayoutBindings<Js.ScrollLayout>))]
     [ConstructorJs]
     public partial class ScrollLayout : Block {
-        public required Block Content { get; set; }
+
+        [Socket]
+        public required Block Child { get; set; }
         public ScrollLayout(ScrollLayout other, int callerLineNumber, string callerFilePath)
             : base(other, callerLineNumber, callerFilePath) {
-            Content = other.Content;
+            Child = other.Child;
         }
         public ScrollLayout([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
 
-        
+        public virtual ScrollLayout Assign(out Js.Variable<Js.ScrollLayout> variable, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")// where T : Hierarchical where JsT : Js.Hierarchical 
+        {
+            variable = new(callerLineNumber, callerFilePath);
+            return Assign(variable);
+        }
+        public ScrollLayout Assign(Js.Variable<Js.ScrollLayout> variable) {
+            if (VariableNames == null) VariableNames = new();
+            VariableNames.Add(variable.Name);
+            return this;
+        }
 
 
-        protected override void ModifyHtml(Context context, Tag elementTag) {
+        /*protected override void ModifyHtml(Context context, Tag elementTag) {
 
-            elementTag.Add(CreateScript_SetCurrentSocket("Content"));
-            elementTag.Add(Content.GenerateHtml(context));
+            elementTag.Add(CreateScript_SetCurrentSocket("Child"));
+            elementTag.Add(Child.GenerateHtml(context));
 
 
             base.ModifyHtml(context, elementTag);
-        }
+        }*/
 
     }
 

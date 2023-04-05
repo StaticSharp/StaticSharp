@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    namespace Js {
+    /*namespace Js {
         public interface CheckboxBlock: Checkbox, Block {
         }
     }
@@ -29,7 +29,7 @@ namespace StaticSharp {
             );
             base.ModifyHtml(context, elementTag);
         }        
-    }
+    }*/
 
 
 

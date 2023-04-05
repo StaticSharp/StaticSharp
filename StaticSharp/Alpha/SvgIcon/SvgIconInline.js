@@ -6,41 +6,21 @@ function SvgIconInline(element) {
         BaselineOffset: 0.14
     }
 
-    let width = Number(element.dataset.width)
-    let height = Number(element.dataset.height)
-
-    let scale = Number(element.dataset.scale || 1)
-
-    element.style.display = "inline-block"
-    element.style.verticalAlign = "baseline"
-
-    element.style.width = `${scale * height / width}em`//width + "px"
-    element.style.height = "1em"
-
-    element.style.overflow = "visible"
-    //element.style.backgroundColor = "burlywood"
-
-
-    element.HtmlNodesOrdered = new Enumerable(function* () {
-        yield element.content
-        yield* element.UnmanagedChildren
-    })
-
-    element.AfterChildren = () => {
-        let content = element.content
-        content.style.display = "block"
-        content.style.position = "relative"
-        content.style.height = scale + "em"
-
-        
-    }
-
+    let content = element.children[0]
+    /*content.style.display = "block"
+    content.style.position = "relative"
+    content.style.transform = `scale(1,0.5)`
+    content.style.transformOrigin = "top";*/
 
     new Reaction(() => {
-        let content = element.content
         let baselineOffset = element.BaselineOffset
+        //element.style.transform = `scale(1,2)`
 
-        content.style.top = `${1 - (1-baselineOffset)*scale}em`
+        //element.style.transform = `translate(0, ${100*baselineOffset + "%"})`
+
+        //content.style.top = `${1 - (1 - baselineOffset) * element.scale}em`
+        //console.log("element.scale", element.scale)
+        //element.style.height = `${element.scale}em`
     })
 
 

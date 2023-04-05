@@ -29,9 +29,8 @@ namespace StaticSharp {
             public bool ClipByParent { get; }
 
             public new Block Parent { get; }
-            public new Block NextSibling { get; }
-            public new Js.Enumerable<Block> Siblings { get; }
-            public new Js.Enumerable<Block> UnmanagedChildren { get; }
+            public Block NextSibling { get; }
+            public Js.Enumerable<Block> UnmanagedChildren { get; }
         }
     }
 
@@ -87,7 +86,7 @@ namespace StaticSharp {
 
     }
 
-
+    //[Mix(typeof(AssignMixin<Block, Js.Block>))]
     [Mix(typeof(BlockBindings<Js.Block>))]
     [ConstructorJs]
     
@@ -95,7 +94,6 @@ namespace StaticSharp {
         //public virtual List<Modifier> Modifiers { get; } = new();
         [Socket]
         public virtual Blocks UnmanagedChildren { get; } = new();
-        //public Block? Overlay;
 
         protected Block(Block other,
             int callerLineNumber = 0,
@@ -105,17 +103,9 @@ namespace StaticSharp {
         }
         public Block([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
 
+        
 
-        protected override void ModifyHtml(Context context, Tag elementTag) {
-            
-            var array = UnmanagedChildren.ToArray();
-            if (array.Length > 0) {
-                elementTag.Add(CreateScript_SetCurrentSocket("UnmanagedChildrenFirst"));
-                elementTag.Add(UnmanagedChildren.GenerateHtml(context));
-            }
 
-            base.ModifyHtml(context, elementTag);
-        }
     }
 
     public static partial class Static {

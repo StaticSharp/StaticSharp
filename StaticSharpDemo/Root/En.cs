@@ -45,7 +45,7 @@ namespace StaticSharpDemo.Root {
             ) {
                 return new LayoutOverride
                     {
-                        Content = new Block(callerLineNumber, callerFilePath)
+                        Child = new Block(callerLineNumber, callerFilePath)
                             {
                                 MarginsVertical = 75,
                                 Height = new(x => 1 / Js.Window.DevicePixelRatio),
@@ -53,7 +53,7 @@ namespace StaticSharpDemo.Root {
                                 Visibility = 0.5
                             },
                         OverrideX = new(e => Js.Math.First(e.MarginLeft, 0)),
-                        OverrideWidth = new(e => Js.Math.Sum(e.Parent.Width, -e.Content.GetLayer().MarginLeft, -e.Content.GetLayer().MarginRight))
+                        OverrideWidth = new(e => Js.Math.Sum(e.Parent.Width, -e.Child.GetLayer().MarginLeft, -e.Child.GetLayer().MarginRight))
                 };
         }
 
@@ -98,10 +98,7 @@ namespace StaticSharpDemo.Root {
             $"This is compile time error {new Block{ BackgroundColor = Color.Red}}",*/
             "Welcome to StaticSharp! We believe in getting right to the point, so here is the code from this very page.",
 
-            CodeBlockScrollable(LoadFile(ThisFilePath()).GetCodeRegion("codeExample").Highlight())
-            .Modify(x=>{
-                x.Width = new(e=>Js.Math.Min(e.InternalWidth, e.Parent.Width));
-            }).CenterHorizontally(),
+            CodeBlockScrollable(LoadFile(ThisFilePath()).GetCodeRegion("codeExample").Highlight()),
 
             Separator(),
 
@@ -119,11 +116,10 @@ namespace StaticSharpDemo.Root {
                 MarginLeft = new(e=>e.Parent.PaddingLeft),
                 MarginRight = new(e=>e.Parent.PaddingRight),
                 MarginsVertical = 75,
-                PrimaryGravity = null,
                 Children = {
                     new LinearLayout(){
                         ItemGrow = 0,
-                        Width = new(e=>e.Parent.Width * 0.1),
+                        Width = new(e=>e.Parent.Width * 0.5),
                         MarginLeft = 10,
                         MarginRight = 10,
                         MarginTop = 60,
@@ -138,8 +134,8 @@ namespace StaticSharpDemo.Root {
                         }
                     },
                     new Image("StackoverflowKeyboard.svg"){
-                        Width = new(e=>e.Parent.Width * 0.1),
-                        Height = 400,
+                        Width = new(e=>e.Parent.Width * 0.5),
+                        Height = new(e=>Js.Math.Min(e.Width/e.Aspect, 400)),
                         Margins = 75,
                         Embed = Image.TEmbed.Image,
                         Fit = Fit.Inside

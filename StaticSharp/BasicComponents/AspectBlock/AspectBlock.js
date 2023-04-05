@@ -1,27 +1,29 @@
 function AspectBlock(element) {
     Block(element)
 
-    let nativeWidth = Number(element.dataset.width)
-    let nativeHeight = Number(element.dataset.height)
-
-    let nativeAspect = nativeWidth / nativeHeight
-
     element.Reactive = {
 
-        Aspect: nativeAspect,
-        /*InternalWidth*/ Width: () => First(element.Height * element.Aspect, nativeWidth),
-        /*InternalHeight*/ Height: () => First(element.Width / element.Aspect, nativeHeight),
+        NativeWidth: undefined,
+        NativeHeight: undefined,
+        NativeAspect: e => e.NativeWidth / e.NativeHeight,
+
+        Aspect: e => e.NativeAspect,
+        Width: () => First(element.Height * element.Aspect, element.NativeWidth),
+        Height: () => First(element.Width / element.Aspect, element.NativeHeight),
 
         Fit: "Inside",
         GravityVertical: 0,
         GravityHorizontal: 0,
     }
 
-
+    element.HtmlNodesOrdered = new Enumerable(function* () {
+        yield element.content
+        yield* element.UnmanagedChildren
+    })
 
 
     new Reaction(() => {
-        let content = element.children[0]
+        let content = element.content
 
         if (element.Fit == "Stretch") {
 
@@ -39,7 +41,7 @@ function AspectBlock(element) {
             
 
             let sign = (element.Fit == "Inside") ? 1 : -1
-
+            let nativeAspect = element.NativeAspect
             if (sign * realAspect < sign * nativeAspect) {
                 contentHeight = contentWidth / nativeAspect
                 y = (element.Height - contentHeight) * (0.5 * sign * element.GravityVertical + 0.5)

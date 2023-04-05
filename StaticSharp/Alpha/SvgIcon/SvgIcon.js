@@ -1,5 +1,6 @@
 function SvgIcon(element) {
 
+
     element.Reactive = {
         StrokeColor: undefined,
         StrokeWidth : undefined,

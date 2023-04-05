@@ -60,7 +60,7 @@ namespace StaticSharp {
         public MenuResponsive([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
             : base(callerLineNumber, callerFilePath) { }
 
-        protected override void ModifyHtml(Context context, Tag elementTag) {
+        /*protected override void ModifyHtml(Context context, Tag elementTag) {
 
             var logo = Logo;
             if (logo != null) {
@@ -75,6 +75,6 @@ namespace StaticSharp {
             elementTag.Add(Dropdown.GenerateHtml(context));
 
             base.ModifyHtml(context, elementTag);
-        }
+        }*/
     }
 }

@@ -44,11 +44,11 @@ namespace StaticSharpDemo.Root.Components.ParagraphComponent {
             H3("Code"),
 
 
-            $"text with {Code("code inline")}",
+            /*$"text with {Code("code inline")}",
             new Paragraph($"text with {Code("code inline")}"){ 
                 ForegroundColor = Color.LightBlue,
                 BackgroundColor = Color.DarkBlue
-            },
+            },*/
 
             H3("Background"),
 
@@ -95,19 +95,33 @@ namespace StaticSharpDemo.Root.Components.ParagraphComponent {
                 BackgroundColor = Color.MediumPurple,
             }.FillWidth().InheritHorizontalPaddings(),
 
-            new Paragraph("""
-                PaddingLeft = new(e=>Js.Math.Max(e.Parent.PaddingLeft, 20)),
-                PaddingRight = new(e=>Js.Math.Max(e.Parent.PaddingRight, 20)),
-                Resize to see difference with previous
-                """){
-                PaddingLeft = new(e=>Js.Math.Max(e.Parent.PaddingLeft, 10)),
-                PaddingRight = new(e=>Js.Math.Max(e.Parent.PaddingRight, 10)),
-                BackgroundColor = Color.BlueViolet,
-            }.FillWidth(),
 
-            Enumerable.Range(0,1000).Select(x=>
-                new Paragraph($"Paragraph #{x}"){ }
-            ),
+            new LayoutOverride{ 
+                Child = new Paragraph("""
+                    PaddingLeft = new(e=>Js.Math.Max(e.Parent.PaddingLeft, 20)),
+                    PaddingRight = new(e=>Js.Math.Max(e.Parent.PaddingRight, 20)),
+                    Resize to see difference with previous
+                    """){
+                    PaddingLeft = new(e=>Js.Math.Max(e.Parent.Parent.PaddingLeft, 10)),
+                    PaddingRight = new(e=>Js.Math.Max(e.Parent.Parent.PaddingRight, 10)),
+                    BackgroundColor = Color.BlueViolet,
+                },
+                OverrideX = 0,
+                OverrideWidth = new(e=>e.Parent.Width)
+
+            },
+
+
+            
+
+            /*Enumerable.Range(0,1000).Select(x=>
+                new Block{ 
+                    Width = 10+x,
+                    Height = 10+x,
+                    BackgroundColor = Color.FromGrayscale(x%4*0.2)
+                }
+                //new Paragraph($"Paragraph #{x}"){ }
+            ),*/
 
         };
     }

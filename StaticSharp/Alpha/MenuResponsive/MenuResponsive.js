@@ -78,7 +78,6 @@ function MenuResponsive(element) {
 
 
     let baseHtmlNodesOrdered = element.HtmlNodesOrdered
-
     element.HtmlNodesOrdered = new Enumerable(function* () {
         let logo = element.Logo
         if (logo && logo.Exists)

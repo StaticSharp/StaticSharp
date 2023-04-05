@@ -10,17 +10,22 @@ namespace StaticSharp {
     public class Text : CallerInfo, IInline {
 
         public string Value { get; set; }
-        public bool Formatting { get; }
+        //public bool Formatting { get; }
 
-        public Text(string text, bool formatting = true, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
+        public Text(string text, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
             : base(callerLineNumber, callerFilePath) {
 
             Value = text.Replace("\r\n", "\n").Replace("\r", "\n");
-            Formatting = formatting;
         }        
 
-        public Tag GenerateHtml(Context context) {
-            
+
+
+        public string GetPlainText(Context context) {
+            return Value;
+        }
+
+        public TagAndScript Generate(Context context) {
+
             var chars = Value.ToPrintableChars();
             HashSet<string> families = new();
             foreach (var fontFamilyGenome in context.FontFamilies) {
@@ -38,9 +43,9 @@ namespace StaticSharp {
                     break;
             }
 
-            
 
-            if (!Formatting) {
+
+            /*if (!Formatting) {
                 return new Tag() { Value };
             }
 
@@ -52,12 +57,12 @@ namespace StaticSharp {
             int start = 0;
             int length = 0;
 
-            for (int i = 0; i<Value.Length; i++ ) { 
+            for (int i = 0; i < Value.Length; i++) {
                 var c = Value[i];
                 if (specialCharacters.TryGetValue(c, out var action)) {
-                    if (length!=0)
+                    if (length != 0)
                         result.Add(Value.Substring(start, length));
-                    start = i+1;
+                    start = i + 1;
                     length = 0;
                     action(result);
                 } else {
@@ -65,14 +70,10 @@ namespace StaticSharp {
                 }
             }
             if (length != 0)
-                result.Add(Value.Substring(start, length));
+                result.Add(Value.Substring(start, length));*/
 
-            return result;
+            return new TagAndScript(new Tag() { Value }, null);
 
-        }
-
-        public string GetPlainText(Context context) {
-            return Value;
         }
     }
 }

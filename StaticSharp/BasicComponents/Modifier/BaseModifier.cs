@@ -1,4 +1,6 @@
-﻿using ImageMagick;
+﻿using ColorCode.Styling;
+using ImageMagick;
+using Scopes;
 using StaticSharp.Gears;
 using StaticSharp.Html;
 using System;
@@ -58,6 +60,11 @@ namespace StaticSharp {
         [ConstructorJs]
         public abstract partial class BaseModifier: Hierarchical {
 
+            protected override string TagName => IsLink? "a" : base.TagName;
+
+
+            private bool IsLink => InternalLink != null || ExternalLink != null;
+
             public string? ExternalLink { get; set; }
             public Tree.Node? InternalLink { get; set; }
             public bool OpenLinksInANewTab { get; set; }
@@ -106,27 +113,49 @@ namespace StaticSharp {
                 }
             }
 
-            public override Tag GenerateHtml(Context context) {
+
+            public override void ModifyTagAndScript(Context context, Tag tag, Group script) {
+                base.ModifyTagAndScript(context, tag, script);
+                
                 var url = GetUrl(context);
-                if (url == null) {
-                    return base.GenerateHtml(context);
-                } else {
-                    return new Tag("a") {
-                        ["href"] = url,
-                        ["target"] = OpenLinksInANewTab ? "_blank" : "_self",
-                        Style = {
-                            ["display"] = "contents",
-                        },
-                        Children = {
-                            base.GenerateHtml(context)
-                        }
-                    };
+                if (url != null) {
+                    tag.Name = "a";
+                    tag["href"] = url;
+                    tag["target"] = OpenLinksInANewTab ? "_blank" : "_self";
+                    //tag.Style["display"] = "contents";
+
                 }
+
+                if (Tooltip != null) {
+                    tag["title"] = Tooltip;
+                }
+
+                if (LineHeight != null) {
+                    tag.Style["line-height"] = LineHeight;
+                }
+
+                if (LetterSpacing != null) {
+                    tag.Style["letter-spacing"] = LetterSpacing + "em";
+                }
+
+                if (fontFamilies != null) {
+                    tag.Style["font-family"] = string.Join(',', fontFamilies.Select(x => x.Name));
+                }
+
+                if (Weight != null) {
+                    tag.Style["font-weight"] = (int)Weight.Value;
+                }
+
+                if (Italic != null) {
+                    tag.Style["font-style"] = Italic.Value ? "italic" : "normal";
+                }
+
             }
 
 
-
             protected override Context ModifyContext(Context context) {
+                context = base.ModifyContext(context);
+
                 if (fontFamilies != null) {
                     context.FontFamilies = fontFamilies;
                 }
@@ -146,40 +175,6 @@ namespace StaticSharp {
                 return context;
             }
 
-            protected override void ModifyHtml(Context context, Tag elementTag) {
-                //protected void ModifyTag(Tag tag) {
-                /*if (Url != null) {
-                    tag.Name = "a";
-                    tag["href"] = Url;
-                }*/
-
-                if (Tooltip != null) {
-                    elementTag["title"] = Tooltip;
-                }
-
-                if (LineHeight != null) {
-                    elementTag.Style["line-height"] = LineHeight;
-                }
-
-                if (LetterSpacing != null){
-                    elementTag.Style["letter-spacing"] = LetterSpacing+"em";
-                }
-
-                if (fontFamilies != null) {
-                    elementTag.Style["font-family"] = string.Join(',', fontFamilies.Select(x => x.Name));
-                }
-
-                if (Weight != null) {
-                    elementTag.Style["font-weight"] = (int)Weight.Value;
-                }
-
-                if (Italic != null) {
-                    elementTag.Style["font-style"] = Italic.Value ? "italic" : "normal";
-                }
-
-
-                base.ModifyHtml(context, elementTag);
-            }
 
         }
     }

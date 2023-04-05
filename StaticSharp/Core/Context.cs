@@ -56,10 +56,10 @@ namespace StaticSharp {
 
 
         public Ref<int> nextIdNumber;
-        public int CreateId() {
+        public string CreateId() {
             //var result = $"luid{nextIdNumber}";
-            nextIdNumber.Value++;
-            return nextIdNumber.Value;
+            //nextIdNumber.Value++;
+            return "v"+nextIdNumber.Value++;
         }
 
 

@@ -1,5 +1,5 @@
-﻿using StaticSharp.Gears;
-using System.Linq;
+﻿using System.Linq;
+using StaticSharp.Gears;
 
 namespace StaticSharpDemo.Root {
     public abstract partial class Page : StaticSharp.Page {
@@ -13,6 +13,7 @@ namespace StaticSharpDemo.Root {
             FontSize = 18;
             FontFamilies = new() { "Inter" };
             Weight = FontWeight.Light;
+            //TextDecorationColor = Color.Blue;
         }
 
 
@@ -39,7 +40,7 @@ namespace StaticSharpDemo.Root {
             VirtualNode.GetAllParallelNodes().Select(
                 x=>new Paragraph{
                     Inlines = {
-                        new Inline(x.Language.ToString()){
+                        new InlineGroup(x.Language.ToString()){
                             InternalLink = x
                         }
                     }
@@ -110,14 +111,16 @@ namespace StaticSharpDemo.Root {
 
         public virtual double ColumnWidth => 1080;
 
-        public override Blocks UnmanagedChildren => new Blocks { // for top level element Width must be set/overriden (e.g. FillWidth), otherwise - recursive binding
+        Js.Variable<Js.ScrollLayout> MainScrollLayout = new();
+
+        public override Blocks UnmanagedChildren => new Blocks {
             new ScrollLayout {
                 Width = new(e=>e.Parent.Width),
                 Height = new(e=>e.Parent.Height),
                 ScrollY = new(e=>Js.Storage.Restore("MainScroll_"+string.Join("-",VirtualNode.Path), () => e.ScrollYActual)),
                 //FontSize = new(e =>Js.Math.First( Js.Storage.Restore("FontSize", () => 10)),
                 
-                Content = new LinearLayout{
+                Child = new LinearLayout{
                     Width = new(e=>e.Parent.Width),
 
                     ItemGrow = 0,
@@ -125,18 +128,30 @@ namespace StaticSharpDemo.Root {
                     Gap = 0,
                     Children = {
                         new LinearLayout{
-                            PaddingsHorizontal = new(e=>Js.Math.Max(e.Parent.Width-ColumnWidth , 0)/2),
+                            //Width = new(e=>e.Parent.Width),
+                            PaddingsHorizontal = new(e=>Js.Math.Max(e.Width-ColumnWidth , 0)/2),
                             Children = {
                                 Menu,
                                 Content,
                             }
-                        }.FillWidth(),
+                        },
 
                         Footer,
                     }
                 }
+            }.Assign(MainScrollLayout),
 
+            new SvgIconBlock(SvgIcons.MaterialDesignIcons.ArrowUp){ 
+                Radius = new(e=>e.Width*0.5),
+                Visibility = 0.2,
+                BackgroundColor = Color.LightGray,
+                Exists = new(e=>MainScrollLayout.Value.ScrollYActual > 100),
+                X = new (e=>e.Parent.Width-e.Width - 10),
+                Y = new (e=>e.Parent.Height-e.Height - 10),
+                Width = 64,
+                Height = 64,
             }
+
         };
     }
 }

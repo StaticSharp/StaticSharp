@@ -54,7 +54,7 @@ function Video(element) {
     var sourcesJson = element.dataset.sources.replace(/'/g, '"');// replaceAll("'", '"');
     var sources = JSON.parse(sourcesJson)
 
-
+    //console.log("Video", element.content)
 
     element.Reactive = {
         Selectable: false,
@@ -169,7 +169,7 @@ function Video(element) {
     })
 
 
-    function FitOutside(child, childAspect, parentWidth, parentHeight) {
+    /*function FitOutside(child, childAspect, parentWidth, parentHeight) {
 
     }
 
@@ -201,7 +201,7 @@ function Video(element) {
             return
 
         FitInside(positioner, element.Aspect, element.Width, element.Height)        
-    })
+    })*/
 
 
     function InitializeYoutubeIFrame() {
@@ -211,14 +211,14 @@ function Video(element) {
 
         element.VideoPlayerType = "youtube"
 
-        var positioner = document.createElement("youtube-iframe-positioner");
+        /*var positioner = document.createElement("youtube-iframe-positioner");
         element.appendChild(positioner);
-        element.Positioner = positioner
+        element.Positioner = positioner*/
 
         var iframe = document.createElement("div");
         iframe.id = getUniqueID();
 
-        positioner.appendChild(iframe);
+        element.content.appendChild(iframe);
         iframe.style.width = "100%"
         iframe.style.height = "100%"
 
@@ -305,7 +305,7 @@ function Video(element) {
             playerDestructor = undefined
 
             player.destroy()
-            element.removeChild(positioner)
+            //element.removeChild(positioner)
 
             let d = Reaction.beginDeferred()
             element.Player = undefined
@@ -323,8 +323,10 @@ function Video(element) {
         }
 
         let player = document.createElement("video")
-        element.appendChild(player)
-        element.Positioner = player
+        player.style.width = "100%"
+        player.style.height = "100%"
+        element.content.appendChild(player)
+        //element.Positioner = player
 
         player.src = sources[1].url
         player.muted = true

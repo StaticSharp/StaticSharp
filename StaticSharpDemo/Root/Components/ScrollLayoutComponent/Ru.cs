@@ -15,7 +15,7 @@ namespace StaticSharpDemo.Root.Components.ScrollLayoutComponent {
         public override Blocks? Content => new() { 
             new ScrollLayout(){ 
                 Height = 300,
-                Content = new SvgIconBlock(SvgIcons.MaterialDesignIcons.Carrot){
+                Child = new SvgIconBlock(SvgIcons.MaterialDesignIcons.Carrot){
                     Width = 1024,
                     BackgroundColor = Color.MediumPurple,
                 }                
@@ -26,7 +26,7 @@ namespace StaticSharpDemo.Root.Components.ScrollLayoutComponent {
                 Height = 200,
                 Paddings = 20,
                 BackgroundColor = Color.Pink,
-                Content = new SvgIconBlock(SvgIcons.MaterialDesignIcons.Carrot){
+                Child = new SvgIconBlock(SvgIcons.MaterialDesignIcons.Carrot){
                     Width = 1024,
                     BackgroundColor = Color.MediumPurple,
                 }
@@ -43,7 +43,7 @@ namespace StaticSharpDemo.Root.Components.ScrollLayoutComponent {
                         Paddings = 20
                     }
                 },
-                Content = new Paragraph($"""
+                Child = new Paragraph($"""
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu mattis erat, vel rutrum orci. Integer eu tincidunt nisl, et eleifend nisl. Cras imperdiet suscipit mi, et tempus erat tristique vel. Pellentesque ornare, diam at imperdiet fermentum, augue velit rhoncus nunc, vehicula auctor augue turpis ac nunc. Sed faucibus lectus malesuada commodo mattis. Mauris dignissim purus vitae libero condimentum, vitae placerat quam sodales. Etiam ut erat eu nisi dignissim venenatis vitae vel enim.
                     In vitae nibh quis nunc luctus scelerisque. Vivamus molestie porta orci, eget vestibulum tortor cursus nec. Praesent sed volutpat sapien, nec maximus nisi. Donec congue ultrices convallis. Etiam nec sapien vel sem eleifend convallis. Vivamus gravida, diam ac dignissim condimentum, tortor libero hendrerit nulla, vel rhoncus tellus risus ultricies nunc. In maximus auctor tempus. Aenean consequat ipsum vel tortor consectetur cursus. Maecenas sit amet ornare leo. Quisque vitae lacus efficitur, efficitur magna eu, sollicitudin ante. Mauris vulputate eleifend nisi eu laoreet. Sed sit amet lectus eu turpis pharetra faucibus in vitae massa. Integer elementum interdum leo a ullamcorper.
                     Aenean sed erat efficitur, lobortis tortor vitae, maximus est. Phasellus id velit ut arcu gravida vulputate. Fusce sit amet turpis iaculis, posuere neque in, bibendum massa. Praesent fringilla dolor a vulputate feugiat. Maecenas velit sem, aliquet non tempus vitae, vulputate at felis. Pellentesque a erat at sapien molestie accumsan eget scelerisque arcu. In hendrerit ornare tortor sed vulputate.
@@ -56,7 +56,7 @@ namespace StaticSharpDemo.Root.Components.ScrollLayoutComponent {
 
             new ScrollLayout(){
                 Height = 200,
-                Content = new Paragraph($"""
+                Child = new Paragraph($"""
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu mattis erat, vel rutrum orci. Integer eu tincidunt nisl, et eleifend nisl. Cras imperdiet suscipit mi, et tempus erat tristique vel. Pellentesque ornare, diam at imperdiet fermentum, augue velit rhoncus nunc, vehicula auctor augue turpis ac nunc. Sed faucibus lectus malesuada commodo mattis. Mauris dignissim purus vitae libero condimentum, vitae placerat quam sodales. Etiam ut erat eu nisi dignissim venenatis vitae vel enim.
                     In vitae nibh quis nunc luctus scelerisque. Vivamus molestie porta orci, eget vestibulum tortor cursus nec. Praesent sed volutpat sapien, nec maximus nisi. Donec congue ultrices convallis. Etiam nec sapien vel sem eleifend convallis. Vivamus gravida, diam ac dignissim condimentum, tortor libero hendrerit nulla, vel rhoncus tellus risus ultricies nunc. In maximus auctor tempus. Aenean consequat ipsum vel tortor consectetur cursus. Maecenas sit amet ornare leo. Quisque vitae lacus efficitur, efficitur magna eu, sollicitudin ante. Mauris vulputate eleifend nisi eu laoreet. Sed sit amet lectus eu turpis pharetra faucibus in vitae massa. Integer elementum interdum leo a ullamcorper.
                     Aenean sed erat efficitur, lobortis tortor vitae, maximus est. Phasellus id velit ut arcu gravida vulputate. Fusce sit amet turpis iaculis, posuere neque in, bibendum massa. Praesent fringilla dolor a vulputate feugiat. Maecenas velit sem, aliquet non tempus vitae, vulputate at felis. Pellentesque a erat at sapien molestie accumsan eget scelerisque arcu. In hendrerit ornare tortor sed vulputate.

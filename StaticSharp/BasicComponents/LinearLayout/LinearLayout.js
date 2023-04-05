@@ -77,18 +77,21 @@ function LinearLayout(element) {
         console.log(element.ItemGrow)
     })*/
 
-    new Reaction(() => {
-        var names = new LayoutPropertiesNames(!element.Vertical)
+    new Reaction(() => {       
 
-        var internalSize = element.SecondarySize
+        var secondarySize = element.SecondarySize
+        if (secondarySize == undefined)
+            return
+
+        var names = new LayoutPropertiesNames(!element.Vertical)
 
         if (element.SecondaryGravity == undefined) {
             for (let child of element.OrderedChildren) {
                 let firstOffset = CalcOffset(element, child, names.side[0])
                 let lastOffset = CalcOffset(element, child, names.side[1])
-
+                let size = secondarySize - firstOffset - lastOffset
                 child.Layer[names.cordinate] = firstOffset
-                child.Layer[names.dimension] = internalSize - firstOffset - lastOffset                
+                child.Layer[names.dimension] = size               
             }
         } else {
             for (let child of element.OrderedChildren) {
@@ -96,7 +99,7 @@ function LinearLayout(element) {
                 let lastOffset = CalcOffset(element, child, names.side[1])
 
                 let childSize = child.Layer[names.dimension]
-                let availableSize = internalSize - firstOffset - lastOffset
+                let availableSize = secondarySize - firstOffset - lastOffset
                 let extraPixels = availableSize - childSize
 
                 if (extraPixels > 0) {
@@ -104,6 +107,8 @@ function LinearLayout(element) {
                 } else {
                     childSize = availableSize
                 }
+
+                
 
                 child.Layer[names.cordinate] = firstOffset
                 child.Layer[names.dimension] = childSize
@@ -114,6 +119,9 @@ function LinearLayout(element) {
 
 
     new Reaction(() => {
+
+        if (element.PrimarySize == undefined)
+            return
 
         let children = element.OrderedChildren
         var names = new LayoutPropertiesNames(element.Vertical)
@@ -160,7 +168,7 @@ function LinearLayout(element) {
                 size = size + itemGrow * pixelPerUnit
                     
                 let position = region.border[0].Shift(child, size)
-
+                
                 child.Layer[names.cordinate] = position
                 child.Layer[names.dimension] = size
 

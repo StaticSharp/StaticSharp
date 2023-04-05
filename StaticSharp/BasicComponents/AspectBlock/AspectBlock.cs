@@ -1,4 +1,6 @@
-﻿using StaticSharp.Gears;
+﻿using Scopes;
+using StaticSharp.Gears;
+using StaticSharp.Html;
 using System.Runtime.CompilerServices;
 
 namespace StaticSharp {
@@ -34,6 +36,13 @@ namespace StaticSharp {
     public partial class AspectBlock : Block {
         public AspectBlock(AspectBlock other, int callerLineNumber, string callerFilePath): base(other, callerLineNumber, callerFilePath) {}
         public AspectBlock([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {}
+
+        protected static void SetNativeSize(Scopes.Group script, string elementVariableName, double width, double height) {
+            script.Add($"{elementVariableName}.NativeWidth = {width}");
+            script.Add($"{elementVariableName}.NativeHeight = {height}");
+        }
+
+
 
     }
 

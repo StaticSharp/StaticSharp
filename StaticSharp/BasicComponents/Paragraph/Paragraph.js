@@ -2,7 +2,7 @@ function Paragraph(element) {
 
     Block(element)
 
-    CreateSocket(element, "FirstInline", element)
+    //CreateSocket(element, "FirstInline", element)
 
     element.Reactive = {
         Selectable: true,
@@ -13,11 +13,12 @@ function Paragraph(element) {
         Width: e => e.InternalWidth,
         Height: e => e.InternalHeight,
 
-        MaxContentWidth: undefined,
-        MinContentWidth: undefined,
 
-        MaxContentHeight: undefined,
-        MinContentHeight: undefined,
+        MaxContentWidth:  e => e.HierarchyFontSize / Paragraph.testFontSize * e.inlineContainer.maxWidth,
+        MinContentWidth:  e => e.HierarchyFontSize / Paragraph.testFontSize * e.inlineContainer.minWidth,
+        MaxContentHeight: e => e.HierarchyFontSize / Paragraph.testFontSize * e.inlineContainer.maxHeight,
+        MinContentHeight: e => e.HierarchyFontSize / Paragraph.testFontSize * e.inlineContainer.minHeight,
+
 
         PaddingLeft: () => (element.BackgroundColor != undefined) ? 10 : undefined,
         PaddingRight: () => (element.BackgroundColor != undefined) ? 10 : undefined,
@@ -28,9 +29,11 @@ function Paragraph(element) {
         MarginRight: () => (element.BackgroundColor != undefined) ? 0 : 10,
         MarginTop: () => (element.BackgroundColor != undefined) ? 0 : 8,
         MarginBottom: () => (element.BackgroundColor != undefined) ? 0 : 8,
-
-
     }
+
+
+
+
 
     element.HtmlNodesOrdered = new Enumerable(function* () {
         yield element.inlineContainer
@@ -39,36 +42,8 @@ function Paragraph(element) {
 
 
 
-
-    element.AfterChildren = () => {
-
-
-        let content = element.children[0]
-
-        //content.classList.add("inline-container")
-
-        //content.style.position = "initial"
-        /*content.style.fontSize = testFontSize + "px";
-        content.style.width = "min-content"
-        var minWidthRect = content.getBoundingClientRect()
-        content.style.width = "max-content"
-        var maxWidthRect = content.getBoundingClientRect()*/
-
-
-
-        //content.style.fontSize = ""
-        //content.style.width = ""
-
-
-        element.MaxContentWidth = () =>  element.HierarchyFontSize / Paragraph.testFontSize * content.maxWidth
-        element.MinContentWidth = () =>  element.HierarchyFontSize / Paragraph.testFontSize * content.minWidth
-        element.MaxContentHeight = () => element.HierarchyFontSize / Paragraph.testFontSize * content.maxHeight
-        element.MinContentHeight = () => element.HierarchyFontSize / Paragraph.testFontSize * content.minHeight
-    }
-
-
     new Reaction(() => {
-        let content = element.children[0]
+        let content = element.inlineContainer
         /*
         Left,
         Center,
@@ -91,8 +66,13 @@ function Paragraph(element) {
 
 
     new Reaction(() => {
+
+        if (element.Width == undefined) {
+            return
+        }
+
         element.style.width = ToCssSize(element.Width)
-        let content = element.children[0]
+        let content = element.inlineContainer
         content.style.transformOrigin = ""
         content.style.transform = ""
         content.style.width = ""
@@ -102,7 +82,7 @@ function Paragraph(element) {
 
         let minContentWidthWithPaddings = Sum(element.MinContentWidth, element.PaddingLeft, element.PaddingRight)
 
-        if (minContentWidthWithPaddings > element.Width) {
+        if (element.Width < minContentWidthWithPaddings) {
 
             let scale = Sum(element.Width, -element.PaddingLeft, -element.PaddingRight) / element.MinContentWidth
 
@@ -122,9 +102,10 @@ function Paragraph(element) {
         let extraPixels = element.Width - maxContentWidthWithPaddings
 
         if (extraPixels > -0.001) {
-
-            element.InternalHeight = Sum(element.MinContentHeight, element.PaddingTop, element.PaddingBottom)
-
+            
+            let internalHeight = Sum(element.MinContentHeight, element.PaddingTop, element.PaddingBottom)
+            element.InternalHeight = internalHeight
+            //element.title = `InternalHeight(${internalHeight}) = ${element.MinContentHeight} + ${element.PaddingTop} + ${element.PaddingBottom}`
             if (extraPixels > 0.001) {
                 content.style.width = ToCssSize(Sum(element.Width, -element.PaddingLeft, -element.PaddingRight))
             } else {
@@ -133,7 +114,7 @@ function Paragraph(element) {
             return
         }
         
-        //console.log("Reflow", minContentWidthWithPaddings, maxContentWidthWithPaddings, element.Width)
+        //console.log("Reflow", minContentWidthWithPaddings, maxContentWidthWithPaddings, element.Width, element.inlineContainer.maxWidth)
         var rect = content.getBoundingClientRect()
         element.InternalHeight = Sum(rect.height, element.PaddingTop, element.PaddingBottom)
 
@@ -142,4 +123,4 @@ function Paragraph(element) {
     HeightToStyle(element)
 }
 
-Paragraph.testFontSize = 128
+Paragraph.testFontSize = 18

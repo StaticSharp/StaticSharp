@@ -5,6 +5,8 @@ using StaticSharp.Html;
 namespace StaticSharp
 {
     public interface IInline: IPlainTextProvider {
-        public Tag GenerateHtml(Context context);
+
+        TagAndScript Generate(Context context);
+        //Tag GenerateHtml(Context context);
     }
 }

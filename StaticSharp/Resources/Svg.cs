@@ -2,7 +2,7 @@
 using StaticSharp.Html;
 using System.Threading.Tasks;
 
-namespace StaticSharp {
+namespace StaticSharp.Gears {
 
 
     public static class Svg {

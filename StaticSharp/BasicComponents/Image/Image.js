@@ -12,10 +12,7 @@ function Image(element) {
         }
     })*/
 
-    element.HtmlNodesOrdered = new Enumerable(function* () {
-        yield element.content
-        yield* element.UnmanagedChildren
-    })
+    
 
     element.AfterChildren = function () {
         let thumbnail = element.content.querySelector("#thumbnail")

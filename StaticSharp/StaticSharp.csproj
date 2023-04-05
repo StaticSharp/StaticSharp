@@ -11,6 +11,10 @@
 		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
 
 		<WarningsAsErrors>CS0108</WarningsAsErrors><!--use the new keyword-->
+
+		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+
+
 	</PropertyGroup>
 
     <PropertyGroup>
@@ -69,7 +73,7 @@
 		<PackageReference Include="NUglify" Version="1.20.2" />-->
 		<PackageReference Include="Octokit" Version="2.0.1" />
 		<PackageReference Include="Scopes" Version="0.0.16" />
-		<PackageReference Include="StaticSharp.Javascriptifier" Version="0.1.6" />
+		<PackageReference Include="StaticSharp.Javascriptifier" Version="0.1.8" />
 		<PackageReference Include="SvgIcons" Version="0.1.7" />
 		
 		<PackageReference Include="YoutubeExplode" Version="6.2.5" />
@@ -90,6 +94,8 @@
 	<PropertyGroup>
 		<UseDebugGeneratorOutput>false</UseDebugGeneratorOutput>
 	</PropertyGroup>
+	
+	
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 	  <WarningsAsErrors>$(WarningsAsErrors);NU1605</WarningsAsErrors>
 		<!--LangVersion>preview</LangVersion-->

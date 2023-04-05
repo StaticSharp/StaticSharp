@@ -26,24 +26,24 @@ namespace StaticSharp {
         
         }
 
-        public class Element2 { 
-            public Scopes.Group? InitializationScript { get; init; }
+        public class TagAndScript { 
+            public Scopes.Group Script { get; init; }
             public Tag Tag { get; init; }            
 
-            public Element2(Tag tag, Group? initializationScript = null) {
-                InitializationScript = initializationScript;
+            public TagAndScript(Tag tag, Group? script) {
+                Script = script;
                 Tag = tag;
             }
 
-            public static Element2 Create(string className, string id, string? tagName = null) {
+            /*public static TagAndScript Create(string className, string id, string? tagName = null) {
                 if (tagName == null)
                     tagName = CaseUtils.CamelToKebab(className);
-                return new Element2(new Tag(tagName, id), new Group());
+                return new TagAndScript(new Tag(tagName, id), new Group());
             }
 
-            public static Element2 CreateScriptless(string tagName, string id) {
-                return new Element2(new Tag(tagName, id));
-            }
+            public static TagAndScript CreateScriptless(string tagName, string id) {
+                return new TagAndScript(new Tag(tagName, id));
+            }*/
 
 
         }
