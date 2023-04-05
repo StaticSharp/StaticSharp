@@ -169,7 +169,7 @@ Enumerable.prototype.Any = function (func = () => true) {
 
 
 /**
- * @param {function(R,T): TResult} func
+ * @param {function(R,T): R} func
  * @param {R} [initialValue]
  * @return {R}
  */

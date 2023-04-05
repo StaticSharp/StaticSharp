@@ -1,14 +1,6 @@
 ﻿function CreateLayer(element) {
-    //console.log("CreateLayer")
     let backupProperties = new Map()
 
-    /*let originalPropertiesView = new Proxy
-    Object.defineProperty(originalPropertiesView, "A", {
-        get: function () {
-            return "B"
-        }
-
-    })*/
 
     function createBackupProperty(property) {
         //let currentProperty = target["__" + prop]
@@ -18,7 +10,7 @@
         let backupProperty = new Property()
         backupProperty.name = "Backup_" + property.name // TODO: ???
         backupProperty.object = property.object // TODO: needed to execute binding
-        backupProperty.setValue(propertyValueOrBinding)        
+        backupProperty.setValue(propertyValueOrBinding)
 
         return backupProperty
     }
@@ -26,7 +18,7 @@
     function getBackupProperty(target, propertyName) {
         let backupProperty = backupProperties.get(propertyName)
         if (backupProperty == undefined) {
-            if (!Property.exists(target, propertyName) ) {
+            if (!Property.exists(target, propertyName)) {
                 throw new Error(`Element does not have property "${propertyName}"`)
             }
 
@@ -36,12 +28,7 @@
         return backupProperty
     }
 
-    let data = function(){        
-        /*if (!element.Layer || !element.Layer.backupProperties) {
-            // Layer could be set to element itself and has not originalProperties
-            return
-        }*/
-
+    let data = function () {
         let d = Reaction.beginDeferred()
         backupProperties.forEach(function (backupProperty, key, map) {
             let propertyValueOrBinding = backupProperty.binding ? backupProperty.binding.func : backupProperty.value
@@ -61,7 +48,7 @@
                 }*/
 
                 var backupProperty = getBackupProperty(data.element, propertyName)
-                
+
                 let value = backupProperty.getValue()
                 //console.log(value,backupProperty)
 
@@ -99,12 +86,3 @@ function ClearLayer(element) {
 
     d.end()
 }
-
-// TODO: finalize layer internface
-/*function CreateOrClearLayer(element) {
-    if (element.Layer != undefined) {
-        ClearLayer(element)
-    } else {
-        element.Layer = CreateLayer(element)  // TODO:
-    }
-}*/

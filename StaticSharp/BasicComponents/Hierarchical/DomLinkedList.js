@@ -1,6 +1,7 @@
 ﻿/**
- * @constructor - Inherits Enumerable, represents a linked list of DOM elements. Has modification methods
- * @param {Property} firstChildProperty - Name of collection property
+ * Represents a linked list of DOM elements. Has modification methods. Inherits Enumerable
+ * @constructor
+ * @param {Property} firstChildProperty - Property, containing the first element in linked list
  */
 function DomLinkedList(firstChildProperty) {
 
@@ -19,6 +20,10 @@ function DomLinkedList(firstChildProperty) {
 
 Object.setPrototypeOf(DomLinkedList.prototype, Enumerable.prototype)
 
+/**
+ * @param {number} startIndex
+ * @param {Element[]} itemsArray
+ */
 DomLinkedList.prototype.InsertRange = function (startIndex, itemsArray) {
     if (startIndex < 0) {
         throw new Error(`"startIndex" out of range : ${startIndex}`)
@@ -51,7 +56,11 @@ DomLinkedList.prototype.InsertRange = function (startIndex, itemsArray) {
     d.end()
 }
 
-
+/**
+ * @param {number} startIndex
+ * @param {number} count
+ * @return {Element[]}
+ */
 DomLinkedList.prototype.RemoveRange = function (startIndex, count) {
     if (count < 1 || startIndex < 0) {
         throw new Error(`Range to remove is out of collection range. "startIndex" : ${startIndex}, "count" : ${count}`)
@@ -90,11 +99,18 @@ DomLinkedList.prototype.RemoveRange = function (startIndex, count) {
     return itemsToRemove
 }
 
-
+/**
+ * @param {number} index
+ * @param {Element} item
+ */
 DomLinkedList.prototype.Insert = function (index, item) {
     this.InsertRange(index, [item])
 }
 
+/**
+ * @param {number} index
+ * @return {Element}
+ */
 DomLinkedList.prototype.RemoveAt = function (index) {
     var result = this.RemoveRange(index, 1)
     return result[0]
