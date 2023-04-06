@@ -18,23 +18,10 @@
 	  <None Remove="appsettings.json" />
 	</ItemGroup>
 	
-	<ItemGroup>
+	<!--<ItemGroup>
 	  <Content Include="appsettings.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
-	</ItemGroup>
-	
-	
-
-	<!--<ItemGroup>
-		<PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="3.9.0">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; native; contentfiles; analyzers; </IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
-
-	<ItemGroup Condition="!$(UseDebugGeneratorOutput)">
-
 	</ItemGroup>-->
 
   <ItemGroup>

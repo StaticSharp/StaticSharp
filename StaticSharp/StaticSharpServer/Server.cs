@@ -15,6 +15,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace StaticSharp {
 
@@ -82,7 +83,11 @@ namespace StaticSharp {
         public Task RunAsync(CancellationToken cancellationToken = default) {
 
             var builder = WebApplication.CreateBuilder();
+            builder.Logging.SetMinimumLevel(LogLevel.Warning);
+
             var app = builder.Build();
+
+
 
             foreach (var i in Urls)
                 app.Urls.Add(i.ToString());            
