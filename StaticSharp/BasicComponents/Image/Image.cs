@@ -2,6 +2,7 @@ using ImageMagick;
 using Scopes;
 using StaticSharp.Gears;
 using StaticSharp.Html;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 
@@ -35,21 +36,26 @@ namespace StaticSharp {
 
         protected override string TagName => "image-block";
 
-        protected Genome<IAsset> assetGenome;
+        public required Genome<IAsset> AssetGenome;
 
         public TEmbed Embed { get; set; } = TEmbed.Thumbnail;
 
 
         public Image(Image other, int callerLineNumber, string callerFilePath)
             : base(other, callerLineNumber, callerFilePath) {
-            assetGenome = other.assetGenome;
+            AssetGenome = other.AssetGenome;
         }
+
+        public Image([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
+        }
+
         public Image(Genome<IAsset> assetGenome, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
-            this.assetGenome = assetGenome;
+            AssetGenome = assetGenome;
         }
-        
+
+        [SetsRequiredMembers]
         public Image(string pathOrUrl, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
-            assetGenome = AssetGenome.GenomeFromPathOrUrl(pathOrUrl, callerFilePath);
+            AssetGenome = Gears.AssetGenome.GenomeFromPathOrUrl(pathOrUrl, callerFilePath);
         }
 
         /*public override void AddRequiredInclues(IIncludes includes) {
@@ -59,9 +65,9 @@ namespace StaticSharp {
         IAsset GetSource() {
             string[] webExtensions = { ".jpg", ".jpeg", ".png", ".svg" };
 
-            var source = assetGenome.Result;
+            var source = AssetGenome.Result;
             if (!webExtensions.Contains(source.Extension)) {
-                source = new JpegGenome(assetGenome).Result;
+                source = new JpegGenome(AssetGenome).Result;
             }
             return source;
         }
@@ -119,7 +125,7 @@ namespace StaticSharp {
             }
 
 
-            var thumbnail = new ThumbnailGenome(assetGenome).Result;
+            var thumbnail = new ThumbnailGenome(AssetGenome).Result;
             var thumbnailUrlBase64 = thumbnail.GetDataUrlBase64();
 
             var thumbnailSvgDefTag = Svg.InlineImage(thumbnailUrlBase64);

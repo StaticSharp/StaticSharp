@@ -154,12 +154,10 @@ namespace StaticSharp {
                     continue;
 
                 if (value is Hierarchical hierarchical) {
-
                     var item = hierarchical.Generate(context);
                     result.Tag.Add(item.Tag);
                     result.Script.Add(item.Script);
                     scriptOfCurrentElement.Add($"{id}.{property.Name} = {item.Tag.Id}");
-
                     continue;
                 }
 
@@ -167,9 +165,6 @@ namespace StaticSharp {
                     var collectionName = property.Name;
                     var items = blocks.Select(x=>x.Generate(context)).ToArray();
                     if (items.Length == 0) { continue; }
-
-                    //var first = items[0];
-                    //scriptOfCurrentElement.Add($"{id}.{collectionName}First = {first.Tag.Id}");
 
                     if (items.Length > 0) {
 
@@ -184,19 +179,12 @@ namespace StaticSharp {
                             var c = items[i];
                             scriptOfCurrentElement.Add($"{p.Tag.Id}.NextSibling = {c.Tag.Id}");
                         }
-
                     }
-
                     continue;
                 }
             }
 
-
-
             result.Script.Add(scriptOfCurrentElement);
-
-            
-
             return result;
         }
 
