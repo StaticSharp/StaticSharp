@@ -31,10 +31,9 @@ namespace StaticSharp.Gears {
         public string ClassName { get; }
         public ConstructorJsAttribute(string className = "", [CallerFilePath] string callerFilePath = "") : base(className + ".js", callerFilePath){
             ClassName = className;
-        }
-
-        
+        }        
     }
+
 
 
     /*public class ConstructorJs: RelatedScriptAttribute {

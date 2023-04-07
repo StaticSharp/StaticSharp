@@ -21,11 +21,6 @@ namespace StaticSharp {
     namespace Gears {
 
 
-        public class ScriptfullTag: Tag { 
-            
-        
-        }
-
         public class TagAndScript { 
             public Scopes.Group Script { get; init; }
             public Tag Tag { get; init; }            
@@ -34,18 +29,6 @@ namespace StaticSharp {
                 Script = script;
                 Tag = tag;
             }
-
-            /*public static TagAndScript Create(string className, string id, string? tagName = null) {
-                if (tagName == null)
-                    tagName = CaseUtils.CamelToKebab(className);
-                return new TagAndScript(new Tag(tagName, id), new Group());
-            }
-
-            public static TagAndScript CreateScriptless(string tagName, string id) {
-                return new TagAndScript(new Tag(tagName, id));
-            }*/
-
-
         }
 
 
@@ -134,52 +117,6 @@ namespace StaticSharp {
 
 
 
-            protected Tag CreateConstructorScript() {
-                var jsConstructorsNames = FindJsConstructorsNames();
-
-                var propertiesInitializersScript = string.Join(',', Properties.Select(x => $"{x.Key}:{x.Value}"));
-
-                string script = $"{{let element = Constructor({string.Join(',', jsConstructorsNames)});";
-                if (!string.IsNullOrEmpty(propertiesInitializersScript)) {
-                    script += $"element.Reactive={{{propertiesInitializersScript}}}";
-                }
-                script += "}";
-
-                return new Tag("script") {
-                    new PureHtmlNode(script)
-                };
-            }
-
-
-
-
-            protected Tag CreateScript(string code) {
-                return new Tag("script") {
-                    new PureHtmlNode(code)
-                };
-            }
-
-            protected Tag CreateScript_SetCurrentSocket(string name) {
-                return new Tag("script") {
-                    new PureHtmlNode($"SetCurrentSocket(\"{name}\")")
-                };
-            }
-
-            protected Tag CreateScript_SetCurrentCollectionSocket(string name) {
-                return CreateScript_SetCurrentSocket(name + "First");
-            }
-
-            protected Tag CreateScript_AssignToParentProperty(string name) {
-                return new Tag("script") {
-                    new PureHtmlNode($"AssignToParentProperty(\"{name}\")")
-                };
-            }
-
-            protected Tag CreateScript_AssignPreviousTagToParentProperty(string name) {
-                return new Tag("script") {
-                    new PureHtmlNode($"AssignPreviousTagToParentProperty(\"{name}\")")
-                };
-            }
         }
     }
 

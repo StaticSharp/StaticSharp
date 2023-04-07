@@ -10,6 +10,11 @@ namespace StaticSharp {
             
             public double X { get; }
             public double Y { get; }
+
+            public double AbsoluteX { get; }
+            public double AbsoluteY { get; }
+
+
             public double Width { get; }
             public double Height { get; }
 
@@ -18,10 +23,16 @@ namespace StaticSharp {
             public double MarginTop  { get; }
             public double MarginBottom  { get; }
 
-            public double PaddingLeft  { get; }
-            public double PaddingRight  { get; }
-            public double PaddingTop  { get; }
-            public double PaddingBottom  { get; }
+            public double PaddingLeft  { get; set; }
+            public double PaddingRight  { get; set; }
+            public double PaddingTop  { get; set; }
+            public double PaddingBottom  { get; set; }
+
+            public double PaddingsHorizontal { set {
+                    PaddingLeft = value;
+                    PaddingRight = value;
+                }
+            }
 
             public double FontSize  { get; }
             public int Depth { get; }

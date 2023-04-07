@@ -81,7 +81,7 @@ namespace StaticSharpDemo.Root.Components.VideoPlayer {
 
         public override Blocks? Content => new() {
 
-            new LayoutOverride {
+            /*new LayoutOverride {
                 Child = new Video("T4TEdzSLyi0"){
                     BackgroundColor= Color.Black,
                     GravityHorizontal = 0,
@@ -91,35 +91,37 @@ namespace StaticSharpDemo.Root.Components.VideoPlayer {
                 Height = new(e=>Js.Math.Min( 0.9 * e.Root.Height, e.Parent.Width / ((Js.Video)e.Child).Aspect) ),
                 OverrideX = new(e=>0),
                 
+            },*/
+
+            new Video("qWGR-eMSnX8"){
+                Width = new(e=>e.Parent.Width),
+                Depth = 1,
+                Play = false,
+                Mute = true,
+                PreferPlatformPlayer = false,
+                Controls = true,
+                //Position = new(e=>(e.Parent as Js.ScrollLayout).ScrollYActual/100),
             },
 
-            new Video("T4TEdzSLyi0"){
-                //Height = new(e=>e.Root.Height*0.8),
-                //GravityVertical = -1,
-                //Fit = Fit.Outside,
-                //PreferPlatformPlayer= false,
-                /*Modifiers = {
-                    new Shadow{
-                        Distance = new(e=>e.Parent.Width)
-                    },
-                    new Shadow{
-                        Distance = 8
-                    },
-                    new Cursor(Cursor.Type.Pointer)
-                },*/
 
-                Name = "Video",
-                //Width = new(e=>e.Siblings.Max(x=>x.Width)),
 
-                //Play = new (e=>((Js.Checkbox)e.Siblings.ByName("VideoProperties").Children.ByName("VideoProperties")).ValueActual),
-                /*Mute = new (e=>((Js.Checkbox)e.Parent["VideoProperties"]["Mute"]).ValueActual),
-                PreferPlatformPlayer = new (e=>((Js.Checkbox)e.Parent["VideoProperties"]["PreferPlatformPlayer"]).ValueActual),
-                Controls = new (e=>((Js.Checkbox)e.Parent["VideoProperties"]["Controls"]).ValueActual),
-                Loop = new (e=>((Js.Checkbox)e.Parent["VideoProperties"]["Loop"]).ValueActual),
-                Volume = new (e=>((Js.Slider)e.Parent["VolumeSlider"]).ValueActual),*/
+            new ScrollLayout(){
+                Height = 300,
+                Child = new Block{ 
+                    //BackgroundColor = Color.Red,
+                    Height = 3000
+                },
+                UnmanagedChildren = {
+                    
+                }
+                
+            },
+
+
+            
+            new Block{ 
+                Height = 3000,
             }
-            ,
-
 
 
             /*{"VideoProperties",

@@ -337,7 +337,7 @@ function Video(element) {
         player.setAttribute("x5-video-player-type", "h5")
         //player.setAttribute("autoplay", "true")
         
-
+        
         player.ontimeupdate = () => element.PositionActual = element.Player.currentTime
 
         function onPlayOrPause() {
@@ -472,7 +472,7 @@ function Video(element) {
         
         if (element.VideoPlayerType == "youtube") {
             if (element.Play) {
-                console.log("Play")
+                
                 element.Player.playVideo()
             } else {
                 element.Player.pauseVideo()
