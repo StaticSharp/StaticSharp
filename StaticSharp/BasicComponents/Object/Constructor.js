@@ -103,12 +103,12 @@ function CreateSocket(element,name,parentExpression) {
 
             // if reparenting element is a part of element linked list, 
             // than subsequent elements of list are also effectively reparented
-            /*let nextSibling = previousValue.NextSibling
+            let nextSibling = previousValue.NextSibling
             while (nextSibling) {
                 nextSibling.Parent = undefined
-                CreateOrClearLayer(nextSibling)
+                nextSibling.Layer()
                 nextSibling = nextSibling.NextSibling
-            }*/
+            }
         }
         if (newValue) {
             
@@ -126,14 +126,14 @@ function CreateSocket(element,name,parentExpression) {
             // if reparenting element is a part of element linked list,
             // than subsequent elements of list are also effectively reparented
 
-            //if (parentExpression != undefined) {
-                /*let nextSibling = newValue.NextSibling
+            if (parentExpression != undefined) {
+                let nextSibling = newValue.NextSibling
                 while (nextSibling) {
                     nextSibling.Parent = parentExpression
-                    CreateOrClearLayer(nextSibling)                    
+                    nextSibling.Layer()
                     nextSibling = nextSibling.NextSibling
-                }*/
-            //}
+                }
+            }
         }
         //previousValue = newValue
 
