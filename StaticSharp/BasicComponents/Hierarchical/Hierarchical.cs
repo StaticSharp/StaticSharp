@@ -141,10 +141,9 @@ namespace StaticSharp {
             AddSourceCodeNavigationData(result.Tag, context);
 
             ModifyTagAndScript(context, result.Tag, scriptOfCurrentElement);
-
+            
 
             var properties = type.GetProperties(BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Instance).Where(x=>x.CanRead);
-
             var sockets = properties.Where(x=>x.GetCustomAttribute<SocketAttribute>()!=null).ToArray();
 
             foreach (var property in sockets) { 
@@ -183,6 +182,8 @@ namespace StaticSharp {
                     continue;
                 }
             }
+
+            scriptOfCurrentElement.Add($"if (typeof ({id}.AfterChildren) === \"function\") {{ {id}.AfterChildren() }}");
 
             result.Script.Add(scriptOfCurrentElement);
             return result;

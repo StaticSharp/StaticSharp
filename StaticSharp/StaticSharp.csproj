@@ -120,6 +120,11 @@
 
   <ItemGroup>
     <Folder Include="StaticSharpServer\" />
-  </ItemGroup>	
+  </ItemGroup>
+
+
+	<ItemGroup>
+		<ProjectReference Include="..\StaticSharpComponentSourceGenerator\Generator\StaticSharpComponentSourceGenerator.csproj" OutputItemType="Analyzer" />
+	</ItemGroup>
 
 </Project>
