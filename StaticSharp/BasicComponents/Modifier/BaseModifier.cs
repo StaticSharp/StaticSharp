@@ -62,6 +62,7 @@ namespace StaticSharp {
 
             protected override string TagName => IsLink? "a" : base.TagName;
 
+            public Modifiers Modifiers { get; } = new();
 
             private bool IsLink => InternalLink != null || ExternalLink != null;
 
@@ -149,6 +150,21 @@ namespace StaticSharp {
                 if (Italic != null) {
                     tag.Style["font-style"] = Italic.Value ? "italic" : "normal";
                 }
+
+                if (Modifiers.Any()) {
+
+                    List<string> modifiersVariables = new();
+
+                    foreach (var m in Modifiers) { 
+                        var generated = m.Generate(tag.Id, context);
+                        modifiersVariables.Add(generated.Id);
+                        script.Add(generated.Script);
+                    }
+
+                    script.Add($"{tag.Id}.Modifiers = [{string.Join(',', modifiersVariables)}]");
+                }
+
+
 
             }
 

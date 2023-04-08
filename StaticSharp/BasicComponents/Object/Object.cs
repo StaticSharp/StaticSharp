@@ -19,10 +19,19 @@ namespace StaticSharp {
 
 
     namespace Gears {
+        public class IdAndScript {
+            public Scopes.Group? Script { get; init; }
+            public string Id { get; init; }
 
+            public IdAndScript(string id, Group? script) {
+                Id = id;
+                Script = script;
+                
+            }
+        }
 
         public class TagAndScript { 
-            public Scopes.Group Script { get; init; }
+            public Scopes.Group? Script { get; init; }
             public Tag Tag { get; init; }            
 
             public TagAndScript(Tag tag, Group? script) {
@@ -43,6 +52,8 @@ namespace StaticSharp {
         [RelatedScript("Events")]
         public abstract class Object : CallerInfo {
             public Dictionary<string, string> Properties { get; } = new();
+
+            protected List<string>? VariableNames;
 
             public string this[string propertyName] {
                 /*get {
@@ -115,7 +126,10 @@ namespace StaticSharp {
                 AddRequiredIncluesForType(type, context);
             }
 
-
+            protected virtual Context ModifyContext(Context context) {
+                AddRequiredInclues(context);
+                return context;
+            }
 
         }
     }

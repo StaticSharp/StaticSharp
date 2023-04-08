@@ -98,7 +98,7 @@ namespace StaticSharpDemo.Root {
             },
             Children = {
                     MenuItem(Node.Components),
-                    MenuItem(Node.Components.ImageComponent),
+                    MenuItem(Node.Modifiers),
                     MenuItem(Node.Components.VideoPlayer),
                     MenuItem(Node.Components.ParagraphComponent),
                     MenuItem(Node.Customization.HowToCreateNewComponent)

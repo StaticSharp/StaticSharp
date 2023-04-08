@@ -14,12 +14,12 @@ function Image(element) {
 
     
 
-    element.AfterChildren = function () {
+    /*element.AfterChildren = function () {
         let thumbnail = element.content.querySelector("#thumbnail")
         if (thumbnail) {
             thumbnail.style.display = "block"
         }
-    }
+    }*/
 
     
 }

@@ -80,7 +80,7 @@ namespace StaticSharp {
     public abstract class Hierarchical : Gears.Object {
         protected virtual string TagName => CaseUtils.CamelToKebab(GetType().Name);
 
-        public List<string>? VariableNames;
+        
 
         protected Hierarchical(Hierarchical other,
             int callerLineNumber,
@@ -99,10 +99,7 @@ namespace StaticSharp {
             return this;
         }
 
-        protected virtual Context ModifyContext(Context context) {
-            AddRequiredInclues(context);
-            return context;
-        }
+        
 
         protected string TagToJsValue(Tag tag) {
             return TagToJsValue(tag.Id);

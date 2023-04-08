@@ -23,24 +23,6 @@ namespace StaticSharp {
             }            
         }
 
-        /*public virtual IEnumerable<Tag> GenerateHtml(Context context) {
-            if (items != null) {
-                foreach (var i in items) {
-                    var child = i.GenerateHtml(context);
-                    yield return child;
-                    //parent.Add(child);
-                }
-            }
-        }*/
-
-        /*public virtual Tag GenerateHtml(Context context) {
-            var result = new Tag();
-            GenerateHtml(result, context);
-            return result;
-        }*/
-
-
-
         IEnumerator<Block> IEnumerable<Block>.GetEnumerator() {
             if (items != null)
                 return items.GetEnumerator();

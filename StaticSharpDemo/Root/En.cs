@@ -3,6 +3,9 @@ using System;
 using System.Runtime.CompilerServices;
 
 
+
+
+
 namespace StaticSharpDemo.Root {
 
     [Representative]
@@ -111,6 +114,7 @@ namespace StaticSharpDemo.Root {
             Separator(),
 
             new LinearLayout(){
+                
                 Vertical = new(e=>e.Width<950),
                 Reverse = new(e=>e.Vertical),
                 MarginLeft = new(e=>e.Parent.PaddingLeft),

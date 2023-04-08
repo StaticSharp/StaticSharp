@@ -85,30 +85,8 @@ namespace StaticSharp {
             tag.Add(inlineContainer);
 
             script.Add($"{tag.Id}.inlineContainer = {TagToJsValue(inlineContainer)}");
-
-            //elementTag.Add(CreateScript_SetCurrentSocket("FirstInline"));
-            //elementTag.Add(inlineContainer);
-
-            //base.ModifyHtml(context, elementTag);
         }
 
-
-        /*protected override void ModifyHtml(Context context, Tag elementTag) {
-            var p = new Tag("p") {                
-                CreateScript_AssignToParentProperty("inlineContainer")
-            };
-            p["class"] = "inline-container";
-
-            foreach (var i in Inlines) {
-                var child = i.GenerateHtml(context);
-                p.Add(child);
-            }
-            p.Add("\n");
-            elementTag.Add(CreateScript_SetCurrentSocket("FirstInline"));
-            elementTag.Add(p);
-
-            base.ModifyHtml(context, elementTag);
-        }*/
 
     }
 }
