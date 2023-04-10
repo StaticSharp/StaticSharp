@@ -15,6 +15,7 @@
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
         <DebugType>embedded</DebugType>
         <PackageVersion>0.1.0</PackageVersion>
+        <Authors>StaticSharp</Authors>
     </PropertyGroup>
 
     <ItemGroup>
