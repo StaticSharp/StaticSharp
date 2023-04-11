@@ -27,6 +27,7 @@
         <DebugType>embedded</DebugType>
         <PackageVersion>0.1.0</PackageVersion>
         <PackageIcon>images\icon.png</PackageIcon>
+        <Authors>StaticSharp</Authors>
     </PropertyGroup>
 
     <ItemGroup>
