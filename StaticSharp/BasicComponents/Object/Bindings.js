@@ -314,6 +314,8 @@ function Property() {
 
             if (value.isBindingConstructor) {
                 value = value(_this)
+                console.log("isBindingConstructor", value, this.object)
+
             }
 
             if (_this.binding) {

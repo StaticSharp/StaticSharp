@@ -1,56 +1,26 @@
-﻿
-
-using Scopes;
-using StaticSharp.Html;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 
 namespace StaticSharp {
 
-
     namespace Js {
-        public interface Object {
-            public Object this[string name] { get; }
+        public interface Entity {
+            public Entity this[string name] { get; }
         }
     }
 
 
     namespace Gears {
-        public class IdAndScript {
-            public Scopes.Group? Script { get; init; }
-            public string Id { get; init; }
-
-            public IdAndScript(string id, Group? script) {
-                Id = id;
-                Script = script;
-                
-            }
-        }
-
-        public class TagAndScript { 
-            public Scopes.Group? Script { get; init; }
-            public Tag Tag { get; init; }            
-
-            public TagAndScript(Tag tag, Group? script) {
-                Script = script;
-                Tag = tag;
-            }
-        }
-
-
-
-
         [Scripts.ReactiveUtils]
         [Scripts.Math]
         [Scripts.Linq]
+        [Scripts.Animation]
 
         [RelatedScript("Constructor")]
         [RelatedScript("Bindings")]
         [RelatedScript("Events")]
-        public abstract class Object : CallerInfo {
+        [Scripts.TypeCast]
+        [ConstructorJs]
+        public abstract class Entity : CallerInfo {
             public Dictionary<string, string> Properties { get; } = new();
 
             protected List<string>? VariableNames;
@@ -65,19 +35,15 @@ namespace StaticSharp {
                 }
             }
 
-
-            protected Object(Object other,
+            protected Entity(Entity other,
                 int callerLineNumber = 0,
                 string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
                 Properties = new(other.Properties);
             }
 
-            protected Object(int callerLineNumber, string callerFilePath) : base(callerLineNumber, callerFilePath) {
+            protected Entity(int callerLineNumber, string callerFilePath) : base(callerLineNumber, callerFilePath) {
 
             }
-
-            //public abstract Task<Tag> GenerateHtmlAsync(Context context);
-
 
             protected string[] FindJsConstructorsNames() {
                 foreach (var i in GetBaseTypes()) {
@@ -94,14 +60,14 @@ namespace StaticSharp {
                 var type = GetType();
                 while (type != null) {
                     yield return type;
-                    if (type == typeof(Object))
+                    if (type == typeof(Entity))
                         yield break;
                     type = type.BaseType;
                 }
             }
 
             private void AddRequiredIncluesForType(Type type, Context context) {
-                if (type != typeof(Object)) {
+                if (type != typeof(Entity)) {
                     var baseType = type.BaseType;
                     if (baseType != null) {
                         AddRequiredIncluesForType(baseType, context);

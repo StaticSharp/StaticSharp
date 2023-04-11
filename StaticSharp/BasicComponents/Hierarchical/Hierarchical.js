@@ -118,6 +118,7 @@ function SyncChildren(element, targetChildren) {
 var parentGetDepth = 1
 
 function Hierarchical(element) {
+    Entity(element)
     element.isHierarchical = true
 
     CreateCollectionSocket(element, "UnmanagedChildren", element)

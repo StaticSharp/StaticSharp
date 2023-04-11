@@ -1,13 +1,50 @@
-﻿using System.Linq.Expressions;
+﻿using StaticSharp.Animations;
+using System.Linq.Expressions;
 
 namespace StaticSharp {
+
+    public static partial class Static {
+        public static Expression<Func<Js, T>> Animate<Js, T>(Js js, Expression<Func<Js, T>> func) {
+            return func;
+        }
+    }
+
+    namespace Animations {
+
+        public abstract class BindingWrapper { 
+        
+        }
+        public class Linear : BindingWrapper {
+            public Linear(double duration) { 
+            
+            }
+        }
+
+        
+
+
+    }
+
+    namespace Js.BindingWrappers {
+        class Animation { 
+            
+        }
+    }
+
+
+
+
     namespace Gears {
+
+
         public class Bindings<FinalJs> {
             public struct Binding<T> : IVoidEnumerable {
 
                 private T? Value;
                 private Expression<Func<FinalJs, T>>? Expression;
+                private List<LambdaExpression>? bindingWrappers = null;
 
+                public double Animation { set { } }
 
                 public Binding(Expression<Func<FinalJs, T>> expression) {
                     Expression = expression;
@@ -19,14 +56,39 @@ namespace StaticSharp {
                 public static implicit operator Binding<T>(T value) {
                     return new Binding<T>(value);
                 }
+
+                public Binding<T> this[Expression index] {
+                    set {
+                        // set the instance value at index
+                    }
+                }
+
+
+                public void Add<W>(Expression<Func<FinalJs, W>> wrapper) {
+                    bindingWrappers ??= new List<LambdaExpression>();
+
+                    bindingWrappers.Add(wrapper);
+                }
+
+
                 public string CreateScriptExpression() {
                     if (Expression != null) {
-                        return Javascriptifier.ExpressionScriptifier.EvalLambdaExpression(Expression).ToString();
-                        //return new LambdaScriptifier(Expression,new object[] { new FinalJs()}).Eval();
+                        var script = Javascriptifier.ExpressionScriptifier.Scriptify(Expression).ToString();
+                        /*if (bindingWrappers?.Count > 0) {
+                            foreach (var b in bindingWrappers) { 
+                                
+                            }
+                        }
+
+
+                        var wrap = $"(()=>{{return {script}}})()";*/
+                        return script;
                     }
                     return Javascriptifier.ValueStringifier.Stringify(Value);
-                    //return CSValueToJSValueConverter.ObjectToJsValue(Value);
                 }
+
+                
+
             }
 
             protected void Apply<T>(Binding<T> binding,
@@ -37,9 +99,9 @@ namespace StaticSharp {
 
                 var memberNames = new string?[] { memberName, memberName1, memberName2, memberName3 };
 
-                var aggregator = (Aggregator.Current as Object);
+                var aggregator = (Aggregator.Current as Entity);
                 if (aggregator == null)
-                    throw new InvalidOperationException($"{nameof(Bindings<FinalJs>)} must be aggregated into {nameof(Object)} only");
+                    throw new InvalidOperationException($"{nameof(Bindings<FinalJs>)} must be aggregated into {nameof(Entity)} only");
 
                 foreach (var i in memberNames) {
                     if (i != null) {

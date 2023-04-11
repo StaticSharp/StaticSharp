@@ -5,6 +5,7 @@ namespace StaticSharp {
 
     namespace Js {
         public interface Modifier {
+
             bool Enabled { get; }
         }
     }
@@ -19,11 +20,11 @@ namespace StaticSharp {
 
         [ConstructorJs]
         [Mix(typeof(ModifierBindings<Js.Modifier>))]
-        public abstract class Modifier : Object {
+        public abstract class Modifier : Entity {
             protected Modifier(int callerLineNumber, string callerFilePath) : base(callerLineNumber, callerFilePath) {
             }
 
-            protected Modifier(Object other, int callerLineNumber = 0, string callerFilePath = "") : base(other, callerLineNumber, callerFilePath) {
+            protected Modifier(Modifier other, int callerLineNumber = 0, string callerFilePath = "") : base(other, callerLineNumber, callerFilePath) {
             }
 
             public virtual IdAndScript Generate(string elementId, Context context) {

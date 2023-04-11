@@ -21,9 +21,27 @@ function BaseModifier(element) {
 
     //window.location.replace(matchLanguage([{{ languages }}]) + extension)
 
-
+    /**type */
 
     element.isModifier = true
+    let baseAs = element.as
+    element.as = function (typeName) {
+        let result = baseAs(typeName)
+        if (result != undefined)
+            return result
+
+        if (element.Modifiers != undefined) {
+            let oldAs = element.as
+            element.as = () => undefined
+            result = element.Modifiers.First(x => x.is(typeName),()=>undefined)
+            element.as = oldAs
+        }
+        
+        return result
+    }
+
+
+
 
     element.Reactive = {
         Hover: false,
@@ -55,6 +73,9 @@ function BaseModifier(element) {
             else
                 return undefined
         },
+
+        Modifiers: Enumerable.Empty(),
+
 
         FontSize: undefined,
         HierarchyFontSize: () => element.FontSize || element.Parent.HierarchyFontSize,

@@ -30,7 +30,7 @@ namespace StaticSharp {
 
 
         
-        public interface Hierarchical : Object {
+        public interface Hierarchical : Entity {
             public string Name { get; }
             public bool Exists { get; }
             public Page Root { get; }
@@ -77,7 +77,7 @@ namespace StaticSharp {
     [ConstructorJs]
     [RelatedScript("DomLinkedList")]
     //[Mix(typeof(AssignMixin<Hierarchical, Js.Hierarchical>))]
-    public abstract class Hierarchical : Gears.Object {
+    public abstract class Hierarchical : Gears.Entity {
         protected virtual string TagName => CaseUtils.CamelToKebab(GetType().Name);
 
         

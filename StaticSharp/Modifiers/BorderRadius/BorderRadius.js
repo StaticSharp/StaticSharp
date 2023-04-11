@@ -1,8 +1,13 @@
+
+
+
 function BorderRadius(element) {
     Modifier.call(this,element)
     this.isBorderRadius = true
 
     let modifier = this
+
+
 
     modifier.Reactive = {
         Radius: undefined,
@@ -13,8 +18,7 @@ function BorderRadius(element) {
     }
 
 
-    new Reaction(() => {
-        console.log(modifier)
+    new Reaction(() => {        
         element.style.borderTopLeftRadius = ToCssSize(modifier.RadiusTopLeft)
         element.style.borderTopRightRadius = ToCssSize(modifier.RadiusTopRight)
         element.style.borderBottomLeftRadius = ToCssSize(modifier.RadiusBottomLeft)

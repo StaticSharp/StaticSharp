@@ -57,7 +57,11 @@ namespace StaticSharpDemo.Root.Components {
 
             Node.Children.Select(x=>new LinearLayout{ 
                 InternalLink = x,
-                BackgroundColor = new(e=>e.Hover ? Color.FromGrayscale(0.95) : Color.White),
+                BackgroundColor = new(e=>((Js.Hover)e).Value ? Color.FromGrayscale(0.95) : Color.White),
+                Modifiers = { 
+                    new Hover()
+                },
+
                 Children = {
                     H4(x.Representative?.Title),
                     x.Representative?.Description

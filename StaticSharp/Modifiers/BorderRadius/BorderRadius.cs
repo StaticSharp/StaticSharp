@@ -1,6 +1,4 @@
-﻿
-using Scopes;
-using StaticSharp.Gears;
+﻿using StaticSharp.Gears;
 using System.Runtime.CompilerServices;
 
 namespace StaticSharp {
@@ -33,20 +31,8 @@ namespace StaticSharp {
         public BorderRadius([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
         }
 
-        public BorderRadius(Gears.Object other, int callerLineNumber = 0, string callerFilePath = "") : base(other, callerLineNumber, callerFilePath) {
+        public BorderRadius(BorderRadius other, int callerLineNumber = 0, string callerFilePath = "") : base(other, callerLineNumber, callerFilePath) {
         }
-
-        /*public override IdAndScript Generate(Context context) {
-
-            return new IdAndScript(
-                context.CreateId(),
-                new Group {
-                    "//Modifier"
-                }
-                );
-
-        }*/
-
     }
 
 

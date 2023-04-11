@@ -20,7 +20,7 @@ namespace StaticSharp {
             public Color HierarchyBackgroundColor { get; }
             public Color ForegroundColor { get; }
             public Color HierarchyForegroundColor { get; }
-
+            public Js.Enumerable<Js.Modifier> Modifiers { get; }
 
             public bool Hover { get; }
             public bool? Selectable { get; }
@@ -41,7 +41,6 @@ namespace StaticSharp {
             public Binding<Color> BackgroundColor { set { Apply(value); } }
             public Binding<Color> ForegroundColor { set { Apply(value); } }
             public Binding<Color> TextDecorationColor { set { Apply(value); } }
-
             public Binding<bool?> Selectable { set { Apply(value); } }
             public Binding<double> Visibility { set { Apply(value); } }            
             public Binding<double> Radius { set { Apply(value); } }
@@ -161,7 +160,7 @@ namespace StaticSharp {
                         script.Add(generated.Script);
                     }
 
-                    script.Add($"{tag.Id}.Modifiers = [{string.Join(',', modifiersVariables)}]");
+                    script.Add($"{tag.Id}.Modifiers = new Enumerable([{string.Join(',', modifiersVariables)}])");
                 }
 
 

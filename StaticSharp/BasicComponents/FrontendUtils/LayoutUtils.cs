@@ -5,3 +5,7 @@ namespace StaticSharp.Scripts {
         }
     }
 }
+
+
+namespace StaticSharp.Scripts {
+}
