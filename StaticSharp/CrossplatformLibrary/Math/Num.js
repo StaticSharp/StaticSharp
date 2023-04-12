@@ -1,9 +1,13 @@
+
+var Num = {}
+
+
 function IsNaNOrNull(value) {
     if (value === null) return true
     return isNaN(value)
 }
 
-function Max() {
+Num.Max = function () {
     let result = undefined
     for (let i of arguments) {
         if (IsNaNOrNull(i)) continue;

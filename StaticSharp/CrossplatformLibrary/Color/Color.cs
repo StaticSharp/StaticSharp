@@ -1,12 +1,7 @@
-using EnvDTE80;
-using ImageMagick;
 using Javascriptifier;
 using StaticSharp.Gears;
-using System;
-using System.Diagnostics.Contracts;
 
 namespace StaticSharp {
-
 
     namespace Scripts {
         public class ColorAttribute : ScriptReferenceAttribute {
@@ -14,9 +9,7 @@ namespace StaticSharp {
         }
     }
 
-
-
-    public partial struct Color : Javascriptifier.IStringifiable, IKeyProvider {
+    public partial struct Color : IStringifiable, IKeyProvider {
 
 
         public string Key => KeyUtils.Combine<Color>(ToJavascriptString());
@@ -212,10 +205,8 @@ namespace StaticSharp {
             return this.Lerp(blackOrWhite, contrast);
         }
 
-        public Color ContrastColor()
-        {
-            return ContrastColor(1);
-        }
+        public Color ContrastColor() => ContrastColor(1);
+
 
     }
 
