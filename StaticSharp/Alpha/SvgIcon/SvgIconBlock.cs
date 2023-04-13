@@ -6,14 +6,11 @@ using System.Xml;
 
 namespace StaticSharp {
 
-    namespace Js {
-
-        public interface SvgIconBlock: AspectBlock, SvgIcon {
-        }
+    public interface JSvgIconBlock : JAspectBlock, JSvgIcon {
     }
 
-    [Mix(typeof(SvgIconBindings<Js.SvgIconBlock>))]
-    [Mix(typeof(BlockBindings<Js.SvgIconBlock>))]
+    [Mix(typeof(SvgIconBindings<JSvgIconBlock>))]
+    [Mix(typeof(BlockBindings<JSvgIconBlock>))]
     [ConstructorJs("SvgIcon")]
     [ConstructorJs]
     public partial class SvgIconBlock : AspectBlock {

@@ -4,10 +4,8 @@ using StaticSharp.Html;
 
 namespace StaticSharp {
 
-    namespace Js {
-        public interface Inline : Hierarchical {
+    public interface JInline : JHierarchical {
 
-        }
     }
 
     namespace Gears {

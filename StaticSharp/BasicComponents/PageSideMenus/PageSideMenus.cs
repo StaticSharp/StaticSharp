@@ -5,13 +5,11 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    namespace Js {
-        public interface PageSideMenus : Page {
-            public double ContentWidth  { get; }
-            public bool BarsCollapsed { get; }
-            public double SideBarsIconsSize  { get; }
+    public interface JPageSideMenus : JPage {
+        public double ContentWidth { get; }
+        public bool BarsCollapsed { get; }
+        public double SideBarsIconsSize { get; }
 
-        }
     }
 
     namespace Gears {
@@ -22,7 +20,7 @@ namespace StaticSharp {
     }
 
     [ConstructorJs]
-    [Mix(typeof(PageSideMenusBindings<Js.PageSideMenus>))]
+    [Mix(typeof(PageSideMenusBindings<JPageSideMenus>))]
     public abstract partial class PageSideMenus : Page {
 
         
@@ -42,12 +40,12 @@ namespace StaticSharp {
         //public override Inlines Description => (base.Description != null) ? new Paragraph(base.Description) : null;
 
         public virtual Block? TopBar => new Paragraph(Title) {
-            Height = new(e=>Js.Math.Max(((Js.PageSideMenus)e.Root).SideBarsIconsSize, e.GetLayer().Height /*InternalHeight*/)),
+            Height = new(e=>Js.Num.Max(((JPageSideMenus)e.Root).SideBarsIconsSize, e.GetLayer().Height /*InternalHeight*/)),
             //["Height"] = "() => Min(element.Root.SideBarsIconsSize,element.InternalHeight)",
             TextAlignmentHorizontal = TextAlignmentHorizontal.Center,
             MarginsVertical = 0,
             Weight = FontWeight.ExtraLight,
-            FontSize = new(e => ((Js.PageSideMenus)e.Root).SideBarsIconsSize),
+            FontSize = new(e => ((JPageSideMenus)e.Root).SideBarsIconsSize),
         };
 
         public override Block? MainVisual => null;

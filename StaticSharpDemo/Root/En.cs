@@ -55,8 +55,8 @@ namespace StaticSharpDemo.Root {
                                 BackgroundColor = new(e => e.Parent.HierarchyForegroundColor),
                                 Visibility = 0.5
                             },
-                        OverrideX = new(e => Js.Math.First(e.MarginLeft, 0)),
-                        OverrideWidth = new(e => Js.Math.Sum(e.Parent.Width, -e.Child.GetLayer().MarginLeft, -e.Child.GetLayer().MarginRight))
+                        OverrideX = new(e => Js.Num.First(e.MarginLeft, 0)),
+                        OverrideWidth = new(e => Js.Num.Sum(e.Parent.Width, -e.Child.GetLayer().MarginLeft, -e.Child.GetLayer().MarginRight))
                 };
         }
 
@@ -139,7 +139,7 @@ namespace StaticSharpDemo.Root {
                     },
                     new Image("StackoverflowKeyboard.svg"){
                         Width = new(e=>e.Parent.Width * 0.5),
-                        Height = new(e=>Js.Math.Min(e.Width/e.Aspect, 400)),
+                        Height = new(e=>Js.Num.Min(e.Width/e.Aspect, 400)),
                         Margins = 75,
                         Embed = Image.TEmbed.Image,
                         Fit = Fit.Inside

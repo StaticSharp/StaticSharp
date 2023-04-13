@@ -11,13 +11,11 @@ namespace StaticSharp {
         Stretch
     }
 
-    namespace Js {
-        public interface AspectBlock : Block {
-            public double Aspect  { get; }
-            public Fit Fit { get; }
-            public double GravityVertical  { get; }
-            public double GravityHorizontal  { get; }
-        }
+    public interface JAspectBlock : JBlock {
+        public double Aspect { get; }
+        public Fit Fit { get; }
+        public double GravityVertical { get; }
+        public double GravityHorizontal { get; }
     }
 
 
@@ -31,7 +29,7 @@ namespace StaticSharp {
     }
 
 
-    [Mix(typeof(AspectBlockBindings<Js.AspectBlock>))]
+    [Mix(typeof(AspectBlockBindings<JAspectBlock>))]
     [ConstructorJs]
     public partial class AspectBlock : Block {
         public AspectBlock(AspectBlock other, int callerLineNumber, string callerFilePath): base(other, callerLineNumber, callerFilePath) {}

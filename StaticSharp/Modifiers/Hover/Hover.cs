@@ -4,11 +4,10 @@ using System.Runtime.CompilerServices;
 namespace StaticSharp {
 
 
-    namespace Js {
-        public interface Hover {
-            public bool Value{ get; }
-        }
+    public interface JHover : JModifier {
+        public bool Value { get; }
     }
+
     namespace Gears {
         public class HoverBindings<FinalJs> : ModifierBindings<FinalJs> {
         }
@@ -17,7 +16,7 @@ namespace StaticSharp {
 
 
     [ConstructorJs]
-    [Mix(typeof(HoverBindings<Js.Hover>))]
+    [Mix(typeof(HoverBindings<JHover>))]
     public partial class Hover : Modifier {
         public Hover([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
         }

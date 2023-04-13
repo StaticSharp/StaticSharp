@@ -3,12 +3,10 @@ using Scopes.C;
 
 namespace StaticSharp {
 
-    namespace Js {
-        public interface Modifier {
-
-            bool Enabled { get; }
-        }
+    public interface JModifier : JEntity {
+        bool Enabled { get; }
     }
+
     namespace Gears {
         public class ModifierBindings<FinalJs> : Bindings<FinalJs> {
             public Binding<bool> Enabled { set { Apply(value); } }
@@ -19,7 +17,7 @@ namespace StaticSharp {
     namespace Gears {
 
         [ConstructorJs]
-        [Mix(typeof(ModifierBindings<Js.Modifier>))]
+        [Mix(typeof(ModifierBindings<JModifier>))]
         public abstract class Modifier : Entity {
             protected Modifier(int callerLineNumber, string callerFilePath) : base(callerLineNumber, callerFilePath) {
             }

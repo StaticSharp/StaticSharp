@@ -1,13 +1,12 @@
 using StaticSharp.Gears;
 using StaticSharp.Html;
+using StaticSharp.Js;
 using System.Runtime.CompilerServices;
 
 namespace StaticSharp {
 
-    namespace Js {
-        public interface BlockWithChildren : Block {
-           public Enumerable<Block> Children { get; }
-        }
+    public interface JBlockWithChildren : JBlock {
+        public Enumerable<Block> Children { get; }
     }
 
     namespace Gears {
@@ -15,7 +14,7 @@ namespace StaticSharp {
         }
     }
 
-    [Mix(typeof(BlockWithChildrenBindings<Js.BlockWithChildren>))]
+    [Mix(typeof(BlockWithChildrenBindings<JBlockWithChildren>))]
     [ConstructorJs]
     public partial class BlockWithChildren : Block {
 

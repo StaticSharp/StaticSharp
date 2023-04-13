@@ -17,10 +17,8 @@ namespace StaticSharp {
     }
 
 
-    namespace Js {
-        public interface Paragraph : Block {
-            public TextAlignmentHorizontal TextAlignmentHorizontal { get; }
-        }
+    public interface JParagraph : JBlock {
+        public TextAlignmentHorizontal TextAlignmentHorizontal { get; }
     }
 
     namespace Gears {
@@ -32,7 +30,7 @@ namespace StaticSharp {
 
     [RelatedStyle]
     [ConstructorJs]
-    [Mix(typeof(ParagraphBindings<Js.Paragraph>))]
+    [Mix(typeof(ParagraphBindings<JParagraph>))]
     public partial class Paragraph : Block {
         public Inlines Inlines { get; } = new();
 

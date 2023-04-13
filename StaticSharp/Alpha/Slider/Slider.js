@@ -50,10 +50,10 @@ function Slider(element) {
 
         IsVertical: () => element.Width < element.Height,
 
-        VerticalPaddingSum: () => Sum(element.PaddingTop, element.PaddingBottom, 0),
-        HorizontalPaddingSum: () => Sum(element.PaddingLeft, element.PaddingRight, 0),
-        TrackWidth: () => Sum(element.Width, -element.HorizontalPaddingSum),
-        TrackHeight: () => Sum(element.Height, -element.VerticalPaddingSum),
+        VerticalPaddingSum: () => Num.Sum(element.PaddingTop, element.PaddingBottom, 0),
+        HorizontalPaddingSum: () => Num.Sum(element.PaddingLeft, element.PaddingRight, 0),
+        TrackWidth: () => Num.Sum(element.Width, -element.HorizontalPaddingSum),
+        TrackHeight: () => Num.Sum(element.Height, -element.VerticalPaddingSum),
 
         ThumbThickhess: () => element.IsVertical ? element.TrackWidth : element.TrackHeight,
         TrackLenght: () => element.IsVertical ? element.TrackHeight : element.TrackWidth,

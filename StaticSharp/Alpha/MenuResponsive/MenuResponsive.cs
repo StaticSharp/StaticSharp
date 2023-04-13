@@ -5,18 +5,15 @@ using System.Runtime.CompilerServices;
 
 namespace StaticSharp {
 
-    namespace Js {
-        public interface MenuResponsive : BlockWithChildren {
-            public double PrimaryGravity { get; }
-            public double SecondaryGravity { get; }
-            public bool DropdownExpanded { get; }
-            
-            public Block? Logo { get; }
-            public Block Button { get; }
-            public BlockWithChildren Dropdown { get; }
-        }
-    }
+    public interface JMenuResponsive : JBlockWithChildren {
+        public double PrimaryGravity { get; }
+        public double SecondaryGravity { get; }
+        public bool DropdownExpanded { get; }
 
+        public JBlock? Logo { get; }
+        public JBlock Button { get; }
+        public JBlockWithChildren Dropdown { get; }
+    }
 
     namespace Gears {
         public class MenuResponsiveBindings<FinalJs> : BlockWithChildrenBindings<FinalJs>  {
@@ -29,7 +26,7 @@ namespace StaticSharp {
     }
 
     [Scripts.LayoutUtils]
-    [Mix(typeof(MenuResponsiveBindings<Js.MenuResponsive>))]
+    [Mix(typeof(MenuResponsiveBindings<JMenuResponsive>))]
     [ConstructorJs]
     public partial class MenuResponsive : BlockWithChildren {
 
@@ -41,8 +38,8 @@ namespace StaticSharp {
         [Socket]
         public Block Button { get; set; } = new SvgIconBlock(SvgIcons.MaterialDesignIcons.Menu)
         {
-            Visibility = new(e => ((Js.MenuResponsive)e.Parent).Dropdown.Children.Any() ? 1 : 0),
-            BackgroundColor = new(e => ((Js.MenuResponsive)e.Parent).DropdownExpanded ? DefaultBackgroundColor : Color.White),
+            Visibility = new(e => ((JMenuResponsive)e.Parent).Dropdown.Children.Any() ? 1 : 0),
+            BackgroundColor = new(e => ((JMenuResponsive)e.Parent).DropdownExpanded ? DefaultBackgroundColor : Color.White),
         };
 
         [Socket]
@@ -54,7 +51,7 @@ namespace StaticSharp {
             RadiusTopLeft= 5,
             RadiusBottomLeft= 5,
             RadiusBottomRight = 5,
-            Visibility = new(e => ((Js.MenuResponsive)e.Parent).DropdownExpanded ? 1 : 0)
+            Visibility = new(e => ((JMenuResponsive)e.Parent).DropdownExpanded ? 1 : 0)
         };
 
         public MenuResponsive([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")

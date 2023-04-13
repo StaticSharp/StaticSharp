@@ -8,17 +8,15 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
 
-    namespace Js {
-        public interface ScrollLayout : Block {
-            public Block Child { get; }
-            public double ScrollX  { get; }
-            public double ScrollY  { get; }
-            public double ScrollXActual  { get; }
-            public double ScrollYActual  { get; }
-            
-            public double InternalWidth { get; }
-            public double InternalHeight { get; }
-        }
+    public interface JScrollLayout : JBlock {
+        public Block Child { get; }
+        public double ScrollX { get; }
+        public double ScrollY { get; }
+        public double ScrollXActual { get; }
+        public double ScrollYActual { get; }
+
+        public double InternalWidth { get; }
+        public double InternalHeight { get; }
     }
 
     namespace Gears {
@@ -28,7 +26,7 @@ namespace StaticSharp {
         }
     }
 
-    [Mix(typeof(ScrollLayoutBindings<Js.ScrollLayout>))]
+    [Mix(typeof(ScrollLayoutBindings<JScrollLayout>))]
     [ConstructorJs]
     public partial class ScrollLayout : Block {
 
@@ -40,12 +38,12 @@ namespace StaticSharp {
         }
         public ScrollLayout([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
 
-        public virtual ScrollLayout Assign(out Js.Variable<Js.ScrollLayout> variable, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")// where T : Hierarchical where JsT : Js.Hierarchical 
+        public virtual ScrollLayout Assign(out Js.Variable<JScrollLayout> variable, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")// where T : Hierarchical where JsT : Js.Hierarchical 
         {
             variable = new(callerLineNumber, callerFilePath);
             return Assign(variable);
         }
-        public ScrollLayout Assign(Js.Variable<Js.ScrollLayout> variable) {
+        public ScrollLayout Assign(Js.Variable<JScrollLayout> variable) {
             if (VariableNames == null) VariableNames = new();
             VariableNames.Add(variable.Name);
             return this;

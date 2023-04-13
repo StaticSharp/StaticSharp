@@ -98,12 +98,12 @@ namespace StaticSharpDemo.Root.Components.ParagraphComponent {
 
             new LayoutOverride{ 
                 Child = new Paragraph("""
-                    PaddingLeft = new(e=>Js.Math.Max(e.Parent.PaddingLeft, 20)),
-                    PaddingRight = new(e=>Js.Math.Max(e.Parent.PaddingRight, 20)),
+                    PaddingLeft = new(e=>Js.Num.Max(e.Parent.PaddingLeft, 20)),
+                    PaddingRight = new(e=>Js.Num.Max(e.Parent.PaddingRight, 20)),
                     Resize to see difference with previous
                     """){
-                    PaddingLeft = new(e=>Js.Math.Max(e.Parent.Parent.PaddingLeft, 10)),
-                    PaddingRight = new(e=>Js.Math.Max(e.Parent.Parent.PaddingRight, 10)),
+                    PaddingLeft = new(e=>Js.Num.Max(e.Parent.Parent.PaddingLeft, 10)),
+                    PaddingRight = new(e=>Js.Num.Max(e.Parent.Parent.PaddingRight, 10)),
                     BackgroundColor = Color.BlueViolet,
                 },
                 OverrideX = 0,

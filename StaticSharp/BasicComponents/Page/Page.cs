@@ -6,13 +6,11 @@ using System.Runtime.CompilerServices;
 
 namespace StaticSharp {
 
-    namespace Js {
-        public interface Page : BaseModifier {
-            public double Width  { get; }
-            public double Height  { get; }
-            public double FontSize  { get; }
+    public interface JPage : JBaseModifier {
+        public double Width { get; }
+        public double Height { get; }
+        public double FontSize { get; }
 
-        }
     }
 
     namespace Gears {
@@ -34,13 +32,17 @@ namespace StaticSharp {
 
 
 
-    [Mix(typeof(PageBindings<Js.Page>))]
+    [Mix(typeof(PageBindings<JPage>))]
     [ConstructorJs]
     [Scripts.Storage]
     [RelatedScript("Initialization")]
     [RelatedStyle("../Normalization")]
 
-    public abstract partial class Page : Block {
+    public abstract partial class Page : BaseModifier {
+
+        [Socket]
+        public abstract Blocks UnmanagedChildren { get; }
+
         protected virtual void Setup(Context context) {
             FontSize = 16;
         }
@@ -55,8 +57,6 @@ namespace StaticSharp {
 
         protected override string TagName => "body";
 
-
-        public override abstract Blocks UnmanagedChildren { get; }
 
 
         public Page([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")

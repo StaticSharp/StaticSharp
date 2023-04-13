@@ -1,46 +1,47 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net7</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
+		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<!--LangVersion>preview</LangVersion-->
-		
-		
+
+
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
 		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
 
-		<WarningsAsErrors>CS0108</WarningsAsErrors><!--use the new keyword-->
+		<WarningsAsErrors>CS0108</WarningsAsErrors>
+		<!--use the new keyword-->
 
 		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
 
 
 	</PropertyGroup>
 
-    <PropertyGroup>
-        <PackageId>StaticSharp.Core</PackageId>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageLicenseFile>LICENSE</PackageLicenseFile>
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <EmbedUntrackedSources>true</EmbedUntrackedSources>
-        <!-- TODO: Do we really need sourcelink for generator?-->
-        <DebugType>embedded</DebugType>
-        <PackageVersion>0.1.0</PackageVersion>
-        <PackageIcon>images\icon.png</PackageIcon>
-        <Authors>StaticSharp</Authors>
-    </PropertyGroup>
+	<PropertyGroup>
+		<PackageId>StaticSharp.Core</PackageId>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<!-- TODO: Do we really need sourcelink for generator?-->
+		<DebugType>embedded</DebugType>
+		<PackageVersion>0.1.0</PackageVersion>
+		<PackageIcon>images\icon.png</PackageIcon>
+		<Authors>StaticSharp</Authors>
+	</PropertyGroup>
 
-    <ItemGroup>
-        <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    </ItemGroup>
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
 
 
-    <ItemGroup>
-        <None Include="..\README.md" Pack="true" PackagePath="\" />
-        <None Include="..\LICENSE" Pack="true" PackagePath="\" />
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-        <None Include=".\Core.png" Pack="true" Visible="false" PackagePath="images\icon.png" />
-    </ItemGroup>
+	<ItemGroup>
+		<None Include="..\README.md" Pack="true" PackagePath="\" />
+		<None Include="..\LICENSE" Pack="true" PackagePath="\" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+		<None Include=".\Core.png" Pack="true" Visible="false" PackagePath="images\icon.png" />
+	</ItemGroup>
 
 
 	<ItemGroup>
@@ -48,24 +49,24 @@
 		<EmbeddedResource Include="**\*.css" />
 	</ItemGroup>
 
-	
+
 
 
 
 	<ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.4.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.4.0" />
 		<PackageReference Include="ColorCode.HTML" Version="2.0.13" />
 
 
-		
+
 		<PackageReference Include="Magick.NET-Q16-AnyCPU" Version="12.1.0" />
 		<PackageReference Include="Magick.NET.Core" Version="12.1.0" />
 		<PackageReference Include="NUglify" Version="1.20.5" />
-		
-		
 
-		
-		
+
+
+
+
 		<!--
 		<PackageReference Include="NToastNotify" Version="8.0.0" />
 		
@@ -74,9 +75,9 @@
 		<PackageReference Include="NUglify" Version="1.20.2" />-->
 		<PackageReference Include="Octokit" Version="2.0.1" />
 		<PackageReference Include="Scopes" Version="0.0.16" />
-		<PackageReference Include="StaticSharp.Javascriptifier" Version="0.1.12" />
-		
-		<PackageReference Include="SvgIcons" Version="0.1.7" />		
+		<PackageReference Include="StaticSharp.Javascriptifier" Version="0.1.13" />
+
+		<PackageReference Include="SvgIcons" Version="0.1.7" />
 		<PackageReference Include="YoutubeExplode" Version="6.2.5" />
 
 
@@ -84,47 +85,58 @@
 		<PackageReference Include="MimeTypeMapOfficial" Version="1.0.17" />
 	</ItemGroup>
 
+
+
+
+
+
+
+
 	
-	
-	
-	
-	
-	
-	
-	<!--Source generators-->
-	<PropertyGroup>
-		<UseDebugGeneratorOutput>false</UseDebugGeneratorOutput>
-	</PropertyGroup>
-	
-	
+
+
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	  <WarningsAsErrors>$(WarningsAsErrors);NU1605</WarningsAsErrors>
+		<WarningsAsErrors>$(WarningsAsErrors);NU1605</WarningsAsErrors>
 		<!--LangVersion>preview</LangVersion-->
-	  <DebugType>portable</DebugType>
+		<DebugType>portable</DebugType>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<!--LangVersion>preview</LangVersion-->
-	  <DebugType>portable</DebugType>
+		<DebugType>portable</DebugType>
+	</PropertyGroup>
+
+	<!--Source generators-->
+
+	<PropertyGroup>
+		<UseDebugGeneratorOutput>false</UseDebugGeneratorOutput>
 	</PropertyGroup>
 
 	<ItemGroup Condition="$(UseDebugGeneratorOutput)">
 		<Compile Include=".generated\**" />
 	</ItemGroup>
 
-  <ItemGroup Condition="!$(UseDebugGeneratorOutput)">
+	<ItemGroup Condition="!$(UseDebugGeneratorOutput)">
 		<PackageReference Include="StaticSharp.MixinSourceGenerator" Version="0.1.1" PrivateAssets="All" />
 	</ItemGroup>
 
-  <ItemGroup>
-		<PackageReference Include="StaticSharp.MixinSourceGenerator.Attributes" Version="0.1.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="StaticSharpServer\" />
-  </ItemGroup>
-
-
 	<ItemGroup>
+		<PackageReference Include="StaticSharp.MixinSourceGenerator.Attributes" Version="0.1.0" />
+	</ItemGroup>
+
+
+
+
+
+
+	<PropertyGroup>
+		<StaticSharpComponentSourceGeneratorDebug>true</StaticSharpComponentSourceGeneratorDebug>
+	</PropertyGroup>
+
+	<ItemGroup Condition="$(StaticSharpComponentSourceGeneratorDebug)">
+		<Compile Include=".generated\**" />
+	</ItemGroup>
+
+	<ItemGroup Condition="!$(StaticSharpComponentSourceGeneratorDebug)">
 		<ProjectReference Include="..\StaticSharpComponentSourceGenerator\Generator\StaticSharpComponentSourceGenerator.csproj" OutputItemType="Analyzer" />
 	</ItemGroup>
 

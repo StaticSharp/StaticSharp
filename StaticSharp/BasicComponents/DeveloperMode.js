@@ -135,20 +135,20 @@ new Reaction(() => {
 
             //margin.title = target.dataset.callerFilePath + "\nline: " + target.dataset.callerLineNumber
 
-            margin.style.left = Sum(target.AbsoluteX, -target.MarginLeft) + "px"
-            margin.style.top = Sum(target.AbsoluteY, -target.MarginTop) + "px"
-            margin.style.width = Sum(target.Width, target.MarginLeft, target.MarginRight) + "px"
-            margin.style.height = Sum(target.Height, target.MarginTop, target.MarginBottom) + "px"
+            margin.style.left = Num.Sum(target.AbsoluteX, -target.MarginLeft) + "px"
+            margin.style.top = Num.Sum(target.AbsoluteY, -target.MarginTop) + "px"
+            margin.style.width = Num.Sum(target.Width, target.MarginLeft, target.MarginRight) + "px"
+            margin.style.height = Num.Sum(target.Height, target.MarginTop, target.MarginBottom) + "px"
 
-            padding.style.left = First(target.MarginLeft, 0) + "px"
-            padding.style.top = First(target.MarginTop, 0) + "px"
-            padding.style.width = First(target.Width, 0) + "px"
-            padding.style.height = First(target.Height, 0) + "px"
+            padding.style.left = Num.First(target.MarginLeft, 0) + "px"
+            padding.style.top = Num.First(target.MarginTop, 0) + "px"
+            padding.style.width = Num.First(target.Width, 0) + "px"
+            padding.style.height = Num.First(target.Height, 0) + "px"
 
-            internal.style.left = First(target.PaddingLeft, 0) + "px"
-            internal.style.top = First(target.PaddingTop, 0) + "px"
-            internal.style.width = Sum(target.Width, -target.PaddingLeft, -target.PaddingRight) + "px"
-            internal.style.height = Sum(target.Height, -target.PaddingTop, -target.PaddingBottom) + "px"
+            internal.style.left = Num.First(target.PaddingLeft, 0) + "px"
+            internal.style.top = Num.First(target.PaddingTop, 0) + "px"
+            internal.style.width = Num.Sum(target.Width, -target.PaddingLeft, -target.PaddingRight) + "px"
+            internal.style.height = Num.Sum(target.Height, -target.PaddingTop, -target.PaddingBottom) + "px"
         }
     } else {
         if (developerMode.elementFrame) {

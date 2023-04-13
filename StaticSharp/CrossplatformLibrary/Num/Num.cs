@@ -20,7 +20,7 @@ namespace StaticSharp {
         }
 
 
-        [JavascriptClass("")]
+        //[JavascriptClass("")]
         public static class Num {
             [JavascriptOnlyMember]
             public static double First(params double[] value) => throw new JavascriptOnlyException();
@@ -57,7 +57,7 @@ namespace StaticSharp {
                     return keyframes[keyframes.Length - 1].y;
                 }
 
-                for (int i = 1; i < keyframes.Length - 1; i++) {
+                for (int i = 1; i < keyframes.Length; i++) {
                     if (x < keyframes[i].x) {
                         double deltaX = keyframes[i].x - keyframes[i - 1].x;
                         double alpha = (x - keyframes[i-1].x) / deltaX;

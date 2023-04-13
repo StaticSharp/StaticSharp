@@ -2,17 +2,14 @@
 using System.Runtime.CompilerServices;
 
 namespace StaticSharp {
-
-
-    namespace Js {
-        public interface BorderRadius {
-            public double Radius { get; }
-            public double RadiusTopLeft { get; }
-            public double RadiusTopRight { get; }
-            public double RadiusBottomLeft { get; }
-            public double RadiusBottomRight { get; }
-        }
+    public interface JBorderRadius : JModifier {
+        public double Radius { get; }
+        public double RadiusTopLeft { get; }
+        public double RadiusTopRight { get; }
+        public double RadiusBottomLeft { get; }
+        public double RadiusBottomRight { get; }
     }
+
     namespace Gears {
         public class BorderRadiusBindings<FinalJs> : ModifierBindings<FinalJs> {
             public Binding<double> Radius { set { Apply(value); } }
@@ -26,7 +23,7 @@ namespace StaticSharp {
 
 
     [ConstructorJs]
-    [Mix(typeof(BorderRadiusBindings<Js.BorderRadius>))]
+    [Mix(typeof(BorderRadiusBindings<JBorderRadius>))]
     public partial class BorderRadius : Modifier {
         public BorderRadius([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
         }

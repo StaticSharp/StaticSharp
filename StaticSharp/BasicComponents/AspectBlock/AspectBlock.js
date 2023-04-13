@@ -8,8 +8,8 @@ function AspectBlock(element) {
         NativeAspect: e => e.NativeWidth / e.NativeHeight,
 
         Aspect: e => e.NativeAspect,
-        Width: () => First(element.Height * element.Aspect, element.NativeWidth),
-        Height: () => First(element.Width / element.Aspect, element.NativeHeight),
+        Width: () => Num.First(element.Height * element.Aspect, element.NativeWidth),
+        Height: () => Num.First(element.Width / element.Aspect, element.NativeHeight),
 
         Fit: "Inside",
         GravityVertical: 0,

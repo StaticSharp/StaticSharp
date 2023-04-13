@@ -4,10 +4,10 @@ function CalcOffset(container, child, sideName) {
     let paddingName = "Padding" + sideName
     let marginName = "Margin" + sideName
     if (container[paddingName] != undefined) {
-        return Math.max(container[paddingName], First(child[marginName], 0))
+        return Math.max(container[paddingName], child[marginName] || 0)
     }
     if (container[marginName] == undefined) {
-        return First(child[marginName], 0)
+        return child[marginName] || 0
     }
     if (child[marginName] == undefined) {
         return 0
@@ -128,7 +128,7 @@ function Block(element) {
         AbsoluteX: () => {
             let parent = element.Parent
             if (parent) {
-                return Sum(element.Parent.AbsoluteX, element.Parent.ScrollXActual, element.X)
+                return Num.Sum(element.Parent.AbsoluteX, element.Parent.ScrollXActual, element.X)
             } else {
                 return 0
             }
@@ -136,7 +136,7 @@ function Block(element) {
         AbsoluteY: () => {
             let parent = element.Parent
             if (parent) {
-                return Sum(element.Parent.AbsoluteY, -element.Parent.ScrollYActual, element.Y)
+                return Num.Sum(element.Parent.AbsoluteY, -element.Parent.ScrollYActual, element.Y)
             } else {
                 return 0
             }

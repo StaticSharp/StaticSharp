@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using StaticSharp.Gears;
 
+
 namespace StaticSharpDemo.Root {
     public abstract partial class Page : StaticSharp.Page {
         public override string? SiteName => "StaticSharp";
@@ -10,7 +11,12 @@ namespace StaticSharpDemo.Root {
 
         protected override void Setup(Context context) {
             base.Setup(context);
-            FontSize = 18;
+            FontSize = new (e=>Js.Num.PiecewiseLinearInterpolation(
+                Js.Window.DevicePixelRatio,
+                new(1, 18),
+                new(2, 16)
+                )
+            );
             FontFamilies = new() { "Inter" };
             Weight = FontWeight.Light;
             //TextDecorationColor = Color.Blue;
@@ -66,7 +72,7 @@ namespace StaticSharpDemo.Root {
 
         public virtual Block Footer => new LinearLayout {
             FontSize = 14,
-            PaddingsHorizontal = new(e => Js.Math.Max(e.Parent.Width - ColumnWidth, 0) / 2),
+            PaddingsHorizontal = new(e => Js.Num.Max(e.Parent.Width - ColumnWidth, 0) / 2),
             BackgroundColor = Color.FromGrayscale(0.9),
             Children = { 
                 /*new LinearLayout {
@@ -111,7 +117,7 @@ namespace StaticSharpDemo.Root {
 
         public virtual double ColumnWidth => 1080;
 
-        Js.Variable<Js.ScrollLayout> MainScrollLayout => new();
+        Js.Variable<JScrollLayout> MainScrollLayout => new();
 
         public override Blocks UnmanagedChildren => new Blocks {
             new ScrollLayout {
@@ -129,7 +135,7 @@ namespace StaticSharpDemo.Root {
                     Children = {
                         new LinearLayout{
                             //Width = new(e=>e.Parent.Width),
-                            PaddingsHorizontal = new(e=>Js.Math.Max(e.Width-ColumnWidth , 0)/2),
+                            PaddingsHorizontal = new(e=>Js.Num.Max(e.Width-ColumnWidth , 0)/2),
                             Children = {
                                 Menu,
                                 Content,

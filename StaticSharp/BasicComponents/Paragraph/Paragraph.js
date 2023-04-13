@@ -6,7 +6,7 @@ function Paragraph(element) {
 
     element.Reactive = {
         Selectable: true,
-        InternalWidth: () => Sum(element.MaxContentWidth, element.PaddingLeft, element.PaddingRight),
+        InternalWidth: () => Num.Sum(element.MaxContentWidth, element.PaddingLeft, element.PaddingRight),
 
         InternalHeight: undefined,
 
@@ -80,34 +80,34 @@ function Paragraph(element) {
         content.style.left = ToCssSize(element.PaddingLeft)
         content.style.top = ToCssSize(element.PaddingTop)
 
-        let minContentWidthWithPaddings = Sum(element.MinContentWidth, element.PaddingLeft, element.PaddingRight)
+        let minContentWidthWithPaddings = Num.Sum(element.MinContentWidth, element.PaddingLeft, element.PaddingRight)
 
         if (element.Width < minContentWidthWithPaddings) {
 
-            let scale = Sum(element.Width, -element.PaddingLeft, -element.PaddingRight) / element.MinContentWidth
+            let scale = Num.Sum(element.Width, -element.PaddingLeft, -element.PaddingRight) / element.MinContentWidth
 
             if (scale > 0) {
                 content.style.width = "min-content"
                 content.style.transformOrigin = "top left"
                 content.style.transform = `scale(${scale}, ${scale})`
-                element.InternalHeight = Sum(element.MaxContentHeight * scale, element.PaddingTop, element.PaddingBottom)
+                element.InternalHeight = Num.Sum(element.MaxContentHeight * scale, element.PaddingTop, element.PaddingBottom)
             } else {
                 content.style.display = "none"
-                element.InternalHeight = Sum(element.PaddingTop, element.PaddingBottom)
+                element.InternalHeight = Num.Sum(element.PaddingTop, element.PaddingBottom)
             }
             return
         }
 
-        let maxContentWidthWithPaddings = Sum(element.MaxContentWidth, element.PaddingLeft, element.PaddingRight)
+        let maxContentWidthWithPaddings = Num.Sum(element.MaxContentWidth, element.PaddingLeft, element.PaddingRight)
         let extraPixels = element.Width - maxContentWidthWithPaddings
 
         if (extraPixels > -0.001) {
             
-            let internalHeight = Sum(element.MinContentHeight, element.PaddingTop, element.PaddingBottom)
+            let internalHeight = Num.Sum(element.MinContentHeight, element.PaddingTop, element.PaddingBottom)
             element.InternalHeight = internalHeight
             //element.title = `InternalHeight(${internalHeight}) = ${element.MinContentHeight} + ${element.PaddingTop} + ${element.PaddingBottom}`
             if (extraPixels > 0.001) {
-                content.style.width = ToCssSize(Sum(element.Width, -element.PaddingLeft, -element.PaddingRight))
+                content.style.width = ToCssSize(Num.Sum(element.Width, -element.PaddingLeft, -element.PaddingRight))
             } else {
                 content.style.width = "max-content"
             }
@@ -116,7 +116,7 @@ function Paragraph(element) {
         
         //console.log("Reflow", minContentWidthWithPaddings, maxContentWidthWithPaddings, element.Width, element.inlineContainer.maxWidth)
         var rect = content.getBoundingClientRect()
-        element.InternalHeight = Sum(rect.height, element.PaddingTop, element.PaddingBottom)
+        element.InternalHeight = Num.Sum(rect.height, element.PaddingTop, element.PaddingBottom)
 
     })
 

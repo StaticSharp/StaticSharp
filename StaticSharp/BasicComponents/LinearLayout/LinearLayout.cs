@@ -18,19 +18,17 @@ namespace StaticSharp {
         Multiline: false
      
      */
-    namespace Js {
-        public interface LinearLayout : Block {
-            public bool Vertical { get; }
-            public double ItemGrow { get; }
-            public double Gap { get; }
-            public double GapGrow { get; }
-            public double? PrimaryGravity { get; }
-            public double? SecondaryGravity { get; }
-            //public bool FillSecondary { get; }
+    public interface JLinearLayout : JBlock {
+        public bool Vertical { get; }
+        public double ItemGrow { get; }
+        public double Gap { get; }
+        public double GapGrow { get; }
+        public double? PrimaryGravity { get; }
+        public double? SecondaryGravity { get; }
+        //public bool FillSecondary { get; }
 
-            public double InternalWidth { get; }
-            public double InternalHieght { get; }
-        }
+        public double InternalWidth { get; }
+        public double InternalHieght { get; }
     }
 
     namespace Gears {
@@ -48,7 +46,7 @@ namespace StaticSharp {
 
     [Scripts.LayoutUtils]
     //[RelatedScript("../FrontendUtils/LayoutUtils")]
-    [Mix(typeof(LinearLayoutBindings<Js.LinearLayout>))]
+    [Mix(typeof(LinearLayoutBindings<JLinearLayout>))]
     [ConstructorJs]
     public partial class LinearLayout : BlockWithChildren {
 

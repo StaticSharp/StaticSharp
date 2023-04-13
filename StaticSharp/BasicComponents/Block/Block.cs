@@ -5,44 +5,43 @@ using System.Runtime.CompilerServices;
 
 namespace StaticSharp {
 
-    namespace Js {
-        public interface Block : BaseModifier {
-            
-            public double X { get; }
-            public double Y { get; }
+    public interface JBlock : JBaseModifier {
 
-            public double AbsoluteX { get; }
-            public double AbsoluteY { get; }
+        public double X { get; }
+        public double Y { get; }
+
+        public double AbsoluteX { get; }
+        public double AbsoluteY { get; }
 
 
-            public double Width { get; }
-            public double Height { get; }
+        public double Width { get; }
+        public double Height { get; }
 
-            public double MarginLeft  { get; }
-            public double MarginRight  { get; }
-            public double MarginTop  { get; }
-            public double MarginBottom  { get; }
+        public double MarginLeft { get; }
+        public double MarginRight { get; }
+        public double MarginTop { get; }
+        public double MarginBottom { get; }
 
-            public double PaddingLeft  { get; set; }
-            public double PaddingRight  { get; set; }
-            public double PaddingTop  { get; set; }
-            public double PaddingBottom  { get; set; }
+        public double PaddingLeft { get; set; }
+        public double PaddingRight { get; set; }
+        public double PaddingTop { get; set; }
+        public double PaddingBottom { get; set; }
 
-            public double PaddingsHorizontal { set {
-                    PaddingLeft = value;
-                    PaddingRight = value;
-                }
+        public double PaddingsHorizontal {
+            set {
+                PaddingLeft = value;
+                PaddingRight = value;
             }
-
-            public double FontSize  { get; }
-            public int Depth { get; }
-
-            public bool ClipByParent { get; }
-
-            public new Block Parent { get; }
-            public Block NextSibling { get; }
-            public Js.Enumerable<Block> UnmanagedChildren { get; }
         }
+
+        public double FontSize { get; }
+        public int Depth { get; }
+
+        public bool ClipByParent { get; }
+
+        public new JBlock Parent { get; }
+        public JBlock NextSibling { get; }
+        public Js.Enumerable<JBlock> UnmanagedChildren { get; }
     }
 
 
@@ -98,7 +97,7 @@ namespace StaticSharp {
     }
 
     //[Mix(typeof(AssignMixin<Block, Js.Block>))]
-    [Mix(typeof(BlockBindings<Js.Block>))]
+    [Mix(typeof(BlockBindings<JBlock>))]
     [ConstructorJs]
     
     public partial class Block : BaseModifier {
@@ -133,14 +132,14 @@ namespace StaticSharp {
         }
 
         public static T FillWidth<T>(this T _this) where T : Block {
-            _this.X = new(e => Js.Math.First(e.MarginLeft, 0));
-            _this.Width = new(e => Js.Math.Sum(e.Parent.Width, -e.MarginLeft, -e.MarginRight));
+            _this.X = new(e => Js.Num.First(e.MarginLeft, 0));
+            _this.Width = new(e => Js.Num.Sum(e.Parent.Width, -e.MarginLeft, -e.MarginRight));
             return _this;
         }
 
         public static T FillHeight<T>(this T _this) where T : Block {
-            _this.Y = new(e => Js.Math.First(e.MarginTop, 0));
-            _this.Height = new(e => Js.Math.Sum(e.Parent.Height, -e.MarginTop, -e.MarginBottom));
+            _this.Y = new(e => Js.Num.First(e.MarginTop, 0));
+            _this.Height = new(e => Js.Num.Sum(e.Parent.Height, -e.MarginTop, -e.MarginBottom));
             return _this;
         }
 

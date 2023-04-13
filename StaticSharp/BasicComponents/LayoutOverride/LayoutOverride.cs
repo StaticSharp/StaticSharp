@@ -13,17 +13,14 @@ using System.Threading.Tasks;
 namespace StaticSharp
 {
 
-    namespace Js
-    {
-        public interface LayoutOverride : Block {
-            public Block Child { get; }
+    public interface JLayoutOverride : JBlock {
+        public JBlock Child { get; }
 
-            public double? OverrideX { get; }
-            public double? OverrideY { get; }
+        public double? OverrideX { get; }
+        public double? OverrideY { get; }
 
-            public double? OverrideWidth { get; }
-            public double? OverrideHeight { get; }
-        }
+        public double? OverrideWidth { get; }
+        public double? OverrideHeight { get; }
     }
 
 
@@ -38,7 +35,7 @@ namespace StaticSharp
     }
 
 
-    [Mix(typeof(LayoutOverrideBindings<Js.LayoutOverride>))]
+    [Mix(typeof(LayoutOverrideBindings<JLayoutOverride>))]
     [ConstructorJs]
     public partial class LayoutOverride: Block {
         [Socket]

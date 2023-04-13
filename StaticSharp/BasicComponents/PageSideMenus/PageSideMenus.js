@@ -89,7 +89,7 @@ function PageSideMenus(element) {
         SideBarsIconsSize: 48,
 
         BarsCollapsed: () =>
-            element.Width < Sum(
+            element.Width < Num.Sum(
                 element.ContentWidth,
                 element.LeftSideBar ? element.LeftSideBar.Width : 0,
                 element.RightSideBar ? element.RightSideBar.Width : 0),
@@ -250,9 +250,9 @@ function PageSideMenus(element) {
     new Reaction(() => {
         if (element.TopBar) {
             if ((element.RightSideBar || element.LeftSideBar) && element.BarsCollapsed) {
-                element.TopBar.Height = () => Max(element.TopBar.Layer.Height/*InternalHeight*/, element.SideBarsIconsSize)
+                element.TopBar.Height = () => Num.Max(element.TopBar.Layer.Height/*InternalHeight*/, element.SideBarsIconsSize)
             } else {
-                element.TopBar.Height = () => First(element.TopBar.Layer.Height/*InternalHeight*/, element.SideBarsIconsSize)
+                element.TopBar.Height = () => Num.First(element.TopBar.Layer.Height/*InternalHeight*/, element.SideBarsIconsSize)
             }
         }
     })
@@ -396,9 +396,9 @@ function PageSideMenus(element) {
 
     new Reaction(() => {
 
-        let LeftBarSize = (element.LeftSideBar && !element.BarsCollapsed) ? Max(element.LeftSideBar.Width, 0) : 0
+        let LeftBarSize = (element.LeftSideBar && !element.BarsCollapsed) ? Num.Max(element.LeftSideBar.Width, 0) : 0
 
-        let RightBarSize = (element.RightSideBar && !element.BarsCollapsed) ? Max(element.RightSideBar.Width, 0) : 0
+        let RightBarSize = (element.RightSideBar && !element.BarsCollapsed) ? Num.Max(element.RightSideBar.Width, 0) : 0
 
         let width = element.Width - LeftBarSize - RightBarSize
         let innerWidth = Math.min(width, element.ContentWidth)

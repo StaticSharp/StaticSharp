@@ -9,10 +9,8 @@ using System.Xml;
 
 namespace StaticSharp {
 
-    namespace Js {
-        public interface SvgIconInline: Block, SvgIcon {
-            //public double BaselineOffset  { get; } 
-        }
+    public interface JSvgIconInline : JInline, JSvgIcon {
+        //public double BaselineOffset  { get; } 
     }
 
     namespace Gears {
@@ -21,8 +19,8 @@ namespace StaticSharp {
         }
     }
 
-    [Mix(typeof(SvgIconInlineBindings<Js.SvgIconInline>))]
-    [Mix(typeof(InlineBindings<Js.SvgIconInline>))]
+    [Mix(typeof(SvgIconInlineBindings<JSvgIconInline>))]
+    [Mix(typeof(InlineBindings<JSvgIconInline>))]
     [RelatedScript("SvgIcon")]
     [ConstructorJs]
     public partial class SvgIconInline : Inline {

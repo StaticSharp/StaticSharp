@@ -9,10 +9,8 @@ using System.Runtime.CompilerServices;
 namespace StaticSharp {
 
 
-    namespace Js {
-        public interface Image : AspectBlock {
-            //public double Aspect  { get; }
-        }
+    public interface JImage : JAspectBlock {
+        //public double Aspect  { get; }
     }
 
 
@@ -24,7 +22,7 @@ namespace StaticSharp {
 
 
 
-    [Mix(typeof(ImageBindings<Js.Image>))]
+    [Mix(typeof(ImageBindings<JImage>))]
     [ConstructorJs]
     public partial class Image : AspectBlock, IMainVisual {
 

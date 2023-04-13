@@ -19,7 +19,7 @@ function MenuResponsive(element) {
         InternalHeight: e => {
             var verticalNames = new LayoutPropertiesNames(true)
 
-            let result = Sum(e["Padding" + verticalNames.side[0]], e["Padding" + verticalNames.side[1]])
+            let result = Num.Sum(e["Padding" + verticalNames.side[0]], e["Padding" + verticalNames.side[1]])
 
             let mainMenuItems = e.Children.ToArray()
             let dropdownMenuItems = e.Dropdown.Children.ToArray()
@@ -37,9 +37,9 @@ function MenuResponsive(element) {
                 let firstOffset = CalcOffset(e, child, verticalNames.side[0])
                 let lastOffset = CalcOffset(e, child, verticalNames.side[1])
 
-                let current = Sum(child.Layer[verticalNames.dimension], firstOffset + lastOffset)  // TODO: why Layer?
+                let current = Num.Sum(child.Layer[verticalNames.dimension], firstOffset + lastOffset)  // TODO: why Layer?
 
-                result = Max(result, current)
+                result = Num.Max(result, current)
             }
 
             //for (let item of dropdownMenuItems) {

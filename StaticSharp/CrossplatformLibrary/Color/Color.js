@@ -194,7 +194,7 @@ Color.Lerp = function (a, b, t) {
  */
 Color.prototype.Lerp = function (targetColor, amount) {
     var bk = (1 - amount);
-    var a = First(this.a * bk + targetColor.a * amount, this.a, targetColor.a);
+    var a = Num.First(this.a * bk + targetColor.a * amount, this.a, targetColor.a);
     var r = this.r * bk + targetColor.r * amount;
     var g = this.g * bk + targetColor.g * amount;
     var b = this.b * bk + targetColor.b * amount;

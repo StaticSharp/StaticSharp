@@ -4,7 +4,7 @@ function Thumb(element) {
     element.Reactive = {
         BackgroundColor: () => element.Parent.HierarchyForegroundColor,
         
-        Radius: () => Min(element.Width, element.Height) / 2,
+        Radius: () => Num.Min(element.Width, element.Height) / 2,
         Depth: 1,
         Visibility: () => (window.Touch || element.ThumbSizeScale >= 1) ? 0 : element.Hover ? 0.5 : 0.25,
     }
@@ -54,8 +54,8 @@ function ScrollLayout(element) {
 
 
     element.Reactive = {
-        InternalWidth: () => Sum(element.Child.Layer.Width, element.LeftOffset, element.RightOffset),
-        InternalHeight: () => Sum(element.Child.Layer.Height, element.TopOffset, element.BottomOffset),
+        InternalWidth: () => Num.Sum(element.Child.Layer.Width, element.LeftOffset, element.RightOffset),
+        InternalHeight: () => Num.Sum(element.Child.Layer.Height, element.TopOffset, element.BottomOffset),
 
         Width: e => e.InternalWidth,
         Height: e => e.InternalHeight,
@@ -131,8 +131,8 @@ function ScrollLayout(element) {
 
     
     new Reaction(() => {
-        element.Child.Layer.Width = Max(element.Child.Layer.Width, element.ChildAreaWidth)
-        element.Child.Layer.Height = Max(element.Child.Layer.Height, element.ChildAreaHeight)
+        element.Child.Layer.Width = Math.max(element.Child.Layer.Width, element.ChildAreaWidth)
+        element.Child.Layer.Height = Math.max(element.Child.Layer.Height, element.ChildAreaHeight)
     })
 
     

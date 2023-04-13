@@ -5,7 +5,7 @@ namespace StaticSharp {
 
         [Javascriptifier.JavascriptOnlyMember]
         [Javascriptifier.JavascriptMethodFormat("{0}.Layer")]
-        public static T GetLayer<T>(this T _this) where T : Js.Hierarchical => throw new Javascriptifier.JavascriptOnlyException();
+        public static T GetLayer<T>(this T _this) where T : JHierarchical => throw new Javascriptifier.JavascriptOnlyException();
     }
 
     namespace Scripts {

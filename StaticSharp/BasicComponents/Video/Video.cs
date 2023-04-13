@@ -17,25 +17,23 @@ using YoutubeExplode;
 namespace StaticSharp {
 
 
-    namespace Js {
-        public interface Video : AspectBlock {
-            public bool Play { get; }
-            public bool PlayActual { get; }
+    public interface JVideo : JAspectBlock {
+        public bool Play { get; }
+        public bool PlayActual { get; }
 
-            public double Position  { get; }
-            public double PositionActual  { get; }
+        public double Position { get; }
+        public double PositionActual { get; }
 
-            public bool Mute { get; }
-            public bool MuteActual { get; }
+        public bool Mute { get; }
+        public bool MuteActual { get; }
 
-            public double Volume  { get; }
-            public double VolumeActual  { get; }
+        public double Volume { get; }
+        public double VolumeActual { get; }
 
 
-            public bool PreferPlatformPlayer { get; }
-            public bool Controls { get; }
-            public bool Loop { get; }
-        }
+        public bool PreferPlatformPlayer { get; }
+        public bool Controls { get; }
+        public bool Loop { get; }
     }
 
 
@@ -56,7 +54,7 @@ namespace StaticSharp {
 
 
 
-    [Mix(typeof(VideoBindings<Js.Video>))]
+    [Mix(typeof(VideoBindings<JVideo>))]
     [ConstructorJs]
     public sealed partial class Video : AspectBlock, IMainVisual {
 

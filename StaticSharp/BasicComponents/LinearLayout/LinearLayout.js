@@ -31,15 +31,15 @@ function LinearLayout(element) {
         InternalSecondarySize: e => {
             var names = new LayoutPropertiesNames(!element.Vertical)
 
-            let result = Sum(e["Padding" + names.side[0]], e["Padding" + names.side[1]], 0)
+            let result = Num.Sum(e["Padding" + names.side[0]], e["Padding" + names.side[1]], 0)
 
             for (let child of e.OrderedChildren) {
                 let firstOffset = CalcOffset(e, child, names.side[0])
                 let lastOffset = CalcOffset(e, child, names.side[1])
 
-                let current = Sum(child.Layer[names.dimension], firstOffset + lastOffset)
+                let current = Num.Sum(child.Layer[names.dimension], firstOffset + lastOffset)
 
-                result = Max(result, current)
+                result = Num.Max(result, current)
             }
             //console.log("InternalSecondarySize", result)
             return result

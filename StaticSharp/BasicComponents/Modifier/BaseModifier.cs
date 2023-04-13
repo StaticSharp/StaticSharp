@@ -12,28 +12,26 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    namespace Js {
-        public interface BaseModifier : Hierarchical {
+    public interface JBaseModifier : JHierarchical {
 
-            public new BaseModifier Parent { get; }
-            public Color BackgroundColor { get; }
-            public Color HierarchyBackgroundColor { get; }
-            public Color ForegroundColor { get; }
-            public Color HierarchyForegroundColor { get; }
-            public Js.Enumerable<Js.Modifier> Modifiers { get; }
+        public new JBaseModifier Parent { get; }
+        public Color BackgroundColor { get; }
+        public Color HierarchyBackgroundColor { get; }
+        public Color ForegroundColor { get; }
+        public Color HierarchyForegroundColor { get; }
+        public Js.Enumerable<JModifier> Modifiers { get; }
 
-            public bool Hover { get; }
-            public bool? Selectable { get; }
+        public bool Hover { get; }
+        public bool? Selectable { get; }
 
-            public double Visibility { get; }
+        public double Visibility { get; }
 
-            public double Radius { get; }
-            public double RadiusTopLeft { get; }
-            public double RadiusTopRight { get; }
-            public double RadiusBottomLeft { get; }
-            public double RadiusBottomRight { get; }
+        public double Radius { get; }
+        public double RadiusTopLeft { get; }
+        public double RadiusTopRight { get; }
+        public double RadiusBottomLeft { get; }
+        public double RadiusBottomRight { get; }
 
-        }
     }
 
     namespace Gears {
@@ -54,7 +52,7 @@ namespace StaticSharp {
 
     namespace Gears {
 
-        [Mix(typeof(BaseModifierBindings<Js.BaseModifier>))]
+        [Mix(typeof(BaseModifierBindings<JBaseModifier>))]
         [Scripts.Color]
         [ConstructorJs]
         public abstract partial class BaseModifier: Hierarchical {

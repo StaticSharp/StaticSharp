@@ -15,28 +15,22 @@ namespace StaticSharp {
     
 
 
-    [Javascriptifier.JavascriptClass("")]
+    /*[Javascriptifier.JavascriptClass("")]
     public static class HierarchicalStatic {
 
         [Javascriptifier.JavascriptMethodFormat("{0}.First(x=>x.Name=={1})")]
-        public static T ByName<T>(this Enumerable<T> enumerable, string name) where T : Js.Hierarchical {
+        public static T ByName<T>(this Enumerable<T> enumerable, string name) where T : JHierarchical {
             throw new Javascriptifier.JavascriptOnlyException();
         }
-    }
+    }*/
 
 
-    namespace Js {
+    public interface JHierarchical : JEntity {
+        public string Name { get; }
+        public bool Exists { get; }
+        public JPage Root { get; }
+        public JHierarchical Parent { get; }
 
-
-
-        
-        public interface Hierarchical : Entity {
-            public string Name { get; }
-            public bool Exists { get; }
-            public Page Root { get; }
-            public Hierarchical Parent { get; }
-            
-        }
     }
 
 
@@ -77,7 +71,7 @@ namespace StaticSharp {
     [ConstructorJs]
     [RelatedScript("DomLinkedList")]
     //[Mix(typeof(AssignMixin<Hierarchical, Js.Hierarchical>))]
-    public abstract class Hierarchical : Gears.Entity {
+    public abstract class Hierarchical : Entity {
         protected virtual string TagName => CaseUtils.CamelToKebab(GetType().Name);
 
         
@@ -88,12 +82,12 @@ namespace StaticSharp {
         }
         public Hierarchical(int callerLineNumber, string callerFilePath) : base(callerLineNumber, callerFilePath) { }
 
-        public virtual Hierarchical Assign(out Js.Variable<Js.Hierarchical> variable, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")// where T : Hierarchical where JsT : Js.Hierarchical 
+        public virtual Hierarchical Assign(out Js.Variable<JHierarchical> variable, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")// where T : Hierarchical where JsT : Js.Hierarchical 
         {
             variable = new(callerLineNumber, callerFilePath);
             return Assign(variable);
         }
-        public Hierarchical Assign(Js.Variable<Js.Hierarchical> variable) {
+        public Hierarchical Assign(Js.Variable<JHierarchical> variable) {
             if (VariableNames == null) VariableNames = new();
             VariableNames.Add(variable.Name);
             return this;

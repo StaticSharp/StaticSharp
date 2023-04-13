@@ -9,14 +9,12 @@ using System.Threading.Tasks;
 
 namespace StaticSharp {
 
-    namespace Js {
-        public interface Slider : Block {
-            public double Min  { get; }
-            public double Max  { get; }
-            public double Step  { get; }
-            public double Value  { get; }
-            public double ValueActual  { get; }
-        }
+    public interface JSlider : JBlock {
+        public double Min { get; }
+        public double Max { get; }
+        public double Step { get; }
+        public double Value { get; }
+        public double ValueActual { get; }
     }
 
     namespace Gears {
@@ -29,7 +27,7 @@ namespace StaticSharp {
     }
 
 
-    [Mix(typeof(SliderBindings<Js.Slider>))]
+    [Mix(typeof(SliderBindings<JSlider>))]
     [ConstructorJs]
     public partial class Slider : Block {
 
