@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
@@ -30,6 +30,7 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.4.0" />
+        <PackageReference Include="Scopes" Version="0.0.16" />
     </ItemGroup>
 
 	
@@ -44,7 +45,7 @@
     <Target Name="GetDependencyTargetPaths" DependsOnTargets="ResolveReferences">
         <ItemGroup>
             <!-- for referencing as project. Needed for MSBuild (VS), not needed for dotnet build (VSCode)-->
-            <!-- TargetPathWithTargetPlatformMoniker Condition="'$(MSBuildRuntimeType)'=='Full'" Include="@(ResolvedCompileFileDefinitions)" IncludeRuntimeDependency="false" /-->
+            <TargetPathWithTargetPlatformMoniker Condition="'$(MSBuildRuntimeType)'=='Full'" Include="@(ResolvedCompileFileDefinitions)" IncludeRuntimeDependency="false" />
             <!-- for correct nuget package-->
             <None Include="$(OutputPath)\*.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
         </ItemGroup>
