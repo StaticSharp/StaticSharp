@@ -32,6 +32,8 @@
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.4.0" />
     </ItemGroup>
 
+	
+	
     <!-- Further is needed to resolve generator dependenies on nugets-->
 
     <PropertyGroup>
