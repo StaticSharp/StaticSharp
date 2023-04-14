@@ -130,7 +130,7 @@
 
 
 	<PropertyGroup>
-		<StaticSharpComponentSourceGeneratorDebug>false</StaticSharpComponentSourceGeneratorDebug>
+        <StaticSharpComponentSourceGeneratorDebug>false</StaticSharpComponentSourceGeneratorDebug>
 	</PropertyGroup>
 
 	<ItemGroup Condition="$(StaticSharpComponentSourceGeneratorDebug)">

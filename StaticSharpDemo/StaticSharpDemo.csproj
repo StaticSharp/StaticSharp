@@ -34,13 +34,13 @@
 	<!--Source generators-->
 
 	<PropertyGroup>
-		<StaticSharpSourceGeneratorDebug>false</StaticSharpSourceGeneratorDebug>
+        <RoutingSgDebug>false</RoutingSgDebug>
 	</PropertyGroup>
-	<ItemGroup Condition="$(StaticSharpSourceGeneratorDebug)">
-		<Compile Include=".generated\StaticSharpSourceGenerator.StaticSharpSourceGenerator\**" />
+	<ItemGroup Condition="$(RoutingSgDebug)">
+		<Compile Include=".generated\RoutingSg.RoutingSg\**" />
 	</ItemGroup>
-	<ItemGroup Condition="!$(StaticSharpSourceGeneratorDebug)">
-		<PackageReference Include="StaticSharp.StaticSharpSourceGenerator" Version="0.1.0" />
+	<ItemGroup Condition="!$(RoutingSgDebug)">
+        <ProjectReference Include="..\RoutingSg\Generator\RoutingSg.csproj" OutputItemType="Analyzer" />
 	</ItemGroup>
 
 
