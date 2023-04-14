@@ -106,7 +106,7 @@
 	</PropertyGroup>
 
 	<!--Source generators-->
-
+	<!--
 	<PropertyGroup>
 		<UseDebugGeneratorOutput>false</UseDebugGeneratorOutput>
 	</PropertyGroup>
@@ -122,6 +122,7 @@
 	<ItemGroup>
 		<PackageReference Include="StaticSharp.MixinSourceGenerator.Attributes" Version="0.1.0" />
 	</ItemGroup>
+	-->
 
 
 
@@ -129,15 +130,16 @@
 
 
 	<PropertyGroup>
-		<StaticSharpComponentSourceGeneratorDebug>true</StaticSharpComponentSourceGeneratorDebug>
+		<StaticSharpComponentSourceGeneratorDebug>false</StaticSharpComponentSourceGeneratorDebug>
 	</PropertyGroup>
 
 	<ItemGroup Condition="$(StaticSharpComponentSourceGeneratorDebug)">
-		<Compile Include=".generated\**" />
+		<Compile Include=".generated\StaticSharpComponentSourceGenerator.StaticSharpComponentSourceGenerator\**" />
 	</ItemGroup>
 
 	<ItemGroup Condition="!$(StaticSharpComponentSourceGeneratorDebug)">
 		<ProjectReference Include="..\StaticSharpComponentSourceGenerator\Generator\StaticSharpComponentSourceGenerator.csproj" OutputItemType="Analyzer" />
 	</ItemGroup>
+
 
 </Project>

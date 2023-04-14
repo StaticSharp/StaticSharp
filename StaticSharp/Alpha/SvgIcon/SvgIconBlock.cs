@@ -9,9 +9,7 @@ namespace StaticSharp {
     public interface JSvgIconBlock : JAspectBlock, JSvgIcon {
     }
 
-    [Mix(typeof(SvgIconBindings<JSvgIconBlock>))]
-    [Mix(typeof(BlockBindings<JSvgIconBlock>))]
-    [ConstructorJs("SvgIcon")]
+    [RelatedScript("SvgIcon")]
     [ConstructorJs]
     public partial class SvgIconBlock : AspectBlock {
 

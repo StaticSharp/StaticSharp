@@ -8,16 +8,11 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
 
-
-    /*[System.Diagnostics.DebuggerNonUserCode]
-    public class TemplateJs : BlockJs {
-        public TemplateJs() { }
-    }*/
+    public interface JTemplate: JBlock { }
 
 
     [ConstructorJs]
-
-    public class Template : Block {
+    public partial class Template : Block {
         protected Genome<IAsset> assetGenome { get; }
 
         protected Template(Template other,

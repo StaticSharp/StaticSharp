@@ -3,7 +3,10 @@ using StaticSharp.Gears;
 using StaticSharp.Html;
 
 namespace StaticSharp {
-    
+
+    public interface JInlineGroup : JInline {
+    }
+
     public sealed partial class InlineGroup : Inline {
 
         public Inlines Children { get; init; } = new();
@@ -15,16 +18,11 @@ namespace StaticSharp {
             Children = new(other.Children);
         }
         public InlineGroup(
-            int callerLineNumber = 0,
-            string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
-
-        public InlineGroup(
             string text,
             int callerLineNumber = 0,
             string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
             Children.Add(text);
         }
-
         public InlineGroup(
             Inlines inlines,
             int callerLineNumber = 0,

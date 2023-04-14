@@ -7,32 +7,16 @@ using System.Runtime.CompilerServices;
 namespace StaticSharp {
 
     public interface JPage : JBaseModifier {
-        public double Width { get; }
-        public double Height { get; }
-        public double FontSize { get; }
+        public double Width { get; set; }
+        public double Height { get; set; }
+        public double FontSize { get; set; }
 
     }
-
-    namespace Gears {
-        public class PageBindings<FinalJs> : BlockBindings<FinalJs> {
-            //public Binding<double> FontSize { set { Apply(value); } }
-
-        }
-    }
-
-
-    
-
-
-
 
     public interface IMainVisual {
         void GetMeta(Dictionary<string,string> meta, Context context);
     }
 
-
-
-    [Mix(typeof(PageBindings<JPage>))]
     [ConstructorJs]
     [Scripts.Storage]
     [RelatedScript("Initialization")]
@@ -45,6 +29,9 @@ namespace StaticSharp {
 
         protected virtual void Setup(Context context) {
             FontSize = 16;
+            CodeFontFamilies = new[] { new FontFamilyGenome("Roboto Mono") };
+            FontFamilies = new() { new FontFamilyGenome("Roboto") };
+            Weight = FontWeight.Regular;
         }
         public virtual Genome<IAsset>? Favicon => null;
         public virtual string? SiteName => null;
@@ -56,16 +43,6 @@ namespace StaticSharp {
         public abstract Node VirtualNode { get; }
 
         protected override string TagName => "body";
-
-
-
-        public Page([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
-            : base(callerLineNumber, callerFilePath) {
-            CodeFontFamilies = new[] { new FontFamilyGenome("Roboto Mono") };
-            FontFamilies = new(){ new FontFamilyGenome("Roboto") };
-            Weight = StaticSharp.FontWeight.Regular;
-
-        }
 
         protected override void AddRequiredInclues(Context context) {
 

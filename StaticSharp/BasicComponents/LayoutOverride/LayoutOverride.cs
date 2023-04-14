@@ -16,33 +16,21 @@ namespace StaticSharp
     public interface JLayoutOverride : JBlock {
         public JBlock Child { get; }
 
-        public double? OverrideX { get; }
-        public double? OverrideY { get; }
+        public double? OverrideX { get; set; }
+        public double? OverrideY { get; set; }
 
-        public double? OverrideWidth { get; }
-        public double? OverrideHeight { get; }
+        public double? OverrideWidth { get; set; }
+        public double? OverrideHeight { get; set; }
     }
 
-
-    namespace Gears {
-        public class LayoutOverrideBindings<FinalJs> : BlockBindings<FinalJs> {
-            public Binding<double?> OverrideX { set { Apply(value); } }
-            public Binding<double?> OverrideY { set { Apply(value); } }
-
-            public Binding<double?> OverrideWidth { set { Apply(value); } }
-            public Binding<double?> OverrideHeight { set { Apply(value); } }
-        }
-    }
-
-
-    [Mix(typeof(LayoutOverrideBindings<JLayoutOverride>))]
     [ConstructorJs]
     public partial class LayoutOverride: Block {
         [Socket]
         public required Block Child { get; set; }
 
-        public LayoutOverride([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
-            : base(callerLineNumber, callerFilePath) { }
+        protected LayoutOverride(LayoutOverride other, int callerLineNumber, string callerFilePath) : base(other, callerLineNumber, callerFilePath) {
+            Child = other.Child;
+        }
 
     }
 }

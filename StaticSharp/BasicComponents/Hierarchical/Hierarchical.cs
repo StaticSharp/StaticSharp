@@ -26,30 +26,21 @@ namespace StaticSharp {
 
 
     public interface JHierarchical : JEntity {
-        public string Name { get; }
-        public bool Exists { get; }
+        public string Name { get; set; }
+        public bool Exists { get; set; }
         public JPage Root { get; }
         public JHierarchical Parent { get; }
 
     }
 
-
-    namespace Gears {
-        public class HierarchicalBindings<FinalJs> : Bindings<FinalJs> {
-            public Binding<string> Name { set { Apply(value); } }
-            public Binding<bool> Exists { set { Apply(value); } }
-        }
-    }
-
     namespace Gears {
         public class SocketAttribute : Attribute { 
-        }
-    
+        }    
     }
 
 
     namespace Js {
-        public class Variable<T> : Javascriptifier.IStringifiable {
+        public class Variable<T> : Javascriptifier.IStringifiable where T: JEntity {
 
             [Javascriptifier.JavascriptPropertyGetFormat("{0}")]
             [Javascriptifier.JavascriptOnlyMember]
@@ -71,18 +62,10 @@ namespace StaticSharp {
     [ConstructorJs]
     [RelatedScript("DomLinkedList")]
     //[Mix(typeof(AssignMixin<Hierarchical, Js.Hierarchical>))]
-    public abstract class Hierarchical : Entity {
+    public abstract partial class Hierarchical : Entity {
         protected virtual string TagName => CaseUtils.CamelToKebab(GetType().Name);
 
-        
-
-        protected Hierarchical(Hierarchical other,
-            int callerLineNumber,
-            string callerFilePath) : base(other, callerLineNumber, callerFilePath) {
-        }
-        public Hierarchical(int callerLineNumber, string callerFilePath) : base(callerLineNumber, callerFilePath) { }
-
-        public virtual Hierarchical Assign(out Js.Variable<JHierarchical> variable, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")// where T : Hierarchical where JsT : Js.Hierarchical 
+        /*public virtual Hierarchical Assign(out Js.Variable<JHierarchical> variable, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")// where T : Hierarchical where JsT : Js.Hierarchical 
         {
             variable = new(callerLineNumber, callerFilePath);
             return Assign(variable);
@@ -91,9 +74,7 @@ namespace StaticSharp {
             if (VariableNames == null) VariableNames = new();
             VariableNames.Add(variable.Name);
             return this;
-        }
-
-        
+        } */      
 
         protected string TagToJsValue(Tag tag) {
             return TagToJsValue(tag.Id);

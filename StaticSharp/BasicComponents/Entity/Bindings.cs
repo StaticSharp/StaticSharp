@@ -34,7 +34,7 @@ namespace StaticSharp {
 
 
 
-    namespace Gears {
+    /*namespace Gears {
 
 
         public class Bindings<FinalJs> {
@@ -74,14 +74,6 @@ namespace StaticSharp {
                 public string CreateScriptExpression() {
                     if (Expression != null) {
                         var script = Javascriptifier.ExpressionScriptifier.Scriptify(Expression).ToString();
-                        /*if (bindingWrappers?.Count > 0) {
-                            foreach (var b in bindingWrappers) { 
-                                
-                            }
-                        }
-
-
-                        var wrap = $"(()=>{{return {script}}})()";*/
                         return script;
                     }
                     return Javascriptifier.ValueStringifier.Stringify(Value);
@@ -105,14 +97,11 @@ namespace StaticSharp {
 
                 foreach (var i in memberNames) {
                     if (i != null) {
-                        /*if (binding == null)
-                            aggregator.Properties[i] = Js.Constants.Undefined;
-                        else*/
                             aggregator.Properties[i] = binding.CreateScriptExpression();
                     }
                 }
             }
         }
-    }
+    }*/
 
 }

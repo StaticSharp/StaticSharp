@@ -18,30 +18,17 @@ namespace StaticSharp {
 
 
     public interface JParagraph : JBlock {
-        public TextAlignmentHorizontal TextAlignmentHorizontal { get; }
+        public TextAlignmentHorizontal TextAlignmentHorizontal { get; set; }
     }
-
-    namespace Gears {
-        public class ParagraphBindings<FinalJs> : BlockBindings<FinalJs> {
-            public Binding<TextAlignmentHorizontal> TextAlignmentHorizontal { set { Apply(value); } }
-        }
-    }
-
 
     [RelatedStyle]
     [ConstructorJs]
-    [Mix(typeof(ParagraphBindings<JParagraph>))]
     public partial class Paragraph : Block {
         public Inlines Inlines { get; } = new();
 
-        public Paragraph(
-            [CallerLineNumber] int callerLineNumber = 0,
-            [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
-        }
-
         public Paragraph(Paragraph other,
-            [CallerLineNumber] int callerLineNumber = 0,
-            [CallerFilePath] string callerFilePath = "") : base(other, callerLineNumber, callerFilePath) {
+            int callerLineNumber,
+            string callerFilePath) : base(other, callerLineNumber, callerFilePath) {
             Inlines = new(other.Inlines);
         }
 

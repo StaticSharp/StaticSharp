@@ -17,7 +17,10 @@ public abstract class CallerInfo{
         this.callerLineNumber = callerLineNumber;
         this.callerFilePath = callerFilePath;
     }
-
+    protected CallerInfo(CallerInfo other, int callerLineNumber, string callerFilePath) {
+        this.callerLineNumber = callerLineNumber;
+        this.callerFilePath = callerFilePath;
+    }
     protected void ThrowInvalidUsage() { 
         throw new InvalidUsageException(callerLineNumber,callerFilePath);
     }

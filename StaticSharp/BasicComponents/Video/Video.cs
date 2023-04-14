@@ -18,43 +18,24 @@ namespace StaticSharp {
 
 
     public interface JVideo : JAspectBlock {
-        public bool Play { get; }
+        public bool Play { get; set; }
         public bool PlayActual { get; }
 
-        public double Position { get; }
+        public double Position { get; set; }
         public double PositionActual { get; }
 
-        public bool Mute { get; }
+        public bool Mute { get; set; }
         public bool MuteActual { get; }
 
-        public double Volume { get; }
+        public double Volume { get; set; }
         public double VolumeActual { get; }
 
 
-        public bool PreferPlatformPlayer { get; }
-        public bool Controls { get; }
-        public bool Loop { get; }
+        public bool PreferPlatformPlayer { get; set; }
+        public bool Controls { get; set; }
+        public bool Loop { get; set; }
     }
 
-
-    namespace Gears {
-        public class VideoBindings<FinalJs> : AspectBlockBindings<FinalJs> {
-            public Binding<bool> Play { set { Apply(value); } }
-            public Binding<double> Position { set { Apply(value); } }
-            public Binding<bool> Mute { set { Apply(value); } }
-            public Binding<double> Volume { set { Apply(value); } }
-
-
-            public Binding<bool> PreferPlatformPlayer { set { Apply(value); } }
-            public Binding<bool> Controls { set { Apply(value); } }            
-            public Binding<bool> Loop { set { Apply(value); } }
-
-        }
-    }
-
-
-
-    [Mix(typeof(VideoBindings<JVideo>))]
     [ConstructorJs]
     public sealed partial class Video : AspectBlock, IMainVisual {
 

@@ -6,24 +6,15 @@ using System.Threading.Tasks;
 namespace StaticSharp {
 
     public interface JPageSideMenus : JPage {
-        public double ContentWidth { get; }
+        public double ContentWidth { get; set; }
         public bool BarsCollapsed { get; }
-        public double SideBarsIconsSize { get; }
+        public double SideBarsIconsSize { get; set; }
 
     }
 
-    namespace Gears {
-        public class PageSideMenusBindings<FinalJs> : PageBindings<FinalJs> {
-            public Binding<double> ContentWidth { set { Apply(value); } }
-            public Binding<double> SideBarsIconsSize { set { Apply(value); } }
-        }
-    }
 
     [ConstructorJs]
-    [Mix(typeof(PageSideMenusBindings<JPageSideMenus>))]
-    public abstract partial class PageSideMenus : Page {
-
-        
+    public abstract partial class PageSideMenus : Page {        
         protected override void Setup(Context context) {
             SideBarsIconsSize = 48;
             base.Setup(context);
@@ -34,10 +25,6 @@ namespace StaticSharp {
                 return n[(n.LastIndexOf('.') + 1)..].Replace('_',' ');
             }
         }
-
-
-
-        //public override Inlines Description => (base.Description != null) ? new Paragraph(base.Description) : null;
 
         public virtual Block? TopBar => new Paragraph(Title) {
             Height = new(e=>Js.Num.Max(((JPageSideMenus)e.Root).SideBarsIconsSize, e.GetLayer().Height /*InternalHeight*/)),

@@ -10,32 +10,9 @@ using System.Xml.Linq;
 namespace StaticSharp {
 
     public interface JSvgIcon {
-        public Color StrokeColor { get; }
-        public double StrokeWidth { get; }
+        public Color StrokeColor { get; set; }
+        public double StrokeWidth { get; set; }
 
     }
-
-    namespace Gears {
-        public class SvgIconBindings<FinalJs> : Bindings<FinalJs> {
-            public Binding<Color> StrokeColor { set { Apply(value); } }
-            public Binding<double> StrokeWidth { set { Apply(value); } }
-        }
-
-
-    }
-
-
-    /*namespace Gears {
-        public static class MaterialDesignIcon {
-            
-        }
-    }*/
-
-
-    
-
-
-
-
 
 }

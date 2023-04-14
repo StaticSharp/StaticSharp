@@ -17,17 +17,9 @@ namespace StaticSharp {
         public double ValueActual { get; }
     }
 
-    namespace Gears {
-        public class SliderBindings<FinalJs> : BlockBindings<FinalJs> {
-            public Binding<double> Min { set { Apply(value); } }
-            public Binding<double> Max { set { Apply(value); } }
-            public Binding<double> Step { set { Apply(value); } }
-            public Binding<double> Value { set { Apply(value); } }
-        }
-    }
 
 
-    [Mix(typeof(SliderBindings<JSlider>))]
+
     [ConstructorJs]
     public partial class Slider : Block {
 
@@ -37,22 +29,6 @@ namespace StaticSharp {
         };
 
         public Block? Thumb { get; set; } = null;
-        public Slider(Slider other, int callerLineNumber, string callerFilePath)
-            : base(other, callerLineNumber, callerFilePath) { }
-
-        public Slider([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
-
-        /*protected override void ModifyHtml(Context context, Tag elementTag) {
-            var thumb = Thumb;
-            if (thumb == null) {
-                thumb = DefaultThumbConstructor();
-            }
-
-            elementTag.Add(
-                thumb.GenerateHtml(context)
-                );
-            base.ModifyHtml(context, elementTag);
-        }*/
 
     }
 

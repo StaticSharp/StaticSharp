@@ -32,26 +32,43 @@
 
 
 	<!--Source generators-->
+
+	<PropertyGroup>
+		<StaticSharpSourceGeneratorDebug>false</StaticSharpSourceGeneratorDebug>
+	</PropertyGroup>
+	<ItemGroup Condition="$(StaticSharpSourceGeneratorDebug)">
+		<Compile Include=".generated\StaticSharpSourceGenerator.StaticSharpSourceGenerator\**" />
+	</ItemGroup>
+	<ItemGroup Condition="!$(StaticSharpSourceGeneratorDebug)">
+		<PackageReference Include="StaticSharp.StaticSharpSourceGenerator" Version="0.1.0" />
+	</ItemGroup>
+
+
+	<PropertyGroup>
+		<StaticSharpComponentSourceGeneratorDebug>false</StaticSharpComponentSourceGeneratorDebug>
+	</PropertyGroup>
+	<ItemGroup Condition="$(StaticSharpComponentSourceGeneratorDebug)">
+		<Compile Include=".generated\StaticSharpComponentSourceGenerator.StaticSharpComponentSourceGenerator\**" />
+	</ItemGroup>
+	<ItemGroup Condition="!$(StaticSharpComponentSourceGeneratorDebug)">
+		<PackageReference Include="StaticSharp.StaticSharpComponentSourceGenerator" Version="0.1.0" />
+	</ItemGroup>
+	
+	
+	
 	<PropertyGroup>
 		<UseDebugGeneratorOutput>false</UseDebugGeneratorOutput>
-	</PropertyGroup>
-	
+	</PropertyGroup>	
 	<ItemGroup Condition="$(UseDebugGeneratorOutput)">
 		<Compile Include=".generated\**" />
 	</ItemGroup>
-
 	<ItemGroup Condition="!$(UseDebugGeneratorOutput)">
 		<PackageReference Include="StaticSharp.MixinSourceGenerator" Version="0.1.1" />
-    <PackageReference Include="StaticSharp.StaticSharpSourceGenerator" Version="0.1.0" />
 	</ItemGroup>
-
     <ItemGroup>
         <PackageReference Include="StaticSharp.MixinSourceGenerator.Attributes" Version="0.1.0" />
     </ItemGroup>
 
-    <ItemGroup>
-	  <Folder Include="Root\Components\Code\" />
-	</ItemGroup>
 
 	<ItemGroup>
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />

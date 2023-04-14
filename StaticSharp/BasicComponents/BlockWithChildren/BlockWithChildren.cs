@@ -9,12 +9,6 @@ namespace StaticSharp {
         public Enumerable<Block> Children { get; }
     }
 
-    namespace Gears {
-        public class BlockWithChildrenBindings<FinalJs> : BlockBindings<FinalJs> {
-        }
-    }
-
-    [Mix(typeof(BlockWithChildrenBindings<JBlockWithChildren>))]
     [ConstructorJs]
     public partial class BlockWithChildren : Block {
 
@@ -25,7 +19,6 @@ namespace StaticSharp {
             : base(other, callerLineNumber, callerFilePath) {
             Children = new(other.Children);
         }
-        public BlockWithChildren([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
 
     }
 }

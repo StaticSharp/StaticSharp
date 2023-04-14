@@ -10,6 +10,8 @@ namespace StaticSharp {
         public void Add(string name) { 
             Add(new FontFamilyGenome(name));
         }
+        public FontFamilies() : base() { }
+        public FontFamilies(FontFamilies other) : base(other) { }
     }
 
 

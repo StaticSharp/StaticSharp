@@ -22,6 +22,7 @@ namespace StaticSharpDemo.Root {
             //TextDecorationColor = Color.Blue;
         }
 
+        
 
         public override object? MainVisual => null;
         public override string Title {

@@ -9,24 +9,15 @@ namespace StaticSharp {
 
 
     public interface JScrollLayout : JBlock {
-        public Block Child { get; }
-        public double ScrollX { get; }
-        public double ScrollY { get; }
-        public double ScrollXActual { get; }
-        public double ScrollYActual { get; }
-
-        public double InternalWidth { get; }
-        public double InternalHeight { get; }
+        Block Child { get; }
+        double ScrollX { get; set; }
+        double ScrollY { get; set; }
+        double ScrollXActual { get; }
+        double ScrollYActual { get; }
+        double InternalWidth { get; }
+        double InternalHeight { get; }
     }
 
-    namespace Gears {
-        public class ScrollLayoutBindings<FinalJs> : BlockBindings<FinalJs> {
-            public Binding<double> ScrollX { set { Apply(value); } }
-            public Binding<double> ScrollY { set { Apply(value); } }
-        }
-    }
-
-    [Mix(typeof(ScrollLayoutBindings<JScrollLayout>))]
     [ConstructorJs]
     public partial class ScrollLayout : Block {
 
@@ -36,9 +27,8 @@ namespace StaticSharp {
             : base(other, callerLineNumber, callerFilePath) {
             Child = other.Child;
         }
-        public ScrollLayout([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
 
-        public virtual ScrollLayout Assign(out Js.Variable<JScrollLayout> variable, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")// where T : Hierarchical where JsT : Js.Hierarchical 
+        /*public virtual ScrollLayout Assign(out Js.Variable<JScrollLayout> variable, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")// where T : Hierarchical where JsT : Js.Hierarchical 
         {
             variable = new(callerLineNumber, callerFilePath);
             return Assign(variable);
@@ -47,7 +37,7 @@ namespace StaticSharp {
             if (VariableNames == null) VariableNames = new();
             VariableNames.Add(variable.Name);
             return this;
-        }
+        }*/
 
 
         /*protected override void ModifyHtml(Context context, Tag elementTag) {

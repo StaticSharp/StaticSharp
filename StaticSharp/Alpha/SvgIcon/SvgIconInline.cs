@@ -13,14 +13,7 @@ namespace StaticSharp {
         //public double BaselineOffset  { get; } 
     }
 
-    namespace Gears {
-        public class SvgIconInlineBindings<FinalJs> : SvgIconBindings<FinalJs> {
-            //public Binding<double> BaselineOffset { set { Apply(value); } }
-        }
-    }
 
-    [Mix(typeof(SvgIconInlineBindings<JSvgIconInline>))]
-    [Mix(typeof(InlineBindings<JSvgIconInline>))]
     [RelatedScript("SvgIcon")]
     [ConstructorJs]
     public partial class SvgIconInline : Inline {

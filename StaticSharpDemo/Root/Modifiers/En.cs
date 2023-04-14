@@ -30,7 +30,7 @@ namespace StaticSharpDemo.Root.Modifiers {
                 Height = 200,
                 BackgroundColor =
                 new(e=>
-                (e as JHover).Value
+                e.AsHover().Value
                 ?Color.MediumVioletRed
                 :Color.OrangeRed
                 ),
@@ -41,7 +41,7 @@ namespace StaticSharpDemo.Root.Modifiers {
                         Radius = new (e=>
                         Js.Animation.SpeedLimit(
                             10,
-                            (e as JHover).Value? 10: 50
+                            e.AsHover().Value? 10: 50
                             ))
                     }
                 }
@@ -56,8 +56,8 @@ namespace StaticSharpDemo.Root.Modifiers {
                     Color.MediumVioletRed,
                     Color.OrangeRed,
                     Js.Animation.SpeedLimit(
-                        (e as JHover).Value?5:0.5,
-                        (e as JHover).Value?1:0
+                        e.AsHover().Value?5:0.5,
+                        e.AsHover().Value?1:0
                     )
                 )
                 ),

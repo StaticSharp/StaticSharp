@@ -14,15 +14,6 @@ namespace StaticSharp {
     }
 
 
-    namespace Gears {
-        public class ImageBindings<FinalJs> : AspectBlockBindings<FinalJs> {
-            //public Binding<double> Aspect { set { Apply(value); } }
-        }
-    }
-
-
-
-    [Mix(typeof(ImageBindings<JImage>))]
     [ConstructorJs]
     public partial class Image : AspectBlock, IMainVisual {
 
@@ -42,9 +33,6 @@ namespace StaticSharp {
         public Image(Image other, int callerLineNumber, string callerFilePath)
             : base(other, callerLineNumber, callerFilePath) {
             AssetGenome = other.AssetGenome;
-        }
-
-        public Image([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
         }
 
         public Image(Genome<IAsset> assetGenome, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {

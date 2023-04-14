@@ -8,13 +8,6 @@ namespace StaticSharp {
 
     }
 
-    namespace Gears {
-        public class InlineBindings<FinalJs> : BaseModifierBindings<FinalJs> {
-        
-        }
-    }
-
-
     [ConstructorJs]
     public abstract partial class Inline : BaseModifier, IInline {
         public double? MarginLeft { get; set; }
@@ -70,12 +63,18 @@ namespace StaticSharp {
             int callerLineNumber = 0,
             string callerFilePath = ""
             ) : base(other, callerLineNumber, callerFilePath) {
+
+            MarginLeft = other.MarginLeft;
+            MarginRight = other.MarginRight;
+            MarginTop = other.MarginTop;
+            MarginBottom = other.MarginBottom;
+
+            PaddingLeft = other.PaddingLeft;
+            PaddingRight = other.PaddingRight;
+            PaddingTop = other.PaddingTop;
+            PaddingBottom = other.PaddingBottom;
+
         }
-
-        public Inline(
-            int callerLineNumber = 0,
-            string callerFilePath = "") : base(callerLineNumber, callerFilePath) { }
-
 
         public virtual string GetPlainText(Context context) => "";
 

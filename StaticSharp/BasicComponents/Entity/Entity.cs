@@ -1,7 +1,49 @@
 ﻿using StaticSharp.Gears;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace StaticSharp {
+    public struct Binding<J,T> : IVoidEnumerable {
+
+        private T? Value;
+        private Expression<Func<J, T>>? Expression;
+        private List<LambdaExpression>? bindingWrappers = null;
+
+        public double Animation { set { } }
+
+        public Binding(Expression<Func<J, T>> expression) {
+            Expression = expression;
+        }
+        public Binding(T value) {
+            Value = value;
+        }
+
+        public static implicit operator Binding<J,T>(T value) {
+            return new Binding<J,T>(value);
+        }
+
+        public Binding<J, T> this[Expression index] {
+            set {
+                // set the instance value at index
+            }
+        }
+
+
+        public void Add<W>(Expression<Func<J, W>> wrapper) {
+            bindingWrappers ??= new List<LambdaExpression>();
+
+            bindingWrappers.Add(wrapper);
+        }
+
+
+        public string CreateScriptExpression() {
+            if (Expression != null) {
+                var script = Javascriptifier.ExpressionScriptifier.Scriptify(Expression).ToString();
+                return script;
+            }
+            return Javascriptifier.ValueStringifier.Stringify(Value);
+        }
+    }
 
 
     public interface JEntity {
@@ -19,7 +61,7 @@ namespace StaticSharp {
     [RelatedScript("Events")]
     [Scripts.TypeCast]
     [ConstructorJs]
-    public abstract class Entity : CallerInfo {
+    public abstract partial class Entity : CallerInfo {
         public Dictionary<string, string> Properties { get; } = new();
 
         protected List<string>? VariableNames;
@@ -35,13 +77,9 @@ namespace StaticSharp {
         }
 
         protected Entity(Entity other,
-            int callerLineNumber = 0,
-            string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
+            int callerLineNumber,
+            string callerFilePath) : base(callerLineNumber, callerFilePath) {
             Properties = new(other.Properties);
-        }
-
-        protected Entity(int callerLineNumber, string callerFilePath) : base(callerLineNumber, callerFilePath) {
-
         }
 
         protected string[] FindJsConstructorsNames() {
