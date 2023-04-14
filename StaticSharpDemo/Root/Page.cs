@@ -119,7 +119,6 @@ namespace StaticSharpDemo.Root {
         public virtual double ColumnWidth => 1080;
 
         Js.Variable<JScrollLayout> MainScrollLayout => new();
-
         public override Blocks UnmanagedChildren => new Blocks {
             new ScrollLayout {
                 Width = new(e=>e.Parent.Width),

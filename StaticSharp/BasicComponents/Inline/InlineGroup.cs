@@ -11,7 +11,7 @@ namespace StaticSharp {
 
         public Inlines Children { get; init; } = new();
 
-        protected InlineGroup(InlineGroup other,
+        public InlineGroup(InlineGroup other,
             int callerLineNumber = 0,
             string callerFilePath = ""
             ) : base(other, callerLineNumber, callerFilePath) {

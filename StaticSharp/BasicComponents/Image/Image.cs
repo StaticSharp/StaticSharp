@@ -44,10 +44,6 @@ namespace StaticSharp {
             AssetGenome = Gears.AssetGenome.GenomeFromPathOrUrl(pathOrUrl, callerFilePath);
         }
 
-        /*public override void AddRequiredInclues(IIncludes includes) {
-            base.AddRequiredInclues(includes);
-            includes.Require(new Script(ThisFilePathWithNewExtension("js")));
-        }*/
         IAsset GetSource() {
             string[] webExtensions = { ".jpg", ".jpeg", ".png", ".svg" };
 

@@ -99,44 +99,7 @@ namespace StaticSharpComponentSourceGenerator {
                 .FirstOrDefault();
             var body = new Group();
 
-            if (jType != null) {
-                var properties = GetAllWritablePropertiesOfInterface(jType as INamedTypeSymbol).ToArray();
-
-                foreach (var p in properties) {
-
-                    var setMethod = p.SetMethod;
-                    if (setMethod.IsAbstract == false) { 
-                    }
-
-                    string new_ = p.ContainingType.Is(jType) ? "" : "new ";
-
-                    if (!setMethod.IsAbstract) {
-                        var declarationSyntax = setMethod.DeclaringSyntaxReferences
-                            .Select(r => r.GetSyntax())
-                            .OfType<AccessorDeclarationSyntax>()
-                            .FirstOrDefault();
-
-                        body.Add(
-                            new Scope($"public {new_}Binding<J{type.Name},{p.Type}> {p.Name}") {
-                                new Scope("set"){
-                                    declarationSyntax.Body.Statements.Select(x=>x.ToString())
-                                }
-                            }
-                            );
-                    } else {
-
-                        body.Add(
-                            new Scope($"public {new_}Binding<J{type.Name},{p.Type}> {p.Name}") {
-                                new Scope("set"){
-                                    $"Properties[\"{p.Name}\"] = value.CreateScriptExpression();"
-                                }
-                            }
-                        );
-                    }
-                }
-
-                
-            }
+            
 
 
             var isPage = type.InheritsFrom(PageType) || type.Is(PageType);
@@ -182,16 +145,64 @@ namespace StaticSharpComponentSourceGenerator {
 
             //Assign
             if (jType != null) {
-                var overrideOrVirtual = type.Is(EntityType) ? "virtual" : "override";
-                body.Add(new Scope($"public {overrideOrVirtual} {type.Name} Assign(out Js.Variable<J{type.Name}> variable, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = \"\")") {
+                //var new_ = type.Is(EntityType) ? "" : "new ";
+                body.Add(new Scope($"public {type.Name} Assign(out Js.Variable<J{type.Name}> variable, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = \"\")") {
                     "variable = new(callerLineNumber, callerFilePath);",
                     "return Assign(variable);"
                 });
-                body.Add(new Scope($"public {type.Name} Assign(Js.Variable<J{type.Name}> variable)") {
-                    "if (VariableNames == null) VariableNames = new();",
-                    "VariableNames.Add(variable.Name);",
-                    "return this;"
-                });
+
+                var current = type;
+                var virtualOrOverride = type.IsSealed ? "": "virtual";
+                while (true) {
+                    body.Add(new Scope($"public {virtualOrOverride} {type.Name} Assign(Js.Variable<J{current.Name}> variable)") {
+                        "if (VariableNames == null) VariableNames = new();",
+                        "VariableNames.Add(variable.Name);",
+                        "return this;"
+                    });                    
+                    if (current.Is(EntityType))
+                        break;
+                    virtualOrOverride = "override";
+                    current = current.BaseType;
+                }                
+            }
+
+
+            //Bindings
+            if (jType != null) {
+                var properties = GetAllWritablePropertiesOfInterface(jType as INamedTypeSymbol).ToArray();
+
+                foreach (var p in properties) {
+
+                    var setMethod = p.SetMethod;
+                    if (setMethod.IsAbstract == false) {
+                    }
+
+                    string new_ = p.ContainingType.Is(jType) ? "" : "new ";
+
+                    if (!setMethod.IsAbstract) {
+                        var declarationSyntax = setMethod.DeclaringSyntaxReferences
+                            .Select(r => r.GetSyntax())
+                            .OfType<AccessorDeclarationSyntax>()
+                            .FirstOrDefault();
+
+                        body.Add(
+                            new Scope($"public {new_}Binding<J{type.Name},{p.Type}> {p.Name}") {
+                                new Scope("set"){
+                                    declarationSyntax.Body.Statements.Select(x=>x.ToString())
+                                }
+                            }
+                            );
+                    } else {
+
+                        body.Add(
+                            new Scope($"public {new_}Binding<J{type.Name},{p.Type}> {p.Name}") {
+                                new Scope("set"){
+                                    $"Properties[\"{p.Name}\"] = value.CreateScriptExpression();"
+                                }
+                            }
+                        );
+                    }
+                }
             }
 
 
