@@ -51,7 +51,7 @@
 		<Compile Include=".generated\StaticSharpComponentSourceGenerator.StaticSharpComponentSourceGenerator\**" />
 	</ItemGroup>
 	<ItemGroup Condition="!$(StaticSharpComponentSourceGeneratorDebug)">
-		<PackageReference Include="StaticSharp.StaticSharpComponentSourceGenerator" Version="0.1.0" />
+		<ProjectReference Include="..\StaticSharpComponentSourceGenerator\Generator\StaticSharpComponentSourceGenerator.csproj" OutputItemType="Analyzer" />
 	</ItemGroup>
 	
 	

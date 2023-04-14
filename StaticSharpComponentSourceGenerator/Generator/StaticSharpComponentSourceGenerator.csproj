@@ -30,7 +30,9 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.4.0" />
-        <PackageReference Include="Scopes" Version="0.0.16" />
+
+        <PackageReference Include="Scopes" Version="0.0.16" GeneratePathProperty="true"/>
+        <None Include="$(PkgScopes)\lib\netstandard2.0\*.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
     </ItemGroup>
 
 	
@@ -38,16 +40,14 @@
     <!-- Further is needed to resolve generator dependenies on nugets-->
 
     <PropertyGroup>
-        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
     </PropertyGroup>
 
-    <Target Name="GetDependencyTargetPaths" DependsOnTargets="ResolveReferences">
+    <Target Name="GetDependencyTargetPaths">
         <ItemGroup>
-            <!-- for referencing as project. Needed for MSBuild (VS), not needed for dotnet build (VSCode)-->
-            <TargetPathWithTargetPlatformMoniker Condition="'$(MSBuildRuntimeType)'=='Full'" Include="@(ResolvedCompileFileDefinitions)" IncludeRuntimeDependency="false" />
-            <!-- for correct nuget package-->
-            <None Include="$(OutputPath)\*.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+            <TargetPathWithTargetPlatformMoniker Include="$(PKGScopes)\lib\netstandard2.0\Scopes.dll" IncludeRuntimeDependency="false" />
+            <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+            <None Include="$(PKGScopes)\lib\netstandard2.0\*.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
         </ItemGroup>
     </Target>
 
