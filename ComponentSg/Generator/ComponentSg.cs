@@ -9,7 +9,7 @@ using System.Collections;
 using System.Data;
 using System.Collections.Generic;
 
-namespace StaticSharpComponentSourceGenerator {
+namespace ComponentSg {
 
     static class Static {
         public static bool Is(this ISymbol thisType, ISymbol otherType) {
@@ -31,7 +31,7 @@ namespace StaticSharpComponentSourceGenerator {
     
 
     [Microsoft.CodeAnalysis.Generator]
-    public class StaticSharpComponentSourceGenerator : ISourceGenerator {
+    public class ComponentSg : ISourceGenerator {
 
 
         INamedTypeSymbol EntityType;

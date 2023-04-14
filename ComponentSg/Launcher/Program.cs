@@ -5,8 +5,8 @@ public class Program {
 
         var targetProjectPath = Path.Combine(ProjectDirectory.Path, $"..\\..\\{ProjectName}\\{ProjectName}.csproj");
         var outputPath = Path.Combine(Path.GetDirectoryName(targetProjectPath), 
-            $".generated/{typeof(StaticSharpComponentSourceGenerator.StaticSharpComponentSourceGenerator).FullName}");
+            $".generated/{typeof(ComponentSg.ComponentSg).FullName}");
         await RoslynSourceGeneratorLauncher.RoslynSourceGeneratorLauncher.Launch(
-            new StaticSharpComponentSourceGenerator.StaticSharpComponentSourceGenerator(), targetProjectPath, outputPath);
+            new ComponentSg.ComponentSg(), targetProjectPath, outputPath);
     }
 }

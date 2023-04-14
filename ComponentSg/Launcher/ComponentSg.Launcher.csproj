@@ -9,7 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="StaticSharp.RoslynSourceGeneratorLauncher" Version="0.1.9" />
-        <ProjectReference Include="..\Generator\StaticSharpComponentSourceGenerator.csproj" />
+        <ProjectReference Include="..\Generator\ComponentSg.csproj" />
     </ItemGroup>
     
 </Project>

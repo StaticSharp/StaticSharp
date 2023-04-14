@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StaticSharpComponentSourceGenerator", "StaticSharpComponentSourceGenerator\Generator\StaticSharpComponentSourceGenerator.csproj", "{200F17AD-5760-4D46-8276-7C6B731DCDFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComponentSg", "ComponentSg\Generator\ComponentSg.csproj", "{200F17AD-5760-4D46-8276-7C6B731DCDFC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoutingSg", "RoutingSg\Generator\RoutingSg.csproj", "{E1570EF4-4194-464E-B691-18A23CF1D65A}"
 EndProject

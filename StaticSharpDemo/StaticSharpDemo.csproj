@@ -45,13 +45,13 @@
 
 
 	<PropertyGroup>
-		<StaticSharpComponentSourceGeneratorDebug>false</StaticSharpComponentSourceGeneratorDebug>
+		<ComponentSgDebug>false</ComponentSgDebug>
 	</PropertyGroup>
-	<ItemGroup Condition="$(StaticSharpComponentSourceGeneratorDebug)">
-		<Compile Include=".generated\StaticSharpComponentSourceGenerator.StaticSharpComponentSourceGenerator\**" />
+	<ItemGroup Condition="$(ComponentSgDebug)">
+		<Compile Include=".generated\ComponentSg.ComponentSg\**" />
 	</ItemGroup>
-	<ItemGroup Condition="!$(StaticSharpComponentSourceGeneratorDebug)">
-		<ProjectReference Include="..\StaticSharpComponentSourceGenerator\Generator\StaticSharpComponentSourceGenerator.csproj" OutputItemType="Analyzer" />
+	<ItemGroup Condition="!$(ComponentSgDebug)">
+		<ProjectReference Include="..\ComponentSg\Generator\ComponentSg.csproj" OutputItemType="Analyzer" />
 	</ItemGroup>
 	
 	
