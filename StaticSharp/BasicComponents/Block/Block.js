@@ -128,7 +128,7 @@ function Block(element) {
         AbsoluteX: () => {
             let parent = element.Parent
             if (parent) {
-                return Num.Sum(element.Parent.AbsoluteX, element.Parent.ScrollXActual, element.X)
+                return Num.Sum(element.Parent.AbsoluteX, element.Parent.ScrollX, element.X)
             } else {
                 return 0
             }
@@ -136,7 +136,7 @@ function Block(element) {
         AbsoluteY: () => {
             let parent = element.Parent
             if (parent) {
-                return Num.Sum(element.Parent.AbsoluteY, -element.Parent.ScrollYActual, element.Y)
+                return Num.Sum(element.Parent.AbsoluteY, -element.Parent.ScrollY, element.Y)
             } else {
                 return 0
             }

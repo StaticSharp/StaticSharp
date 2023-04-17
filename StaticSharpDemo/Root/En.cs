@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 
@@ -85,7 +86,6 @@ namespace StaticSharpDemo.Root {
 
         public override Blocks? Content => new() {
 
-
             new Paragraph($"STATIC_SHARP".UnderscoreToNbsp()).ToLandingMainHeader(),
 
             Description,
@@ -106,6 +106,7 @@ namespace StaticSharpDemo.Root {
             Separator(),
 
             "COMPONENT-based\ncontent development".ToLandingSectionHeader(Color.GreenYellow * 0.75),
+
             """
             Component-based development is like a Lego set for your website! You get to use pre-made blocks (components) and snap them together, or even create your own custom bricks to build the site of your dreams.
             Plus, it's super scalable and easy to update. Bye-bye, clunky websites - hello, sleek and modern web creations!
@@ -137,7 +138,7 @@ namespace StaticSharpDemo.Root {
                             """,
                         }
                     },
-                    new Image("StackoverflowKeyboard.svg"){
+                    new Image("StackoverflowKeyboard.svg"){                        
                         Width = new(e=>e.Parent.Width * 0.5),
                         Height = new(e=>Js.Num.Min(e.Width/e.Aspect, 400)),
                         Margins = 75,

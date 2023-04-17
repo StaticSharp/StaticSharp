@@ -25,10 +25,13 @@ namespace StaticSharp {
         public Block? Logo { get; set; } = null;
 
         [Socket]
-        public Block Button { get; set; } = new SvgIconBlock(SvgIcons.MaterialDesignIcons.Menu)
-        {
+        public Block Button { get; set; } = new SvgIconBlock(SvgIcons.MaterialDesignIcons.Menu) {
             Visibility = new(e => e.Parent.AsMenuResponsive().Dropdown.Children.Any() ? 1 : 0),
-            BackgroundColor = new(e => e.Parent.AsMenuResponsive().DropdownExpanded ? DefaultBackgroundColor : Color.White),
+            //BackgroundColor = new(e => e.Parent.AsMenuResponsive().DropdownExpanded ? DefaultBackgroundColor : Color.White),
+            Modifiers = { 
+                new Toggle(),
+                new Cursor(CursorVariant.Pointer),
+            }
         };
 
         [Socket]
@@ -37,11 +40,25 @@ namespace StaticSharp {
             Vertical = true,
             BackgroundColor = DefaultBackgroundColor,
             Paddings = 5,
-            RadiusTopLeft= 5,
-            RadiusBottomLeft= 5,
-            RadiusBottomRight = 5,
-            Visibility = new(e => e.Parent.AsMenuResponsive().DropdownExpanded ? 1 : 0)
+            Visibility = new(e => e.Parent.AsMenuResponsive().DropdownExpanded ? 1 : 0),
+            Y = new(e=>e.Parent.Height),
+            X = new(e=>e.Parent.Width - e.Width),
+            Modifiers = { 
+                new BorderRadius(){
+                    Radius= 5,
+                },
+            }
+
         };
+
+        [Socket]
+        public Block Glass { get; set; } = new Block() {
+            Depth = -1,
+            Width = 500,
+            Height = 500,
+            BackgroundColor = Color.Black,
+        };
+
 
     }
 }

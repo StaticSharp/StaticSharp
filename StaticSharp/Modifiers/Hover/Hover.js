@@ -9,6 +9,12 @@ function Hover(element) {
         Value: false,
     }
 
+    new Reaction(() => {
+        if (!element.Exists) {
+            modifier.Value = false
+        }
+    })
+
     element.addEventListener("mouseenter", () => modifier.Value = true, false)
     element.addEventListener("mouseleave", () => modifier.Value = false, false)
 }

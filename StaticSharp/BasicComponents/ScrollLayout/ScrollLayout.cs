@@ -12,8 +12,6 @@ namespace StaticSharp {
         Block Child { get; }
         double ScrollX { get; set; }
         double ScrollY { get; set; }
-        double ScrollXActual { get; }
-        double ScrollYActual { get; }
         double InternalWidth { get; }
         double InternalHeight { get; }
     }

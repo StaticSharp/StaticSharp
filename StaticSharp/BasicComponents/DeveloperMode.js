@@ -2,19 +2,6 @@
 var pageHash = "t!dcsctAYNTSYMJaKLcdZPtZ#n@KPIjkK)ppteSZ4t%W)N*3RC8k645V4DUMW5G!";
 
 
-
-
-
-
-
-
-/*console.log("fr ru_ru -> ", matchLanguage(["fr", "ru_ru"]))
-console.log("fr -> ", matchLanguage(["fr"]))
-
-console.log("en_ca en -> ", matchLanguage(["en_ca"]))
-console.log("en -> ", matchLanguage(["en"]))
-console.log("zh en-> ", matchLanguage(["zh","en"]))*/
-
 function Watch() {
 
     const refreshIntervalMs = 500;
@@ -69,7 +56,7 @@ document.addEventListener("keyup", () => {
 document.addEventListener("mousemove", () => {
     var x = event.clientX
     var y = event.clientY
-
+    //console.log("mousemove", document.elementsFromPoint(x, y))
     developerMode.ElementMouseIsOver = document.elementsFromPoint(x, y).find(x=>x.isBlock);
     developerMode.CtrlKeyPressed = event.ctrlKey
 });

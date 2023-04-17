@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using StaticSharp.Gears;
-
+using StaticSharp.Js;
 
 namespace StaticSharpDemo.Root {
     public abstract partial class Page : StaticSharp.Page {
@@ -119,13 +119,48 @@ namespace StaticSharpDemo.Root {
         public virtual double ColumnWidth => 1080;
 
         Js.Variable<JScrollLayout> MainScrollLayout => new();
+
+        
+
+
         public override Blocks UnmanagedChildren => new Blocks {
+
+
+            new SvgIconBlock(SvgIcons.MaterialDesignIcons.ChevronDoubleUp){
+                Depth= 1,         
+                Visibility = new(e=>Animation.SpeedLimit(1, e.AsHover().Value ? 0.5 : 0.2)) ,
+                BackgroundColor = Color.LightGray,
+                Exists = new(e=>MainScrollLayout.Value.ScrollY > 100),
+                X = new (e=>e.Parent.Width-e.Width - 10),
+                Y = new (e=>e.Parent.Height-e.Height - 10),
+                Width = 64,
+                Height = 64,
+                Modifiers = {
+                    new Button{
+                        Script = $"{MainScrollLayout.Name}.ScrollY = 0"
+                    },
+                    new Cursor(CursorVariant.Pointer),
+                    new Hover(),
+                    new BorderRadius(){
+                        Radius = new(e=>e.AsBlock().Width*0.25),
+                    }
+                }
+            },
+
+
             new ScrollLayout {
                 Width = new(e=>e.Parent.Width),
                 Height = new(e=>e.Parent.Height),
-                ScrollY = new(e=>Js.Storage.Restore("MainScroll_"+string.Join("-",VirtualNode.Path), () => e.ScrollYActual)),
-                //FontSize = new(e =>Js.Math.First( Js.Storage.Restore("FontSize", () => 10)),
                 
+                Modifiers = { 
+                    new SessionStorageNumber{ 
+                        Name = "MainScroll_"+string.Join("-",VirtualNode.Path),
+                        ValueToStore = new(e=>MainScrollLayout.Value.ScrollY)
+                    }.Assign(out var MainScrollLayoutPosition)
+                },
+                ScrollY = new(e=>MainScrollLayoutPosition.Value.StoredValue),
+
+
                 Child = new LinearLayout{
                     Width = new(e=>e.Parent.Width),
 
@@ -147,16 +182,7 @@ namespace StaticSharpDemo.Root {
                 }
             }.Assign(MainScrollLayout),
 
-            new SvgIconBlock(SvgIcons.MaterialDesignIcons.ArrowUp){ 
-                Radius = new(e=>e.Width*0.5),
-                Visibility = 0.2,
-                BackgroundColor = Color.LightGray,
-                Exists = new(e=>MainScrollLayout.Value.ScrollYActual > 100),
-                X = new (e=>e.Parent.Width-e.Width - 10),
-                Y = new (e=>e.Parent.Height-e.Height - 10),
-                Width = 64,
-                Height = 64,
-            }
+            
 
         };
     }

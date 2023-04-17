@@ -155,7 +155,7 @@ namespace StaticSharp {
                 }
             }
 
-            scriptOfCurrentElement.Add($"if (typeof ({id}.AfterChildren) === \"function\") {{ {id}.AfterChildren() }}");
+            //scriptOfCurrentElement.Add($"if (typeof ({id}.AfterChildren) === \"function\") {{ {id}.AfterChildren() }}");
 
             result.Script.Add(scriptOfCurrentElement);
             return result;

@@ -16,12 +16,16 @@ namespace StaticSharp {
                 PaddingsHorizontal = 0.25,
                 PaddingTop = 0.1,
                 PaddingBottom = 0.25,
-                Radius = 3,
                 BackgroundColor = new(e => Color.Lerp(e.Parent.HierarchyBackgroundColor, e.Parent.HierarchyForegroundColor, codeBackgroundIntensity)),
                 Weight = FontWeight.Regular,
                 FontFamilies = { codeFontFamily },
                 Children = {
                     inlines
+                },
+                Modifiers = {
+                    new BorderRadius(){
+                        Radius= 3,
+                    },
                 }
             };
         }
@@ -30,7 +34,6 @@ namespace StaticSharp {
             return new ScrollLayout(callerLineNumber, callerFilePath) {
                 //PreferredHeight = new(e => Js.Math.Min(e.InternalHeight, e.Root.Height * 0.8)),
                 Height = new(e => Js.Num.Min(e.InternalHeight, e.Root.Height * 0.8)),
-                Radius = 8,
                 BackgroundColor = new(e => Color.Lerp(e.Parent.HierarchyBackgroundColor, e.Parent.HierarchyForegroundColor, codeBackgroundIntensity)),
                 Paddings = 12,
                 Child = new Paragraph(
@@ -40,6 +43,11 @@ namespace StaticSharp {
                     Weight = FontWeight.Regular,
                     FontFamilies = { codeFontFamily }
                 },
+                Modifiers = {
+                    new BorderRadius(){
+                        Radius = 8,
+                    },
+                }
             };
         }
         public static Paragraph CodeBlock(Inlines inlines, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
@@ -49,12 +57,17 @@ namespace StaticSharp {
                 Paddings = 12,*/
             
             return new Paragraph(inlines, callerLineNumber, callerFilePath) {
-                Radius = 8,
+
                 BackgroundColor = new(e => Color.Lerp(e.Parent.HierarchyBackgroundColor, e.Parent.HierarchyForegroundColor, codeBackgroundIntensity)),
                 Paddings = 12,
                 FontSize = CodeBlockFontSize,
                 Weight = FontWeight.Regular,
-                FontFamilies = { codeFontFamily }
+                FontFamilies = { codeFontFamily },
+                Modifiers = {
+                    new BorderRadius(){
+                        Radius = 8,
+                    },
+                }
             };
         }
 

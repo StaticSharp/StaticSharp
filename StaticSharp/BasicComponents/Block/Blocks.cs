@@ -1,7 +1,7 @@
 ﻿using StaticSharp.Gears;
 using StaticSharp.Html;
 using System.Collections;
-
+using System.Runtime.CompilerServices;
 
 namespace StaticSharp {
 
@@ -32,6 +32,18 @@ namespace StaticSharp {
         IEnumerator IEnumerable.GetEnumerator() {
             return (this as IEnumerable<Block>).GetEnumerator();
         }
+
+
+        public void Add(IEnumerable<string> texts,
+            [CallerFilePath] string callerFilePath = "",[CallerLineNumber] int callerLineNumber = 0){
+            foreach (var i in texts) {
+                Add(new Paragraph(i, callerLineNumber, callerFilePath));
+            }
+        }
+
+
+
+
     }
 
 }

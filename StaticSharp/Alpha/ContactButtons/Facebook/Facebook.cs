@@ -22,8 +22,13 @@ static partial class Static {
                 },
                 text
             },
-            Radius = BorderRadius,
-            BackgroundColor = new Color("1a6ed8")
+
+            BackgroundColor = new Color("1a6ed8"),
+            Modifiers = {
+                new BorderRadius(){
+                    Radius = BorderRadius,
+                },
+            }
         };
 
     }
@@ -45,9 +50,13 @@ static partial class Static {
                 },
                 text
             },
-            Radius = BorderRadius,
             ForegroundColor = Color.White,
-            BackgroundColor = new Color("26A5E4")
+            BackgroundColor = new Color("26A5E4"),
+            Modifiers = {
+                new BorderRadius(){
+                    Radius = BorderRadius,
+                },
+            }
         };
 
     }
@@ -72,9 +81,13 @@ static partial class Static {
                 },
                 text
             },
-            Radius = BorderRadius,
             ForegroundColor = Color.White,
-            BackgroundColor = new Color("5865F2")
+            BackgroundColor = new Color("5865F2"),
+            Modifiers = {
+                new BorderRadius(){
+                    Radius = BorderRadius,
+                },
+            }
         };
 
     }

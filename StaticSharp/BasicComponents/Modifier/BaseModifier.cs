@@ -26,11 +26,11 @@ namespace StaticSharp {
 
         public double Visibility { get; set; }
 
-        public double Radius { get; set; }
+        /*public double Radius { get; set; }
         public double RadiusTopLeft { get; set; }
         public double RadiusTopRight { get; set; }
         public double RadiusBottomLeft { get; set; }
-        public double RadiusBottomRight { get; set; }
+        public double RadiusBottomRight { get; set; }*/
 
     }
 

@@ -40,16 +40,21 @@ function SetupPointerDrag(element, func) {
 function ScrollLayout(element) {
     Block(element)
 
+    var modificationSource = undefined
 
     let scrollable = document.createElement("scrollable")
     scrollable.style.touchAction = "manipulation"
     scrollable.style.overflow = "auto"
 
     scrollable.Events.Scroll = () => {
+        if (modificationSource == "Property")
+            return
+        modificationSource = "Event"
         let d = Reaction.beginDeferred()
-        element.ScrollXActual = scrollable.scrollLeft
-        element.ScrollYActual = scrollable.scrollTop
+        element.ScrollX = scrollable.scrollLeft
+        element.ScrollY = scrollable.scrollTop
         d.end()
+        modificationSource = undefined
     }
 
 
@@ -71,8 +76,8 @@ function ScrollLayout(element) {
         ScrollX: undefined,
         ScrollY: undefined, //Storage.Store("scroll", () => element.ScrollYActual),
 
-        ScrollXActual: 0,
-        ScrollYActual: 0,
+        /*ScrollXActual: 0,
+        ScrollYActual: 0,*/
 
         ScrollBarThickness: 4,
         ScrollBarMargin: 2,
@@ -89,7 +94,7 @@ function ScrollLayout(element) {
         ThumbPositionScale: () => verticalThumb.ThumbTravel / element.Child./*InternalHeight*/Layer.Height,
         ThumbSizeScale: () => element.ChildAreaHeight / element.Child./*InternalHeight*/Layer.Height, 
         X: () => element.Width - verticalThumb.Width - element.ScrollBarMargin,
-        Y: () => element.ScrollBarMargin + element.ScrollYActual * verticalThumb.ThumbPositionScale,
+        Y: () => element.ScrollBarMargin + element.ScrollY * verticalThumb.ThumbPositionScale,
         Width: () => element.ScrollBarThickness,        
         Height: () => verticalThumb.ThumbTravel * verticalThumb.ThumbSizeScale,
     }
@@ -100,7 +105,7 @@ function ScrollLayout(element) {
         ThumbTravel: () => element.Width - 2 * element.ScrollBarMargin,
         ThumbPositionScale: () => horizontalThumb.ThumbTravel / element.Child.Width,
         ThumbSizeScale: () => element.ChildAreaWidth / element.Child.Width,        
-        X: () => element.ScrollBarMargin + element.ScrollXActual * horizontalThumb.ThumbPositionScale,
+        X: () => element.ScrollBarMargin + element.ScrollX * horizontalThumb.ThumbPositionScale,
         Y: () => element.Height - horizontalThumb.Height - element.ScrollBarMargin,
         Width: () => horizontalThumb.ThumbTravel * horizontalThumb.ThumbSizeScale,
         Height: () => element.ScrollBarThickness,        
@@ -147,10 +152,22 @@ function ScrollLayout(element) {
 
 
     new Reaction(() => {
+
+        element.ScrollY
+        element.ScrollX
+
+        if (modificationSource == "Event")
+            return
+        modificationSource = "Property"
+        
         window.requestAnimationFrame(() => {
             scrollable.scrollTop = element.ScrollY
             scrollable.scrollLeft = element.ScrollX
+            modificationSource = undefined
         });
+
+        
+        
     })
 
 

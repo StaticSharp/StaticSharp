@@ -32,15 +32,14 @@ namespace StaticSharpDemo.Root.Components.ScrollLayoutComponent {
                 }
             },
 
-            "Don't muss  Content and Children:",
-
             new ScrollLayout(){
                 BackgroundColor = Color.LightGray,
                 Paddings = 10,
+                //PaddingLeft = 50,
                 Height = 200,
                 UnmanagedChildren = { 
                     new SvgIconBlock(SvgIcons.MaterialDesignIcons.VectorDifferenceAb){ 
-                        Paddings = 20
+                        Width = 100
                     }
                 },
                 Child = new Paragraph($"""

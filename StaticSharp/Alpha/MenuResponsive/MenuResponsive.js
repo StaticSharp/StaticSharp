@@ -11,7 +11,7 @@ function MenuResponsive(element) {
         PrimaryGravity: 1,
         SecondaryGravity: 0,
 
-        DropdownExpanded: false,
+        DropdownExpanded: e => e.Button.as("Toggle").Value,
 
         Width: e => e.InternalWidth,
         Height: e => e.InternalHeight,
@@ -104,7 +104,7 @@ function MenuResponsive(element) {
             let buttonOppositeOffset = region.border[1].Shift(element.Button)
             let buttonPosition = element.Width - element.Button.Layer.Width - buttonOppositeOffset
             element.Button.Layer.X = buttonPosition
-            element.Dropdown.Layer.X = buttonPosition + element.Button.Layer.Width - element.Dropdown.Layer.Width // TODO: maybe move to CSharp?
+            //element.Dropdown.Layer.X = buttonPosition + element.Button.Layer.Width - element.Dropdown.Layer.Width // TODO: maybe move to CSharp?
         }
 
         if (element.Logo) {
@@ -160,9 +160,9 @@ function MenuResponsive(element) {
             allMenuItems[i].Layer.X = menuItemPosition + primaryGravityShift
         }
 
-        if (!element.Dropdown.Children.Any()) {
+        /*if (!element.Dropdown.Children.Any()) {
             element.DropdownExpanded = false
-        }
+        }*/
     })
 
 
@@ -185,7 +185,7 @@ function MenuResponsive(element) {
 
         let buttonY = getYForChild(element.Button)
         element.Button.Layer.Y = buttonY
-        element.Dropdown.Layer.Y = buttonY + element.Button.Layer.Height
+        //element.Dropdown.Layer.Y = buttonY + element.Button.Layer.Height
 
         for (let menuItem of [...element.Children]) {
             menuItem.Layer.Y = getYForChild(menuItem)
@@ -194,9 +194,9 @@ function MenuResponsive(element) {
     })
 
     
-    element.AfterChildren = () => {
+    /*element.AfterChildren = () => {
         element.Button.Events.Click = () => {
             element.DropdownExpanded = !element.DropdownExpanded && element.Dropdown.Children.Any()
         }
-    }
+    }*/
 }

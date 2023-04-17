@@ -93,29 +93,34 @@ namespace StaticSharpDemo.Root.Components.VideoPlayer {
                 
             },*/
 
-            new Video("qWGR-eMSnX8"){
-                Width = new(e=>e.Parent.Width),
-                Depth = 1,
-                Play = false,
-                Mute = true,
-                PreferPlatformPlayer = false,
-                Controls = true,
-                //Position = new(e=>(e.Parent as Js.ScrollLayout).ScrollYActual/100),
-            },
+            new LinearLayout{
+                Vertical = new(e=>e.Root.Width<e.Root.Height),
+                Children = {
 
+                    new Video("qWGR-eMSnX8"){
+                        Width = new(e=>e.Parent.Width),
+                        Play = true,
+                        Mute = true,
+                        PreferPlatformPlayer = false,
+                        Controls = true,
+                        Loop= true,
+                        //Position = new(e=>(e.Parent as Js.ScrollLayout).ScrollYActual/100),
+                    }.Assign(out var primaryVideo),
 
-
-            new ScrollLayout(){
-                Height = 300,
-                Child = new Block{ 
-                    //BackgroundColor = Color.Red,
-                    Height = 3000
-                },
-                UnmanagedChildren = {
-                    
+                    new Video("qWGR-eMSnX8"){
+                        Width = new(e=>e.Parent.Width),
+                        Play = new(e=>primaryVideo.Value.PlayActual),
+                        Mute = true,
+                        PreferPlatformPlayer = false,
+                        Position = new(e=>primaryVideo.Value.PositionActual),
+                        Controls = false,
+                        Loop= true,
+                        //Position = new(e=>(e.Parent as Js.ScrollLayout).ScrollYActual/100),
+                    },
                 }
-                
             },
+
+
 
 
             
