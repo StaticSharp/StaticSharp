@@ -82,6 +82,8 @@ function Page(element) {
         yield* baseHtmlNodesOrdered
         if (element.svgDefs)
             yield element.svgDefs
+        if (element.extras)
+            yield element.extras
     })
 
 

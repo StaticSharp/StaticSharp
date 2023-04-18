@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace StaticSharp {
 
@@ -26,7 +25,6 @@ namespace StaticSharp {
             }
             public byte[] Data => data;
             public string Text => Encoding.UTF8.GetString(data);
-
         }
     }
 

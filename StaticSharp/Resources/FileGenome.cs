@@ -1,12 +1,7 @@
 ﻿using StaticSharp.Gears;
 using System;
 
-
-
 namespace StaticSharp {
-    
-
-
     namespace Gears {
 
         public record FileGenome(string Path) : Genome<IAsset> {

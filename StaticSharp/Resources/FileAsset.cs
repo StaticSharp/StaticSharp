@@ -1,18 +1,9 @@
-﻿using MimeTypes;
-using System;
-using System.IO;
-using System.Text;
-
-
-
-
+﻿
 
 
 namespace StaticSharp {
 
     namespace Gears {
-
-
         public class FileAsset : IAsset {
 
             public string Path { get; }
@@ -45,10 +36,6 @@ namespace StaticSharp {
                 get {
                     if (data == null) {
                         data = FileUtils.ReadAllBytes(Path);
-                        /*using (var fileStream = new FileStream(Path, FileMode.Open, FileAccess.Read)) {
-                            data = new byte[fileStream.Length];
-                            fileStream.Read(data, 0, data.Length);
-                        }*/
                     }
                     return data;
                 }
@@ -63,13 +50,7 @@ namespace StaticSharp {
                     }
                 }
             }
-
-            /*public bool GetValid() {
-                return LastWriteTime == GetLastWriteTime(Path);
-            }*/
-
         }
     }
-
 }
 

@@ -35,11 +35,4 @@ namespace StaticSharp.Gears {
     }
 
 
-
-    /*public class ConstructorJs: RelatedScriptAttribute {
-        public ConstructorJs(string? fileName = null, [CallerFilePath] string callerFilePath = "") : base(fileName, callerFilePath) { }
-    }*/
-
-
-
 }

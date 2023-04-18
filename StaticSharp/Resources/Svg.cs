@@ -26,19 +26,5 @@ namespace StaticSharp.Gears {
 
 
     }
-
-    /*public record SvgBlurFilterGenerator(float StandardDeviationX, float StandardDeviationY) {
-
-        public Tag Tag {
-            get { 
-                var key = Hash.CreateFromString(KeyUtils.GetKeyForObject(this)).ToString(16);
-                var tag = 
-
-                return ;
-            }
-        }
-
-    }*/
-
 }
 

@@ -47,7 +47,10 @@ namespace StaticSharpDemo.Root.Modifiers {
 
 
             nameof(Cursor).ToSectionHeader(),
+            //Description here
+
             CodeBlockFromThisFileRegion("cursorExample"),
+
             new LinearLayout{
                 Vertical = false,
                 Children = {

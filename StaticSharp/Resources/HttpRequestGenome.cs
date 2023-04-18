@@ -12,7 +12,6 @@ namespace StaticSharp {
 
     namespace Resources {
         public static partial class Static {
-
             public static IAsset LoadHttp(string uri) {
                 var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, uri);
                 return LoadHttp(httpRequestMessage);
@@ -20,10 +19,7 @@ namespace StaticSharp {
             public static IAsset LoadHttp(HttpRequestMessage httpRequestMessage) {
                 return new HttpRequestGenome(httpRequestMessage).Result;
             }
-
-        }
-    
-    
+        }    
     }
 
 
@@ -91,108 +87,7 @@ namespace StaticSharp {
     }
 
 
-
-/*
-
-
-        public class HttpRequestAsset : IAssetDataAsync {
-
-
-            string? contentHash = null;
-            HttpRequestMessage httpRequestMessage;
-            Task<HttpResponseMessage> httpResponseMessageTask;
-
-            public HttpRequestAsset(HttpRequestMessage httpRequestMessage) {
-                this.httpRequestMessage = httpRequestMessage;
-                httpResponseMessageTask = HttpClientStatic.Instance.SendAsync(httpRequestMessage);
-            }
-
-
-
-
-
-            public async Task<string?> GetCharSetAsync() {
-                return (await httpResponseMessageTask).Content.Headers.ContentType?.CharSet;
-                //return await charSetTask;
-            }
-
-            public async Task<byte[]> GetBytesAsync() {
-                return await (await httpResponseMessageTask).Content.ReadAsByteArrayAsync();
-            }
-
-            public async Task<string> GetContentHashAsync() {
-                if (contentHash == null) {
-                    contentHash = Hash.CreateFromBytes(await GetBytesAsync()).ToString();
-                }
-                return contentHash;
-            }
-
-
-            private string? RawExtension() {
-                var path = httpRequestMessage.RequestUri?.AbsolutePath;
-                var extension = Path.GetExtension(path);
-                return extension;
-            }
-
-            private async Task<string?> RawMediaTypeAsync() {
-                var mediaType = (await httpResponseMessageTask).Content.Headers.ContentType?.MediaType;
-                return mediaType;
-            }
-
-
-            public async Task<string> GetFileExtensionAsync() {
-                var extension = RawExtension();
-
-                if (extension != null)
-                    return extension;
-
-                var mediaType = await RawMediaTypeAsync();
-                if (mediaType != null) {
-                    return MimeTypeMap.GetExtension(mediaType);
-                }
-                
-                return ".?";
-            }
-
-            public async Task<string> GetMediaTypeAsync() {
-                var mediaType = await RawMediaTypeAsync();
-                if (mediaType != null) {
-                    return mediaType;
-                }
-                var extension = RawExtension();
-                if (extension != null) {
-                    mediaType = MimeTypeMap.GetMimeType(extension);
-                    if (mediaType != null) {
-                        return mediaType;
-                    }
-                }
-                return "application/octet-stream";
-            }
-
-            public async Task<FilePath> GetTargetFilePathAsync() {
-                return new(await GetContentHashAsync() + await GetFileExtensionAsync());
-            }
-
-            public async Task<string> GetTextAsync() {
-                using (MemoryStream memoryStream = new(await GetBytesAsync())) {
-                    var charSet = await GetCharSetAsync();
-                    Encoding encoding = charSet!=null ? Encoding.GetEncoding(charSet) : Encoding.UTF8;
-
-                    using (StreamReader streamReader = new StreamReader(memoryStream, encoding, true)) {
-                        var text = streamReader.ReadToEnd();
-                        return text;
-                    }
-                }
-            }
-        }
-
-
-
-    }
-*/
-    //Instead of inheritance from CacheableHttpRequest, it is better to use aggregation
     namespace Gears {
-
         public static partial class KeyCalculators {
             public static string GetKey(HttpRequestMessage httpRequestMessage) {
 

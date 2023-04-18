@@ -110,7 +110,7 @@ new Reaction(() => {
             margin.appendChild(padding)
 
             developerMode.elementFrame = margin
-            document.body.appendChild(developerMode.elementFrame)
+            document.body.extras.appendChild(developerMode.elementFrame)
         }
         developerMode.elementFrame.style.display = "block"
 

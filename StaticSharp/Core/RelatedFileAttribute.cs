@@ -34,19 +34,7 @@ namespace StaticSharp.Gears {
                 absoluteFilePath = Path.GetFullPath(Path.Combine(directory, filePath));
             }
 
-
-            if (File.Exists(absoluteFilePath)) {
-                var result = new FileGenome(absoluteFilePath);
-                return result;
-
-            } else {
-                var relativeFilePath = AssemblyResourcesUtils.GetFilePathRelativeToProject(assembly, absoluteFilePath);
-                var relativeResourcePath = AssemblyResourcesUtils.GetResourcePath(relativeFilePath);
-
-                var result = new AssemblyResourceGenome(assembly, relativeResourcePath);
-                return result;
-
-            }
+            return new FileOfAssemblyResourceGenome(assembly, absoluteFilePath).Result;
         }
 
         public virtual Genome<IAsset> GetGenome(Type type) {

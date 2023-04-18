@@ -1,6 +1,3 @@
-using StaticSharp.Js;
-using System;
-using System.Linq;
 
 namespace StaticSharpDemo.Root.Modifiers {
 

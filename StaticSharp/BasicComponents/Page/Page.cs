@@ -128,13 +128,17 @@ namespace StaticSharp {
 
             AddSvgDefs(context, bodyTagAndScript.Tag, bodyTagAndScript.Script);
 
+            bodyTagAndScript.Script.Add($"{bodyTagAndScript.Tag.Id}.extras = {TagToJsValue("extras")}");
+            bodyTagAndScript.Tag.Add(new Tag("extras", "extras"));
+
             var document = new Tag(null) {
                 new Tag("!doctype"){ ["html"] = ""},
                 new Tag("html") {
                     ["lang"] = PageLanguage,
                     Children ={
                         head,
-                        bodyTagAndScript.Tag
+                        bodyTagAndScript.Tag,
+                        
                     }
                 }
                 

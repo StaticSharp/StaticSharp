@@ -1,6 +1,4 @@
-﻿using StaticSharp.Js;
-using System.Linq;
-
+﻿
 namespace StaticSharpDemo.Root.Modifiers {
 
 
@@ -14,11 +12,6 @@ namespace StaticSharpDemo.Root.Modifiers {
             Работа с событиями: {Code(nameof(Hover))}, {Code(nameof(Button))}, {Code(nameof(Toggle))}
             Подсказки для других объектов, например, Flex добавляет подсказки для {Code(nameof(LinearLayout))}
             """;
-
-
-
-
-
 
     }
 }

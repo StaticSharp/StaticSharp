@@ -24,16 +24,7 @@ namespace StaticSharp.Gears {
             var type = GetType();
             var assembly = type.Assembly;
 
-            if (File.Exists(filePath)) {
-                var result = new FileGenome(filePath);
-                return result;
-
-            } else {
-                var relativeFilePath = AssemblyResourcesUtils.GetFilePathRelativeToProject(assembly, filePath);
-                var relativeResourcePath = AssemblyResourcesUtils.GetResourcePath(relativeFilePath);
-                var result = new AssemblyResourceGenome(assembly, relativeResourcePath);
-                return result;
-            }
+            return new FileOfAssemblyResourceGenome(assembly, filePath).Result;
         }
     }
 }
