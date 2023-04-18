@@ -5,9 +5,11 @@ function Button(element) {
     let modifier = this
 
     modifier.Reactive = {
+        EventPropagation: false
     }
 
     element.addEventListener("click", () => {
         modifier.Script(modifier)
+        event.stopPropagation()
     }, false)
 }

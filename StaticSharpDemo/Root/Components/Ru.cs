@@ -40,7 +40,7 @@ namespace StaticSharpDemo.Root.Components {
         [Representative]
     partial class Ru : Common {
  
-        public override object? MainVisual => null;
+
 
         public override Inlines Description => $"Компоненты для создания страниц.";
 

@@ -6,14 +6,14 @@ function Cursor(element) {
 
 
     modifier.Reactive = {
-        Variant: undefined,
+        Option: "Pointer",
     }
 
     new Reaction(() => {
-        var variant = modifier.Variant
-        if ((variant === undefined) || (variant === ""))
+        var option = modifier.Option
+        if ((option === undefined) || (option === ""))
             element.style.cursor = ""
         else
-            element.style.cursor = CamelToKebab(variant);
+            element.style.cursor = CamelToKebab(option);
     })
 }

@@ -5,7 +5,6 @@ using System.Runtime.CompilerServices;
 namespace StaticSharp;
 
 static partial class Static {
-    public static double BorderRadius = 5;
 
     public static Block FacebookMessengerButton(string username, string text = "Facebook", int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
      
@@ -26,7 +25,7 @@ static partial class Static {
             BackgroundColor = new Color("1a6ed8"),
             Modifiers = {
                 new BorderRadius(){
-                    Radius = BorderRadius,
+                    Radius = 5,
                 },
             }
         };
@@ -54,7 +53,7 @@ static partial class Static {
             BackgroundColor = new Color("26A5E4"),
             Modifiers = {
                 new BorderRadius(){
-                    Radius = BorderRadius,
+                    Radius = 5,
                 },
             }
         };
@@ -85,7 +84,7 @@ static partial class Static {
             BackgroundColor = new Color("5865F2"),
             Modifiers = {
                 new BorderRadius(){
-                    Radius = BorderRadius,
+                    Radius = 5,
                 },
             }
         };

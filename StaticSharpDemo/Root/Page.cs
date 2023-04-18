@@ -3,6 +3,8 @@ using StaticSharp.Gears;
 using StaticSharp.Js;
 
 namespace StaticSharpDemo.Root {
+
+
     public abstract partial class Page : StaticSharp.Page {
         public override string? SiteName => "StaticSharp";
         public override Genome<IAsset>? Favicon => LoadFile("https://raw.githubusercontent.com/StaticSharp/StaticSharpBrandAssets/main/FavIcon.svg");
@@ -24,7 +26,7 @@ namespace StaticSharpDemo.Root {
 
         
 
-        public override object? MainVisual => null;
+        public override Block? MainVisual => null;
         public override string Title {
             get {
                 var result = GetType().Namespace;
@@ -47,7 +49,7 @@ namespace StaticSharpDemo.Root {
             VirtualNode.GetAllParallelNodes().Select(
                 x=>new Paragraph{
                     Inlines = {
-                        new InlineGroup(x.Language.ToString()){
+                        new Inline(x.Language.ToString()){
                             InternalLink = x
                         }
                     }
@@ -108,7 +110,14 @@ namespace StaticSharpDemo.Root {
                     MenuItem(Node.Modifiers),
                     MenuItem(Node.Components.VideoPlayer),
                     MenuItem(Node.Components.ParagraphComponent),
-                    MenuItem(Node.Customization.HowToCreateNewComponent)
+                    MenuItem(Node.Customization.HowToCreateNewComponent),
+                    new LinearLayout(){ 
+                        PrimaryGravity = 0,
+                        Vertical = false,
+                        Children = {
+                            LanguageMenuItems
+                        }
+                    }
                 },
 
             Margins = 20
@@ -139,7 +148,7 @@ namespace StaticSharpDemo.Root {
                     new Button{
                         Script = $"{MainScrollLayout.Name}.ScrollY = 0"
                     },
-                    new Cursor(CursorVariant.Pointer),
+                    new Cursor(CursorOption.Pointer),
                     new Hover(),
                     new BorderRadius(){
                         Radius = new(e=>e.AsBlock().Width*0.25),
@@ -166,7 +175,7 @@ namespace StaticSharpDemo.Root {
 
                     ItemGrow = 0,
                     GapGrow = 1,
-                    Gap = 0,
+                    Gap = 50,
                     Children = {
                         new LinearLayout{
                             //Width = new(e=>e.Parent.Width),

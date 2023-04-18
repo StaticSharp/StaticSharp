@@ -125,8 +125,8 @@ namespace StaticSharp {
 
 
             var bodyTagAndScript = Generate(context);
-            
 
+            AddSvgDefs(context, bodyTagAndScript.Tag, bodyTagAndScript.Script);
 
             var document = new Tag(null) {
                 new Tag("!doctype"){ ["html"] = ""},
@@ -157,11 +157,7 @@ namespace StaticSharp {
             return document.GetHtml();
         }
 
-
-        public override void ModifyTagAndScript(Context context, Tag tag, Scopes.Group script) {
-            base.ModifyTagAndScript(context, tag, script);
-            //tag["class"] = "nojs";
-
+        private void AddSvgDefs(Context context, Tag tag, Scopes.Group script) {
             var svgDefsTags = context.SvgDefs.GetOrderedItems().ToArray();
             if (svgDefsTags.Length > 0) {
 
@@ -177,8 +173,16 @@ namespace StaticSharp {
                 };
 
                 tag.Add(svgDefs);
-                script.Add($"{tag.Id}.svgDefs = {svgDefs.Id}");
+                script.Add($"{tag.Id}.svgDefs = {TagToJsValue(svgDefs)}");
             }
+        }
+
+
+        public override void ModifyTagAndScript(Context context, Tag tag, Scopes.Group script) {
+            base.ModifyTagAndScript(context, tag, script);
+            //tag["class"] = "nojs";
+
+            
         }
 
 

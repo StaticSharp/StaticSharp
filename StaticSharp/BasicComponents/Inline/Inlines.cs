@@ -74,7 +74,7 @@ namespace StaticSharp
 
         //Link
         public void AppendFormatted(Tree.Node node, string? format = null, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
-            var link = new InlineGroup(callerLineNumber, callerFilePath) {
+            var link = new Inline(callerLineNumber, callerFilePath) {
                 InternalLink = node,
                 Children = {
                     (format != null)?format: (node.Representative?.Title ?? "")
@@ -83,7 +83,7 @@ namespace StaticSharp
             AppendFormatted(link);
         }
         public void AppendFormatted(Uri url, string format, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0) {
-            var link = new InlineGroup(callerLineNumber, callerFilePath) {
+            var link = new Inline(callerLineNumber, callerFilePath) {
                 ExternalLink = url.ToString(),
                 Children = {
                     format

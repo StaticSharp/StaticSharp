@@ -1,5 +1,4 @@
 ﻿using Javascriptifier;
-using StaticSharp.Animations;
 
 namespace StaticSharp {
 

@@ -9,14 +9,14 @@ using System.Xml;
 
 namespace StaticSharp {
 
-    public interface JSvgIconInline : JInline, JSvgIcon {
+    public interface JSvgIconInline : JAbstractInline, JSvgIcon {
         //public double BaselineOffset  { get; } 
     }
 
 
     [RelatedScript("SvgIcon")]
     [ConstructorJs]
-    public partial class SvgIconInline : Inline {
+    public partial class SvgIconInline : AbstractInline {
 
         SvgIcons.Icon icon;
 
@@ -75,7 +75,9 @@ namespace StaticSharp {
 
         }
 
-
+        public override string GetPlainText(Context context) {
+            return string.Empty;
+        }
     }
 
 

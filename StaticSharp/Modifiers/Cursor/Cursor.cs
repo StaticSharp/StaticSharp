@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace StaticSharp {
 
-    public enum CursorVariant {
+    public enum CursorOption {
         Default,
         None,
         ContextMenu,
@@ -36,15 +36,15 @@ namespace StaticSharp {
         NwseResize
     }
     public interface JCursor : JModifier {
-        public CursorVariant Variant { get; set; }
+        public CursorOption Option { get; set; }
     }
 
 
     [ConstructorJs]
     public partial class Cursor : Modifier {        
-        public Cursor(CursorVariant variant, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
+        public Cursor(CursorOption option, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
             : this(callerLineNumber, callerFilePath) {
-            Variant = variant;
+            Option = option;
         }
     }
 

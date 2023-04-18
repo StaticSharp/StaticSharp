@@ -30,7 +30,7 @@ namespace StaticSharp {
             //BackgroundColor = new(e => e.Parent.AsMenuResponsive().DropdownExpanded ? DefaultBackgroundColor : Color.White),
             Modifiers = { 
                 new Toggle(),
-                new Cursor(CursorVariant.Pointer),
+                new Cursor(CursorOption.Pointer),
             }
         };
 
@@ -47,6 +47,9 @@ namespace StaticSharp {
                 new BorderRadius(){
                     Radius= 5,
                 },
+                new Button{ 
+                    Script = """console.log("clicked")""",
+                }
             }
 
         };

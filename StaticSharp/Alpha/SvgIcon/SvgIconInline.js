@@ -1,5 +1,5 @@
 function SvgIconInline(element) {
-    Inline(element)
+    AbstractInline(element)
     SvgIcon(element)
 
     element.Reactive = {

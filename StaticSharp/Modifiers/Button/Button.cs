@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace StaticSharp {
     public interface JButton : JModifier {
-        bool SetCursor { get; set; }
+        bool EventPropagation { get; set; }
     }
 
 

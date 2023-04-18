@@ -16,12 +16,16 @@ public abstract class MultilanguageProtoNode<LanguageEnum> : ProtoNode<Multilang
 
     protected T? SelectRepresentative<T>(IEnumerable<T> representatives) {
         var findedLanguage = representatives.FirstOrDefault(r => r?.GetType().Name == Enum.GetName(Language));
-        if (findedLanguage is null) {
-            findedLanguage = representatives.FirstOrDefault(r => r?.GetType().Name == "En");
-        }
-        if (findedLanguage is null) {
-            findedLanguage = representatives.FirstOrDefault();
-        }
+        if (findedLanguage != null) return findedLanguage;
+
+        findedLanguage = representatives.FirstOrDefault(r => (r?.GetType().Name.EndsWith("_"+Enum.GetName(Language))).Value);
+        if (findedLanguage != null) return findedLanguage;
+
+        findedLanguage = representatives.FirstOrDefault(r => r?.GetType().Name == "En");
+        if (findedLanguage != null) return findedLanguage;
+
+
+        findedLanguage = representatives.FirstOrDefault();        
         return findedLanguage;
     }
     public abstract MultilanguageProtoNode<LanguageEnum> WithLanguage(LanguageEnum language);

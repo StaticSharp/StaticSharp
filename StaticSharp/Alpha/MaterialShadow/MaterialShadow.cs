@@ -1,7 +1,7 @@
 ﻿using StaticSharp.Gears;
 namespace StaticSharp {
     public interface JMaterialShadow : JAbstractBoxShadow {
-        public double Elevation  { get; }
+        public double Elevation  { get; set; }
     }
 
     [ConstructorJs]

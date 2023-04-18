@@ -48,7 +48,7 @@ namespace StaticSharp {
 
         public static void Add<T>(
             this T collector,
-            InlineGroup inline,
+            Inline inline,
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0) where T : IBlockCollector {
             collector.Add(new Paragraph(inline, callerLineNumber, callerFilePath));

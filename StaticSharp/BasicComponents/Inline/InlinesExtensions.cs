@@ -8,7 +8,7 @@ namespace StaticSharp {
             foreach (var i in inlines) {
                 if (i is Text text) {
                     text.Value = func(text.Value);
-                } else if (i is InlineGroup inline){
+                } else if (i is Inline inline){
                     inline.Children.ProcessTextFragments(func);
                 }
             }
