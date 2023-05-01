@@ -102,7 +102,9 @@
                 //document.body.style.opacity = 1
 
                 if (location.hash !== "") {
-                    location.href = location.hash
+                    window.requestAnimationFrame(() => {
+                        location.href = location.hash
+                    });                    
                 }
 
             })

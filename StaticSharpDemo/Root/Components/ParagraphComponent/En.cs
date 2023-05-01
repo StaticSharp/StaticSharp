@@ -3,18 +3,31 @@
 namespace StaticSharpDemo.Root.Components.ParagraphComponent {
 
     [Representative]
-    public partial class En : Page {
+    public partial class En : ArticlePage {
         public override Inlines Description => $"Paragraph is a Block of text and other Inlines";
-        public override Blocks? Content => new (){
-            "Single line paragraph",
+        public override Blocks Article => new (){
 
+            CodeBlockFromThisFileRegion("simpleString"),
+#region simpleString
+            "Single line paragraph",
+#endregion
+
+            CodeBlockFromThisFileRegion("multilineString"),
+#region multilineString
             """
-            Multi
-            line
+            Multiline
             paragraph
             """,
+#endregion            
+            
+            CodeBlockFromThisFileRegion("interpolatedString"),
+#region interpolatedString
+            $"Use interpolated strings to insert {Node.Root:link} or {Bold("styled text")}",
+#endregion  
 
-            $"Single line paragraph with {Node} link",
+            "Alignment".ToSectionHeader(),
+
+
 
             new Paragraph("""
             Multi
@@ -32,6 +45,8 @@ namespace StaticSharpDemo.Root.Components.ParagraphComponent {
                 TextAlignmentHorizontal = TextAlignmentHorizontal.JustifyIncludingLastLine
             },
 
+
+
             "Multiple spaces |        | 8 spaces",
 
             "Long single line paragraph, that should wrap. Long single line paragraph, that should wrap. Long single line paragraph, that should wrap.",
@@ -41,16 +56,8 @@ namespace StaticSharpDemo.Root.Components.ParagraphComponent {
 
             "Long paragraph separated by tabs\tLong paragraph separated by tabs\tLong paragraph separated by tabs\tLong paragraph separated by tabs\tLong paragraph separated by tabs\t",
 
-            H3("Code"),
 
-
-            /*$"text with {Code("code inline")}",
-            new Paragraph($"text with {Code("code inline")}"){ 
-                ForegroundColor = Color.LightBlue,
-                BackgroundColor = Color.DarkBlue
-            },*/
-
-            H3("Background"),
+            "Background".ToSectionHeader(),
 
             new Paragraph("""
                 If background color is set, margins are replaced by paddings.

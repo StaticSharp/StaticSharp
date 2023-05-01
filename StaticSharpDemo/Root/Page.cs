@@ -87,7 +87,7 @@ namespace StaticSharpDemo.Root {
                         "C"
                     }
                 },*/
-                $"This website is created using {Node.Root}"
+                $"This website has been created using {Node.Root}"
             }
         };
 
@@ -171,6 +171,7 @@ namespace StaticSharpDemo.Root {
 
 
                 Child = new LinearLayout{
+                    
                     Width = new(e=>e.Parent.Width),
 
                     ItemGrow = 0,
@@ -178,6 +179,7 @@ namespace StaticSharpDemo.Root {
                     Gap = 50,
                     Children = {
                         new LinearLayout{
+                            
                             //Width = new(e=>e.Parent.Width),
                             PaddingsHorizontal = new(e=>Js.Num.Max(e.Width-ColumnWidth , 0)/2),
                             Children = {

@@ -41,9 +41,38 @@ namespace StaticSharpDemo.Utils {
         }
 
         public static Paragraph ToSectionHeader(this string text, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
-            return new Paragraph(text, callerLineNumber, callerFilePath) { 
+            var id = text.Replace(" ", "_");
+            return new Paragraph(text, callerLineNumber, callerFilePath) {
                 MarginTop = 40,
-                FontSize= 50,
+                FontSize = 50,
+                MarginLeft = 60,
+                Weight = FontWeight.ExtraLight,
+
+                Modifiers = { 
+                    new Id{ 
+                        Value = id
+                    }
+                },
+
+                UnmanagedChildren = { 
+                    new Block{ 
+                        X = new(e=>-e.Width),
+                        Width = new(e=>e.Parent.MarginLeft),
+                        Height = new(e=>e.Parent.Height),
+                        ExternalLink = $"#{id}",
+
+                        Modifiers = { 
+                            new Hover()
+                        },
+
+                        UnmanagedChildren = {
+                            new SvgIconBlock(SvgIcons.MaterialDesignIcons.LinkVariant){
+                                Visibility = new (e=>e.Parent.AsHover().Value ? 0.25 : 0.1),
+                                Width= 35,
+                            }.Center()
+                        }                        
+                    },                    
+                }
             };
         }
 
