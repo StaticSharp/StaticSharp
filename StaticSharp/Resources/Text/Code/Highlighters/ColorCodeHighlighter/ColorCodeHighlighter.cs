@@ -1,16 +1,38 @@
-﻿using ColorCode;
+namespace StaticSharp;
+
+using ColorCode;
 using ColorCode.Common;
 using ColorCode.HTML.Common;
 using ColorCode.Parsing;
 using ColorCode.Styling;
-using StaticSharp.Html;
+
 using System.Collections.Generic;
 
+public class ColorCodeHighlighter : IHighlighter {
 
-namespace StaticSharp.Gears {
-    public class CodeFormatter : CodeColorizerBase {
-        public CodeFormatter(StyleDictionary? Style = null, ILanguageParser? languageParser = null) : base(Style, languageParser) {
+    public string? Language { get; init; }
+    public bool Dark { get; }
+
+    public ColorCodeHighlighter(string? language = null, bool dark = false) {
+        Language = language;
+        Dark = dark;
+    }
+
+
+    public Inlines Highlight(string text, string? fileExtension = null) {
+        var programmingLanguageName = fileExtension?.TrimStart('.') ?? Language;
+        var language = Languages.FindById(programmingLanguageName);
+        var formatter = new CodeColorizer(Dark ? StyleDictionary.DefaultDark : StyleDictionary.DefaultLight);
+        var result = formatter.GetInlines(text, language);
+        return result;
+    }
+
+
+    private class CodeColorizer : CodeColorizerBase {
+
+        public CodeColorizer(StyleDictionary? styles) : base(styles, null) {
         }
+
 
         public Inlines GetInlines(string sourceCode, ILanguage language) {
 
@@ -78,4 +100,9 @@ namespace StaticSharp.Gears {
         protected override void Write(string parsedSourceCode, IList<Scope> scopes) {
         }
     }
+
+
+
 }
+
+

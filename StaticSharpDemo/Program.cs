@@ -15,7 +15,7 @@ namespace StaticSharpDemo {
 
         private static async Task Main(string[] args) {
 
-            ProgrammingLanguageProcessor.AddProgrammingLanguageProcessor(new CSharpLanguageProcessor());
+            //ProgrammingLanguageProcessor.AddProgrammingLanguageProcessor(new CSharpLanguageProcessor());
 
             //var ls = new LambdaScriptifier(() => Color2.Black + Color2.White);
             //var code = ls.Eval();

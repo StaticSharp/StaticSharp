@@ -114,11 +114,33 @@ namespace StaticSharpDemo.Root.Modifiers {
             },
 #endregion
 
-             (nameof(UserSelect)+" & friends").ToSectionHeader(),
-#region userExample
+            nameof(UserSelect).ToSectionHeader(),
+            CodeBlockFromThisFileRegion("userSelectExample"),
+            new LinearLayout{ 
+                Vertical = false,
+                Children = {
+#region userSelectExample
+                    new Paragraph("None"){
+                        BackgroundColor = Color.Violet,
+                        Modifiers = {
+                            new UserSelect(UserSelectOption.None)
+                        }
+                    },
+                    new Paragraph("Text"){
+                        BackgroundColor = Color.MediumVioletRed,
+                        Modifiers = {
+                            new UserSelect(UserSelectOption.Text)
+                        }
+                    }
+#endregion
+                }
+            },
+
+             "All together".ToSectionHeader(),
+#region usageExample
             new Paragraph("Click me!"){
                 Depth = 1,
-                BackgroundColor = Color.LightPink,
+                BackgroundColor = Color.OrangeRed,
                 Modifiers = {
                     new MaterialShadow(){
                         Elevation = new(
@@ -138,10 +160,10 @@ namespace StaticSharpDemo.Root.Modifiers {
                 }
             }.Assign(out var CodeVisibilityToggle),
 
-            CodeBlockFromThisFileRegion("userExample")
+            CodeBlockFromThisFileRegion("usageExample")
                 .Modify(x=> x.Exists = new(e=>CodeVisibilityToggle.Value.AsToggle().Value)),
-
 #endregion
+
         };
 
         

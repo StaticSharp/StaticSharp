@@ -74,7 +74,6 @@ namespace StaticSharpDemo.Root {
             Separator(),
 
             #region codeExample
-
             "coDe".ToLandingSectionHeader(Color.Red),
 
             /*$"This is {new Inline("Red text"){ ForegroundColor = Color.Red}}",
@@ -82,7 +81,7 @@ namespace StaticSharpDemo.Root {
             $"This is compile time error {new Block{ BackgroundColor = Color.Red}}",*/
             "Welcome to StaticSharp! We believe in getting right to the point, so here is the code from this very page.",
 
-            CodeBlockScrollable(LoadFile(ThisFilePath()).GetCodeRegion("codeExample").Highlight()),
+            CodeBlockScrollable(LoadFile(ThisFilePath()).GetCodeRegion("codeExample").Highlight(new CSharpHighlighter())),
 
             Separator(),
 
@@ -135,7 +134,7 @@ namespace StaticSharpDemo.Root {
             For example, on this page, there are colored words in the headings. You can write full formatting in each case
             or you can create a function that highlights all capital letters with a given color and makes all lowercase letters capitalized.
             """,
-            CodeBlock("\"create your own SHORTCUTS\".ToLandingSectionHeader(Color.Red)".Highlight("cs")),
+            CodeBlock("\"create your own SHORTCUTS\".ToLandingSectionHeader(Color.Red)".Highlight(new ColorCodeHighlighter("cs"))),
             $"In this case it is an extension method for type {Code("string")}",
 
             Separator(),

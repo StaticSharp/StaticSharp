@@ -23,7 +23,7 @@ namespace StaticSharpDemo.Utils {
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerFilePath] string callerFilePath = "") {
 
-            return CodeBlockScrollable(LoadFile(callerFilePath).GetCodeRegion(regionName).Highlight(), callerLineNumber, callerFilePath);
+            return CodeBlockScrollable(LoadFile(callerFilePath).GetCodeRegion(regionName).Highlight(new CSharpHighlighter()), callerLineNumber, callerFilePath);
         }
 
 
