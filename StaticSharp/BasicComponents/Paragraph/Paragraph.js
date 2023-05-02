@@ -66,7 +66,7 @@ function Paragraph(element) {
 
 
     new Reaction(() => {
-
+        
         if (element.Width == undefined) {
             return
         }
@@ -113,8 +113,8 @@ function Paragraph(element) {
             }
             return
         }
-        
-        //console.log("Reflow", minContentWidthWithPaddings, maxContentWidthWithPaddings, element.Width, element.inlineContainer.maxWidth)
+
+        content.style.width = ToCssSize(Num.Sum(element.Width, -element.PaddingLeft, -element.PaddingRight))
         var rect = content.getBoundingClientRect()
         element.InternalHeight = Num.Sum(rect.height, element.PaddingTop, element.PaddingBottom)
 
