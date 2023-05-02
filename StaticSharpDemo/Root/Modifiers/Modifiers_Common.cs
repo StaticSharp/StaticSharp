@@ -87,6 +87,7 @@ namespace StaticSharpDemo.Root.Modifiers {
 #region borderRadiusExample
             new Paragraph("BorderRadius"){
                 BackgroundColor = Color.BlueViolet,
+                MarginsHorizontal = 12,
                 Modifiers = {
                     new BorderRadius(){
                         Radius = 10,
@@ -100,6 +101,7 @@ namespace StaticSharpDemo.Root.Modifiers {
             CodeBlockFromThisFileRegion("shadowExample"),
 #region shadowExample
             new Paragraph("Hover me!"){
+                MarginsHorizontal = 12,
                 BackgroundColor = Color.BlueViolet,
                 Modifiers = {
                     new MaterialShadow(){
@@ -140,6 +142,7 @@ namespace StaticSharpDemo.Root.Modifiers {
 #region usageExample
             new Paragraph("Click me!"){
                 Depth = 1,
+                MarginsHorizontal = 12,
                 BackgroundColor = Color.OrangeRed,
                 Modifiers = {
                     new MaterialShadow(){
