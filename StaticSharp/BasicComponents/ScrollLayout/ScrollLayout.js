@@ -39,9 +39,10 @@ function SetupPointerDrag(element, func) {
 
 function ScrollLayout(element) {
     Block(element)
+    element.isScrollLayout = true
+
 
     var modificationSource = undefined
-
     let scrollable = document.createElement("scrollable")
     scrollable.style.touchAction = "manipulation"
     scrollable.style.overflow = "auto"

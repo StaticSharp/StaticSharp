@@ -164,7 +164,7 @@ namespace StaticSharpDemo.Root {
                 Modifiers = { 
                     new SessionStorageNumber{ 
                         Name = "MainScroll_"+string.Join("-",VirtualNode.Path),
-                        ValueToStore = new(e=>MainScrollLayout.Value.ScrollY)
+                        ValueToStore = new(e=>e.AsScrollLayout().ScrollY)
                     }.Assign(out var MainScrollLayoutPosition)
                 },
                 ScrollY = new(e=>MainScrollLayoutPosition.Value.StoredValue),
