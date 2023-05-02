@@ -14,7 +14,7 @@ namespace StaticSharp {
         double? PrimaryGravity { get; set; }
         double? SecondaryGravity { get; set; }
         double InternalWidth { get;  }
-        double InternalHieght { get;  }
+        double InternalHeight { get;  }
     }
 
 

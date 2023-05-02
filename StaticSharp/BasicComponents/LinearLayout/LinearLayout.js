@@ -5,7 +5,7 @@
 
 function LinearLayout(element) {
     BlockWithChildren(element)
-
+    element.isLinearLayout = true
     
 
 
