@@ -42,4 +42,40 @@ jobs:
           ./_out/StaticSharp.Core.${{env.package_version}}.nupkg \
           -k ${{secrets.NUGET_KEY}} \
           -s https://api.nuget.org/v3/index.json
+      
+      - name: Pack StaticSharp.RoutingSg
+        run: |
+          dotnet pack ./RoutingSg/Generator/RoutingSg.csproj \
+          -c Release \
+          -p:PackageVersion=${{env.package_version}} \
+          -o _out \
+          -p:ContinuousIntegrationBuild=true \
+          -p:PublishRepositoryUrl=true \
+          -p:EmbedUntrackedSources=true \
+          -p:DebugType=embedded
+       
+      - name: Publish StaticSharp.RoutingSg
+        run: |
+          dotnet nuget push \
+          ./_out/StaticSharp.RoutingSg.${{env.package_version}}.nupkg \
+          -k ${{secrets.NUGET_KEY}} \
+          -s https://api.nuget.org/v3/index.json
+        
+      - name: Pack StaticSharp.ComponentSg
+        run: |
+          dotnet pack ./ComponentSg/Generator/ComponentSg.csproj \
+          -c Release \
+          -p:PackageVersion=${{env.package_version}} \
+          -o _out \
+          -p:ContinuousIntegrationBuild=true \
+          -p:PublishRepositoryUrl=true \
+          -p:EmbedUntrackedSources=true \
+          -p:DebugType=embedded
+       
+      - name: Publish StaticSharp.ComponentSg
+        run: |
+          dotnet nuget push \
+          ./_out/StaticSharp.ComponentSg.${{env.package_version}}.nupkg \
+          -k ${{secrets.NUGET_KEY}} \
+          -s https://api.nuget.org/v3/index.json
         
