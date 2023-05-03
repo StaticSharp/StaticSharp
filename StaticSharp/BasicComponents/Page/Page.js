@@ -20,8 +20,10 @@ function Page(element) {
 
 
     let animationFrame = 0
+
     window.Reactive = {
         Root: element,
+        AnimationFrameTime: 0,
 
         AnimationFrame: () => {
             animationFrame++
@@ -36,7 +38,47 @@ function Page(element) {
         Touch: false,
     }
 
+    /*let animationFramesHistory = []
 
+    function linearRegression(points) {
+        let n = points.length
+        let xSum = 0, ySum = 0, xxSum = 0, xySum = 0
+        for (var i = n - 1; i >= 0; i--) {
+            xxSum += xSum;
+            xSum += i;
+            xySum += ySum;
+            ySum += points[i];
+        }
+
+        // Calculate slope and intercept
+        var slope = (n * xySum - xSum * ySum) / (n * xxSum - xSum * xSum);
+        var intercept = (ySum / n) - (slope * xSum) / n;
+        return intercept
+    }*/
+
+    let previousTime = 0
+    function UpdateAnimation(time) {
+        /*animationFramesHistory.unshift(time)
+        animationFramesHistory.length = Math.min(animationFramesHistory.length, 5)
+
+        console.log(time - previousTime)
+        previousTime = time
+
+        if (animationFramesHistory.length > 2) {
+            time = linearRegression(animationFramesHistory)
+        }*/
+        
+        /*console.log(time - previousTime)
+        previousTime = time*/
+
+
+        window.AnimationFrameTime = time
+        window.requestAnimationFrame((t) => {
+            UpdateAnimation(t)
+        })
+    }
+
+    UpdateAnimation(performance.now());
 
 
     let touchMedia = window.matchMedia("(pointer: coarse)")

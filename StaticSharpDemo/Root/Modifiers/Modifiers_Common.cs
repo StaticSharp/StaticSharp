@@ -178,13 +178,14 @@ namespace StaticSharpDemo.Root.Modifiers {
                 BackgroundColor = Color.OrangeRed,
                 Modifiers = {
                     new BackgroundImage{
-                        Height= 40,
+                        Height= 40,                        
                         ImageGenome = LogoGenome,
                         Repeat = BackgroundImageRepeat.RepeatX,
                         BlendMode = BlendMode.Saturation,
                     }.Center(),
 
                     new BackgroundImage{
+                        X = new(e=>Animation.Loop(5,0,-e.Width)),
                         Height= new(e=>e.AsBlock().Height),
                         ImageGenome = LogoGenome,
                         Repeat = BackgroundImageRepeat.RepeatX,

@@ -23,7 +23,12 @@ namespace StaticSharp {
             [Stateful]
             /// <param name="speedLimit">The speedLimit target units per seconds.</param>
             public static T SpeedLimit<T>(double speedLimit, T target) => throw new Javascriptifier.JavascriptOnlyException();
-        
+
+            [JavascriptOnlyMember]
+            [Stateful]
+            /// <param name="duration">The duration in seconds.</param>
+            public static T Loop<T>(double diration, T from, T to) => throw new Javascriptifier.JavascriptOnlyException();
+
         }
     }
 
