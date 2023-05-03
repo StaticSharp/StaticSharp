@@ -15,5 +15,3 @@ public record JpegGenome(Genome<IAsset> Source, int? Quality = null) : ImageProc
         return image;
     }
 }
-
-

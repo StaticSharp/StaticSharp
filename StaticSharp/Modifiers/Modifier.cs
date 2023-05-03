@@ -5,7 +5,7 @@ using StaticSharp.Gears;
 namespace StaticSharp {
 
     public interface JModifier : JEntity {
-        bool Enabled { get; set; }
+        
     }
 
 

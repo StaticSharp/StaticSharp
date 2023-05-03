@@ -39,6 +39,7 @@ public class CSharpHighlighter : IHighlighter {
             Kind.String => new Inline(text) { ForegroundColor = new Color("a31515") },
             Kind.Number => new Inline(text) { ForegroundColor = Color.OrangeRed },
             Kind.Keyword => new Inline(text) { ForegroundColor = Color.Blue },
+            _ => new Inline(text)
         };
     };
 

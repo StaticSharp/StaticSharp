@@ -138,7 +138,7 @@ namespace StaticSharp {
                     script.Add(generated.Script);
                 }
 
-                script.Add($"{tag.Id}.Modifiers = new Enumerable([{string.Join(',', modifiersVariables)}])");
+                script.Add($"{tag.Id}.Modifiers = [{string.Join(',', modifiersVariables)}]");
             }
 
 

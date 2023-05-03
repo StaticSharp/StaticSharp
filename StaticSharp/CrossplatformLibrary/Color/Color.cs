@@ -208,6 +208,17 @@ namespace StaticSharp {
         public Color ContrastColor() => ContrastColor(1);
 
 
+        public string ToHex() { 
+            string DoubleToHex(double value) { 
+                return ((byte)Math.Round(Math.Clamp(value, 0, 1) * 255)).ToString("X2");
+            }
+            var result = DoubleToHex(R)+ DoubleToHex(G) + DoubleToHex(B);
+            if (!double.IsNaN(A)) {
+                result += DoubleToHex(A);
+            }
+            return result;
+        }
+
     }
 
 

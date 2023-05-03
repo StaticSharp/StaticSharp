@@ -10,6 +10,7 @@ function Button(element) {
 
     element.addEventListener("click", () => {
         modifier.Script(modifier)
-        event.stopPropagation()
+        if (!modifier.EventPropagation)
+            event.stopPropagation()
     }, false)
 }

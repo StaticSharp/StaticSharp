@@ -33,8 +33,10 @@ namespace StaticSharp {
         public Image(Image other, int callerLineNumber, string callerFilePath)
             : base(other, callerLineNumber, callerFilePath) {
             AssetGenome = other.AssetGenome;
+            Embed = other.Embed;
         }
 
+        [SetsRequiredMembers]
         public Image(Genome<IAsset> assetGenome, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") : base(callerLineNumber, callerFilePath) {
             AssetGenome = assetGenome;
         }
@@ -55,9 +57,7 @@ namespace StaticSharp {
         }
 
 
-        MagickImageInfo GetImageInfo(IAsset source) {
-            return new MagickImageInfo(source.Data);
-        }
+        
 
 
         public override void ModifyTagAndScript(Context context, Tag tag, Group script) {
@@ -65,8 +65,8 @@ namespace StaticSharp {
 
             var contentId = context.CreateId();
             
-            var source = GetSource();
-            var imageInfo = GetImageInfo(source);
+            var source = AssetGenome.ToWebImage().Result;
+            var imageInfo = source.GetImageInfo();
 
             SetNativeSize(script, tag.Id, imageInfo.Width, imageInfo.Height);
 
@@ -125,7 +125,7 @@ namespace StaticSharp {
                 //TreeDepth = 0
             };
 
-            var thumbnailImageInfo = GetImageInfo(thumbnail);
+            var thumbnailImageInfo = thumbnail.GetImageInfo();
 
             tag.Add(new Tag("content", contentId) {
 
@@ -173,8 +173,8 @@ namespace StaticSharp {
 
 
         void IMainVisual.GetMeta(Dictionary<string, string> meta, Context context) {
-            var source = GetSource();
-            var imageInfo = GetImageInfo(source);
+            var source = AssetGenome.ToWebImage().Result;
+            var imageInfo = source.GetImageInfo();
             var url = (context.BaseUrl + context.AddAsset(source)).ToString();
             meta["og:image"] = url;
             meta["og:image:width"] = imageInfo.Width.ToString();

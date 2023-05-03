@@ -1,4 +1,7 @@
-﻿using StaticSharp.Js;
+﻿using Octokit;
+using StaticSharp.Gears;
+using StaticSharp.Js;
+using System.Collections.Generic;
 using System.Linq;
 namespace StaticSharpDemo.Root.Modifiers {
     abstract partial class Modifiers_Common : ArticlePage {
@@ -166,6 +169,49 @@ namespace StaticSharpDemo.Root.Modifiers {
             CodeBlockFromThisFileRegion("usageExample")
                 .Modify(x=> x.Exists = new(e=>CodeVisibilityToggle.Value.AsToggle().Value)),
 #endregion
+
+            nameof(BackgroundImage).ToSectionHeader(),
+            CodeBlockFromThisFileRegion("backgroundImageExample"),
+#region backgroundImageExample
+            new Block{ 
+                Height = 70,
+                BackgroundColor = Color.OrangeRed,
+                Modifiers = {
+                    new BackgroundImage{
+                        Height= 40,
+                        ImageGenome = LogoGenome,
+                        Repeat = BackgroundImageRepeat.RepeatX,
+                        BlendMode = BlendMode.Saturation,
+                    }.Center(),
+
+                    new BackgroundImage{
+                        Height= new(e=>e.AsBlock().Height),
+                        ImageGenome = LogoGenome,
+                        Repeat = BackgroundImageRepeat.RepeatX,
+                    },
+                }
+            },
+#endregion
+
+            nameof(LinearGradient).ToSectionHeader(),
+            CodeBlockFromThisFileRegion("linearGradientExample"),
+#region linearGradientExample
+            new Paragraph("Click me"){
+                Height = 70,
+                BackgroundColor= Color.Black,
+                Modifiers = {
+                    new LinearGradient{
+                        Angle = 0.25,
+                        Keys = {
+                            { Color.OrangeRed, new(e=>Js.Animation.Duration(0.5, e.AsToggle().Value? 0.5: 0.25)) },
+                            { Color.MediumVioletRed, new(e=>Js.Animation.Duration(0.5, e.AsToggle().Value? 0.5: 0.75)) },
+                        },
+                    },
+                    new Toggle()
+                }
+            }
+#endregion
+
 
         };
 

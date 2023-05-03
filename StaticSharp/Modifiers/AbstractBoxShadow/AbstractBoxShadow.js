@@ -10,9 +10,9 @@ function AbstractBoxShadow(element) {
     
 
     new Reaction(() => {
-        var boxShadowModifiers = element.Modifiers.Where(x => x.isAbstractBoxShadow)
-        if (boxShadowModifiers.First() == modifier) {
-            let shadow = boxShadowModifiers.Select(x => x.getBoxShadow()).ToArray().join(',')
+        var coModifiers = element.Modifiers.filter(x => x.isAbstractBoxShadow)
+        if (coModifiers[0] == modifier) {
+            let shadow = coModifiers.map(x => x.getBoxShadow()).join(',')
             element.style.boxShadow = shadow
         }
     })

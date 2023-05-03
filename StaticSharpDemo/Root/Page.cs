@@ -91,13 +91,14 @@ namespace StaticSharpDemo.Root {
             }
         };
 
+        public Genome<IAsset> LogoGenome => LoadFile("https://raw.githubusercontent.com/StaticSharp/StaticSharpBrandAssets/main/LogoHorizontal.svg");
 
         public virtual Block Menu => new MenuResponsive {
             Depth = 1,
             //HideButton = false,
             //PrimaryGravity = -1,
             //SecondaryGravity = -1,
-            Logo = new Image("https://raw.githubusercontent.com/StaticSharp/StaticSharpBrandAssets/main/LogoHorizontal.svg") {
+            Logo = new Image(LogoGenome) {
                 Embed = Image.TEmbed.Image,
                 Height = 32,
                 //MarginsVertical = 6,

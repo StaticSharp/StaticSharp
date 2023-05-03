@@ -33,7 +33,7 @@ function BaseModifier(element) {
         if (element.Modifiers != undefined) {
             let oldAs = element.as
             element.as = () => undefined
-            result = element.Modifiers.First(x => x.is(typeName),()=>undefined)
+            result = element.Modifiers.find(x => x.is(typeName))
             element.as = oldAs
         }
         
@@ -41,7 +41,7 @@ function BaseModifier(element) {
     }
 
 
-
+    element.Modifiers = undefined,
 
     element.Reactive = {
         Hover: false,
@@ -74,7 +74,7 @@ function BaseModifier(element) {
                 return undefined
         },
 
-        Modifiers: Enumerable.Empty(),
+        
 
 
         FontSize: undefined,

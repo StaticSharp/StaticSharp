@@ -5,11 +5,10 @@ using System.Reflection;
 namespace StaticSharp {
     public struct Binding<J,T> : IVoidEnumerable {
 
-        private T? Value;
-        private Expression<Func<J, T>>? Expression;
-        private List<LambdaExpression>? bindingWrappers = null;
+        public T? Value;
+        public Expression<Func<J, T>>? Expression;
+        //private List<LambdaExpression>? bindingWrappers = null;
 
-        public double Animation { set { } }
 
         public Binding(Expression<Func<J, T>> expression) {
             Expression = expression;
@@ -18,22 +17,24 @@ namespace StaticSharp {
             Value = value;
         }
 
+        public bool IsExpression => Expression != null;
+
         public static implicit operator Binding<J,T>(T value) {
             return new Binding<J,T>(value);
         }
 
-        public Binding<J, T> this[Expression index] {
+        /*public Binding<J, T> this[Expression index] {
             set {
                 // set the instance value at index
             }
-        }
+        }*/
 
 
-        public void Add<W>(Expression<Func<J, W>> wrapper) {
+        /*public void Add<W>(Expression<Func<J, W>> wrapper) {
             bindingWrappers ??= new List<LambdaExpression>();
 
             bindingWrappers.Add(wrapper);
-        }
+        }*/
 
 
         public string CreateScriptExpression() {
