@@ -5,6 +5,7 @@ function AbstractBackground(element) {
     let modifier = this
 
     modifier.Reactive = {
+        Enabled: true,
         RawImage: undefined,
 
         X: 0,
@@ -35,7 +36,9 @@ function AbstractBackground(element) {
 
     new Reaction(() => {
 
-        var coModifiers = element.Modifiers.filter(x => x.isAbstractBackground)
+        var coModifiers = element.Modifiers.filter(x => x.isAbstractBackground && x.Enabled)
+        if (coModifiers.length == 0)
+            return
         if (coModifiers[0] == modifier) {
             let data = coModifiers.map(x => x.getBackground()).reverse()
             for (let i of Object.keys(data[0]))
