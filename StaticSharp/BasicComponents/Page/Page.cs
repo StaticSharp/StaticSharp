@@ -29,7 +29,7 @@ namespace StaticSharp {
 
         protected virtual void Setup(Context context) {
             FontSize = 16;
-            CodeFontFamilies = new[] { new FontFamilyGenome("Roboto Mono") };
+            //CodeFontFamilies = new[] { new FontFamilyGenome("Roboto Mono") };
             FontFamilies = new() { new FontFamilyGenome("Roboto") };
             Weight = FontWeight.Regular;
         }

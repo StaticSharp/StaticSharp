@@ -1,4 +1,5 @@
-﻿using NUglify;
+﻿using AngleSharp.Dom;
+using NUglify;
 using StaticSharp.Gears;
 using System.Runtime.CompilerServices;
 using static StaticSharp.Image;
@@ -30,9 +31,9 @@ namespace StaticSharp {
 
             var imageAsset = ImageGenome.ToWebImage().Result;
             var imageInfo = imageAsset.GetImageInfo();
+            var url = context.PathFromHostToCurrentPage.To(context.AddAsset(imageAsset)).ToString();
 
-            var utl = (context.BaseUrl + context.AddAsset(imageAsset)).ToString();
-            result.Script.Add($"{result.Id}.RawImage = \"url({utl})\"");
+            result.Script.Add($"{result.Id}.RawImage = \"url({url})\"");
 
             result.Script.Add($"{result.Id}.NativeWidth = {Javascriptifier.ValueStringifier.Stringify(imageInfo.Width)}");
             result.Script.Add($"{result.Id}.NativeHeight = {Javascriptifier.ValueStringifier.Stringify(imageInfo.Height)}");

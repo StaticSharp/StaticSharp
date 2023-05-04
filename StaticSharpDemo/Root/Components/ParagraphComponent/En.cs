@@ -25,7 +25,7 @@ namespace StaticSharpDemo.Root.Components.ParagraphComponent {
             $"Use interpolated strings to insert {Node.Root:link} or {Bold("styled text")}",
 #endregion  
 
-            "Alignment".ToSectionHeader(),
+            SectionHeader("Alignment"),
 
 
 
@@ -57,7 +57,7 @@ namespace StaticSharpDemo.Root.Components.ParagraphComponent {
             "Long paragraph separated by tabs\tLong paragraph separated by tabs\tLong paragraph separated by tabs\tLong paragraph separated by tabs\tLong paragraph separated by tabs\t",
 
 
-            "Background".ToSectionHeader(),
+            SectionHeader("Background"),
 
             new Paragraph("""
                 If background color is set, margins are replaced by paddings.

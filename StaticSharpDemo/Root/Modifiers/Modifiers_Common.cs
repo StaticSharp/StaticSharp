@@ -8,12 +8,9 @@ namespace StaticSharpDemo.Root.Modifiers {
 
         public override Block? MainVisual => new Image("ModifiersPoster.psd");
 
-        public override Blocks Article => new(){
 
-            nameof(Button).ToSectionHeader(),
-
+        protected Blocks BottonExample => new() {
             CodeBlockFromThisFileRegion("bottonExample"),
-
 #region bottonExample
             new Paragraph("Click me!"){
                 BackgroundColor = Color.Violet,
@@ -25,8 +22,10 @@ namespace StaticSharpDemo.Root.Modifiers {
             },
 #endregion
             
-            nameof(Toggle).ToSectionHeader(),
-             CodeBlockFromThisFileRegion("toggleExample"),
+        };
+
+        protected Blocks ToggleExample => new() { 
+            CodeBlockFromThisFileRegion("toggleExample"),
 #region toggleExample
             new Paragraph("Click me!"){
                 BackgroundColor = new(e=>e.AsToggle().Value ? Color.Violet : Color.BlueViolet) ,
@@ -35,9 +34,10 @@ namespace StaticSharpDemo.Root.Modifiers {
                 }
             },
 #endregion
+        };
 
-            nameof(Hover).ToSectionHeader(),
-             CodeBlockFromThisFileRegion("hoverExample"),
+        protected Blocks HoverExample => new() {
+            CodeBlockFromThisFileRegion("hoverExample"),
 #region hoverExample
             new Paragraph("Hover me!"){
                 BackgroundColor = new(e=>e.AsHover().Value ? Color.PaleVioletRed : Color.BlueViolet) ,
@@ -46,12 +46,9 @@ namespace StaticSharpDemo.Root.Modifiers {
                 }
             },
 #endregion
+        };
 
-
-
-            nameof(Cursor).ToSectionHeader(),
-            //Description here
-
+        protected Blocks CursorExample => new() {
             CodeBlockFromThisFileRegion("cursorExample"),
 
             new LinearLayout{
@@ -83,9 +80,8 @@ namespace StaticSharpDemo.Root.Modifiers {
                     i.TextAlignmentHorizontal = TextAlignmentHorizontal.Center;
                 }
             }),
-
-
-            nameof(BorderRadius).ToSectionHeader(),
+        };
+        protected Blocks BorderRadiusExample => new() {
             CodeBlockFromThisFileRegion("borderRadiusExample"),
 #region borderRadiusExample
             new Paragraph("BorderRadius"){
@@ -99,10 +95,10 @@ namespace StaticSharpDemo.Root.Modifiers {
                 }
             },            
 #endregion
-
-            nameof(MaterialShadow).ToSectionHeader(),
-            CodeBlockFromThisFileRegion("shadowExample"),
-#region shadowExample
+        };
+        protected Blocks MaterialShadowExample => new() {
+            CodeBlockFromThisFileRegion("materialShadowExample"),
+#region materialShadowExample
             new Paragraph("Hover me!"){
                 MarginsHorizontal = 12,
                 BackgroundColor = Color.BlueViolet,
@@ -118,10 +114,10 @@ namespace StaticSharpDemo.Root.Modifiers {
                 }
             },
 #endregion
-
-            nameof(UserSelect).ToSectionHeader(),
+        };
+        protected Blocks UserSelectExample => new() {
             CodeBlockFromThisFileRegion("userSelectExample"),
-            new LinearLayout{ 
+            new LinearLayout{
                 Vertical = false,
                 Children = {
 #region userSelectExample
@@ -139,9 +135,9 @@ namespace StaticSharpDemo.Root.Modifiers {
                     }
 #endregion
                 }
-            },
-
-             "All together".ToSectionHeader(),
+            }
+        };
+        protected Blocks UsageExample => new() {
 #region usageExample
             new Paragraph("Click me!"){
                 Depth = 1,
@@ -169,16 +165,31 @@ namespace StaticSharpDemo.Root.Modifiers {
             CodeBlockFromThisFileRegion("usageExample")
                 .Modify(x=> x.Exists = new(e=>CodeVisibilityToggle.Value.AsToggle().Value)),
 #endregion
+        };
+        protected Blocks BackgroundImageExample_Simple => new() {
+            CodeBlockFromThisFileRegion("backgroundImageExample_Simple"),
+#region backgroundImageExample_Simple
+            new Block{
+                Height = 90,
+                BackgroundColor = Color.LightGray,
+                Modifiers = {
+                    new BackgroundImage{
+                        ImageGenome = LoadFile("../FavIconWhiteInBlack.svg"),
+                    }
+                }
+            },
+#endregion
+        };
 
-            nameof(BackgroundImage).ToSectionHeader(),
-            CodeBlockFromThisFileRegion("backgroundImageExample"),
-#region backgroundImageExample
-            new Block{ 
+        protected Blocks BackgroundImageExample_Complex => new() {
+            CodeBlockFromThisFileRegion("backgroundImageExample_Complex"),
+#region backgroundImageExample_Complex
+            new Block{
                 Height = 70,
                 BackgroundColor = Color.OrangeRed,
                 Modifiers = {
                     new BackgroundImage{
-                        Height= 40,                        
+                        Height= 40,
                         ImageGenome = LogoGenome,
                         Repeat = BackgroundImageRepeat.RepeatX,
                         BlendMode = BlendMode.Saturation,
@@ -193,10 +204,28 @@ namespace StaticSharpDemo.Root.Modifiers {
                 }
             },
 #endregion
+        };
 
-            nameof(LinearGradient).ToSectionHeader(),
-            CodeBlockFromThisFileRegion("linearGradientExample"),
-#region linearGradientExample
+        protected Blocks LinearGradientExample_Simple => new() {
+            CodeBlockFromThisFileRegion("linearGradientExample_Simple"),
+#region linearGradientExample_Simple
+            new Block(){
+                Height = 70,
+                Modifiers = {
+                    new LinearGradient{
+                        Keys = {
+                            Color.OrangeRed,
+                            { Color.Orange, 0.25 },
+                            Color.MediumVioletRed,
+                        },
+                    }
+                }
+            },
+#endregion
+        };
+        protected Blocks LinearGradientExample_Complex => new() {
+            CodeBlockFromThisFileRegion("linearGradientExample_Complex"),
+#region linearGradientExample_Complex
             new Paragraph("Click me"){
                 Height = 70,
                 BackgroundColor= Color.Black,
@@ -212,9 +241,9 @@ namespace StaticSharpDemo.Root.Modifiers {
                 }
             }
 #endregion
-
-
         };
+
+        
 
         
 

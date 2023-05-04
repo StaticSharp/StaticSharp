@@ -45,7 +45,7 @@ namespace StaticSharp {
         public string? ExternalLink { get; set; }
         public Tree.Node? InternalLink { get; set; }
         public bool OpenLinksInANewTab { get; set; }            
-        public FontFamilyGenome[]? CodeFontFamilies { get; set; } = null;
+        //public FontFamilyGenome[]? CodeFontFamilies { get; set; } = null;
 
         private FontFamilies? fontFamilies = null;
         public FontFamilies FontFamilies {
@@ -72,7 +72,7 @@ namespace StaticSharp {
             ExternalLink = other.ExternalLink;
             InternalLink = other.InternalLink;
             OpenLinksInANewTab = other.OpenLinksInANewTab;
-            CodeFontFamilies = other.CodeFontFamilies?.ToArray();
+            //CodeFontFamilies = other.CodeFontFamilies?.ToArray();
             FontFamilies = new FontFamilies(other.FontFamilies);
             Weight = other.Weight;
             Italic = other.Italic;
@@ -152,9 +152,9 @@ namespace StaticSharp {
             if (fontFamilies != null) {
                 context.FontFamilies = fontFamilies;
             }
-            if (CodeFontFamilies != null) {
+            /*if (CodeFontFamilies != null) {
                 context.CodeFontFamilies = CodeFontFamilies;
-            }
+            }*/
 
             if (Weight != null) {
                 context.FontWeight = Weight.Value;

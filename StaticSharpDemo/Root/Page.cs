@@ -3,11 +3,9 @@ using StaticSharp.Gears;
 using StaticSharp.Js;
 
 namespace StaticSharpDemo.Root {
-
-
-    public abstract partial class Page : StaticSharp.Page {
+    public abstract partial class Page : PageBase {
         public override string? SiteName => "StaticSharp";
-        public override Genome<IAsset>? Favicon => LoadFile("https://raw.githubusercontent.com/StaticSharp/StaticSharpBrandAssets/main/FavIcon.svg");
+        public override Genome<IAsset>? Favicon => LoadFile("FavIcon.svg");
 
         public override string PageLanguage => Node.Language.ToString().ToLower();
 
