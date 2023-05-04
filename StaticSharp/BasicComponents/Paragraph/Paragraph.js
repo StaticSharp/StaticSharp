@@ -5,7 +5,9 @@ function Paragraph(element) {
     //CreateSocket(element, "FirstInline", element)
 
     element.Reactive = {
-        Selectable: true,
+
+        NoWrap: false,
+
         InternalWidth: () => Num.Sum(element.MaxContentWidth, element.PaddingLeft, element.PaddingRight),
 
         InternalHeight: undefined,
@@ -80,17 +82,22 @@ function Paragraph(element) {
         content.style.left = ToCssSize(element.PaddingLeft)
         content.style.top = ToCssSize(element.PaddingTop)
 
-        let minContentWidthWithPaddings = Num.Sum(element.MinContentWidth, element.PaddingLeft, element.PaddingRight)
+        let noWrap = element.NoWrap
+        let minContentWidth = noWrap ? element.MaxContentWidth : element.MinContentWidth
+
+        let minContentWidthWithPaddings = Num.Sum(minContentWidth, element.PaddingLeft, element.PaddingRight)
 
         if (element.Width < minContentWidthWithPaddings) {
 
-            let scale = Num.Sum(element.Width, -element.PaddingLeft, -element.PaddingRight) / element.MinContentWidth
+            let scale = Num.Sum(element.Width, -element.PaddingLeft, -element.PaddingRight) / minContentWidth
 
             if (scale > 0) {
-                content.style.width = "min-content"
+                content.style.width = noWrap ? "max-content" : "min-content"
                 content.style.transformOrigin = "top left"
                 content.style.transform = `scale(${scale}, ${scale})`
-                element.InternalHeight = Num.Sum(element.MaxContentHeight * scale, element.PaddingTop, element.PaddingBottom)
+                let contentHeight = noWrap ? element.MinContentHeight : element.MaxContentHeight
+
+                element.InternalHeight = Num.Sum(contentHeight * scale, element.PaddingTop, element.PaddingBottom)
             } else {
                 content.style.display = "none"
                 element.InternalHeight = Num.Sum(element.PaddingTop, element.PaddingBottom)
