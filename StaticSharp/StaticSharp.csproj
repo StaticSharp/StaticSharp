@@ -125,6 +125,15 @@
 	-->
 
 
+    <PropertyGroup>
+        <RoutingSgDebug>false</RoutingSgDebug>
+    </PropertyGroup>
+    <ItemGroup Condition="$(RoutingSgDebug)">
+        <Compile Include=".generated\RoutingSg.RoutingSg\**" />
+    </ItemGroup>
+    <ItemGroup Condition="!$(RoutingSgDebug)">
+        <ProjectReference Include="..\RoutingSg\Generator\RoutingSg.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true"/>
+    </ItemGroup>
 
 
 
@@ -138,7 +147,7 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="!$(ComponentSgDebug)">
-		<ProjectReference Include="..\ComponentSg\Generator\ComponentSg.csproj" OutputItemType="Analyzer" />
+		<ProjectReference Include="..\ComponentSg\Generator\ComponentSg.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
 	</ItemGroup>
 
 

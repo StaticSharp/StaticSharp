@@ -122,6 +122,12 @@ namespace RoutingSg {
 
 
         public void Execute(GeneratorExecutionContext context) {
+            // This is needed because RoutingSg must not take effect on StaticSharp,
+            // but must be referenced automatically by any project that references StaticSharp
+            if (context.Compilation.Assembly.Name == "StaticSharp") {
+                return;
+            }
+
             var watch = System.Diagnostics.Stopwatch.StartNew();
 
 
