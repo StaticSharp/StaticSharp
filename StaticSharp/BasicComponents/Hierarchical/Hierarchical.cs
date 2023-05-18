@@ -7,12 +7,11 @@ using StaticSharp.Html;
 using StaticSharp.Js;
 using System.Globalization;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace StaticSharp {
 
 
-    
+
 
 
     /*[Javascriptifier.JavascriptClass("")]
@@ -33,48 +32,12 @@ namespace StaticSharp {
 
     }
 
-    namespace Gears {
-        public class SocketAttribute : Attribute { 
-        }    
-    }
-
-
-    namespace Js {
-        public class Variable<T> : Javascriptifier.IStringifiable where T: JEntity {
-
-            [Javascriptifier.JavascriptPropertyGetFormat("{0}")]
-            [Javascriptifier.JavascriptOnlyMember]
-            public T Value => throw new Javascriptifier.JavascriptOnlyException();
-            public string Name { get; set; }
-            public Variable([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
-                Name = "_"+Hash.CreateFromString($"{callerLineNumber}\0{callerFilePath}").ToString(8);
-            }
-            public string ToJavascriptString() {
-                return Name;
-            }
-        }
-    }
-
-
-
 
     [Scripts.Layer]
     [ConstructorJs]
     [RelatedScript("DomLinkedList")]
-    //[Mix(typeof(AssignMixin<Hierarchical, Js.Hierarchical>))]
     public abstract partial class Hierarchical : Entity {
         protected virtual string TagName => CaseUtils.CamelToKebab(GetType().Name);
-
-        /*public virtual Hierarchical Assign(out Js.Variable<JHierarchical> variable, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")// where T : Hierarchical where JsT : Js.Hierarchical 
-        {
-            variable = new(callerLineNumber, callerFilePath);
-            return Assign(variable);
-        }
-        public Hierarchical Assign(Js.Variable<JHierarchical> variable) {
-            if (VariableNames == null) VariableNames = new();
-            VariableNames.Add(variable.Name);
-            return this;
-        } */      
 
         protected string TagToJsValue(Tag tag) {
             return TagToJsValue(tag.Id);
@@ -86,13 +49,13 @@ namespace StaticSharp {
             
         }
 
-
         public virtual TagAndScript Generate(Context context) {
 
             context = ModifyContext(context);
 
             var type = GetType();
-            var id = context.CreateId();
+
+            var id = context.CreateId(tempruaryId.ToString());
 
             var result = new TagAndScript(new Tag(TagName,id), new Group());
 
@@ -104,11 +67,7 @@ namespace StaticSharp {
                 jsConstructorsNames.Select(x=>$"{x}({id})")                
             };
 
-            if (Properties.Count > 0) {
-                scriptOfCurrentElement.Add(new Scope($"{id}.Reactive = "){
-                    Properties.Select(x => $"{x.Key}:{x.Value},")
-                });
-            }
+            AddPropertiesToScript(id,scriptOfCurrentElement,context);
 
             AddSourceCodeNavigationData(result.Tag, context);
 

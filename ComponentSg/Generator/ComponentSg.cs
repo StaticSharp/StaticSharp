@@ -206,9 +206,9 @@ namespace ComponentSg {
             }
 
 
-            Group castExtensiion = null;
+            Group castExtension = null;
             if (jType != null) {
-                castExtensiion = new Group {
+                castExtension = new Group {
                     "[Javascriptifier.JavascriptClass(\"\")]",
                     new Scope($"public static partial class {type.Name}Extension"){
                         "[Javascriptifier.JavascriptOnlyMember]",
@@ -222,7 +222,7 @@ namespace ComponentSg {
             var result = new Group {
                 "using System.Runtime.CompilerServices;",
                 new Scope($"namespace {type.ContainingNamespace}") {
-                    castExtensiion,
+                    castExtension,
                     new Scope($"partial class {type.Name} /*Generated*/"){
                         body
                     }

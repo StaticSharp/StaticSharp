@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace StaticSharp {
     public static partial class Static {
 
@@ -12,5 +7,8 @@ namespace StaticSharp {
             return x;
         }
 
+        public static T Function<T>(Func<T> func) {
+            return func();
+        }
     }
 }

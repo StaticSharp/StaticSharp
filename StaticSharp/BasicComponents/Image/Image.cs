@@ -13,7 +13,7 @@ namespace StaticSharp {
         //public double Aspect  { get; }
     }
 
-
+    [Scripts.FitImage]
     [ConstructorJs]
     public partial class Image : AspectBlock, IMainVisual {
 

@@ -13,7 +13,6 @@ namespace StaticSharp {
 
     [ConstructorJs]
     public abstract partial class Modifier : Entity {
-
         public virtual IdAndScript Generate(string elementId, Context context) {
 
             context = ModifyContext(context);
@@ -32,11 +31,7 @@ namespace StaticSharp {
                     VariableNames?.Select(x=>$"let {x} = {id}"),
                 };
 
-            if (Properties.Count > 0) {
-                script.Add(new Scope($"{id}.Reactive = "){
-                        Properties.Select(x => $"{x.Key}:{x.Value},")
-                    });
-            }
+            AddPropertiesToScript(id,script,context);
 
             return new IdAndScript(id, script);
         }

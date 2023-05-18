@@ -99,9 +99,20 @@ function Video(element) {
 
 
 
-    /*window.setInterval(() => {
-        element.PositionUpdateTimer++;
-    },50)*/
+    let baseHtmlNodesOrdered = element.HtmlNodesOrdered
+    element.HtmlNodesOrdered = new Enumerable(function* () {
+        yield* baseHtmlNodesOrdered
+        yield element.content
+    })
+
+
+    new Reaction(() => {
+        FitImage(
+            element,
+            element.content, element.NativeAspect,
+            element.Fit, element.GravityVertical, element.GravityHorizontal
+        )
+    })
 
 
     var playerDestructor = undefined

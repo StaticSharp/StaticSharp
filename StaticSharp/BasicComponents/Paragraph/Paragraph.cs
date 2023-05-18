@@ -19,7 +19,12 @@ namespace StaticSharp {
 
     public interface JParagraph : JBlock {
         bool NoWrap { get; set; }
-        public TextAlignmentHorizontal TextAlignmentHorizontal { get; set; }
+        TextAlignmentHorizontal TextAlignmentHorizontal { get; set; }
+
+        double InternalWidth { get; }
+        double InternalHeight { get; }
+        
+
     }
 
     [RelatedStyle]

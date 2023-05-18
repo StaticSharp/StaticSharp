@@ -55,11 +55,22 @@ namespace StaticSharp {
         public bool ItalicFont { get; set; } = false;
 
 
+        public List<(string temporaryId, string replacement)> TemporaryIdToId { get; } = new();
+
         public Ref<int> nextIdNumber;
-        public string CreateId() {
-            //var result = $"luid{nextIdNumber}";
-            //nextIdNumber.Value++;
-            return "v"+nextIdNumber.Value++;
+        public string CreateId(string? temporaryId = null) {
+            var result = "v" + nextIdNumber.Value++;
+            if (temporaryId != null) {
+                TemporaryIdToId.Add((temporaryId, result));
+            }
+            return result;
+        }
+
+        public string ReplaceTemporaryId(string script) {
+            foreach (var i in TemporaryIdToId) {
+                script = script.Replace(i.temporaryId, i.replacement);
+            }
+            return script;
         }
 
 

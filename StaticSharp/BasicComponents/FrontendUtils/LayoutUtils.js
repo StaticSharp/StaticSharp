@@ -27,6 +27,21 @@ function LayoutBorder(sideIndex, layoutPrpertiesNames, marginStop = 0, bodyStop 
     this.bodyStop = bodyStop
 }
 
+LayoutBorder.prototype.SetFromContainer = function (container) {
+    
+    let padding = container["Padding" + this.layoutPrpertiesNames.side[this.sideIndex]]    
+    this.bodyStop = 0
+    this.marginStop = 0
+    if (padding !== undefined) {
+        this.bodyStop = padding
+    } else {
+        let margin = container["Margin" + this.layoutPrpertiesNames.side[this.sideIndex]]
+        if (margin !== undefined)
+            this.marginStop = -margin
+    }    
+}
+
+
 LayoutBorder.prototype.ShiftMaxOf = function (children) {
 
     let marginStop = 0
@@ -68,7 +83,9 @@ LayoutBorder.prototype.ShiftByPixels = function (pixels) {
     this.bodyStop += pixels
 }
 
-
+LayoutBorder.prototype.ShiftByGap = function (gap) {
+    this.bodyStop = Math.max(this.bodyStop, this.marginStop + gap)
+}
 
 
 function LinearLayoutRegion(vertical) {
@@ -101,7 +118,10 @@ LinearLayoutRegion.formContainer = function (container, vertical) {
 
     for (let i = 0; i < 2; i++) {
 
-        result.border[i].bodyStop = 0
+        result.border[i].SetFromContainer(container)
+
+        //SetFromContainer
+        /*result.border[i].bodyStop = 0
         result.border[i].marginStop = 0
         if (padding[i] != undefined) {
             result.border[i].bodyStop = padding[i]
@@ -109,7 +129,7 @@ LinearLayoutRegion.formContainer = function (container, vertical) {
             let margin = container["Margin" + names.side[i]]
             if (margin !== undefined)
                 result.border[i].marginStop = -margin
-        }
+        }*/
     }
     return result
 }

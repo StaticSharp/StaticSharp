@@ -90,7 +90,7 @@ namespace StaticSharp {
         }
 
 
-        public Tag? GenerateFavicon(Context context) {
+        private Tag? GenerateFavicon(Context context) {
             //<link rel="icon" type="image/x-icon" href="/images/favicon.ico">
             if (Favicon == null)
                 return null;
@@ -147,15 +147,17 @@ namespace StaticSharp {
             var initializationScript =
                 new Scopes.C.Scope("function Initialize()"){
                     bodyTagAndScript.Script
-                };
+                }.ToString();
 
+
+            initializationScript = context.ReplaceTemporaryId(initializationScript);
 
             head.Add(context.GenerateScript());
             head.Add(context.GenerateStyle());
             head.Add(context.GenerateFonts());
 
             head.Add(new Tag("script") {
-                new PureHtmlNode(initializationScript.ToString())
+                new PureHtmlNode(initializationScript)
             });
 
             return document.GetHtml();

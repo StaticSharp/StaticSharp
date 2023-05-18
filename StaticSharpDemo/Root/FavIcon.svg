@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 73.9 64" xml:space="preserve">
+    <style type="text/css">
+        .outer {
+            fill: black;
+        }
+		.inner {
+            fill: white;
+        }
+        @media (prefers-color-scheme: dark) {
+            .outer {
+                fill: white;
+            }
+			.inner {
+                fill: black;
+            }
+        }
+    </style>
+<path class="outer" d="M37,0L0,64h46.2h27.7L37,0z"/>
+<polygon class="inner" points="8.7,59 37,10 57.2,45 49.1,59 "/>
+</svg>

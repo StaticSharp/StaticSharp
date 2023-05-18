@@ -3,6 +3,20 @@ function Image(element) {
     AspectBlock(element)
 
 
+    let baseHtmlNodesOrdered = element.HtmlNodesOrdered
+    element.HtmlNodesOrdered = new Enumerable(function* () {
+        yield* baseHtmlNodesOrdered
+        yield element.content
+    })
+
+
+    new Reaction(() => {
+        FitImage(
+            element,
+            element.content, element.NativeAspect,
+            element.Fit, element.GravityVertical, element.GravityHorizontal
+        )
+    })
 
     /*new Reaction(() => {
         let content = element.children[0]

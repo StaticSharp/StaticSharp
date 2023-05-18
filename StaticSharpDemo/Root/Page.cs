@@ -126,7 +126,7 @@ namespace StaticSharpDemo.Root {
 
         public virtual double ColumnWidth => 1080;
 
-        Js.Variable<JScrollLayout> MainScrollLayout => new();
+        Js.Variable<JScrollView> ScrollView => new();
 
         
 
@@ -138,14 +138,14 @@ namespace StaticSharpDemo.Root {
                 Depth= 1,         
                 Visibility = new(e=>Animation.SpeedLimit(1, e.AsHover().Value ? 0.5 : 0.2)) ,
                 BackgroundColor = Color.LightGray,
-                Exists = new(e=>MainScrollLayout.Value.ScrollY > 100),
+                Exists = new(e=>ScrollView.Value.ScrollY > 100),
                 X = new (e=>e.Parent.Width-e.Width - 10),
                 Y = new (e=>e.Parent.Height-e.Height - 10),
                 Width = 64,
                 Height = 64,
                 Modifiers = {
                     new Button{
-                        Script = $"{MainScrollLayout.Name}.ScrollY = 0"
+                        Script = $"{ScrollView.Name}.ScrollY = 0"
                     },
                     new Cursor(CursorOption.Pointer),
                     new Hover(),
@@ -156,18 +156,17 @@ namespace StaticSharpDemo.Root {
             },
 
 
-            new ScrollLayout {
+            new ScrollView{
                 Width = new(e=>e.Parent.Width),
                 Height = new(e=>e.Parent.Height),
                 
                 Modifiers = { 
                     new SessionStorageNumber{ 
                         Name = "MainScroll_"+string.Join("-",VirtualNode.Path),
-                        ValueToStore = new(e=>e.AsScrollLayout().ScrollY)
+                        ValueToStore = new(e=>e.AsScrollView().ScrollY)
                     }.Assign(out var MainScrollLayoutPosition)
                 },
                 ScrollY = new(e=>MainScrollLayoutPosition.Value.StoredValue),
-
 
                 Child = new LinearLayout{
                     
@@ -178,8 +177,7 @@ namespace StaticSharpDemo.Root {
                     Gap = 50,
                     Children = {
                         new LinearLayout{
-                            
-                            //Width = new(e=>e.Parent.Width),
+                            Width = new(e=>e.Parent.Width),
                             PaddingsHorizontal = new(e=>Js.Num.Max(e.Width-ColumnWidth , 0)/2),
                             Children = {
                                 Menu,
@@ -190,9 +188,7 @@ namespace StaticSharpDemo.Root {
                         Footer,
                     }
                 }
-            }.Assign(MainScrollLayout),
-
-            
+            }.Assign(ScrollView),            
 
         };
     }

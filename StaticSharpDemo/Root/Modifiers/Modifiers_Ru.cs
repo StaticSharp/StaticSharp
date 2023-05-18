@@ -13,7 +13,7 @@ namespace StaticSharpDemo.Root.Modifiers {
             Подсказки для других объектов, например, Flex добавляет подсказки для {Code(nameof(LinearLayout))}
             """;
 
-        public override Blocks Article => new Modifiers_En().Article;
+        public override Blocks Article => new Modifiers_En(Language.Ru).Article;
 
     }
 }

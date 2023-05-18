@@ -1,9 +1,12 @@
 ﻿using StaticSharp.Gears;
 using StaticSharp.Html;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 
 
 namespace StaticSharp {
+
+    
 
     public interface JBlock : JBaseModifier {
 
@@ -94,16 +97,16 @@ namespace StaticSharp {
     }
 
     public static partial class Static {
-        public static T CenterHorizontally<T>(this T _this) where T : Block {
+        public static T CenterX<T>(this T _this) where T : Block {
             _this.X = new(e => 0.5 * (e.Parent.Width - e.Width));
             return _this;
         }
-        public static T CenterVertically<T>(this T _this) where T : Block {
+        public static T CenterY<T>(this T _this) where T : Block {
             _this.Y = new(e => 0.5 * (e.Parent.Height - e.Height));
             return _this;
         }
         public static T Center<T>(this T _this) where T : Block {
-            return _this.CenterHorizontally().CenterVertically();
+            return _this.CenterX().CenterY();
         }
 
         public static T FillWidth<T>(this T _this) where T : Block {

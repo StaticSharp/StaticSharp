@@ -1,8 +1,8 @@
 function Paragraph(element) {
 
     Block(element)
+    element.isParagraph = true
 
-    //CreateSocket(element, "FirstInline", element)
 
     element.Reactive = {
 

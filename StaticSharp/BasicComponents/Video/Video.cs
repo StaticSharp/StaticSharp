@@ -36,6 +36,8 @@ namespace StaticSharp {
         public bool Loop { get; set; }
     }
 
+
+    [Scripts.FitImage]
     [ConstructorJs]
     public sealed partial class Video : AspectBlock, IMainVisual {
 

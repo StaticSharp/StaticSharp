@@ -13,7 +13,7 @@ namespace StaticSharpDemo.Root.Components.ScrollLayoutComponent {
         public override string Title => "Scroll Layout";
         public override Inlines Description => $"Контейнер вертикальным и горизонтальным скроллбарами.";
         public override Blocks? Content => new() { 
-            new ScrollLayout(){ 
+            new ScrollView(){ 
                 Height = 300,
                 Child = new SvgIconBlock(SvgIcons.MaterialDesignIcons.Carrot){
                     Width = 1024,
@@ -22,7 +22,7 @@ namespace StaticSharpDemo.Root.Components.ScrollLayoutComponent {
             },
 
             "Paddings:",
-            new ScrollLayout(){
+            new ScrollView(){
                 Height = 200,
                 Paddings = 20,
                 BackgroundColor = Color.Pink,
@@ -32,7 +32,7 @@ namespace StaticSharpDemo.Root.Components.ScrollLayoutComponent {
                 }
             },
 
-            new ScrollLayout(){
+            new ScrollView(){
                 BackgroundColor = Color.LightGray,
                 Paddings = 10,
                 //PaddingLeft = 50,
@@ -53,7 +53,7 @@ namespace StaticSharpDemo.Root.Components.ScrollLayoutComponent {
                 }
             },
 
-            new ScrollLayout(){
+            new ScrollView(){
                 Height = 200,
                 Child = new Paragraph($"""
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu mattis erat, vel rutrum orci. Integer eu tincidunt nisl, et eleifend nisl. Cras imperdiet suscipit mi, et tempus erat tristique vel. Pellentesque ornare, diam at imperdiet fermentum, augue velit rhoncus nunc, vehicula auctor augue turpis ac nunc. Sed faucibus lectus malesuada commodo mattis. Mauris dignissim purus vitae libero condimentum, vitae placerat quam sodales. Etiam ut erat eu nisi dignissim venenatis vitae vel enim.

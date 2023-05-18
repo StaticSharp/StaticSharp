@@ -31,8 +31,8 @@ namespace StaticSharp {
             };
         }
 
-        public static ScrollLayout CodeBlockScrollable(Inlines inlines, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
-            return new ScrollLayout(callerLineNumber, callerFilePath) {
+        public static ScrollView CodeBlockScrollable(Inlines inlines, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
+            return new ScrollView(callerLineNumber, callerFilePath) {
                 //PreferredHeight = new(e => Js.Math.Min(e.InternalHeight, e.Root.Height * 0.8)),
                 Height = new(e => Js.Num.Min(e.InternalHeight, e.Root.Height * 0.8)),
                 BackgroundColor = new(e => Color.Lerp(e.Parent.HierarchyBackgroundColor, e.Parent.HierarchyForegroundColor, codeBackgroundIntensity)),

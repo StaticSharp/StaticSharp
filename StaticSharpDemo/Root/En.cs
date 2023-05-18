@@ -1,4 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using EnvDTE;
+using Newtonsoft.Json.Linq;
+using NUglify;
+using StaticSharp.Js;
+using StaticSharp.Resources.Text;
 using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -6,15 +10,18 @@ using System.Runtime.CompilerServices;
 
 
 
-
 namespace StaticSharpDemo.Root {
+
+
+    
+
 
     [Representative]
     partial class En : Page {
         public override string Title => "StaticSharp";
         public override Inlines Description => $"Component oriented static-site generator\nextendable with C#";
 
-        
+
 
         public override Block? MainVisual => new Video("T4TEdzSLyi0") {
             Play = true,
@@ -43,7 +50,7 @@ namespace StaticSharpDemo.Root {
             };
         }
 
-        
+
 
 
         /*public static Inline Code(string text, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
@@ -64,12 +71,236 @@ namespace StaticSharpDemo.Root {
         }*/
 
 
+        Block MakeHeader(Image image, Block block) {
 
+            var vertical = new Property<JBlock, bool>(
+                e=>e.Width<800
+                );
+
+            var imageHeightVertical = image.CreateProperty(e => 500);
+
+
+            //Property<JImage, double> imageHeightVertical = new(e=>e.)
+
+
+
+
+            Property<JBlock, double> maxHeight = new (
+                e => Js.Num.Max(image.Front.AsBlock().Height)
+                );
+
+
+
+            var result = new Block {
+                Height = new(e => vertical.Front ? 1200: image.Front.AsBlock().Height),
+                BackgroundColor = Color.Violet,
+                UnmanagedChildren = {
+                    image.Modify(x=>{
+                        x.Width = new(e=>vertical.Front ? e.Parent.Width: 0.5*e.Parent.Width );
+                    }),
+                    block
+                }
+            };
+            result.AttachProperty(vertical);
+            result.AttachProperty(maxHeight);
+            return result;
+        }
+
+        //Block? CreateProperty<T>(Property<JPage>, double>)
+        Block Menu2 => new FitView {
+            Margins = 30,
+
+            Child = new LinearLayout {                
+                Vertical = false,
+                ItemGrow = 0,
+                GapGrow = 1,
+                SecondaryGravity = 0,
+                Gap = 20,
+                Width = new(e=>Js.Num.Max(e.Parent.Width, e.InternalWidth)),
+                Children = {
+                    new Image("https://raw.githubusercontent.com/illumetry/IllumetryBrandAssets/master/LogoHorizontalBigText.svg#1"){
+                        Width = 250
+                    },
+                    new Paragraph(){
+                        FontSize = 20,
+                        Weight = FontWeight.Medium,
+                        Inlines = {
+                            new Inline("Contact Us".ToUpper()){
+                                MarginsHorizontal = 0.5,MarginsVertical= 0.5,
+                            },
+                            new SvgIconInline(SvgIcons.MaterialDesignIcons.ArrowRight){
+                                MarginRight = 0.4,
+                            },
+
+                        },
+                        NoWrap = true,
+                        BackgroundColor = Color.Violet,
+                        Paddings = 5,
+                        Modifiers = {
+                            new BorderRadius{
+                                Radius = new(e=>e.AsBlock().Height * 0.5)
+                            }
+                        }
+                    }
+                }
+            }
+
+
+        };
         public override Blocks? Content => new() {
 
-            new Paragraph($"STATIC SHARP"){ 
+            /*new Paragraph($"STATIC SHARP"){ 
                 NoWrap = true,
-            }.ToLandingMainHeader(),
+            }.ToLandingMainHeader(),*/
+
+            
+
+            new Flipper {
+                Proportion = 0.4,
+                Vertical = new(e=>e.Root.Height > e.Root.Width || e.Root.Width<600),
+                Reverse = new(e=>e.Vertical),
+                Gap = 0,
+                MarginTop = 0,
+
+                MarginsHorizontal = new(e=>e.Vertical ? Js.Num.Max((e.Parent.Width - e.Root.Height * 0.6) / 2, 0) : 0),
+
+                //MarginsHorizontal = new(e=>e.Parent.PaddingLeft),
+                //BackgroundColor = Color.DeepPink,
+                Width = new(e=>e.Vertical ? Js.Num.Max(e.InternalWidth,500) : e.InternalWidth),
+                First = new LinearLayout{ 
+                    MarginsHorizontal = new(e=>e.Parent.AsFlipper().Vertical ? e.Parent.MarginLeft : 0),
+                    //BackgroundColor= Color.MediumVioletRed,
+                    //Height = new(e=>e.Parent.AsFlipper().Vertical ? e.Parent.AsFlipper().Second.Height : 500),
+                    Children = {
+                        Menu2,
+                        new Paragraph($"""
+                            HOLOGRAPHIC
+                            {new Inline("DISPLAY"){ForegroundColor = Color.Violet}}
+                            FOR XR
+                            EXPERIENCE
+                            """){
+                            Margins = 30,
+                            FontSize = 80,
+                            LineHeight = 1,
+
+                        },
+                    }
+                },
+                
+                /*new LinearLayout {
+                    BackgroundColor = Color.IndianRed,
+                    Margins = 0,
+                    Children = {
+                        Menu2,
+                        new Paragraph($"""
+                                        HOLOGRAPHIC
+                                        {new Inline("DISPLAY"){ForegroundColor = Color.Violet}}
+                                        FOR XR
+                                        EXPERIENCE
+                                        """){
+                            FontSize = 60,
+                            LineHeight = 1,
+
+                        }
+                    },
+                },*/
+                Second = new Image($"https://picsum.photos/seed/{90}/640/480"){
+                    Fit = Fit.Outside,
+                    Paddings = 50,
+                }
+            },
+
+            
+
+
+            /*MakeHeader(
+                new Image($"https://picsum.photos/seed/{6}/640/480"){
+                    Fit = Fit.Outside,
+                    MarginsHorizontal = new(e=>e.Parent.AsFlipper().Vertical ?  (e.Parent.Width-600)/2  : 0)
+                },
+
+                new scal
+                new Paragraph(TextUtils.LoremIpsum(100)){ 
+                    //Width = 500
+                }
+                ),*/
+
+            /*new Flipper {
+
+
+
+                Vertical = new(e=>e.Width < 800),
+                Reverse = new(e=>e.Vertical),
+                MarginLeft = new(e=>e.Parent.PaddingLeft),
+                MarginRight = new(e=>e.Parent.PaddingRight),
+
+                Proportion = 0.5,
+                Gap = 20,
+
+                Height = new(e=>e.Vertical
+                ?e.InternalHeight      
+                :e.Second.AsParagraph().InternalHeight),
+
+                First = new Image($"https://picsum.photos/seed/{6}/640/480"){ 
+                    Fit = Fit.Outside,
+                    MarginsHorizontal = new(e=>e.Parent.AsFlipper().Vertical ?  (e.Parent.Width-600)/2  : 0)
+                },
+                Second = new Paragraph(TextUtils.LoremIpsum(100)){ 
+                    //Width = 500
+                },
+
+                UnmanagedChildren = { 
+                    new Block{ 
+                        BackgroundColor = Color.Black,
+                        Height = 10,
+                        Width = new(e=>e.Parent.AsFlipper().InternalWidth)
+                    }.CenterY()
+                }
+            },
+
+
+            new Flipper{ 
+                //Proportion = double.NaN,//new(e=>e.Vertical? null : 0.5),
+                //Gap = new(e=>e.MaxContactMargin),
+                First = new Block{ 
+                    Width = 100,
+                    MarginRight = 10,
+                    BackgroundColor = Color.Orange,
+                    Height = new(e=>e.Width)
+                },
+                Second = new Block{
+                    //Width = 500,
+                    MarginRight= 100,
+                    MarginLeft = 10,
+                    BackgroundColor = Color.OrangeRed,
+                    //Height = 500
+                },
+                UnmanagedChildren = {
+                    new Block{ 
+                        BackgroundColor = Color.Black, 
+                        Height = 100,
+                        Width = 2,
+                    }.Center(),
+                    new Block{
+                        BackgroundColor = Color.Black,
+                        Height = 2,
+                        Width = new(e=>e.Parent.Width),
+                    }.CenterY()
+                }
+                
+            },*/
+
+            /*new Flipper{
+                Gap = 100,
+                First = new Block{
+                    BackgroundColor = Color.Pink,
+                    Height = 10
+                },
+                Second = new Block{
+                    BackgroundColor = Color.Violet,
+                    Height = 10
+                }
+            },*/
 
             Description,
 
@@ -95,7 +326,7 @@ namespace StaticSharpDemo.Root {
             """,
 
             Separator(),
-
+            
             new LinearLayout(){
                 
                 Vertical = new(e=>e.Width<950),
@@ -210,41 +441,6 @@ namespace StaticSharpDemo.Root {
                 }
             },
             
-
-
-
-            /*new Block{
-                ["Height"] = "(e)=>e.Flipped ? Sum(e.First.Height, e.Second.Height) : Max(e.First.Height, e.Second.Height) ",
-                BackgroundColor = Color.Pink,
-                ["Flipped"] = "()=>element.Width<500",
-                
-                Children = {
-                    {"First",new Paragraph("Title"){ 
-                        Width = new(e=>Js.Math.Min(e.Parent.Width * 0.5, 200))
-                    }},
-                    { "Second", new Paragraph(Description){
-                        ["X"] = "(e)=>e.Parent.Flipped ? 0 : e.Parent.First.Width",
-                        ["Y"] = "(e)=>e.Parent.Flipped ? e.Parent.First.Height : 0",
-                        ["Width"] = "(e)=>e.Parent.Flipped ? e.Parent.Width : e.Parent.Width - e.X",
-                        //Width = new(e=>e.Parent.Width - e.X)
-                    } }                
-                }            
-            },*/
-
-            /*new Flipper{ 
-                First = new Image("Crafting.psd"),
-                Second = new Column{ 
-                    Children = {
-                        H5("Crafting"),
-                        "Combine components!!",
-                        "Create chortcuts",
-                        $"Например на этой странице все заголовки это агрегат {Code("LandingHeader()")}, который внутри выглядит так:"
-                    }
-                }
-            },*/
-
-
-
 
         };
 
