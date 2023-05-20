@@ -77,8 +77,7 @@ function BaseModifier(element) {
         
 
 
-        FontSize: undefined,
-        HierarchyFontSize: () => element.FontSize || element.Parent.HierarchyFontSize,
+        
 
         Radius: undefined,
         RadiusTopLeft: () => element.Radius,

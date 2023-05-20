@@ -102,28 +102,9 @@ function Block(element) {
         MarginTop: undefined,
         MarginRight: undefined,
         MarginBottom: undefined,
-
-        //LayoutX: undefined,
-        //LayoutY: undefined,
-        //LayoutWidth: undefined,
-        //LayoutHeight: undefined,
-
-        //PreferredWidth: e => e.InternalWidth,
-        //PreferredHeight: e => e.InternalHeight,
-        //Grow: 0,
-        //Shrink: 0,
-
-        //MinWidth: 0,
-        //MinHeight: 0,
-        //MaxWidth: Infinity,
-        //MaxHeight: Infinity,
-
-        //InternalWidth: undefined,
-        //InternalHeight: undefined,
-
-
-        X: 0, //e => First(e.LayoutX,0),
-        Y: 0, //e => First(e.LayoutY,0),
+        
+        X: 0,
+        Y: 0,
 
         AbsoluteX: () => {
             let parent = element.Parent
@@ -144,6 +125,11 @@ function Block(element) {
 
         Width: undefined, //e => e.InternalWidth, // e => First(e.LayoutWidth, e.PreferredWidth),
         Height: undefined, //e => e.InternalHeight, // e => First(e.LayoutHeight, e.PreferredHeight),
+
+
+        FontSize: undefined,
+        HierarchyFontSize: () => element.FontSize || element.Parent.HierarchyFontSize,
+
 
         ClipByParent: false
     }
@@ -168,13 +154,10 @@ function Block(element) {
 
     })
 
-
-    
-
-
+    /*only Paragraph do this
     new Reaction(() => {
         element.style.fontSize = ToCssSize(element.FontSize)
-    })
+    })*/
 
     element.Events.MouseEnter = () => element.Hover = true
     element.Events.MouseLeave = () => element.Hover = false

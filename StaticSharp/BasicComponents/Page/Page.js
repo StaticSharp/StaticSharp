@@ -87,18 +87,7 @@ function Page(element) {
         window.Touch = e.matches
     }
 
-    function createDevicePixelRatioCallback(func) {
-        let matchMedia = window.matchMedia(`screen and (resolution: ${window.devicePixelRatio}dppx)`)
-        matchMedia.addEventListener(
-            "change",
-            () => {
-                func()
-                createDevicePixelRatioCallback(func)
-            },
-            { once: true }
-        );
-    }
-    createDevicePixelRatioCallback(() => window.DevicePixelRatio = window.devicePixelRatio)
+    
 
 
 
@@ -109,7 +98,7 @@ function Page(element) {
         //LayoutHeight: undefined,
 
         FontSize: 16,
-        HierarchyFontSize: () => element.FontSize,
+        HierarchyFontSize: e => e.FontSize,
 
         BackgroundColor: new Color("#fff"),
 
@@ -152,30 +141,41 @@ function Page(element) {
     }*/
     //PrintWindowSize()
 
-    window.onresize = function (event) {
-        //let startTime = performance.now()
-        let d = Reaction.beginDeferred()
-        //element.LayoutWidth = getWindowWidth()
-        element.Width = getWindowWidth() // Why it was "Layout" ??? 
-        //element.LayoutHeight = getWindowHeight()
-        element.Height = getWindowHeight() // ???
-        //PrintWindowSize()
-        d.end()
-        //console.log("resize", performance.now() - startTime)
-    }
+    
 
     /*const observer = new ResizeObserver(() => { });
     if (observer)
         element.BackgroundColor = new Color("#ff0000")*/
 
 
-    
+    function createDevicePixelRatioCallback(func) {
+        let matchMedia = window.matchMedia(`screen and (resolution: ${window.devicePixelRatio}dppx)`)
+        matchMedia.addEventListener(
+            "change",
+            () => {
+                func()
+                createDevicePixelRatioCallback(func)
+            },
+            { once: true }
+        );
+    }
 
 
+    createDevicePixelRatioCallback(() => {
+        ApplyWindowDimensionsAndDevicePixelRatio
+    })
 
-    
+    window.onresize = function (event) {
+        ApplyWindowDimensionsAndDevicePixelRatio()
+    }
 
-
+    function ApplyWindowDimensionsAndDevicePixelRatio() {
+        let d = Reaction.beginDeferred()
+        window.DevicePixelRatio = window.devicePixelRatio
+        element.Width = getWindowWidth()
+        element.Height = getWindowHeight()
+        d.end()
+    }
 
     
 

@@ -68,13 +68,15 @@ function Paragraph(element) {
 
 
     new Reaction(() => {
-        
+ 
         if (element.Width == undefined) {
             return
         }
 
         element.style.width = ToCssSize(element.Width)
         let content = element.inlineContainer
+
+        content.style.fontSize = ToCssSize(element.HierarchyFontSize)
         content.style.transformOrigin = ""
         content.style.transform = ""
         content.style.width = ""
@@ -122,12 +124,14 @@ function Paragraph(element) {
         }
 
         content.style.width = ToCssSize(Num.Sum(element.Width, -element.PaddingLeft, -element.PaddingRight))
-        var rect = content.getBoundingClientRect()
-        element.InternalHeight = Num.Sum(rect.height, element.PaddingTop, element.PaddingBottom)
+        let rect = content.getBoundingClientRect()
+
+        let internalHeight = Num.Sum(rect.height, element.PaddingTop, element.PaddingBottom)
+        element.InternalHeight = internalHeight
 
     })
 
     HeightToStyle(element)
 }
 
-Paragraph.testFontSize = 18
+Paragraph.testFontSize = 128

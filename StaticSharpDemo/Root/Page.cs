@@ -11,12 +11,20 @@ namespace StaticSharpDemo.Root {
 
         protected override void Setup(Context context) {
             base.Setup(context);
-            FontSize = new (e=>Js.Num.PiecewiseLinearInterpolation(
+
+            FontSize = new(e =>
+                Js.Num.PiecewiseLinearInterpolation(Js.Num.Max(e.Width, e.Height),
+                    new(2560, 50),
+                    new(480, 10)
+                )
+            );
+
+            /*FontSize = new (e=>Js.Num.PiecewiseLinearInterpolation(
                 Js.Window.DevicePixelRatio,
                 new(1, 18),
                 new(2, 16)
                 )
-            );
+            );*/
             FontFamilies = new() { "Inter" };
             Weight = FontWeight.Light;
             //TextDecorationColor = Color.Blue;

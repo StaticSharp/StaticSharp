@@ -1,19 +1,16 @@
 
-function GetParentElementByPredicate(firstParentToCompare, predicate) {
+/*function GetParentElementByPredicate(firstParentToCompare, predicate) {
     var p = firstParentToCompare
     while (p != undefined) {
         if (predicate(p)) {
             
             return p
         } else {
-            /*if (p.tagName == "SCROLLABLE") {
-                console.error("SCROLLABLE", p.parentElement)
-            }*/
             p = p.parentElement
         }
     }
     return undefined
-}
+}*/
 
 /*
 function SocketProperty(value) {
