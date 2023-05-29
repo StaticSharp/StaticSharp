@@ -76,6 +76,7 @@ namespace StaticSharp {
         public int Depth { get; set; }
 
         //public bool ClipByParent { get; }
+        public bool ClipChildren { get; set; }
 
         public new JBlock Parent { get; }
         public JBlock NextSibling { get; }

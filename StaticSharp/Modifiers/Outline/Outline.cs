@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace StaticSharp {
 
-    public struct Sides : Javascriptifier.IStringifiable {
+    /*public struct Sides : Javascriptifier.IStringifiable {
         public static readonly Sides Top = 1;
         public static readonly Sides Right = 2;
         public static readonly Sides Bottom = 4;
@@ -27,9 +27,9 @@ namespace StaticSharp {
         public string ToJavascriptString() {
             return Javascriptifier.ValueStringifier.Stringify(value);
         }
-    }
+    }*/
 
-    public enum BorderStyle {
+    public enum OutlineStyle {
         None,
         Dotted,
         Dashed,
@@ -37,13 +37,14 @@ namespace StaticSharp {
         Double
     }
 
-    public interface JBorder : JModifier {
+    public interface JOutline : JModifier {
 
-        public Sides Sides { get; set; }
+        //public Sides Sides { get; set; }
 
-        public BorderStyle Style { get; set; }
+        public OutlineStyle Style { get; set; }
         public Color Color { get; set; }
         public double Width { get; set; }
+        public double Offset { get; set; }
 
         /*public double Radius { get; set; }
         public double RadiusTopLeft { get; set; }
@@ -54,7 +55,7 @@ namespace StaticSharp {
 
 
     [ConstructorJs]
-    public partial class Border : Modifier {
+    public partial class Outline : Modifier {
 
     }
 

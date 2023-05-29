@@ -172,7 +172,13 @@ function Block(element) {
 
         SyncChildren(element, tergetChildren)
     })
-    
 
+
+    new Reaction(() => {
+        element.style.overflow = element.ClipChildren ? "clip" : ""        
+    })
+
+
+    
 
 }

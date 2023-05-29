@@ -245,23 +245,23 @@ namespace StaticSharpDemo.Root.Modifiers {
 
 
 
-        protected Blocks BorderExample => new() {
-            CodeBlockFromThisFileRegion("borderExample"),
-#region borderExample
-            new Block{
+        protected Blocks OutlineExample => new() {
+            CodeBlockFromThisFileRegion("outlineExample"),
+#region outlineExample
+            new Paragraph("Click me"){
                 Height = 70,
+                BackgroundColor = Color.Violet,
+                MarginsHorizontal = 30,
                 Modifiers = {
-                    new Border{
-                        Sides = Sides.All, //Default value
-                        Style= BorderStyle.Solid,                        
-                        Width = new(e=> 1 / Js.Window.DevicePixelRatio)
+                    new Outline {
+                        Style= OutlineStyle.Solid,  
+                        
                         //The width remains fixed at one pixel regardless of scaling.
+                        Width = new(e=> 1 / Js.Window.DevicePixelRatio),                        
+                        
+                        Offset = new(e=>Js.Animation.Duration(0.5, e.AsToggle().Value? 20: 0))                        
                     },
-                    new Border{
-                        Sides = Sides.Left,
-                        Color = Color.OrangeRed,
-                        Width = new(e=>Animation.Loop(5,0,e.AsBlock().Width)),
-                    },
+                    new Toggle()
                 }
             }
         };

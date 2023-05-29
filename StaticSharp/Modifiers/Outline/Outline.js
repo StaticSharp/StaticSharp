@@ -1,9 +1,9 @@
 
 
 
-function Border(element) {
+function Outline(element) {
     Modifier.call(this,element)
-    this.isBorder = true
+    this.isOutline = true
 
     let modifier = this
 
@@ -11,29 +11,22 @@ function Border(element) {
 
     modifier.Reactive = {
         Enabled: true,
-        Sides: 15,
         Style: "Solid",
         Color: () => element.HierarchyForegroundColor,
         Width: 1,
-        
+        Offset: 0        
     }
 
-    modifier.getBorder = function () {
-        let result = Array(4)
-        for (let i = 0; i < 4; i++) {
-
-        }
-    }
 
     new Reaction(() => {
-
-        var coModifiers = element.Modifiers.filter(x => x.isBorder && x.Enabled).reverse()
-        if (coModifiers[0] == modifier) {
-
-            if (modifier.Sides == 15) {
-                element.style.borderStyle = modifier.Style.toLowerCase()
-                element.style.borderColor = modifier.Color.toString()
-                element.style.borderWidth = `${modifier.Width}px`
+        var last = element.Modifiers.findLast(x => x.isOutline && x.Enabled)
+        if (last == modifier) {
+            element.style.outlineStyle = modifier.Style.toLowerCase()
+            element.style.outlineColor = modifier.Color.toString()
+            element.style.outlineWidth = `${modifier.Width}px`
+            element.style.outlineOffset = `${modifier.Offset}px`
+            /*if (modifier.Sides == 15) {
+                
             } else {
                 let sides = 15
 
@@ -57,10 +50,10 @@ function Border(element) {
 
                 }
 
-                element.style.borderStyle = styles.join(' ')
-                element.style.borderColor = colors.join(' ')
-                element.style.borderWidth = widths.join(' ')
-            }
+                element.style.outlineStyle = styles.join(' ')
+                element.style.outlineColor = colors.join(' ')
+                element.style.outlineWidth = widths.join(' ')
+            }*/
         }
     })
 }

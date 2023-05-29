@@ -28,11 +28,31 @@ namespace StaticSharpDemo.Root.Components.ImageComponent {
             "Manual convertions and resize",
             "Thumbnails",
 
-            H2("Psd format support"),
+            SectionHeader("Psd format support"),
             $"Psd convertion is supported using {new Uri("https://github.com/dlemstra/Magick.NET"):Magick.NET} library.",
             new Image("ImageExample1.psd"){ 
                 Embed = Image.TEmbed.Thumbnail
             },
+
+
+            SectionHeader("Clipping"),
+            new Image("ImageExample1.psd"){
+                Fit = Fit.Outside,
+                Embed = Image.TEmbed.Thumbnail,
+                Height = new(e=>e.Width),
+                ClipChildren = true,
+                Modifiers = { 
+                    new BorderRadius{ 
+                        Radius = new(e=>e.AsBlock().Height * 0.5)
+                    },
+                    new Outline{ 
+                        Width = 10,
+                        Offset = 50,
+                        Color = Color.Violet
+                    }
+                }
+            },
+
 
 
 
