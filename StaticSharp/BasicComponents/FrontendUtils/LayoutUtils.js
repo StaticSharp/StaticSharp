@@ -10,7 +10,7 @@ function LayoutPropertiesNames(vertical) {
         vertical ? "Bottom" : "Right"
     ]
     /**@type {"Y" | "X"}*/
-    this.cordinate = vertical ? "Y" : "X"
+    this.coordinate = vertical ? "Y" : "X"
 
     /**@type {"Height" | "Width"}*/
     this.dimension = vertical ? "Height" : "Width"

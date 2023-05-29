@@ -29,7 +29,7 @@ LayoutAlgorithms.SequenceLayout = function (vertical, container, children, measu
 
             let size = child.Layer[names.dimension]
             let position = region.border[0].Shift(child, size)
-            child.Layer[names.cordinate] = position * shrinkRate
+            child.Layer[names.coordinate] = position * shrinkRate
             child.Layer[names.dimension] = size * shrinkRate
 
         }
@@ -60,7 +60,7 @@ LayoutAlgorithms.SequenceLayout = function (vertical, container, children, measu
 
             let position = region.border[0].Shift(child, size)
 
-            child.Layer[names.cordinate] = position
+            child.Layer[names.coordinate] = position
             child.Layer[names.dimension] = size
         }
     }
@@ -93,7 +93,7 @@ LayoutAlgorithms.ParallelLayout = function (vertical, container, children, defau
             let firstOffset = CalcOffset(container, child, names.side[0])
             let lastOffset = CalcOffset(container, child, names.side[1])
             let size = containerSize - firstOffset - lastOffset
-            child.Layer[names.cordinate] = firstOffset
+            child.Layer[names.coordinate] = firstOffset
             child.Layer[names.dimension] = size
         }
     } else {
@@ -111,7 +111,7 @@ LayoutAlgorithms.ParallelLayout = function (vertical, container, children, defau
                 childSize = availableSize
             }
 
-            child.Layer[names.cordinate] = firstOffset
+            child.Layer[names.coordinate] = firstOffset
             child.Layer[names.dimension] = childSize
         }
     }

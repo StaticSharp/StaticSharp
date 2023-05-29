@@ -34,7 +34,7 @@ namespace StaticSharp {
             Weight = FontWeight.Regular;
         }
         public virtual Genome<IAsset>? Favicon => null;
-        public virtual string? SiteName => null;
+        public abstract string? SiteName { get; }
         public abstract string PageLanguage { get; }
         public abstract string Title { get; }
         public abstract object? MainVisual { get; }

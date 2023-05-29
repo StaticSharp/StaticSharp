@@ -1,6 +1,7 @@
 ﻿using EnvDTE;
 using Newtonsoft.Json.Linq;
 using NUglify;
+using StaticSharp;
 using StaticSharp.Js;
 using StaticSharp.Resources.Text;
 using System;
@@ -147,160 +148,27 @@ namespace StaticSharpDemo.Root {
 
 
         };
+
+
+
+
+
+
         public override Blocks? Content => new() {
 
-            /*new Paragraph($"STATIC SHARP"){ 
+            new Paragraph($"STATIC SHARP"){ 
                 NoWrap = true,
-            }.ToLandingMainHeader(),*/
+            }.ToLandingMainHeader(),
 
-            
 
-            new Flipper {
-                Proportion = 0.4,
-                Vertical = new(e=>e.Root.Height > e.Root.Width || e.Root.Width<600),
-                Reverse = new(e=>e.Vertical),
-                Gap = 0,
-                MarginTop = 0,
-
-                MarginsHorizontal = new(e=>e.Vertical ? Js.Num.Max((e.Parent.Width - e.Root.Height * 0.6) / 2, 0) : 0),
-
-                //MarginsHorizontal = new(e=>e.Parent.PaddingLeft),
-                //BackgroundColor = Color.DeepPink,
-                Width = new(e=>e.Vertical ? Js.Num.Max(e.InternalWidth,500) : e.InternalWidth),
-                First = new LinearLayout{ 
-                    MarginsHorizontal = new(e=>e.Parent.AsFlipper().Vertical ? e.Parent.MarginLeft : 0),
-                    //BackgroundColor= Color.MediumVioletRed,
-                    //Height = new(e=>e.Parent.AsFlipper().Vertical ? e.Parent.AsFlipper().Second.Height : 500),
-                    Children = {
-                        Menu2,
-                        new Paragraph($"""
-                            HOLOGRAPHIC
-                            {new Inline("DISPLAY"){ForegroundColor = Color.Violet}}
-                            FOR XR
-                            EXPERIENCE
-                            """){
-                            Margins = 30,
-                            FontSize = 80,
-                            LineHeight = 1,
-
-                        },
+            new Block{
+                Height = 500,
+                Modifiers = { 
+                    new BorderRadius{ 
+                        Radius = 50,
                     }
-                },
-                
-                /*new LinearLayout {
-                    BackgroundColor = Color.IndianRed,
-                    Margins = 0,
-                    Children = {
-                        Menu2,
-                        new Paragraph($"""
-                                        HOLOGRAPHIC
-                                        {new Inline("DISPLAY"){ForegroundColor = Color.Violet}}
-                                        FOR XR
-                                        EXPERIENCE
-                                        """){
-                            FontSize = 60,
-                            LineHeight = 1,
-
-                        }
-                    },
-                },*/
-                Second = new Image($"https://picsum.photos/seed/{90}/640/480"){
-                    Fit = Fit.Outside,
-                    Paddings = 50,
                 }
             },
-
-            
-
-
-            /*MakeHeader(
-                new Image($"https://picsum.photos/seed/{6}/640/480"){
-                    Fit = Fit.Outside,
-                    MarginsHorizontal = new(e=>e.Parent.AsFlipper().Vertical ?  (e.Parent.Width-600)/2  : 0)
-                },
-
-                new scal
-                new Paragraph(TextUtils.LoremIpsum(100)){ 
-                    //Width = 500
-                }
-                ),*/
-
-            /*new Flipper {
-
-
-
-                Vertical = new(e=>e.Width < 800),
-                Reverse = new(e=>e.Vertical),
-                MarginLeft = new(e=>e.Parent.PaddingLeft),
-                MarginRight = new(e=>e.Parent.PaddingRight),
-
-                Proportion = 0.5,
-                Gap = 20,
-
-                Height = new(e=>e.Vertical
-                ?e.InternalHeight      
-                :e.Second.AsParagraph().InternalHeight),
-
-                First = new Image($"https://picsum.photos/seed/{6}/640/480"){ 
-                    Fit = Fit.Outside,
-                    MarginsHorizontal = new(e=>e.Parent.AsFlipper().Vertical ?  (e.Parent.Width-600)/2  : 0)
-                },
-                Second = new Paragraph(TextUtils.LoremIpsum(100)){ 
-                    //Width = 500
-                },
-
-                UnmanagedChildren = { 
-                    new Block{ 
-                        BackgroundColor = Color.Black,
-                        Height = 10,
-                        Width = new(e=>e.Parent.AsFlipper().InternalWidth)
-                    }.CenterY()
-                }
-            },
-
-
-            new Flipper{ 
-                //Proportion = double.NaN,//new(e=>e.Vertical? null : 0.5),
-                //Gap = new(e=>e.MaxContactMargin),
-                First = new Block{ 
-                    Width = 100,
-                    MarginRight = 10,
-                    BackgroundColor = Color.Orange,
-                    Height = new(e=>e.Width)
-                },
-                Second = new Block{
-                    //Width = 500,
-                    MarginRight= 100,
-                    MarginLeft = 10,
-                    BackgroundColor = Color.OrangeRed,
-                    //Height = 500
-                },
-                UnmanagedChildren = {
-                    new Block{ 
-                        BackgroundColor = Color.Black, 
-                        Height = 100,
-                        Width = 2,
-                    }.Center(),
-                    new Block{
-                        BackgroundColor = Color.Black,
-                        Height = 2,
-                        Width = new(e=>e.Parent.Width),
-                    }.CenterY()
-                }
-                
-            },*/
-
-            /*new Flipper{
-                Gap = 100,
-                First = new Block{
-                    BackgroundColor = Color.Pink,
-                    Height = 10
-                },
-                Second = new Block{
-                    BackgroundColor = Color.Violet,
-                    Height = 10
-                }
-            },*/
 
             Description,
 
