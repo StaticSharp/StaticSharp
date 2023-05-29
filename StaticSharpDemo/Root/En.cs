@@ -161,14 +161,7 @@ namespace StaticSharpDemo.Root {
             }.ToLandingMainHeader(),
 
 
-            new Block{
-                Height = 500,
-                Modifiers = { 
-                    new BorderRadius{ 
-                        Radius = 50,
-                    }
-                }
-            },
+            
 
             Description,
 

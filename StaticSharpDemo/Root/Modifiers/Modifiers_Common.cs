@@ -243,9 +243,31 @@ namespace StaticSharpDemo.Root.Modifiers {
 #endregion
         };
 
-        
 
-        
+
+        protected Blocks BorderExample => new() {
+            CodeBlockFromThisFileRegion("borderExample"),
+#region borderExample
+            new Block{
+                Height = 70,
+                Modifiers = {
+                    new Border{
+                        Sides = Sides.All, //Default value
+                        Style= BorderStyle.Solid,                        
+                        Width = new(e=> 1 / Js.Window.DevicePixelRatio)
+                        //The width remains fixed at one pixel regardless of scaling.
+                    },
+                    new Border{
+                        Sides = Sides.Left,
+                        Color = Color.OrangeRed,
+                        Width = new(e=>Animation.Loop(5,0,e.AsBlock().Width)),
+                    },
+                }
+            }
+        };
+ #endregion
+
+
 
     }
 }
