@@ -206,6 +206,6 @@ Color.prototype.Lerp = function (targetColor, amount) {
  */
 Color.prototype.ContrastColor = function (contrast = 1) {
     var grayscale = (0.2125 * this.r) + (0.7154 * this.g) + (0.0721 * this.b);
-    var blackOrWhite = (grayscale > 0.5) ? new Color(0, 0, 0, 1) : new Color(1, 1, 1, 1);
+    var blackOrWhite = (grayscale > 0.5) ? new Color(0, 0, 0, this.a) : new Color(1, 1, 1, this.a);
     return this.Lerp(blackOrWhite, contrast);
 }

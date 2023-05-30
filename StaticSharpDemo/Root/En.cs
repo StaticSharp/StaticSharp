@@ -160,12 +160,12 @@ namespace StaticSharpDemo.Root {
                 NoWrap = true,
             }.ToLandingMainHeader(),
 
-
-            
+           
 
             Description,
 
             Separator(),
+
 
             #region codeExample
             "coDe".ToLandingSectionHeader(Color.Red),

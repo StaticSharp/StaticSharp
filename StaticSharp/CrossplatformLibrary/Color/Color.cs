@@ -201,7 +201,7 @@ namespace StaticSharp {
         public Color ContrastColor(double contrast = 1)
         {
             var grayscale = (0.2125 * this.R) + (0.7154 * this.G) + (0.0721 * this.B);
-            var blackOrWhite = (grayscale > 0.5) ? new Color(0, 0, 0, 1) : new Color(1, 1, 1, 1);
+            var blackOrWhite = (grayscale > 0.5) ? new Color(0, 0, 0, this.A) : new Color(1, 1, 1, this.A);
             return this.Lerp(blackOrWhite, contrast);
         }
 
