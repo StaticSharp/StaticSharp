@@ -135,10 +135,10 @@ namespace StaticSharp {
                     ["height"] = "100%",
                     ["viewBox"] = $"0 0 {thumbnailImageInfo.Width} {thumbnailImageInfo.Height}",
                     ["preserveAspectRatio"] = "none",
-                    Style = {
+                    /*Style = {
                         ["overflow"] = "hidden",
                         ["display"] = "none", //for not(.js)
-                    },
+                    },*/
                     Children = {
                         new Tag("use"){
                             ["href"]="#"+thumbnailId,

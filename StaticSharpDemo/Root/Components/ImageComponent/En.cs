@@ -40,15 +40,16 @@ namespace StaticSharpDemo.Root.Components.ImageComponent {
                 Fit = Fit.Outside,
                 Embed = Image.TEmbed.Thumbnail,
                 Height = new(e=>e.Width),
-                ClipChildren = true,
+                Margins = new(e=>e.AsOutline().Offset + e.AsOutline().Width),
+                ClipChildren = false,
                 Modifiers = { 
                     new BorderRadius{ 
-                        Radius = new(e=>e.AsBlock().Height * 0.5)
+                        RadiusBottomLeft = new(e=>e.AsBlock().Height * 0.5)
                     },
                     new Outline{ 
-                        Width = 10,
-                        Offset = 50,
-                        Color = Color.Violet
+                        Width = 2,
+                        Offset = 2,
+                        Color = Color.DarkGreen
                     }
                 }
             },

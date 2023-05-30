@@ -113,7 +113,7 @@ function FitView(element) {
             imageTag.style.left = ToCssSize(x)
             imageTag.style.width = ToCssSize(contentWidth)
             imageTag.style.height = ToCssSize(contentHeight)
-            imageTag.style.clipPath = GetClipRect(container, x, y, contentWidth, contentHeight)
+            //imageTag.style.clipPath = GetClipRect(container, x, y, contentWidth, contentHeight)
 
         }
 

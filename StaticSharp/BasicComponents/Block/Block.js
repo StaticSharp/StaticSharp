@@ -67,15 +67,13 @@ function GetClipRect(clippingElement, contentX, contentY, contentWidth, contentH
     let right = -clippingElement.Width + contentWidth + contentX
     let bottom = -clippingElement.Height + contentHeight + contentY
     let offsets = `${top}px ${right}px ${bottom}px ${left}px`
+
     let round = ""
-    if (
-        clippingElement.RadiusTopLeft != undefined
-        || clippingElement.RadiusTopRight != undefined
-        || clippingElement.RadiusBottomLeft != undefined
-        || clippingElement.RadiusBottomRight != undefined
-    ) {
-        round = ` round ${clippingElement.RadiusTopLeft || 0}px ${clippingElement.RadiusTopRight || 0}px ${clippingElement.RadiusBottomRight || 0}px ${clippingElement.RadiusBottomLeft || 0}px`
+    let borderRadius = as(clippingElement, "BorderRadius")
+    if (borderRadius != undefined) {
+        round = ` round ${borderRadius.RadiusTopLeft || 0}px ${borderRadius.RadiusTopRight || 0}px ${borderRadius.RadiusBottomRight || 0}px ${borderRadius.RadiusBottomLeft || 0}px`
     }
+
     return `inset(${offsets}${round})`
 }
 
