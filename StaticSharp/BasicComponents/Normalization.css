@@ -37,6 +37,7 @@ body {
 }
 
     body * {
+        letter-spacing: inherit;
         touch-action: inherit;
         display: block;
         overflow-x: visible;

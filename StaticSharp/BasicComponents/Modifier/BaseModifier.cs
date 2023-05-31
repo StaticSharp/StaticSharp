@@ -112,9 +112,9 @@ namespace StaticSharp {
                 tag.Style["line-height"] = LineHeight;
             }
 
-            if (LetterSpacing != null) {
+            /*if (LetterSpacing != null) {
                 tag.Style["letter-spacing"] = LetterSpacing + "em";
-            }
+            }*/
 
             if (fontFamilies != null) {
                 tag.Style["font-family"] = string.Join(',', fontFamilies.Select(x => x.Name));
@@ -155,6 +155,11 @@ namespace StaticSharp {
             /*if (CodeFontFamilies != null) {
                 context.CodeFontFamilies = CodeFontFamilies;
             }*/
+
+            if (LetterSpacing != null) {
+                context.LetterSpacing = LetterSpacing.Value;
+            }
+
 
             if (Weight != null) {
                 context.FontWeight = Weight.Value;

@@ -172,7 +172,7 @@ namespace StaticSharpDemo.Root {
                 ScrollY = new(e=>MainScrollLayoutPosition.Value.StoredValue),
 
                 Child = new LinearLayout{
-                    
+                    ClipChildren= true,
                     Width = new(e=>e.Parent.Width),
 
                     ItemGrow = 0,

@@ -12,7 +12,7 @@ LayoutAlgorithms.SequenceMeasure = function (vertical, container, children, gap)
     return region.GetSize()
 }
 
-LayoutAlgorithms.SequenceLayout = function (vertical, container, children, measuredContainerSize, gravity, itemGrow, gap, gapGrow) {
+LayoutAlgorithms.SequenceLayout = function (vertical, container, children, measuredContainerSize, gravity, itemGrow, gap, gapGrow, startGapGrow = 0, endGapGrow = 0) {
     var containerSize = vertical ? container.Height : container.Width
 
     var names = new LayoutPropertiesNames(vertical)
@@ -40,7 +40,7 @@ LayoutAlgorithms.SequenceLayout = function (vertical, container, children, measu
         let pixelPerUnit = 0
 
         if (gravity == undefined) {
-            growUnits = itemGrow * children.length + gapGrow * (children.length - 1)
+            growUnits = itemGrow * children.length + gapGrow * (children.length - 1) + startGapGrow + endGapGrow
             pixelPerUnit = (growUnits != 0) ? extraPixels / growUnits : 0
         } else {
             let offset = (0.5 * gravity + 0.5) * extraPixels
@@ -52,6 +52,8 @@ LayoutAlgorithms.SequenceLayout = function (vertical, container, children, measu
             if (i > 0) {
                 var currentGap = gap + gapGrow * pixelPerUnit
                 region.border[0].ShiftByGap(currentGap)
+            } else {
+                region.border[0].ShiftByGap(startGapGrow * pixelPerUnit)
             }
 
             let size = child.Layer[names.dimension] || 0
@@ -131,6 +133,8 @@ function LinearLayout(element) {
         ItemGrow: 1,
         Gap: 0,
         GapGrow: 0,
+        StartGapGrow: 0,
+        EndGapGrow: 0,
 
         PrimaryGravity: undefined,
         SecondaryGravity: undefined,
@@ -162,7 +166,7 @@ function LinearLayout(element) {
     })
 
     new Reaction(() => {
-        LayoutAlgorithms.SequenceLayout(element.Vertical, element, element.OrderedChildren, element.InternalPrimarySize, element.PrimaryGravity, element.ItemGrow, element.Gap, element.GapGrow)
+        LayoutAlgorithms.SequenceLayout(element.Vertical, element, element.OrderedChildren, element.InternalPrimarySize, element.PrimaryGravity, element.ItemGrow, element.Gap, element.GapGrow, element.StartGapGrow, element.EndGapGrow)
         
     })
 

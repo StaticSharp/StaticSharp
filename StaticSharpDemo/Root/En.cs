@@ -159,13 +159,25 @@ namespace StaticSharpDemo.Root {
             new Paragraph($"STATIC SHARP"){ 
                 NoWrap = true,
             }.ToLandingMainHeader(),
+            
+            new Block{ 
+                Height = new(e=>e.UnmanagedChildren.First().Height),
+                UnmanagedChildren = {
+                    new Paragraph("STATIC SHARP\nSTATIC SHARP"){
+                        FontSize= 40,
+                        TextAlignmentHorizontal = TextAlignmentHorizontal.Center,
+                        Width = new(e=>Js.Num.Min(e.Parent.Width, e.InternalWidth)),
+                        BackgroundColor = Color.Violet,
+                        //LetterSpacing = 0.2
+                    }.CenterX(),
+                }
+            },
 
-           
+            
 
             Description,
 
             Separator(),
-
 
             #region codeExample
             "coDe".ToLandingSectionHeader(Color.Red),

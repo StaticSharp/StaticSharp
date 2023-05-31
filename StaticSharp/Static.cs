@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.IO;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 
 
@@ -40,7 +41,11 @@ namespace StaticSharp {
         public static string MakeAbsolutePath(string subPath = "", [CallerFilePath] string callerFilePath = "") {
             var path = Path.GetFullPath(subPath, Path.GetDirectoryName(callerFilePath));
             return path;
-
         }
+
+        public static string ToStringInvariant(this double value) => value.ToString(CultureInfo.InvariantCulture);
+        public static string ToStringInvariant(this float value) => value.ToString(CultureInfo.InvariantCulture);        
+
+
     }
 }

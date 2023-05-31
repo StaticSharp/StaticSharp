@@ -53,9 +53,10 @@ namespace StaticSharp {
 
         public FontWeight FontWeight { get; set; } = FontWeight.Regular;
         public bool ItalicFont { get; set; } = false;
-
+        public double LetterSpacing { get; set; } = 0;
 
         public List<(string temporaryId, string replacement)> TemporaryIdToId { get; } = new();
+        
 
         public Ref<int> nextIdNumber;
         public string CreateId(string? temporaryId = null) {

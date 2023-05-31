@@ -27,8 +27,6 @@ namespace StaticSharpDemo.Root.Components.ParagraphComponent {
 
             SectionHeader("Alignment"),
 
-
-
             new Paragraph("""
             Multi
             line

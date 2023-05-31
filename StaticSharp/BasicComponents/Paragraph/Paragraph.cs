@@ -1,13 +1,8 @@
 ﻿using StaticSharp.Gears;
 using StaticSharp.Html;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 
 namespace StaticSharp {
-
-
     public enum TextAlignmentHorizontal {
         Left,
         Center,
@@ -30,6 +25,8 @@ namespace StaticSharp {
     [RelatedStyle]
     [ConstructorJs]
     public partial class Paragraph : Block {
+
+        public bool CollapseSpaces { get; set; } = false;
         public Inlines Inlines { get; } = new();
 
         public Paragraph(Paragraph other,
@@ -60,8 +57,16 @@ namespace StaticSharp {
             var inlineContainerId = context.CreateId();
 
             var inlineContainer = new Tag("p", inlineContainerId) {
-                ["class"] = "inline-container"
+                ["class"] = "inline-container",
+                Style = {
+                    ["letter-spacing"] = $"{context.LetterSpacing.ToStringInvariant()}em"
+                }
+                
             };
+
+            if (CollapseSpaces) {
+                inlineContainer.Style.Add("white-space", "pre-line");
+            }
 
             foreach (var i in Inlines) {
                 var child = i.Generate(context);
@@ -71,7 +76,7 @@ namespace StaticSharp {
                     script.Add($"{child.Tag.Id}.Parent = {tag.Id}");
                 }                
             }
-            inlineContainer.Add("\n");
+            //inlineContainer.Add("\n");
 
             tag.Add(inlineContainer);
 

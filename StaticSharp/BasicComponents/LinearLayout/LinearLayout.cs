@@ -11,6 +11,8 @@ namespace StaticSharp {
         bool Reverse { get; set; }
         double Gap { get; set; }
         double GapGrow { get; set; }
+        double StartGapGrow { get; set; }
+        double EndGapGrow { get; set; }
         double? PrimaryGravity { get; set; }
         double? SecondaryGravity { get; set; }
         double InternalWidth { get;  }
