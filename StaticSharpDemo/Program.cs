@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Runtime.CompilerServices;
 
 namespace StaticSharpDemo {
 
@@ -60,8 +61,9 @@ namespace StaticSharpDemo {
         public static async Task Generator() {
             Cache.RootDirectory = MakeAbsolutePath(".cache");
 
-            var projectPath = ProjectDirectory.Path;
-            var baseDirectory = Path.GetFullPath(Path.Combine(projectPath, "../../StaticSharp.github.io"));
+            var projectDirectory = GetThisFileDirectory();
+            
+            var baseDirectory = Path.GetFullPath(Path.Combine(projectDirectory, "../../StaticSharp.github.io"));
 
             var generator = new MultilanguageStaticGenerator<Language>(
                 new DefaultMultilanguageNodeToPath<Language>(),
@@ -70,6 +72,11 @@ namespace StaticSharpDemo {
                 );
 
             await generator.GenerateAsync(new αRoot(default));
+        }
+
+
+        private static string GetThisFileDirectory([CallerFilePath] string path = "") {
+            return Path.GetDirectoryName(path)!;
         }
     }
 }
