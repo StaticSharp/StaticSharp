@@ -17,7 +17,7 @@ namespace StaticSharp {
 
             context = ModifyContext(context);
 
-            var id = context.CreateId();
+            var modifierId = context.CreateId();
 
 
 
@@ -27,13 +27,14 @@ namespace StaticSharp {
             }
 
             var script = new Group() {
-                    $"let {id} = new {jsConstructorsNames[0]}({elementId})",
-                    VariableNames?.Select(x=>$"let {x} = {id}"),
+                    $"let {modifierId} = {{}}",
+                    $"{jsConstructorsNames[0]}({modifierId},{elementId})",
+                    VariableNames?.Select(x=>$"let {x} = {modifierId}"),
                 };
 
-            AddPropertiesToScript(id,script,context);
+            AddPropertiesToScript(modifierId,script,context);
 
-            return new IdAndScript(id, script);
+            return new IdAndScript(modifierId, script);
         }
     }
 

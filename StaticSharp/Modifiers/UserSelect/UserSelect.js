@@ -1,18 +1,9 @@
-
-
-
-function UserSelect(element) {
-    Modifier.call(this,element)
-    this.isUserSelect = true
-
-    let modifier = this
-
-
+StaticSharpClass("StaticSharp.UserSelect", (modifier, element) => {
+    StaticSharp.Modifier(modifier, element)
 
     modifier.Reactive = {
         Option: "None"
     }
-
 
     new Reaction(() => {
         var option = modifier.Option
@@ -21,4 +12,4 @@ function UserSelect(element) {
         else
             element.style.userSelect = CamelToKebab(option);
     })
-}
+})

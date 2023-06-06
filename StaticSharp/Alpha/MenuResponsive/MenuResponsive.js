@@ -1,6 +1,6 @@
-function MenuResponsive(element) {
-    BlockWithChildren(element)
-    element.isMenuResponsive = true
+StaticSharpClass("StaticSharp.MenuResponsive", (element) => {
+    StaticSharp.BlockWithChildren(element)
+
 
     CreateSocket(element, "Logo", element)
     CreateSocket(element, "Button", element)
@@ -11,7 +11,7 @@ function MenuResponsive(element) {
         PrimaryGravity: 1,
         SecondaryGravity: 0,
 
-        DropdownExpanded: e => e.Button.as("Toggle").Value,
+        DropdownExpanded: e => e.Button.as("StaticSharp.Toggle").Value,
 
         Width: e => e.InternalWidth,
         Height: e => e.InternalHeight,
@@ -199,4 +199,4 @@ function MenuResponsive(element) {
             element.DropdownExpanded = !element.DropdownExpanded && element.Dropdown.Children.Any()
         }
     }*/
-}
+})

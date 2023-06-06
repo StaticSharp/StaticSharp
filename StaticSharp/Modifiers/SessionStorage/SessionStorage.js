@@ -1,8 +1,5 @@
-function SessionStorage(element) {
-    Modifier.call(this, element)
-    this.isSessionStorage = true
-
-    let modifier = this
+StaticSharpClass("StaticSharp.SessionStorage", (modifier, element) => {
+    StaticSharp.Modifier(modifier, element)
 
     modifier.Reactive = {
         StoredValue: undefined,
@@ -13,5 +10,4 @@ function SessionStorage(element) {
         sessionStorage.setItem(modifier.name, modifier.ValueToStore)
     })
 
-
-}
+})

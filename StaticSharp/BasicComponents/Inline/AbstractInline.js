@@ -1,5 +1,5 @@
-function AbstractInline(element) {
-    BaseModifier(element)
+StaticSharpClass("StaticSharp.AbstractInline", (element) => {
+    StaticSharp.BaseModifier(element)
 
 
-}
+})

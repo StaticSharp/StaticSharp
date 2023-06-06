@@ -205,6 +205,10 @@ namespace ComponentSg {
                 }
             }
 
+            var fullName = type.Name;
+            if (type.ContainingNamespace.Name != "") {
+                fullName = $"{type.ContainingNamespace.Name}.{fullName}";
+            }
 
             Group castExtension = null;
             if (jType != null) {
@@ -212,7 +216,7 @@ namespace ComponentSg {
                     "[Javascriptifier.JavascriptClass(\"\")]",
                     new Scope($"public static partial class {type.Name}Extension"){
                         "[Javascriptifier.JavascriptOnlyMember]",
-                        $"[Javascriptifier.JavascriptMethodFormat(\"as({{0}},\\\"{type.Name}\\\")\")]",
+                        $"[Javascriptifier.JavascriptMethodFormat(\"as({{0}},\\\"{fullName}\\\")\")]",
                         $"public static J{type.Name} As{type.Name}(this JEntity _this) => throw new Javascriptifier.JavascriptOnlyException();"
                     }
                 };
@@ -229,10 +233,7 @@ namespace ComponentSg {
                 }
             };
 
-            var fullName = type.Name;
-            if (type.ContainingNamespace.Name != "") {
-                fullName = $"{type.ContainingNamespace.Name}.{fullName}";
-            }
+            
 
             context.AddSource($"{fullName}.generated.cs", result.ToString());
         }

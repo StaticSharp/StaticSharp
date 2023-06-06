@@ -1,13 +1,9 @@
 ﻿using EnvDTE;
-
-using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Security;
 
 namespace StaticSharp.Gears;
-
-
 
 public class VisualStudio {
 

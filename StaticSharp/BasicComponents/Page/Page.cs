@@ -18,7 +18,7 @@ namespace StaticSharp {
     }
 
     [ConstructorJs]
-    [Scripts.Storage]
+    //[Scripts.Storage]
     [RelatedScript("Initialization")]
     [RelatedStyle("../Normalization")]
 
@@ -113,7 +113,7 @@ namespace StaticSharp {
                     new Tag("meta"){["charset"] = "utf-8" },
                     new Tag("meta"){
                         ["name"]="viewport",
-                        ["content"] = "width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"
+                        ["content"] = "width=device-width,initial-scale=1.0,maximum-scale=5.0,user-scalable=yes"
                     },
                     new Tag("title"){
                         Title
@@ -152,9 +152,15 @@ namespace StaticSharp {
 
             initializationScript = context.ReplaceTemporaryId(initializationScript);
 
+            head.Add(new Tag("script") {
+                new Html.PureHtmlNode("window.StaticSharp = {}")
+            });
+
+            head.Add(context.GenerateFontsScript());
+
             head.Add(context.GenerateScript());
             head.Add(context.GenerateStyle());
-            head.Add(context.GenerateFonts());
+            
 
             head.Add(new Tag("script") {
                 new PureHtmlNode(initializationScript)

@@ -28,9 +28,9 @@ namespace StaticSharp.Gears {
 
 
     public class ConstructorJsAttribute : RelatedScriptAttribute {
-        public string ClassName { get; }
-        public ConstructorJsAttribute(string className = "", [CallerFilePath] string callerFilePath = "") : base(className + ".js", callerFilePath){
-            ClassName = className;
+        public string TypeFullName { get; }
+        public ConstructorJsAttribute(string typeFullName = "", [CallerFilePath] string callerFilePath = "") : base(typeFullName + ".js", callerFilePath){
+            TypeFullName = typeFullName;
         }        
     }
 

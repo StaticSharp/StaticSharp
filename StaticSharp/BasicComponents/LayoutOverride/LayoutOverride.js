@@ -1,6 +1,6 @@
-﻿function LayoutOverride(element) {
-    Block(element)
-    element.isLayoutOverride = true
+﻿
+StaticSharpClass("StaticSharp.LayoutOverride", (element) => {
+    StaticSharp.Block(element)
 
     CreateSocket(element, "Child", element)
 
@@ -34,4 +34,4 @@
         element.Child.Layer.Width = element.OverrideWidth || element.Width
         element.Child.Layer.Height = element.OverrideHeight || element.Height
     })
-}
+})

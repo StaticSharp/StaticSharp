@@ -1,6 +1,5 @@
-
-function Image(element) {
-    AspectBlock(element)
+StaticSharpClass("StaticSharp.Image", (element) => {
+    StaticSharp.AspectBlock(element)
 
     let baseHtmlNodesOrdered = element.HtmlNodesOrdered
     element.HtmlNodesOrdered = new Enumerable(function* () {
@@ -35,4 +34,4 @@ function Image(element) {
     }*/
 
     
-}
+})

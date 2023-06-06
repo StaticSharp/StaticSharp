@@ -1,8 +1,5 @@
-
-function MaterialShadow(element) {
-    AbstractBoxShadow.call(this, element)
-    this.isMaterialShadow = true
-    let modifier = this
+StaticSharpClass("StaticSharp.MaterialShadow", (modifier, element) => {
+    StaticSharp.AbstractBoxShadow(modifier, element)
 
     modifier.Reactive = {
         Elevation: 10
@@ -23,7 +20,4 @@ function MaterialShadow(element) {
         let e = modifier.Elevation
         return ambientShadow(e) + "," + hardShadow(e)
     }
-
-
-
-}
+})

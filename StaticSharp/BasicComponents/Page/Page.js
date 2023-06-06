@@ -1,10 +1,12 @@
 ﻿
-function Page(element) {
+
+StaticSharpClass("StaticSharp.Page", (element) => {
+    
+    StaticSharp.Block(element)
+
     element.classList.add("js")
     element.isRoot = true
-    
 
-    Block(element)
 
     var html = document.body.parentNode
     function getWindowWidth() {
@@ -15,9 +17,6 @@ function Page(element) {
         return html.clientHeight
         //return window.innerHeight // document.documentElement.clientHeight
     }
-
-
-
 
     let animationFrame = 0
 
@@ -36,42 +35,11 @@ function Page(element) {
         UserInteracted: false,
         DevicePixelRatio: window.devicePixelRatio,
         Touch: false,
+        Initialized: false,
     }
 
-    /*let animationFramesHistory = []
 
-    function linearRegression(points) {
-        let n = points.length
-        let xSum = 0, ySum = 0, xxSum = 0, xySum = 0
-        for (var i = n - 1; i >= 0; i--) {
-            xxSum += xSum;
-            xSum += i;
-            xySum += ySum;
-            ySum += points[i];
-        }
-
-        // Calculate slope and intercept
-        var slope = (n * xySum - xSum * ySum) / (n * xxSum - xSum * xSum);
-        var intercept = (ySum / n) - (slope * xSum) / n;
-        return intercept
-    }*/
-
-    let previousTime = 0
     function UpdateAnimation(time) {
-        /*animationFramesHistory.unshift(time)
-        animationFramesHistory.length = Math.min(animationFramesHistory.length, 5)
-
-        console.log(time - previousTime)
-        previousTime = time
-
-        if (animationFramesHistory.length > 2) {
-            time = linearRegression(animationFramesHistory)
-        }*/
-        
-        /*console.log(time - previousTime)
-        previousTime = time*/
-
-
         window.AnimationFrameTime = time
         window.requestAnimationFrame((t) => {
             UpdateAnimation(t)
@@ -86,9 +54,6 @@ function Page(element) {
     touchMedia.onchange = (e) => {
         window.Touch = e.matches
     }
-
-    
-
 
 
     element.Reactive = {
@@ -122,30 +87,15 @@ function Page(element) {
 
 
     new Reaction(() => {
-        //element.LayoutWidth = getWindowWidth()
-        //element.LayoutHeight = getWindowHeight()
         element.Width = getWindowWidth()
         element.Height = getWindowHeight()
     })
 
-    /*window.ontouchend = () => {
-        console.log("ontouchend")
-        window.UserInteracted = true
-    }*/
+
     window.onmousedown = () => {
         window.UserInteracted = true
     }
 
-    /*function PrintWindowSize() {
-        console.log("onresize", window.innerWidth, window.innerHeight, document.documentElement.clientWidth, document.documentElement.clientHeight, document.body.parentNode.clientHeight)
-    }*/
-    //PrintWindowSize()
-
-    
-
-    /*const observer = new ResizeObserver(() => { });
-    if (observer)
-        element.BackgroundColor = new Color("#ff0000")*/
 
 
     function createDevicePixelRatioCallback(func) {
@@ -176,9 +126,10 @@ function Page(element) {
         element.Height = getWindowHeight()
         d.end()
     }
-
+    
     
 
-}
+})
+
 
 

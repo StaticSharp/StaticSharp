@@ -39,7 +39,7 @@ namespace StaticSharpDemo.Root.Modifiers {
 
             SectionHeader(nameof(MaterialShadow)),
             MaterialShadowExample,
-
+            
             SectionHeader(nameof(UserSelect)),
             UserSelectExample,
 

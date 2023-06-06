@@ -1,6 +1,6 @@
-function SvgIconInline(element) {
-    AbstractInline(element)
-    SvgIcon(element)
+StaticSharpClass("StaticSharp.SvgIconInline", (element) => {
+    StaticSharp.AbstractInline(element)
+    StaticSharp.SvgIcon(element)
 
     element.Reactive = {
         BaselineOffset: 0.14
@@ -24,4 +24,4 @@ function SvgIconInline(element) {
     })
 
 
-}
+})

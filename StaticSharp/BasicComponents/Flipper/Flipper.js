@@ -1,6 +1,5 @@
-function Flipper(element) {
-    Block(element)
-    element.isFlipper = true
+StaticSharpClass("StaticSharp.Flipper", (element) => {
+    StaticSharp.Block(element)
 
     CreateSocket(element, "First", element)
     CreateSocket(element, "Second", element)
@@ -197,4 +196,4 @@ function Flipper(element) {
 
 
 
-}
+})

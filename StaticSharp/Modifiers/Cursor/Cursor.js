@@ -1,9 +1,5 @@
-function Cursor(element) {
-    Modifier.call(this, element)
-    this.isCursor = true
-
-    let modifier = this
-
+StaticSharpClass("StaticSharp.Cursor", (modifier, element) => {
+    StaticSharp.Modifier(modifier, element)
 
     modifier.Reactive = {
         Option: "Pointer",
@@ -16,4 +12,4 @@ function Cursor(element) {
         else
             element.style.cursor = CamelToKebab(option);
     })
-}
+})

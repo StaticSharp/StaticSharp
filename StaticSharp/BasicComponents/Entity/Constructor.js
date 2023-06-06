@@ -1,67 +1,28 @@
-function _deleteScript() {
-    let script = document.currentScript
-    let parent = script.parentElement
-    parent.removeChild(script)
-    return parent
-}
+
+function StaticSharpClass(name, constructor) {
+
+    const parts = name.split(".")
+    const className = parts[parts.length - 1]
+    parts.length = parts.length - 1
 
 
-var currentSocket = undefined
-var parentStack = []
-function getCurrentParent() {
-    if (parentStack.length>0)
-        return parentStack[parentStack.length - 1]
-    return undefined
-}
 
-function SetCurrentSocket(propertyName) {
-    var element = _deleteScript()
-    var parent = getCurrentParent()
-    currentSocket = parent.Reactive[propertyName]
-}
-
-function AssignToParentProperty(propertyName) {
-    var element = _deleteScript()
-    let parent = getCurrentParent()
-    parent[propertyName] = element
-}
-
-function AssignPreviousTagToParentProperty(propertyName) {
-    var element = _deleteScript()
-    let lastChild = element.lastChild 
-    let parent = getCurrentParent()
-    parent[propertyName] = lastChild
-}
-
-
-function Constructor() {
-    var element = _deleteScript()
-    //element.Parent = parent
-    
-    
-    for (let i of arguments) {
-        i(element)
-    }
-    if (currentSocket) {
-        currentSocket.setValue(element)
+    let currentNamespace = window
+    for (let i of parts) {
+        currentNamespace[i] = currentNamespace[i] || {}
+        currentNamespace = currentNamespace[i]
     }
 
-    currentSocket = element.Reactive.FirstChild
-    parentStack.push(element)
+    function constructorWrapper(_this, ...arguments) {
+        _this.types = _this.types || []
+        _this.types.push(name)
+        constructor(_this, ...arguments)
+    }
 
-    return element;
+    currentNamespace[className] = constructorWrapper
+    currentNamespace[className].tagName = CamelToKebab(className)
 }
 
-function Pop() {
-    let element = _deleteScript()
-
-    currentSocket = element.Reactive.NextSibling
-    parentStack.pop()
-
-    if (typeof (element.AfterChildren) === "function")
-        element.AfterChildren()
-
-}
 
 //Move to FrontendUtils
 function CamelToKebab(value) {
@@ -84,19 +45,11 @@ function CreateSocket(element,name,parentExpression) {
     //let previousValue = undefined
 
     property.onAssign = function (previousValue, newValue) {
-        //console.log("onAssign", previousValue, newValue)
-
-
-        //let newValue = property.getValue()
 
         if (previousValue == newValue)
             return
 
-
-
         if (previousValue) {
-            //console.log("deleting previous")
-            //previousValue.place.setValue(undefined)
             previousValue.place = undefined
             previousValue.Parent = undefined
             previousValue.Layer()
@@ -117,11 +70,8 @@ function CreateSocket(element,name,parentExpression) {
                 newValue.place.setValue(undefined)
             }
             newValue.place = property
-            //if (parentExpression != undefined) {
             newValue.Parent = parentExpression
             newValue.Layer()
-                //CreateLayer(newValue)
-            //}
             
             // if reparenting element is a part of element linked list,
             // than subsequent elements of list are also effectively reparented
@@ -135,9 +85,6 @@ function CreateSocket(element,name,parentExpression) {
                 }
             }
         }
-        //previousValue = newValue
-
-
     }
 
     return property
@@ -154,20 +101,12 @@ function CreateCollectionSocket(element, name, parentExpression) {
     element[name] = value
     element["Existing"+name] = value.Where(x=>x.Exists)
 
-    /*Object.defineProperty(element, name, {
-        get: function () {
-            return value
-        }
-    });*/
 }
-
-
-
 
 
 function Create(parent, ...constructors) {
     let primary = constructors[0]
-    let tagName = CamelToKebab(primary.name)
+    let tagName = primary.tagName 
     
     let element = document.createElement(tagName)
     parent.appendChild(element)
@@ -175,6 +114,5 @@ function Create(parent, ...constructors) {
     for (let i of constructors) {
         i(element)
     }
-    return element;
-    
+    return element;    
 }

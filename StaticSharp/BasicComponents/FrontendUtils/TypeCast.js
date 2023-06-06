@@ -1,9 +1,14 @@
 function as(element, typeName) {
+
+    //console.log("as", typeName, element)
+
     if (element == undefined)
         return undefined
 
     if (typeof (element.as) == "function") {
         return element.as(typeName)
+    } else {
+        throw new Error(`no as functyion ${element.types}`)
     }
 
     return undefined
@@ -11,6 +16,9 @@ function as(element, typeName) {
 
 
 function convert(element, typeName) {
+
+    
+
     var result = as(element, typeName)
 
     if (result == undefined) {

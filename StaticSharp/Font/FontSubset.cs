@@ -43,13 +43,19 @@ namespace StaticSharp {
         }
     }
 
-
-
     public class FontSubset {
+        public required string Format { get; init; }
+        public required string Base64 { get; init; }
+        public required string FamilyName { get; init; }
+        public required FontWeight Weight { get; init; }
+        public required bool Italic { get; init; }
+    }
+
+    public class FontSubsetBuilder {
 
         private Font font;
         private HashSet<char> usedChars = new();
-        public FontSubset(Font font) {
+        public FontSubsetBuilder(Font font) {
             this.font = font;
         }
 
@@ -61,7 +67,8 @@ namespace StaticSharp {
             return chars;
         }
 
-        public string GenerateInclude() {
+
+        public FontSubset GetFontSubset() {
 
             var sortedUsedChars = usedChars.OrderBy(c => c);
             var text = string.Concat(sortedUsedChars);
@@ -79,13 +86,25 @@ namespace StaticSharp {
             var base64 = Convert.ToBase64String(content);
             var format = "woff2";
 
+            return new FontSubset {
+                Format = format,
+                Base64 = base64,
+                FamilyName = font.Family.Name,
+                Weight = font.Weight,
+                Italic = font.Italic
+            };
+        }
+
+        public string GenerateInclude() {
+            var fontSubset = GetFontSubset();            
+
             var stringBuilder = new StringBuilder();
             stringBuilder.Append("@font-face {");
-            stringBuilder.Append($"font-family: '{font.Family.Name}';");
-            stringBuilder.Append("font-weight: ").Append((int)font.Weight).Append(";");
-            stringBuilder.Append("font-style: ").Append(Font.ItalicToStyle(font.Italic)).Append(";");
+            stringBuilder.Append($"font-family: '{fontSubset.FamilyName}';");
+            stringBuilder.Append("font-weight: ").Append((int)fontSubset.Weight).Append(";");
+            stringBuilder.Append("font-style: ").Append(Font.ItalicToStyle(fontSubset.Italic)).Append(";");
             //stringBuilder.AppendLine($"src:local('{Arguments.Family} {Arguments.Weight}{italicSuffix}'),");
-            stringBuilder.Append($"src: url(data:application/font-{format};charset=utf-8;base64,{base64}) format('{format}');");
+            stringBuilder.Append($"src: url(data:application/font-{fontSubset.Format};charset=utf-8;base64,{fontSubset.Base64}) format('{fontSubset.Format}');");
             stringBuilder.Append("}");
 
             return stringBuilder.ToString();

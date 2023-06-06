@@ -1,14 +1,14 @@
 
-function Thumb(element) {
-    Block(element)
+StaticSharpClass("StaticSharp.Thumb", (element) => {
+    StaticSharp.Block(element)
     element.Reactive = {
         BackgroundColor: () => element.Parent.HierarchyForegroundColor,
-        
+
         Radius: () => Num.Min(element.Width, element.Height) / 2,
         Depth: 1,
         Visibility: () => (window.Touch || element.ThumbSizeScale >= 1) ? 0 : element.Hover ? 0.5 : 0.25,
     }
-}
+})
 
 function SetupPointerDrag(element, func) {
     element.Events.PointerDown = () => {
@@ -33,13 +33,8 @@ function SetupPointerDrag(element, func) {
 
 
 
-
-
-
-
-function ScrollView(element) {
-    Block(element)
-    element.isScrollView = true
+StaticSharpClass("StaticSharp.ScrollView", (element) => {
+    StaticSharp.Block(element)
 
 
     var modificationSource = undefined
@@ -86,8 +81,8 @@ function ScrollView(element) {
 
     }
     CreateSocket(element, "Child", element)
-    CreateSocket(element, "VerticalThumb", element).setValue(Create(element, Thumb))
-    CreateSocket(element, "HorizontalThumb", element).setValue(Create(element, Thumb))
+    CreateSocket(element, "VerticalThumb", element).setValue(Create(element, StaticSharp.Thumb))
+    CreateSocket(element, "HorizontalThumb", element).setValue(Create(element, StaticSharp.Thumb))
 
     let verticalThumb = element.VerticalThumb
     verticalThumb.Reactive = {
@@ -171,7 +166,4 @@ function ScrollView(element) {
         
     })
 
-
-
-
-}
+})

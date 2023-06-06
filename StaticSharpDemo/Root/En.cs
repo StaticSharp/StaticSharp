@@ -1,21 +1,8 @@
-﻿using EnvDTE;
-using Newtonsoft.Json.Linq;
-using NUglify;
-using StaticSharp;
-using StaticSharp.Js;
-using StaticSharp.Resources.Text;
+﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Linq;
 using System.Runtime.CompilerServices;
 
-
-
-
 namespace StaticSharpDemo.Root {
-
-
-    
-
 
     [Representative]
     partial class En : Page {
@@ -160,20 +147,7 @@ namespace StaticSharpDemo.Root {
                 NoWrap = true,
             }.ToLandingMainHeader(),
             
-            new Block{ 
-                Height = new(e=>e.UnmanagedChildren.First().Height),
-                UnmanagedChildren = {
-                    new Paragraph("STATIC SHARP\nSTATIC SHARP"){
-                        FontSize= 40,
-                        TextAlignmentHorizontal = TextAlignmentHorizontal.Center,
-                        Width = new(e=>Js.Num.Min(e.Parent.Width, e.InternalWidth)),
-                        BackgroundColor = Color.Violet,
-                        //LetterSpacing = 0.2
-                    }.CenterX(),
-                }
-            },
-
-            
+            //System.Linq.Enumerable.Range(0,10).Select(x=>new Image(new JpegGenome(LoadFile($"https://picsum.photos/seed/{x}A/2000/1000")))),
 
             Description,
 
@@ -200,38 +174,37 @@ namespace StaticSharpDemo.Root {
 
             Separator(),
             
-            new LinearLayout(){
+            new Flipper(){
                 
                 Vertical = new(e=>e.Width<950),
                 Reverse = new(e=>e.Vertical),
                 MarginLeft = new(e=>e.Parent.PaddingLeft),
                 MarginRight = new(e=>e.Parent.PaddingRight),
                 MarginsVertical = 75,
-                Children = {
-                    new LinearLayout(){
-                        ItemGrow = 0,
-                        Width = new(e=>e.Parent.Width * 0.5),
-                        MarginLeft = 10,
-                        MarginRight = 10,
-                        MarginTop = 60,
-                        Children = {
-                            "copypasteable from\nSTACKOVERFLOW".ToLandingSectionHeader(new Color("#F58025"))
-                            ,
-                            """
-                            Copy-pasteability is the superpower of code - it allows developers to reuse and share code like a boss, saving time and effort in the software development process.
-                            No-code or low-code platforms might have their own superpowers, but when it comes to flexibility and customization, code-based approaches reign supreme.
-                            So go forth, dear developer, and copy-paste to your heart's content!
-                            """,
-                        }
-                    },
-                    new Image("StackoverflowKeyboard.svg"){                        
-                        Width = new(e=>e.Parent.Width * 0.5),
-                        Height = new(e=>Js.Num.Min(e.Width/e.Aspect, 400)),
-                        Margins = 75,
-                        Embed = Image.TEmbed.Image,
-                        Fit = Fit.Inside
+                First  = new LinearLayout(){
+                    ItemGrow = 0,
+                    Width = new(e=>e.Parent.Width * 0.5),
+                    MarginLeft = 10,
+                    MarginRight = 10,
+                    MarginTop = 60,
+                    Children = {
+                        "copypasteable from\nSTACKOVERFLOW".ToLandingSectionHeader(new Color("#F58025"))
+                        ,
+                        """
+                        Copy-pasteability is the superpower of code - it allows developers to reuse and share code like a boss, saving time and effort in the software development process.
+                        No-code or low-code platforms might have their own superpowers, but when it comes to flexibility and customization, code-based approaches reign supreme.
+                        So go forth, dear developer, and copy-paste to your heart's content!
+                        """,
                     }
+                },
+                Second = new Image("StackoverflowKeyboard.svg"){                        
+                    //Width = new(e=>e.Parent.Width * 0.5),
+                    Height = new(e=>Js.Num.Min(e.Width/e.NativeAspect, 400)),
+                    Margins = 75,
+                    Embed = Image.TEmbed.Image,
+                    Fit = Fit.Inside
                 }
+                
             },
 
             Separator(),

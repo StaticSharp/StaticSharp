@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Collections;
 
 namespace StaticSharp {
 
@@ -114,7 +115,18 @@ namespace StaticSharp {
             if (parameters == null) {
                 return;
             }
-            VisualStudio.Open(parameters.callerFilePath, parameters.callerLineNumber);
+
+            var visualStudioCodePID = Environment.GetEnvironmentVariable("VSCODE_PID");
+            if (visualStudioCodePID != null) {
+                VSCode.Open(parameters.callerFilePath, parameters.callerLineNumber);
+                return;
+            }
+
+            var visualStudioVersion = Environment.GetEnvironmentVariable("VisualStudioVersion");
+            if (visualStudioVersion != null) {
+                VisualStudio.Open(parameters.callerFilePath, parameters.callerLineNumber);
+                return;
+            }
         }
 
         public static AbsoluteUrl BaseUrlFromHttpRequest(HttpRequest httpRequest) {

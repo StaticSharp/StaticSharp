@@ -1,9 +1,5 @@
-function Id(element) {
-    Modifier.call(this, element)
-    this.isId = true
-
-    let modifier = this
-
+StaticSharpClass("StaticSharp.Id", (modifier, element) => {
+    StaticSharp.Modifier(modifier, element)
 
     modifier.Reactive = {
         Value: undefined,
@@ -13,4 +9,4 @@ function Id(element) {
         var value = modifier.Value || ""
         element.id = value
     })
-}
+})

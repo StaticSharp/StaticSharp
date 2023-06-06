@@ -1,14 +1,9 @@
-
-function LinearGradient(element) {
-    AbstractBackground.call(this, element)
-    this.isLinearGradient = true
-    let modifier = this
+StaticSharpClass("StaticSharp.LinearGradient", (modifier, element) => {
+    StaticSharp.AbstractBackground(modifier, element)
 
     modifier.Reactive = {
         Angle: 0
-    }
-
-   
+    }  
 
 
 }

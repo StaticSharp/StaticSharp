@@ -77,14 +77,8 @@ function GetClipRect(clippingElement, contentX, contentY, contentWidth, contentH
     return `inset(${offsets}${round})`
 }
 
-
-function Block(element) {
-    
-
-    BaseModifier(element)
-
-    element.isBlock = true
-
+StaticSharpClass("StaticSharp.Block", (element) => {
+    StaticSharp.BaseModifier(element)
 
 
     element.Reactive = {
@@ -123,6 +117,37 @@ function Block(element) {
 
         Width: undefined, //e => e.InternalWidth, // e => First(e.LayoutWidth, e.PreferredWidth),
         Height: undefined, //e => e.InternalHeight, // e => First(e.LayoutHeight, e.PreferredHeight),
+
+        ViewportVisibility: e => {
+
+            const vw = e.Root.Width
+            if (!Num.ValidNumber(vw) || vw==0) return 0
+
+            const vh = e.Root.Height
+            if (!Num.ValidNumber(vh) || vw == 0) return 0
+
+            
+
+            const w = e.Width
+            if (!Num.ValidNumber(w)) return 0
+
+            const h = e.Height
+            if (!Num.ValidNumber(h)) return 0
+            const x = e.AbsoluteX
+            if (!Num.ValidNumber(x)) return 0
+            const y = e.AbsoluteY
+            if (!Num.ValidNumber(y)) return 0
+
+            const x0 = Math.max(x, 0)
+            const x1 = Math.min(x + w, vw)
+            
+            const y0 = Math.max(y || 0, 0)
+            const y1 = Math.min(y + h, vh)
+
+            const xr = Math.max(x1 - x0, 0) / w
+            const yr = Math.max(y1 - y0, 0) / h
+            return xr*yr
+        },
 
 
         FontSize: undefined,
@@ -179,4 +204,4 @@ function Block(element) {
 
     
 
-}
+})

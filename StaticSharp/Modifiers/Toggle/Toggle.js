@@ -1,13 +1,9 @@
-function Toggle(element) {
-    Modifier.call(this, element)
-    this.isToggle = true
-
-    let modifier = this
-
+StaticSharpClass("StaticSharp.Toggle", (modifier, element) => {
+    StaticSharp.Modifier(modifier, element)
 
     modifier.Reactive = {
         Value: false,
     }
 
     element.addEventListener("click", () => {modifier.Value = !modifier.Value}, false)
-}
+})

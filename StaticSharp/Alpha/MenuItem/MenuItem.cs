@@ -16,10 +16,14 @@ namespace StaticSharp.Alpha {
                 PaddingsVertical = 10,
                 PaddingsHorizontal = 20,
 
+                Modifiers = { 
+                    new Hover()
+                },
+
                 UnmanagedChildren = {
                     new Block {
                             BackgroundColor = new(e=>e.Parent.HierarchyForegroundColor),
-                            Visibility = new(e=>e.Parent.Hover ? 0.10 : 0),
+                            Visibility = new(e=>e.Parent.AsHover().Value ? 0.10 : 0),
                             Depth = -1
                     }.FillHeight().FillWidth(),
                 }

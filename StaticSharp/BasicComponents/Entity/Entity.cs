@@ -190,7 +190,7 @@ namespace StaticSharp {
                 var attributes = i.GetCustomAttributes<ConstructorJsAttribute>(false);
                 if (attributes.Any()) {
 
-                    return attributes.Select(x => string.IsNullOrEmpty(x.ClassName) ? i.Name : x.ClassName).ToArray();
+                    return attributes.Select(x => string.IsNullOrEmpty(x.TypeFullName) ? i.FullName : x.TypeFullName).ToArray();
                 }
             }
             throw new Exception($"{nameof(ConstructorJsAttribute)} not found for {GetType().FullName}");

@@ -1,6 +1,7 @@
+StaticSharpClass("StaticSharp.BaseModifier", (element) => {
 
-function BaseModifier(element) {
-    Hierarchical(element)
+    StaticSharp.Hierarchical(element)
+
 
     //TODO: fix file protocol
     /*if (element.parentElement.tagName == "A") {
@@ -23,14 +24,24 @@ function BaseModifier(element) {
 
     /**type */
 
-    element.isModifier = true
     let baseAs = element.as
     element.as = function (typeName) {
+        
+
         let result = baseAs(typeName)
         if (result != undefined)
             return result
 
+        
+        
+
         if (element.Modifiers != undefined) {
+            /*for (let i of element.Modifiers) {
+                console.log("as", i.is)
+            }*/
+
+
+
             let oldAs = element.as
             element.as = () => undefined
             result = element.Modifiers.find(x => x.is(typeName))
@@ -132,4 +143,4 @@ function BaseModifier(element) {
     new Reaction(() => {
         element.style.textDecorationColor = ToCssValue(element.TextDecorationColor)
     })
-}
+})

@@ -120,11 +120,8 @@ LayoutAlgorithms.ParallelLayout = function (vertical, container, children, defau
 }
 
 
-
-
-function LinearLayout(element) {
-    BlockWithChildren(element)
-    element.isLinearLayout = true
+StaticSharpClass("StaticSharp.LinearLayout", (element) => {
+    StaticSharp.BlockWithChildren(element)
 
     element.Reactive = {
 
@@ -171,4 +168,4 @@ function LinearLayout(element) {
     })
 
 
-}
+})

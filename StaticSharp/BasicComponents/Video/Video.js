@@ -44,10 +44,8 @@ function getUniqueID() {
     return "juid" + uniqueID;
 }
 
-
-function Video(element) {
-    AspectBlock(element)
-    element.isVideo = true
+StaticSharpClass("StaticSharp.Video", (element) => {
+    StaticSharp.AspectBlock(element)
 
     let youtubeId = element.dataset.youtubeId
 
@@ -563,4 +561,4 @@ function Video(element) {
         }
     })    
 
-}
+})

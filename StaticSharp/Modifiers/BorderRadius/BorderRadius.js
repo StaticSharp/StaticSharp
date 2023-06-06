@@ -1,13 +1,5 @@
-
-
-
-function BorderRadius(element) {
-    Modifier.call(this,element)
-    this.isBorderRadius = true
-
-    let modifier = this
-
-
+StaticSharpClass("StaticSharp.BorderRadius", (modifier, element) => {
+    StaticSharp.Modifier(modifier, element)
 
     modifier.Reactive = {
         Radius: undefined,
@@ -24,4 +16,4 @@ function BorderRadius(element) {
         element.style.borderBottomLeftRadius = ToCssSize(modifier.RadiusBottomLeft)
         element.style.borderBottomRightRadius = ToCssSize(modifier.RadiusBottomRight)
     })
-}
+})

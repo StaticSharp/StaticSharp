@@ -21,9 +21,6 @@ namespace StaticSharp {
         public Color HierarchyForegroundColor { get; }
         public Js.Enumerable<JModifier> Modifiers { get; }
 
-        public bool Hover { get; }
-        public bool? Selectable { get; }
-
         public double Visibility { get; set; }
 
         /*public double Radius { get; set; }

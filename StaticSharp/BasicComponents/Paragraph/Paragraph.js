@@ -1,8 +1,5 @@
-function Paragraph(element) {
-
-    Block(element)
-    element.isParagraph = true
-
+StaticSharpClass("StaticSharp.Paragraph", (element) => {
+    StaticSharp.Block(element)
 
     element.Reactive = {
 
@@ -16,10 +13,10 @@ function Paragraph(element) {
         Height: e => e.InternalHeight,
 
 
-        MaxContentWidth:  e => e.HierarchyFontSize / Paragraph.testFontSize * e.inlineContainer.maxWidth,
-        MinContentWidth:  e => e.HierarchyFontSize / Paragraph.testFontSize * e.inlineContainer.minWidth,
-        MaxContentHeight: e => e.HierarchyFontSize / Paragraph.testFontSize * e.inlineContainer.maxHeight,
-        MinContentHeight: e => e.HierarchyFontSize / Paragraph.testFontSize * e.inlineContainer.minHeight,
+        MaxContentWidth: e => e.HierarchyFontSize / StaticSharp.Paragraph.testFontSize * e.inlineContainer.maxWidth,
+        MinContentWidth: e => e.HierarchyFontSize / StaticSharp.Paragraph.testFontSize * e.inlineContainer.minWidth,
+        MaxContentHeight: e => e.HierarchyFontSize / StaticSharp.Paragraph.testFontSize * e.inlineContainer.maxHeight,
+        MinContentHeight: e => e.HierarchyFontSize / StaticSharp.Paragraph.testFontSize * e.inlineContainer.minHeight,
 
 
         PaddingLeft: () => (element.BackgroundColor != undefined) ? 10 : undefined,
@@ -132,6 +129,7 @@ function Paragraph(element) {
     })
 
     HeightToStyle(element)
-}
 
-Paragraph.testFontSize = 128
+})
+
+StaticSharp.Paragraph.testFontSize = 128

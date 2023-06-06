@@ -1,9 +1,8 @@
 
 
 
-
-function AspectBlock(element) {
-    Block(element)
+StaticSharpClass("StaticSharp.AspectBlock", (element) => {
+    StaticSharp.Block(element)
 
     element.Reactive = {
 
@@ -23,4 +22,4 @@ function AspectBlock(element) {
     
 
 
-}
+})

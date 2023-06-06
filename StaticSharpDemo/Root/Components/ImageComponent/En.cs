@@ -41,7 +41,7 @@ namespace StaticSharpDemo.Root.Components.ImageComponent {
                 Embed = Image.TEmbed.Thumbnail,
                 Height = new(e=>e.Width),
                 Margins = new(e=>e.AsOutline().Offset + e.AsOutline().Width),
-                ClipChildren = false,
+                ClipChildren = true,
                 Modifiers = { 
                     new BorderRadius{ 
                         RadiusBottomLeft = new(e=>e.AsBlock().Height * 0.5)

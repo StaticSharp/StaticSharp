@@ -1,5 +1,5 @@
-function SvgIcon(element) {
 
+StaticSharpClass("StaticSharp.SvgIcon", (element) => {
 
     element.Reactive = {
         StrokeColor: undefined,
@@ -19,4 +19,4 @@ function SvgIcon(element) {
         if (element.StrokeWidth != undefined)
             element.children[0].style.strokeWidth = ToCssSize(element.StrokeWidth)
     })
-}
+})

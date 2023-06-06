@@ -1,8 +1,5 @@
-function Button(element) {
-    Modifier.call(this, element)
-    this.isButton = true
-
-    let modifier = this
+StaticSharpClass("StaticSharp.Button", (modifier, element) => {
+    StaticSharp.Modifier(modifier, element)
 
     modifier.Reactive = {
         EventPropagation: false
@@ -13,4 +10,5 @@ function Button(element) {
         if (!modifier.EventPropagation)
             event.stopPropagation()
     }, false)
-}
+
+})

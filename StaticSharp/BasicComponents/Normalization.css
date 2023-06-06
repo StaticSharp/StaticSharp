@@ -1,7 +1,7 @@
 html {
     display: initial;
     position: initial;
-    overscroll-behavior-x: none;
+    //overscroll-behavior-x: none;
     overflow: hidden;
     overflow-x: hidden;
     overflow-y: hidden;

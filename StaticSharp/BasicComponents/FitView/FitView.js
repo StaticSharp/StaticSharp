@@ -1,7 +1,5 @@
-
-function FitView(element) {
-    AspectBlock(element)
-    element.isFitView = true
+StaticSharpClass("StaticSharp.FitView", (element) => {
+    StaticSharp.AspectBlock(element)
 
     element.Reactive = {
         NativeWidth: e => e.Child.Width,
@@ -121,4 +119,4 @@ function FitView(element) {
 
     })
 
-}
+})

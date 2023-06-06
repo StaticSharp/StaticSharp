@@ -1,19 +1,18 @@
-function Modifier(element) {
-    Entity(this)
-    this.isModifier = true
-    let modifier = this
+StaticSharpClass("StaticSharp.Modifier", (modifier, element) => {
+    StaticSharp.Entity(modifier)
 
+    let baseAs = modifier.as
+    modifier.as = function (typeName) {
+        
 
-    let baseAs = this.as
-    this.as = function (typeName) {
         let result = baseAs(typeName)
         if (result != undefined)
             return result
 
-        let oldAs = this.as
-        this.as = () => undefined
+        let oldAs = modifier.as
+        modifier.as = () => undefined
         result = as(element, typeName)
-        this.as = oldAs
+        modifier.as = oldAs
         return result
     }
 
@@ -23,4 +22,4 @@ function Modifier(element) {
         Enabled: true
     }
 
-}
+})

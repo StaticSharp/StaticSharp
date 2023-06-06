@@ -2,14 +2,23 @@
 
 
 namespace StaticSharp {
-    public interface JSessionStorageNumber : JModifier {
+    public interface JSessionStorageNumber : JSessionStorage {
         double StoredValue { get; }
         double ValueToStore { set; }
     }
 
 
-    [ConstructorJs("SessionStorage")]
-    public partial class SessionStorageNumber : Modifier {
+
+    public interface JSessionStorage : JModifier {
+    }
+
+    [ConstructorJs()]
+    public abstract partial class SessionStorage : Modifier {
+    
+    }
+
+
+    public partial class SessionStorageNumber : SessionStorage {
         public required string Name { set; private get; }
 
         public override IdAndScript Generate(string elementId, Context context) {

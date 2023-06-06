@@ -57,7 +57,10 @@ document.addEventListener("mousemove", () => {
     var x = event.clientX
     var y = event.clientY
     //console.log("mousemove", document.elementsFromPoint(x, y))
-    developerMode.ElementMouseIsOver = document.elementsFromPoint(x, y).find(x=>x.isBlock);
+    developerMode.ElementMouseIsOver = document.elementsFromPoint(x, y).find(x => {
+        if (!x.is) return false
+        return x.is("StaticSharp.Block")
+    });
     developerMode.CtrlKeyPressed = event.ctrlKey
 });
 

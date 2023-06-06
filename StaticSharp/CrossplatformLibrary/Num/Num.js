@@ -1,6 +1,10 @@
 
 var Num = {}
 
+Num.ValidNumber = function (value) {
+    if (typeof (value) !== "number") return false
+    return !isNaN(value)
+}
 
 Num.IsNaNOrNull = function (value) {
     if (value === null) return true

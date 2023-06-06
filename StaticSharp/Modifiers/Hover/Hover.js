@@ -1,9 +1,5 @@
-function Hover(element) {
-    Modifier.call(this, element)
-    this.isHover = true
-
-    let modifier = this
-
+StaticSharpClass("StaticSharp.Hover", (modifier, element) => {
+    StaticSharp.Modifier(modifier, element)
 
     modifier.Reactive = {
         Value: false,
@@ -17,4 +13,4 @@ function Hover(element) {
 
     element.addEventListener("mouseenter", () => modifier.Value = true, false)
     element.addEventListener("mouseleave", () => modifier.Value = false, false)
-}
+})

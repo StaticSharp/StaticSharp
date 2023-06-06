@@ -1,8 +1,8 @@
+StaticSharpClass("StaticSharp.AbstractBackground", (modifier, element) => {
+    StaticSharp.Modifier(modifier, element)
 
-function AbstractBackground(element) {
-    Modifier.call(this, element)
-    this.isAbstractBackground = true
-    let modifier = this
+    
+
 
     modifier.Reactive = {
         Enabled: true,
@@ -35,8 +35,7 @@ function AbstractBackground(element) {
     
 
     new Reaction(() => {
-
-        var coModifiers = element.Modifiers.filter(x => x.isAbstractBackground && x.Enabled)
+        var coModifiers = element.Modifiers.filter(x => x.is("StaticSharp.AbstractBackground") && x.Enabled)
         if (coModifiers.length == 0)
             return
         if (coModifiers[0] == modifier) {
@@ -46,4 +45,4 @@ function AbstractBackground(element) {
         }
     })
 
-}
+})

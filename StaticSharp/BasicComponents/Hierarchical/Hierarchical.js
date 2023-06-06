@@ -114,38 +114,14 @@ function SyncChildren(element, targetChildren) {
  */
 var parentGetDepth = 1
 
-function Hierarchical(element) {
-    Entity(element)
-    element.isHierarchical = true
+StaticSharpClass("StaticSharp.Hierarchical", (element) => {
+
+    StaticSharp.Entity(element)
+
 
     CreateCollectionSocket(element, "UnmanagedChildren", element)
     CreateSocket(element, "NextSibling", () => element.Parent)
 
-    /*
-     () => {
-            let oldParentGetDepth = parentGetDepth
-            let depth = parentGetDepth
-            let p = element.Place
-            if (!p) return undefined
-            while (p.name == "NextSibling") {                
-                let sibling = p.object
-                depth--
-                if (depth <= 0) {
-                    parentGetDepth = 2 * parentGetDepth
-                    let result = sibling.Parent
-                    parentGetDepth = oldParentGetDepth
-                    return result
-                }
-
-                p = p.object.Place
-                if (!p) return undefined
-                
-            }
-
-            parentGetDepth = oldParentGetDepth
-            return p.object
-        }
-     */
     CreateLayer(element)
 
 
@@ -236,4 +212,4 @@ function Hierarchical(element) {
     
  
 
-}
+})

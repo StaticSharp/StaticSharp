@@ -1,5 +1,6 @@
 ﻿
 
+
 using NUglify;
 using StaticSharp.Gears;
 
@@ -13,6 +14,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace StaticSharp {
 
@@ -37,7 +39,7 @@ namespace StaticSharp {
 
         //public Includes Includes { get; init; }
 
-        public ConcurrentDictionary<string, FontSubset> FontSubsets { get; } = new(); //Key is Font.Key
+        public ConcurrentDictionary<string, FontSubsetBuilder> FontSubsetBuilders { get; } = new(); //Key is Font.Key
 
         public SvgDefs SvgDefs { get; } = new();
 
@@ -120,10 +122,39 @@ namespace StaticSharp {
             };
         }
 
-        public Html.Tag GenerateFonts() {
+        public Html.Tag GenerateFontsScript() {
+            var body = new Scopes.Group();            
+
+            var fontSubsets = FontSubsetBuilders
+                .OrderBy(x => x.Key)
+                .Select(x=>x.Value)
+                .Select(x=>x.GetFontSubset())
+                .ToArray();
+
+            foreach (var i in fontSubsets) {
+                var familyName = Javascriptifier.ValueStringifier.Stringify(i.FamilyName);
+                var base64 = Javascriptifier.ValueStringifier.Stringify(i.Base64);
+                var italic = Javascriptifier.ValueStringifier.Stringify(i.Italic);
+                var format = Javascriptifier.ValueStringifier.Stringify(i.Format);
+                body.Add($"fonts.push(StaticSharp.LoadFont({familyName},{(int)i.Weight}, {italic}, {format}, {base64}))");
+            }
+
+
+            var script = new Scopes.C.Scope("StaticSharp.InitializeStaticFonts = function ()") {
+                "const fonts = []",
+                body,
+                "return Promise.all(fonts)"
+            };
+
+            return new Html.Tag("script") {
+                new Html.PureHtmlNode(script.ToString())
+            };
+        }
+
+        public Html.Tag GenerateFontsStyle() {
             var fontStyle = new StringBuilder();
 
-            var sortedFonts = FontSubsets.OrderBy(x => x.Key);
+            var sortedFonts = FontSubsetBuilders.OrderBy(x => x.Key);
 
             foreach (var i in sortedFonts) {
                 fontStyle.AppendLine(i.Value.GenerateInclude());
@@ -132,8 +163,6 @@ namespace StaticSharp {
                 new Html.PureHtmlNode(fontStyle.ToString())
             };
         }
-
-
 
         /*public async Task AddScriptFromResource(string fileName, [CallerFilePath] string callerFilePath = "") {
             var assembly = Assembly.GetCallingAssembly();

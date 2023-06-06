@@ -107,7 +107,7 @@ namespace StaticSharp {
             }
 
 
-            var thumbnail = new ThumbnailGenome(AssetGenome).Result;
+            var thumbnail = new ThumbnailGenome(AssetGenome,32).Result;
             var thumbnailUrlBase64 = thumbnail.GetDataUrlBase64();
 
             var thumbnailSvgDefTag = Svg.InlineImage(thumbnailUrlBase64);

@@ -9,7 +9,7 @@ namespace StaticSharp {
     }
 
     public interface JAspectBlock : JBlock {
-        public double Aspect { get; set; }
+        public double NativeAspect { get; set; }
         public Fit Fit { get; set; }
         public double GravityVertical { get; set; }
         public double GravityHorizontal { get; set; }
@@ -18,8 +18,8 @@ namespace StaticSharp {
     [ConstructorJs]
     public partial class AspectBlock : Block {
         protected static void SetNativeSize(Scopes.Group script, string elementVariableName, double width, double height) {
-            script.Add($"{elementVariableName}.NativeWidth = {width}");
-            script.Add($"{elementVariableName}.NativeHeight = {height}");
+            script.Add($"{elementVariableName}.NativeWidth = {width.ToStringInvariant()}");
+            script.Add($"{elementVariableName}.NativeHeight = {height.ToStringInvariant()}");
         }
     }
 }

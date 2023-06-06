@@ -31,7 +31,7 @@ namespace StaticSharp {
             foreach (var fontFamilyGenome in context.FontFamilies) {
                 var fontFamily = fontFamilyGenome.Result;
                 var font = fontFamily.FindFont(context.FontWeight, context.ItalicFont);
-                var fontSubset = context.FontSubsets.GetOrAdd(font.Key, key => new FontSubset(font));
+                var fontSubset = context.FontSubsetBuilders.GetOrAdd(font.Key, key => new FontSubsetBuilder(font));
 
                 var numChars = chars.Count;
                 chars = fontSubset.AddChars(chars);
