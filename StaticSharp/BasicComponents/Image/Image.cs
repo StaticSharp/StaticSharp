@@ -25,6 +25,8 @@ namespace StaticSharp {
 
         protected override string TagName => "image-block";
 
+        public string? Alt { get; init; } = null;
+
         public required Genome<IAsset> AssetGenome;
 
         public TEmbed Embed { get; set; } = TEmbed.Thumbnail;
@@ -64,6 +66,7 @@ namespace StaticSharp {
             base.ModifyTagAndScript(context, tag, script);
 
             var contentId = context.CreateId();
+            var imgId = context.CreateId();
             
             var source = AssetGenome.ToWebImage().Result;
             var imageInfo = source.GetImageInfo();
@@ -100,6 +103,8 @@ namespace StaticSharp {
                 return;
             }
 
+            
+
             url = context.PathFromHostToCurrentPage.To(context.AddAsset(source)).ToString();
             if (Embed == TEmbed.None) {
                 AddSimpleImage();
@@ -110,11 +115,14 @@ namespace StaticSharp {
             var thumbnail = new ThumbnailGenome(AssetGenome,32).Result;
             var thumbnailUrlBase64 = thumbnail.GetDataUrlBase64();
 
-            var thumbnailSvgDefTag = Svg.InlineImage(thumbnailUrlBase64);
-            var thumbnailId = context.SvgDefs.Add(thumbnailSvgDefTag);
 
-            var hBlurId = context.SvgDefs.Add(Svg.BlurFilter(0.5f, 0));
-            var vBlurId = context.SvgDefs.Add(Svg.BlurFilter(0, 0.5f));
+            var thumbnailImageInfo = thumbnail.GetImageInfo();
+
+            script.Add($"{tag.Id}.thumbnailData = {{src:\"{thumbnailUrlBase64}\",width:{thumbnailImageInfo.Width},height:{thumbnailImageInfo.Height}}}");
+            
+
+
+
 
 
             var quantizeSettings = new QuantizeSettings() {
@@ -125,43 +133,11 @@ namespace StaticSharp {
                 //TreeDepth = 0
             };
 
-            var thumbnailImageInfo = thumbnail.GetImageInfo();
+            
 
             tag.Add(new Tag("content", contentId) {
 
-                new Tag("svg"){
-                    Id = "thumbnail",
-                    ["width"] = "100%",
-                    ["height"] = "100%",
-                    ["viewBox"] = $"0 0 {thumbnailImageInfo.Width} {thumbnailImageInfo.Height}",
-                    ["preserveAspectRatio"] = "none",
-                    /*Style = {
-                        ["overflow"] = "hidden",
-                        ["display"] = "none", //for not(.js)
-                    },*/
-                    Children = {
-                        new Tag("use"){
-                            ["href"]="#"+thumbnailId,
-                        },
-                        new Tag("use"){
-                            ["href"]="#"+thumbnailId,
-                            ["filter"] = $"url(#{vBlurId})"
-                        },
-                        new Tag("g"){
-                            ["filter"] = $"url(#{hBlurId})",
-                            Children = {
-                                new Tag("use"){
-                                    ["href"]="#"+thumbnailId,
-                                },
-                                new Tag("use"){
-                                    ["href"]="#"+thumbnailId,
-                                    ["filter"] = $"url(#{vBlurId})"
-                                }
-                            }
-                        }
-                    }
-                },
-                new Tag("img") {
+                new Tag("img", imgId) {
                     ["width"] = "100%",
                     ["height"] = "100%",
                     ["src"] = url
