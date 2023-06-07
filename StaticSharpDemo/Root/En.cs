@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
+using StaticSharp.Gears;
 using System;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace StaticSharpDemo.Root {
@@ -147,7 +149,7 @@ namespace StaticSharpDemo.Root {
                 NoWrap = true,
             }.ToLandingMainHeader(),
             
-            //System.Linq.Enumerable.Range(0,10).Select(x=>new Image(new JpegGenome(LoadFile($"https://picsum.photos/seed/{x}A/2000/1000")))),
+            System.Linq.Enumerable.Range(0,10).Select(x=>new Image(new JpegGenome(LoadFile($"https://picsum.photos/seed/{x}A/2000/1000")))),
 
             Description,
 

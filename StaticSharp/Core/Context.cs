@@ -41,6 +41,8 @@ namespace StaticSharp {
 
         public ConcurrentDictionary<string, FontSubsetBuilder> FontSubsetBuilders { get; } = new(); //Key is Font.Key
 
+
+        public List<Html.Tag> HeadTags = new();
         public SvgDefs SvgDefs { get; } = new();
 
         public Assets Assets { get; init; }

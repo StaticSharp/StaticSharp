@@ -65,33 +65,15 @@ namespace StaticSharp {
         public override void ModifyTagAndScript(Context context, Tag tag, Group script) {
             base.ModifyTagAndScript(context, tag, script);
 
-            var contentId = context.CreateId();
-            var imgId = context.CreateId();
-            
+            var imgId = context.CreateId();            
             var source = AssetGenome.ToWebImage().Result;
             var imageInfo = source.GetImageInfo();
 
             SetNativeSize(script, tag.Id, imageInfo.Width, imageInfo.Height);
 
-            script.Add($"{tag.Id}.content = {TagToJsValue(contentId)}");
-
-
-            //tag["data-width"] = imageInfo.Width;
-            //tag["data-height"] = imageInfo.Height;
+            script.Add($"{tag.Id}.img = {TagToJsValue(imgId)}");
 
             string url;
-
-
-
-            void AddSimpleImage() {
-                tag.Add(new Tag("content", contentId) {
-                    new Tag("img") {
-                        ["width"] = "100%",
-                        ["height"] = "100%",
-                        ["src"] = url,
-                    }
-                });
-            }
 
             if (Embed == TEmbed.Image) {
                 if (source.GetMediaType() == "image/svg+xml") {
@@ -99,51 +81,36 @@ namespace StaticSharp {
                 } else {
                     url = source.GetDataUrlBase64();
                 }
-                AddSimpleImage();
-                return;
+            } else {
+                url = context.PathFromHostToCurrentPage.To(context.AddAsset(source)).ToString();
             }
 
             
 
-            url = context.PathFromHostToCurrentPage.To(context.AddAsset(source)).ToString();
-            if (Embed == TEmbed.None) {
-                AddSimpleImage();
-                return;
+            
+            if (Embed == TEmbed.Thumbnail) {
+                var thumbnail = new ThumbnailGenome(AssetGenome, 32).Result;
+                var thumbnailUrlBase64 = thumbnail.GetDataUrlBase64();
+
+
+                var thumbnailImageInfo = thumbnail.GetImageInfo();
+
+                var thumbnailId = context.CreateId();
+                context.HeadTags.Add(new Tag("link", thumbnailId) {
+                    ["rel"] = "preload",
+                    ["href"] = thumbnailUrlBase64,
+                    ["as"] = "image",
+                });
+                script.Add($"StaticSharp.SetThumbnailBackground({TagToJsValue(imgId)}, \"{thumbnailId}\", {thumbnailImageInfo.Width}, {thumbnailImageInfo.Height})");
             }
 
-
-            var thumbnail = new ThumbnailGenome(AssetGenome,32).Result;
-            var thumbnailUrlBase64 = thumbnail.GetDataUrlBase64();
-
-
-            var thumbnailImageInfo = thumbnail.GetImageInfo();
-
-            script.Add($"{tag.Id}.thumbnailData = {{src:\"{thumbnailUrlBase64}\",width:{thumbnailImageInfo.Width},height:{thumbnailImageInfo.Height}}}");
-            
-
-
-
-
-
-            var quantizeSettings = new QuantizeSettings() {
-                Colors = 4,
-                ColorSpace = ColorSpace.RGB,
-                DitherMethod = DitherMethod.No,
-                MeasureErrors = false,
-                //TreeDepth = 0
+            var img = new Tag("img", imgId) {
+                ["src"] = url
             };
-
-            
-
-            tag.Add(new Tag("content", contentId) {
-
-                new Tag("img", imgId) {
-                    ["width"] = "100%",
-                    ["height"] = "100%",
-                    ["src"] = url
-                }
+            if (Alt != null) {
+                img["alt"] = Alt;
             }
-            );
+            tag.Add(img);
 
         }
 

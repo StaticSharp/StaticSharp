@@ -100,6 +100,7 @@ namespace StaticSharpDemo.Root {
             //PrimaryGravity = -1,
             //SecondaryGravity = -1,
             Logo = new Image(LogoGenome) {
+                Alt = "StaticSharp logo",
                 Embed = Image.TEmbed.Image,
                 Height = 32,
                 //MarginsVertical = 6,

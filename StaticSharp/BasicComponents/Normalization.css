@@ -4,8 +4,7 @@ html {
     //overscroll-behavior-x: none;
     overflow: hidden;
     overflow-x: hidden;
-    overflow-y: hidden;
-   
+    overflow-y: hidden;   
 }
 
 .js {
@@ -36,30 +35,34 @@ body {
     tab-size: 4;
 }
 
-    body * {
-        letter-spacing: inherit;
-        touch-action: inherit;
-        display: block;
-        overflow-x: visible;
-        overflow-y: visible;
-        position: absolute;
-        margin: 0;
-        visibility: inherit;
-        margin-block-start: 0;
-        margin-block-end: 0;
-        margin-inline-start: 0;
-        margin-inline-end: 0;
-        line-height: inherit;
-        text-decoration-line: inherit;
-        text-decoration-color: inherit;
-        color: inherit;
-        justify-content: inherit;
-        align-content: inherit;
-        text-align: inherit;
-        box-sizing: border-box;
-        word-break: keep-all;
-        white-space: inherit;
-    }
+body img {
+    overflow: hidden;
+}
+
+body * {
+    letter-spacing: inherit;
+    touch-action: inherit;
+    display: block;
+    overflow-x: visible;
+    overflow-y: visible;
+    position: absolute;
+    margin: 0;
+    visibility: inherit;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+    line-height: inherit;
+    text-decoration-line: inherit;
+    text-decoration-color: inherit;
+    color: inherit;
+    justify-content: inherit;
+    align-content: inherit;
+    text-align: inherit;
+    box-sizing: border-box;
+    word-break: keep-all;
+    white-space: inherit;
+}
 
 
 

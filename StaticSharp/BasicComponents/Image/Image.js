@@ -1,27 +1,10 @@
-StaticSharpClass("StaticSharp.Image", (element) => {
-    StaticSharp.AspectBlock(element)
 
-    let baseHtmlNodesOrdered = element.HtmlNodesOrdered
-    element.HtmlNodesOrdered = new Enumerable(function* () {
-        yield element.content
-        yield* baseHtmlNodesOrdered        
-    })
+StaticSharp.SetThumbnailBackground = function (img, preloadLinkId, width, height) {
 
+    let src = document.getElementById(preloadLinkId).href
 
-    new Reaction(() => {
-        FitImage(
-            element,
-            element.content, element.NativeAspect,
-            element.Fit, element.GravityVertical, element.GravityHorizontal
-        )
-    })
-
-
-    new Reaction(() => {
-        let img = element.querySelector("img")
-        
-        var svgBackground =
-            `<svg xmlns="http://www.w3.org/2000/svg" viewBox ="0 0 ${element.thumbnailData.width} ${element.thumbnailData.height}" preserveAspectRatio="none">
+    var svgBackground =
+`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox ="0 0 ${width} ${height}" preserveAspectRatio="none">
     <filter id="filter">
         <feGaussianBlur stdDeviation="1 0" in="SourceGraphic" result="hBlur"></feGaussianBlur>
         <feMerge result="hBlurAndImage">
@@ -35,35 +18,82 @@ StaticSharpClass("StaticSharp.Image", (element) => {
                 <feMergeNode in="vBlur"></feMergeNode>
             </feMerge>
         </filter>
-    <image href="${element.thumbnailData.src}" filter="url(#filter)"/>
-    <circle  cx="50%" cy="50%" r="10%" fill="red" />
-</svg>`
+    <image href="${src}" filter="url(#filter)"/>
+</svg>` 
+    const svgEncoded = encodeURIComponent(svgBackground)
+    //<circle  cx="50%" cy="50%" r="10%" fill="red" />
 
-        const svgEncoded = encodeURIComponent(svgBackground)
-        img.style.backgroundImage = `url('data:image/svg+xml;utf8,${svgEncoded}')`;
-        img.style.backgroundSize = '100% 100%';
-        img.src = ""
+    img.style.backgroundImage = `url('data:image/svg+xml;utf8,${svgEncoded}')`
+    img.style.backgroundSize = '100% 100%'
 
-        console.log(img)
+    function loaded() {
+        img.style.backgroundImage = ""
+        img.style.backgroundSize = ""
+    }
+
+    if (img.complete) {
+        loaded()
+    } else {
+        img.addEventListener('load', loaded)
+        /*img.addEventListener('error', function () {
+            alert('error')
+        })*/
+    }
+}
+
+
+StaticSharpClass("StaticSharp.Image", (element) => {
+    StaticSharp.AspectBlock(element)
+
+    let baseHtmlNodesOrdered = element.HtmlNodesOrdered
+    element.HtmlNodesOrdered = new Enumerable(function* () {
+        yield element.img
+        yield* baseHtmlNodesOrdered        
     })
 
 
-    /*new Reaction(() => {
-        let content = element.children[0]
-        let thumbnail = content.querySelector("#thumbnail")
-        if (thumbnail) {
-            thumbnail.style.display = "block"
-        }
-    })*/
+    new Reaction(() => {
+        FitImage(
+            element,
+            element.img, element.NativeAspect,
+            element.Fit, element.GravityVertical, element.GravityHorizontal
+        )
+    })
 
-    
 
-    /*element.AfterChildren = function () {
-        let thumbnail = element.content.querySelector("#thumbnail")
-        if (thumbnail) {
-            thumbnail.style.display = "block"
+    new Reaction(() => {
+        /*if (!element.thumbnailData)
+            return*/
+
+        let img = element.img
+
+        //StaticSharp.SetThumbnailBackground(img, element.thumbnailData.src, element.thumbnailData.width, element.thumbnailData.height)
+
+
+
+        
+
+        
+        //img.src = ""
+        /*function loaded() {
+            console.log("loaded", img)
+            img.style.backgroundImage = ""
+            img.style.backgroundSize = ""
         }
-    }*/
+
+
+        if (img.complete) {
+            loaded()
+        } else {
+            img.addEventListener('load', loaded)
+            img.addEventListener('error', function () {
+                alert('error')
+            })
+        }*/
+
+
+    })
+
 
     
 })

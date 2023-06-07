@@ -56,7 +56,7 @@ namespace StaticSharp {
         }
 
         private Tag GenerateMetaTags(Context context) {
-
+            var result = new Tag();
 
             var meta = new Dictionary<string, string>();
             if (SiteName!=null)
@@ -72,9 +72,14 @@ namespace StaticSharp {
 
             if (Description != null) {
                 string description = Description.GetPlainText(context);
-                meta["description"] = description;
+                //meta["description"] = description;
                 meta["og:description"] = description;
                 meta["twitter:description"] = description;
+
+                result.Add(new Tag("meta") {
+                    ["name"] = "description",
+                    ["content"] = description
+                });
             }
 
             meta["og:type"] = "website";
@@ -82,9 +87,8 @@ namespace StaticSharp {
             if (MainVisual is IMainVisual mainVisual) {
                 mainVisual.GetMeta(meta,context);
             }
-            var result = new Tag() {
-                meta.Select(x=>Tag.Meta(x.Key,x.Value))
-            };
+
+            result.Add(meta.Select(x => Tag.Meta(x.Key, x.Value)));
 
             return result;
         }
@@ -109,19 +113,7 @@ namespace StaticSharp {
             Setup(context);
             
 
-            var head = new Tag("head"){
-                    new Tag("meta"){["charset"] = "utf-8" },
-                    new Tag("meta"){
-                        ["name"]="viewport",
-                        ["content"] = "width=device-width,initial-scale=1.0,maximum-scale=5.0,user-scalable=yes"
-                    },
-                    new Tag("title"){
-                        Title
-                    },
-                    GenerateMetaTags(context),
-                    GenerateFavicon(context)
-                    //<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
-                };
+            
 
 
             var bodyTagAndScript = Generate(context);
@@ -130,6 +122,25 @@ namespace StaticSharp {
 
             bodyTagAndScript.Script.Add($"{bodyTagAndScript.Tag.Id}.extras = {TagToJsValue("extras")}");
             bodyTagAndScript.Tag.Add(new Tag("extras", "extras"));
+
+
+            var head = new Tag("head"){
+                new Tag("meta"){["charset"] = "utf-8" },
+                new Tag("meta"){
+                    ["name"]="viewport",
+                    ["content"] = "width=device-width,initial-scale=1.0,maximum-scale=5.0,user-scalable=yes"
+                },
+                new Tag("title"){
+                    Title
+                },
+                context.HeadTags,
+
+
+                GenerateMetaTags(context),
+                GenerateFavicon(context)
+                //<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+            };
+
 
             var document = new Tag(null) {
                 new Tag("!doctype"){ ["html"] = ""},
@@ -152,7 +163,7 @@ namespace StaticSharp {
 
             initializationScript = context.ReplaceTemporaryId(initializationScript);
 
-            head.Add(new Tag("script") {
+            head.Add(new Tag("script", "create StaticSharp namespace") {
                 new Html.PureHtmlNode("window.StaticSharp = {}")
             });
 
