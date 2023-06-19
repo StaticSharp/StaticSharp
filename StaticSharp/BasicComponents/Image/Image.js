@@ -61,39 +61,5 @@ StaticSharpClass("StaticSharp.Image", (element) => {
     })
 
 
-    new Reaction(() => {
-        /*if (!element.thumbnailData)
-            return*/
-
-        let img = element.img
-
-        //StaticSharp.SetThumbnailBackground(img, element.thumbnailData.src, element.thumbnailData.width, element.thumbnailData.height)
-
-
-
-        
-
-        
-        //img.src = ""
-        /*function loaded() {
-            console.log("loaded", img)
-            img.style.backgroundImage = ""
-            img.style.backgroundSize = ""
-        }
-
-
-        if (img.complete) {
-            loaded()
-        } else {
-            img.addEventListener('load', loaded)
-            img.addEventListener('error', function () {
-                alert('error')
-            })
-        }*/
-
-
-    })
-
-
     
 })

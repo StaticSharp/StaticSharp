@@ -1,5 +1,6 @@
 
 using NUglify.JavaScript.Syntax;
+using StaticSharp.Resources.Text;
 
 namespace StaticSharpDemo.Root.Modifiers {
 
@@ -73,6 +74,45 @@ namespace StaticSharpDemo.Root.Modifiers {
 
             SectionHeader(nameof(Outline)),
             OutlineExample,
+
+
+
+            SectionHeader("Backdrop filters"),
+
+            new Paragraph(TextUtils.LoremIpsum(10)){ 
+                FontSize = 50,
+                BackgroundColor = Color.Orange,
+                UnmanagedChildren = {
+                    new LinearLayout{
+                        Vertical = new(e=>e.Height>e.Width),
+                        Paddings = 20,                        
+                        ItemGrow = 1,
+                        GapGrow = 1,
+                        StartGapGrow = 1,
+                        EndGapGrow = 1,
+                        Children = {
+                            new Block{
+                                Width = 100, Height = 100,
+                                Modifiers = {
+                                    new BackdropBlur {
+                                        Radius = 10
+                                    },
+                                }
+                            },
+                            new Block{
+                                Width = 100, Height = 100,
+                                Modifiers = {
+                                    new BackdropGrayscale {
+                                        Amount = 1
+                                    }
+                                }
+                            }
+                        },
+                    }.FillWidth().FillHeight()
+                }
+            },
+
+            
 
         };
             

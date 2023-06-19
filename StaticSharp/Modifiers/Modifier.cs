@@ -1,11 +1,12 @@
 using Scopes;
 using Scopes.C;
 using StaticSharp.Gears;
+using StaticSharp.Html;
 
 namespace StaticSharp {
 
     public interface JModifier : JEntity {
-        
+        bool Enabled { get; set; }
     }
 
 
@@ -13,7 +14,11 @@ namespace StaticSharp {
 
     [ConstructorJs]
     public abstract partial class Modifier : Entity {
-        public virtual IdAndScript Generate(string elementId, Context context) {
+
+        public virtual string? TagRename => null;
+
+
+        public virtual IdAndScript Generate(Tag element, Context context) {
 
             context = ModifyContext(context);
 
@@ -28,7 +33,7 @@ namespace StaticSharp {
 
             var script = new Group() {
                     $"let {modifierId} = {{}}",
-                    $"{jsConstructorsNames[0]}({modifierId},{elementId})",
+                    $"{jsConstructorsNames[0]}({modifierId},{element.Id})",
                     VariableNames?.Select(x=>$"let {x} = {modifierId}"),
                 };
 

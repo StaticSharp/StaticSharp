@@ -83,7 +83,7 @@ StaticSharpClass("StaticSharp.Block", (element) => {
 
     element.Reactive = {
         
-        Depth: 0,
+        Depth: undefined,
 
         PaddingLeft: undefined,
         PaddingTop: undefined,
@@ -157,8 +157,11 @@ StaticSharpClass("StaticSharp.Block", (element) => {
         ClipByParent: false
     }
 
-    DepthToStyle(element)
 
+    new Reaction(() => {
+        let depth = element.Depth
+        element.style.zIndex = depth == undefined ? "" : depth
+    })
 
     XToStyle(element);
     YToStyle(element);

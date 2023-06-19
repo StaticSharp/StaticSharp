@@ -14,7 +14,7 @@ StaticSharpClass("StaticSharp.LayoutOverride", (element) => {
         MarginLeft: () => element.Child.Layer.MarginLeft,
         MarginRight: () => element.Child.Layer.MarginRight,
 
-        Child: undefined,
+        //Child: undefined,
 
         OverrideX: undefined,
         OverrideY: undefined,

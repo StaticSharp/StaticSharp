@@ -5,7 +5,7 @@ using StaticSharp.Js;
 namespace StaticSharpDemo.Root {
     public abstract partial class Page : PageBase {
         public override string? SiteName => "StaticSharp";
-        public override Genome<IAsset>? Favicon => LoadFile("FavIcon.svg");
+        public override Genome<IAsset> Favicon => LoadFile("FavIcon.svg");
 
         public override string PageLanguage => Node.Language.ToString().ToLower();
 
@@ -130,11 +130,10 @@ namespace StaticSharpDemo.Root {
 
         public virtual double ColumnWidth => 1080;
 
+
+
+
         Js.Variable<JScrollView> ScrollView => new();
-
-        
-
-
         public override Blocks UnmanagedChildren => new Blocks {
 
 

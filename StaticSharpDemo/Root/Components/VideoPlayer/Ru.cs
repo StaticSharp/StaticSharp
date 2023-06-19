@@ -10,7 +10,7 @@ namespace StaticSharpDemo.Root.Components.VideoPlayer {
 
 
 
-        public override Block? MainVisual => new Video("T4TEdzSLyi0") {
+        public override Block? MainVisual => new Video(LoadFile("VideoExample.mp4")) {
             Play = true,
             Mute = true,
             Loop = true,
@@ -96,8 +96,8 @@ namespace StaticSharpDemo.Root.Components.VideoPlayer {
             new LinearLayout{
                 Vertical = new(e=>e.Root.Width<e.Root.Height),
                 Children = {
-
-                    new Video("qWGR-eMSnX8"){
+                    MainVisual,
+                    /*new Video("qWGR-eMSnX8"){
                         Width = new(e=>e.Parent.Width),
                         Play = true,
                         Mute = true,
@@ -116,7 +116,7 @@ namespace StaticSharpDemo.Root.Components.VideoPlayer {
                         Controls = false,
                         Loop= true,
                         //Position = new(e=>(e.Parent as Js.ScrollLayout).ScrollYActual/100),
-                    },
+                    },*/
                 }
             },
 

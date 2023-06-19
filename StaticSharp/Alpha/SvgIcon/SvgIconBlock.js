@@ -7,4 +7,14 @@ StaticSharpClass("StaticSharp.SvgIconBlock", (element) => {
         yield element.content
         yield* element.UnmanagedChildren
     })
+
+    new Reaction(() => {
+        FitImage(
+            element,
+            element.content, element.NativeAspect,
+            element.Fit, element.GravityVertical, element.GravityHorizontal
+        )
+    })
+
+
 })

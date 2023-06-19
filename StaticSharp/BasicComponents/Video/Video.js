@@ -44,6 +44,14 @@ function getUniqueID() {
     return "juid" + uniqueID;
 }
 
+
+/*StaticSharp.YouTubePlayer = function () {
+    const _this = this
+
+
+}*/
+
+
 StaticSharpClass("StaticSharp.Video", (element) => {
     StaticSharp.AspectBlock(element)
 

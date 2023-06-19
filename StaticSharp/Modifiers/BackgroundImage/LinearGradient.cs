@@ -1,6 +1,6 @@
 ﻿using Scopes.C;
 using StaticSharp.Gears;
-
+using StaticSharp.Html;
 
 namespace StaticSharp {
 
@@ -10,8 +10,8 @@ namespace StaticSharp {
 
     public partial class LinearGradient : AbstractBackground {
         public GradientKeys<JLinearGradient> Keys { get; } = new();
-        public override IdAndScript Generate(string elementId, Context context) {
-            var result = base.Generate(elementId, context);
+        public override IdAndScript Generate(Tag element, Context context) {
+            var result = base.Generate(element, context);
 
             if (Keys.Properties.Count > 0) {
                 result.Script.Add(new Scope($"{result.Id}.Reactive = "){

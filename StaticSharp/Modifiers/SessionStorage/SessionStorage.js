@@ -6,8 +6,15 @@ StaticSharpClass("StaticSharp.SessionStorage", (modifier, element) => {
         ValueToStore: undefined,
     }
 
-    new Reaction(() => {
+
+    window.addEventListener("beforeunload", function (e) {
+        console.log(modifier.name, modifier.ValueToStore)
         sessionStorage.setItem(modifier.name, modifier.ValueToStore)
-    })
+    }, false);
+
+
+    /*new Reaction(() => {
+        sessionStorage.setItem(modifier.name, modifier.ValueToStore)
+    })*/
 
 })

@@ -143,69 +143,7 @@ StaticSharpClass("StaticSharp.Hierarchical", (element) => {
         //UnmanagedChildren: Enumerable.Empty(),
         //ExistingUnmanagedChildren: e => e.UnmanagedChildren.Where(x => x.Exists)
     }
-
-    /*element.Reactive.Place.onAssign = function (p, n) {
-        if (p)
-            p.setValue(undefined)
-    }*/
-
-
-    /*element.Reactive.UnmanagedChildren.onAssign = function (p,n) {
-        if (p) {
-            for (let i of p) {
-                i.Parent = undefined
-            }
-        }
-        if (n) {
-            for (let i of n) {
-                i.Parent = element
-            }
-        }
-    }*/
-
-    /*element.setUnmanagedChildren = function (newValue) {
-        element.Reactive.UnmanagedChildren.replaceValue((previousValue) => {
-            if (previousValue) {
-                for (let i of previousValue) {
-                    i.Parent = undefined
-                }
-            }
-            if (newValue) {
-                for (let i of newValue) {
-                    i.Parent = element
-                }
-            }
-            return newValue
-        })
-    }*/
-
-
-    /*new Reaction(() => {
-        if (element.NextSibling) {
-            element.NextSibling.Layer.Parent = element.Parent
-        }
-
-    })*/
-
-
-
-    
-
-
-
-    /*GetHtmlNode = function (node) {
-        let parentNode = node.parentNode
-        if (parentNode == undefined) {
-            return node
-        }
-        let parentTag = parentNode.tagName
-        if (parentTag == "A") {
-            return parentNode
-        }
-        return node
-    }*/
-
-    
+  
 
 
 

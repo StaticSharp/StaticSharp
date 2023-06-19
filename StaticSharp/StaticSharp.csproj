@@ -75,7 +75,7 @@
 		<PackageReference Include="NUglify" Version="1.20.2" />-->
 		<PackageReference Include="Octokit" Version="2.0.1" />
 		<PackageReference Include="Scopes" Version="0.0.16" />
-		<PackageReference Include="StaticSharp.Javascriptifier" Version="0.1.13" />
+		<PackageReference Include="StaticSharp.Javascriptifier" Version="0.1.14" />
 
 		<PackageReference Include="SvgIcons" Version="0.1.7" />
 		<PackageReference Include="YoutubeExplode" Version="6.2.5" />
@@ -132,7 +132,7 @@
         <Compile Include=".generated\RoutingSg.RoutingSg\**" />
     </ItemGroup>
     <ItemGroup Condition="!$(RoutingSgDebug)">
-        <ProjectReference Include="..\RoutingSg\Generator\RoutingSg.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true"/>
+        <ProjectReference Include="..\RoutingSg\Generator\RoutingSg.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
     </ItemGroup>
 
 
@@ -147,7 +147,7 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="!$(ComponentSgDebug)">
-		<ProjectReference Include="..\ComponentSg\Generator\ComponentSg.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
+		<ProjectReference Include="..\ComponentSg\Generator\ComponentSg.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
 
 

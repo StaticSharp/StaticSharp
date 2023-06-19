@@ -1,14 +1,4 @@
-﻿using AngleSharp.Html;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using StaticSharp.Gears;
-using StaticSharp.Html;
-using SvgIcons;
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using StaticSharp.Gears;
 
 namespace StaticSharp
 {

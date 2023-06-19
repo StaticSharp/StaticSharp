@@ -1,6 +1,7 @@
 ﻿using AngleSharp.Dom;
 using NUglify;
 using StaticSharp.Gears;
+using StaticSharp.Html;
 using System.Runtime.CompilerServices;
 using static StaticSharp.Image;
 
@@ -26,8 +27,8 @@ namespace StaticSharp {
         }
 
 
-        public override IdAndScript Generate(string elementId, Context context) {
-            var result = base.Generate(elementId, context);
+        public override IdAndScript Generate(Tag element, Context context) {
+            var result = base.Generate(element, context);
 
             var imageAsset = ImageGenome.ToWebImage().Result;
             var imageInfo = imageAsset.GetImageInfo();

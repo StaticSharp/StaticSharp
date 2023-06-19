@@ -45,6 +45,14 @@ namespace StaticSharp {
         protected string TagToJsValue(string id) {
             return $"""document.getElementById("{id}")""";
         }
+
+        protected static void SetTagName(Tag tag, string name) {
+            if (tag.Name != null) {
+                throw new Exception($"Tag name conflict \"{tag.Name}\" \"{name}\"");
+            }
+            tag.Name = name;
+        }
+
         public virtual void ModifyTagAndScript(Context context, Tag tag, Scopes.Group script) { 
             
         }
@@ -57,7 +65,8 @@ namespace StaticSharp {
 
             var id = context.CreateId(tempruaryId.ToString());
 
-            var result = new TagAndScript(new Tag(TagName,id), new Group());
+            //Tag name will be set later
+            var result = new TagAndScript(new Tag(null,id), new Group());
 
             var jsConstructorsNames = FindJsConstructorsNames();
 
@@ -72,7 +81,11 @@ namespace StaticSharp {
             AddSourceCodeNavigationData(result.Tag, context);
 
             ModifyTagAndScript(context, result.Tag, scriptOfCurrentElement);
-            
+
+            if (result.Tag.Name == null) {
+                result.Tag.Name = TagName;
+            }
+
 
             var properties = type.GetProperties(BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Instance).Where(x=>x.CanRead);
             var sockets = properties.Where(x=>x.GetCustomAttribute<SocketAttribute>()!=null).ToArray();

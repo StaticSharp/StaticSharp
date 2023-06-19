@@ -13,13 +13,16 @@ namespace StaticSharpDemo.Root {
 
 
 
-        public override Block? MainVisual => new Video("T4TEdzSLyi0") {
+        public override Block? MainVisual => new Image("FavIconWhiteInBlack.svg");
+            
+            
+        /*    new Video("T4TEdzSLyi0") {
             Play = true,
             Mute = true,
             PreferPlatformPlayer = false,
             //Controls = false,
             //Loop = true,
-        };
+        };*/
 
 
 
@@ -149,7 +152,7 @@ namespace StaticSharpDemo.Root {
                 NoWrap = true,
             }.ToLandingMainHeader(),
             
-            System.Linq.Enumerable.Range(0,10).Select(x=>new Image(new JpegGenome(LoadFile($"https://picsum.photos/seed/{x}A/2000/1000")))),
+            //System.Linq.Enumerable.Range(0,10).Select(x=>new Image(new JpegGenome(LoadFile($"https://picsum.photos/seed/{x}A/2000/1000")))),
 
             Description,
 

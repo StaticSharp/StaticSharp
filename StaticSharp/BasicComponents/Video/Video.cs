@@ -43,19 +43,26 @@ namespace StaticSharp {
 
         protected override string TagName => "player";
 
-        public string Identifier { get; init; }
+        public Genome<IAsset> VideoGenome { get; init; }
 
 
-        public Video(string identifier, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
+        public Video(Genome<IAsset> videoGenome, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "")
             : base(callerLineNumber, callerFilePath) {
-            Identifier = identifier;        
+            VideoGenome = videoGenome;        
         }
 
 
         public override void ModifyTagAndScript(Context context, Tag tag, Group script) {
+            
+            
+            
             base.ModifyTagAndScript(context, tag, script);
 
-            var youtubeVideoId = YoutubeExplode.Videos.VideoId.TryParse(Identifier);
+
+
+
+
+            /*var youtubeVideoId = YoutubeExplode.Videos.VideoId.TryParse(Identifier);
             if (youtubeVideoId != null) {
 
                 var youtubeVideoManifest = new YoutubeVideoManifestGenome(youtubeVideoId).Result;
@@ -93,7 +100,7 @@ namespace StaticSharp {
                 }).Replace('"', '\'');
 
                 tag["data-sources"] = json;
-            }
+            }*/
 
         }
 
@@ -105,7 +112,7 @@ namespace StaticSharp {
 
         public void GetMeta(Dictionary<string, string> meta, Context context) {
 
-            var youtubeVideoId = YoutubeExplode.Videos.VideoId.TryParse(Identifier);
+            /*var youtubeVideoId = YoutubeExplode.Videos.VideoId.TryParse(Identifier);
             if (youtubeVideoId != null) {
                 var youtubeVideoManifest = new YoutubeVideoManifestGenome(youtubeVideoId).Result;
                 var item = youtubeVideoManifest.Items.MaxBy(x => x.Width)!;
@@ -119,7 +126,7 @@ namespace StaticSharp {
 
             } else {
                 throw new NotImplementedException();
-            }
+            }*/
         }
     }
 }

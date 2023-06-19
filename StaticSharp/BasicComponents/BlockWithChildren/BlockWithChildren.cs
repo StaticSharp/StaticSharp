@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 namespace StaticSharp {
 
     public interface JBlockWithChildren : JBlock {
-        public Enumerable<Block> Children { get; }
+        public Enumerable<JBlock> Children { get; }
     }
 
     [ConstructorJs]

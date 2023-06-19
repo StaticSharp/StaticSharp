@@ -1,4 +1,5 @@
 ﻿using StaticSharp.Gears;
+using StaticSharp.Html;
 using System.Runtime.CompilerServices;
 
 namespace StaticSharp {
@@ -12,8 +13,8 @@ namespace StaticSharp {
 
         public string Script { get; set; }
 
-        public override IdAndScript Generate(string elementId, Context context) {
-            var result = base.Generate(elementId, context);
+        public override IdAndScript Generate(Tag element, Context context) {
+            var result = base.Generate(element, context);
             result.Script.Add($"{result.Id}.Script = function(e){{{Script}}}");
             return result;
         }

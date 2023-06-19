@@ -5,7 +5,13 @@ using System.Runtime.CompilerServices;
 
 namespace StaticSharp {
 
-    public interface JLinearLayout : JBlock {
+    public enum LinearLayoutOverflow { 
+        Shrink,
+        Remove,
+        None
+    }
+
+    public interface JLinearLayout : JBlockWithChildren {
         bool Vertical { get; set; }
         double ItemGrow { get; set; }
         bool Reverse { get; set; }
@@ -17,6 +23,8 @@ namespace StaticSharp {
         double? SecondaryGravity { get; set; }
         double InternalWidth { get;  }
         double InternalHeight { get;  }
+        LinearLayoutOverflow Overflow { get; set; }
+        public JBlock Ellipsis { get; }
     }
 
 
@@ -24,6 +32,10 @@ namespace StaticSharp {
     [Scripts.LayoutUtils]
     [ConstructorJs]
     public partial class LinearLayout : BlockWithChildren {
-
+        [Socket]
+        public Block? Ellipsis { get; set; } = null;
+        protected LinearLayout(LinearLayout other, int callerLineNumber, string callerFilePath) : base(other, callerLineNumber, callerFilePath) {
+            Ellipsis = other.Ellipsis;
+        }
     }
 }

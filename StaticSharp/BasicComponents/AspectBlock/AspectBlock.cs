@@ -1,6 +1,5 @@
-﻿using Scopes;
-using StaticSharp.Gears;
-using StaticSharp.Html;
+﻿using StaticSharp.Gears;
+
 namespace StaticSharp {
     public enum Fit { 
         Inside,

@@ -91,10 +91,10 @@ namespace StaticSharp {
 
         public override void ModifyTagAndScript(Context context, Tag tag, Group script) {
             base.ModifyTagAndScript(context, tag, script);
-                
+
             var url = GetUrl(context);
             if (url != null) {
-                tag.Name = "a";
+                SetTagName(tag, "a");
                 tag["href"] = url;
                 tag["target"] = OpenLinksInANewTab ? "_blank" : "_self";
                 //tag.Style["display"] = "contents";
@@ -129,8 +129,13 @@ namespace StaticSharp {
 
                 List<string> modifiersVariables = new();
 
-                foreach (var m in Modifiers) { 
-                    var generated = m.Generate(tag.Id, context);
+                foreach (var m in Modifiers) {
+                    var tagRename = m.TagRename;
+                    if (tagRename != null) {
+                        SetTagName(tag, tagRename);
+                    }
+                    
+                    var generated = m.Generate(tag, context);
                     modifiersVariables.Add(generated.Id);
                     script.Add(generated.Script);
                 }

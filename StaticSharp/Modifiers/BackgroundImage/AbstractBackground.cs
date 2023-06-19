@@ -34,7 +34,6 @@ namespace StaticSharp {
 
 
     public interface JAbstractBackground : JModifier {
-        bool Enabled { get; set; }
         string RawImage { get; set; }
         double X { get; set; }
         double Y { get; set; }

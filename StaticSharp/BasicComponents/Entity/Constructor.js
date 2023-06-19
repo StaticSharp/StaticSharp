@@ -99,7 +99,7 @@ function CreateCollectionSocket(element, name, parentExpression) {
     var value = new DomLinkedList(firstChildProperty)
 
     element[name] = value
-    element["Existing"+name] = value.Where(x=>x.Exists)
+    element["Existing" + name] = value.Where(x => x.Exists)
 
 }
 
