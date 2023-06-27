@@ -1,572 +1,213 @@
 
-var YouTube = {
-    initialize: function () {
-        youtubeIFrameApiScript = document.createElement("script")
-        youtubeIFrameApiScript.src = "https://www.youtube.com/iframe_api"
 
-        let timeout = setTimeout(() => {
-            document.head.removeChild(youtubeIFrameApiScript)
-            youtubeIFrameApiScript.onload = undefined
-            youtubeIFrameApiScript.onerror = undefined
-            let d = Reaction.beginDeferred()
-            YouTube.Status = "error"
-            d.end()
-        }, 500)
+function EventPropertyDriver(readProperty, writePoperty, writeSource) {
 
-        youtubeIFrameApiScript.onload = function () {
-            clearTimeout(timeout)
-            YT.ready(function () {
-                let d = Reaction.beginDeferred()
-                YouTube.Status = "ready"
-                d.end()
-            })            
+    let entered = false
+    new Reaction(() => {
+        let value = readProperty()
+        //console.log("property changed", value, entered)
+        if (entered) {
+            entered = false
+        } else {
+            //console.log("write from property", value)
+            entered = true
+            writeSource(value)
         }
-        youtubeIFrameApiScript.onerror = function () {
-            clearTimeout(timeout)
-            let d = Reaction.beginDeferred()
-            YouTube.Status = "error"
-            d.end()
-        }
+    })
 
-        document.head.appendChild(youtubeIFrameApiScript)
-        YouTube.Status = "loading"
+    this.setValueFromEvent = function (value) {
+        //console.log("event fired", value, entered)
+        if (entered) {
+            entered = false
+        } else {
+            //console.log("write from event", value)
+            entered = true
+            writePoperty(value)
+        }        
     }
+
+    this.DoNotWaitForEvent = function () {
+        entered = false
+    }
+
 }
 
-YouTube.Reactive = {
-    Status: undefined
-}
-
-
-var uniqueID = 0;
-function getUniqueID() {
-    uniqueID++;
-    return "juid" + uniqueID;
-}
-
-
-/*StaticSharp.YouTubePlayer = function () {
-    const _this = this
-
-
-}*/
 
 
 StaticSharpClass("StaticSharp.Video", (element) => {
-    StaticSharp.AspectBlock(element)
+    StaticSharp.AspectBlockResizableContent(element)
 
-    let youtubeId = element.dataset.youtubeId
 
-    var sourcesJson = element.dataset.sources.replace(/'/g, '"');// replaceAll("'", '"');
-    var sources = JSON.parse(sourcesJson)
-
-    //console.log("Video", element.content)
+    let player = element.content
 
     element.Reactive = {
-        Selectable: false,
-
-        //Aspect: element.dataset.width / element.dataset.height,
-        //InternalWidth: () => First(element.Height * element.Aspect, element.dataset.width),
-        //InternalHeight: () => First(element.Width / element.Aspect, element.dataset.height),
-
-        PreferPlatformPlayer: true,
-
         Controls: true,
-
         Loop: false,
-
         Play: false,
-        PlayActual: () => element.Play,
-
-        Position: 0,
-
-        PositionActual: undefined,
-
+        CurrentTime: 0,
         Mute: false,
-        MuteActual: () => element.Mute,
-
         Volume: 1,
-        VolumeActual: () => element.Volume,
-
-
-
-        VideoPlayerType: undefined,//youtube, video
-
-        Player: undefined,
-        Positioner: undefined,
-
-        PositionInitialized: false,
-
-        SourceIndex: undefined
 
 
     }
 
+
+    //To implement later: This is the way to check if the "loop" flag has been changed by the user.It doesn't work with the "controls" attribute.
+    /*var observer = new MutationObserver(function (mutations) {
+        mutations.forEach((mutation) => {
+            if (mutation.type === "attributes") {
+                console.log(mutation.attributeName);
+            }
+        })
+    })
+    observer.observe(player, {
+        attributes: true
+    });*/
 
 
 
     let baseHtmlNodesOrdered = element.HtmlNodesOrdered
     element.HtmlNodesOrdered = new Enumerable(function* () {
-        yield* baseHtmlNodesOrdered
         yield element.content
-    })
-
-
-    new Reaction(() => {
-        FitImage(
-            element,
-            element.content, element.NativeAspect,
-            element.Fit, element.GravityVertical, element.GravityHorizontal
-        )
-    })
-
-
-    var playerDestructor = undefined
-
-
-    new Reaction(() => {
-        if (!element.Player)
-            element.PositionInitialized = false
-    })
-
-
-    //element.style.overflow = "hidden"
-
-
-
-    /*
-     if (!showControls) {
-                iframe.style.pointerEvents = "none";
-            }
-
-
-     */
-
-    new Reaction(() => {
-        if (element.VideoPlayerType == "html5") {
-            if (element.Player) {
-                if (element.Width == undefined)
-                    return;
-
-                /*let lossFunction = (source) => {
-                    return Math.abs(element.Width - source.size.x)
-                }*/
-                let lossFunction = (source) => {
-                    let pixelWidth = window.DevicePixelRatio * element.Width
-                    if (source.size.x < pixelWidth) {
-                        return 8 * (pixelWidth - source.size.x)
-                    }
-                    return source.size.x - pixelWidth
-                }
-
-                let closestSourceLoss = lossFunction(sources[0])
-
-                let closestSourceIndex = 0
-                for (let i = 1; i < sources.length; i++) {
-                    let loss = lossFunction(sources[i])
-                    if (loss < closestSourceLoss) {
-                        closestSourceLoss = loss
-                        closestSourceIndex = i
-                    }
-                }
-                element.SourceIndex = closestSourceIndex
-            }
-        }
+        yield* baseHtmlNodesOrdered
     })
 
     new Reaction(() => {
-        if (element.VideoPlayerType == "html5") {
-            if (!element.Player)
-                return
-
-            let position = element.Player.currentTime
-            element.Player.src = sources[element.SourceIndex].url
-            element.Player.currentTime = position
-        }
+        player.controls = element.Controls
     })
 
+    new Reaction(() => {
+        player.loop = element.Loop
+    })
 
-    /*function FitOutside(child, childAspect, parentWidth, parentHeight) {
-
-    }
-
-    function FitInside(child, childAspect, parentWidth, parentHeight) {
-        let parentAspect = parentWidth / parentHeight
-
-        if (parentAspect > childAspect) {
-            child.style.top = 0
-            child.style.height = element.Height + "px"
-
-            let calculatedWidth = element.Height * element.Aspect
-            child.style.left = 0.5 * (element.Width - calculatedWidth) + "px"
-            child.style.width = calculatedWidth + "px"
-        } else {
-            child.style.left = 0
-            child.style.width = element.Width + "px"
-
-            let calculatedHeight = element.Width / element.Aspect
-            child.style.top = 0.5 * (element.Height - calculatedHeight) + "px"
-            child.style.height = calculatedHeight + "px"
-        }
-    }
     
 
 
+    let playOnUserInteracted = false
     new Reaction(() => {
-        let positioner = element.Positioner
-        if (!positioner)
-            return
+        if (window.UserInteracted) {
+            if (playOnUserInteracted) {
+                player.play()
+            }
+        }
+    })
 
-        FitInside(positioner, element.Aspect, element.Width, element.Height)        
+
+    function play_EnableEvents() {
+        player.onplay = () => {
+            playReaction.enabled = false
+            element.Play = true
+            playReaction.enabled = true
+        }
+
+        player.onpause = () => {
+            playReaction.enabled = false
+            element.Play = false
+            playReaction.enabled = true            
+        }
+    }
+
+    function play_DisableEvents() {
+        player.onplay = null
+        player.onpause = null
+    }
+
+
+    /*new Reaction(() => {
+        console.log("Transient Sticky", navigator.userActivation.isActive, navigator.userActivation.hasBeenActive)
+        window.AnimationFrameTime
     })*/
 
-
-    function InitializeYoutubeIFrame() {
-        if (playerDestructor) {
-            playerDestructor()            
-        }
-
-        element.VideoPlayerType = "youtube"
-
-        /*var positioner = document.createElement("youtube-iframe-positioner");
-        element.appendChild(positioner);
-        element.Positioner = positioner*/
-
-        var iframe = document.createElement("div");
-        iframe.id = getUniqueID();
-
-        element.content.appendChild(iframe);
-        iframe.style.width = "100%"
-        iframe.style.height = "100%"
-
-        let playerVars = {
-            rel: 0,
-            //"autoplay": autoPlay ? 1 : 0,
-
-            //???showinfo: 0,
-
-            controls: element.Controls ? 1 : 0,
-            origin: window.location.origin
-        }
-
-        if (element.Loop) {
-            playerVars.loop = 1
-            playerVars.playlist = youtubeId
-        }
-
-        let volumeTimeout = undefined
-        let positionTimeout = undefined
-
-        let player = new YT.Player(iframe.id, {
-            videoId: youtubeId,
-            host: "http://www.youtube-nocookie.com",
-            playerVars: playerVars,
-            events: {
-                onReady: () => {                    
-                    /*if (currentPosition !== 0) {
-                        player.seekTo(currentPosition, true)
-                    }*/
-
-                    element.PositionActual = () => {
-                        clearTimeout(positionTimeout)
-
-                        if (!element.Player)
-                            return undefined
-
-                        let result = element.Player.getCurrentTime()
-                        if (element.PlayActual) {
-                            positionTimeout = window.setTimeout(() => {
-                                element.Reactive.PositionActual.makeDirty()
-                            }, 50)
-                        }
-                        return result
-                    }
-
-
-
-                    element.VolumeActual = () => {
-                        clearTimeout(volumeTimeout)
-
-                        if (!element.Player)
-                            return undefined
-
-                        let result = element.Player.getVolume() * 0.01
-
-                        volumeTimeout = window.setTimeout(() => {
-                            element.Reactive.VolumeActual.makeDirty()
-                        }, 100)
-                        return result
-                    }
-
-
-                    element.Player = player
-                    //element.PlayerReady = true
-                },
-                onStateChange: function (event) {
-                    if (event.data == YT.PlayerState.ENDED) {
-                        element.PlayActual = false
-                    } else if (event.data == YT.PlayerState.PLAYING) {
-                        element.PlayActual = true
-                    } else if (event.data == YT.PlayerState.PAUSED) {
-                        element.PlayActual = false
-                    }
-                }
-            }
-        })
-        
-        
-        playerDestructor = function () {
-            clearTimeout(volumeTimeout)
-            clearTimeout(positionTimeout)
-            
-            playerDestructor = undefined
-
-            player.destroy()
-            //element.removeChild(positioner)
-
-            let d = Reaction.beginDeferred()
-            element.Player = undefined
-            d.end()
-        }        
+    const waitingForUserInteractionCssClassName = "player-waiting-for-user-interaction";
+    function beginWaitingForUserInteraction() {
+        element.classList.add(waitingForUserInteractionCssClassName);
+    }
+    function endWaitingForUserInteraction() {
+        element.classList.remove(waitingForUserInteractionCssClassName);
     }
 
 
+    const playReaction = new Reaction(() => {
+        if (element.Play == !player.paused)
+            return
 
-    function InitializeHtml5Video() {
-        element.VideoPlayerType = "html5"
-
-        if (playerDestructor) {
-            playerDestructor()
+        if (window.UserInteracted) {
+            endWaitingForUserInteraction()
         }
 
-        let player = document.createElement("video")
-        player.style.width = "100%"
-        player.style.height = "100%"
-        element.content.appendChild(player)
-        //element.Positioner = player
+        play_DisableEvents()
 
-        player.src = sources[1].url
-        player.muted = true
+        if (element.Play) {
 
-        player.setAttribute("playsinline", "true")
-        player.setAttribute("webkit-playsinline", "true")
+            player.play()
+                .then(() => {
+                    play_EnableEvents()
+                })
+                .catch(() => {
+                    //console.log("play failed")
+                    beginWaitingForUserInteraction()
+                    //play_EnableEvents()
+                })
 
-        player.setAttribute("x5-video-player-type", "h5")
-        //player.setAttribute("autoplay", "true")
-        
-        
-        player.ontimeupdate = () => element.PositionActual = element.Player.currentTime
 
-        function onPlayOrPause() {
-            if (element.Play == element.Player.paused) {//anction is done by user
-                window.UserInteracted = true
+        } else {
+            player.pause()
+        }
+    })
+
+
+    let muteDriver = new EventPropertyDriver(
+        () => element.Mute,
+        x => element.Mute = x,
+        muted => {
+            if (player.muted == muted) {
+                muteDriver.DoNotWaitForEvent()
+            }
+            try {
+                player.muted = muted
+            } catch {
+                console.log("F")
             }
         }
+    )
 
-        player.onplay = () => {
-            let d = Reaction.beginDeferred()
-            element.PlayActual = true
-            onPlayOrPause();
-            d.end()
+    let volumeDriver = new EventPropertyDriver(
+        () => element.Volume,
+        x => element.Volume = x,
+        volume => {
+            if (player.volume == volume) {
+                volumeDriver.DoNotWaitForEvent()
+            }
+            player.volume = volume
         }
-        player.onpause = () => {
-            let d = Reaction.beginDeferred()
-            element.PlayActual = false
-            onPlayOrPause()
-            d.end()
+    )
+
+    let oldVolume = player.volume
+    let oldMuted = player.muted    
+
+    player.onvolumechange = () => {
+        if (oldVolume != player.volume) {
+            //console.log('volumechange', player.volume);
+            volumeDriver.setValueFromEvent(player.volume)
+            oldVolume = player.volume
         }
-
-
-        element.VolumeActual = player.volume
-        player.onvolumechange = () => {
-            let d = Reaction.beginDeferred()
-            //window.UserInteracted = true TODO
-            element.VolumeActual = player.volume
-            element.MuteActual = player.muted
-            d.end()
-        }
-
-        player.oncanplay = () => {
-            element.Player = player
-        }
-
-        
-        playerDestructor = function () {
-            playerDestructor = undefined
-
-            player.ontimeupdate = undefined
-            player.onpause = undefined
-            player.onplay = undefined
-            player.onvolumechange = undefined
-
-            element.Player = undefined
-            element.removeChild(player)            
+        if (oldMuted != player.muted) {
+            //console.log('volumechange', player.muted);
+            muteDriver.setValueFromEvent(player.muted)
+            oldMuted = player.muted
         }
     }
 
 
-    new Reaction(() => {
-
-        if (element.PreferPlatformPlayer) {
-            if (element.dataset.youtubeId !== undefined) {
-                if (YouTube.Status === undefined) {
-                    YouTube.initialize()
-                }
-                if (YouTube.Status == "ready") {
-                    InitializeYoutubeIFrame()
-                }
-                if (YouTube.Status == "error") {
-                    InitializeHtml5Video()
-                }
-            }
-        } else {
-            InitializeHtml5Video()
+    let currentTimeDriver = new EventPropertyDriver(
+        () => element.CurrentTime,
+        x => element.CurrentTime = x,
+        currentTime => {
+            player.currentTime = currentTime
         }
-    })
+    )
 
+    player.ontimeupdate = () => currentTimeDriver.setValueFromEvent(player.currentTime)
 
-
-    //Position
-    new Reaction(() => {
-        
-        if (!element.Player)
-            return
-
-        const positionTolerance = 0.05;
-
-        if (element.VideoPlayerType == "youtube") {
-            let delta = element.Player.getCurrentTime() - element.Position
-            if (Math.abs(delta) > positionTolerance) {
-                element.Player.seekTo(element.Position, true)
-            }
-        } else {
-            let delta = element.Player.currentTime - element.Position
-            if (Math.abs(delta) > positionTolerance) {
-                element.Player.currentTime = element.Position
-            }
-        }
-        element.PositionInitialized = true
-
-    })
-
-    /*if (window.history && history.pushState) { // check for history api support
-        window.addEventListener('load', function () {
-            // create history states
-            history.pushState(-1, null); // back state
-            history.pushState(0, null); // main state
-            history.pushState(1, null); // forward state
-            history.go(-1); // start in main state
-
-            this.addEventListener('popstate', function (event, state) {
-                // check history state and fire custom events
-                if (state = event.state) {
-
-                    event = document.createEvent('Event');
-                    event.initEvent(state > 0 ? 'next' : 'previous', true, true);
-                    this.dispatchEvent(event);
-
-                    // reset state
-                    history.go(-state);
-                }
-            }, false);
-        }, false);
-    }*/
-
-    this.addEventListener('popstate', function (event, state) {
-        console.log("popstate")
-
-    })
-
-
-
-    //Play
-    new Reaction(() => {
-        if (!element.Player)
-            return
-
-        if (!element.PositionInitialized)
-            return     
-        
-        if (element.VideoPlayerType == "youtube") {
-            if (element.Play) {
-                
-                element.Player.playVideo()
-            } else {
-                element.Player.pauseVideo()
-            }
-        } else {
-            if (element.SourceIndex == undefined)
-                return
-
-            window.UserInteracted //for wechat
-
-            if (element.Play == element.Player.paused) {
-                element.Play ? element.Player.play() : element.Player.pause()
-            }
-
-            //element.Player.play()
-            
-
-            
-        }        
-    })
-
-
-    //Mute
-    new Reaction(() => {
-        if (element.Player) {
-            if (element.VideoPlayerType == "youtube") {
-                if (element.Mute) {
-                    element.Player.mute()                    
-                } else {
-                    element.Player.unMute()
-                }
-            } else {
-                if (element.Mute != undefined) {
-                    var value = (!window.UserInteracted) || element.Mute
-                    element.Player.muted = value
-                }
-            }
-        }
-    })
-
-    //Volume
-    new Reaction(() => {
-        if (element.Player) {
-            //console.log("element.Volume", element.Volume)
-            if (element.Volume == undefined)
-                return
-
-            if (element.VideoPlayerType == "youtube") {
-                element.Player.setVolume(100 * element.Volume);
-            } else {
-                element.Player.volume = element.Volume
-            }
-        }
-    })
-
-
-    //Loop
-    new Reaction(() => {
-        if (element.Player) {
-            if (element.VideoPlayerType == "youtube") {
-
-            } else {
-                element.Player.loop = element.Loop
-            }
-        }
-    })
-
-    //Controls
-    new Reaction(() => {
-        if (element.Player) {
-            if (element.VideoPlayerType == "youtube") {
-
-
-            } else {
-                element.Player.controls = element.Controls                
-            }
-        }
-    })    
 
 })

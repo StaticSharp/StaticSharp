@@ -163,9 +163,18 @@ public class Cache {
             return FileUtils.ReadAllBytes(ContentFilePath);
         }
 
+        public string LoadContentText() {
+            return FileUtils.ReadAllText(ContentFilePath);
+        }
+
         public Slot StoreData<T>(T data) {
-            CreateCacheSubDirectory();
             string json = JsonSerializer.Serialize(data, JsonSerializerOptions);
+            StoreRawJson(json);
+            return this;
+        }
+
+        private Slot StoreRawJson(string json) {
+            CreateCacheSubDirectory();
             File.WriteAllText(CachedDataJsonFilePath, json);
             return this;
         }
@@ -173,6 +182,12 @@ public class Cache {
         public Slot StoreContent(byte[] data) {
             CreateCacheSubDirectory();
             FileUtils.WriteAllBytes(ContentFilePath, data);
+            return this;
+        }
+
+        public Slot StoreContentText(string text) {
+            CreateCacheSubDirectory();
+            FileUtils.WriteAllText (ContentFilePath, text);
             return this;
         }
 

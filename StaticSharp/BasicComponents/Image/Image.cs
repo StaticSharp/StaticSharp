@@ -9,13 +9,13 @@ using System.Runtime.CompilerServices;
 namespace StaticSharp {
 
 
-    public interface JImage : JAspectBlock {
+    public interface JImage : JAspectBlockResizableContent {
         //public double Aspect  { get; }
     }
 
     [Scripts.FitImage]
     [ConstructorJs]
-    public partial class Image : AspectBlock, IMainVisual {
+    public partial class Image : AspectBlockResizableContent, IMainVisual {
 
         public enum TEmbed { 
             Image,
@@ -58,20 +58,11 @@ namespace StaticSharp {
             return source;
         }
 
-
-        
-
-
-        public override void ModifyTagAndScript(Context context, Tag tag, Group script) {
-            base.ModifyTagAndScript(context, tag, script);
-
-            var imgId = context.CreateId();            
+        public override void CreateContent(Context context, Tag tag, Group scriptBeforeConstructor, Group scriptAfterConstructor, string contentId, out double width, out double height) {
             var source = AssetGenome.ToWebImage().Result;
             var imageInfo = source.GetImageInfo();
-
-            SetNativeSize(script, tag.Id, imageInfo.Width, imageInfo.Height);
-
-            script.Add($"{tag.Id}.img = {TagToJsValue(imgId)}");
+            width = imageInfo.Width;
+            height = imageInfo.Height;
 
             string url;
 
@@ -85,9 +76,7 @@ namespace StaticSharp {
                 url = context.PathFromHostToCurrentPage.To(context.AddAsset(source)).ToString();
             }
 
-            
 
-            
             if (Embed == TEmbed.Thumbnail) {
                 var thumbnail = new ThumbnailGenome(AssetGenome, 32).Result;
                 var thumbnailUrlBase64 = thumbnail.GetDataUrlBase64();
@@ -101,18 +90,33 @@ namespace StaticSharp {
                     ["href"] = thumbnailUrlBase64,
                     ["as"] = "image",
                 });
-                script.Add($"StaticSharp.SetThumbnailBackground({TagToJsValue(imgId)}, \"{thumbnailId}\", {thumbnailImageInfo.Width}, {thumbnailImageInfo.Height})");
+                scriptAfterConstructor.Add($"StaticSharp.SetThumbnailBackground({TagToJsValue(contentId)}, \"{thumbnailId}\", {thumbnailImageInfo.Width}, {thumbnailImageInfo.Height})");
             }
 
-            var img = new Tag("img", imgId) {
+            var img = new Tag("img", contentId) {
                 ["src"] = url
             };
             if (Alt != null) {
                 img["alt"] = Alt;
             }
             tag.Add(img);
-
         }
+
+
+
+        /*public override void ModifyTagAndScript(Context context, Tag tag, Group script) {
+            base.ModifyTagAndScript(context, tag, script);
+
+            var imgId = context.CreateId();            
+            
+
+            SetNativeSize(script, tag.Id, imageInfo.Width, imageInfo.Height);
+
+            script.Add($"{tag.Id}.img = {TagToJsValue(imgId)}");
+
+            
+
+        }*/
 
 
         void IMainVisual.GetMeta(Dictionary<string, string> meta, Context context) {
@@ -125,6 +129,8 @@ namespace StaticSharp {
 
             meta["twitter:image"] = url;
         }
+
+        
     }
 
 }

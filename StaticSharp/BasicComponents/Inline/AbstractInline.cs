@@ -78,8 +78,8 @@ namespace StaticSharp {
 
         public abstract string GetPlainText(Context context);
 
-        public override void ModifyTagAndScript(Context context, Tag tag, Group script) {
-            base.ModifyTagAndScript(context, tag, script);
+        public override void ModifyTagAndScript(Context context, Tag tag, Group scriptBeforeConstructor, Group scriptAfterConstructor) {
+            base.ModifyTagAndScript(context, tag, scriptBeforeConstructor, scriptAfterConstructor);
             
             if (MarginLeft != null || MarginRight != null || MarginTop != null || MarginBottom != null) {
                 tag.Style["margin"] = $"{MarginTop ?? 0}em {MarginRight ?? 0}em {MarginBottom ?? 0}em {MarginLeft ?? 0}em";

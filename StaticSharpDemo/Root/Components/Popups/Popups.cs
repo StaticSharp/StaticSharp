@@ -1,3 +1,4 @@
+using StaticSharp.Resources.Text;
 using System.Linq;
 
 namespace StaticSharpDemo.Root.Components.Popups {
@@ -15,47 +16,58 @@ namespace StaticSharpDemo.Root.Components.Popups {
 
 
 
-        /*public override Blocks UnmanagedChildren => new(){
+        public override Blocks UnmanagedChildren => new(){
             base.UnmanagedChildren,
-
             new Block{ 
-                Exists = new(e=>!e.UnmanagedChildren.First().AsToggle().Value),
-
-                UnmanagedChildren = {                   
-
+                UnmanagedChildren = {
                     new LinearLayout {
+                        BackgroundColor = Color.White,
                         Visibility = 1,
-                        //BackgroundColor = new(e=>e.AsToggle().Value ? Color.Green : Color.Red),
                         Children = {
-                            "Warning"
-                        },
-                        Modifiers = {
-                            new SessionStorageBoolean {
-                                Name = "PopupShown",
-                                ValueToStore = new(e=>e.AsToggle().Value)
-                            },
-                            new Toggle{
-                                Value = new(e=>e.AsSessionStorageBoolean().StoredValue)
-                            }.Assign(out var visible),
-                            
-                        }
-                    }.Center(),
+                            "Warning",
+                            new Paragraph("Ok"){ 
+                                TextAlignmentHorizontal = TextAlignmentHorizontal.Center,
+                                BackgroundColor = Color.Green,
+                                Margins = 10,
+                                Modifiers = {
+                                    new SessionStorageBoolean {
+                                        Name = "PopupShown",
+                                        ValueToStore = new(e=>e.AsToggle().Value)
+                                    },
+                                    new Toggle{
+                                        Value = new(e=>e.AsSessionStorageBoolean().StoredValue)
+                                    },
 
-                    new Block{
-                        BackgroundColor = new Color(1,1,1,0.1),
-                        Depth = -1,
-                    }.FillHeight().FillWidth(),
+                                    new BorderRadius{Radius = 5},
+                                    new UserSelect(),
+                                    new Cursor()
+                                }
+                            }.Assign(out var okButton)
+                        },
+                        Modifiers = {                            
+                            new MaterialShadow(),
+                            new BorderRadius{ 
+                                Radius = 5
+                            },
+                            new BoxShadow{ 
+                                Spread = 1,
+                                Color = Color.FromGrayscale(0.5),
+                            }                            
+                        },
+                        
+                    }.Center(),
                 },
+                Exists = new(e=>!okButton.Value.AsToggle().Value),
                 Modifiers = {
-                    new BackdropFilter{ 
-                        //Enabled = new(e=>visible.Value.Value)
-                    }
-                }
-            }.FillHeight().FillWidth()
-            
-        };*/
+                    new BackdropBlur{}
+                },                
+
+            }.FillHeight().FillWidth()            
+        };
 
         public override Blocks Article => new Blocks {
+
+            //Enumerable.Range(0,20).Select(x=>new Paragraph(TextUtils.LoremIpsum(50))),
 
 
             new LinearLayout {
@@ -86,6 +98,7 @@ namespace StaticSharpDemo.Root.Components.Popups {
                     Popup = new LinearLayout {
                         Vertical = true,
                         Overflow = LinearLayoutOverflow.Remove,
+                        BackgroundColor = Color.White,
                         Children = {
                             "One",
                             "Two",
@@ -98,6 +111,10 @@ namespace StaticSharpDemo.Root.Components.Popups {
                             "Nine",
                             "Ten"
                         },
+                        Modifiers = { 
+                            new MaterialShadow(),
+                            new BorderRadius(5)
+                        }
                     }.Modify(x=>{
                         foreach (var (item, index) in x.Children.Select((item, index) => (item, index))){
                             item.Exists = new(e=>!e.Parent.Parent.Parent.AsBlockWithChildren().Children.Skip(index).First().Exists);

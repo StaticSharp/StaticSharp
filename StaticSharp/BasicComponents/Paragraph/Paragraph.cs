@@ -1,4 +1,5 @@
-﻿using StaticSharp.Gears;
+﻿using Scopes;
+using StaticSharp.Gears;
 using StaticSharp.Html;
 using System.Runtime.CompilerServices;
 
@@ -52,8 +53,8 @@ namespace StaticSharp {
             Inlines = new() { inline };
         }
 
-        public override void ModifyTagAndScript(Context context, Tag tag, Scopes.Group script) {
-            base.ModifyTagAndScript(context, tag, script);
+        public override void ModifyTagAndScript(Context context, Tag tag, Group scriptBeforeConstructor, Group scriptAfterConstructor) {
+            base.ModifyTagAndScript(context, tag, scriptBeforeConstructor, scriptAfterConstructor);
             var inlineContainerId = context.CreateId();
 
             var inlineContainer = new Tag("p", inlineContainerId) {
@@ -72,15 +73,15 @@ namespace StaticSharp {
                 var child = i.Generate(context);
                 inlineContainer.Add(child.Tag);
                 if (child.Script != null) {
-                    script.Add(child.Script);
-                    script.Add($"{child.Tag.Id}.Parent = {tag.Id}");
+                    scriptBeforeConstructor.Add(child.Script);
+                    scriptBeforeConstructor.Add($"{child.Tag.Id}.Parent = {tag.Id}");
                 }                
             }
             //inlineContainer.Add("\n");
 
             tag.Add(inlineContainer);
 
-            script.Add($"{tag.Id}.inlineContainer = {TagToJsValue(inlineContainer)}");
+            scriptBeforeConstructor.Add($"{tag.Id}.inlineContainer = {TagToJsValue(inlineContainer)}");
         }
 
 

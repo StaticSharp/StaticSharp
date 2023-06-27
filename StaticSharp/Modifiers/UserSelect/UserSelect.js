@@ -7,6 +7,7 @@ StaticSharpClass("StaticSharp.UserSelect", (modifier, element) => {
 
     new Reaction(() => {
         var option = modifier.Option
+        
         if ((option === undefined) || (option === ""))
             element.style.userSelect = ""
         else

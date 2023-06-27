@@ -9,8 +9,7 @@ StaticSharpClass("StaticSharp.BorderRadius", (modifier, element) => {
         RadiusBottomRight: e => e.Radius,
     }
 
-
-    new Reaction(() => {        
+    new Reaction(() => {
         element.style.borderTopLeftRadius = ToCssSize(modifier.RadiusTopLeft)
         element.style.borderTopRightRadius = ToCssSize(modifier.RadiusTopRight)
         element.style.borderBottomLeftRadius = ToCssSize(modifier.RadiusBottomLeft)

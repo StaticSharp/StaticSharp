@@ -33,8 +33,8 @@ namespace StaticSharp {
         }
 
 
-        public override void ModifyTagAndScript(Context context, Tag tag, Group script) {
-            base.ModifyTagAndScript(context, tag, script);
+        public override void ModifyTagAndScript(Context context, Tag tag, Group scriptBeforeConstructor, Group scriptAfterConstructor) {
+            base.ModifyTagAndScript(context, tag, scriptBeforeConstructor, scriptAfterConstructor);
 
             tag.Style["display"] = "inline-block";
 

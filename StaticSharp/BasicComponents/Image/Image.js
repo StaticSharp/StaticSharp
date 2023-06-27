@@ -43,23 +43,6 @@ StaticSharp.SetThumbnailBackground = function (img, preloadLinkId, width, height
 
 
 StaticSharpClass("StaticSharp.Image", (element) => {
-    StaticSharp.AspectBlock(element)
+    StaticSharp.AspectBlockResizableContent(element)
 
-    let baseHtmlNodesOrdered = element.HtmlNodesOrdered
-    element.HtmlNodesOrdered = new Enumerable(function* () {
-        yield element.img
-        yield* baseHtmlNodesOrdered        
-    })
-
-
-    new Reaction(() => {
-        FitImage(
-            element,
-            element.img, element.NativeAspect,
-            element.Fit, element.GravityVertical, element.GravityHorizontal
-        )
-    })
-
-
-    
 })

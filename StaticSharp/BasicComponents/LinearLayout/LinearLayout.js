@@ -27,6 +27,9 @@ LayoutAlgorithms.SequenceLayoutOverflowShrink = function (vertical, container, c
 
         let size = child.Layer[names.dimension]
         let position = region.border[0].Shift(child, size)
+
+        
+
         child.Layer[names.coordinate] = position * shrinkRate
         child.Layer[names.dimension] = size * shrinkRate
 
@@ -117,7 +120,6 @@ LayoutAlgorithms.SequenceLayout = function (vertical, container, children, conta
         size = size + itemGrow * pixelPerUnit
         
         let position = region.border[0].Shift(child, size)
-        
         child.Layer[names.coordinate] = position
         child.Layer[names.dimension] = size
     }
@@ -140,17 +142,22 @@ LayoutAlgorithms.ParallelMeasure = function (vertical, container, children) {
 
 LayoutAlgorithms.ParallelLayout = function (vertical, container, children, defaultGravity) {
     var containerSize = vertical ? container.Height : container.Width
-
+    
     if (Num.IsNaNOrNull(containerSize))
         return
 
     var names = new LayoutPropertiesNames(vertical)
-
+    /*if (!vertical) {
+        console.log("defaultGravity", defaultGravity)
+    }*/
     if (defaultGravity == undefined) {
         for (let child of children) {
             let firstOffset = CalcOffset(container, child, names.side[0])
             let lastOffset = CalcOffset(container, child, names.side[1])
             let size = containerSize - firstOffset - lastOffset
+
+            //console.log(names.coordinate, firstOffset)
+
             child.Layer[names.coordinate] = firstOffset
             child.Layer[names.dimension] = size
         }
@@ -168,7 +175,7 @@ LayoutAlgorithms.ParallelLayout = function (vertical, container, children, defau
             } else {
                 childSize = availableSize
             }
-
+            
             child.Layer[names.coordinate] = firstOffset
             child.Layer[names.dimension] = childSize
         }

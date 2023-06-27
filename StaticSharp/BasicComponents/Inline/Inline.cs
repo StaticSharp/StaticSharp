@@ -31,16 +31,16 @@ namespace StaticSharp {
         }
 
 
-        public override void ModifyTagAndScript(Context context, Tag tag, Group script) {
-            base.ModifyTagAndScript(context, tag, script);
+        public override void ModifyTagAndScript(Context context, Tag tag, Group scriptBeforeConstructor, Group scriptAfterConstructor) {
+            base.ModifyTagAndScript(context, tag, scriptBeforeConstructor, scriptAfterConstructor);
 
 
             foreach (var i in Children) {
                 var child = i.Generate(context);
                 tag.Add(child.Tag);
                 if (child.Script != null) {
-                    script.Add(child.Script);
-                    script.Add($"{child.Tag.Id}.Parent = {tag.Id}");
+                    scriptBeforeConstructor.Add(child.Script);
+                    scriptBeforeConstructor.Add($"{child.Tag.Id}.Parent = {tag.Id}");
                 }
             }
         }

@@ -47,7 +47,7 @@ function ReactionBase(func) {
 
 
     //_this.makeDirty = abstract function
-    _this.dirtImmune = false
+    _this.enabled = true
 }
 
 
@@ -57,7 +57,7 @@ function Reaction(func) {
     ReactionBase.call(_this, func)
     
     _this.makeDirty = function () {
-        if (_this.dirtImmune) // TODO: never ==true?
+        if (!_this.enabled) 
             return;
         Reaction.deferred.add(_this)
     }

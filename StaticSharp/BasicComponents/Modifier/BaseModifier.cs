@@ -89,8 +89,8 @@ namespace StaticSharp {
         }
 
 
-        public override void ModifyTagAndScript(Context context, Tag tag, Group script) {
-            base.ModifyTagAndScript(context, tag, script);
+        public override void ModifyTagAndScript(Context context, Tag tag, Group scriptBeforeConstructor, Group scriptAfterConstructor) {
+            base.ModifyTagAndScript(context, tag, scriptBeforeConstructor, scriptAfterConstructor);
 
             var url = GetUrl(context);
             if (url != null) {
@@ -137,10 +137,9 @@ namespace StaticSharp {
                     
                     var generated = m.Generate(tag, context);
                     modifiersVariables.Add(generated.Id);
-                    script.Add(generated.Script);
+                    scriptBeforeConstructor.Add(generated.Script);
                 }
-
-                script.Add($"{tag.Id}.Modifiers = [{string.Join(',', modifiersVariables)}]");
+                scriptBeforeConstructor.Add($"{tag.Id}.Modifiers = [{string.Join(',', modifiersVariables)}]");
             }
 
 

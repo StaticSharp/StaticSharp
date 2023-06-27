@@ -7,7 +7,7 @@ StaticSharpClass("StaticSharp.Paragraph", (element) => {
 
         InternalWidth: () => Num.Sum(element.MaxContentWidth, element.PaddingLeft, element.PaddingRight),
 
-        InternalHeight: undefined,
+        InternalHeight: () => Measure(),
 
         Width: e => e.InternalWidth,
         Height: e => e.InternalHeight,
@@ -29,8 +29,6 @@ StaticSharpClass("StaticSharp.Paragraph", (element) => {
         MarginTop: () => (element.BackgroundColor != undefined) ? 0 : 8,
         MarginBottom: () => (element.BackgroundColor != undefined) ? 0 : 8,
     }
-
-
 
 
 
@@ -64,26 +62,33 @@ StaticSharpClass("StaticSharp.Paragraph", (element) => {
     })
 
 
-    new Reaction(() => {
- 
-        if (element.Width == undefined) {
-            return
-        }
 
-        element.style.width = ToCssSize(element.Width)
+    function Layout() {
+        return LayoutOrMeasure(true)
+    }
+    function Measure() {
+        return LayoutOrMeasure(false)
+    }
+    function LayoutOrMeasure(layout) {
+
+        if (element.Width == undefined) {
+            return 0
+        }
         let content = element.inlineContainer
 
-        content.style.fontSize = ToCssSize(element.HierarchyFontSize)
-        content.style.transformOrigin = ""
-        content.style.transform = ""
-        content.style.width = ""
-        content.style.display = ""
-        content.style.left = ToCssSize(element.PaddingLeft)
-        content.style.top = ToCssSize(element.PaddingTop)
+        if (layout) {
+            element.style.width = ToCssSize(element.Width)
+            content.style.fontSize = ToCssSize(element.HierarchyFontSize)
+            content.style.transformOrigin = ""
+            content.style.transform = ""
+            content.style.width = ""
+            content.style.display = ""
+            content.style.left = ToCssSize(element.PaddingLeft)
+            content.style.top = ToCssSize(element.PaddingTop)
+        }
 
         let noWrap = element.NoWrap
         let minContentWidth = noWrap ? element.MaxContentWidth : element.MinContentWidth
-
         let minContentWidthWithPaddings = Num.Sum(minContentWidth, element.PaddingLeft, element.PaddingRight)
 
         if (element.Width < minContentWidthWithPaddings) {
@@ -91,15 +96,20 @@ StaticSharpClass("StaticSharp.Paragraph", (element) => {
             let scale = Num.Sum(element.Width, -element.PaddingLeft, -element.PaddingRight) / minContentWidth
 
             if (scale > 0) {
-                content.style.width = noWrap ? "max-content" : "min-content"
-                content.style.transformOrigin = "top left"
-                content.style.transform = `scale(${scale}, ${scale})`
-                let contentHeight = noWrap ? element.MinContentHeight : element.MaxContentHeight
-
-                element.InternalHeight = Num.Sum(contentHeight * scale, element.PaddingTop, element.PaddingBottom)
+                if (layout) {
+                    content.style.width = noWrap ? "max-content" : "min-content"
+                    content.style.transformOrigin = "top left"
+                    content.style.transform = `scale(${scale}, ${scale})`
+                } else {
+                    let contentHeight = noWrap ? element.MinContentHeight : element.MaxContentHeight
+                    return Num.Sum(contentHeight * scale, element.PaddingTop, element.PaddingBottom)
+                }                
             } else {
-                content.style.display = "none"
-                element.InternalHeight = Num.Sum(element.PaddingTop, element.PaddingBottom)
+                if (layout) {
+                    content.style.display = "none"
+                } else {
+                    return Num.Sum(element.PaddingTop, element.PaddingBottom)
+                }                
             }
             return
         }
@@ -108,24 +118,30 @@ StaticSharpClass("StaticSharp.Paragraph", (element) => {
         let extraPixels = element.Width - maxContentWidthWithPaddings
 
         if (extraPixels > -0.001) {
-            
-            let internalHeight = Num.Sum(element.MinContentHeight, element.PaddingTop, element.PaddingBottom)
-            element.InternalHeight = internalHeight
-            //element.title = `InternalHeight(${internalHeight}) = ${element.MinContentHeight} + ${element.PaddingTop} + ${element.PaddingBottom}`
-            if (extraPixels > 0.001) {
-                content.style.width = ToCssSize(Num.Sum(element.Width, -element.PaddingLeft, -element.PaddingRight))
+            if (layout) {
+                if (extraPixels > 0.001) {
+                    content.style.width = ToCssSize(Num.Sum(element.Width, -element.PaddingLeft, -element.PaddingRight))
+                } else {
+                    content.style.width = "max-content"
+                }
             } else {
-                content.style.width = "max-content"
+                return Num.Sum(element.MinContentHeight, element.PaddingTop, element.PaddingBottom)
             }
             return
         }
 
         content.style.width = ToCssSize(Num.Sum(element.Width, -element.PaddingLeft, -element.PaddingRight))
-        let rect = content.getBoundingClientRect()
 
-        let internalHeight = Num.Sum(rect.height, element.PaddingTop, element.PaddingBottom)
-        element.InternalHeight = internalHeight
+        if (!layout) {
+            let rect = content.getBoundingClientRect()
+            return Num.Sum(rect.height, element.PaddingTop, element.PaddingBottom)
+        }
 
+
+    }
+
+    new Reaction(() => {
+        Layout()
     })
 
     HeightToStyle(element)

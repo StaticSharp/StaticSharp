@@ -72,8 +72,8 @@ namespace StaticSharpDemo.Root.Modifiers {
 
             LinearGradientExample_Complex,
 
-            SectionHeader(nameof(Outline)),
-            OutlineExample,
+            SectionHeader(nameof(BoxShadow)),
+            BoxShadowExample,
 
 
 

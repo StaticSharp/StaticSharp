@@ -1,6 +1,5 @@
 function FitImage(container, imageTag, nativeAspect, fit, gravityVertical, gravityHorizontal) {
 
-
     if (fit == "Stretch") {
 
         imageTag.style.width = "100%"
@@ -19,7 +18,7 @@ function FitImage(container, imageTag, nativeAspect, fit, gravityVertical, gravi
         let contentWidth = containerWidth
         let contentHeight = containerHeight
 
-
+        
 
         let sign = (fit == "Inside") ? 1 : -1
         //let nativeAspect = element.NativeAspect
@@ -36,6 +35,5 @@ function FitImage(container, imageTag, nativeAspect, fit, gravityVertical, gravi
         imageTag.style.width = ToCssSize(contentWidth)
         imageTag.style.height = ToCssSize(contentHeight)
         imageTag.style.clipPath = GetClipRect(container, x, y, contentWidth, contentHeight)
-
     }
 }

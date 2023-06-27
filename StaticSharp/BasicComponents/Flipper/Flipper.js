@@ -126,25 +126,28 @@ StaticSharpClass("StaticSharp.Flipper", (element) => {
         let first = element.LayoutFirst
         let second = element.LayoutSecond
 
+        
         LayoutAlgorithms.ParallelLayout(!element.Vertical, element, [first, second], undefined)
+        
 
         let gap = element.Gap
 
         if (element.Vertical) {
             if (Num.IsNaNOrNull(element.Height))
-                return
-            LayoutAlgorithms.SequenceLayout(true, element, [first, second], element.InternalHeight, undefined, 1, gap, 0)
+                return           
 
+            LayoutAlgorithms.SequenceLayout(true, element, [first, second], element.Height, element.InternalHeight, undefined, 1, gap, 0)
 
         } else {//Horizontal
             let width = element.Width
+            
             if (Num.IsNaNOrNull(width))
                 return
 
             let proportion = element.LayoutProportion
-            //console.log("proportion", proportion)
             
-            if (!Num.IsNaNOrNull(proportion) > 0) {
+            
+            if (!Num.IsNaNOrNull(proportion)) {
                 proportion = Num.Clamp(proportion,0,1)
 
                 let gapTravel = width - gap
@@ -187,7 +190,7 @@ StaticSharpClass("StaticSharp.Flipper", (element) => {
                 //second.Layer.Width = (element.Width - spaceMid) * 0.5 - right
 
             } else {
-
+                
                 LayoutAlgorithms.SequenceLayout(false, element, [first, second], element.InternalWidth, undefined, 1, gap, 0)
                 return
             }

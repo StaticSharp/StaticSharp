@@ -1,4 +1,5 @@
 ﻿using Octokit;
+using StaticSharp;
 using StaticSharp.Gears;
 using StaticSharp.Js;
 using System.Collections.Generic;
@@ -245,21 +246,17 @@ namespace StaticSharpDemo.Root.Modifiers {
 
 
 
-        protected Blocks OutlineExample => new() {
-            CodeBlockFromThisFileRegion("outlineExample"),
-#region outlineExample
-            new Paragraph("Click me"){
+        protected Blocks BoxShadowExample => new() {
+            CodeBlockFromThisFileRegion("boxShadowExample"),
+#region boxShadowExample
+            new Paragraph("One pixel outline"){
                 Height = 70,
                 BackgroundColor = Color.Violet,
                 MarginsHorizontal = 30,
                 Modifiers = {
-                    new Outline {
-                        Style= OutlineStyle.Solid,  
-                        
+                    new BoxShadow {                       
                         //The width remains fixed at one pixel regardless of scaling.
-                        Width = new(e=> 1 / Js.Window.DevicePixelRatio),                        
-                        
-                        Offset = new(e=>Js.Animation.Duration(0.5, e.AsToggle().Value? 20: 0))                        
+                        Spread = new(e=> 1 / Js.Window.DevicePixelRatio)                       
                     },
                     new Toggle()
                 }

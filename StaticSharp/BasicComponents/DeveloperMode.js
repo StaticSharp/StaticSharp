@@ -50,7 +50,7 @@ document.addEventListener("keydown", () => {
 document.addEventListener("keyup", () => {
     
     developerMode.CtrlKeyPressed = event.ctrlKey
-    console.log("keyup", developerMode.CtrlKeyPressed)
+    //console.log("keyup", developerMode.CtrlKeyPressed)
 });
 
 document.addEventListener("mousemove", () => {

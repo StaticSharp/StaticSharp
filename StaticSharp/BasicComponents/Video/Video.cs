@@ -1,45 +1,29 @@
-﻿using NUglify.Html;
+﻿using FFMpegCore.Arguments;
+using FFMpegCore.Pipes;
+using FFMpegCore;
+using Instances;
 using Scopes;
 using StaticSharp.Gears;
 using StaticSharp.Html;
-using SvgIcons;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using YoutubeExplode;
+
 
 namespace StaticSharp {
 
 
-    public interface JVideo : JAspectBlock {
+    public interface JVideo : JAspectBlockResizableContent {
         public bool Play { get; set; }
-        public bool PlayActual { get; }
-
-        public double Position { get; set; }
-        public double PositionActual { get; }
-
+        public double CurrentTime { get; set; }
         public bool Mute { get; set; }
-        public bool MuteActual { get; }
-
         public double Volume { get; set; }
-        public double VolumeActual { get; }
-
-
-        public bool PreferPlatformPlayer { get; set; }
         public bool Controls { get; set; }
         public bool Loop { get; set; }
     }
 
-
+    [RelatedStyle]
     [Scripts.FitImage]
     [ConstructorJs]
-    public sealed partial class Video : AspectBlock, IMainVisual {
+    public sealed partial class Video : AspectBlockResizableContent, IMainVisual {
 
         protected override string TagName => "player";
 
@@ -51,18 +35,68 @@ namespace StaticSharp {
             VideoGenome = videoGenome;        
         }
 
+        /*public static async Task<IMediaAnalysis> AnalyseAsync(Stream stream, FFOptions? ffOptions = null, CancellationToken cancellationToken = default(CancellationToken)) {
+            StreamPipeSource writer = new StreamPipeSource(stream);
+            InputPipeArgument pipeArgument = new InputPipeArgument(writer);
+            ProcessArguments processArguments = PrepareStreamAnalysisInstance(pipeArgument.PipePath, ffOptions ?? GlobalFFOptions.Current);
+            pipeArgument.Pre();
+            Task<IProcessResult> task = processArguments.StartAndWaitForExitAsync(cancellationToken);
+            try {
+                await pipeArgument.During(cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
+            }
+            catch (IOException) {
+            }
+            finally {
+                pipeArgument.Post();
+            }
 
-        public override void ModifyTagAndScript(Context context, Tag tag, Group script) {
+            IProcessResult obj = await task.ConfigureAwait(continueOnCapturedContext: false);
+            ThrowIfExitCodeNotZero(obj);
+            pipeArgument.Post();
+            return ParseOutput(obj);
+        }*/
+        public override void CreateContent(Context context, Tag tag, Group scriptBeforeConstructor, Group scriptAfterConstructor, string contentId, out double width, out double height) {
+
+
+
+            var asset = VideoGenome.Result;
+
+            var info = new VideoInfoGenome(VideoGenome).Result;
+
+            var videoStream = info.Streams.First(x => x.CodecType == "video");
+            
+
+            tag.Add(new Tag("video", contentId) {
+                ["src"] = context.PathFromHostToCurrentPage.To(context.AddAsset(VideoGenome.Result)).ToString(),
+                ["playsinline"] = "true",
+                ["webkit-playsinline"] = "true",
+                ["x5-video-player-type"] = "h5",
+                ["muted"] = "",
+                ["autoplay"] = "",
+                /*Children = { 
+                    new Tag("source"){
+                        ["src"] = context.PathFromHostToCurrentPage.To(context.AddAsset(asset)).ToString(),
+                        ["type"] = $"video/{asset.Extension.TrimStart('.')}"
+                    }
+                }*/
+            });
+            width = videoStream.Width.Value;
+            height = videoStream.Height.Value;
+        }
+
+
+
+        /*public override void ModifyTagAndScript(Context context, Tag tag, Group script) {
             
             
             
             base.ModifyTagAndScript(context, tag, script);
 
+            
 
 
 
-
-            /*var youtubeVideoId = YoutubeExplode.Videos.VideoId.TryParse(Identifier);
+            var youtubeVideoId = YoutubeExplode.Videos.VideoId.TryParse(Identifier);
             if (youtubeVideoId != null) {
 
                 var youtubeVideoManifest = new YoutubeVideoManifestGenome(youtubeVideoId).Result;
@@ -100,9 +134,9 @@ namespace StaticSharp {
                 }).Replace('"', '\'');
 
                 tag["data-sources"] = json;
-            }*/
+            }
 
-        }
+        }*/
 
 
 
@@ -128,5 +162,7 @@ namespace StaticSharp {
                 throw new NotImplementedException();
             }*/
         }
+
+        
     }
 }

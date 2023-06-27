@@ -6,7 +6,7 @@ StaticSharpClass("StaticSharp.Button", (modifier, element) => {
     }
 
     element.addEventListener("click", () => {
-        modifier.Script(modifier)
+        modifier.Script(element)
         if (!modifier.EventPropagation)
             event.stopPropagation()
     }, false)

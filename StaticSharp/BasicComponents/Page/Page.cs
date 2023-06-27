@@ -201,12 +201,12 @@ namespace StaticSharp {
         }
 
 
-        public override void ModifyTagAndScript(Context context, Tag tag, Scopes.Group script) {
-            base.ModifyTagAndScript(context, tag, script);
+        /*public override void ModifyTagAndScript(Context context, Tag tag, Scopes.Group scriptBeforeConstructor, Scopes.Group scriptAfterConstructor) {
+            base.ModifyTagAndScript(context, tag, scriptBeforeConstructor, scriptAfterConstructor);
             //tag["class"] = "nojs";
 
             
-        }
+        }*/
 
 
 

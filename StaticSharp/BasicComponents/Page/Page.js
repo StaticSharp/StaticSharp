@@ -2,7 +2,7 @@
 
 StaticSharpClass("StaticSharp.Page", (element) => {
     
-    StaticSharp.Block(element)
+    StaticSharp.BaseModifier(element)
 
     element.classList.add("js")
     element.isRoot = true
@@ -39,6 +39,7 @@ StaticSharpClass("StaticSharp.Page", (element) => {
     }
 
 
+
     function UpdateAnimation(time) {
         window.AnimationFrameTime = time
         window.requestAnimationFrame((t) => {
@@ -59,8 +60,8 @@ StaticSharpClass("StaticSharp.Page", (element) => {
     element.Reactive = {
         Root: element,        
 
-        //LayoutWidth: undefined,
-        //LayoutHeight: undefined,
+        Width: getWindowWidth(),
+        Height: getWindowHeight(),
 
         FontSize: 16,
         HierarchyFontSize: e => e.FontSize,
@@ -72,30 +73,43 @@ StaticSharpClass("StaticSharp.Page", (element) => {
 
     }
 
-    
-    let baseHtmlNodesOrdered = element.HtmlNodesOrdered
     element.HtmlNodesOrdered = new Enumerable(function* () {
-        yield* baseHtmlNodesOrdered
+        yield* element.ExistingUnmanagedChildren
         if (element.svgDefs)
             yield element.svgDefs
         if (element.extras)
             yield element.extras
     })
 
-
-
-
-
     new Reaction(() => {
-        element.Width = getWindowWidth()
-        element.Height = getWindowHeight()
+        let tergetChildren = [...element.HtmlNodesOrdered]
+        SyncChildren(element, tergetChildren)
     })
 
+    WidthToStyle(element)
+    HeightToStyle(element)
 
-    window.onmousedown = () => {
+    /*new Reaction(() => {
+        element.Width = getWindowWidth()
+        element.Height = getWindowHeight()
+    })*/
+
+    function pageActivationHandler() {
+        console.log("UserInteracted")
         window.UserInteracted = true
+        window.removeEventListener("mousedown", pageActivationHandler);
+        window.removeEventListener("keydown", pageActivationHandlerByKey);
     }
 
+    function pageActivationHandlerByKey() {
+        const modifierKeys = ["Alt", "Control", "Shift", "CapsLock", "NumLock", "ScrollLock", "Meta",  /*Firefox*/ "Escape", "Tab"];
+        if (!modifierKeys.includes(event.key)) {
+            pageActivationHandler()
+        }
+    }
+
+    window.addEventListener("mousedown", pageActivationHandler)
+    window.addEventListener("keydown", pageActivationHandlerByKey)
 
 
     function createDevicePixelRatioCallback(func) {

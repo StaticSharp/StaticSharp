@@ -59,5 +59,17 @@ namespace StaticSharp.Gears {
             }
         }
 
+        public static void WriteAllText(string path, string text) {
+            while (true) {
+                try {
+                    File.WriteAllText(path, text);
+                    return;
+                }
+                catch (IOException) {
+                    Thread.Yield();
+                }
+            }
+        }
+
     }
 }

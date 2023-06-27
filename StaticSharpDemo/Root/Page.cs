@@ -88,26 +88,34 @@ namespace StaticSharpDemo.Root {
                         "C"
                     }
                 },*/
-                $"This website has been created using {Node.Root}"
+                //$"This website has been created using {Node.Root}"
             }
         };
 
         public Genome<IAsset> LogoGenome => LoadFile("https://raw.githubusercontent.com/StaticSharp/StaticSharpBrandAssets/main/LogoHorizontal.svg");
 
-        public virtual Block Menu => new MenuResponsive {
-            Depth = 1,
+        public virtual Block Header => new LinearLayout {
+            ItemGrow = 0,
+            GapGrow = 1,
+            Margins = 20,
+            Children = {
+                new Image(LogoGenome) {
+                    Alt = "StaticSharp logo",
+                    Embed = Image.TEmbed.Image,
+                    Height = 32,
+                    MarginsHorizontal = 20,
+                    InternalLink = VirtualNode.Root,                    
+                },
+
+            }
+        };
+            
+            
+            /*new MenuResponsive {
             //HideButton = false,
             //PrimaryGravity = -1,
             //SecondaryGravity = -1,
-            Logo = new Image(LogoGenome) {
-                Alt = "StaticSharp logo",
-                Embed = Image.TEmbed.Image,
-                Height = 32,
-                //MarginsVertical = 6,
-                MarginsHorizontal = 20,
-                InternalLink = VirtualNode.Root,
-
-            },
+            Logo = ,
             Children = {
                     MenuItem(Node.Components),
                     MenuItem(Node.Modifiers),
@@ -124,7 +132,7 @@ namespace StaticSharpDemo.Root {
                 },
 
             Margins = 20
-        };
+        };*/
 
         public abstract Blocks? Content { get; }
 
@@ -183,7 +191,7 @@ namespace StaticSharpDemo.Root {
                             Width = new(e=>e.Parent.Width),
                             PaddingsHorizontal = new(e=>Js.Num.Max(e.Width-ColumnWidth , 0)/2),
                             Children = {
-                                Menu,
+                                Header,
                                 Content,
                             }
                         },

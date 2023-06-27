@@ -69,8 +69,8 @@ StaticSharpClass("StaticSharp.ScrollView", (element) => {
         ChildAreaWidth: () => element.Width - element.LeftOffset - element.RightOffset,
         ChildAreaHeight: () => element.Height - element.TopOffset - element.BottomOffset,
 
-        ScrollX: undefined,
-        ScrollY: undefined, //Storage.Store("scroll", () => element.ScrollYActual),
+        ScrollX: 0,
+        ScrollY: 0, 
 
         /*ScrollXActual: 0,
         ScrollYActual: 0,*/

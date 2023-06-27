@@ -182,7 +182,7 @@ namespace StaticSharpDemo.Root {
             new Flipper(){
                 
                 Vertical = new(e=>e.Width<950),
-                Reverse = new(e=>e.Vertical),
+                Reverse = true,//new(e=>e.Vertical),
                 MarginLeft = new(e=>e.Parent.PaddingLeft),
                 MarginRight = new(e=>e.Parent.PaddingRight),
                 MarginsVertical = 75,

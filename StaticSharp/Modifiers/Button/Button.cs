@@ -15,7 +15,7 @@ namespace StaticSharp {
 
         public override IdAndScript Generate(Tag element, Context context) {
             var result = base.Generate(element, context);
-            result.Script.Add($"{result.Id}.Script = function(e){{{Script}}}");
+            result.Script.Add($"{result.Id}.Script = function(element){{\n{Script}\n}}");
             return result;
         }
     }

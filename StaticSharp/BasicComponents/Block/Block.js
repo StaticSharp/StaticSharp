@@ -115,8 +115,8 @@ StaticSharpClass("StaticSharp.Block", (element) => {
             }
         },
 
-        Width: undefined, //e => e.InternalWidth, // e => First(e.LayoutWidth, e.PreferredWidth),
-        Height: undefined, //e => e.InternalHeight, // e => First(e.LayoutHeight, e.PreferredHeight),
+        Width: 0, //e => e.InternalWidth, // e => First(e.LayoutWidth, e.PreferredWidth),
+        Height: 0, //e => e.InternalHeight, // e => First(e.LayoutHeight, e.PreferredHeight),
 
         ViewportVisibility: e => {
 
@@ -154,7 +154,7 @@ StaticSharpClass("StaticSharp.Block", (element) => {
         HierarchyFontSize: () => element.FontSize || element.Parent.HierarchyFontSize,
 
 
-        ClipByParent: false
+        //ClipByParent: false
     }
 
 
@@ -169,33 +169,12 @@ StaticSharpClass("StaticSharp.Block", (element) => {
     HeightToStyle(element)
 
 
-
-    new Reaction(() => {
-
-        if (element.ClipByParent && element.Parent) {
-            element.style.clipPath = GetClipRect(element.Parent, element.X, element.Y, element.Width, element.Height)
-        } else {
-            element.style.clipPath = ""
-        }
-
-    })
-
-    /*only Paragraph do this
-    new Reaction(() => {
-        element.style.fontSize = ToCssSize(element.FontSize)
-    })*/
-
-    element.Events.MouseEnter = () => element.Hover = true
-    element.Events.MouseLeave = () => element.Hover = false
-
     element.HtmlNodesOrdered = new Enumerable(function* () {
         yield* element.ExistingUnmanagedChildren
     })
 
     new Reaction(() => {
-        //let currentChildren =[...element.children]
         let tergetChildren = [...element.HtmlNodesOrdered]
-
         SyncChildren(element, tergetChildren)
     })
 

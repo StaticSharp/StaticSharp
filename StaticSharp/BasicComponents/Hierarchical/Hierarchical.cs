@@ -53,7 +53,7 @@ namespace StaticSharp {
             tag.Name = name;
         }
 
-        public virtual void ModifyTagAndScript(Context context, Tag tag, Scopes.Group script) { 
+        public virtual void ModifyTagAndScript(Context context, Tag tag, Group scriptBeforeConstructor, Group scriptAfterConstructor) { 
             
         }
 
@@ -70,17 +70,17 @@ namespace StaticSharp {
 
             var jsConstructorsNames = FindJsConstructorsNames();
 
-            var scriptOfCurrentElement = new Group() {
-                $"let {id} = {TagToJsValue(id)}",
-                VariableNames?.Select(x=>$"let {x} = {id}"),
-                jsConstructorsNames.Select(x=>$"{x}({id})")                
-            };
+            Group scriptBeforeConstructor = new();
+            Group scriptAfterConstructor = new();
 
-            AddPropertiesToScript(id,scriptOfCurrentElement,context);
+
+            
+
+            AddPropertiesToScript(id, scriptAfterConstructor, context);
 
             AddSourceCodeNavigationData(result.Tag, context);
 
-            ModifyTagAndScript(context, result.Tag, scriptOfCurrentElement);
+            ModifyTagAndScript(context, result.Tag, scriptBeforeConstructor, scriptAfterConstructor);
 
             if (result.Tag.Name == null) {
                 result.Tag.Name = TagName;
@@ -100,7 +100,7 @@ namespace StaticSharp {
                     var item = hierarchical.Generate(context);
                     result.Tag.Add(item.Tag);
                     result.Script.Add(item.Script);
-                    scriptOfCurrentElement.Add($"{id}.{property.Name} = {item.Tag.Id}");
+                    scriptAfterConstructor.Add($"{id}.{property.Name} = {item.Tag.Id}");
                     continue;
                 }
 
@@ -116,11 +116,11 @@ namespace StaticSharp {
                             result.Script.Add(item.Script);
                         }
 
-                        scriptOfCurrentElement.Add($"{id}.{collectionName}First = {items[0].Tag.Id}");
+                        scriptAfterConstructor.Add($"{id}.{collectionName}First = {items[0].Tag.Id}");
                         for (int i = 1; i< items.Length; i++) {
                             var p = items[i-1];
                             var c = items[i];
-                            scriptOfCurrentElement.Add($"{p.Tag.Id}.NextSibling = {c.Tag.Id}");
+                            scriptAfterConstructor.Add($"{p.Tag.Id}.NextSibling = {c.Tag.Id}");
                         }
                     }
                     continue;
@@ -128,6 +128,18 @@ namespace StaticSharp {
             }
 
             //scriptOfCurrentElement.Add($"if (typeof ({id}.AfterChildren) === \"function\") {{ {id}.AfterChildren() }}");
+
+            var scriptOfCurrentElement = new Group() {
+                $"let {id} = {TagToJsValue(id)}",
+                VariableNames?.Select(x=>$"let {x} = {id}"),
+
+                scriptBeforeConstructor,
+
+                jsConstructorsNames.Select(x=>$"{x}({id})"),
+
+                scriptAfterConstructor
+            };
+
 
             result.Script.Add(scriptOfCurrentElement);
             return result;

@@ -1,5 +1,4 @@
 ﻿using StaticSharp.Gears;
-using System.Runtime.CompilerServices;
 
 namespace StaticSharp {
     public interface JBorderRadius : JModifier {
@@ -9,7 +8,6 @@ namespace StaticSharp {
         public double RadiusBottomLeft { get; set; }
         public double RadiusBottomRight { get; set; }
     }
-
 
     [ConstructorJs]
     public partial class BorderRadius : Modifier {

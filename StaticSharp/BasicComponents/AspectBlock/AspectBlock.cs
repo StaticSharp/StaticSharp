@@ -15,10 +15,10 @@ namespace StaticSharp {
     }
 
     [ConstructorJs]
-    public partial class AspectBlock : Block {
-        protected static void SetNativeSize(Scopes.Group script, string elementVariableName, double width, double height) {
+    public abstract partial class AspectBlock : Block {
+        /*protected static void SetNativeSize(Scopes.Group script, string elementVariableName, double width, double height) {
             script.Add($"{elementVariableName}.NativeWidth = {width.ToStringInvariant()}");
             script.Add($"{elementVariableName}.NativeHeight = {height.ToStringInvariant()}");
-        }
+        }*/
     }
 }

@@ -4,68 +4,64 @@ html {
     //overscroll-behavior-x: none;
     overflow: hidden;
     overflow-x: hidden;
-    overflow-y: hidden;   
+    overflow-y: hidden;
 }
 
 .js {
-
     position: absolute;
     overflow: hidden;
     overflow-x: hidden;
     overflow-y: hidden;
     white-space: normal;
-    
     touch-action: none;
     margin: 0;
 }
 
-.js * {
-    scrollbar-width: none;
-}
-.js *::-webkit-scrollbar {
-    display: none;
-}
+    .js * {
+        scrollbar-width: none;
+    }
+
+        .js *::-webkit-scrollbar {
+            display: none;
+        }
 
 head {
     display: none;
 }
+
 
 body {
     line-height: 1.5;
     tab-size: 4;
 }
 
-body img {
-    overflow: hidden;
-}
+    /*body img {
+        overflow: clip !important;
+    }*/
 
-body * {
-    letter-spacing: inherit;
-    touch-action: inherit;
-    display: block;
-    overflow-x: visible;
-    overflow-y: visible;
-    position: absolute;
-    margin: 0;
-    visibility: inherit;
-    margin-block-start: 0;
-    margin-block-end: 0;
-    margin-inline-start: 0;
-    margin-inline-end: 0;
-    line-height: inherit;
-    text-decoration-line: inherit;
-    text-decoration-color: inherit;
-    color: inherit;
-    justify-content: inherit;
-    align-content: inherit;
-    text-align: inherit;
-    box-sizing: border-box;
-    word-break: keep-all;
-    white-space: inherit;
-    padding: 0;
-    border: unset;
-}
-
-
-
-
+    body * {
+        letter-spacing: inherit;
+        touch-action: inherit;
+        display: block;
+        overflow-x: visible;
+        overflow-y: visible;
+        position: absolute;
+        margin: 0;
+        visibility: inherit;
+        margin-block-start: 0;
+        margin-block-end: 0;
+        margin-inline-start: 0;
+        margin-inline-end: 0;
+        line-height: inherit;
+        text-decoration-line: inherit;
+        text-decoration-color: inherit;
+        color: inherit;
+        justify-content: inherit;
+        align-content: inherit;
+        text-align: inherit;
+        box-sizing: border-box;
+        word-break: keep-all;
+        white-space: inherit;
+        padding: 0;
+        border: unset;
+    }

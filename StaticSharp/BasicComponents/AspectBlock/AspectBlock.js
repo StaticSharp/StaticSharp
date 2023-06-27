@@ -5,10 +5,15 @@ StaticSharpClass("StaticSharp.AspectBlock", (element) => {
     StaticSharp.Block(element)
 
     element.Reactive = {
-
+        Width: undefined,
+        Height: undefined,
+    }
+    
+    element.Reactive = {
+        NativeAspect: e => e.NativeWidth / e.NativeHeight,
         NativeWidth: undefined,
         NativeHeight: undefined,
-        NativeAspect: e => e.NativeWidth / e.NativeHeight,
+        
 
         //Aspect: e => e.NativeAspect,
         Width: () => Num.First(element.Height * element.NativeAspect, element.NativeWidth),

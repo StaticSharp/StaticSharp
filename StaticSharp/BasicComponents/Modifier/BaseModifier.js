@@ -52,12 +52,9 @@ StaticSharpClass("StaticSharp.BaseModifier", (element) => {
     }
 
 
-    element.Modifiers = undefined,
+    //element.Modifiers = undefined,
 
     element.Reactive = {
-        Hover: false,
-        Selectable: undefined,
-
         BackgroundColor: undefined,
         HierarchyBackgroundColor: () => element.BackgroundColor || element.Parent.HierarchyBackgroundColor,
 
@@ -85,17 +82,6 @@ StaticSharpClass("StaticSharp.BaseModifier", (element) => {
                 return undefined
         },
 
-        
-
-
-        
-
-        Radius: undefined,
-        RadiusTopLeft: () => element.Radius,
-        RadiusTopRight: () => element.Radius,
-        RadiusBottomLeft: () => element.Radius,
-        RadiusBottomRight: () => element.Radius,
-
         Visibility: 1
     }
 
@@ -111,24 +97,6 @@ StaticSharpClass("StaticSharp.BaseModifier", (element) => {
             element.style.opacity = visibility
             element.style.visibility = ""
         }        
-    })
-
-
-    new Reaction(() => {
-        element.style.borderTopLeftRadius       = ToCssSize(element.RadiusTopLeft)
-        element.style.borderTopRightRadius      = ToCssSize(element.RadiusTopRight)
-        element.style.borderBottomLeftRadius    = ToCssSize(element.RadiusBottomLeft)
-        element.style.borderBottomRightRadius   = ToCssSize(element.RadiusBottomRight)
-    })
-
-
-
-    new Reaction(() => {
-        let selectable = element.Selectable
-        if (selectable!=undefined)
-            element.style.userSelect = element.Selectable ? "text" : "none"
-        else
-            element.style.userSelect = ""
     })
     
 
