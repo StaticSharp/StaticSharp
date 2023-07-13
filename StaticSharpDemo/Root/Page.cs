@@ -88,7 +88,7 @@ namespace StaticSharpDemo.Root {
                         "C"
                     }
                 },*/
-                //$"This website has been created using {Node.Root}"
+                $"This website has been created using {Node.Root}"
             }
         };
 
@@ -109,7 +109,8 @@ namespace StaticSharpDemo.Root {
 
             }
         };
-            
+          
+
             
             /*new MenuResponsive {
             //HideButton = false,

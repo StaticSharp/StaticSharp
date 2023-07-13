@@ -2,20 +2,20 @@
   "profiles": {
     "Server": {
       "commandName": "Project",
-      "e": true,
       "environmentVariables": {
-        "ENTRY_POINT": "Server",
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "entryPoint": "Server"
       }
     },
 
     "Generator": {
       "commandName": "Project",
-      "e": true,
       "environmentVariables": {
-        "ENTRY_POINT": "Generator",
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "targetHostName": "staticsharp.com",
+        "outputDirectory": "../../StaticSharp.github.io",
+        //"cachePath" : "",
+        "entryPoint": "Generator"
       }
     }
+
   }
 }

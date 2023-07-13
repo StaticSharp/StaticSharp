@@ -196,7 +196,7 @@ namespace StaticSharp {
             var html = page.GeneratePageHtml(context);
 
             var hash = html.ToHashString();
-            var tempPath = Path.Combine(Cache.RootDirectory, hash + ".html");
+            var tempPath = Path.Combine(Cache.Directory, hash + ".html");
             if (!File.Exists(tempPath)) {
                 File.WriteAllText(tempPath, html);
             }                

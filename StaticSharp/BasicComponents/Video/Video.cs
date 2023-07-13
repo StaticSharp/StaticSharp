@@ -35,36 +35,11 @@ namespace StaticSharp {
             VideoGenome = videoGenome;        
         }
 
-        /*public static async Task<IMediaAnalysis> AnalyseAsync(Stream stream, FFOptions? ffOptions = null, CancellationToken cancellationToken = default(CancellationToken)) {
-            StreamPipeSource writer = new StreamPipeSource(stream);
-            InputPipeArgument pipeArgument = new InputPipeArgument(writer);
-            ProcessArguments processArguments = PrepareStreamAnalysisInstance(pipeArgument.PipePath, ffOptions ?? GlobalFFOptions.Current);
-            pipeArgument.Pre();
-            Task<IProcessResult> task = processArguments.StartAndWaitForExitAsync(cancellationToken);
-            try {
-                await pipeArgument.During(cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
-            }
-            catch (IOException) {
-            }
-            finally {
-                pipeArgument.Post();
-            }
-
-            IProcessResult obj = await task.ConfigureAwait(continueOnCapturedContext: false);
-            ThrowIfExitCodeNotZero(obj);
-            pipeArgument.Post();
-            return ParseOutput(obj);
-        }*/
         public override void CreateContent(Context context, Tag tag, Group scriptBeforeConstructor, Group scriptAfterConstructor, string contentId, out double width, out double height) {
 
-
-
             var asset = VideoGenome.Result;
-
             var info = new VideoInfoGenome(VideoGenome).Result;
-
-            var videoStream = info.Streams.First(x => x.CodecType == "video");
-            
+            var videoStream = info.Streams.First(x => x.CodecType == "video");            
 
             tag.Add(new Tag("video", contentId) {
                 ["src"] = context.PathFromHostToCurrentPage.To(context.AddAsset(VideoGenome.Result)).ToString(),

@@ -8,7 +8,7 @@ using FFMpegCore.Exceptions;
 using FFMpegCore.Helpers;
 using System.Diagnostics;
 using System.Text.Json;
-using static StaticSharp.VideoInfoGenome;
+
 
 
 namespace StaticSharp {

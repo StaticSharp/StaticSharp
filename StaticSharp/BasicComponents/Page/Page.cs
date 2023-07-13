@@ -145,6 +145,7 @@ namespace StaticSharp {
             var document = new Tag(null) {
                 new Tag("!doctype"){ ["html"] = ""},
                 new Tag("html") {
+                    //["translate"]="no",
                     ["lang"] = PageLanguage,
                     Children ={
                         head,

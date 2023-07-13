@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <IncludeBuildOutput>false</IncludeBuildOutput>
+        <Configurations>Debug;Release;Server</Configurations>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -19,8 +20,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="..\README.md" Pack="true" PackagePath="\"/>
-        <None Include="..\LICENSE" Pack="true" PackagePath="\"/>
+        <None Include="..\README.md" Pack="true" PackagePath="\" />
+        <None Include="..\LICENSE" Pack="true" PackagePath="\" />
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
         <!-- TODO: Do we really need sourcelink for generator?-->
 		<None Include="..\icon.png" Pack="true" Visible="false" PackagePath="images\icon.png" />

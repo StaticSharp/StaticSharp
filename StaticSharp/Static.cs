@@ -4,8 +4,6 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 
 
-namespace StaticSharp {
-}
 
 namespace StaticSharp {
     public static partial class Static {
@@ -22,15 +20,20 @@ namespace StaticSharp {
             return value.ToString(CultureInfo.CurrentCulture);
         }*/
 
-        public static string ThisFilePath([CallerFilePath] string callerFilePath = "") {
+        public static string GetThisFilePath([CallerFilePath] string callerFilePath = "") {
             return callerFilePath;
         }
 
-        public static string ThisFileNameWithoutExtension([CallerFilePath] string callerFilePath = "") {
+
+        public static string GetThisFileDirectory([CallerFilePath] string callerFilePath = "") {
+            return Path.GetDirectoryName(callerFilePath)!;
+        }
+
+        public static string GetThisFileNameWithoutExtension([CallerFilePath] string callerFilePath = "") {
             return Path.GetFileNameWithoutExtension(callerFilePath);
         }
 
-        public static string ThisFilePathWithNewExtension(string extension = "", [CallerFilePath] string callerFilePath = "") {
+        public static string GetThisFilePathWithNewExtension(string extension = "", [CallerFilePath] string callerFilePath = "") {
             var indexOfDot = callerFilePath.LastIndexOf('.');
             if (indexOfDot == -1)
                 return callerFilePath;

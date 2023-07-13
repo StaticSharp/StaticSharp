@@ -166,7 +166,7 @@ namespace StaticSharpDemo.Root {
             $"This is compile time error {new Block{ BackgroundColor = Color.Red}}",*/
             "Welcome to StaticSharp! We believe in getting right to the point, so here is the code from this very page.",
 
-            CodeBlockScrollable(LoadFile(ThisFilePath()).GetCodeRegion("codeExample").Highlight(new CSharpHighlighter())),
+            CodeBlockScrollable(LoadFile(GetThisFilePath()).GetCodeRegion("codeExample").Highlight(new CSharpHighlighter())),
 
             Separator(),
 

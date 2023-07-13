@@ -1,73 +1,35 @@
-﻿
-
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Reflection.Metadata;
+﻿using StaticSharp.Gears;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace StaticSharp.Gears;
 
 
-
-public interface ICacheItemConstructor {
-    CacheItem Create();
-}
-
-public class CacheItem {
-
-    //public string Key { get; init; }
-    public Func<bool>? Verify { get; init; }
-    public object Value { get; init; }
-
-    public CacheItem(object value, Func<bool>? verify) {
-
-        Verify = verify;
-        Value = value;
-    }
-
-    /*public Genome Genome { get; set; }
-
-    private object? value;
-
-    public object? Value => value;
-    public object ValueNotNull {
-        get {
-            if (value == null) {
-                value = Genome.Create();
-            }
-            return value;
-        }
-    }
-
-    private HashSet<string>? dependentKeys;
-
-    public CacheItem(Genome genome) {
-        Genome = genome;
-    }
-
-    public HashSet<string>? DependentKeys => dependentKeys;
-    public HashSet<string> DependentKeysNotNull {
-        get {
-            if (dependentKeys == null) {
-                dependentKeys = new HashSet<string>();
-            }
-            return dependentKeys;
-        }
-    }*/
-
-}
+namespace StaticSharp;
 
 public class Cache {
 
-    public static string RootDirectory { get; set; }
+    private class Item {
+        public Func<bool>? Verify { get; init; }
+        public object Value { get; init; }
+
+        public Item(object value, Func<bool>? verify) {
+
+            Verify = verify;
+            Value = value;
+        }
+    }
 
 
-    static Dictionary<string, CacheItem> items = new();
+    private static string? directory = null;
+    public static string Directory {
+        get {
+            return directory ?? throw new InvalidOperationException("Cache.Directory is not set.");
+        }
+        set {
+            directory = value;
+        }
+    }
+
+
+    static Dictionary<string, Item> items = new();
 
     public delegate void Constructor<T>(out T value, out Func<bool>? verify) where T : class;
 
@@ -75,15 +37,13 @@ public class Cache {
         lock (items) {
             if (!items.TryGetValue(key, out var item)) {
                 constructor(out var value, out var verify);
-                item = new CacheItem(value,verify);
+                item = new Item(value,verify);
                 items.Add(key, item);
                 return value;
             }
             return (T)item.Value;
         }
     }
-
-
 
     public static void TrimMutatedItems() {
         lock (items) {
@@ -136,7 +96,7 @@ public class Cache {
         };
         private static readonly string CachedDataJsonFileName = "data.json";
         private string CachedDataJsonFilePath => Path.Combine(CacheSubDirectory, CachedDataJsonFileName);
-        private string CacheSubDirectory => Path.Combine(RootDirectory, KeyHash);
+        private string CacheSubDirectory => Path.Combine(Directory, KeyHash);
         private string ContentFilePath => Path.Combine(CacheSubDirectory, "content");
 
         public bool LoadData<T>(out T data) where T : new() {
@@ -192,16 +152,16 @@ public class Cache {
         }
 
         private void CreateCacheSubDirectory() {
-            if (!Directory.Exists(CacheSubDirectory)) {
-                Directory.CreateDirectory(CacheSubDirectory);
+            if (!System.IO.Directory.Exists(CacheSubDirectory)) {
+                System.IO.Directory.CreateDirectory(CacheSubDirectory);
             }
         }
 
         public void DeleteCacheSubDirectory() {
-            if (!Directory.Exists(CacheSubDirectory))
+            if (!System.IO.Directory.Exists(CacheSubDirectory))
                 return;
-            Directory.Delete(CacheSubDirectory, true);
-            while (Directory.Exists(CacheSubDirectory)) {
+            System.IO.Directory.Delete(CacheSubDirectory, true);
+            while (System.IO.Directory.Exists(CacheSubDirectory)) {
                 Thread.Sleep(100);
             }
         }
