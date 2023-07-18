@@ -42,7 +42,7 @@
 		<None Include="..\README.md" Pack="true" PackagePath="\" />
 		<None Include="..\LICENSE" Pack="true" PackagePath="\" />
 		<PackageReference Include="FFMpegCore" Version="5.1.0" />
-		<PackageReference Include="FFMpegInstaller.Windows.x64" Version="0.1.8" />
+		<PackageReference Include="FFMpegInstaller.Windows.x64" Version="0.1.10" PrivateAssets="analyzers;build"/>
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
 		<None Include=".\Core.png" Pack="true" Visible="false" PackagePath="images\icon.png" />
 	</ItemGroup>
