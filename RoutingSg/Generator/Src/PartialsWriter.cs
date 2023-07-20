@@ -35,7 +35,7 @@ namespace RoutingSg.Src {
         static Scope WritePagePartial(INamedTypeSymbol pageSymbol, IEnumerable<string> path) {
             var accessibility = "public"; //typeSymbol.DeclaredAccessibility.ToCSharpName();
             var nodeClassName = string.Join(".", path.Select(x => Kw.α + x));
-            var baseClassFullName = pageSymbol.BaseType.ContainingNamespace.GetFullyQualifiedName();
+            var baseClassFullName = pageSymbol.BaseType.ContainingNamespace.GetFullyQualifiedNameNoGlobal();
             var classInTree = baseClassFullName.StartsWith(_rootNamespace);
             var baseClassInfected = classInTree & pageSymbol.BaseType.IsPartial();
 
@@ -45,7 +45,7 @@ namespace RoutingSg.Src {
                 $"{Kw.Node} {Kw.IRepresentative}.{Kw.NodePropertyName} => {Kw.NodePropertyName};" };
 
             if (baseClassInfected) {
-                result.Add($"public {pageSymbol.Name}({_state.ToConstructorParameters()}) : base({_state.ToBaseCall()})");
+                result.Add($"public {pageSymbol.Name}({_state.ToConstructorParameters()}) : base({_state.ToBaseCall()}) {{}}");
             } else {
                 result.Add(_state.Select(p => $"public {p.TypeName} {p.Name}{{get; init;}}"));
                 result.Add(new Scope($"public {pageSymbol.Name}({_state.ToConstructorParameters()})") {
