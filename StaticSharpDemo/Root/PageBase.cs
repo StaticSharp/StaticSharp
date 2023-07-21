@@ -50,8 +50,7 @@ namespace StaticSharpDemo.Root {
                 Vertical = false,
                 ItemGrow = 0,
                 Children = {
-                    new Paragraph(bulletIcon)
-                    {
+                    new Paragraph(bulletIcon) {
                         Width = bulletWidth
                     },
                     new Paragraph(inlines) {

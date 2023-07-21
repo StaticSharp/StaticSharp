@@ -49,9 +49,9 @@ namespace StaticSharpDemo.Root.GettingStarted
                     Children = { 
                         "In this article we will explore how to start working with StaticSharp from scratch. The recomended IDE for StaticSharp is Visual Studio Code, so this tutorial will focus on it. Though you can use any other IDE, which we will cover later. ",
 
-                        $@"So first of all let's open VS Code and install ""StaticSharp"" extension. When the extension is installed, you will be able to see a StaticSharp triangle icon in the activity bar (the most left bar). Click it. Now you can see three new views: ROUTES, PAGES and RESOURCES. ROUTES view suggests you to create a new StaticSharp project, while two others are empty. Let's click {Bold("Create new project")} and select a folder and a name for it for a new project. ",
+                        $@"So first of all let's open VS Code and install ""StaticSharp"" extension. When the extension is installed, you will be able to see a StaticSharp triangle icon in the activity bar (the most left bar). Click it. Now you can see three new views: ROUTES, PAGES and RESOURCES. ROUTES view suggests you to create a new StaticSharp project, while two others are empty. Let's click {Bold("Create new project")} and select a folder and a name for a new project. ",
 
-                        $"After a while new project is created. You can launch it right away just by pressing {Bold("F5")} same as any other dotnet project. Then you can open localhost in browser and see you newly created site. (TODO: maybe open automatically?)" 
+                        $"In a few seconds new project is created. You can launch it right away just by pressing {Bold("F5")} same as any other dotnet project. Then you can open localhost in browser and see you newly created site. (TODO: maybe open automatically?)" 
                     }
                 },
                 Second = new Image("1.png") {
@@ -93,7 +93,7 @@ namespace StaticSharpDemo.Root.GettingStarted
             
             new Flipper() {
                 First = new Paragraph(
-                    $"Now let's put aside StaticSharp extension for a while and go to files explorer. Here you can see that StaticSharp project is just an ordinary dotnet project and all of it's elemets are constructed of well known C# items. Let's go through files briefly. First of all, you can see {FilePath("*.csproj")} file which represents a console application with plugged-in {FilePath("StaticSharp.Core")} nuget package. If you open {FilePath("Program.cs")} you will see quite a concise code, allowing to customize StaticSharp launch, in particular to select one of two main modes: Server or Generator ({FilePath(".vscode/launch.json")} file contains corresponding launch profiles). {FilePath("Language.cs")} is a simple enum of languages supported by your site, a single one by default. The crucial item is Root folder, as you might guess it represents a Root route of your web site. All its pages resources, and child routes will be inside. In a default project you can see inside:"
+                    $"Now let's put aside StaticSharp extension for a while and go to files explorer. Here you can see that StaticSharp project is just an ordinary dotnet project and all of it's elemets are constructed of well known C# items. Let's go through files briefly. First of all, you can see {FilePath("*.csproj")} file which represents a console application with plugged-in {FilePath("StaticSharp.Core")} nuget package. If you open {FilePath("Program.cs")} you will see quite a concise code, allowing to customize StaticSharp launch, in particular to select one of two main modes: Server or Generator ({FilePath(".vscode/launch.json")} file contains corresponding launch profiles). The crucial item is Root folder, as you might guess it represents a Root route of your web site. All its pages resources, and child routes will be inside. In a default project you can see inside:"
                     ),
 
                 Second = new Image("6.png") {
@@ -105,10 +105,10 @@ namespace StaticSharpDemo.Root.GettingStarted
                 Vertical = new (e => e.Width < 800),
             },
 
+            ListItem2($@"{FilePath("Language.cs")} - enum of languages supported by your site, a single language ""En"" by default"),
             ListItem2($"{FilePath("Root.cs")} - a page of Root route. It contains a C# class which defines the page. Every page in StaticSharp is a dedicated class,"),
             ListItem2($"{FilePath("BasePage.cs")} - since page is merely a OOP class, it is possible to have a common ancestor of all you pages to share some code, say define common style,"),
-            ListItem2($"{FilePath("ProtoNode.cs")} - mandatory auxiliary class, an ancestor of all nodes (node here is an object containing state for a route). Also ProtoNode.cs denotes web site root (TODO: too complicated explanation), "),
-            ListItem2($"{FilePath("FavIcon.svg")}, {FilePath("LogoHorizontal.png")} - visual assets, that can be used in Root or possibly other routes"),
+            ListItem2($"{FilePath("FavIcon.svg")}, {FilePath("LogoHorizontal.png")} - optional visual assets, that can be used in Root or possibly other routes"),
 
             "All folders and files inside route's folder except pages and child routes folders are considered resources of this route and can be found in corresponding view",
 
