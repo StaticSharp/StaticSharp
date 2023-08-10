@@ -14,7 +14,7 @@
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
         <!-- TODO: Do we really need sourcelink for generator?-->
         <DebugType>embedded</DebugType>
-        <PackageVersion>0.1.0</PackageVersion>
+        <PackageVersion>0.1.109-local</PackageVersion>
 		<PackageIcon>images\icon.png</PackageIcon>
         <Authors>StaticSharp</Authors>
     </PropertyGroup>

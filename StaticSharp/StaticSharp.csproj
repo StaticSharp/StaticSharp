@@ -28,7 +28,7 @@
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		<!-- TODO: Do we really need sourcelink for generator?-->
 		<DebugType>embedded</DebugType>
-		<PackageVersion>0.1.0</PackageVersion>
+		<PackageVersion>0.1.109-local</PackageVersion>
 		<PackageIcon>images\icon.png</PackageIcon>
 		<Authors>StaticSharp</Authors>
 	</PropertyGroup>
@@ -151,7 +151,7 @@
         <Compile Include=".generated\RoutingSg.RoutingSg\**" />
     </ItemGroup>
     <ItemGroup Condition="!$(RoutingSgDebug)">
-        <ProjectReference Include="..\RoutingSg\Generator\RoutingSg.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+        <ProjectReference Include="..\RoutingSg\Generator\RoutingSg.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true"/> <!-- -->    
     </ItemGroup>
 
 
@@ -167,6 +167,8 @@
 
 	<ItemGroup Condition="!$(ComponentSgDebug)">
 		<ProjectReference Include="..\ComponentSg\Generator\ComponentSg.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+        <!-- ReferenceOutputAssembly="false" - project, referencing StaticSharp.Core nuget package, does not NOT automatically references RoutingSg. 
+        does not affect referencing StaticSharp.Core as a project (no automatic reference anyway)-->
 	</ItemGroup>
 
 

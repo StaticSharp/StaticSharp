@@ -40,6 +40,8 @@ namespace StaticSharpDemo.Root {
             };
         }
 
+        // TODO: two overrides of ListItem needed because of complicated cast between interpolated string<->Inline<->Inlines
+        // Looks like it could be resolved
         protected Block ListItem(Inline inline, string bulletIcon = "&bull; ", [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
             return ListItem(new Inlines() { inline }, bulletIcon);
         }
