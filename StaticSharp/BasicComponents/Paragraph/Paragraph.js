@@ -132,9 +132,12 @@ StaticSharpClass("StaticSharp.Paragraph", (element) => {
 
         content.style.width = ToCssSize(Num.Sum(element.Width, -element.PaddingLeft, -element.PaddingRight))
 
-        if (!layout) {
-            let rect = content.getBoundingClientRect()
-            return Num.Sum(rect.height, element.PaddingTop, element.PaddingBottom)
+        if (!layout) {            
+            //wrong result first time
+            //let rect = content.getBoundingClientRect()
+            
+            let height = Num.Sum(content.offsetHeight, element.PaddingTop, element.PaddingBottom)
+            return height
         }
 
 
@@ -148,4 +151,4 @@ StaticSharpClass("StaticSharp.Paragraph", (element) => {
 
 })
 
-StaticSharp.Paragraph.testFontSize = 128
+StaticSharp.Paragraph.testFontSize = 20

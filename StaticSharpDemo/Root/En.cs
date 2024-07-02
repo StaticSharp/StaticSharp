@@ -144,9 +144,7 @@ namespace StaticSharpDemo.Root {
 
 
 
-
-
-        public override Blocks? Content => new() {
+        public override Blocks? Content => new () {
 
             new Paragraph($"STATIC SHARP"){ 
                 NoWrap = true,

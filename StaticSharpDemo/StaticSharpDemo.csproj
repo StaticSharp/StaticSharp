@@ -56,18 +56,6 @@
 	
 	
 	
-	<PropertyGroup>
-		<UseDebugGeneratorOutput>false</UseDebugGeneratorOutput>
-	</PropertyGroup>	
-	<ItemGroup Condition="$(UseDebugGeneratorOutput)">
-		<Compile Include=".generated\**" />
-	</ItemGroup>
-	<ItemGroup Condition="!$(UseDebugGeneratorOutput)">
-		<PackageReference Include="StaticSharp.MixinSourceGenerator" Version="0.1.1" />
-	</ItemGroup>
-    <ItemGroup>
-        <PackageReference Include="StaticSharp.MixinSourceGenerator.Attributes" Version="0.1.0" />
-    </ItemGroup>
 
 
 	<ItemGroup>
