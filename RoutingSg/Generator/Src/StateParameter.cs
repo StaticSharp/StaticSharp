@@ -1,11 +1,8 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace RoutingSg {
-    class StateParameter {
+    public class StateParameter {
         public string Name { get; private set; }
         public string ParameterName { get; private set; }
         public ITypeSymbol Type { get; private set; }
@@ -19,7 +16,7 @@ namespace RoutingSg {
             ParameterName = parameterName;
             Type = type;
             TypeName = typeName;
-        }        
+        }
     }
 
     static class StateParametersStatic {

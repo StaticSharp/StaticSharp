@@ -32,7 +32,7 @@ namespace StaticSharp {
                 json = slot.LoadContentText();
             } else {
                 FFMpegCore.GlobalFFOptions.Configure(x => {
-                    x.BinaryFolder = FFMpegInstaller.Discover.InstallationDirectory;
+                    x.BinaryFolder = FFMpegInstaller.InstallationDirectory;
                 });
 
                 MemoryStream memoryStream = new MemoryStream(Source.Result.Data);

@@ -1,4 +1,9 @@
-﻿using System.Runtime.CompilerServices;
+﻿using Microsoft.VisualStudio.Shell.Interop;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 
 namespace StaticSharpDemo.Root {
     public abstract partial class PageBase : StaticSharp.Page {
@@ -6,20 +11,73 @@ namespace StaticSharpDemo.Root {
         protected virtual FontFamilies CodeFontFamilies => new() {
             new FontFamilyGenome("Roboto Mono")
         };
+
         protected Inline Bold(string text, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
-            return new Inline(text, callerLineNumber, callerFilePath) { 
+            return new Inline(text, callerLineNumber, callerFilePath) {
                 Weight = FontWeight.Medium,
             };
+        }
+
+        protected new Inline Italic(string text, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
+            return new Inline(text, callerLineNumber, callerFilePath) {
+                Italic = true,
+            };
+        }
+
+
+        protected Paragraph ListItem(
+            Inlines inlines, string bulletIcon = "&bull; ", [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
+
+            return new Paragraph(inlines) {
+                MarginLeft = new(e => e.UnmanagedChildren.First().Width),
+                UnmanagedChildren = {
+                    new Paragraph(bulletIcon) {
+                        X = new(e=>-e.Width),
+                        //Width = new(e=>e.Parent.MarginLeft),
+                        Height = new(e=>e.Parent.Height)
+                    },
+                }
+            };
+        }
+
+        // TODO: two overrides of ListItem needed because of complicated cast between interpolated string<->Inline<->Inlines
+        // Looks like it could be resolved
+        protected Block ListItem(Inline inline, string bulletIcon = "&bull; ", [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
+            return ListItem(new Inlines() { inline }, bulletIcon);
+        }
+
+        protected Block ListItem2(Inlines inlines, string bulletIcon = "&bull;", [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
+            var bulletWidth = 10;
+            return new LinearLayout {
+                Vertical = false,
+                ItemGrow = 0,
+                Children = {
+                    new Paragraph(bulletIcon) {
+                        Width = bulletWidth
+                    },
+                    new Paragraph(inlines) {
+                        Width = new (e => e.Parent.Width - bulletWidth)
+                    }
+                }
+            };
+        }
+
+        protected Block ListItem2(Inline inline, string bulletIcon = "&bull;", [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
+            return ListItem2(new Inlines() { inline }, bulletIcon);
+        }
+
+        protected Inline FilePath(string text, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
+            return Bold(text); // TODO: fix and use italic?
         }
 
         protected Inline Code(string text, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
             return Code(new Inlines {
                 text
-            },callerLineNumber,callerFilePath);
+            }, callerLineNumber, callerFilePath);
         }
 
         protected Inline Code(Inlines inlines, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
-            return new Inline(inlines,callerLineNumber,callerFilePath) {
+            return new Inline(inlines, callerLineNumber, callerFilePath) {
                 FontFamilies = CodeFontFamilies,
                 Weight = FontWeight.Regular,
             };
@@ -29,11 +87,26 @@ namespace StaticSharpDemo.Root {
         }
 
         protected Inline TypeName<T>([CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
-            return Code(typeof(T).Name,callerLineNumber,callerFilePath).Modify(x => x.ForegroundColor = Color.OrangeRed);
+            return Code(typeof(T).Name, callerLineNumber, callerFilePath).Modify(x => x.ForegroundColor = Color.OrangeRed);
+        }
+
+
+
+        public string TitleToId(string title) => title.Replace(" ", "_");
+
+        /// <summary>
+        /// Link to the same page header created by <see cref="PageBase.SectionHeader(string, int, string)">SectionHeader</see> method
+        /// </summary>
+        /// <param name="title"></param>
+        /// <returns>Inline component representing a hyperlink</returns>
+        public Inline SectionHeaderLink(string title) {
+            return new Inline(title) {
+                ExternalLink = $"#{TitleToId(title)}"
+            };
         }
 
         protected Paragraph SectionHeader(string text, [CallerLineNumber] int callerLineNumber = 0, [CallerFilePath] string callerFilePath = "") {
-            var id = text.Replace(" ", "_");
+            var id = TitleToId(text);
             return new Paragraph(text, callerLineNumber, callerFilePath) {
                 MarginTop = 40,
                 FontSize = 50,

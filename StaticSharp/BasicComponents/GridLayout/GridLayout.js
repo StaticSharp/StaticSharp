@@ -18,8 +18,8 @@ var GridLayoutType = {
 }
 
 
-function GridLayout(element) {
-    BlockWithChildren(element)
+StaticSharpClass("StaticSharp.GridLayout", (element) => {
+    StaticSharp.BlockWithChildren(element)
     element.isGridLayout = true
 
     function transpose(rows) {
@@ -185,4 +185,4 @@ function GridLayout(element) {
 
 
 
-}
+})

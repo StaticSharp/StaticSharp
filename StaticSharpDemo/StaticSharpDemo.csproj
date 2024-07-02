@@ -27,12 +27,13 @@
   <ItemGroup>
     <!--ProjectReference Include="..\StaticSharpServer\StaticSharpSever.csproj" /-->
       <ProjectReference Include="..\StaticSharp\StaticSharp.csproj" />
-          <!--PackageReference Include="StaticSharp.Core" Version="0.1.0" /-->
-	</ItemGroup>
+    </ItemGroup>
 
 
 	<!--Source generators-->
 
+    <!--Now RoutingSg is referenced via StaticSharp.Core as transitive dependency. 
+	But this works for PackageReference and does not work for ProjectReference-->
 	<PropertyGroup>
         <RoutingSgDebug>false</RoutingSgDebug>
 	</PropertyGroup>

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace RoutingSg {
-    class Log {
+    public class Log {
         public GeneratorExecutionContext ExecutionContext { get; }
         //public DiagnosticSeverity Severity { get; }
 
@@ -41,7 +41,7 @@ namespace RoutingSg {
         }
 
 #line 1 "StaticSharp"
-        public void AbstractRepresentative(Location location) => ReportError("Abstract Representative",location);
+        public void AbstractRepresentative(Location location) => ReportError("Abstract Representative", location);
 
 
         //public static void AbstractRepresentative()
