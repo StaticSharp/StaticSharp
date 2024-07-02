@@ -13,9 +13,9 @@ namespace StaticSharp {
 
     }
 
-    public interface IMainVisual {
+    /*public interface IMainVisual {
         void GetMeta(Dictionary<string,string> meta, Context context);
-    }
+    }*/
 
     [ConstructorJs]
     //[Scripts.Storage]
@@ -37,7 +37,7 @@ namespace StaticSharp {
         public abstract string? SiteName { get; }
         public abstract string PageLanguage { get; }
         public abstract string Title { get; }
-        public abstract object? MainVisual { get; }
+        public virtual Genome<IAsset>? MainVisual => null;
         
         public abstract Inlines? Description { get; }
         public abstract Node VirtualNode { get; }
@@ -84,13 +84,23 @@ namespace StaticSharp {
 
             meta["og:type"] = "website";
 
-            if (MainVisual is IMainVisual mainVisual) {
-                mainVisual.GetMeta(meta,context);
-            }
+            CreateMainVisualMeta(meta, context);
 
             result.Add(meta.Select(x => Tag.Meta(x.Key, x.Value)));
 
             return result;
+        }
+
+        void CreateMainVisualMeta(Dictionary<string, string> meta, Context context) {
+            if (MainVisual == null) return;
+            var source = MainVisual.ToWebImage().Result;
+            var imageInfo = source.GetImageInfo();
+            var url = (context.BaseUrl + context.AddAsset(source)).ToString();
+            meta["og:image"] = url;
+            meta["og:image:width"] = imageInfo.Width.ToString();
+            meta["og:image:height"] = imageInfo.Height.ToString();
+
+            meta["twitter:image"] = url;
         }
 
 

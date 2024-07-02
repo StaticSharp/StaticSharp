@@ -1,5 +1,6 @@
 ﻿
 
+using StaticSharp.Gears;
 using StaticSharp.Resources.Text;
 using System;
 using System.Linq;
@@ -14,12 +15,14 @@ namespace StaticSharpDemo.Root.Components.VideoPlayer {
 
 
 
-        public override Block? MainVisual => new Video(LoadFile("VideoExample.mp4")) {
+        public override Genome<IAsset> MainVisual => LoadFile("VideoExample.mp4");
+            
+            /*new Video() {
             Play = true,
             Mute = true,
             Loop = true,
             Controls = false,
-        };
+        };*/
         public override Inlines Description => $"StaticSharp VideoPlayer component.";
 
         /*public override Blocks UnmanagedChildren => new(){

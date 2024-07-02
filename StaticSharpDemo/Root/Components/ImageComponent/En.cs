@@ -1,5 +1,6 @@
 ﻿
 
+using StaticSharp.Gears;
 using System;
 using System.Linq;
 
@@ -15,7 +16,7 @@ namespace StaticSharpDemo.Root.Components.ImageComponent {
     partial class En : Common {
         public override Inlines Description => $"StaticSharp Image component.";
 
-        public override Block? MainVisual => new Image("ImageExample1.jpg");
+        public override Genome<IAsset> MainVisual => LoadFile("ImageExample1.jpg");
 
         
 

@@ -1,4 +1,6 @@
 ﻿
+using StaticSharp.Gears;
+
 namespace StaticSharpDemo.Root.GettingStarted
 {
     partial class GettingStarted : ArticlePage {
@@ -13,9 +15,7 @@ namespace StaticSharpDemo.Root.GettingStarted
             public static string VsCodeAlternatives => "VS Code alternatives";
         }
 
-        public override Block? MainVisual => new Image("Rocket.svg") {
-            Height = 300
-        };
+        public override Genome<IAsset> MainVisual => LoadFile("Rocket.svg");
 
         public override Blocks Article => new() { 
             //$"Updated at {DateTime.Today.ToShortDateString()} (TODO: style)", // TODO: causes constant page reload becuase of different page hash

@@ -7,7 +7,7 @@ using System.Linq;
 namespace StaticSharpDemo.Root.Modifiers {
     abstract partial class Modifiers_Common : ArticlePage {
 
-        public override Block? MainVisual => new Image("ModifiersPoster.psd");
+        public override Genome<IAsset> MainVisual => LoadFile("ModifiersPoster.psd");
 
 
         protected Blocks BottonExample => new() {

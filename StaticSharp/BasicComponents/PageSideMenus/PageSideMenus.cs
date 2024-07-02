@@ -35,7 +35,7 @@ namespace StaticSharp {
             FontSize = new(e => ((JPageSideMenus)e.Root).SideBarsIconsSize),
         };
 
-        public override Block? MainVisual => null;
+
         public virtual Blocks? Content => null;
         public virtual Block? Footer => null;
         public virtual Block? LeftSideBarIcon => null;

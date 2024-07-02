@@ -15,7 +15,7 @@ namespace StaticSharp {
 
     [Scripts.FitImage]
     [ConstructorJs]
-    public partial class Image : AspectBlockResizableContent, IMainVisual {
+    public partial class Image : AspectBlockResizableContent {
 
         public enum TEmbed { 
             Image,
@@ -48,15 +48,6 @@ namespace StaticSharp {
             AssetGenome = Gears.AssetGenome.GenomeFromPathOrUrl(pathOrUrl, callerFilePath);
         }
 
-        IAsset GetSource() {
-            string[] webExtensions = { ".jpg", ".jpeg", ".png", ".svg" };
-
-            var source = AssetGenome.Result;
-            if (!webExtensions.Contains(source.Extension)) {
-                source = new JpegGenome(AssetGenome).Result;
-            }
-            return source;
-        }
 
         public override void CreateContent(Context context, Tag tag, Group scriptBeforeConstructor, Group scriptAfterConstructor, string contentId, out double width, out double height) {
             var source = AssetGenome.ToWebImage().Result;
@@ -119,16 +110,7 @@ namespace StaticSharp {
         }*/
 
 
-        void IMainVisual.GetMeta(Dictionary<string, string> meta, Context context) {
-            var source = AssetGenome.ToWebImage().Result;
-            var imageInfo = source.GetImageInfo();
-            var url = (context.BaseUrl + context.AddAsset(source)).ToString();
-            meta["og:image"] = url;
-            meta["og:image:width"] = imageInfo.Width.ToString();
-            meta["og:image:height"] = imageInfo.Height.ToString();
-
-            meta["twitter:image"] = url;
-        }
+        
 
         
     }

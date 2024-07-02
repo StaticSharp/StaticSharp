@@ -23,7 +23,7 @@ namespace StaticSharp {
     [RelatedStyle]
     [Scripts.FitImage]
     [ConstructorJs]
-    public sealed partial class Video : AspectBlockResizableContent, IMainVisual {
+    public sealed partial class Video : AspectBlockResizableContent {
 
         protected override string TagName => "player";
 
@@ -119,9 +119,9 @@ namespace StaticSharp {
 
 
 
-        public void GetMeta(Dictionary<string, string> meta, Context context) {
+        /*public void GetMeta(Dictionary<string, string> meta, Context context) {
 
-            /*var youtubeVideoId = YoutubeExplode.Videos.VideoId.TryParse(Identifier);
+            var youtubeVideoId = YoutubeExplode.Videos.VideoId.TryParse(Identifier);
             if (youtubeVideoId != null) {
                 var youtubeVideoManifest = new YoutubeVideoManifestGenome(youtubeVideoId).Result;
                 var item = youtubeVideoManifest.Items.MaxBy(x => x.Width)!;
@@ -135,8 +135,8 @@ namespace StaticSharp {
 
             } else {
                 throw new NotImplementedException();
-            }*/
-        }
+            }
+        }*/
 
         
     }

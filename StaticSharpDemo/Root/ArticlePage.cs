@@ -53,7 +53,8 @@ namespace StaticSharpDemo.Root {
         };
 
         public override sealed Blocks? Content => new(){
-            MainVisual,
+            MainVisual!=null ? new Image(MainVisual) : null,
+
             new Paragraph(Title){
                 Weight = FontWeight.Thin,
                 FontSize = 80

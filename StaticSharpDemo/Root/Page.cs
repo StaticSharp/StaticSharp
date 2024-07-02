@@ -25,9 +25,7 @@ namespace StaticSharpDemo.Root {
             //TextDecorationColor = Color.Blue;
         }
 
-        
 
-        public override Block? MainVisual => null;
         public override string Title {
             get {
                 var result = GetType().Namespace;

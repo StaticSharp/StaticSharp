@@ -13,7 +13,7 @@ namespace StaticSharpDemo.Root {
 
 
 
-        public override Block? MainVisual => new Image("FavIconWhiteInBlack.svg");
+        public override Genome<IAsset> MainVisual => LoadFile("FavIconWhiteInBlack.svg");
             
             
         /*    new Video("T4TEdzSLyi0") {
