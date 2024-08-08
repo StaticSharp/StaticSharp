@@ -71,7 +71,7 @@ namespace StaticSharp {
             meta["twitter:url"] = url;
 
             if (Description != null) {
-                string description = Description.GetPlainText(context);
+                string description = Description.GetPlainText();
                 //meta["description"] = description;
                 meta["og:description"] = description;
                 meta["twitter:description"] = description;

@@ -20,7 +20,7 @@ namespace StaticSharp {
 
 
 
-        public string GetPlainText(Context context) {
+        public string GetPlainText() {
             return Value;
         }
 

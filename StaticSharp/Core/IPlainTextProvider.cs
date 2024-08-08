@@ -6,7 +6,7 @@ namespace StaticSharp.Core
 
     public interface IPlainTextProvider
     {
-        string GetPlainText(Context context);
+        string GetPlainText();
     }
 
 

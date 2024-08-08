@@ -50,8 +50,8 @@ namespace StaticSharp {
             throw new System.InvalidOperationException("Cast from Inline to String is forbidden.");
         }
 
-        public override string GetPlainText(Context context) {
-            return Children.GetPlainText(context);
+        public override string GetPlainText() {
+            return Children.GetPlainText();
         }
     }
 }

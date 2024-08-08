@@ -75,7 +75,7 @@ namespace StaticSharp {
 
         }
 
-        public override string GetPlainText(Context context) {
+        public override string GetPlainText() {
             return string.Empty;
         }
     }

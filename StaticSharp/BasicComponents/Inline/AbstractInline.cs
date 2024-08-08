@@ -76,7 +76,7 @@ namespace StaticSharp {
 
         }
 
-        public abstract string GetPlainText(Context context);
+        public abstract string GetPlainText();
 
         public override void ModifyTagAndScript(Context context, Tag tag, Group scriptBeforeConstructor, Group scriptAfterConstructor) {
             base.ModifyTagAndScript(context, tag, scriptBeforeConstructor, scriptAfterConstructor);

@@ -94,10 +94,10 @@ namespace StaticSharp
 
 
 
-        public string GetPlainText(Context context) {
+        public string GetPlainText() {
             var result = new StringBuilder();
             foreach (var i in this) {
-                result.Append(i.GetPlainText(context));                
+                result.Append(i.GetPlainText());                
             }
             return result.ToString();
         }
